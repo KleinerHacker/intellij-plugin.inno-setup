@@ -1,0 +1,122 @@
+<idea-plugin version="2">
+    <id>org.pcsoft.plugins.intellij.inno_setup</id>
+    <name>Inno Setup Script Support Plugin</name>
+    <version>1.0</version>
+    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">PC-Soft</vendor>
+
+    <description><![CDATA[
+      Support for Inno Setup Script Files (*.iss)
+    ]]></description>
+
+    <change-notes><![CDATA[
+
+    ]]>
+    </change-notes>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
+
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Language -->
+        <fileTypeFactory implementation="org.pcsoft.plugins.intellij.inno_setup.script.IssFileTypeFactory"/>
+        <!-- Parser & Syntax -->
+        <lang.parserDefinition language="iss"
+                               implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.IssParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="iss"
+                                       implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.syntax.IssSyntaxHighlighterFactory"/>
+        <colorSettingsPage
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.syntax.IssSyntaxColorSettingsPage"/>
+        <!-- Structure -->
+        <lang.psiStructureViewFactory language="iss"
+                                      implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.tree.IssStructureViewFactory"/>
+        <lang.foldingBuilder language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.folding.IssSectionFoldingBuilder"/>
+        <!-- Others -->
+        <lang.commenter language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
+
+        <!-- Annotators -->
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error.IssSectionErrorAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.info.IssSectionInfoAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error.IssSectionFileErrorAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.warn.IssSectionFileWarnAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error.IssSectionTaskErrorAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.warn.IssSectionTaskWarnAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error.IssSectionComponentErrorAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.warn.IssSectionComponentWarnAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error.IssSectionTypeErrorAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.warn.IssSectionTypeWarnAnnotator"/>
+
+        <!-- Contributors -->
+        <!-- Completion -->
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionTaskCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionSetupCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionFileCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionComponentCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionTypeCompletionContributor"/>
+        <!-- -->
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagTypeCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagTaskCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagComponentCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagFileCompletionContributor"/>
+        <!-- Go To -->
+        <gotoSymbolContributor
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTaskGoToContributor"/>
+
+        <!-- Manipulators -->
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionTasksValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFileDefinitionTasksValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskDefinitionNameValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionComponentsValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskDefinitionComponentsValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionComponentsValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFileDefinitionComponentsValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentDefinitionNameValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionTypesValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentDefinitionTypesValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypeDefinitionNameValueElementManipulator"/>
+
+        <lang.refactoringSupport language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
+
+        <!-- Documentation -->
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssFlagDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssCommentDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssAttributeDocumentationProvider"/>
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>
