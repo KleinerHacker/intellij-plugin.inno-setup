@@ -1,8 +1,10 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.structure.tree;
 
 import com.intellij.ide.structureView.StructureViewBuilder;
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
 import com.intellij.lang.PsiStructureViewFactory;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +23,7 @@ public final class IssStructureViewFactory implements PsiStructureViewFactory {
         return new TreeBasedStructureViewBuilder() {
             @NotNull
             @Override
-            public com.intellij.ide.structureView.StructureViewModel createStructureViewModel() {
+            public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
                 return new IssStructureViewModel(psiFile);
             }
         };
