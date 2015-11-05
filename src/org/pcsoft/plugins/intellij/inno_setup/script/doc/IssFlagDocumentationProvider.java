@@ -4,8 +4,10 @@ import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
@@ -33,6 +35,19 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_flag");
     private static final String UNKNOWN = "Unknown flag";
+
+    @Nullable
+    @Override
+    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
+        if (element instanceof IssComponentDefinitionNameValueElement) {
+
+            final IssComponentDefinitionNameValueElement nameValueElement = (IssComponentDefinitionNameValueElement) element;
+            return "Reference to component: " + nameValueElement.getName() + "<br/>" +
+                    "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getDescriptionValue().getText();
+        }
+
+        return super.getQuickNavigateInfo(element, originalElement);
+    }
 
     @Override
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
@@ -66,6 +81,12 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (element instanceof IssTypeDefinitionFlagsValueElement) {
             final IssTypeDefinitionFlagsValueElement typeDefinitionFlagsValueElement = (IssTypeDefinitionFlagsValueElement) element;
             final IssTypeFlag typeFlag = IssTypeFlag.fromId(typeDefinitionFlagsValueElement.getName());

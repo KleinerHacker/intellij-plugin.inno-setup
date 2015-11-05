@@ -33,8 +33,8 @@ public final class IssHighlightingColorFactory {
             new TextAttributes(null, null, JBColor.BLACK, EffectType.BOLD_DOTTED_LINE, Font.BOLD)
     );
 
-    public static final TextAttributesKey SYNTAX_CP = TextAttributesKey.createTextAttributesKey(
-            "SYNTAX_CP",
+    public static final TextAttributesKey SYNTAX_CD = TextAttributesKey.createTextAttributesKey(
+            "SYNTAX_CD",
             new TextAttributes(new JBColor(new Color(0x00A0C0), new Color(0x00A0C0)), null, null, null, Font.PLAIN)
     );
 

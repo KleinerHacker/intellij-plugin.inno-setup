@@ -9,10 +9,10 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 28.12.2014.
  */
-public class IssComponentDefinitionNameElement extends IssDefinitionItemElement<IssDefinitionElement> {
+public class IssComponentDefinitionNameElement extends IssDefinitionItemElement<IssComponentDefinitionElement> {
 
     public IssComponentDefinitionNameElement(ASTNode node) {
-        super(node, IssDefinitionElement.class);
+        super(node, IssComponentDefinitionElement.class);
     }
 
     @Nullable

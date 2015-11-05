@@ -1,16 +1,25 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.syntax;
 
+import com.intellij.diff.tools.fragmented.OnesideEditorHighlighter;
+import com.intellij.openapi.editor.colors.ColorKey;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.editor.ex.util.LexerEditorHighlighter;
+import com.intellij.openapi.editor.ex.util.LimitedRangeHighlighterIterator;
+import com.intellij.openapi.editor.highlighter.EditorHighlighter;
+import com.intellij.openapi.editor.highlighter.FragmentedEditorHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import com.intellij.openapi.options.colors.EditorHighlightingProvidingColorSettingsPage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
 
 import javax.swing.Icon;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,10 +31,14 @@ import java.util.Map;
  * Time: 11:03
  * TODO: Write Summary
  */
-public final class IssSyntaxColorSettingsPage implements ColorSettingsPage {
+public final class IssSyntaxColorSettingsPage implements EditorHighlightingProvidingColorSettingsPage {
 
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
             new AttributesDescriptor("Comments", IssHighlightingColorFactory.SYNTAX_COMMENT),
+            new AttributesDescriptor("Strings", IssHighlightingColorFactory.SYNTAX_STRING),
+            new AttributesDescriptor("Compiler Directives", IssHighlightingColorFactory.SYNTAX_CD),
+            new AttributesDescriptor("Section Title", IssHighlightingColorFactory.SYNTAX_SECTION_TITLE),
+            new AttributesDescriptor("Operators", IssHighlightingColorFactory.SYNTAX_OPERATORS)
     };
 
     static {
@@ -90,6 +103,7 @@ public final class IssSyntaxColorSettingsPage implements ColorSettingsPage {
     @Override
     public ColorDescriptor[] getColorDescriptors() {
         return new ColorDescriptor[]{
+
         };
     }
 
@@ -97,5 +111,10 @@ public final class IssSyntaxColorSettingsPage implements ColorSettingsPage {
     @Override
     public String getDisplayName() {
         return "Inno Setup Script (ISS)";
+    }
+
+    @Override
+    public EditorHighlighter createEditorHighlighter(EditorColorsScheme editorColorsScheme) {
+        return new LexerEditorHighlighter(getHighlighter(), editorColorsScheme);
     }
 }
