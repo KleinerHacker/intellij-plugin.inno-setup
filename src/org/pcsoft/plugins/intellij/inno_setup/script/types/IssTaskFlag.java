@@ -4,12 +4,12 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
  * Created by Christoph on 04.01.2015.
  */
 public enum IssTaskFlag implements IssFlag {
-    CheckableAlone("CheckableAlone", "flag.tasks.checkable_alone"),
-    CheckedOnce("CheckedOnce", "flag.tasks.checked_once"),
-    DoNotInheritCheck("DontInheritCheck", "flag.tasks.dont_inherit_check"),
-    Exclusive("Exclusive", "flag.tasks.exclusive"),
-    Restart("Restart", "flag.tasks.restart"),
-    Unchecked("Unchecked", "flag.tasks.unchecked");
+    CheckableAlone("CheckableAlone", "task.flag.checkable_alone"),
+    CheckedOnce("CheckedOnce", "task.flag.checked_once"),
+    DoNotInheritCheck("DontInheritCheck", "task.flag.dont_inherit_check"),
+    Exclusive("Exclusive", "task.flag.exclusive"),
+    Restart("Restart", "task.flag.restart"),
+    Unchecked("Unchecked", "task.flag.unchecked");
 
     public static IssTaskFlag fromId(final String id) {
         return IssFlag.findById(id, IssTaskFlag.class);

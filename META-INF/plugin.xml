@@ -104,7 +104,13 @@
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssFlagDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionComponentDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionTypeDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionTaskDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionFileDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssCommentDocumentationProvider"/>
         <documentationProvider

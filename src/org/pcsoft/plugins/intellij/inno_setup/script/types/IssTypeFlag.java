@@ -4,7 +4,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
  * Created by Christoph on 04.01.2015.
  */
 public enum IssTypeFlag implements IssFlag {
-    IsCustom("IsCustom", "flag.types.is_custom");
+    IsCustom("IsCustom", "type.flag.is_custom");
 
     public static IssTypeFlag fromId(final String id) {
         return IssFlag.findById(id, IssTypeFlag.class);

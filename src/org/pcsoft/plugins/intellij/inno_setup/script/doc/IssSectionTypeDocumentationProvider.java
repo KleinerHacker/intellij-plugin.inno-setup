@@ -31,34 +31,21 @@ import java.util.ResourceBundle;
  * Created by Christoph on 28.12.2014.
  * <a href="Bla" target="_self">Bla</link>
  */
-public class IssFlagDocumentationProvider extends AbstractDocumentationProvider {
+public class IssSectionTypeDocumentationProvider extends AbstractDocumentationProvider {
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_flag");
+    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_type");
     private static final String UNKNOWN = "Unknown flag";
 
     @Nullable
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssComponentPropertyNameValueElement) {
-
-            final IssComponentPropertyNameValueElement nameValueElement = (IssComponentPropertyNameValueElement) element;
-            return "Reference to component: " + nameValueElement.getName() + "<br/>" +
-                    "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getDescriptionValue().getText();
-        }
-
         return super.getQuickNavigateInfo(element, originalElement);
     }
 
     @Override
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
         if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
-            return IssTypeUtils.createFlagValue(element.getProject(), object.toString());
-        } else if (PsiTreeUtil.getParentOfType(element, IssTaskDefinitionElement.class) != null) {
-            return IssTaskUtils.createFlagValue(element.getProject(), object.toString());
-        } else if (PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
-            return IssComponentUtils.createFlagValue(element.getProject(), object.toString());
-        } else if (PsiTreeUtil.getParentOfType(element, IssFileDefinitionElement.class) != null) {
-            return IssFileUtils.createFlagValue(element.getProject(), object.toString());
+         return IssFileUtils.createFlagValue(element.getProject(), object.toString());
         }
 
         return null;
@@ -68,12 +55,6 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
         if (element instanceof IssTypePropertyFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_typessection.htm");
-        } else if (element instanceof IssTaskPropertyFlagsValueElement) {
-            return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_taskssection.htm");
-        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
-            return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_componentssection.htm");
-        } else if (element instanceof IssFilePropertyFlagsValueElement) {
-            return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_filessection.htm");
         }
 
         return null;
@@ -88,27 +69,6 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
                 return UNKNOWN;
 
             return RESOURCE_BUNDLE.getString(typeFlag.getDescriptionKey());
-        } else if (element instanceof IssTaskPropertyFlagsValueElement) {
-            final IssTaskPropertyFlagsValueElement taskDefinitionFlagsValueElement = (IssTaskPropertyFlagsValueElement) element;
-            final IssTaskFlag taskFlag = IssTaskFlag.fromId(taskDefinitionFlagsValueElement.getName());
-            if (taskFlag == null)
-                return UNKNOWN;
-
-            return RESOURCE_BUNDLE.getString(taskFlag.getDescriptionKey());
-        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
-            final IssComponentPropertyFlagsValueElement componentDefinitionFlagsValueElement = (IssComponentPropertyFlagsValueElement) element;
-            final IssComponentFlag componentFlag = IssComponentFlag.fromId(componentDefinitionFlagsValueElement.getName());
-            if (componentFlag == null)
-                return UNKNOWN;
-
-            return RESOURCE_BUNDLE.getString(componentFlag.getDescriptionKey());
-        } else if (element instanceof IssFilePropertyFlagsValueElement) {
-            final IssFilePropertyFlagsValueElement fileDefinitionFlagsValueElement = (IssFilePropertyFlagsValueElement) element;
-            final IssFileFlag fileFlag = IssFileFlag.fromId(fileDefinitionFlagsValueElement.getName());
-            if (fileFlag == null)
-                return UNKNOWN;
-
-            return RESOURCE_BUNDLE.getString(fileFlag.getDescriptionKey());
         }
 
         return null;

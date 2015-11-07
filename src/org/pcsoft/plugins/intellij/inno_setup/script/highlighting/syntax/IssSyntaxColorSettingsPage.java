@@ -1,6 +1,5 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.syntax;
 
-import com.intellij.diff.tools.fragmented.OnesideEditorHighlighter;
 import com.intellij.openapi.editor.colors.ColorKey;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
