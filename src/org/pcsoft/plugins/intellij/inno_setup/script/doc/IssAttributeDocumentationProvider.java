@@ -8,10 +8,10 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,25 +47,25 @@ public class IssAttributeDocumentationProvider extends AbstractDocumentationProv
             final IssIdentifierElement identifierElement = (IssIdentifierElement) element;
 
             if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
-                final IssTypeAttribute typeAttribute = IssTypeAttribute.fromId(identifierElement.getName());
+                final IssTypeProperty typeAttribute = IssTypeProperty.fromId(identifierElement.getName());
                 if (typeAttribute == null)
                     return "Unknown type attribute";
 
                 return RESOURCE_BUNDLE.getString(typeAttribute.getDescriptionKey());
             } else if (PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
-                final IssComponentAttribute componentAttribute = IssComponentAttribute.fromId(identifierElement.getName());
+                final IssComponentProperty componentAttribute = IssComponentProperty.fromId(identifierElement.getName());
                 if (componentAttribute == null)
                     return "Unknown component attribute";
 
                 return RESOURCE_BUNDLE.getString(componentAttribute.getDescriptionKey());
             } else if (PsiTreeUtil.getParentOfType(element, IssTaskDefinitionElement.class) != null) {
-                final IssTaskAttribute taskAttribute = IssTaskAttribute.fromId(identifierElement.getName());
+                final IssTaskProperty taskAttribute = IssTaskProperty.fromId(identifierElement.getName());
                 if (taskAttribute == null)
                     return "Unknown task attribute";
 
                 return RESOURCE_BUNDLE.getString(taskAttribute.getDescriptionKey());
             } else if (PsiTreeUtil.getParentOfType(element, IssFileDefinitionElement.class) != null) {
-                final IssFileAttribute fileAttribute = IssFileAttribute.fromId(identifierElement.getName());
+                final IssFileProperty fileAttribute = IssFileProperty.fromId(identifierElement.getName());
                 if (fileAttribute == null)
                     return "Unknown file attribute";
 

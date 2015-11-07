@@ -3,12 +3,12 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -75,19 +75,19 @@ final class IssParserSectionUtility {
                         break;
                     case Task:
                         parseLineForDefaultSection(psiBuilder, "Tasks Section", IssMarkerFactory.TaskSection.SECTION_DEFINITION,
-                                IssTaskAttribute::getValueMarkerElementFromId, IssTaskAttribute::getItemMarkerElementFromId);
+                                IssTaskProperty::getValueMarkerElementFromId, IssTaskProperty::getItemMarkerElementFromId);
                         break;
                     case File:
                         parseLineForDefaultSection(psiBuilder, "Files Section", IssMarkerFactory.FileSection.SECTION_DEFINITION,
-                                IssFileAttribute::getValueMarkerElementFromId, IssFileAttribute::getItemMarkerElementFromId);
+                                IssFileProperty::getValueMarkerElementFromId, IssFileProperty::getItemMarkerElementFromId);
                         break;
                     case Component:
                         parseLineForDefaultSection(psiBuilder, "Component Section", IssMarkerFactory.ComponentSection.SECTION_DEFINITION,
-                                IssComponentAttribute::getValueMarkerElementFromId, IssComponentAttribute::getItemMarkerElementFromId);
+                                IssComponentProperty::getValueMarkerElementFromId, IssComponentProperty::getItemMarkerElementFromId);
                         break;
                     case Type:
                         parseLineForDefaultSection(psiBuilder, "Type Section", IssMarkerFactory.TypeSection.SECTION_DEFINITION,
-                                IssTypeAttribute::getValueMarkerElementFromId, IssTypeAttribute::getItemMarkerElementFromId);
+                                IssTypeProperty::getValueMarkerElementFromId, IssTypeProperty::getItemMarkerElementFromId);
                         break;
                     default:
                         throw new RuntimeException();
@@ -194,7 +194,7 @@ final class IssParserSectionUtility {
         final PsiBuilder.Marker itemMark = psiBuilder.mark();
         {
             final String identifier = psiBuilder.getTokenText();
-            final IssSetupAttribute setupItem = IssSetupAttribute.fromId(identifier);
+            final IssSetupProperty setupItem = IssSetupProperty.fromId(identifier);
             if (setupItem == null) {
                 itemMark.drop();
 

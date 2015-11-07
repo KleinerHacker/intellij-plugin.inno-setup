@@ -8,7 +8,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveResult;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class IssComponentReference extends IssAbstractReference {
     @Override
     public ResolveResult[] multiResolve(boolean b) {
         final Collection<IssComponentDefinitionElement> componentDefinitionElements = IssComponentUtils.findComponentDefinitions(myElement.getProject(), key, b);
-        final List<IssComponentDefinitionNameValueElement> componentDefinitionNameValueElements = componentDefinitionElements.stream()
+        final List<IssComponentPropertyNameValueElement> componentDefinitionNameValueElements = componentDefinitionElements.stream()
                 .filter(item -> item.getComponentName() != null && item.getComponentName().getNameValue() != null)
                 .map(item -> item.getComponentName().getNameValue())
                 .collect(Collectors.toList());
@@ -50,8 +50,8 @@ public class IssComponentReference extends IssAbstractReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssComponentDefinitionNameValueElement) {
-            final IssComponentDefinitionNameValueElement nameElement = (IssComponentDefinitionNameValueElement) element;
+        if (element instanceof IssComponentPropertyNameValueElement) {
+            final IssComponentPropertyNameValueElement nameElement = (IssComponentPropertyNameValueElement) element;
             return nameElement.getName().equalsIgnoreCase(myElement.getName());
         }
 

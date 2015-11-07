@@ -74,25 +74,26 @@
         <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagTaskCompletionContributor"/>
         <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagComponentCompletionContributor"/>
         <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagFileCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssCopyModeFileCompletionContributor"/>
         <!-- Go To -->
         <gotoSymbolContributor
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTaskGoToContributor"/>
 
         <!-- Manipulators -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionTasksValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFileDefinitionTasksValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskDefinitionNameValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionComponentsValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskDefinitionComponentsValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionComponentsValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFileDefinitionComponentsValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentDefinitionNameValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionTypesValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentDefinitionTypesValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypeDefinitionNameValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyTasksValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyTasksValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyNameValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyComponentsValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyComponentsValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyComponentsValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyNameValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyTypesValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyTypesValueElementManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypePropertyNameValueElementManipulator"/>
 
         <lang.refactoringSupport language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
 

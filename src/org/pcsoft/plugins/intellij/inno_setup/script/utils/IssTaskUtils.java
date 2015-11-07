@@ -4,10 +4,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionComponentsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,19 +18,19 @@ import java.util.List;
  */
 public final class IssTaskUtils {
 
-    public static IssTaskDefinitionFlagsValueElement createFlagValue(final Project project, final String name) {
+    public static IssTaskPropertyFlagsValueElement createFlagValue(final Project project, final String name) {
         final IssFile issFile = IssUtils.createFile(project, "[TASKS]\nFlags: " + name);
-        return PsiTreeUtil.findChildOfType(issFile, IssTaskDefinitionFlagsValueElement.class);
+        return PsiTreeUtil.findChildOfType(issFile, IssTaskPropertyFlagsValueElement.class);
     }
 
-    public static IssTaskDefinitionComponentsValueElement createComponentReference(final Project project, final String refName) {
+    public static IssTaskPropertyComponentsValueElement createComponentReference(final Project project, final String refName) {
         final IssFile issFile = IssUtils.createFile(project, "[TASKS]\nComponents: " + refName);
-        return PsiTreeUtil.findChildOfType(issFile, IssTaskDefinitionComponentsValueElement.class);
+        return PsiTreeUtil.findChildOfType(issFile, IssTaskPropertyComponentsValueElement.class);
     }
 
-    public static IssTaskDefinitionNameValueElement createNameElement(final Project project, final String name) {
+    public static IssTaskPropertyNameValueElement createNameElement(final Project project, final String name) {
         final IssFile issFile = IssUtils.createFile(project, "[TASKS]\nName: " + name);
-        return PsiTreeUtil.findChildOfType(issFile, IssTaskDefinitionNameValueElement.class);
+        return PsiTreeUtil.findChildOfType(issFile, IssTaskPropertyNameValueElement.class);
     }
 
     public static Collection<IssTaskDefinitionElement> findTaskDefinitions(final Project project) {

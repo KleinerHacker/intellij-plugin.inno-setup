@@ -46,22 +46,22 @@ public class IssTaskDefinitionElement extends IssDefinitionElement<IssTaskSectio
     }
 
     @Nullable
-    public IssTaskDefinitionNameElement getTaskName() {
-        return PsiTreeUtil.findChildOfType(this, IssTaskDefinitionNameElement.class);
+    public IssTaskPropertyNameElement getTaskName() {
+        return PsiTreeUtil.findChildOfType(this, IssTaskPropertyNameElement.class);
     }
 
     @Nullable
-    public IssTaskDefinitionDescriptionElement getTaskDescription() {
-        return PsiTreeUtil.findChildOfType(this, IssTaskDefinitionDescriptionElement.class);
+    public IssTaskPropertyDescriptionElement getTaskDescription() {
+        return PsiTreeUtil.findChildOfType(this, IssTaskPropertyDescriptionElement.class);
     }
 
     @Nullable
-    public IssTaskDefinitionComponentsElement getTaskComponents() {
-        return PsiTreeUtil.findChildOfType(this, IssTaskDefinitionComponentsElement.class);
+    public IssTaskPropertyComponentsElement getTaskComponents() {
+        return PsiTreeUtil.findChildOfType(this, IssTaskPropertyComponentsElement.class);
     }
 
     @Nullable
-    public IssTaskDefinitionFlagsElement getTaskFlags() {
-        return PsiTreeUtil.findChildOfType(this, IssTaskDefinitionFlagsElement.class);
+    public IssTaskPropertyFlagsElement getTaskFlags() {
+        return PsiTreeUtil.findChildOfType(this, IssTaskPropertyFlagsElement.class);
     }
 }

@@ -11,7 +11,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -23,7 +23,7 @@ public class IssSectionComponentCompletionContributor extends CompletionContribu
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssComponentAttribute item : IssComponentAttribute.values()) {
+                        for (final IssComponentProperty item : IssComponentProperty.values()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.BLUE)
                                     .withInsertHandler((insertionContext, lookupElement) -> {

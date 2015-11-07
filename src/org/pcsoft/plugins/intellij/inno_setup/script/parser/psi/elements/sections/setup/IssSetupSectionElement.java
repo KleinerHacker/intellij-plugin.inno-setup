@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionItemElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionElement;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class IssSetupSectionElement extends IssSectionElement {
     }
 
     @Nullable
-    public Collection<IssDefinitionItemElement> getSectionItemList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssDefinitionItemElement.class);
+    public Collection<IssDefinitionPropertyElement> getSectionItemList() {
+        return PsiTreeUtil.findChildrenOfType(this, IssDefinitionPropertyElement.class);
     }
 }

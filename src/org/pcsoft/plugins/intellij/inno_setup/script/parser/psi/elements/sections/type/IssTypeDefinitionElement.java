@@ -46,17 +46,17 @@ public class IssTypeDefinitionElement extends IssDefinitionElement<IssTypeSectio
     }
 
     @Nullable
-    public IssTypeDefinitionNameElement getTypeName() {
-        return PsiTreeUtil.findChildOfType(this, IssTypeDefinitionNameElement.class);
+    public IssTypePropertyNameElement getTypeName() {
+        return PsiTreeUtil.findChildOfType(this, IssTypePropertyNameElement.class);
     }
 
     @Nullable
-    public IssTypeDefinitionDescriptionElement getTypeDescription() {
-        return PsiTreeUtil.findChildOfType(this, IssTypeDefinitionDescriptionElement.class);
+    public IssTypePropertyDescriptionElement getTypeDescription() {
+        return PsiTreeUtil.findChildOfType(this, IssTypePropertyDescriptionElement.class);
     }
 
     @Nullable
-    public IssTypeDefinitionFlagsElement getTypeFlags() {
-        return PsiTreeUtil.findChildOfType(this, IssTypeDefinitionFlagsElement.class);
+    public IssTypePropertyFlagsElement getTypeFlags() {
+        return PsiTreeUtil.findChildOfType(this, IssTypePropertyFlagsElement.class);
     }
 }

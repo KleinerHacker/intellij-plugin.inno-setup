@@ -46,27 +46,27 @@ public class IssFileDefinitionElement extends IssDefinitionElement<IssFileSectio
     }
 
     @Nullable
-    public IssFileDefinitionSourceElement getFileSource() {
-        return PsiTreeUtil.findChildOfType(this, IssFileDefinitionSourceElement.class);
+    public IssFilePropertySourceElement getFileSource() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertySourceElement.class);
     }
 
     @Nullable
-    public IssFileDefinitionTasksElement getFileTasks() {
-        return PsiTreeUtil.findChildOfType(this, IssFileDefinitionTasksElement.class);
+    public IssFilePropertyTasksElement getFileTasks() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyTasksElement.class);
     }
 
     @Nullable
-    public IssFileDefinitionDestDirElement getFileDestDir() {
-        return PsiTreeUtil.findChildOfType(this, IssFileDefinitionDestDirElement.class);
+    public IssFilePropertyDestDirElement getFileDestDir() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyDestDirElement.class);
     }
 
     @Nullable
-    public IssFileDefinitionComponentsElement getFileComponents() {
-        return PsiTreeUtil.findChildOfType(this, IssFileDefinitionComponentsElement.class);
+    public IssFilePropertyComponentsElement getFileComponents() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyComponentsElement.class);
     }
 
     @Nullable
-    public IssFileDefinitionFlagsElement getFileFlags() {
-        return PsiTreeUtil.findChildOfType(this, IssFileDefinitionFlagsElement.class);
+    public IssFilePropertyFlagsElement getFileFlags() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyFlagsElement.class);
     }
 }

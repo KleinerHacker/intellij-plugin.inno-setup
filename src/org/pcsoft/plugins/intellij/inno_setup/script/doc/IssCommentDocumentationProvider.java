@@ -5,13 +5,13 @@ import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionTypesValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionComponentsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionTasksValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionComponentsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyTypesValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyComponentsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyTasksValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement;
 
 /**
  * Created by Christoph on 05.01.2015.
@@ -21,7 +21,7 @@ public class IssCommentDocumentationProvider extends AbstractDocumentationProvid
     @Nullable
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        if (originalElement instanceof IssFileDefinitionTasksValueElement) {
+        if (originalElement instanceof IssFilePropertyTasksValueElement) {
             final PsiNamedElement namedValueElement = (PsiNamedElement) originalElement;
             if (namedValueElement.getReference().resolve() == null)
                 return "Task reference not found";
@@ -33,8 +33,8 @@ public class IssCommentDocumentationProvider extends AbstractDocumentationProvid
 
                 return sb.toString();
             }
-        } else if (originalElement instanceof IssFileDefinitionComponentsValueElement ||
-                originalElement instanceof IssTaskDefinitionComponentsValueElement) {
+        } else if (originalElement instanceof IssFilePropertyComponentsValueElement ||
+                originalElement instanceof IssTaskPropertyComponentsValueElement) {
             final PsiNamedElement namedValueElement = (PsiNamedElement) originalElement;
             if (namedValueElement.getReference().resolve() == null)
                 return "Component reference not found";
@@ -46,7 +46,7 @@ public class IssCommentDocumentationProvider extends AbstractDocumentationProvid
 
                 return sb.toString();
             }
-        } else if (originalElement instanceof IssComponentDefinitionTypesValueElement) {
+        } else if (originalElement instanceof IssComponentPropertyTypesValueElement) {
             final PsiNamedElement namedValueElement = (PsiNamedElement) originalElement;
             if (namedValueElement.getReference().resolve() == null)
                 return "Type reference not found";
@@ -65,20 +65,20 @@ public class IssCommentDocumentationProvider extends AbstractDocumentationProvid
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssTaskDefinitionNameValueElement) {
-            final IssTaskDefinitionNameValueElement nameValueElement = (IssTaskDefinitionNameValueElement) element;
+        if (element instanceof IssTaskPropertyNameValueElement) {
+            final IssTaskPropertyNameValueElement nameValueElement = (IssTaskPropertyNameValueElement) element;
             if (nameValueElement.getValueParent() == null || nameValueElement.getValueParent().getDefinition() == null)
                 return null;
 
             return buildDocFromComment(nameValueElement.getValueParent().getDefinition());
-        } else if (element instanceof IssComponentDefinitionNameValueElement) {
-            final IssComponentDefinitionNameValueElement nameValueElement = (IssComponentDefinitionNameValueElement) element;
+        } else if (element instanceof IssComponentPropertyNameValueElement) {
+            final IssComponentPropertyNameValueElement nameValueElement = (IssComponentPropertyNameValueElement) element;
             if (nameValueElement.getValueParent() == null || nameValueElement.getValueParent().getDefinition() == null)
                 return null;
 
             return buildDocFromComment(nameValueElement.getValueParent().getDefinition());
-        } else if (element instanceof IssTypeDefinitionNameValueElement) {
-            final IssTypeDefinitionNameValueElement nameValueElement = (IssTypeDefinitionNameValueElement) element;
+        } else if (element instanceof IssTypePropertyNameValueElement) {
+            final IssTypePropertyNameValueElement nameValueElement = (IssTypePropertyNameValueElement) element;
             if (nameValueElement.getValueParent() == null || nameValueElement.getValueParent().getDefinition() == null)
                 return null;
 

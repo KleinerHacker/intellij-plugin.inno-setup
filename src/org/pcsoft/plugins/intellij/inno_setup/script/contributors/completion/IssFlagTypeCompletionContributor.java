@@ -10,7 +10,7 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 
 /**
@@ -19,7 +19,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 public class IssFlagTypeCompletionContributor extends CompletionContributor {
     public IssFlagTypeCompletionContributor() {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssTypeDefinitionFlagsElement.class),
+                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssTypePropertyFlagsElement.class),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {

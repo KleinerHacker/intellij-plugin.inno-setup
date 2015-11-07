@@ -5,8 +5,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,14 +17,14 @@ import java.util.List;
  */
 public final class IssTypeUtils {
 
-    public static IssTypeDefinitionFlagsValueElement createFlagValue(final Project project, final String name) {
+    public static IssTypePropertyFlagsValueElement createFlagValue(final Project project, final String name) {
         final IssFile issFile = IssUtils.createFile(project, "[TYPES]\nFlags: " + name);
-        return PsiTreeUtil.findChildOfType(issFile, IssTypeDefinitionFlagsValueElement.class);
+        return PsiTreeUtil.findChildOfType(issFile, IssTypePropertyFlagsValueElement.class);
     }
 
-    public static IssTypeDefinitionNameValueElement createNameElement(final Project project, final String name) {
+    public static IssTypePropertyNameValueElement createNameElement(final Project project, final String name) {
         final IssFile issFile = IssUtils.createFile(project, "[TYPES]\nName: " + name);
-        return PsiTreeUtil.findChildOfType(issFile, IssTypeDefinitionNameValueElement.class);
+        return PsiTreeUtil.findChildOfType(issFile, IssTypePropertyNameValueElement.class);
     }
 
     public static Collection<IssTypeDefinitionElement> findTypeDefinitions(final Project project) {

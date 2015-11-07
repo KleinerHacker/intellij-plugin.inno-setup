@@ -6,14 +6,14 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
@@ -39,9 +39,9 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
     @Nullable
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssComponentDefinitionNameValueElement) {
+        if (element instanceof IssComponentPropertyNameValueElement) {
 
-            final IssComponentDefinitionNameValueElement nameValueElement = (IssComponentDefinitionNameValueElement) element;
+            final IssComponentPropertyNameValueElement nameValueElement = (IssComponentPropertyNameValueElement) element;
             return "Reference to component: " + nameValueElement.getName() + "<br/>" +
                     "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getDescriptionValue().getText();
         }
@@ -66,13 +66,13 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
 
     @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssTypeDefinitionFlagsValueElement) {
+        if (element instanceof IssTypePropertyFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_typessection.htm");
-        } else if (element instanceof IssTaskDefinitionFlagsValueElement) {
+        } else if (element instanceof IssTaskPropertyFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_taskssection.htm");
-        } else if (element instanceof IssComponentDefinitionFlagsValueElement) {
+        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_componentssection.htm");
-        } else if (element instanceof IssFileDefinitionFlagsValueElement) {
+        } else if (element instanceof IssFilePropertyFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_filessection.htm");
         }
 
@@ -81,35 +81,29 @@ public class IssFlagDocumentationProvider extends AbstractDocumentationProvider 
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        if (element instanceof IssTypeDefinitionFlagsValueElement) {
-            final IssTypeDefinitionFlagsValueElement typeDefinitionFlagsValueElement = (IssTypeDefinitionFlagsValueElement) element;
+        if (element instanceof IssTypePropertyFlagsValueElement) {
+            final IssTypePropertyFlagsValueElement typeDefinitionFlagsValueElement = (IssTypePropertyFlagsValueElement) element;
             final IssTypeFlag typeFlag = IssTypeFlag.fromId(typeDefinitionFlagsValueElement.getName());
             if (typeFlag == null)
                 return UNKNOWN;
 
             return RESOURCE_BUNDLE.getString(typeFlag.getDescriptionKey());
-        } else if (element instanceof IssTaskDefinitionFlagsValueElement) {
-            final IssTaskDefinitionFlagsValueElement taskDefinitionFlagsValueElement = (IssTaskDefinitionFlagsValueElement) element;
+        } else if (element instanceof IssTaskPropertyFlagsValueElement) {
+            final IssTaskPropertyFlagsValueElement taskDefinitionFlagsValueElement = (IssTaskPropertyFlagsValueElement) element;
             final IssTaskFlag taskFlag = IssTaskFlag.fromId(taskDefinitionFlagsValueElement.getName());
             if (taskFlag == null)
                 return UNKNOWN;
 
             return RESOURCE_BUNDLE.getString(taskFlag.getDescriptionKey());
-        } else if (element instanceof IssComponentDefinitionFlagsValueElement) {
-            final IssComponentDefinitionFlagsValueElement componentDefinitionFlagsValueElement = (IssComponentDefinitionFlagsValueElement) element;
+        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
+            final IssComponentPropertyFlagsValueElement componentDefinitionFlagsValueElement = (IssComponentPropertyFlagsValueElement) element;
             final IssComponentFlag componentFlag = IssComponentFlag.fromId(componentDefinitionFlagsValueElement.getName());
             if (componentFlag == null)
                 return UNKNOWN;
 
             return RESOURCE_BUNDLE.getString(componentFlag.getDescriptionKey());
-        } else if (element instanceof IssFileDefinitionFlagsValueElement) {
-            final IssFileDefinitionFlagsValueElement fileDefinitionFlagsValueElement = (IssFileDefinitionFlagsValueElement) element;
+        } else if (element instanceof IssFilePropertyFlagsValueElement) {
+            final IssFilePropertyFlagsValueElement fileDefinitionFlagsValueElement = (IssFilePropertyFlagsValueElement) element;
             final IssFileFlag fileFlag = IssFileFlag.fromId(fileDefinitionFlagsValueElement.getName());
             if (fileFlag == null)
                 return UNKNOWN;

@@ -18,23 +18,23 @@ public class IssComponentDefinitionElement extends IssDefinitionElement<IssCompo
     }
 
     @Nullable
-    public IssComponentDefinitionNameElement getComponentName() {
-        return PsiTreeUtil.findChildOfType(this, IssComponentDefinitionNameElement.class);
+    public IssComponentPropertyNameElement getComponentName() {
+        return PsiTreeUtil.findChildOfType(this, IssComponentPropertyNameElement.class);
     }
 
     @Nullable
-    public IssComponentDefinitionDescriptionElement getComponentDescription() {
-        return PsiTreeUtil.findChildOfType(this, IssComponentDefinitionDescriptionElement.class);
+    public IssComponentPropertyDescriptionElement getComponentDescription() {
+        return PsiTreeUtil.findChildOfType(this, IssComponentPropertyDescriptionElement.class);
     }
 
     @Nullable
-    public IssComponentDefinitionTypesElement getComponentTypes() {
-        return PsiTreeUtil.findChildOfType(this, IssComponentDefinitionTypesElement.class);
+    public IssComponentPropertyTypesElement getComponentTypes() {
+        return PsiTreeUtil.findChildOfType(this, IssComponentPropertyTypesElement.class);
     }
 
     @Nullable
-    public IssComponentDefinitionFlagsElement getComponentFlags() {
-        return PsiTreeUtil.findChildOfType(this, IssComponentDefinitionFlagsElement.class);
+    public IssComponentPropertyFlagsElement getComponentFlags() {
+        return PsiTreeUtil.findChildOfType(this, IssComponentPropertyFlagsElement.class);
     }
 
     @Override

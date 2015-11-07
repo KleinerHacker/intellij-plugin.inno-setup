@@ -8,7 +8,7 @@ import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveResult;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class IssTaskReference extends IssAbstractReference {
     @Override
     public ResolveResult[] multiResolve(boolean b) {
         final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssTaskUtils.findTaskDefinitions(myElement.getProject(), key, b);
-        final List<IssTaskDefinitionNameValueElement> taskDefinitionNameValueElements = taskDefinitionElements.stream()
+        final List<IssTaskPropertyNameValueElement> taskDefinitionNameValueElements = taskDefinitionElements.stream()
                 .filter(item -> item.getTaskName() != null && item.getTaskName().getNameValue() != null)
                 .map(item -> item.getTaskName().getNameValue())
                 .collect(Collectors.toList());
@@ -50,8 +50,8 @@ public class IssTaskReference extends IssAbstractReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssTaskDefinitionNameValueElement) {
-            final IssTaskDefinitionNameValueElement nameElement = (IssTaskDefinitionNameValueElement) element;
+        if (element instanceof IssTaskPropertyNameValueElement) {
+            final IssTaskPropertyNameValueElement nameElement = (IssTaskPropertyNameValueElement) element;
             return nameElement.getName().equalsIgnoreCase(myElement.getName());
         }
 
