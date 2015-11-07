@@ -17,8 +17,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssSectionCompletionContributor extends CompletionContributor {
-    public IssSectionCompletionContributor() {
+public class IssSectionHeaderCompletionContributor extends CompletionContributor {
+    public IssSectionHeaderCompletionContributor() {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssFile.class)
                         .afterLeaf("\r", "\n", "\r\n"),

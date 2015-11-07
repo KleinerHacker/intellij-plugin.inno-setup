@@ -63,18 +63,21 @@
 
         <!-- Contributors -->
         <!-- Completion -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionTaskCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionSetupCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionFileCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionComponentCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionTypeCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTaskCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertySetupCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyFileCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyComponentCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTypeCompletionContributor"/>
         <!-- -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagTypeCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagTaskCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagComponentCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFlagFileCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssCopyModeFileCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTypeFlagCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTaskFlagCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssComponentFlagCompletionContributor"/>
+        <!-- File -->
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileFlagCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileCopyModeCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileAttributeCompletionContributor"/>
+        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFilePermissionsCompletionContributor"/>
         <!-- Go To -->
         <gotoSymbolContributor
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTaskGoToContributor"/>

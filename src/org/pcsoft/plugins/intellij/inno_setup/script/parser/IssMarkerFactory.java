@@ -59,6 +59,10 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_DESTDIR_VALUE = new IElementType(KEY_ITEM + "_DESTDIR_VALUE", LANGUAGE);
         public static final IElementType ITEM_COPYMODE = new IElementType(KEY_ITEM + "_COPYMODE", LANGUAGE);
         public static final IElementType ITEM_COPYMODE_VALUE = new IElementType(KEY_ITEM + "_COPYMODE_VALUE", LANGUAGE);
+        public static final IElementType ITEM_ATTRIBUTE = new IElementType(KEY_ITEM + "_ATTRIBUTE", LANGUAGE);
+        public static final IElementType ITEM_ATTRIBUTE_VALUE = new IElementType(KEY_ITEM + "_ATTRIBUTE_VALUE", LANGUAGE);
+        public static final IElementType ITEM_PERMISSIONS = new IElementType(KEY_ITEM + "_PERMISSIONS", LANGUAGE);
+        public static final IElementType ITEM_PERMISSIONS_VALUE = new IElementType(KEY_ITEM + "_PERMISSIONS_VALUE", LANGUAGE);
         public static final IElementType ITEM_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
         public static final IElementType ITEM_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
         public static final IElementType ITEM_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);

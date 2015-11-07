@@ -2,13 +2,13 @@
 Compression=lzma
 
 [Tasks]
-Name: testTask; Description: "My Test Task"; Components: testBla
+Name: testTask; Description: "My Test Task"; Components: testComponent
 
 [TYPES]
 Name: bla; Description: "Bla"; Flags: IsCustom;
 
 [Components]
-Name: testBla; Description: "Bla"; Types: bla
+Name: testComponent; Description: "Bla"; Types: bla
 
 [Files]
-Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly; Components: testBla; CopyMode: AlwaysOverwrite
+Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly; Components: testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden; Permissions: Full

@@ -108,6 +108,14 @@ public final class IssPsiElementFactory {
             return new IssFilePropertyCopyModeElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_COPYMODE_VALUE.equals(node.getElementType())) {
             return new IssFilePropertyCopyModeValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_ATTRIBUTE.equals(node.getElementType())) {
+            return new IssFilePropertyAttributeElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_ATTRIBUTE_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyAttributeValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_PERMISSIONS.equals(node.getElementType())) {
+            return new IssFilePropertyPermissionsElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_PERMISSIONS_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyPermissionsValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS.equals(node.getElementType())) {
             return new IssFilePropertyTasksElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
