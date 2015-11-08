@@ -5,9 +5,8 @@ import com.intellij.lang.ASTNode;
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssDefinitionPropertyDefaultElement extends IssDefinitionPropertyElement<IssDefinitionElement> {
-
+public class IssDefinitionPropertyDefaultElement extends IssDefinitionPropertyElement<IssDefinitionElement, IssDefinitionPropertyDefaultValueElement> {
     public IssDefinitionPropertyDefaultElement(ASTNode node) {
-        super(node, IssDefinitionElement.class);
+        super(node, IssDefinitionElement.class, IssDefinitionPropertyDefaultValueElement.class);
     }
 }

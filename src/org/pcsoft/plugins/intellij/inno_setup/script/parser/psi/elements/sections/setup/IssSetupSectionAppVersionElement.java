@@ -9,6 +9,6 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 public class IssSetupSectionAppVersionElement extends IssDefinitionPropertyElement {
 
     public IssSetupSectionAppVersionElement(ASTNode node) {
-        super(node, null);
+        super(node, null, null);
     }
 }

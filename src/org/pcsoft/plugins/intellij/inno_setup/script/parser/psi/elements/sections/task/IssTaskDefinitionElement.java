@@ -42,7 +42,7 @@ public class IssTaskDefinitionElement extends IssDefinitionElement<IssTaskSectio
 
     @Override
     public String getName() {
-        return getTaskName() == null ? null : getTaskName().getNameValue() == null ? null : getTaskName().getNameValue().getName();
+        return getTaskName() == null ? null : getTaskName().getPropertyValue() == null ? null : getTaskName().getPropertyValue().getName();
     }
 
     @Nullable

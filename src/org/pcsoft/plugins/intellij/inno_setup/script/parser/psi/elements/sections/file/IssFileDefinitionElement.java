@@ -69,4 +69,19 @@ public class IssFileDefinitionElement extends IssDefinitionElement<IssFileSectio
     public IssFilePropertyFlagsElement getFileFlags() {
         return PsiTreeUtil.findChildOfType(this, IssFilePropertyFlagsElement.class);
     }
+
+    @Nullable
+    public IssFilePropertyCopyModeElement getFileCopyMode() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyCopyModeElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyAttributeElement getFileAttribute() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyAttributeElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyPermissionsElement getFilePermissions() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyPermissionsElement.class);
+    }
 }

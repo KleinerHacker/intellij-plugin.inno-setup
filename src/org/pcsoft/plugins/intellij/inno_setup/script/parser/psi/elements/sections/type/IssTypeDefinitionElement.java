@@ -42,7 +42,7 @@ public class IssTypeDefinitionElement extends IssDefinitionElement<IssTypeSectio
 
     @Override
     public String getName() {
-        return getTypeName() == null ? null : getTypeName().getNameValue() == null ? null : getTypeName().getNameValue().getName();
+        return getTypeName() == null ? null : getTypeName().getPropertyValue() == null ? null : getTypeName().getPropertyValue().getName();
     }
 
     @Nullable

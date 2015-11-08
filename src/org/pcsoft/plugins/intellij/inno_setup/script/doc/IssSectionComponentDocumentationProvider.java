@@ -8,20 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTypeUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +31,7 @@ public class IssSectionComponentDocumentationProvider extends AbstractDocumentat
 
             final IssComponentPropertyNameValueElement nameValueElement = (IssComponentPropertyNameValueElement) element;
             return "Reference to component: " + nameValueElement.getName() + "<br/>" +
-                    "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getDescriptionValue().getText();
+                    "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getPropertyValue().getText();
         }
 
         return super.getQuickNavigateInfo(element, originalElement);

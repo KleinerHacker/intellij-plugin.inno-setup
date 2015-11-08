@@ -11,14 +11,8 @@ import java.util.Collection;
 /**
  * Created by Christoph on 28.12.2014.
  */
-public class IssTaskPropertyComponentsElement extends IssDefinitionPropertyElement<IssFileDefinitionElement> {
-
+public class IssTaskPropertyComponentsElement extends IssDefinitionPropertyElement<IssFileDefinitionElement,IssTaskPropertyComponentsValueElement> {
     public IssTaskPropertyComponentsElement(ASTNode node) {
-        super(node, IssFileDefinitionElement.class);
-    }
-
-    @NotNull
-    public Collection<IssTaskPropertyComponentsValueElement> getComponentsValueList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssTaskPropertyComponentsValueElement.class);
+        super(node, IssFileDefinitionElement.class,IssTaskPropertyComponentsValueElement.class);
     }
 }

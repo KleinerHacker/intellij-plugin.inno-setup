@@ -8,14 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 23.12.2014.
  */
-public class IssFilePropertySourceElement extends IssDefinitionPropertyElement<IssFileDefinitionElement> {
-
+public class IssFilePropertySourceElement extends IssDefinitionPropertyElement<IssFileDefinitionElement,IssFilePropertySourceValueElement> {
     public IssFilePropertySourceElement(ASTNode node) {
-        super(node, IssFileDefinitionElement.class);
-    }
-
-    @Nullable
-    public IssFilePropertySourceValueElement getSourceValue() {
-        return PsiTreeUtil.findChildOfType(this, IssFilePropertySourceValueElement.class);
+        super(node, IssFileDefinitionElement.class,IssFilePropertySourceValueElement.class);
     }
 }

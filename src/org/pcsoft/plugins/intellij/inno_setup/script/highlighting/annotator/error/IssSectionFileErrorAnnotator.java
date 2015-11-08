@@ -24,7 +24,7 @@ public class IssSectionFileErrorAnnotator implements Annotator {
                 annotationHolder.createErrorAnnotation(fileDefinitionElement, "Missing required section item 'DestDir'");
             }
             if (fileDefinitionElement.getFileTasks() != null) {
-                fileDefinitionElement.getFileTasks().getTasksValueList().stream()
+                fileDefinitionElement.getFileTasks().getPropertyValueList().stream()
                         .filter(item -> item.getReference().resolve() == null)
                         .forEach(item -> {
                             final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
@@ -32,7 +32,7 @@ public class IssSectionFileErrorAnnotator implements Annotator {
                         });
             }
             if (fileDefinitionElement.getFileComponents() != null) {
-                fileDefinitionElement.getFileComponents().getComponentsValueList().stream()
+                fileDefinitionElement.getFileComponents().getPropertyValueList().stream()
                         .filter(item -> item.getReference().resolve() == null)
                         .forEach(item -> {
                             final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -40,7 +40,7 @@ public class IssSectionFileErrorAnnotator implements Annotator {
                         });
             }
             if (fileDefinitionElement.getFileFlags() != null) {
-                fileDefinitionElement.getFileFlags().getFlagsValueList().stream()
+                fileDefinitionElement.getFileFlags().getPropertyValueList().stream()
                         .filter(item -> IssFileFlag.fromId(item.getName()) == null)
                         .forEach(item -> {
                             annotationHolder.createErrorAnnotation(item, "Unknown flag");

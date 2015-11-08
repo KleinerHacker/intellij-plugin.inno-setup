@@ -24,7 +24,7 @@ public class IssSectionTaskErrorAnnotator implements Annotator {
                 annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Description'");
             }
             if (taskDefinitionElement.getTaskComponents() != null) {
-                taskDefinitionElement.getTaskComponents().getComponentsValueList().stream()
+                taskDefinitionElement.getTaskComponents().getPropertyValueList().stream()
                         .filter(item -> item.getReference().resolve() == null)
                         .forEach(item -> {
                             final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -42,7 +42,7 @@ public class IssSectionTaskErrorAnnotator implements Annotator {
                 }
             }
             if (taskDefinitionElement.getTaskFlags() != null) {
-                taskDefinitionElement.getTaskFlags().getFlagsValueList().stream()
+                taskDefinitionElement.getTaskFlags().getPropertyValueList().stream()
                         .filter(item -> IssTaskFlag.fromId(item.getName()) == null)
                         .forEach(item -> {
                             annotationHolder.createErrorAnnotation(item, "Unknown flag");

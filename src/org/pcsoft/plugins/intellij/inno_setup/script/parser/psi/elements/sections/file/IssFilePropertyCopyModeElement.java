@@ -8,14 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 23.12.2014.
  */
-public class IssFilePropertyCopyModeElement extends IssDefinitionPropertyElement<IssFileDefinitionElement> {
-
+public class IssFilePropertyCopyModeElement extends IssDefinitionPropertyElement<IssFileDefinitionElement,IssFilePropertyCopyModeValueElement> {
     public IssFilePropertyCopyModeElement(ASTNode node) {
-        super(node, IssFileDefinitionElement.class);
-    }
-
-    @Nullable
-    public IssFilePropertyCopyModeValueElement getCopyModeValue() {
-        return PsiTreeUtil.findChildOfType(this, IssFilePropertyCopyModeValueElement.class);
+        super(node, IssFileDefinitionElement.class,IssFilePropertyCopyModeValueElement.class);
     }
 }

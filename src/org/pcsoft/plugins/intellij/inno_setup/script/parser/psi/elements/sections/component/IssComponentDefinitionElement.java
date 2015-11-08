@@ -62,6 +62,6 @@ public class IssComponentDefinitionElement extends IssDefinitionElement<IssCompo
 
     @Override
     public String getName() {
-        return getComponentName() == null ? null : getComponentName().getNameValue() == null ? null : getComponentName().getNameValue().getName();
+        return getComponentName() == null ? null : getComponentName().getPropertyValue() == null ? null : getComponentName().getPropertyValue().getName();
     }
 }

@@ -18,7 +18,7 @@ public class IssSectionTypeWarnAnnotator implements Annotator {
 
             if (typeDefinitionElement.getTypeFlags() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        typeDefinitionElement.getTypeFlags().getFlagsValueList(),
+                        typeDefinitionElement.getTypeFlags().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");

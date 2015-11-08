@@ -29,8 +29,8 @@ public class IssComponentReference extends IssAbstractReference {
     public ResolveResult[] multiResolve(boolean b) {
         final Collection<IssComponentDefinitionElement> componentDefinitionElements = IssComponentUtils.findComponentDefinitions(myElement.getProject(), key, b);
         final List<IssComponentPropertyNameValueElement> componentDefinitionNameValueElements = componentDefinitionElements.stream()
-                .filter(item -> item.getComponentName() != null && item.getComponentName().getNameValue() != null)
-                .map(item -> item.getComponentName().getNameValue())
+                .filter(item -> item.getComponentName() != null && item.getComponentName().getPropertyValue() != null)
+                .map(item -> item.getComponentName().getPropertyValue())
                 .collect(Collectors.toList());
         final List<ResolveResult> resolveResultList = componentDefinitionNameValueElements.stream()
                 .map(PsiElementResolveResult::new)

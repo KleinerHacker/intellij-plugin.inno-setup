@@ -17,7 +17,7 @@ public class IssSectionTaskWarnAnnotator implements Annotator {
             final IssTaskDefinitionElement taskDefinitionElement = (IssTaskDefinitionElement) psiElement;
             if (taskDefinitionElement.getTaskComponents() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        taskDefinitionElement.getTaskComponents().getComponentsValueList(),
+                        taskDefinitionElement.getTaskComponents().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
@@ -26,7 +26,7 @@ public class IssSectionTaskWarnAnnotator implements Annotator {
             }
             if (taskDefinitionElement.getTaskFlags() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        taskDefinitionElement.getTaskFlags().getFlagsValueList(),
+                        taskDefinitionElement.getTaskFlags().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");

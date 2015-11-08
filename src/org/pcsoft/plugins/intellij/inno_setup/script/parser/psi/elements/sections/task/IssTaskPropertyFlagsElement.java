@@ -10,14 +10,8 @@ import java.util.Collection;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssTaskPropertyFlagsElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement> {
-
+public class IssTaskPropertyFlagsElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement,IssTaskPropertyFlagsValueElement> {
     public IssTaskPropertyFlagsElement(ASTNode node) {
-        super(node, IssTaskDefinitionElement.class);
-    }
-
-    @NotNull
-    public Collection<IssTaskPropertyFlagsValueElement> getFlagsValueList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssTaskPropertyFlagsValueElement.class);
+        super(node, IssTaskDefinitionElement.class,IssTaskPropertyFlagsValueElement.class);
     }
 }

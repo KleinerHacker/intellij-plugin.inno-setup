@@ -8,5 +8,6 @@ public enum IssItemValueType {
     DirectMultiple,
     String,
     Integer,
-    Double
+    Double,
+    Unknown
 }

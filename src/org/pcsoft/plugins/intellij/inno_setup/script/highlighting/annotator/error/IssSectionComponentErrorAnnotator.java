@@ -34,7 +34,7 @@ public class IssSectionComponentErrorAnnotator implements Annotator {
                 }
             }
             if (componentDefinitionElement.getComponentTypes() != null) {
-                componentDefinitionElement.getComponentTypes().getTypesValueList().stream()
+                componentDefinitionElement.getComponentTypes().getPropertyValueList().stream()
                         .filter(item -> item.getReference().resolve() == null)
                         .forEach(item -> {
                             final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
@@ -42,7 +42,7 @@ public class IssSectionComponentErrorAnnotator implements Annotator {
                         });
             }
             if (componentDefinitionElement.getComponentFlags() != null) {
-                componentDefinitionElement.getComponentFlags().getFlagsValueList().stream()
+                componentDefinitionElement.getComponentFlags().getPropertyValueList().stream()
                         .filter(item -> IssComponentFlag.fromId(item.getName()) == null)
                         .forEach(item -> {
                             annotationHolder.createErrorAnnotation(item, "Unknown flag");

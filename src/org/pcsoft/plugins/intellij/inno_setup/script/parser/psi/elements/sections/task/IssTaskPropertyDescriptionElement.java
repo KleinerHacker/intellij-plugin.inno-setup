@@ -8,14 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssTaskPropertyDescriptionElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement> {
-
+public class IssTaskPropertyDescriptionElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement,IssTaskPropertyDescriptionValueElement> {
     public IssTaskPropertyDescriptionElement(ASTNode node) {
-        super(node, IssTaskDefinitionElement.class);
-    }
-
-    @Nullable
-    public IssTaskPropertyDescriptionValueElement getDescriptionValue() {
-        return PsiTreeUtil.findChildOfType(this, IssTaskPropertyDescriptionValueElement.class);
+        super(node, IssTaskDefinitionElement.class,IssTaskPropertyDescriptionValueElement.class);
     }
 }

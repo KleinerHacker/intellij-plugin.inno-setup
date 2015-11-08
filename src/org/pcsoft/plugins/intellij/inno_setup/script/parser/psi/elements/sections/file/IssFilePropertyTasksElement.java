@@ -10,14 +10,8 @@ import java.util.Collection;
 /**
  * Created by Christoph on 23.12.2014.
  */
-public class IssFilePropertyTasksElement extends IssDefinitionPropertyElement<IssFileDefinitionElement> {
-
+public class IssFilePropertyTasksElement extends IssDefinitionPropertyElement<IssFileDefinitionElement, IssFilePropertyTasksValueElement> {
     public IssFilePropertyTasksElement(ASTNode node) {
-        super(node, IssFileDefinitionElement.class);
-    }
-
-    @NotNull
-    public Collection<IssFilePropertyTasksValueElement> getTasksValueList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssFilePropertyTasksValueElement.class);
+        super(node, IssFileDefinitionElement.class, IssFilePropertyTasksValueElement.class);
     }
 }

@@ -17,7 +17,7 @@ public class IssSectionFileWarnAnnotator implements Annotator {
             final IssFileDefinitionElement fileDefinitionElement = (IssFileDefinitionElement) psiElement;
             if (fileDefinitionElement.getFileTasks() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        fileDefinitionElement.getFileTasks().getTasksValueList(),
+                        fileDefinitionElement.getFileTasks().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
@@ -26,7 +26,7 @@ public class IssSectionFileWarnAnnotator implements Annotator {
             }
             if (fileDefinitionElement.getFileComponents() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        fileDefinitionElement.getFileComponents().getComponentsValueList(),
+                        fileDefinitionElement.getFileComponents().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
@@ -45,7 +45,7 @@ public class IssSectionFileWarnAnnotator implements Annotator {
             }
             if (fileDefinitionElement.getFileFlags() != null) {
                 IssAnnotatorUtils.findDoubleValues(
-                        fileDefinitionElement.getFileFlags().getFlagsValueList(),
+                        fileDefinitionElement.getFileFlags().getPropertyValueList(),
                         element -> element.getName(),
                         (element, key) -> {
                             annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");

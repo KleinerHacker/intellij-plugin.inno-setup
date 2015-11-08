@@ -29,8 +29,8 @@ public class IssTaskReference extends IssAbstractReference {
     public ResolveResult[] multiResolve(boolean b) {
         final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssTaskUtils.findTaskDefinitions(myElement.getProject(), key, b);
         final List<IssTaskPropertyNameValueElement> taskDefinitionNameValueElements = taskDefinitionElements.stream()
-                .filter(item -> item.getTaskName() != null && item.getTaskName().getNameValue() != null)
-                .map(item -> item.getTaskName().getNameValue())
+                .filter(item -> item.getTaskName() != null && item.getTaskName().getPropertyValue() != null)
+                .map(item -> item.getTaskName().getPropertyValue())
                 .collect(Collectors.toList());
         final List<ResolveResult> resolveResultList = taskDefinitionNameValueElements.stream()
                 .map(PsiElementResolveResult::new)

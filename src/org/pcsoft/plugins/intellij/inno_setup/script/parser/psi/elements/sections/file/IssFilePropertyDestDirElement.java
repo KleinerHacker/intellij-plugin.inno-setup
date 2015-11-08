@@ -8,14 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 23.12.2014.
  */
-public class IssFilePropertyDestDirElement extends IssDefinitionPropertyElement<IssFileDefinitionElement> {
-
+public class IssFilePropertyDestDirElement extends IssDefinitionPropertyElement<IssFileDefinitionElement,IssFilePropertyDestDirValueElement> {
     public IssFilePropertyDestDirElement(ASTNode node) {
-        super(node, IssFileDefinitionElement.class);
-    }
-
-    @Nullable
-    public IssFilePropertyDestDirValueElement getDestDirValue() {
-        return PsiTreeUtil.findChildOfType(this, IssFilePropertyDestDirValueElement.class);
+        super(node, IssFileDefinitionElement.class,IssFilePropertyDestDirValueElement.class);
     }
 }

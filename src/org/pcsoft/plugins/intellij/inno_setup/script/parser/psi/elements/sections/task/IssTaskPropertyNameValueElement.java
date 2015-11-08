@@ -7,12 +7,14 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssAbstractElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
 
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssTaskPropertyNameValueElement extends IssAbstractElement{
+public class IssTaskPropertyNameValueElement extends IssDefinitionPropertyValueElement{
 
     public IssTaskPropertyNameValueElement(ASTNode node) {
         super(node);
@@ -43,5 +45,11 @@ public class IssTaskPropertyNameValueElement extends IssAbstractElement{
     @Nullable
     public IssTaskPropertyNameElement getValueParent() {
         return PsiTreeUtil.getParentOfType(this, IssTaskPropertyNameElement.class);
+    }
+
+    @NotNull
+    @Override
+    public IssItemValueType getItemValueType() {
+        return IssItemValueType.DirectSingle;
     }
 }

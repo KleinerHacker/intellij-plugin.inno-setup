@@ -32,7 +32,7 @@ public class IssSectionTypeErrorAnnotator implements Annotator {
                 }
             }
             if (typeDefinitionElement.getTypeFlags() != null) {
-                typeDefinitionElement.getTypeFlags().getFlagsValueList().stream()
+                typeDefinitionElement.getTypeFlags().getPropertyValueList().stream()
                         .filter(item -> IssTypeFlag.fromId(item.getName()) == null)
                         .forEach(item -> {
                             annotationHolder.createErrorAnnotation(item, "Unknown flag");

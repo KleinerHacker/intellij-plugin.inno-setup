@@ -20,7 +20,7 @@ public abstract class IssDefinitionElement<P extends IssDefinableSectionElement>
     }
 
     @Nullable
-    public Collection<IssDefinitionPropertyElement> getSectionItemList() {
+    public Collection<IssDefinitionPropertyElement> getSectionPropertyList() {
         return PsiTreeUtil.findChildrenOfType(this, IssDefinitionPropertyElement.class);
     }
 

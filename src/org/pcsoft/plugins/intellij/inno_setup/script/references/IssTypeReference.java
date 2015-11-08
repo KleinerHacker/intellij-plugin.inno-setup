@@ -29,8 +29,8 @@ public class IssTypeReference extends IssAbstractReference {
     public ResolveResult[] multiResolve(boolean b) {
         final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssTypeUtils.findTypeDefinitions(myElement.getProject(), key, b);
         final List<IssTypePropertyNameValueElement> typeDefinitionNameValueElements = typeDefinitionElements.stream()
-                .filter(item -> item.getTypeName() != null && item.getTypeName().getNameValue() != null)
-                .map(item -> item.getTypeName().getNameValue())
+                .filter(item -> item.getTypeName() != null && item.getTypeName().getPropertyValue() != null)
+                .map(item -> item.getTypeName().getPropertyValue())
                 .collect(Collectors.toList());
         final List<ResolveResult> resolveResultList = typeDefinitionNameValueElements.stream()
                 .map(PsiElementResolveResult::new)
