@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
@@ -14,10 +15,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
@@ -33,8 +31,9 @@ import java.util.ResourceBundle;
  */
 public class IssSectionTypeDocumentationProvider extends AbstractDocumentationProvider {
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_type");
-    private static final String UNKNOWN = "Unknown flag";
+    private static final ResourceBundle RESOURCE_BUNDLE = new MultiResourceBundle(
+            ResourceBundle.getBundle("/messages/documentation_type"), ResourceBundle.getBundle("/messages/documentation_common")
+    );
 
     @Nullable
     @Override
@@ -45,7 +44,7 @@ public class IssSectionTypeDocumentationProvider extends AbstractDocumentationPr
     @Override
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
         if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
-         return IssFileUtils.createFlagValue(element.getProject(), object.toString());
+            return IssFileUtils.createFlagValue(element.getProject(), object.toString());
         }
 
         return null;
@@ -62,11 +61,21 @@ public class IssSectionTypeDocumentationProvider extends AbstractDocumentationPr
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssTypePropertyFlagsValueElement) {
+        if (element instanceof IssIdentifierElement) {
+            final IssIdentifierElement identifierElement = (IssIdentifierElement) element;
+
+            if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
+                final IssTypeProperty typeProperty = IssTypeProperty.fromId(identifierElement.getName());
+                if (typeProperty == null)
+                    return "Unknown type property";
+
+                return RESOURCE_BUNDLE.getString(typeProperty.getDescriptionKey());
+            }
+        } else if (element instanceof IssTypePropertyFlagsValueElement) {
             final IssTypePropertyFlagsValueElement typeDefinitionFlagsValueElement = (IssTypePropertyFlagsValueElement) element;
             final IssTypeFlag typeFlag = IssTypeFlag.fromId(typeDefinitionFlagsValueElement.getName());
             if (typeFlag == null)
-                return UNKNOWN;
+                return "Unknown flag";
 
             return RESOURCE_BUNDLE.getString(typeFlag.getDescriptionKey());
         }

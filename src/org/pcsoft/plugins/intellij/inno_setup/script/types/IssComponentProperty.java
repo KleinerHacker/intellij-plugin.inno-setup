@@ -8,11 +8,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 28.12.2014.
  */
 public enum IssComponentProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.ComponentSection.ITEM_NAME, IssMarkerFactory.ComponentSection.ITEM_NAME_VALUE, "property.components.name"),
-    Description("Description", IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION, IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE, "property.components.description"),
-    Types("Types", IssMarkerFactory.ComponentSection.ITEM_TYPES, IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE, "property.components.types"),
-    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED, IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE, "property.components.extra_disk_space_required"),
-    Flags("Flags", IssMarkerFactory.ComponentSection.ITEM_FLAGS, IssMarkerFactory.ComponentSection.ITEM_FLAGS_VALUE, "property.components.flags"),
+    Name("Name", IssMarkerFactory.ComponentSection.ITEM_NAME, IssMarkerFactory.ComponentSection.ITEM_NAME_VALUE, "component.property.name"),
+    Description("Description", IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION, IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE, "component.property.description"),
+    Types("Types", IssMarkerFactory.ComponentSection.ITEM_TYPES, IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE, "component.property.types"),
+    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED, IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE, "component.property.extra_disk_space_required"),
+    Flags("Flags", IssMarkerFactory.ComponentSection.ITEM_FLAGS, IssMarkerFactory.ComponentSection.ITEM_FLAGS_VALUE, "component.property.flags"),
     //Commons
     Languages(IssCommonProperty.Languages),
     MinimalVersion(IssCommonProperty.MinimalVersion),

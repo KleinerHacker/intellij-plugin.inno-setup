@@ -105,8 +105,6 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionFileDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssCommentDocumentationProvider"/>
-        <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssAttributeDocumentationProvider"/>
     </extensions>
 
     <application-components>

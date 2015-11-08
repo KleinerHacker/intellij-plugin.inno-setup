@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
@@ -14,10 +15,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
@@ -33,8 +31,9 @@ import java.util.ResourceBundle;
  */
 public class IssSectionTaskDocumentationProvider extends AbstractDocumentationProvider {
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_task");
-    private static final String UNKNOWN = "Unknown flag";
+    private static final ResourceBundle RESOURCE_BUNDLE = new MultiResourceBundle(
+            ResourceBundle.getBundle("/messages/documentation_task"), ResourceBundle.getBundle("/messages/documentation_common")
+    );
 
     @Nullable
     @Override
@@ -62,11 +61,21 @@ public class IssSectionTaskDocumentationProvider extends AbstractDocumentationPr
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssTaskPropertyFlagsValueElement) {
+        if (element instanceof IssIdentifierElement) {
+            final IssIdentifierElement identifierElement = (IssIdentifierElement) element;
+
+            if (PsiTreeUtil.getParentOfType(element, IssTaskDefinitionElement.class) != null) {
+                final IssTaskProperty taskProperty = IssTaskProperty.fromId(identifierElement.getName());
+                if (taskProperty == null)
+                    return "Unknown task property";
+
+                return RESOURCE_BUNDLE.getString(taskProperty.getDescriptionKey());
+            }
+        } else if (element instanceof IssTaskPropertyFlagsValueElement) {
             final IssTaskPropertyFlagsValueElement taskDefinitionFlagsValueElement = (IssTaskPropertyFlagsValueElement) element;
             final IssTaskFlag taskFlag = IssTaskFlag.fromId(taskDefinitionFlagsValueElement.getName());
             if (taskFlag == null)
-                return UNKNOWN;
+                return "Unknown flag";
 
             return RESOURCE_BUNDLE.getString(taskFlag.getDescriptionKey());
         }

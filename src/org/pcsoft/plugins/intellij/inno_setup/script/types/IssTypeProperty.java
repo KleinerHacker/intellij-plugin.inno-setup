@@ -8,9 +8,9 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 04.01.2015.
  */
 public enum IssTypeProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.TypeSection.ITEM_NAME, IssMarkerFactory.TypeSection.ITEM_NAME_VALUE, "property.types.name"),
-    Description("Description", IssMarkerFactory.TypeSection.ITEM_DESCRIPTION, IssMarkerFactory.TypeSection.ITEM_DESCRIPTION_VALUE, "property.types.description"),
-    Flags("Flags", IssMarkerFactory.TypeSection.ITEM_FLAGS, IssMarkerFactory.TypeSection.ITEM_FLAGS_VALUE, "property.types.flags"),
+    Name("Name", IssMarkerFactory.TypeSection.ITEM_NAME, IssMarkerFactory.TypeSection.ITEM_NAME_VALUE, "type.property.name"),
+    Description("Description", IssMarkerFactory.TypeSection.ITEM_DESCRIPTION, IssMarkerFactory.TypeSection.ITEM_DESCRIPTION_VALUE, "type.property.description"),
+    Flags("Flags", IssMarkerFactory.TypeSection.ITEM_FLAGS, IssMarkerFactory.TypeSection.ITEM_FLAGS_VALUE, "type.property.flags"),
     //Commons
     Languages(IssCommonProperty.Languages),
     MinimalVersion(IssCommonProperty.MinimalVersion),

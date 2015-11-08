@@ -8,11 +8,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 22.12.2014.
  */
 public enum IssTaskProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.TaskSection.ITEM_NAME, IssMarkerFactory.TaskSection.ITEM_NAME_VALUE, "property.tasks.name"),
-    Description("Description", IssMarkerFactory.TaskSection.ITEM_DESCRIPTION, IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE, "property.tasks.description"),
-    DescriptionGroup("GroupDescription", IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION, IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE, "property.tasks.group_description"),
-    Flags("Flags", IssMarkerFactory.TaskSection.ITEM_FLAGS, IssMarkerFactory.TaskSection.ITEM_FLAGS_VALUE, "property.tasks.flags"),
-    Components("Components", IssMarkerFactory.TaskSection.ITEM_COMPONENTS, IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE, "property.common.components"),
+    Name("Name", IssMarkerFactory.TaskSection.ITEM_NAME, IssMarkerFactory.TaskSection.ITEM_NAME_VALUE, "task.property.name"),
+    Description("Description", IssMarkerFactory.TaskSection.ITEM_DESCRIPTION, IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE, "task.property.description"),
+    DescriptionGroup("GroupDescription", IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION, IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE, "task.property.group_description"),
+    Flags("Flags", IssMarkerFactory.TaskSection.ITEM_FLAGS, IssMarkerFactory.TaskSection.ITEM_FLAGS_VALUE, "task.property.flags"),
+    Components("Components", IssMarkerFactory.TaskSection.ITEM_COMPONENTS, IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE, "common.property.components"),
     //Commons
     Languages(IssCommonProperty.Languages),
     MinimalVersion(IssCommonProperty.MinimalVersion),

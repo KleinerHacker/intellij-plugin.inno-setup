@@ -5,10 +5,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
 
 import java.util.Arrays;
@@ -21,8 +26,9 @@ import java.util.ResourceBundle;
  */
 public class IssSectionComponentDocumentationProvider extends AbstractDocumentationProvider {
 
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("/messages/documentation_component");
-    private static final String UNKNOWN = "Unknown flag";
+    private static final ResourceBundle RESOURCE_BUNDLE = new MultiResourceBundle(
+            ResourceBundle.getBundle("/messages/documentation_component"), ResourceBundle.getBundle("/messages/documentation_common")
+    );
 
     @Nullable
     @Override
@@ -57,11 +63,21 @@ public class IssSectionComponentDocumentationProvider extends AbstractDocumentat
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssComponentPropertyFlagsValueElement) {
+        if (element instanceof IssIdentifierElement) {
+            final IssIdentifierElement identifierElement = (IssIdentifierElement) element;
+
+            if (PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
+                final IssComponentProperty componentProperty = IssComponentProperty.fromId(identifierElement.getName());
+                if (componentProperty == null)
+                    return "Unknown component property";
+
+                return RESOURCE_BUNDLE.getString(componentProperty.getDescriptionKey());
+            }
+        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
             final IssComponentPropertyFlagsValueElement componentDefinitionFlagsValueElement = (IssComponentPropertyFlagsValueElement) element;
             final IssComponentFlag componentFlag = IssComponentFlag.fromId(componentDefinitionFlagsValueElement.getName());
             if (componentFlag == null)
-                return UNKNOWN;
+                return "Unknown flag";
 
             return RESOURCE_BUNDLE.getString(componentFlag.getDescriptionKey());
         }
