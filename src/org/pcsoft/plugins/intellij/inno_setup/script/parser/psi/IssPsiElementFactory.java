@@ -9,21 +9,13 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssValu
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyDefaultElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppVersionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyDescriptionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyDescriptionValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.*;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -42,6 +34,10 @@ public final class IssPsiElementFactory {
         final PsiElement fileSection = createForFileSection(node);
         if (fileSection != null)
             return fileSection;
+
+        final PsiElement directorySection = createForDirectorySection(node);
+        if (directorySection != null)
+            return directorySection;
 
         final PsiElement componentSection = createForComponentSection(node);
         if (componentSection != null)
@@ -152,6 +148,40 @@ public final class IssPsiElementFactory {
             return new IssFilePropertyFlagsElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssFilePropertyFlagsValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForDirectorySection(ASTNode node) {
+        if (IssMarkerFactory.DirectorySection.SECTION.equals(node.getElementType())) {
+            return new IssDirectorySectionElement(node);
+        } else if (IssMarkerFactory.DirectorySection.SECTION_DEFINITION.equals(node.getElementType())) {
+            return new IssDirectoryDefinitionElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_NAME.equals(node.getElementType())) {
+            return new IssDirectoryPropertyNameElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_NAME_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyNameValueElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyAttributeElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyAttributeValueElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS.equals(node.getElementType())) {
+            return new IssDirectoryPropertyPermissionsElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyPermissionsValueElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_TASKS.equals(node.getElementType())) {
+            return new IssDirectoryPropertyTasksElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyTasksValueElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_COMPONENTS.equals(node.getElementType())) {
+            return new IssDirectoryPropertyComponentsElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyComponentsValueElement(node);
+        }else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS.equals(node.getElementType())) {
+            return new IssDirectoryPropertyFlagsElement(node);
+        } else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
+            return new IssDirectoryPropertyFlagsValueElement(node);
         }
 
         return null;

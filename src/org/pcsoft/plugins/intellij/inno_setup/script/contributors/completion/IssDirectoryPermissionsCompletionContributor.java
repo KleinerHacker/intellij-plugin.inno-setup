@@ -6,18 +6,18 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyPermissionsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonUserOrGroupIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyPermissionsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonIOPermissions;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonUserOrGroupIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssFilePermissionsCompletionContributor extends CompletionContributor {
-    public IssFilePermissionsCompletionContributor() {
+public class IssDirectoryPermissionsCompletionContributor extends CompletionContributor {
+    public IssDirectoryPermissionsCompletionContributor() {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssFilePropertyPermissionsElement.class),
+                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssDirectoryPropertyPermissionsElement.class),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {

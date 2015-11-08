@@ -40,7 +40,7 @@ public enum IssFileFlag implements IssFlag {
     UninstallNoSharedFilePrompt("UninsNoSharedFilePrompt", "file.flag.unins_no_shared_file_propmt"),
     UninstallRemoveReadOnly("UninsRemoveReadOnly", "file.flag.unins_remove_readonly"),
     UninstallRestartDelete("UninsRestartDelete", "file.flag.unins_restart_delete"),
-    UninstallNeverUninstall("UninsNeverUninstall", "file.flag.unins_nerver_uninstall"),
+    UninstallNeverUninstall("UninsNeverUninstall", "file.flag.unins_never_uninstall"),
     UnsetNTFSCompression("UnsetNTFSCompression", "file.flag.unset_ntfs_compression");
 
     public static IssFileFlag fromId(final String id) {

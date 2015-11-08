@@ -5,16 +5,9 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
-import org.apache.commons.lang.enums.EnumUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyAttributeElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileAttribute;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
-
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 
 /**
  * Created by Christoph on 22.12.2014.

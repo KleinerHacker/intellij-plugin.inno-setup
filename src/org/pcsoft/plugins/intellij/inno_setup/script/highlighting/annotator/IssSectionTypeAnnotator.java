@@ -11,7 +11,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssTypeDefinitionElement> {
 
     public IssSectionTypeAnnotator() {
-        super(IssTypeDefinitionElement.class);
+        super(IssTypeDefinitionElement.class, DoubletCheckType.Error);
     }
 
     @Override

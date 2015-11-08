@@ -11,4 +11,9 @@ public class IssFilePropertyDestNameValueElement extends IssDefinitionPropertyVa
     public IssFilePropertyDestNameValueElement(ASTNode node) {
         super(node);
     }
+
+    @Override
+    public String getName() {
+        return getText().replace("\"", "");
+    }
 }

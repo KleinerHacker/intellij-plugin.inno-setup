@@ -12,7 +12,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     File("Files", IssMarkerFactory.FileSection.SECTION, "section.files"),
     Type("Types", IssMarkerFactory.TypeSection.SECTION, "section.types"),
     Component("Components", IssMarkerFactory.ComponentSection.SECTION, "section.components"),
-    Directory("Dirs", null, "section.dirs"),
+    Directory("Dirs", IssMarkerFactory.DirectorySection.SECTION, "section.dirs"),
     Icon("Icons", null, "section.icons"),
     Ini("INI", null, "section.ini"),
     InstallDelete("InstallDelete", null, "section.install_delete"),

@@ -5,10 +5,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
 
@@ -78,22 +76,22 @@ public class IssSectionFileDocumentationProvider extends AbstractDocumentationPr
             return RESOURCE_BUNDLE.getString(fileCopyMode.getDescriptionKey());
         } else if (element instanceof IssFilePropertyAttributeValueElement) {
             final IssFilePropertyAttributeValueElement filePropertyAttributeValueElement = (IssFilePropertyAttributeValueElement) element;
-            final IssFileAttribute issFileAttribute = IssFileAttribute.fromId(filePropertyAttributeValueElement.getName());
-            if (issFileAttribute == null)
+            final IssCommonIOAttribute issCommonIOAttribute = IssCommonIOAttribute.fromId(filePropertyAttributeValueElement.getName());
+            if (issCommonIOAttribute == null)
                 return "Unknown attribute";
 
-            return RESOURCE_BUNDLE.getString(issFileAttribute.getDescriptionKey());
+            return RESOURCE_BUNDLE.getString(issCommonIOAttribute.getDescriptionKey());
         } else if (element instanceof IssFilePropertyPermissionsValueElement) {
             final IssFilePropertyPermissionsValueElement filePropertyPermissionsValueElement = (IssFilePropertyPermissionsValueElement) element;
-            final IssFilePermissions issFilePermissions = IssFilePermissions.fromId(filePropertyPermissionsValueElement.getPermission());
-            if (issFilePermissions == null)
+            final IssCommonIOPermissions issCommonIOPermissions = IssCommonIOPermissions.fromId(filePropertyPermissionsValueElement.getPermission());
+            if (issCommonIOPermissions == null)
                 return "Unknown permission";
             final IssCommonUserOrGroupIdentifier issCommonUserOrGroupIdentifier = IssCommonUserOrGroupIdentifier.fromId(
                     filePropertyPermissionsValueElement.getUserOrGroupIdentifier());
             if (issCommonUserOrGroupIdentifier == null)
                 return "Unknown user or group identifier";
 
-            return RESOURCE_BUNDLE.getString(issFilePermissions.getDescriptionKey()) + "<br/><i>As: " +
+            return RESOURCE_BUNDLE.getString(issCommonIOPermissions.getDescriptionKey()) + "<br/><i>As: " +
                     RESOURCE_BUNDLE.getString(issCommonUserOrGroupIdentifier.getDescriptionKey()) + "</i>";
         }
 

@@ -16,10 +16,18 @@ import java.util.Collection;
  * Created by Christoph on 08.11.2015.
  */
 public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement> implements Annotator {
-    private final Class<E> elementClass;
+    public enum DoubletCheckType {
+        Error,
+        Warning,
+        None
+    }
 
-    protected IssAbstractSectionAnnotator(Class<E> elementClass) {
+    private final Class<E> elementClass;
+    private final DoubletCheckType doubletCheckType;
+
+    protected IssAbstractSectionAnnotator(Class<E> elementClass, DoubletCheckType doubletCheckType) {
         this.elementClass = elementClass;
+        this.doubletCheckType = doubletCheckType;
     }
 
     @Override
@@ -36,16 +44,43 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void findDoubleSectionProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        if (definitionElement.getParentSection() != null && definitionElement.getName() != null) {
+        if (doubletCheckType == DoubletCheckType.None)
+            return;
+
+        if (definitionElement.getParentSection() != null && areNeededDefinitionPropertiesExists(definitionElement)) {
             final long count = ((Collection<IssDefinitionElement>)definitionElement.getParentSection().getDefinitionList()).stream()
                     .filter(item -> item != definitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equals(definitionElement.getName()))
+                    .filter(item -> areNeededDefinitionPropertiesExists((E)item))
+                    .filter(item -> areDefinitionSame((E)item, definitionElement))
                     .count();
             if (count > 0) {
-                annotationHolder.createErrorAnnotation(definitionElement, "Component with name '" + definitionElement.getName() + "' already defined");
+                if (doubletCheckType == DoubletCheckType.Error) {
+                    annotationHolder.createErrorAnnotation(definitionElement, "Component with name '" + definitionElement.getName() + "' already defined");
+                } else if (doubletCheckType == DoubletCheckType.Warning) {
+                    annotationHolder.createWarningAnnotation(definitionElement, "Component with name '" + definitionElement.getName() + "' already defined");
+                } else
+                    throw new RuntimeException();
             }
         }
+    }
+
+    /**
+     * Check that all needed property elements of definition are exists (!= null)
+     * @param definitionElement
+     * @return
+     */
+    protected boolean areNeededDefinitionPropertiesExists(@NotNull E definitionElement) {
+        return definitionElement.getName() != null;
+    }
+
+    /**
+     * Check that all needed property of definition are the same (definitions are equal)
+     * @param definitionElementLeft
+     * @param definitionElementRight
+     * @return
+     */
+    protected boolean areDefinitionSame(@NotNull E definitionElementLeft, @NotNull E definitionElementRight) {
+        return definitionElementLeft.getName().equalsIgnoreCase(definitionElementRight.getName());
     }
 
     private void checkPropertyValues(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {

@@ -13,7 +13,28 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFileDefinitionElement> {
 
     public IssSectionFileAnnotator() {
-        super(IssFileDefinitionElement.class);
+        super(IssFileDefinitionElement.class, DoubletCheckType.Warning);
+    }
+
+    @Override
+    protected boolean areNeededDefinitionPropertiesExists(@NotNull IssFileDefinitionElement definitionElement) {
+        return definitionElement.getFileSource() != null && definitionElement.getFileDestDir() != null;
+    }
+
+    @Override
+    protected boolean areDefinitionSame(@NotNull IssFileDefinitionElement definitionElementLeft, @NotNull IssFileDefinitionElement definitionElementRight) {
+        final boolean basicCheck =
+                definitionElementLeft.getFileSource().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileSource().getPropertyValue().getName()) &&
+                definitionElementLeft.getFileDestDir().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileDestDir().getPropertyValue().getName());
+
+        if (definitionElementLeft.getFileDestName() == null && definitionElementRight.getFileDestName() == null)
+            return basicCheck;
+        if ((definitionElementLeft.getFileDestName() == null && definitionElementRight.getFileDestName() != null) ||
+                definitionElementLeft.getFileDestName() != null && definitionElementRight.getFileDestName() == null)
+            return false;
+
+        return basicCheck &&
+                definitionElementLeft.getFileDestName().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileDestName().getName());
     }
 
     @Override
@@ -36,12 +57,12 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
         }
         if (fileDefinitionElement.getFileAttribute() != null) {
             fileDefinitionElement.getFileAttribute().getPropertyValueList().stream()
-                    .filter(item -> IssFileAttribute.fromId(item.getName()) == null)
+                    .filter(item -> IssCommonIOAttribute.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown attribute"));
         }
         if (fileDefinitionElement.getFilePermissions() != null) {
             fileDefinitionElement.getFilePermissions().getPropertyValueList().stream()
-                    .filter(item -> IssFilePermissions.fromId(item.getPermission()) == null)
+                    .filter(item -> IssCommonIOPermissions.fromId(item.getPermission()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
             fileDefinitionElement.getFilePermissions().getPropertyValueList().stream()
                     .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)

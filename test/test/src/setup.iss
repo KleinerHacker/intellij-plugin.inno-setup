@@ -20,4 +20,12 @@ Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
 
 [Files]
-Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask; ExternalSize: -100
+Source: "testFile"; DestDir: "testDest"; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask; ExternalSize: -100
+Source: "doubleFile"; DestDir: "doubleDest";
+Source: "doubleFile"; DestDir: "doubleDest";
+Source: "doubleFile"; DestDir: "newDest";
+
+[Dirs]
+Name: "tesDir"; Attribs: ReadOnly Hidden Hidden; Permissions: Admins-Full Users-Modify Admins-Full; Flags: DeleteAfterInstall SetNTFSCompression SetNTFSCompression unknown; Tasks: testTask unknown testTask; Components: testComponent unknown testComponent
+Name: "doubleDir";
+Name: "doubleDir";

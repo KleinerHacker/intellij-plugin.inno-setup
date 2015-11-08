@@ -83,6 +83,26 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
 
+    public static final class DirectorySection {
+        private static final String KEY = "DIRECTORY_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType ITEM_NAME = new IElementType(KEY_ITEM + "_NAME", LANGUAGE);
+        public static final IElementType ITEM_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
+        public static final IElementType ITEM_ATTRIBUTE = new IElementType(KEY_ITEM + "_ATTRIBUTE", LANGUAGE);
+        public static final IElementType ITEM_ATTRIBUTE_VALUE = new IElementType(KEY_ITEM + "_ATTRIBUTE_VALUE", LANGUAGE);
+        public static final IElementType ITEM_PERMISSIONS = new IElementType(KEY_ITEM + "_PERMISSIONS", LANGUAGE);
+        public static final IElementType ITEM_PERMISSIONS_VALUE = new IElementType(KEY_ITEM + "_PERMISSIONS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
+        public static final IElementType ITEM_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
+        public static final IElementType ITEM_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType ITEM_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
     public static final class ComponentSection {
         private static final String KEY = "COMPONENT_SECTION";
         private static final String KEY_ITEM = KEY + "_ITEM";

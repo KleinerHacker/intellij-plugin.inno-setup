@@ -13,7 +13,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
 public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTaskDefinitionElement> {
 
     public IssSectionTaskAnnotator() {
-        super(IssTaskDefinitionElement.class);
+        super(IssTaskDefinitionElement.class, DoubletCheckType.Error);
     }
 
     @Override

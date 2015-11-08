@@ -3,12 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -80,6 +75,10 @@ final class IssParserSectionUtility {
                     case File:
                         parseLineForDefaultSection(psiBuilder, "Files Section", IssMarkerFactory.FileSection.SECTION_DEFINITION,
                                 IssFileProperty::getValueMarkerElementFromId, IssFileProperty::getItemMarkerElementFromId);
+                        break;
+                    case Directory:
+                        parseLineForDefaultSection(psiBuilder, "Dirs Section", IssMarkerFactory.DirectorySection.SECTION_DEFINITION,
+                                IssDirectoryProperty::getValueMarkerElementFromId, IssDirectoryProperty::getItemMarkerElementFromId);
                         break;
                     case Component:
                         parseLineForDefaultSection(psiBuilder, "Component Section", IssMarkerFactory.ComponentSection.SECTION_DEFINITION,

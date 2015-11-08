@@ -13,7 +13,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
 public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<IssComponentDefinitionElement> {
 
     public IssSectionComponentAnnotator() {
-        super(IssComponentDefinitionElement.class);
+        super(IssComponentDefinitionElement.class, DoubletCheckType.Error);
     }
 
     @Override
