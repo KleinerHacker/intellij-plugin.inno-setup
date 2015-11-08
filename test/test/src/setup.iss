@@ -14,9 +14,9 @@ Name: doubleType; Description: ""
 Name: doubleType; Description: "Hallo"
 
 [Components]
-Name: testComponent; Description: "Bla"; Types: bla blub bla;
+Name: testComponent; Description: "Bla"; Types: bla blub bla; ExtraDiskSpaceRequired: -100
 Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
 
 [Files]
-Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask
+Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask; ExternalSize: -100

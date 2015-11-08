@@ -78,6 +78,10 @@ public final class IssPsiElementFactory {
             return new IssComponentPropertyDescriptionElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
             return new IssComponentPropertyDescriptionValueElement(node);
+        } else if (IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED.equals(node.getElementType())) {
+            return new IssComponentPropertyExtraDiskSpaceRequiredElement(node);
+        } else if (IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE.equals(node.getElementType())) {
+            return new IssComponentPropertyExtraDiskSpaceRequiredValueElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_TYPES.equals(node.getElementType())) {
             return new IssComponentPropertyTypesElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE.equals(node.getElementType())) {
@@ -116,6 +120,26 @@ public final class IssPsiElementFactory {
             return new IssFilePropertyPermissionsElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_PERMISSIONS_VALUE.equals(node.getElementType())) {
             return new IssFilePropertyPermissionsValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_DESTNAME.equals(node.getElementType())) {
+            return new IssFilePropertyDestNameElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_DESTNAME_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyDestNameValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_EXCLUDES.equals(node.getElementType())) {
+            return new IssFilePropertyExcludesElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_EXCLUDES_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyExcludesValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_EXTERNALSIZE.equals(node.getElementType())) {
+            return new IssFilePropertyExternalSizeElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_EXTERNALSIZE_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyExternalSizeValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_FONTINSTALL.equals(node.getElementType())) {
+            return new IssFilePropertyFontInstallElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_FONTINSTALL_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyFontInstallValueElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_STRONGASSEMBLYNAME.equals(node.getElementType())) {
+            return new IssFilePropertyStrongAssemblyNameElement(node);
+        } else if (IssMarkerFactory.FileSection.ITEM_STRONGASSEMBLYNAME_VALUE.equals(node.getElementType())) {
+            return new IssFilePropertyStrongAssemblyNameValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS.equals(node.getElementType())) {
             return new IssFilePropertyTasksElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
@@ -146,6 +170,10 @@ public final class IssPsiElementFactory {
             return new IssTaskPropertyDescriptionElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
             return new IssTaskPropertyDescriptionValueElement(node);
+        }else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION.equals(node.getElementType())) {
+            return new IssTaskPropertyGroupDescriptionElement(node);
+        } else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE.equals(node.getElementType())) {
+            return new IssTaskPropertyGroupDescriptionValueElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_COMPONENTS.equals(node.getElementType())) {
             return new IssTaskPropertyComponentsElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {

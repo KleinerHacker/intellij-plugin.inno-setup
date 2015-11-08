@@ -41,6 +41,8 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
         public static final IElementType ITEM_DESCRIPTION = new IElementType(KEY_ITEM + "_DESCRIPTION", LANGUAGE);
         public static final IElementType ITEM_DESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_DESCRIPTION_VALUE", LANGUAGE);
+        public static final IElementType ITEM_GROUPDESCRIPTION = new IElementType(KEY_ITEM + "_GROUPDESCRIPTION", LANGUAGE);
+        public static final IElementType ITEM_GROUPDESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_GROUPDESCRIPTION_VALUE", LANGUAGE);
         public static final IElementType ITEM_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
         public static final IElementType ITEM_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
         public static final IElementType ITEM_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
@@ -63,6 +65,16 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_ATTRIBUTE_VALUE = new IElementType(KEY_ITEM + "_ATTRIBUTE_VALUE", LANGUAGE);
         public static final IElementType ITEM_PERMISSIONS = new IElementType(KEY_ITEM + "_PERMISSIONS", LANGUAGE);
         public static final IElementType ITEM_PERMISSIONS_VALUE = new IElementType(KEY_ITEM + "_PERMISSIONS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_DESTNAME = new IElementType(KEY_ITEM + "_DESTNAME", LANGUAGE);
+        public static final IElementType ITEM_DESTNAME_VALUE = new IElementType(KEY_ITEM + "_DESTNAME_VALUE", LANGUAGE);
+        public static final IElementType ITEM_EXCLUDES = new IElementType(KEY_ITEM + "_EXCLUDES", LANGUAGE);
+        public static final IElementType ITEM_EXCLUDES_VALUE = new IElementType(KEY_ITEM + "_EXCLUDES_VALUE", LANGUAGE);
+        public static final IElementType ITEM_EXTERNALSIZE = new IElementType(KEY_ITEM + "_EXTERNALSIZE", LANGUAGE);
+        public static final IElementType ITEM_EXTERNALSIZE_VALUE = new IElementType(KEY_ITEM + "_EXTERNAL_SIZE_VALUE", LANGUAGE);
+        public static final IElementType ITEM_FONTINSTALL = new IElementType(KEY_ITEM + "_FONTINSTALL", LANGUAGE);
+        public static final IElementType ITEM_FONTINSTALL_VALUE = new IElementType(KEY_ITEM + "_FONTINSTALL_VALUE", LANGUAGE);
+        public static final IElementType ITEM_STRONGASSEMBLYNAME = new IElementType(KEY_ITEM + "_STRONGASSEMBLYNAME", LANGUAGE);
+        public static final IElementType ITEM_STRONGASSEMBLYNAME_VALUE = new IElementType(KEY_ITEM + "_STRONGASSEMBLYNAME_VALUE", LANGUAGE);
         public static final IElementType ITEM_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
         public static final IElementType ITEM_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
         public static final IElementType ITEM_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
@@ -81,6 +93,8 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
         public static final IElementType ITEM_DESCRIPTION = new IElementType(KEY_ITEM + "_DESCRIPTION", LANGUAGE);
         public static final IElementType ITEM_DESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_DESCRIPTION_VALUE", LANGUAGE);
+        public static final IElementType ITEM_EXTRADISKSPACEREQUIRED = new IElementType(KEY_ITEM + "_EXTRADISKSPACEREQUIRED", LANGUAGE);
+        public static final IElementType ITEM_EXTRADISKSPACEREQUIRED_VALUE = new IElementType(KEY_ITEM + "_EXTRADISKSPACEREQUIRED_VALUE", LANGUAGE);
         public static final IElementType ITEM_TYPES = new IElementType(KEY_ITEM + "_TYPES", LANGUAGE);
         public static final IElementType ITEM_TYPES_VALUE = new IElementType(KEY_ITEM + "_TYPES_VALUE", LANGUAGE);
         public static final IElementType ITEM_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);

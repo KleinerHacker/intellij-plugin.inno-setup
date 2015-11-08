@@ -28,6 +28,11 @@ public class IssComponentDefinitionElement extends IssDefinitionElement<IssCompo
     }
 
     @Nullable
+    public IssComponentPropertyExtraDiskSpaceRequiredElement getComponentExtraDiskSpaceRequired() {
+        return PsiTreeUtil.findChildOfType(this, IssComponentPropertyExtraDiskSpaceRequiredElement.class);
+    }
+
+    @Nullable
     public IssComponentPropertyTypesElement getComponentTypes() {
         return PsiTreeUtil.findChildOfType(this, IssComponentPropertyTypesElement.class);
     }

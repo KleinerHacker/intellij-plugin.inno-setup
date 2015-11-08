@@ -31,6 +31,11 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
                         annotationHolder.createErrorAnnotation(item, "Unknown flag");
                     });
         }
+        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null && componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null) {
+            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getSize() < 0) {
+                annotationHolder.createErrorAnnotation(componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue(), "Extra Disk Space must be positive!");
+            }
+        }
     }
 
     private void checkForReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
@@ -56,6 +61,11 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
     @Override
     protected void detectWarnings(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(componentDefinitionElement, annotationHolder);
+        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null && componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null) {
+            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getSize() == 0) {
+                annotationHolder.createWarningAnnotation(componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue(), "Extra Disk Space should be greater than 0!");
+            }
+        }
     }
 
     private void checkForDoubleReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {

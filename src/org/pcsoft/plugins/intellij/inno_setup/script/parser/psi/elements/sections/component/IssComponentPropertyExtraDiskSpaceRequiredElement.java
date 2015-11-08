@@ -1,9 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
@@ -11,14 +9,14 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 /**
  * Created by Christoph on 28.12.2014.
  */
-public class IssComponentPropertyDescriptionElement extends IssDefinitionPropertyElement<IssComponentDefinitionElement, IssComponentPropertyDescriptionValueElement> {
-    public IssComponentPropertyDescriptionElement(ASTNode node) {
-        super(node, IssComponentDefinitionElement.class, IssComponentPropertyDescriptionValueElement.class);
+public class IssComponentPropertyExtraDiskSpaceRequiredElement extends IssDefinitionPropertyElement<IssComponentDefinitionElement, IssComponentPropertyExtraDiskSpaceRequiredValueElement> {
+    public IssComponentPropertyExtraDiskSpaceRequiredElement(ASTNode node) {
+        super(node, IssComponentDefinitionElement.class, IssComponentPropertyExtraDiskSpaceRequiredValueElement.class);
     }
 
     @NotNull
     @Override
     public IssItemValueType getItemValueType() {
-        return IssItemValueType.String;
+        return IssItemValueType.Integer;
     }
 }

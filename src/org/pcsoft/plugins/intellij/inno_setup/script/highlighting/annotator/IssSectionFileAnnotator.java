@@ -47,6 +47,11 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
                     .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
         }
+        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null) {
+            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getSize() < 0) {
+                annotationHolder.createErrorAnnotation(fileDefinitionElement.getFileExternalSize().getPropertyValue(), "External size must be positive!");
+            }
+        }
     }
 
     private void checkForReferences(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
@@ -91,6 +96,11 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
             }
         }
         checkForDoubleValues(fileDefinitionElement, annotationHolder);
+        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null) {
+            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getSize() == 0) {
+                annotationHolder.createWarningAnnotation(fileDefinitionElement.getFileExternalSize().getPropertyValue(), "External size should be greater than 0!");
+            }
+        }
     }
 
     private void checkForDoubleValues(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {

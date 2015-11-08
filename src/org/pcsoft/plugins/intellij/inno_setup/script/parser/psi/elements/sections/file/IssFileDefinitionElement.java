@@ -61,6 +61,31 @@ public class IssFileDefinitionElement extends IssDefinitionElement<IssFileSectio
     }
 
     @Nullable
+    public IssFilePropertyDestNameElement getFileDestName() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyDestNameElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyExcludesElement getFileExcludes() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyExcludesElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyExternalSizeElement getFileExternalSize() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyExternalSizeElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyFontInstallElement getFileFontInstall() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyFontInstallElement.class);
+    }
+
+    @Nullable
+    public IssFilePropertyStrongAssemblyNameElement getFileStrongAssemblyName() {
+        return PsiTreeUtil.findChildOfType(this, IssFilePropertyStrongAssemblyNameElement.class);
+    }
+
+    @Nullable
     public IssFilePropertyComponentsElement getFileComponents() {
         return PsiTreeUtil.findChildOfType(this, IssFilePropertyComponentsElement.class);
     }
