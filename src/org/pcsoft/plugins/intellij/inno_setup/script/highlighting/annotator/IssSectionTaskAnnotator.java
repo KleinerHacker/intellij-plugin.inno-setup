@@ -18,30 +18,12 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
 
     @Override
     protected void detectErrors(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (taskDefinitionElement.getTaskName() == null) {
-            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Name'");
-        }
-        if (taskDefinitionElement.getTaskDescription() == null) {
-            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Description'");
-        }
-        if (taskDefinitionElement.getTaskComponents() != null) {
-            taskDefinitionElement.getTaskComponents().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
-                        errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
-//        if (taskDefinitionElement.getParentSection() != null && taskDefinitionElement.getName() != null) {
-//            final long count = taskDefinitionElement.getParentSection().getDefinitionList().stream()
-//                    .filter(item -> item != taskDefinitionElement)
-//                    .filter(item -> item.getName() != null)
-//                    .filter(item -> item.getName().equals(taskDefinitionElement.getName()))
-//                    .count();
-//            if (count > 0) {
-//                annotationHolder.createErrorAnnotation(taskDefinitionElement, "Task with name '" + taskDefinitionElement.getName() + "' already defined");
-//            }
-//        }
+        checkForRequiredProperties(taskDefinitionElement, annotationHolder);
+        checkForReferences(taskDefinitionElement, annotationHolder);
+        checkForKnownValues(taskDefinitionElement, annotationHolder);
+    }
+
+    private void checkForKnownValues(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (taskDefinitionElement.getTaskFlags() != null) {
             taskDefinitionElement.getTaskFlags().getPropertyValueList().stream()
                     .filter(item -> IssTaskFlag.fromId(item.getName()) == null)
@@ -51,12 +33,36 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
         }
     }
 
+    private void checkForReferences(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (taskDefinitionElement.getTaskComponents() != null) {
+            taskDefinitionElement.getTaskComponents().getPropertyValueList().stream()
+                    .filter(item -> item.getReference().resolve() == null)
+                    .forEach(item -> {
+                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
+                        errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
+                    });
+        }
+    }
+
+    private void checkForRequiredProperties(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (taskDefinitionElement.getTaskName() == null) {
+            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Name'");
+        }
+        if (taskDefinitionElement.getTaskDescription() == null) {
+            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Description'");
+        }
+    }
+
     @Override
     protected void detectWarnings(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleReferences(taskDefinitionElement, annotationHolder);
+    }
+
+    private void checkForDoubleReferences(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (taskDefinitionElement.getTaskComponents() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     taskDefinitionElement.getTaskComponents().getPropertyValueList(),
-                    element -> element.getName(),
+                    element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
                     }
@@ -65,7 +71,7 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
         if (taskDefinitionElement.getTaskFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     taskDefinitionElement.getTaskFlags().getPropertyValueList(),
-                    element -> element.getName(),
+                    element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
                     }

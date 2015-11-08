@@ -16,22 +16,11 @@ public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssType
 
     @Override
     protected void detectErrors(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (typeDefinitionElement.getTypeName() == null) {
-            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Name'");
-        }
-        if (typeDefinitionElement.getTypeDescription() == null) {
-            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Description'");
-        }
-//        if (typeDefinitionElement.getParentSection() != null && typeDefinitionElement.getName() != null) {
-//            final long count = typeDefinitionElement.getParentSection().getDefinitionList().stream()
-//                    .filter(item -> item != typeDefinitionElement)
-//                    .filter(item -> item.getName() != null)
-//                    .filter(item -> item.getName().equals(typeDefinitionElement.getName()))
-//                    .count();
-//            if (count > 0) {
-//                annotationHolder.createErrorAnnotation(typeDefinitionElement, "Task with name '" + typeDefinitionElement.getName() + "' already defined");
-//            }
-//        }
+        checkForRequiredProperties(typeDefinitionElement, annotationHolder);
+        checkForKnownValues(typeDefinitionElement, annotationHolder);
+    }
+
+    private void checkForKnownValues(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (typeDefinitionElement.getTypeFlags() != null) {
             typeDefinitionElement.getTypeFlags().getPropertyValueList().stream()
                     .filter(item -> IssTypeFlag.fromId(item.getName()) == null)
@@ -41,12 +30,25 @@ public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssType
         }
     }
 
+    private void checkForRequiredProperties(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (typeDefinitionElement.getTypeName() == null) {
+            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Name'");
+        }
+        if (typeDefinitionElement.getTypeDescription() == null) {
+            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Description'");
+        }
+    }
+
     @Override
     protected void detectWarnings(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleReferences(typeDefinitionElement, annotationHolder);
+    }
+
+    private void checkForDoubleReferences(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (typeDefinitionElement.getTypeFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     typeDefinitionElement.getTypeFlags().getPropertyValueList(),
-                    element -> element.getName(),
+                    element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
                     }

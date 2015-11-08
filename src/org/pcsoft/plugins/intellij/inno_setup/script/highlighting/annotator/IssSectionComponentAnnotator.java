@@ -18,25 +18,12 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
 
     @Override
     protected void detectErrors(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiedAttributes(componentDefinitionElement, annotationHolder);
-//        if (componentDefinitionElement.getParentSection() != null && componentDefinitionElement.getName() != null) {
-//            final long count = componentDefinitionElement.getParentSection().getDefinitionList().stream()
-//                    .filter(item -> item != componentDefinitionElement)
-//                    .filter(item -> item.getName() != null)
-//                    .filter(item -> item.getName().equals(componentDefinitionElement.getName()))
-//                    .count();
-//            if (count > 0) {
-//                annotationHolder.createErrorAnnotation(componentDefinitionElement, "Component with name '" + componentDefinitionElement.getName() + "' already defined");
-//            }
-//        }
-        if (componentDefinitionElement.getComponentTypes() != null) {
-            componentDefinitionElement.getComponentTypes().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
-                        errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
+        checkForRequiedProperties(componentDefinitionElement, annotationHolder);
+        checkForReferences(componentDefinitionElement, annotationHolder);
+        checkForKnownValues(componentDefinitionElement, annotationHolder);
+    }
+
+    private void checkForKnownValues(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (componentDefinitionElement.getComponentFlags() != null) {
             componentDefinitionElement.getComponentFlags().getPropertyValueList().stream()
                     .filter(item -> IssComponentFlag.fromId(item.getName()) == null)
@@ -46,7 +33,18 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
         }
     }
 
-    private void checkForRequiedAttributes(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    private void checkForReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (componentDefinitionElement.getComponentTypes() != null) {
+            componentDefinitionElement.getComponentTypes().getPropertyValueList().stream()
+                    .filter(item -> item.getReference().resolve() == null)
+                    .forEach(item -> {
+                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
+                        errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
+                    });
+        }
+    }
+
+    private void checkForRequiedProperties(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (componentDefinitionElement.getComponentName() == null) {
             annotationHolder.createErrorAnnotation(componentDefinitionElement, "Missing required section item 'Name'");
         }
@@ -57,10 +55,14 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
 
     @Override
     protected void detectWarnings(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleReferences(componentDefinitionElement, annotationHolder);
+    }
+
+    private void checkForDoubleReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (componentDefinitionElement.getComponentTypes() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     componentDefinitionElement.getComponentTypes().getPropertyValueList(),
-                    element -> element.getName(),
+                    element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Type '" + key + "' already listed");
                     }
@@ -69,7 +71,7 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
         if (componentDefinitionElement.getComponentFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     componentDefinitionElement.getComponentFlags().getPropertyValueList(),
-                    element -> element.getName(),
+                    element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
                     }

@@ -19,4 +19,4 @@ Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
 
 [Files]
-Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: users-Modify system-full Users-Modify; Tasks: testTask unknown testTask
+Source: ""; DestDir: ""; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask
