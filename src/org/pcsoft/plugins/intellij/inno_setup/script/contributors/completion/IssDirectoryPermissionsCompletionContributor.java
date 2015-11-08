@@ -24,7 +24,7 @@ public class IssDirectoryPermissionsCompletionContributor extends CompletionCont
                         for (final IssFlag userOrGroupIdentifier : IssCommonUserOrGroupIdentifier.values()) {
                             for (final IssFlag permission : IssCommonIOPermissions.values()) {
                                 completionResultSet.addElement(LookupElementBuilder.create(userOrGroupIdentifier.getId() + "-" + permission.getId())
-                                        .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(new JBColor(0x008000, 0x008000))
+                                        .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
                                         .withInsertHandler((insertionContext, lookupElement) -> {
                                             insertionContext.getDocument().insertString(insertionContext.getTailOffset(), " ");
                                             insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());

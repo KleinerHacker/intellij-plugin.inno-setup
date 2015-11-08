@@ -15,7 +15,7 @@ Name: doubleType; Description: "Hallo"
 
 [Components]
 ; My Test Component
-Name: testComponent; Description: "Bla"; Types: bla blub bla; ExtraDiskSpaceRequired: -100
+Name: testComponent; Description: "B{app}la"; Types: bla blub bla; ExtraDiskSpaceRequired: -100
 Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
 

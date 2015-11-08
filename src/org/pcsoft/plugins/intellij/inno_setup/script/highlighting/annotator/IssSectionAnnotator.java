@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.error;
+package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssSectionErrorAnnotator implements Annotator {
+public class IssSectionAnnotator implements Annotator {
 
     @Override
     public void annotate(PsiElement psiElement, AnnotationHolder annotationHolder) {

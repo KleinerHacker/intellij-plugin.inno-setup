@@ -25,7 +25,7 @@ public final class IssHighlightingColorFactory {
 
     public static final TextAttributesKey SYNTAX_STRING = TextAttributesKey.createTextAttributesKey(
             "SYNTAX_STRING",
-            new TextAttributes(new JBColor(new Color(0x008000), new Color(0x008000)), null, null, null, Font.PLAIN)
+            new TextAttributes(JBColor.GREEN, null, null, null, Font.PLAIN)
     );
 
     public static final TextAttributesKey SYNTAX_SECTION_TITLE = TextAttributesKey.createTextAttributesKey(
@@ -51,6 +51,11 @@ public final class IssHighlightingColorFactory {
     public static final TextAttributesKey ANNOTATOR_ERROR_REFERENCE = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_ERROR_REFERENCE",
             new TextAttributes(JBColor.RED, null, null, null, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT",
+            new TextAttributes(JBColor.PINK, null, null, null, Font.BOLD)
     );
 
     private IssHighlightingColorFactory() {
