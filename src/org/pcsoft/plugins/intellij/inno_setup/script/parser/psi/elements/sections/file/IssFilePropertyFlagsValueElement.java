@@ -21,8 +21,4 @@ public class IssFilePropertyFlagsValueElement extends IssDefinitionPropertyValue
         return getText();
     }
 
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectMultiple;
-    }
 }

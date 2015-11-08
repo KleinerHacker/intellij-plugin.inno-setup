@@ -51,4 +51,7 @@ public abstract class IssDefinitionPropertyElement<D extends IssDefinitionElemen
     public final V getPropertyValue() {
         return getPropertyValueList().stream().findFirst().orElse(null);
     }
+
+    @NotNull
+    public abstract IssItemValueType getItemValueType();
 }

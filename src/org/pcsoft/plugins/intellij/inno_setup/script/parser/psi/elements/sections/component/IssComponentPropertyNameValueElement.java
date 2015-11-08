@@ -46,10 +46,4 @@ public class IssComponentPropertyNameValueElement extends IssDefinitionPropertyV
     public IssComponentPropertyNameElement getValueParent() {
         return PsiTreeUtil.getParentOfType(this, IssComponentPropertyNameElement.class);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectSingle;
-    }
 }

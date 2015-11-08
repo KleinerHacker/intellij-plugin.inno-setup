@@ -11,10 +11,4 @@ public class IssDefinitionPropertyDefaultValueElement extends IssDefinitionPrope
     public IssDefinitionPropertyDefaultValueElement(ASTNode node) {
         super(node);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.Unknown;
-    }
 }

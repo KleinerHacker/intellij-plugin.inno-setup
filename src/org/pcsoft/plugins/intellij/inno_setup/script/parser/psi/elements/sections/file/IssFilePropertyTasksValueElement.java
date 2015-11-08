@@ -48,10 +48,4 @@ public class IssFilePropertyTasksValueElement extends IssDefinitionPropertyValue
     public PsiReference getReference() {
         return new IssTaskReference(this, true);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectMultiple;
-    }
 }

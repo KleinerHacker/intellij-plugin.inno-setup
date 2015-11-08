@@ -20,10 +20,4 @@ public class IssFilePropertyCopyModeValueElement extends IssDefinitionPropertyVa
     public String getName() {
         return getText();
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectSingle;
-    }
 }

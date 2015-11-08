@@ -5,6 +5,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
 
 import java.util.Collection;
 
@@ -14,5 +15,11 @@ import java.util.Collection;
 public class IssFilePropertyAttributeElement extends IssDefinitionPropertyElement<IssFileDefinitionElement,IssFilePropertyAttributeValueElement> {
     public IssFilePropertyAttributeElement(ASTNode node) {
         super(node, IssFileDefinitionElement.class,IssFilePropertyAttributeValueElement.class);
+    }
+
+    @NotNull
+    @Override
+    public IssItemValueType getItemValueType() {
+        return IssItemValueType.DirectMultiple;
     }
 }

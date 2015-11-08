@@ -20,10 +20,4 @@ public class IssTaskPropertyFlagsValueElement extends IssDefinitionPropertyValue
     public String getName() {
         return getText();
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectMultiple;
-    }
 }

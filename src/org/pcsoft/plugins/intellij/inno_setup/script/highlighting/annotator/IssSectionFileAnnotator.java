@@ -97,5 +97,14 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
                     }
             );
         }
+        if (fileDefinitionElement.getFilePermissions() != null) {
+            IssAnnotatorUtils.findDoubleValues(
+                    fileDefinitionElement.getFilePermissions().getPropertyValueList(),
+                    element -> element.getName(),
+                    (element, key) -> {
+                        annotationHolder.createWarningAnnotation(element, "Permission '" + key + "' already listed");
+                    }
+            );
+        }
     }
 }

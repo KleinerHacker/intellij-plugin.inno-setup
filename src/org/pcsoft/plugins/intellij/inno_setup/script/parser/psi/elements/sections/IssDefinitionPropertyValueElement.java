@@ -21,7 +21,4 @@ public abstract class IssDefinitionPropertyValueElement extends IssAbstractEleme
     public final IssIdentifierElement getIdentifier() {
         return PsiTreeUtil.findChildOfType(this, IssIdentifierElement.class);
     }
-
-    @NotNull
-    public abstract IssItemValueType getItemValueType();
 }

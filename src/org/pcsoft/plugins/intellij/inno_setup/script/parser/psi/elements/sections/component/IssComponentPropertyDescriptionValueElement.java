@@ -13,10 +13,4 @@ public class IssComponentPropertyDescriptionValueElement extends IssDefinitionPr
     public IssComponentPropertyDescriptionValueElement(ASTNode node) {
         super(node);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.String;
-    }
 }

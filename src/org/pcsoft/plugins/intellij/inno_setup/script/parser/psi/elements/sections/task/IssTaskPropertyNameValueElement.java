@@ -46,10 +46,4 @@ public class IssTaskPropertyNameValueElement extends IssDefinitionPropertyValueE
     public IssTaskPropertyNameElement getValueParent() {
         return PsiTreeUtil.getParentOfType(this, IssTaskPropertyNameElement.class);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectSingle;
-    }
 }

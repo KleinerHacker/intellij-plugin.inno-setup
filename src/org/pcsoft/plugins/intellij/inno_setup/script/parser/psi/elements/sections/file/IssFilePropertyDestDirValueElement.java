@@ -14,10 +14,4 @@ public class IssFilePropertyDestDirValueElement extends IssDefinitionPropertyVal
     public IssFilePropertyDestDirValueElement(ASTNode node) {
         super(node);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.String;
-    }
 }

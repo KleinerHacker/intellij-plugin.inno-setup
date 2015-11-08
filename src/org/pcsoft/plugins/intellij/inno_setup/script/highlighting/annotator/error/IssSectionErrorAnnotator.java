@@ -30,10 +30,10 @@ public class IssSectionErrorAnnotator implements Annotator {
             collection = setupSectionElement.getSectionItemList();
         } else if (psiElement instanceof IssDefinitionElement) {
             final IssDefinitionElement definitionElement = (IssDefinitionElement) psiElement;
-            if (definitionElement.getSectionPropertyList() == null || definitionElement.getSectionPropertyList().isEmpty())
+            if (definitionElement.getDefinitionPropertyList() == null || definitionElement.getDefinitionPropertyList().isEmpty())
                 return;
 
-            collection = definitionElement.getSectionPropertyList();
+            collection = definitionElement.getDefinitionPropertyList();
         } else
             return;
 

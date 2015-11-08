@@ -2,8 +2,10 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -11,5 +13,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 public class IssTaskPropertyDescriptionElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement,IssTaskPropertyDescriptionValueElement> {
     public IssTaskPropertyDescriptionElement(ASTNode node) {
         super(node, IssTaskDefinitionElement.class,IssTaskPropertyDescriptionValueElement.class);
+    }
+
+    @NotNull
+    @Override
+    public IssItemValueType getItemValueType() {
+        return IssItemValueType.String;
     }
 }

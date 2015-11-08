@@ -19,10 +19,4 @@ public class IssTypePropertyDescriptionValueElement extends IssDefinitionPropert
     public String getName() {
         return getText().replace("\"", "");
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.String;
-    }
 }

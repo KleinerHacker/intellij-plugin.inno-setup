@@ -41,10 +41,4 @@ public class IssComponentPropertyTypesValueElement extends IssDefinitionProperty
     public PsiReference getReference() {
         return new IssTypeReference(this, true);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectMultiple;
-    }
 }

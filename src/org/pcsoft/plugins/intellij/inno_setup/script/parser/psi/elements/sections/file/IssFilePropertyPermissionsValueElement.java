@@ -30,10 +30,4 @@ public class IssFilePropertyPermissionsValueElement extends IssDefinitionPropert
     public String getPermission() {
         return getText().substring(getText().indexOf("-") + 1);
     }
-
-    @NotNull
-    @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.DirectMultiple;
-    }
 }
