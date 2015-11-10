@@ -3,6 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.IssIconDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
  * Created by Christoph on 08.11.2015.
@@ -16,39 +17,16 @@ public class IssSectionIconAnnotator extends IssAbstractSectionAnnotator<IssIcon
     @Override
     protected void detectErrors(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
 //        checkForReferences(iconDefinitionElement, annotationHolder);
-//        checkForKnownValues(iconDefinitionElement, annotationHolder);
+        checkForKnownValues(iconDefinitionElement, annotationHolder);
     }
 
-//    private void checkForKnownValues(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-//        if (iconDefinitionElement.getFileFlags() != null) {
-//            iconDefinitionElement.getFileFlags().getPropertyValueList().stream()
-//                    .filter(item -> IssFileFlag.fromId(item.getName()) == null)
-//                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
-//        }
-//        if (iconDefinitionElement.getFileCopyMode() != null) {
-//            iconDefinitionElement.getFileCopyMode().getPropertyValueList().stream()
-//                    .filter(item -> IssFileCopyMode.fromId(item.getName()) == null)
-//                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown copy mode"));
-//        }
-//        if (iconDefinitionElement.getFileAttribute() != null) {
-//            iconDefinitionElement.getFileAttribute().getPropertyValueList().stream()
-//                    .filter(item -> IssCommonIOAttribute.fromId(item.getName()) == null)
-//                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown attribute"));
-//        }
-//        if (iconDefinitionElement.getFilePermissions() != null) {
-//            iconDefinitionElement.getFilePermissions().getPropertyValueList().stream()
-//                    .filter(item -> IssCommonIOPermissions.fromId(item.getPermission()) == null)
-//                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
-//            iconDefinitionElement.getFilePermissions().getPropertyValueList().stream()
-//                    .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
-//                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
-//        }
-//        if (iconDefinitionElement.getFileExternalSize() != null && iconDefinitionElement.getFileExternalSize().getPropertyValue() != null) {
-//            if (iconDefinitionElement.getFileExternalSize().getPropertyValue().getSize() < 0) {
-//                annotationHolder.createErrorAnnotation(iconDefinitionElement.getFileExternalSize().getPropertyValue(), "External size must be positive!");
-//            }
-//        }
-//    }
+    private void checkForKnownValues(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (iconDefinitionElement.getIconFlags() != null) {
+            iconDefinitionElement.getIconFlags().getPropertyValueList().stream()
+                    .filter(item -> IssIconFlag.fromId(item.getName()) == null)
+                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
+        }
+    }
 
 //    private void checkForReferences(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
 //        if (iconDefinitionElement.getFileTasks() != null) {
@@ -79,41 +57,23 @@ public class IssSectionIconAnnotator extends IssAbstractSectionAnnotator<IssIcon
                     .filter(item -> item.getName().equalsIgnoreCase(iconDefinitionElement.getName()))
                     .count();
             if (count > 0) {
-                annotationHolder.createWarningAnnotation(iconDefinitionElement, "File with source '" + iconDefinitionElement.getName() + "' already defined");
+                annotationHolder.createWarningAnnotation(iconDefinitionElement, "Icon with name '" + iconDefinitionElement.getName() + "' already defined");
             }
         }
-//        checkForDoubleValues(iconDefinitionElement, annotationHolder);
+        checkForDoubleValues(iconDefinitionElement, annotationHolder);
     }
 
-//    private void checkForDoubleValues(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-//        if (iconDefinitionElement.getFileFlags() != null) {
-//            IssAnnotatorUtils.findDoubleValues(
-//                    iconDefinitionElement.getFileFlags().getPropertyValueList(),
-//                    element -> element.getName().toLowerCase(),
-//                    (element, key) -> {
-//                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-//                    }
-//            );
-//        }
-//        if (iconDefinitionElement.getFileAttribute() != null) {
-//            IssAnnotatorUtils.findDoubleValues(
-//                    iconDefinitionElement.getFileAttribute().getPropertyValueList(),
-//                    element -> element.getName().toLowerCase(),
-//                    (element, key) -> {
-//                        annotationHolder.createWarningAnnotation(element, "Attribute '" + key + "' already listed");
-//                    }
-//            );
-//        }
-//        if (iconDefinitionElement.getFilePermissions() != null) {
-//            IssAnnotatorUtils.findDoubleValues(
-//                    iconDefinitionElement.getFilePermissions().getPropertyValueList(),
-//                    element -> element.getName().toLowerCase(),
-//                    (element, key) -> {
-//                        annotationHolder.createWarningAnnotation(element, "Permission '" + key + "' already listed");
-//                    }
-//            );
-//        }
-//    }
+    private void checkForDoubleValues(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        if (iconDefinitionElement.getIconFlags() != null) {
+            IssAnnotatorUtils.findDoubleValues(
+                    iconDefinitionElement.getIconFlags().getPropertyValueList(),
+                    element -> element.getName().toLowerCase(),
+                    (element, key) -> {
+                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
+                    }
+            );
+        }
+    }
 //
 //    private void checkForDoubleReferences(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
 //        if (iconDefinitionElement.getFileTasks() != null) {

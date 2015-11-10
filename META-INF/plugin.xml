@@ -35,9 +35,11 @@
         <!-- Structure -->
         <lang.psiStructureViewFactory language="iss"
                                       implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.tree.IssStructureViewFactory"/>
-        <lang.foldingBuilder language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.folding.IssSectionFoldingBuilder"/>
+        <lang.foldingBuilder language="iss"
+                             implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.folding.IssSectionFoldingBuilder"/>
         <!-- Others -->
-        <lang.commenter language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
+        <lang.commenter language="iss"
+                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
 
         <!-- Annotators -->
         <annotator language="iss"
@@ -59,66 +61,99 @@
 
         <!-- Contributors -->
         <!-- Completion -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
         <!-- Task -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTaskCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTaskFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTaskCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTaskFlagCompletionContributor"/>
         <!-- Setup -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSetupPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSetupPropertyCompletionContributor"/>
         <!-- Component -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssComponentPropertyCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssComponentFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssComponentPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssComponentFlagCompletionContributor"/>
         <!-- Type -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTypeCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTypeFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssPropertyTypeCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssTypeFlagCompletionContributor"/>
         <!-- File -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFilePropertyCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileFlagCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileCopyModeCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileAttributeCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFilePermissionsCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFilePropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileCopyModeCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFileAttributeCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssFilePermissionsCompletionContributor"/>
         <!-- Directory -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryPropertyCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryFlagCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryAttributeCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryPermissionsCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryAttributeCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssDirectoryPermissionsCompletionContributor"/>
         <!-- Icon -->
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssIconPropertyCompletionContributor"/>
-        <completion.contributor language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssIconFlagCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssIconPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssIconFlagCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTaskGoToContributor"/>
+        <gotoSymbolContributor
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTypeGoToContributor"/>
 
         <!-- Manipulators -->
         <!-- File -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyTasksValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyTasksValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyComponentsValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyComponentsValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyTasksValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyTasksValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyComponentsValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyComponentsValueElementManipulator"/>
         <!-- Directory -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyNameValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyTasksValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyTasksValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyComponentsValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyComponentsValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyNameValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyNameValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyTasksValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyTasksValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyComponentsValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyComponentsValueElementManipulator"/>
         <!-- Task -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyNameValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyComponentsValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyNameValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.task.IssTaskPropertyComponentsValueElementManipulator"/>
         <!-- Component -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyNameValueElementManipulator"/>
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyTypesValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyTypesValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyNameValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyTypesValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.component.IssComponentPropertyTypesValueElementManipulator"/>
         <!-- Type -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement"
-                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypePropertyNameValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypePropertyNameValueElementManipulator"/>
 
-        <lang.refactoringSupport language="iss" implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
+        <lang.refactoringSupport language="iss"
+                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
 
         <!-- Documentation -->
         <documentationProvider
@@ -135,6 +170,10 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDirectoryDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssCommentDocumentationProvider"/>
+
+        <!-- Line Marker -->
+        <codeInsight.lineMarkerProvider language="iss"
+                                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.IssOverviewLineMarkerProvider"/>
     </extensions>
 
     <application-components>

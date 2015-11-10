@@ -5,6 +5,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 
@@ -43,7 +44,7 @@ public class IssTypeDefinitionElement extends IssDefinitionElement<IssTypeSectio
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return null;
+                return IssIcons.IC_SECT_TYPE;
             }
         };
     }

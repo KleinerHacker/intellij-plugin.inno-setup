@@ -37,3 +37,4 @@ Flags: DeleteAfterInstall UninsAlwaysUninstall SetNTFSCompression
 
 [Icons]
 Name: "TestIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut
+Flags: CloseOnExit

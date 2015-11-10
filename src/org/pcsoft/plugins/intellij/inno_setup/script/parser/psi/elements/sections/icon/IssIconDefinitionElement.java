@@ -5,9 +5,8 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyDescriptionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconProperty;
 
 import javax.swing.*;
@@ -45,23 +44,23 @@ public class IssIconDefinitionElement extends IssDefinitionElement<IssIconSectio
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return null;
+                return IssIcons.IC_SECT_ICON;
             }
         };
     }
 
     @Override
     public String getName() {
-        return getTypeName() == null ? null : getTypeName().getPropertyValue() == null ? null : getTypeName().getPropertyValue().getName();
+        return getIconName() == null ? null : getIconName().getPropertyValue() == null ? null : getIconName().getPropertyValue().getName();
     }
 
     @Nullable
-    public IssIconPropertyNameElement getTypeName() {
+    public IssIconPropertyNameElement getIconName() {
         return PsiTreeUtil.findChildOfType(this, IssIconPropertyNameElement.class);
     }
 
     @Nullable
-    public IssTypePropertyFlagsElement getTypeFlags() {
-        return PsiTreeUtil.findChildOfType(this, IssTypePropertyFlagsElement.class);
+    public IssIconPropertyFlagsElement getIconFlags() {
+        return PsiTreeUtil.findChildOfType(this, IssIconPropertyFlagsElement.class);
     }
 }

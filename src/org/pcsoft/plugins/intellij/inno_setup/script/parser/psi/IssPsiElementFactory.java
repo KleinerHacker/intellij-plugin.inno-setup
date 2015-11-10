@@ -79,6 +79,10 @@ public final class IssPsiElementFactory {
             return new IssIconPropertyFlagsElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssIconPropertyFlagsValueElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_FILENAME.equals(node.getElementType())) {
+            return new IssIconPropertyFilenameElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_FILENAME_VALUE.equals(node.getElementType())) {
+            return new IssIconPropertyFilenameValueElement(node);
         }
 
         return null;
@@ -167,7 +171,7 @@ public final class IssPsiElementFactory {
             return new IssFilePropertyComponentsElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
             return new IssFilePropertyComponentsValueElement(node);
-        }else if (IssMarkerFactory.FileSection.ITEM_FLAGS.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.FileSection.ITEM_FLAGS.equals(node.getElementType())) {
             return new IssFilePropertyFlagsElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssFilePropertyFlagsValueElement(node);
@@ -201,7 +205,7 @@ public final class IssPsiElementFactory {
             return new IssDirectoryPropertyComponentsElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
             return new IssDirectoryPropertyComponentsValueElement(node);
-        }else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS.equals(node.getElementType())) {
             return new IssDirectoryPropertyFlagsElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssDirectoryPropertyFlagsValueElement(node);
@@ -223,7 +227,7 @@ public final class IssPsiElementFactory {
             return new IssTaskPropertyDescriptionElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
             return new IssTaskPropertyDescriptionValueElement(node);
-        }else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION.equals(node.getElementType())) {
             return new IssTaskPropertyGroupDescriptionElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE.equals(node.getElementType())) {
             return new IssTaskPropertyGroupDescriptionValueElement(node);
