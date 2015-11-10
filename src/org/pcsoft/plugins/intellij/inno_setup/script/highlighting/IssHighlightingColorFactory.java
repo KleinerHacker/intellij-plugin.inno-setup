@@ -43,8 +43,8 @@ public final class IssHighlightingColorFactory {
             new TextAttributes(null, null, null, null, Font.BOLD)
     );
 
-    public static final TextAttributesKey ANNOTATOR_INFO_SECTION_ITEM_NAME = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATOR_INFO_SECTION_ITEM_NAME",
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME",
             new TextAttributes(JBColor.BLUE, null, null, null, Font.BOLD)
     );
 
@@ -56,6 +56,11 @@ public final class IssHighlightingColorFactory {
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT",
             new TextAttributes(JBColor.PINK, null, null, null, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_WARN_PROPERTY_DEPRECATED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_WARN_PROPERTY_DEPRECATED",
+            new TextAttributes(JBColor.BLUE, JBColor.YELLOW, JBColor.BLACK, EffectType.STRIKEOUT, Font.BOLD)
     );
 
     private IssHighlightingColorFactory() {

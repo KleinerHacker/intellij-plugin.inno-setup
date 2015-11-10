@@ -16,7 +16,6 @@ public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssType
 
     @Override
     protected void detectErrors(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiredProperties(typeDefinitionElement, annotationHolder);
         checkForKnownValues(typeDefinitionElement, annotationHolder);
     }
 
@@ -27,15 +26,6 @@ public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssType
                     .forEach(item -> {
                         annotationHolder.createErrorAnnotation(item, "Unknown flag");
                     });
-        }
-    }
-
-    private void checkForRequiredProperties(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (typeDefinitionElement.getTypeName() == null) {
-            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Name'");
-        }
-        if (typeDefinitionElement.getTypeDescription() == null) {
-            annotationHolder.createErrorAnnotation(typeDefinitionElement, "Missing required section item 'Description'");
         }
     }
 

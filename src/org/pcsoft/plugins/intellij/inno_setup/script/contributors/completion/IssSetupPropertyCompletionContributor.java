@@ -16,8 +16,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssPropertySetupCompletionContributor extends CompletionContributor {
-    public IssPropertySetupCompletionContributor() {
+public class IssSetupPropertyCompletionContributor extends CompletionContributor {
+    public IssSetupPropertyCompletionContributor() {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(IssSetupSectionElement.class).afterLeaf("\n", "\r", "\r\n"),
                 new CompletionProvider<CompletionParameters>() {

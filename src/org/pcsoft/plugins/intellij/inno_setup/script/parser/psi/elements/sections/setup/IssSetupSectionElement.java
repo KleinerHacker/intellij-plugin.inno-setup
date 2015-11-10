@@ -3,9 +3,11 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionElement;
 
+import javax.swing.*;
 import java.util.Collection;
 
 /**
@@ -30,5 +32,10 @@ public class IssSetupSectionElement extends IssSectionElement {
     @Nullable
     public Collection<IssDefinitionPropertyElement> getSectionItemList() {
         return PsiTreeUtil.findChildrenOfType(this, IssDefinitionPropertyElement.class);
+    }
+
+    @Override
+    protected Icon getIcon(boolean b) {
+        return IssIcons.IC_SECT_SETUP;
     }
 }

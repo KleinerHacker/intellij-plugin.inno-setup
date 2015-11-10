@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.types;
 
 import com.intellij.psi.tree.IElementType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,5 +19,10 @@ public interface IssDefinableSectionIdentifier extends IssSectionIdentifier {
 
     @Nullable
     IElementType getValueMarkerElement();
+
+    boolean isRequired();
+
+    @NotNull
+    IssValueType getValueType();
 
 }

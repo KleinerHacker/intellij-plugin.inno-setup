@@ -1,16 +1,21 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
+import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Christoph on 08.11.2015.
@@ -35,11 +40,41 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
         if (elementClass.isAssignableFrom(psiElement.getClass())) {
             final E definitionElement = (E)psiElement;
 
+            checkRequiredProperties(definitionElement, annotationHolder);
+            checkDeprecatedProperties(definitionElement, annotationHolder);
             findDoubleSectionProperties(definitionElement, annotationHolder);
             checkPropertyValues(definitionElement, annotationHolder);
 
             detectErrors(definitionElement, annotationHolder);
             detectWarnings(definitionElement, annotationHolder);
+        }
+    }
+
+    private void checkRequiredProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
+        final List<IssDefinableSectionIdentifier> notFoundList = new ArrayList<>();
+        main: for (final IssDefinableSectionIdentifier identifier : definitionElement.getPropertyTypeList()) {
+            if (!identifier.isRequired())
+                continue;
+
+            for (final IssDefinitionPropertyElement propertyElement : (Collection<IssDefinitionPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+                if (propertyElement.getPropertyType().equals(identifier))
+                    continue main;
+            }
+
+            notFoundList.add(identifier);
+        }
+
+        if (notFoundList.size() > 0) {
+            annotationHolder.createErrorAnnotation(definitionElement, "Unable to find required properties: " + notFoundList.toString());
+        }
+    }
+
+    private void checkDeprecatedProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
+        for (final IssDefinitionPropertyElement propertyElement : (Collection<IssDefinitionPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+            if (propertyElement.getPropertyType().isDeprecated()) {
+                final Annotation warningAnnotation = annotationHolder.createWarningAnnotation(propertyElement, "Property is deprecated!");
+                warningAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
+            }
         }
     }
 
@@ -88,7 +123,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
             if (propertyElement.getPropertyValue() == null)
                 continue;
 
-            switch (propertyElement.getItemValueType()) {
+            switch (propertyElement.getPropertyType().getValueType()) {
                 case Unknown:
                     break;
                 case String:

@@ -41,7 +41,7 @@ public abstract class IssSectionElement extends IssAbstractElement {
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return null;
+                return IssSectionElement.this.getIcon(b);
             }
         };
     }
@@ -50,4 +50,6 @@ public abstract class IssSectionElement extends IssAbstractElement {
     public IssSectionNameElement getSectionNameElement() {
         return PsiTreeUtil.findChildOfType(this, IssSectionNameElement.class);
     }
+
+    protected abstract Icon getIcon(boolean b);
 }

@@ -6,9 +6,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssAbstractElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
 import org.pcsoft.plugins.intellij.inno_setup.script.references.IssTaskReference;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
 

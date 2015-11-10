@@ -7,8 +7,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssPropertyDirectoryCompletionContributor extends IssPropertyCompletionContributor<IssDirectorySectionElement> {
-    public IssPropertyDirectoryCompletionContributor() {
+public class IssDirectoryPropertyCompletionContributor extends IssAbstractPropertyCompletionContributor<IssDirectorySectionElement> {
+    public IssDirectoryPropertyCompletionContributor() {
         super(IssDirectorySectionElement.class);
     }
 

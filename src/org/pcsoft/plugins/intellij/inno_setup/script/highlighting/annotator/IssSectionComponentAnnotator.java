@@ -18,7 +18,6 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
 
     @Override
     protected void detectErrors(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiedProperties(componentDefinitionElement, annotationHolder);
         checkForReferences(componentDefinitionElement, annotationHolder);
         checkForKnownValues(componentDefinitionElement, annotationHolder);
     }
@@ -46,15 +45,6 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
-        }
-    }
-
-    private void checkForRequiedProperties(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentName() == null) {
-            annotationHolder.createErrorAnnotation(componentDefinitionElement, "Missing required section item 'Name'");
-        }
-        if (componentDefinitionElement.getComponentDescription() == null) {
-            annotationHolder.createErrorAnnotation(componentDefinitionElement, "Missing required section item 'Description'");
         }
     }
 

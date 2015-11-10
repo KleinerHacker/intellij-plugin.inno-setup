@@ -3,27 +3,30 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 
+import javax.swing.*;
+
 public enum IssSectionType implements IssSectionIdentifier {
-    Setup("Setup", IssMarkerFactory.SetupSection.SECTION, "section.setup"),
-    Code("Code", null, "section.code"),
-    Task("Tasks", IssMarkerFactory.TaskSection.SECTION, "section.tasks"),
-    File("Files", IssMarkerFactory.FileSection.SECTION, "section.files"),
-    Type("Types", IssMarkerFactory.TypeSection.SECTION, "section.types"),
-    Component("Components", IssMarkerFactory.ComponentSection.SECTION, "section.components"),
-    Directory("Dirs", IssMarkerFactory.DirectorySection.SECTION, "section.dirs"),
-    Icon("Icons", null, "section.icons"),
-    Ini("INI", null, "section.ini"),
-    InstallDelete("InstallDelete", null, "section.install_delete"),
-    Language("Languages", null, "section.languages"),
-    Message("Messages", null, "section.messages"),
-    CustomMessage("CustomMessages", null, "section.custom_messages"),
-    LanguageOption("LangOptions", null, "section.lang_options"),
-    Registry("Registry", null, "section.registry"),
-    InstallRun("Run", null, "section.install_run"),
-    UninstallDelete("UninstallDelete", null, "section.uninstall_delete"),
-    UninstallRun("UninstallRun", null, "section.uninstall_run");
+    Setup("Setup", IssMarkerFactory.SetupSection.SECTION, "section.setup", IssIcons.IC_SECT_SETUP),
+    Code("Code", null, "section.code", null),
+    Task("Tasks", IssMarkerFactory.TaskSection.SECTION, "section.tasks", IssIcons.IC_SECT_TASK),
+    File("Files", IssMarkerFactory.FileSection.SECTION, "section.files", IssIcons.IC_SECT_FILE),
+    Type("Types", IssMarkerFactory.TypeSection.SECTION, "section.types", IssIcons.IC_SECT_TYPE),
+    Component("Components", IssMarkerFactory.ComponentSection.SECTION, "section.components", IssIcons.IC_SECT_COMPONENT),
+    Directory("Dirs", IssMarkerFactory.DirectorySection.SECTION, "section.dirs", IssIcons.IC_SECT_DIRECTORY),
+    Icon("Icons", IssMarkerFactory.IconSection.SECTION, "section.icons", IssIcons.IC_SECT_ICON),
+    Ini("INI", null, "section.ini", null),
+    InstallDelete("InstallDelete", null, "section.install_delete", null),
+    Language("Languages", null, "section.languages", null),
+    Message("Messages", null, "section.messages", null),
+    CustomMessage("CustomMessages", null, "section.custom_messages", null),
+    LanguageOption("LangOptions", null, "section.lang_options", null),
+    Registry("Registry", null, "section.registry", null),
+    InstallRun("Run", null, "section.install_run", null),
+    UninstallDelete("UninstallDelete", null, "section.uninstall_delete", null),
+    UninstallRun("UninstallRun", null, "section.uninstall_run", null);
 
     public static IssSectionType fromId(final String id) {
         final String preparedId = id.replace("[", "").replace("]", "");
@@ -37,16 +40,18 @@ public enum IssSectionType implements IssSectionIdentifier {
     private final String id, descriptionKey;
     private final boolean deprecated;
     private final IElementType markerElement;
+    private final javax.swing.Icon icon;
 
-    private IssSectionType(String id, IElementType markerElement, String descriptionKey) {
-        this(id, markerElement, descriptionKey, false);
+    private IssSectionType(String id, IElementType markerElement, String descriptionKey, Icon icon) {
+        this(id, markerElement, descriptionKey, icon, false);
     }
 
-    private IssSectionType(String id, IElementType markerElement, String descriptionKey, boolean deprecated) {
+    private IssSectionType(String id, IElementType markerElement, String descriptionKey, Icon icon, boolean deprecated) {
         this.id = id;
         this.deprecated = deprecated;
         this.descriptionKey = descriptionKey;
         this.markerElement = markerElement;
+        this.icon = icon;
     }
 
     @NotNull
@@ -70,5 +75,10 @@ public enum IssSectionType implements IssSectionIdentifier {
     @Override
     public IElementType getItemMarkerElement() {
         return markerElement;
+    }
+
+    @Nullable
+    public javax.swing.Icon getIcon() {
+        return icon;
     }
 }

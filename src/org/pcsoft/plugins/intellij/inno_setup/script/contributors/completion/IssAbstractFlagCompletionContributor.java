@@ -6,26 +6,27 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinableSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+
+import javax.swing.*;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public abstract class IssPropertyCompletionContributor<E extends IssDefinableSectionElement> extends CompletionContributor {
-    protected IssPropertyCompletionContributor(Class<E> elementClass) {
+public abstract class IssAbstractFlagCompletionContributor<E extends IssDefinitionPropertyElement> extends CompletionContributor {
+    protected IssAbstractFlagCompletionContributor(final Class<E> elementClass) {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(elementClass).afterLeaf(";", "\n", "\r", "\r\n"),
+                PlatformPatterns.psiElement().withLanguage(IssLanguage.INSTANCE).inside(elementClass),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssDefinableSectionIdentifier item : getSectionIdentifierList()) {
+                        for (final IssFlag item : getFlagList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
-                                    .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.BLUE)
+                                    .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
+                                    .withIcon(getIcon()).withStrikeoutness(item.isDeprecated())
                                     .withInsertHandler((insertionContext, lookupElement) -> {
-                                        insertionContext.getDocument().insertString(insertionContext.getTailOffset(), ": ");
+                                        insertionContext.getDocument().insertString(insertionContext.getTailOffset(), " ");
                                         insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
                                     }));
                         }
@@ -33,5 +34,9 @@ public abstract class IssPropertyCompletionContributor<E extends IssDefinableSec
                 });
     }
 
-    protected abstract IssDefinableSectionIdentifier[] getSectionIdentifierList();
+    protected abstract IssFlag[] getFlagList();
+
+    protected Icon getIcon() {
+        return null;
+    }
 }

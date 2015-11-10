@@ -20,7 +20,7 @@ public class IssExtendedHighlightingAnnotator implements Annotator {
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
         if (psiElement instanceof IssIdentifierElement) {
             final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(psiElement, null);
-            infoAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_INFO_SECTION_ITEM_NAME);
+            infoAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME);
         } else if (psiElement instanceof IssDefinitionPropertyValueElement) {
             IssRegexUtils.findInternalConstants(psiElement.getText(), textRange -> {
                 final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(new TextRange(

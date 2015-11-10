@@ -1,17 +1,11 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionProvider;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.CompletionType;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssPsiElementFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 
 /**
@@ -27,7 +21,7 @@ public class IssSectionHeaderCompletionContributor extends CompletionContributor
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
                         for (final IssSectionType item : IssSectionType.values()) {
                             completionResultSet.addElement(LookupElementBuilder.create("[" + item.getId() + "]")
-                                    .withBoldness(true).withCaseSensitivity(false)
+                                    .withBoldness(true).withCaseSensitivity(false).withIcon(item.getIcon())
                                     .withInsertHandler((insertionContext, lookupElement) -> {
                                         if (insertionContext.getDocument().getCharsSequence().charAt(insertionContext.getStartOffset()-1) == '[') {
                                             insertionContext.getDocument().deleteString(insertionContext.getStartOffset()-1, insertionContext.getStartOffset());

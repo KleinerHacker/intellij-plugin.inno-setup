@@ -39,7 +39,6 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
 
     @Override
     protected void detectErrors(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiredProperties(fileDefinitionElement, annotationHolder);
         checkForReferences(fileDefinitionElement, annotationHolder);
         checkForKnownValues(fileDefinitionElement, annotationHolder);
     }
@@ -91,15 +90,6 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
-        }
-    }
-
-    private void checkForRequiredProperties(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (fileDefinitionElement.getFileSource() == null) {
-            annotationHolder.createErrorAnnotation(fileDefinitionElement, "Missing required section item 'Source'");
-        }
-        if (fileDefinitionElement.getFileDestDir() == null) {
-            annotationHolder.createErrorAnnotation(fileDefinitionElement, "Missing required section item 'DestDir'");
         }
     }
 

@@ -7,8 +7,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssPropertyFileCompletionContributor extends IssPropertyCompletionContributor<IssFileSectionElement> {
-    public IssPropertyFileCompletionContributor() {
+public class IssFilePropertyCompletionContributor extends IssAbstractPropertyCompletionContributor<IssFileSectionElement> {
+    public IssFilePropertyCompletionContributor() {
         super(IssFileSectionElement.class);
     }
 

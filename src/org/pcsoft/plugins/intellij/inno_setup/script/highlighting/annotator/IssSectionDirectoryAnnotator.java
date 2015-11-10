@@ -18,7 +18,6 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
 
     @Override
     protected void detectErrors(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiredProperties(directoryDefinitionElement, annotationHolder);
         checkForReferences(directoryDefinitionElement, annotationHolder);
         checkForKnownValues(directoryDefinitionElement, annotationHolder);
     }
@@ -60,12 +59,6 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
-        }
-    }
-
-    private void checkForRequiredProperties(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryName() == null) {
-            annotationHolder.createErrorAnnotation(directoryDefinitionElement, "Missing required section item 'Source'");
         }
     }
 

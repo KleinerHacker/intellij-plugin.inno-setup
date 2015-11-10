@@ -3,18 +3,26 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 
 import javax.swing.Icon;
 
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssTypeDefinitionElement extends IssDefinitionElement<IssTypeSectionElement> {
+public class IssTypeDefinitionElement extends IssDefinitionElement<IssTypeSectionElement, IssTypeProperty> {
 
     public IssTypeDefinitionElement(ASTNode node) {
         super(node, IssTypeSectionElement.class);
+    }
+
+    @NotNull
+    @Override
+    public IssTypeProperty[] getPropertyTypeList() {
+        return IssTypeProperty.values();
     }
 
     @Override

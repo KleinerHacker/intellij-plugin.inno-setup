@@ -65,11 +65,11 @@ public class IssSectionDirectoryDocumentationProvider extends AbstractDocumentat
             }
         } else if (element instanceof IssDirectoryPropertyFlagsValueElement) {
             final IssDirectoryPropertyFlagsValueElement directoryPropertyFlagsValueElement = (IssDirectoryPropertyFlagsValueElement) element;
-            final IssFileFlag fileFlag = IssFileFlag.fromId(directoryPropertyFlagsValueElement.getName());
-            if (fileFlag == null)
+            final IssDirectoryFlag directoryFlag = IssDirectoryFlag.fromId(directoryPropertyFlagsValueElement.getName());
+            if (directoryFlag == null)
                 return "Unknown flag";
 
-            return RESOURCE_BUNDLE.getString(fileFlag.getDescriptionKey());
+            return RESOURCE_BUNDLE.getString(directoryFlag.getDescriptionKey());
         } else if (element instanceof IssDirectoryPropertyAttributeValueElement) {
             final IssDirectoryPropertyAttributeValueElement directoryPropertyAttributeValueElement = (IssDirectoryPropertyAttributeValueElement) element;
             final IssCommonIOAttribute issCommonIOAttribute = IssCommonIOAttribute.fromId(directoryPropertyAttributeValueElement.getName());

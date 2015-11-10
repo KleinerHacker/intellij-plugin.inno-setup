@@ -3,18 +3,26 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
 
 import javax.swing.*;
 
 /**
  * Created by Christoph on 23.12.2014.
  */
-public class IssDirectoryDefinitionElement extends IssDefinitionElement<IssDirectorySectionElement> {
+public class IssDirectoryDefinitionElement extends IssDefinitionElement<IssDirectorySectionElement, IssDirectoryProperty> {
 
     public IssDirectoryDefinitionElement(ASTNode node) {
         super(node, IssDirectorySectionElement.class);
+    }
+
+    @NotNull
+    @Override
+    public IssDirectoryProperty[] getPropertyTypeList() {
+        return IssDirectoryProperty.values();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
+import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyPermissionsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonUserOrGroupIdentifier;
@@ -24,7 +25,8 @@ public class IssFilePermissionsCompletionContributor extends CompletionContribut
                         for (final IssFlag userOrGroupIdentifier : IssCommonUserOrGroupIdentifier.values()) {
                             for (final IssFlag permission : IssCommonIOPermissions.values()) {
                                 completionResultSet.addElement(LookupElementBuilder.create(userOrGroupIdentifier.getId() + "-" + permission.getId())
-                                        .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(new JBColor(0x008000, 0x008000))
+                                        .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
+                                        .withIcon(IssIcons.IC_INFO_PERMISSION).withStrikeoutness(permission.isDeprecated())
                                         .withInsertHandler((insertionContext, lookupElement) -> {
                                             insertionContext.getDocument().insertString(insertionContext.getTailOffset(), " ");
                                             insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());

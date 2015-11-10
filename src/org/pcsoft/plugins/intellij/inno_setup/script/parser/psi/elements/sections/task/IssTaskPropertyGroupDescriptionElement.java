@@ -3,19 +3,19 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sectio
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssItemValueType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssTaskPropertyGroupDescriptionElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement,IssTaskPropertyGroupDescriptionValueElement> {
+public class IssTaskPropertyGroupDescriptionElement extends IssDefinitionPropertyElement<IssTaskDefinitionElement,IssTaskPropertyGroupDescriptionValueElement,IssTaskProperty> {
     public IssTaskPropertyGroupDescriptionElement(ASTNode node) {
         super(node, IssTaskDefinitionElement.class,IssTaskPropertyGroupDescriptionValueElement.class);
     }
 
     @NotNull
     @Override
-    public IssItemValueType getItemValueType() {
-        return IssItemValueType.String;
+    public IssTaskProperty getPropertyType() {
+        return IssTaskProperty.GroupDescription;
     }
 }

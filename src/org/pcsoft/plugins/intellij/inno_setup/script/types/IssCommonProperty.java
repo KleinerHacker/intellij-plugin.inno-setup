@@ -9,24 +9,37 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 27.12.2014.
  */
 enum IssCommonProperty implements IssDefinableSectionIdentifier {
-    Languages("Languages", IssMarkerFactory.ITEM_DEFAULT, null, "common.property.languages"),
-    MinimalVersion("MinVersion", IssMarkerFactory.ITEM_DEFAULT, null, "common.property.min_version"),
-    OnlyBelowVersion("OnlyBelowVersion", IssMarkerFactory.ITEM_DEFAULT, null, "common.property.only_below_version");
+    Languages("Languages", IssMarkerFactory.ITEM_DEFAULT, null,
+            "common.property.languages", IssValueType.DirectMultiple),
+    MinimalVersion("MinVersion", IssMarkerFactory.ITEM_DEFAULT, null,
+            "common.property.min_version", IssValueType.DirectSingle),
+    OnlyBelowVersion("OnlyBelowVersion", IssMarkerFactory.ITEM_DEFAULT, null,
+            "common.property.only_below_version", IssValueType.DirectSingle);
 
-    private final String id, descriptonKey;
-    private final boolean deprecated;
+    private final String id, descriptionKey;
+    private final boolean deprecated, required;
     private final IElementType itemMarkerElement, valueMarkerElement;
+    private final IssValueType valueType;
 
-    private IssCommonProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptonKey) {
-        this(id, itemMarkerElement, valueMarkerElement, descriptonKey, false);
+    private IssCommonProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                              IssValueType valueType) {
+        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, false);
     }
 
-    private IssCommonProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptonKey, boolean deprecated) {
+    private IssCommonProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                              IssValueType valueType, boolean required) {
+        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, required, false);
+    }
+
+    private IssCommonProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                              IssValueType valueType, boolean required, boolean deprecated) {
         this.id = id;
-        this.descriptonKey = descriptonKey;
+        this.descriptionKey = descriptionKey;
         this.deprecated = deprecated;
+        this.required = required;
         this.itemMarkerElement = itemMarkerElement;
         this.valueMarkerElement = valueMarkerElement;
+        this.valueType = valueType;
     }
 
     @NotNull
@@ -38,7 +51,7 @@ enum IssCommonProperty implements IssDefinableSectionIdentifier {
     @NotNull
     @Override
     public String getDescriptionKey() {
-        return descriptonKey;
+        return descriptionKey;
     }
 
 
@@ -57,5 +70,22 @@ enum IssCommonProperty implements IssDefinableSectionIdentifier {
     @Override
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
+
+    @NotNull
+    @Override
+    public IssValueType getValueType() {
+        return valueType;
+    }
+
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

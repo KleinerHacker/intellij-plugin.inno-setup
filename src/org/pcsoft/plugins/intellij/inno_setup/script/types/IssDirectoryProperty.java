@@ -8,12 +8,18 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 23.12.2014.
  */
 public enum IssDirectoryProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.DirectorySection.ITEM_NAME, IssMarkerFactory.DirectorySection.ITEM_NAME_VALUE, "directory.property.name"),
-    Attributes("Attribs", IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE, IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE_VALUE, "directory.property.attribs"),
-    Permissions("Permissions", IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS, IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS_VALUE, "directory.property.permissions"),
-    Flags("Flags", IssMarkerFactory.DirectorySection.ITEM_FLAGS, IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE, "directory.property.flags"),
-    Components("Components", IssMarkerFactory.DirectorySection.ITEM_COMPONENTS, IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE, "common.property.components"),
-    Tasks("Tasks", IssMarkerFactory.DirectorySection.ITEM_TASKS, IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE, "common.property.tasks"),
+    Name("Name", IssMarkerFactory.DirectorySection.ITEM_NAME, IssMarkerFactory.DirectorySection.ITEM_NAME_VALUE,
+            "directory.property.name", IssValueType.String, true),
+    Attributes("Attribs", IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE, IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE_VALUE,
+            "directory.property.attribs", IssValueType.DirectMultiple),
+    Permissions("Permissions", IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS, IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS_VALUE,
+            "directory.property.permissions", IssValueType.DirectMultiple),
+    Flags("Flags", IssMarkerFactory.DirectorySection.ITEM_FLAGS, IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE,
+            "directory.property.flags", IssValueType.DirectMultiple),
+    Components("Components", IssMarkerFactory.DirectorySection.ITEM_COMPONENTS, IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE,
+            "common.property.components", IssValueType.DirectMultiple),
+    Tasks("Tasks", IssMarkerFactory.DirectorySection.ITEM_TASKS, IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE,
+            "common.property.tasks", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),
     MinimalVersion(IssCommonProperty.MinimalVersion),
@@ -32,23 +38,35 @@ public enum IssDirectoryProperty implements IssDefinableSectionIdentifier {
     }
 
     private final String id, descriptionKey;
-    private final boolean deprecated;
+    private final boolean deprecated, required;
     private final IElementType itemMarkerElement, valueMarkerElement;
+    private final IssValueType valueType;
 
     private IssDirectoryProperty(final IssDefinableSectionIdentifier sectionIdentifier) {
-        this(sectionIdentifier.getId(), sectionIdentifier.getItemMarkerElement(), sectionIdentifier.getValueMarkerElement(), sectionIdentifier.getDescriptionKey(), sectionIdentifier.isDeprecated());
+        this(sectionIdentifier.getId(), sectionIdentifier.getItemMarkerElement(), sectionIdentifier.getValueMarkerElement(),
+                sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
+                sectionIdentifier.isDeprecated());
     }
 
-    private IssDirectoryProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey) {
-        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, false);
+    private IssDirectoryProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                                 IssValueType valueType) {
+        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, false);
     }
 
-    private IssDirectoryProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey, boolean deprecated) {
+    private IssDirectoryProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                                 IssValueType valueType, boolean required) {
+        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, required, false);
+    }
+
+    private IssDirectoryProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+                                 IssValueType valueType, boolean required, boolean deprecated) {
         this.id = id;
         this.deprecated = deprecated;
+        this.required = required;
         this.itemMarkerElement = itemMarkerElement;
         this.valueMarkerElement = valueMarkerElement;
         this.descriptionKey = descriptionKey;
+        this.valueType = valueType;
     }
 
     @NotNull
@@ -81,5 +99,20 @@ public enum IssDirectoryProperty implements IssDefinableSectionIdentifier {
         return deprecated;
     }
 
+    @Override
+    public boolean isRequired() {
+        return required;
+    }
 
+    @NotNull
+    @Override
+    public IssValueType getValueType() {
+        return valueType;
+    }
+
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

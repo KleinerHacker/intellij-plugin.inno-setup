@@ -18,7 +18,6 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
 
     @Override
     protected void detectErrors(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForRequiredProperties(taskDefinitionElement, annotationHolder);
         checkForReferences(taskDefinitionElement, annotationHolder);
         checkForKnownValues(taskDefinitionElement, annotationHolder);
     }
@@ -41,15 +40,6 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
-        }
-    }
-
-    private void checkForRequiredProperties(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (taskDefinitionElement.getTaskName() == null) {
-            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Name'");
-        }
-        if (taskDefinitionElement.getTaskDescription() == null) {
-            annotationHolder.createErrorAnnotation(taskDefinitionElement, "Missing required section item 'Description'");
         }
     }
 

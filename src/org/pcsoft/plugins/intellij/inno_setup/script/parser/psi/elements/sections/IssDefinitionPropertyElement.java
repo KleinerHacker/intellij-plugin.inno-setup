@@ -7,13 +7,14 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssAbstractElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
 
 import java.util.Collection;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public abstract class IssDefinitionPropertyElement<D extends IssDefinitionElement, V extends IssDefinitionPropertyValueElement> extends IssAbstractElement {
+public abstract class IssDefinitionPropertyElement<D extends IssDefinitionElement, V extends IssDefinitionPropertyValueElement, T extends IssDefinableSectionIdentifier> extends IssAbstractElement {
 
     private final Class<D> definitionClass;
     private final Class<V> valueClass;
@@ -53,5 +54,5 @@ public abstract class IssDefinitionPropertyElement<D extends IssDefinitionElemen
     }
 
     @NotNull
-    public abstract IssItemValueType getItemValueType();
+    public abstract T getPropertyType();
 }

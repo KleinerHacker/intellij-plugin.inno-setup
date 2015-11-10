@@ -88,6 +88,10 @@ final class IssParserSectionUtility {
                         parseLineForDefaultSection(psiBuilder, "Type Section", IssMarkerFactory.TypeSection.SECTION_DEFINITION,
                                 IssTypeProperty::getValueMarkerElementFromId, IssTypeProperty::getItemMarkerElementFromId);
                         break;
+                    case Icon:
+                        parseLineForDefaultSection(psiBuilder, "Icon Section", IssMarkerFactory.IconSection.SECTION_DEFINITION,
+                                IssIconProperty::getValueMarkerElementFromId, IssIconProperty::getItemMarkerElementFromId);
+                        break;
                     default:
                         throw new RuntimeException();
                 }

@@ -11,6 +11,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppVersionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionElement;
@@ -47,6 +48,10 @@ public final class IssPsiElementFactory {
         if (typeSection != null)
             return typeSection;
 
+        final PsiElement iconSection = createForIconSection(node);
+        if (iconSection != null)
+            return iconSection;
+
         //Default
         if (IssMarkerFactory.SECTION_TITLE.equals(node.getElementType())) {
             return new IssSectionNameElement(node);
@@ -59,6 +64,24 @@ public final class IssPsiElementFactory {
         }
 
         return new IssUnknownElement(node);
+    }
+
+    private static PsiElement createForIconSection(ASTNode node) {
+        if (IssMarkerFactory.IconSection.SECTION.equals(node.getElementType())) {
+            return new IssIconSectionElement(node);
+        } else if (IssMarkerFactory.IconSection.SECTION_DEFINITION.equals(node.getElementType())) {
+            return new IssIconDefinitionElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_NAME.equals(node.getElementType())) {
+            return new IssIconPropertyNameElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_NAME_VALUE.equals(node.getElementType())) {
+            return new IssIconPropertyNameValueElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_FLAGS.equals(node.getElementType())) {
+            return new IssIconPropertyFlagsElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
+            return new IssIconPropertyFlagsValueElement(node);
+        }
+
+        return null;
     }
 
     private static PsiElement createForComponentSection(ASTNode node) {

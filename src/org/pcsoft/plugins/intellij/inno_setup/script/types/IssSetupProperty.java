@@ -157,6 +157,11 @@ public enum IssSetupProperty implements IssSectionIdentifier {
     WizardSmallImageBackColor("WizardSmallImageBackColor", IssMarkerFactory.ITEM_DEFAULT, Constants.TYPE_OBSOLETE),
     WizardStyle("WizardStyle", IssMarkerFactory.ITEM_DEFAULT, Constants.TYPE_OBSOLETE);
 
+    @Override
+    public String toString() {
+        return id;
+    }
+
     private static final class Constants {
         private static final String TYPE_COMPILER = "Compiler-related";
         private static final String TYPE_INSTALLER = "Installer-related";
@@ -208,4 +213,6 @@ public enum IssSetupProperty implements IssSectionIdentifier {
     public String getType() {
         return type;
     }
+
+
 }

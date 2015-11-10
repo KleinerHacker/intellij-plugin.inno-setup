@@ -49,6 +49,38 @@ public final class IssMarkerFactory {
         public static final IElementType ITEM_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
 
+    public static final class IconSection {
+        private static final String KEY = "ICON_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType ITEM_NAME = new IElementType(KEY_ITEM + "_NAME", LANGUAGE);
+        public static final IElementType ITEM_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
+        public static final IElementType ITEM_FILENAME = new IElementType(KEY_ITEM + "_FILENAME", LANGUAGE);
+        public static final IElementType ITEM_FILENAME_VALUE = new IElementType(KEY_ITEM + "_FILENAME_VALUE", LANGUAGE);
+        public static final IElementType ITEM_PARAMETERS = new IElementType(KEY_ITEM + "_PARAMETERS", LANGUAGE);
+        public static final IElementType ITEM_PARAMETERS_VALUE = new IElementType(KEY_ITEM + "_PARAMETERS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_WORKINGDIR = new IElementType(KEY_ITEM + "_WORKINGDIR", LANGUAGE);
+        public static final IElementType ITEM_WORKINGDIR_VALUE = new IElementType(KEY_ITEM + "_WORKINGDIR_VALUE", LANGUAGE);
+        public static final IElementType ITEM_HOTKEY = new IElementType(KEY_ITEM + "_HOTKEY", LANGUAGE);
+        public static final IElementType ITEM_HOTKEY_VALUE = new IElementType(KEY_ITEM + "_HOTKEY_VALUE", LANGUAGE);
+        public static final IElementType ITEM_COMMENT = new IElementType(KEY_ITEM + "_COMMENT", LANGUAGE);
+        public static final IElementType ITEM_COMMENT_VALUE = new IElementType(KEY_ITEM + "_COMMENT_VALUE", LANGUAGE);
+        public static final IElementType ITEM_ICONFILENAME = new IElementType(KEY_ITEM + "_ICONFILENAME", LANGUAGE);
+        public static final IElementType ITEM_ICONFILENAME_VALUE = new IElementType(KEY_ITEM + "_ICONFILENAME_VALUE", LANGUAGE);
+        public static final IElementType ITEM_ICONINDEX = new IElementType(KEY_ITEM + "_ICONINDEX", LANGUAGE);
+        public static final IElementType ITEM_ICONINDEX_VALUE = new IElementType(KEY_ITEM + "_ICONINDEX_VALUE", LANGUAGE);
+        public static final IElementType ITEM_APPUSERMODELID = new IElementType(KEY_ITEM + "_APPUSERMODELID", LANGUAGE);
+        public static final IElementType ITEM_APPUSERMODELID_VALUE = new IElementType(KEY_ITEM + "_APPUSERMODELID_VALUE", LANGUAGE);
+        public static final IElementType ITEM_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
+        public static final IElementType ITEM_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
+        public static final IElementType ITEM_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
+        public static final IElementType ITEM_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType ITEM_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
     public static final class FileSection {
         private static final String KEY = "FILE_SECTION";
         private static final String KEY_ITEM = KEY + "_ITEM";
