@@ -4,14 +4,15 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyComponentsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Christoph on 23.12.2014.
@@ -42,12 +43,17 @@ public final class IssTaskUtils {
         IssUtils.findFiles(project, file -> {
             final Collection<IssTaskDefinitionElement> taskDefinitionElements = PsiTreeUtil.findChildrenOfType(file, IssTaskDefinitionElement.class);
             if (name == null) {
-                list.addAll(taskDefinitionElements);
+                list.addAll(
+                        taskDefinitionElements.stream()
+                                .filter(item -> item.getName() != null)
+                                .filter(item -> !item.getName().trim().isEmpty())
+                                .collect(Collectors.toList())
+                );
                 return;
             }
 
             for (final IssTaskDefinitionElement taskDefinitionElement : taskDefinitionElements) {
-                if (taskDefinitionElement.getName() == null)
+                if (taskDefinitionElement.getName() == null || taskDefinitionElement.getName().trim().isEmpty())
                     continue;
 
                 if (variant) {

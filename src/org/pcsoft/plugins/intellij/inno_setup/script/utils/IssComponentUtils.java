@@ -12,6 +12,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Christoph on 28.12.2014.
@@ -42,12 +43,17 @@ public final class IssComponentUtils {
         IssUtils.findFiles(project, file -> {
             final Collection<IssComponentDefinitionElement> componentDefinitionElements = PsiTreeUtil.findChildrenOfType(file, IssComponentDefinitionElement.class);
             if (name == null) {
-                list.addAll(componentDefinitionElements);
+                list.addAll(
+                        componentDefinitionElements.stream()
+                                .filter(item -> item.getName() != null)
+                                .filter(item -> item.getName().trim().isEmpty())
+                                .collect(Collectors.toList())
+                );
                 return;
             }
 
             for (final IssComponentDefinitionElement componentDefinitionElement : componentDefinitionElements) {
-                if (componentDefinitionElement.getName() == null)
+                if (componentDefinitionElement.getName() == null || componentDefinitionElement.getName().trim().isEmpty())
                     continue;
 
                 if (variant) {

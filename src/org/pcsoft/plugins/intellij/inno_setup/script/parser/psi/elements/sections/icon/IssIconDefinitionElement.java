@@ -63,4 +63,14 @@ public class IssIconDefinitionElement extends IssDefinitionElement<IssIconSectio
     public IssIconPropertyFlagsElement getIconFlags() {
         return PsiTreeUtil.findChildOfType(this, IssIconPropertyFlagsElement.class);
     }
+
+    @Nullable
+    public IssIconPropertyComponentsElement getIconComponents() {
+        return PsiTreeUtil.findChildOfType(this, IssIconPropertyComponentsElement.class);
+    }
+
+    @Nullable
+    public IssIconPropertyTasksElement getIconTasks() {
+        return PsiTreeUtil.findChildOfType(this, IssIconPropertyTasksElement.class);
+    }
 }

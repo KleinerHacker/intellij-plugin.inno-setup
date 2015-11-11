@@ -125,9 +125,6 @@
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.file.IssFilePropertyComponentsValueElementManipulator"/>
         <!-- Directory -->
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyNameValueElement"
-                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyNameValueElementManipulator"/>
-        <lang.elementManipulator
                 forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyTasksValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.directory.IssDirectoryPropertyTasksValueElementManipulator"/>
         <lang.elementManipulator
@@ -151,6 +148,13 @@
         <lang.elementManipulator
                 forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.type.IssTypePropertyNameValueElementManipulator"/>
+        <!-- Icon -->
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.IssIconPropertyTasksValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.icon.IssIconPropertyTasksValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.IssIconPropertyComponentsValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.sections.icon.IssIconPropertyComponentsValueElementManipulator"/>
 
         <lang.refactoringSupport language="iss"
                                  implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>

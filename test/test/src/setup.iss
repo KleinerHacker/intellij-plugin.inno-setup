@@ -36,5 +36,5 @@ Name: "doubleDir";
 Flags: DeleteAfterInstall UninsAlwaysUninstall SetNTFSCompression
 
 [Icons]
-Name: "TestIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut
+Name: "TestIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut; Tasks: bla testTask testTask; Components: testComponent bla testComponent
 Flags: CloseOnExit

@@ -83,7 +83,16 @@ public final class IssPsiElementFactory {
             return new IssIconPropertyFilenameElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_FILENAME_VALUE.equals(node.getElementType())) {
             return new IssIconPropertyFilenameValueElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_TASKS.equals(node.getElementType())) {
+            return new IssIconPropertyTasksElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
+            return new IssIconPropertyTasksValueElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_COMPONENTS.equals(node.getElementType())) {
+            return new IssIconPropertyComponentsElement(node);
+        } else if (IssMarkerFactory.IconSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
+            return new IssIconPropertyComponentsValueElement(node);
         }
+
 
         return null;
     }
