@@ -4,7 +4,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
@@ -44,16 +44,16 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForReferences(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryTasks() != null) {
-            directoryDefinitionElement.getDirectoryTasks().getPropertyValueList().stream()
+        if (directoryDefinitionElement.getDirectoryTaskReference() != null) {
+            directoryDefinitionElement.getDirectoryTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
         }
-        if (directoryDefinitionElement.getDirectoryComponents() != null) {
-            directoryDefinitionElement.getDirectoryComponents().getPropertyValueList().stream()
+        if (directoryDefinitionElement.getDirectoryComponentReference() != null) {
+            directoryDefinitionElement.getDirectoryComponentReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -109,18 +109,18 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForDoubleReferences(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryTasks() != null) {
+        if (directoryDefinitionElement.getDirectoryTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryTasks().getPropertyValueList(),
+                    directoryDefinitionElement.getDirectoryTaskReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
                     }
             );
         }
-        if (directoryDefinitionElement.getDirectoryComponents() != null) {
+        if (directoryDefinitionElement.getDirectoryComponentReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryComponents().getPropertyValueList(),
+                    directoryDefinitionElement.getDirectoryComponentReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");

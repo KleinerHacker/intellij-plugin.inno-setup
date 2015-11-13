@@ -16,7 +16,7 @@ public enum IssTaskProperty implements IssDefinableSectionIdentifier {
             "task.property.group_description", IssValueType.String),
     Flags("Flags", IssMarkerFactory.TaskSection.ITEM_FLAGS, IssMarkerFactory.TaskSection.ITEM_FLAGS_VALUE,
             "task.property.flags", IssValueType.DirectMultiple),
-    Components("Components", IssMarkerFactory.TaskSection.ITEM_COMPONENTS, IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE,
+    ComponentReference("Components", IssMarkerFactory.TaskSection.ITEM_COMPONENTS, IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE,
             "common.property.components", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),

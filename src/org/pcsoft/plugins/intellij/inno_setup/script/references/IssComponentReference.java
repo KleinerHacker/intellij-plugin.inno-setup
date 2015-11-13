@@ -6,10 +6,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +28,12 @@ public class IssComponentReference extends IssAbstractReference {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean b) {
-        final Collection<IssComponentDefinitionElement> componentDefinitionElements = IssComponentUtils.findComponentDefinitions(myElement.getProject(), key, b);
-        final List<IssComponentPropertyNameValueElement> componentDefinitionNameValueElements = componentDefinitionElements.stream()
+        final Collection<IssComponentDefinitionElement> componentDefinitionElements = IssFindUtils.findComponentDefinitionElements(myElement.getProject(), key, b);
+        final List<IssPropertyNameValueElement> nameValueElements = componentDefinitionElements.stream()
                 .filter(item -> item.getComponentName() != null && item.getComponentName().getPropertyValue() != null)
                 .map(item -> item.getComponentName().getPropertyValue())
                 .collect(Collectors.toList());
-        final List<ResolveResult> resolveResultList = componentDefinitionNameValueElements.stream()
+        final List<ResolveResult> resolveResultList = nameValueElements.stream()
                 .map(PsiElementResolveResult::new)
                 .collect(Collectors.toList());
 
@@ -42,7 +43,7 @@ public class IssComponentReference extends IssAbstractReference {
     @NotNull
     @Override
     public Object[] getVariants() {
-        final Collection<IssComponentDefinitionElement> componentDefinitionNameValueElements = IssComponentUtils.findComponentDefinitions(myElement.getProject());
+        final Collection<IssComponentDefinitionElement> componentDefinitionNameValueElements = IssFindUtils.findComponentDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = componentDefinitionNameValueElements.stream().map(LookupElementBuilder::create).collect(Collectors.toList());
 
         return lookupElementList.toArray();
@@ -50,8 +51,9 @@ public class IssComponentReference extends IssAbstractReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssComponentPropertyNameValueElement) {
-            final IssComponentPropertyNameValueElement nameElement = (IssComponentPropertyNameValueElement) element;
+        if (element instanceof IssPropertyNameValueElement &&
+                PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
+            final IssPropertyNameValueElement nameElement = (IssPropertyNameValueElement) element;
             return nameElement.getName().equalsIgnoreCase(myElement.getName());
         }
 

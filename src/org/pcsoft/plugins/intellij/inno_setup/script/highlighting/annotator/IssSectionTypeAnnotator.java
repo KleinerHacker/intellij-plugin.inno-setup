@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 
 /**

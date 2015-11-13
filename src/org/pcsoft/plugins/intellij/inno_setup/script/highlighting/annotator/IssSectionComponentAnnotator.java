@@ -4,7 +4,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
 
 /**
@@ -30,16 +30,18 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
                         annotationHolder.createErrorAnnotation(item, "Unknown flag");
                     });
         }
-        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null && componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null) {
-            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getSize() < 0) {
+        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null &&
+                componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null &&
+                componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getNumber() != null) {
+            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getNumber() < 0) {
                 annotationHolder.createErrorAnnotation(componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue(), "Extra Disk Space must be positive!");
             }
         }
     }
 
     private void checkForReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentTypes() != null) {
-            componentDefinitionElement.getComponentTypes().getPropertyValueList().stream()
+        if (componentDefinitionElement.getComponentTypeReference() != null) {
+            componentDefinitionElement.getComponentTypeReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
@@ -51,17 +53,19 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
     @Override
     protected void detectWarnings(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(componentDefinitionElement, annotationHolder);
-        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null && componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null) {
-            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getSize() == 0) {
+        if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null &&
+                componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null &&
+                componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getNumber() != null) {
+            if (componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getNumber() == 0) {
                 annotationHolder.createWarningAnnotation(componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue(), "Extra Disk Space should be greater than 0!");
             }
         }
     }
 
     private void checkForDoubleReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentTypes() != null) {
+        if (componentDefinitionElement.getComponentTypeReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    componentDefinitionElement.getComponentTypes().getPropertyValueList(),
+                    componentDefinitionElement.getComponentTypeReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Type '" + key + "' already listed");

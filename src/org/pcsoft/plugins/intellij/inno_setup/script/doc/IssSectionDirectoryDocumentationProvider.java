@@ -4,14 +4,12 @@ import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyAttributeValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.IssDirectoryPropertyPermissionsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssDirectoryUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDirectoryFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,24 +25,18 @@ public class IssSectionDirectoryDocumentationProvider extends AbstractDocumentat
             ResourceBundle.getBundle("/messages/documentation_directory"), ResourceBundle.getBundle("/messages/documentation_common")
     );
 
-    @Nullable
-    @Override
-    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        return super.getQuickNavigateInfo(element, originalElement);
-    }
-
     @Override
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
-        if (PsiTreeUtil.getParentOfType(element, IssDirectoryDefinitionElement.class) != null) {
-            return IssDirectoryUtils.createFlagValue(element.getProject(), object.toString());
-        }
+//        if (PsiTreeUtil.getParentOfType(element, IssDirectoryDefinitionElement.class) != null) {
+//            return IssDirectoryUtils.createFlagValue(element.getProject(), object.toString());
+//        }
 
         return null;
     }
 
     @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssDirectoryPropertyFlagsValueElement) {
+        if (element instanceof IssPropertyDirectoryFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_dirssection.htm");
         }
 
@@ -63,32 +55,13 @@ public class IssSectionDirectoryDocumentationProvider extends AbstractDocumentat
 
                 return RESOURCE_BUNDLE.getString(directoryProperty.getDescriptionKey());
             }
-        } else if (element instanceof IssDirectoryPropertyFlagsValueElement) {
-            final IssDirectoryPropertyFlagsValueElement directoryPropertyFlagsValueElement = (IssDirectoryPropertyFlagsValueElement) element;
+        } else if (element instanceof IssPropertyDirectoryFlagsValueElement) {
+            final IssPropertyDirectoryFlagsValueElement directoryPropertyFlagsValueElement = (IssPropertyDirectoryFlagsValueElement) element;
             final IssDirectoryFlag directoryFlag = IssDirectoryFlag.fromId(directoryPropertyFlagsValueElement.getName());
             if (directoryFlag == null)
                 return "Unknown flag";
 
             return RESOURCE_BUNDLE.getString(directoryFlag.getDescriptionKey());
-        } else if (element instanceof IssDirectoryPropertyAttributeValueElement) {
-            final IssDirectoryPropertyAttributeValueElement directoryPropertyAttributeValueElement = (IssDirectoryPropertyAttributeValueElement) element;
-            final IssCommonIOAttribute issCommonIOAttribute = IssCommonIOAttribute.fromId(directoryPropertyAttributeValueElement.getName());
-            if (issCommonIOAttribute == null)
-                return "Unknown attribute";
-
-            return RESOURCE_BUNDLE.getString(issCommonIOAttribute.getDescriptionKey());
-        } else if (element instanceof IssDirectoryPropertyPermissionsValueElement) {
-            final IssDirectoryPropertyPermissionsValueElement directoryPropertyPermissionsValueElement = (IssDirectoryPropertyPermissionsValueElement) element;
-            final IssCommonIOPermissions issCommonIOPermissions = IssCommonIOPermissions.fromId(directoryPropertyPermissionsValueElement.getPermission());
-            if (issCommonIOPermissions == null)
-                return "Unknown permission";
-            final IssCommonUserOrGroupIdentifier issCommonUserOrGroupIdentifier = IssCommonUserOrGroupIdentifier.fromId(
-                    directoryPropertyPermissionsValueElement.getUserOrGroupIdentifier());
-            if (issCommonUserOrGroupIdentifier == null)
-                return "Unknown user or group identifier";
-
-            return RESOURCE_BUNDLE.getString(issCommonIOPermissions.getDescriptionKey()) + "<br/><i>As: " +
-                    RESOURCE_BUNDLE.getString(issCommonUserOrGroupIdentifier.getDescriptionKey()) + "</i>";
         }
 
         return null;

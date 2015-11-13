@@ -20,7 +20,7 @@ public final class IssMarkerFactory {
 
     public static final IElementType SECTION_TITLE = new IElementType("SECTION_TITLE", LANGUAGE);
 
-    public static final IElementType ITEM_DEFAULT = new IElementType("ITEM_DEFAULT", LANGUAGE);
+    public static final IElementType ITEM_UNKNOWN = new IElementType("ITEM_UNKNOWN", LANGUAGE);
 
     public static final class SetupSection {
         private static final String KEY = "SETUP_SECTION";

@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
 
 import java.util.ArrayList;
 import java.util.Collection;

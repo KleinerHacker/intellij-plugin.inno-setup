@@ -6,10 +6,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +28,12 @@ public class IssTaskReference extends IssAbstractReference {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean b) {
-        final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssTaskUtils.findTaskDefinitions(myElement.getProject(), key, b);
-        final List<IssTaskPropertyNameValueElement> taskDefinitionNameValueElements = taskDefinitionElements.stream()
+        final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssFindUtils.findTaskDefinitionElements(myElement.getProject(), key, b);
+        final List<IssPropertyNameValueElement> nameValueElements = taskDefinitionElements.stream()
                 .filter(item -> item.getTaskName() != null && item.getTaskName().getPropertyValue() != null)
                 .map(item -> item.getTaskName().getPropertyValue())
                 .collect(Collectors.toList());
-        final List<ResolveResult> resolveResultList = taskDefinitionNameValueElements.stream()
+        final List<ResolveResult> resolveResultList = nameValueElements.stream()
                 .map(PsiElementResolveResult::new)
                 .collect(Collectors.toList());
 
@@ -42,7 +43,7 @@ public class IssTaskReference extends IssAbstractReference {
     @NotNull
     @Override
     public Object[] getVariants() {
-        final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssTaskUtils.findTaskDefinitions(myElement.getProject());
+        final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssFindUtils.findTaskDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = taskDefinitionElements.stream().map(LookupElementBuilder::create).collect(Collectors.toList());
 
         return lookupElementList.toArray();
@@ -50,8 +51,9 @@ public class IssTaskReference extends IssAbstractReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssTaskPropertyNameValueElement) {
-            final IssTaskPropertyNameValueElement nameElement = (IssTaskPropertyNameValueElement) element;
+        if (element instanceof IssPropertyNameValueElement &&
+                PsiTreeUtil.getParentOfType(element, IssTaskDefinitionElement.class) != null) {
+            final IssPropertyNameValueElement nameElement = (IssPropertyNameValueElement) element;
             return nameElement.getName().equalsIgnoreCase(myElement.getName());
         }
 

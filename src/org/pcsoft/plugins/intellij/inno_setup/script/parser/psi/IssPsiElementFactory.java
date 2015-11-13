@@ -3,20 +3,17 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssUnknownElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyDefaultElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.directory.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionAppVersionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionAppNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionAppVersionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -59,8 +56,8 @@ public final class IssPsiElementFactory {
             return new IssIdentifierElement(node);
         } else if (IssMarkerFactory.VALUE.equals(node.getElementType())) {
             return new IssValueElement(node);
-        } else if (IssMarkerFactory.ITEM_DEFAULT.equals(node.getElementType())) {
-            return new IssDefinitionPropertyDefaultElement(node);
+        } else if (IssMarkerFactory.ITEM_UNKNOWN.equals(node.getElementType())) {
+            return new IssPropertyUnknownElement(node);
         }
 
         return new IssUnknownElement(node);
@@ -72,25 +69,25 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.IconSection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssIconDefinitionElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_NAME.equals(node.getElementType())) {
-            return new IssIconPropertyNameElement(node);
+            return new IssPropertyStringElement(node, IssIconProperty.Name);
         } else if (IssMarkerFactory.IconSection.ITEM_NAME_VALUE.equals(node.getElementType())) {
-            return new IssIconPropertyNameValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssIconPropertyFlagsElement(node);
+            return new IssPropertyIconFlagsElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssIconPropertyFlagsValueElement(node);
+            return new IssPropertyIconFlagsValueElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_FILENAME.equals(node.getElementType())) {
-            return new IssIconPropertyFilenameElement(node);
+            return new IssPropertyStringElement(node, IssIconProperty.Filename);
         } else if (IssMarkerFactory.IconSection.ITEM_FILENAME_VALUE.equals(node.getElementType())) {
-            return new IssIconPropertyFilenameValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_TASKS.equals(node.getElementType())) {
-            return new IssIconPropertyTasksElement(node);
+            return new IssPropertyTaskReferenceElement(node, IssIconProperty.TaskReference);
         } else if (IssMarkerFactory.IconSection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
-            return new IssIconPropertyTasksValueElement(node);
+            return new IssPropertyTaskReferenceValueElement(node);
         } else if (IssMarkerFactory.IconSection.ITEM_COMPONENTS.equals(node.getElementType())) {
-            return new IssIconPropertyComponentsElement(node);
+            return new IssPropertyComponentReferenceElement(node, IssIconProperty.ComponentReference);
         } else if (IssMarkerFactory.IconSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
-            return new IssIconPropertyComponentsValueElement(node);
+            return new IssPropertyComponentReferenceValueElement(node);
         }
 
 
@@ -103,25 +100,25 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.ComponentSection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssComponentDefinitionElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_NAME.equals(node.getElementType())) {
-            return new IssComponentPropertyNameElement(node);
+            return new IssPropertyNameElement(node, IssComponentProperty.Name);
         } else if (IssMarkerFactory.ComponentSection.ITEM_NAME_VALUE.equals(node.getElementType())) {
-            return new IssComponentPropertyNameValueElement(node);
+            return new IssPropertyNameValueElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION.equals(node.getElementType())) {
-            return new IssComponentPropertyDescriptionElement(node);
+            return new IssPropertyStringElement(node, IssComponentProperty.Description);
         } else if (IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
-            return new IssComponentPropertyDescriptionValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED.equals(node.getElementType())) {
-            return new IssComponentPropertyExtraDiskSpaceRequiredElement(node);
+            return new IssPropertyIntegerElement(node, IssComponentProperty.ExtraDiskSpaceRequired);
         } else if (IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE.equals(node.getElementType())) {
-            return new IssComponentPropertyExtraDiskSpaceRequiredValueElement(node);
+            return new IssPropertyIntegerValueElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_TYPES.equals(node.getElementType())) {
-            return new IssComponentPropertyTypesElement(node);
+            return new IssPropertyTypeReferenceElement(node, IssComponentProperty.TypeReference);
         } else if (IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE.equals(node.getElementType())) {
-            return new IssComponentPropertyTypesValueElement(node);
+            return new IssPropertyTypeReferenceValueElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssComponentPropertyFlagsElement(node);
+            return new IssPropertyComponentFlagsElement(node);
         } else if (IssMarkerFactory.ComponentSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssComponentPropertyFlagsValueElement(node);
+            return new IssPropertyComponentFlagsValueElement(node);
         }
 
         return null;
@@ -133,57 +130,57 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.FileSection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssFileDefinitionElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_SOURCE.equals(node.getElementType())) {
-            return new IssFilePropertySourceElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.Source);
         } else if (IssMarkerFactory.FileSection.ITEM_SOURCE_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertySourceValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_DESTDIR.equals(node.getElementType())) {
-            return new IssFilePropertyDestDirElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.DestinationDirectory);
         } else if (IssMarkerFactory.FileSection.ITEM_DESTDIR_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyDestDirValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_COPYMODE.equals(node.getElementType())) {
-            return new IssFilePropertyCopyModeElement(node);
+            return new IssPropertyIOCopyModeElement(node, IssFileProperty.CopyMode);
         } else if (IssMarkerFactory.FileSection.ITEM_COPYMODE_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyCopyModeValueElement(node);
+            return new IssPropertyIOCopyModeValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_ATTRIBUTE.equals(node.getElementType())) {
-            return new IssFilePropertyAttributeElement(node);
+            return new IssPropertyIOAttributeElement(node, IssFileProperty.Attributes);
         } else if (IssMarkerFactory.FileSection.ITEM_ATTRIBUTE_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyAttributeValueElement(node);
+            return new IssPropertyIOAttributeValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_PERMISSIONS.equals(node.getElementType())) {
-            return new IssFilePropertyPermissionsElement(node);
+            return new IssPropertyIOPermissionsElement(node, IssFileProperty.Permissions);
         } else if (IssMarkerFactory.FileSection.ITEM_PERMISSIONS_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyPermissionsValueElement(node);
+            return new IssPropertyIOPermissionsValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_DESTNAME.equals(node.getElementType())) {
-            return new IssFilePropertyDestNameElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.DestinationName);
         } else if (IssMarkerFactory.FileSection.ITEM_DESTNAME_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyDestNameValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_EXCLUDES.equals(node.getElementType())) {
-            return new IssFilePropertyExcludesElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.Excludes);
         } else if (IssMarkerFactory.FileSection.ITEM_EXCLUDES_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyExcludesValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_EXTERNALSIZE.equals(node.getElementType())) {
-            return new IssFilePropertyExternalSizeElement(node);
+            return new IssPropertyIntegerElement(node, IssFileProperty.ExternalSize);
         } else if (IssMarkerFactory.FileSection.ITEM_EXTERNALSIZE_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyExternalSizeValueElement(node);
+            return new IssPropertyIntegerValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_FONTINSTALL.equals(node.getElementType())) {
-            return new IssFilePropertyFontInstallElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.FontInstall);
         } else if (IssMarkerFactory.FileSection.ITEM_FONTINSTALL_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyFontInstallValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_STRONGASSEMBLYNAME.equals(node.getElementType())) {
-            return new IssFilePropertyStrongAssemblyNameElement(node);
+            return new IssPropertyStringElement(node, IssFileProperty.StrongAssemblyName);
         } else if (IssMarkerFactory.FileSection.ITEM_STRONGASSEMBLYNAME_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyStrongAssemblyNameValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS.equals(node.getElementType())) {
-            return new IssFilePropertyTasksElement(node);
+            return new IssPropertyTaskReferenceElement(node, IssFileProperty.TaskReference);
         } else if (IssMarkerFactory.FileSection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyTasksValueElement(node);
+            return new IssPropertyTaskReferenceValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_COMPONENTS.equals(node.getElementType())) {
-            return new IssFilePropertyComponentsElement(node);
+            return new IssPropertyComponentReferenceElement(node, IssFileProperty.ComponentReference);
         } else if (IssMarkerFactory.FileSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyComponentsValueElement(node);
+            return new IssPropertyComponentReferenceValueElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssFilePropertyFlagsElement(node);
+            return new IssPropertyFileFlagsElement(node);
         } else if (IssMarkerFactory.FileSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssFilePropertyFlagsValueElement(node);
+            return new IssPropertyFileFlagsValueElement(node);
         }
 
         return null;
@@ -195,29 +192,29 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.DirectorySection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssDirectoryDefinitionElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_NAME.equals(node.getElementType())) {
-            return new IssDirectoryPropertyNameElement(node);
+            return new IssPropertyStringElement(node, IssDirectoryProperty.Name);
         } else if (IssMarkerFactory.DirectorySection.ITEM_NAME_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyNameValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyAttributeElement(node);
+            return new IssPropertyIOAttributeElement(node, IssDirectoryProperty.Attributes);
         } else if (IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyAttributeValueElement(node);
+            return new IssPropertyIOAttributeValueElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS.equals(node.getElementType())) {
-            return new IssDirectoryPropertyPermissionsElement(node);
+            return new IssPropertyIOPermissionsElement(node, IssDirectoryProperty.Permissions);
         } else if (IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyPermissionsValueElement(node);
+            return new IssPropertyIOPermissionsValueElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_TASKS.equals(node.getElementType())) {
-            return new IssDirectoryPropertyTasksElement(node);
+            return new IssPropertyTaskReferenceElement(node, IssDirectoryProperty.TaskReference);
         } else if (IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyTasksValueElement(node);
+            return new IssPropertyTaskReferenceValueElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_COMPONENTS.equals(node.getElementType())) {
-            return new IssDirectoryPropertyComponentsElement(node);
+            return new IssPropertyComponentReferenceElement(node, IssDirectoryProperty.ComponentReference);
         } else if (IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyComponentsValueElement(node);
+            return new IssPropertyComponentReferenceValueElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssDirectoryPropertyFlagsElement(node);
+            return new IssPropertyDirectoryFlagsElement(node);
         } else if (IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssDirectoryPropertyFlagsValueElement(node);
+            return new IssPropertyDirectoryFlagsValueElement(node);
         }
 
         return null;
@@ -229,25 +226,25 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.TaskSection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssTaskDefinitionElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_NAME.equals(node.getElementType())) {
-            return new IssTaskPropertyNameElement(node);
+            return new IssPropertyNameElement(node, IssTaskProperty.Name);
         } else if (IssMarkerFactory.TaskSection.ITEM_NAME_VALUE.equals(node.getElementType())) {
-            return new IssTaskPropertyNameValueElement(node);
+            return new IssPropertyNameValueElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_DESCRIPTION.equals(node.getElementType())) {
-            return new IssTaskPropertyDescriptionElement(node);
+            return new IssPropertyStringElement(node, IssTaskProperty.Description);
         } else if (IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
-            return new IssTaskPropertyDescriptionValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION.equals(node.getElementType())) {
-            return new IssTaskPropertyGroupDescriptionElement(node);
+            return new IssPropertyStringElement(node, IssTaskProperty.GroupDescription);
         } else if (IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE.equals(node.getElementType())) {
-            return new IssTaskPropertyGroupDescriptionValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_COMPONENTS.equals(node.getElementType())) {
-            return new IssTaskPropertyComponentsElement(node);
+            return new IssPropertyComponentReferenceElement(node, IssTaskProperty.ComponentReference);
         } else if (IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE.equals(node.getElementType())) {
-            return new IssTaskPropertyComponentsValueElement(node);
+            return new IssPropertyComponentReferenceValueElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssTaskPropertyFlagsElement(node);
+            return new IssPropertyTaskFlagsElement(node);
         } else if (IssMarkerFactory.TaskSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssTaskPropertyFlagsValueElement(node);
+            return new IssPropertyTaskFlagsValueElement(node);
         }
 
         return null;
@@ -259,17 +256,17 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.TypeSection.SECTION_DEFINITION.equals(node.getElementType())) {
             return new IssTypeDefinitionElement(node);
         } else if (IssMarkerFactory.TypeSection.ITEM_NAME.equals(node.getElementType())) {
-            return new IssTypePropertyNameElement(node);
+            return new IssPropertyNameElement(node, IssTypeProperty.Name);
         } else if (IssMarkerFactory.TypeSection.ITEM_NAME_VALUE.equals(node.getElementType())) {
-            return new IssTypePropertyNameValueElement(node);
+            return new IssPropertyNameValueElement(node);
         } else if (IssMarkerFactory.TypeSection.ITEM_DESCRIPTION.equals(node.getElementType())) {
-            return new IssTypePropertyDescriptionElement(node);
+            return new IssPropertyStringElement(node, IssTypeProperty.Description);
         } else if (IssMarkerFactory.TypeSection.ITEM_DESCRIPTION_VALUE.equals(node.getElementType())) {
-            return new IssTypePropertyDescriptionValueElement(node);
+            return new IssPropertyStringValueElement(node);
         } else if (IssMarkerFactory.TypeSection.ITEM_FLAGS.equals(node.getElementType())) {
-            return new IssTypePropertyFlagsElement(node);
+            return new IssPropertyTypeFlagsElement(node);
         } else if (IssMarkerFactory.TypeSection.ITEM_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssTypePropertyFlagsValueElement(node);
+            return new IssPropertyTypeFlagsValueElement(node);
         }
 
         return null;

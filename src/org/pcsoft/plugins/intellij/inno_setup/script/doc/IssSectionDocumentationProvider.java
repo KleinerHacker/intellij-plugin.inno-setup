@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.doc;
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 
 import java.util.ResourceBundle;

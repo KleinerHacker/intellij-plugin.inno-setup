@@ -4,8 +4,8 @@ import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,7 +19,7 @@ public class IssSectionTaskGoToContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public String[] getNames(Project project, boolean b) {
-        final Collection<IssTaskDefinitionElement> taskDefinitions = IssTaskUtils.findTaskDefinitions(project);
+        final Collection<IssTaskDefinitionElement> taskDefinitions = IssFindUtils.findTaskDefinitionElements(project);
         final List<String> list = taskDefinitions.stream().map(IssTaskDefinitionElement::getName).collect(Collectors.toList());
         return list.toArray(new String[list.size()]);
     }
@@ -27,7 +27,7 @@ public class IssSectionTaskGoToContributor implements ChooseByNameContributor {
     @NotNull
     @Override
     public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean b) {
-        final Collection<IssTaskDefinitionElement> taskDefinitions = IssTaskUtils.findTaskDefinitions(project, name, true);
+        final Collection<IssTaskDefinitionElement> taskDefinitions = IssFindUtils.findTaskDefinitionElements(project, name, true);
         return taskDefinitions.toArray(new NavigationItem[taskDefinitions.size()]);
     }
 }

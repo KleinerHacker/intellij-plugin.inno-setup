@@ -3,10 +3,9 @@ package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssAnnotatorUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.setup.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionElement;
 
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ public class IssSectionAnnotator implements Annotator {
     }
 
     private void findDoubleSectionItems(PsiElement psiElement, AnnotationHolder annotationHolder) {
-        final Collection<IssDefinitionPropertyElement> collection;
+        final Collection<IssPropertyElement> collection;
         if (psiElement instanceof IssSetupSectionElement) {
             final IssSetupSectionElement setupSectionElement = (IssSetupSectionElement) psiElement;
             if (setupSectionElement.getSectionItemList() == null || setupSectionElement.getSectionItemList().isEmpty())

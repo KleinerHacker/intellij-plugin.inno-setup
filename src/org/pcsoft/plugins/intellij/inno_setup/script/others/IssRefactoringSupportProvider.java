@@ -15,7 +15,7 @@ public final class IssRefactoringSupportProvider extends RefactoringSupportProvi
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
         return false;
-        /*element instanceof IssFilePropertyTasksValueElement || element instanceof IssTaskPropertyNameValueElement ||
-                element instanceof IssComponentPropertyNameValueElement;*/
+        /*element instanceof IssPropertyTaskReferenceValueElement || element instanceof IssTaskPropertyNameValueElement ||
+                element instanceof IssPropertyNameValueElement;*/
     }
 }

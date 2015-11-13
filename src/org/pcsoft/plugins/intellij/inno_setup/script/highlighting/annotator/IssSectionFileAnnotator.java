@@ -4,7 +4,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssFileDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
@@ -24,8 +24,8 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
     @Override
     protected boolean areDefinitionSame(@NotNull IssFileDefinitionElement definitionElementLeft, @NotNull IssFileDefinitionElement definitionElementRight) {
         final boolean basicCheck =
-                definitionElementLeft.getFileSource().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileSource().getPropertyValue().getName()) &&
-                definitionElementLeft.getFileDestDir().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileDestDir().getPropertyValue().getName());
+                definitionElementLeft.getFileSource().getPropertyValue().getString().equalsIgnoreCase(definitionElementRight.getFileSource().getPropertyValue().getString()) &&
+                definitionElementLeft.getFileDestDir().getPropertyValue().getString().equalsIgnoreCase(definitionElementRight.getFileDestDir().getPropertyValue().getString());
 
         if (definitionElementLeft.getFileDestName() == null && definitionElementRight.getFileDestName() == null)
             return basicCheck;
@@ -34,7 +34,7 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
             return false;
 
         return basicCheck &&
-                definitionElementLeft.getFileDestName().getPropertyValue().getName().equalsIgnoreCase(definitionElementRight.getFileDestName().getName());
+                definitionElementLeft.getFileDestName().getPropertyValue().getString().equalsIgnoreCase(definitionElementRight.getFileDestName().getPropertyValue().getString());
     }
 
     @Override
@@ -67,24 +67,25 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
                     .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
         }
-        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null) {
-            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getSize() < 0) {
+        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null &&
+                fileDefinitionElement.getFileExternalSize().getPropertyValue().getNumber() != null) {
+            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getNumber() < 0) {
                 annotationHolder.createErrorAnnotation(fileDefinitionElement.getFileExternalSize().getPropertyValue(), "External size must be positive!");
             }
         }
     }
 
     private void checkForReferences(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (fileDefinitionElement.getFileTasks() != null) {
-            fileDefinitionElement.getFileTasks().getPropertyValueList().stream()
+        if (fileDefinitionElement.getFileTaskReference() != null) {
+            fileDefinitionElement.getFileTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
         }
-        if (fileDefinitionElement.getFileComponents() != null) {
-            fileDefinitionElement.getFileComponents().getPropertyValueList().stream()
+        if (fileDefinitionElement.getFileComponentReference() != null) {
+            fileDefinitionElement.getFileComponentReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -107,8 +108,9 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
             }
         }
         checkForDoubleValues(fileDefinitionElement, annotationHolder);
-        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null) {
-            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getSize() == 0) {
+        if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null &&
+                fileDefinitionElement.getFileExternalSize().getPropertyValue().getNumber() != null) {
+            if (fileDefinitionElement.getFileExternalSize().getPropertyValue().getNumber() == 0) {
                 annotationHolder.createWarningAnnotation(fileDefinitionElement.getFileExternalSize().getPropertyValue(), "External size should be greater than 0!");
             }
         }
@@ -145,18 +147,18 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
     }
 
     private void checkForDoubleReferences(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (fileDefinitionElement.getFileTasks() != null) {
+        if (fileDefinitionElement.getFileTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    fileDefinitionElement.getFileTasks().getPropertyValueList(),
+                    fileDefinitionElement.getFileTaskReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
                     }
             );
         }
-        if (fileDefinitionElement.getFileComponents() != null) {
+        if (fileDefinitionElement.getFileComponentReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    fileDefinitionElement.getFileComponents().getPropertyValueList(),
+                    fileDefinitionElement.getFileComponentReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");

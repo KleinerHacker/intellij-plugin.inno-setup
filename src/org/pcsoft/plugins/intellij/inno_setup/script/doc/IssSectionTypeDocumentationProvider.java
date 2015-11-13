@@ -5,21 +5,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFileDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.file.IssFilePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.task.IssTaskPropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFileUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTaskUtils;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTypeUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,21 +30,28 @@ public class IssSectionTypeDocumentationProvider extends AbstractDocumentationPr
     @Nullable
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        return super.getQuickNavigateInfo(element, originalElement);
-    }
-
-    @Override
-    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
-        if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
-            return IssFileUtils.createFlagValue(element.getProject(), object.toString());
+        if (element instanceof IssPropertyNameValueElement && PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
+            final IssPropertyNameValueElement nameValueElement = (IssPropertyNameValueElement) element;
+            final IssTypeDefinitionElement typeDefinitionElement = PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class);
+            return "Reference to component: " + nameValueElement.getName() + "<br/>" +
+                    "Component Name: " + typeDefinitionElement.getTypeDescription().getPropertyValue().getText();
         }
 
         return null;
     }
 
     @Override
+    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
+//        if (PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
+//            return IssFileUtils.createFlagValue(element.getProject(), object.toString());
+//        }
+
+        return null;
+    }
+
+    @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssTypePropertyFlagsValueElement) {
+        if (element instanceof IssPropertyTypeFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_typessection.htm");
         }
 
@@ -71,8 +70,8 @@ public class IssSectionTypeDocumentationProvider extends AbstractDocumentationPr
 
                 return RESOURCE_BUNDLE.getString(typeProperty.getDescriptionKey());
             }
-        } else if (element instanceof IssTypePropertyFlagsValueElement) {
-            final IssTypePropertyFlagsValueElement typeDefinitionFlagsValueElement = (IssTypePropertyFlagsValueElement) element;
+        } else if (element instanceof IssPropertyTypeFlagsValueElement) {
+            final IssPropertyTypeFlagsValueElement typeDefinitionFlagsValueElement = (IssPropertyTypeFlagsValueElement) element;
             final IssTypeFlag typeFlag = IssTypeFlag.fromId(typeDefinitionFlagsValueElement.getName());
             if (typeFlag == null)
                 return "Unknown flag";

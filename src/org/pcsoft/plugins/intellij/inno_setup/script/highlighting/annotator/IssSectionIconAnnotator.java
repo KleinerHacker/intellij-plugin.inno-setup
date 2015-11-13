@@ -4,7 +4,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.icon.IssIconDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssIconDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconFlag;
 
 /**
@@ -31,16 +31,16 @@ public class IssSectionIconAnnotator extends IssAbstractSectionAnnotator<IssIcon
     }
 
     private void checkForReferences(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (iconDefinitionElement.getIconTasks() != null) {
-            iconDefinitionElement.getIconTasks().getPropertyValueList().stream()
+        if (iconDefinitionElement.getIconTaskReference() != null) {
+            iconDefinitionElement.getIconTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
                         errorAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
         }
-        if (iconDefinitionElement.getIconComponents() != null) {
-            iconDefinitionElement.getIconComponents().getPropertyValueList().stream()
+        if (iconDefinitionElement.getIconComponentReference() != null) {
+            iconDefinitionElement.getIconComponentReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -78,18 +78,18 @@ public class IssSectionIconAnnotator extends IssAbstractSectionAnnotator<IssIcon
     }
 //
     private void checkForDoubleReferences(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (iconDefinitionElement.getIconTasks() != null) {
+        if (iconDefinitionElement.getIconTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    iconDefinitionElement.getIconTasks().getPropertyValueList(),
+                    iconDefinitionElement.getIconTaskReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
                     }
             );
         }
-        if (iconDefinitionElement.getIconComponents() != null) {
+        if (iconDefinitionElement.getIconComponentReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    iconDefinitionElement.getIconComponents().getPropertyValueList(),
+                    iconDefinitionElement.getIconComponentReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");

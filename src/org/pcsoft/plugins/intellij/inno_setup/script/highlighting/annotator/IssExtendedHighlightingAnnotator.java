@@ -7,8 +7,8 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssRegexUtils;
 
 /**
@@ -21,7 +21,7 @@ public class IssExtendedHighlightingAnnotator implements Annotator {
         if (psiElement instanceof IssIdentifierElement) {
             final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(psiElement, null);
             infoAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME);
-        } else if (psiElement instanceof IssDefinitionPropertyValueElement) {
+        } else if (psiElement instanceof IssPropertyValueElement) {
             IssRegexUtils.findInternalConstants(psiElement.getText(), textRange -> {
                 final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(new TextRange(
                         psiElement.getTextOffset() + textRange.getStartOffset(),

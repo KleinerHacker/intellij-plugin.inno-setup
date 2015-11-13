@@ -6,10 +6,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.ResolveResult;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypePropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssTypeUtils;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +28,12 @@ public class IssTypeReference extends IssAbstractReference {
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean b) {
-        final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssTypeUtils.findTypeDefinitions(myElement.getProject(), key, b);
-        final List<IssTypePropertyNameValueElement> typeDefinitionNameValueElements = typeDefinitionElements.stream()
+        final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssFindUtils.findTypeDefinitionElements(myElement.getProject(), key, b);
+        final List<IssPropertyNameValueElement> nameValueElements = typeDefinitionElements.stream()
                 .filter(item -> item.getTypeName() != null && item.getTypeName().getPropertyValue() != null)
                 .map(item -> item.getTypeName().getPropertyValue())
                 .collect(Collectors.toList());
-        final List<ResolveResult> resolveResultList = typeDefinitionNameValueElements.stream()
+        final List<ResolveResult> resolveResultList = nameValueElements.stream()
                 .map(PsiElementResolveResult::new)
                 .collect(Collectors.toList());
 
@@ -42,7 +43,7 @@ public class IssTypeReference extends IssAbstractReference {
     @NotNull
     @Override
     public Object[] getVariants() {
-        final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssTypeUtils.findTypeDefinitions(myElement.getProject());
+        final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssFindUtils.findTypeDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = typeDefinitionElements.stream().map(LookupElementBuilder::create).collect(Collectors.toList());
 
         return lookupElementList.toArray();
@@ -50,8 +51,9 @@ public class IssTypeReference extends IssAbstractReference {
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssTypePropertyNameValueElement) {
-            final IssTypePropertyNameValueElement nameElement = (IssTypePropertyNameValueElement) element;
+        if (element instanceof IssPropertyNameValueElement &&
+                PsiTreeUtil.getParentOfType(element, IssTypeDefinitionElement.class) != null) {
+            final IssPropertyNameValueElement nameElement = (IssPropertyNameValueElement) element;
             return nameElement.getName().equalsIgnoreCase(myElement.getName());
         }
 

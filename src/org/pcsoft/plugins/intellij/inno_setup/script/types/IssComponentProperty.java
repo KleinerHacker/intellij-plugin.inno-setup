@@ -12,7 +12,7 @@ public enum IssComponentProperty implements IssDefinableSectionIdentifier {
             "component.property.name", IssValueType.DirectSingle, true),
     Description("Description", IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION, IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE,
             "component.property.description", IssValueType.String, true),
-    Types("Types", IssMarkerFactory.ComponentSection.ITEM_TYPES, IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE,
+    TypeReference("Types", IssMarkerFactory.ComponentSection.ITEM_TYPES, IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE,
             "component.property.types", IssValueType.DirectMultiple),
     ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED, IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE,
             "component.property.extra_disk_space_required", IssValueType.Integer),

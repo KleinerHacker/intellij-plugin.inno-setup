@@ -16,9 +16,9 @@ public enum IssDirectoryProperty implements IssDefinableSectionIdentifier {
             "directory.property.permissions", IssValueType.DirectMultiple),
     Flags("Flags", IssMarkerFactory.DirectorySection.ITEM_FLAGS, IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE,
             "directory.property.flags", IssValueType.DirectMultiple),
-    Components("Components", IssMarkerFactory.DirectorySection.ITEM_COMPONENTS, IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE,
+    ComponentReference("Components", IssMarkerFactory.DirectorySection.ITEM_COMPONENTS, IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE,
             "common.property.components", IssValueType.DirectMultiple),
-    Tasks("Tasks", IssMarkerFactory.DirectorySection.ITEM_TASKS, IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE,
+    TaskReference("Tasks", IssMarkerFactory.DirectorySection.ITEM_TASKS, IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE,
             "common.property.tasks", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),

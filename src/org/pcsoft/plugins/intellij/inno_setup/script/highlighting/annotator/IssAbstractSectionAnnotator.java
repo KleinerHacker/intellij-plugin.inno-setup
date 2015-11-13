@@ -8,9 +8,9 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.IssDefinitionPropertyValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
             if (!identifier.isRequired())
                 continue;
 
-            for (final IssDefinitionPropertyElement propertyElement : (Collection<IssDefinitionPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+            for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
                 if (propertyElement.getPropertyType().equals(identifier))
                     continue main;
             }
@@ -70,7 +70,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkDeprecatedProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssDefinitionPropertyElement propertyElement : (Collection<IssDefinitionPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+        for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyType().isDeprecated()) {
                 final Annotation warningAnnotation = annotationHolder.createWarningAnnotation(propertyElement, "Property is deprecated!");
                 warningAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
@@ -119,7 +119,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkPropertyValues(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssDefinitionPropertyElement propertyElement : (Collection<IssDefinitionPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+        for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyValue() == null)
                 continue;
 
@@ -156,7 +156,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
                     }
                     break;
                 case DirectMultiple:
-                    for (final IssDefinitionPropertyValueElement valueElement : (Collection<IssDefinitionPropertyValueElement>)propertyElement.getPropertyValueList()) {
+                    for (final IssPropertyValueElement valueElement : (Collection<IssPropertyValueElement>)propertyElement.getPropertyValueList()) {
                         if (valueElement.getFirstChild().getNode().getElementType() == IssTokenFactory.STRING ||
                                 NumberUtils.isNumber(valueElement.getText())) {
                             annotationHolder.createErrorAnnotation(valueElement, "Direct value expected");
@@ -174,9 +174,9 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
      * @param propertyElement
      * @param annotationHolder
      */
-    private void checkForSingleValue(@NotNull IssDefinitionPropertyElement propertyElement, @NotNull final AnnotationHolder annotationHolder) {
+    private void checkForSingleValue(@NotNull IssPropertyElement propertyElement, @NotNull final AnnotationHolder annotationHolder) {
         if (propertyElement.getPropertyValueList().size() > 1) {
-            for (final IssDefinitionPropertyValueElement valueElement : (Collection<IssDefinitionPropertyValueElement>)propertyElement.getPropertyValueList()) {
+            for (final IssPropertyValueElement valueElement : (Collection<IssPropertyValueElement>)propertyElement.getPropertyValueList()) {
                 annotationHolder.createErrorAnnotation(valueElement, "Too many values were set for this property!");
             }
         }

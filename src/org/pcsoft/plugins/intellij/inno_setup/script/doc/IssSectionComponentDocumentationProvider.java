@@ -5,16 +5,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.component.IssComponentPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.sections.type.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
-import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssComponentUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,28 +30,28 @@ public class IssSectionComponentDocumentationProvider extends AbstractDocumentat
     @Nullable
     @Override
     public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssComponentPropertyNameValueElement) {
-
-            final IssComponentPropertyNameValueElement nameValueElement = (IssComponentPropertyNameValueElement) element;
+        if (element instanceof IssPropertyNameValueElement && PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
+            final IssPropertyNameValueElement nameValueElement = (IssPropertyNameValueElement) element;
+            final IssComponentDefinitionElement componentDefinitionElement = PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class);
             return "Reference to component: " + nameValueElement.getName() + "<br/>" +
-                    "Component Name: " + nameValueElement.getValueParent().getDefinition().getComponentDescription().getPropertyValue().getText();
-        }
-
-        return super.getQuickNavigateInfo(element, originalElement);
-    }
-
-    @Override
-    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
-        if (PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
-            return IssComponentUtils.createFlagValue(element.getProject(), object.toString());
+                    "Component Name: " + componentDefinitionElement.getComponentDescription().getPropertyValue().getText();
         }
 
         return null;
     }
 
     @Override
+    public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
+//        if (PsiTreeUtil.getParentOfType(element, IssComponentDefinitionElement.class) != null) {
+//            return IssComponentUtils.createFlagValue(element.getProject(), object.toString());
+//        }
+
+        return null;
+    }
+
+    @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssComponentPropertyFlagsValueElement) {
+        if (element instanceof IssPropertyComponentFlagsValueElement) {
             return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_componentssection.htm");
         }
 
@@ -73,8 +70,8 @@ public class IssSectionComponentDocumentationProvider extends AbstractDocumentat
 
                 return RESOURCE_BUNDLE.getString(componentProperty.getDescriptionKey());
             }
-        } else if (element instanceof IssComponentPropertyFlagsValueElement) {
-            final IssComponentPropertyFlagsValueElement componentDefinitionFlagsValueElement = (IssComponentPropertyFlagsValueElement) element;
+        } else if (element instanceof IssPropertyComponentFlagsValueElement) {
+            final IssPropertyComponentFlagsValueElement componentDefinitionFlagsValueElement = (IssPropertyComponentFlagsValueElement) element;
             final IssComponentFlag componentFlag = IssComponentFlag.fromId(componentDefinitionFlagsValueElement.getName());
             if (componentFlag == null)
                 return "Unknown flag";
