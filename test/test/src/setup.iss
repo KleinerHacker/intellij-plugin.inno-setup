@@ -10,7 +10,7 @@ Name: doubleTask; Description: "Hallo";
 Flags: CheckableAlone
 
 [TYPES]
-Name: bla1; Description: "Bla"; Flags: IsCustom unknown IsCustom ;
+Name: bla1; Description: "Bla"; Flags: IsCustom unknown IsCustom;
 Name: doubleType; Description: ""
 Name: doubleType; Description: "Hallo"
 Flags: IsCustom
@@ -20,7 +20,7 @@ Flags: IsCustom
 Name: testComponent; Description: "B{app}la"; Types: bla1 blub bla1; ExtraDiskSpaceRequired: -100
 Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
-Flags:  Fixed
+Flags: Fixed
 
 [Files]
 Source: "testFile"; DestDir: "testDest"; Flags: UninsRemoveReadOnly 32bit 32bit unknown; Components: testComponent testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden; Permissions: Users-Modify system-full Users-Modify; Tasks: testTask unknown testTask; ExternalSize: -100

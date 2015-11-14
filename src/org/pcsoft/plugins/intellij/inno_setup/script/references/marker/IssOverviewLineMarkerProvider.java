@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.inno_setup.script.structure;
+package org.pcsoft.plugins.intellij.inno_setup.script.references.marker;
 
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;

@@ -2,6 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.utils;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssFileType;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,33 +28,33 @@ import java.util.stream.Collectors;
 final class IssUtils {
 
     @NotNull
-    public static <T extends IssDefinitionElement> Collection<T> findDefinitions(
+    public static <T extends PsiElement> Collection<T> findElements(
             final Project project, final String name, final boolean variant, final Class<T> classToSearchFor,
             final Function<T, Boolean> notNullOrEmptyCheck, final Function<T, String> getName
             ) {
         final List<T> list = new ArrayList<>();
         IssUtils.findFiles(project, file -> {
-            final Collection<T> definitionElements = PsiTreeUtil.findChildrenOfType(file, classToSearchFor);
+            final Collection<T> psiElementList = PsiTreeUtil.findChildrenOfType(file, classToSearchFor);
             if (name == null) {
                 list.addAll(
-                        definitionElements.stream()
+                        psiElementList.stream()
                                 .filter(notNullOrEmptyCheck::apply)
                                 .collect(Collectors.toList())
                 );
                 return;
             }
 
-            for (final T definitionElement : definitionElements) {
-                if (!notNullOrEmptyCheck.apply(definitionElement))
+            for (final T psiElement : psiElementList) {
+                if (!notNullOrEmptyCheck.apply(psiElement))
                     continue;
 
                 if (variant) {
-                    if (StringUtils.startsWithIgnoreCase(getName.apply(definitionElement), name)) {
-                        list.add(definitionElement);
+                    if (StringUtils.startsWithIgnoreCase(getName.apply(psiElement), name)) {
+                        list.add(psiElement);
                     }
                 } else {
-                    if (getName.apply(definitionElement).equalsIgnoreCase(name)) {
-                        list.add(definitionElement);
+                    if (getName.apply(psiElement).equalsIgnoreCase(name)) {
+                        list.add(psiElement);
                     }
                 }
             }

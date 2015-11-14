@@ -12,6 +12,10 @@ public final class IssIcons {
     public static final Icon INNO_SETUP = IconLoader.findIcon("/icons/is.png");
     public static final Icon IS_SCRIPT = IconLoader.findIcon("/icons/is_script.png");
 
+    public static final Icon IC_REF_COMPONENT = IconLoader.findIcon("/icons/ic_sect_component_ref.png");
+    public static final Icon IC_REF_TASK = IconLoader.findIcon("/icons/ic_sect_task_ref.png");
+    public static final Icon IC_REF_TYPE = IconLoader.findIcon("/icons/ic_sect_type_ref.png");
+
     public static final Icon IC_SECT_COMPONENT = IconLoader.findIcon("/icons/ic_sect_component.png");
     public static final Icon IC_SECT_TASK = IconLoader.findIcon("/icons/ic_sect_task.png");
     public static final Icon IC_SECT_TYPE = IconLoader.findIcon("/icons/ic_sect_type.png");

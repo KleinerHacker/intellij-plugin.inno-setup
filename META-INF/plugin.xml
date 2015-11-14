@@ -40,6 +40,12 @@
         <!-- Others -->
         <lang.commenter language="iss"
                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
+        <lang.formatter language="iss"
+                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssFormattingModelBuilder"/>
+        <codeStyleSettingsProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssLanguageCodeStyleSettingsProvider"/>
 
         <!-- Annotators -->
         <annotator language="iss"
@@ -156,7 +162,9 @@
 
         <!-- Line Marker -->
         <codeInsight.lineMarkerProvider language="iss"
-                                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.IssOverviewLineMarkerProvider"/>
+                                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssOverviewLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="iss"
+                                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssReferenceLineMarkerProvider"/>
     </extensions>
 
     <application-components>
