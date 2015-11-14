@@ -8,13 +8,17 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 27.12.2014.
  */
-enum IssCommonProperty implements IssDefinableSectionIdentifier {
+public enum IssCommonProperty implements IssDefinableSectionIdentifier {
     Languages("Languages", IssMarkerFactory.PROPERTY_UNKNOWN, null,
             "common.property.languages", IssValueType.DirectMultiple),
     MinimalVersion("MinVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null,
             "common.property.min_version", IssValueType.DirectSingle),
     OnlyBelowVersion("OnlyBelowVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null,
-            "common.property.only_below_version", IssValueType.DirectSingle);
+            "common.property.only_below_version", IssValueType.DirectSingle),
+    ComponentReference("Components", IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS, IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS_VALUE,
+            "common.property.components", IssValueType.DirectMultiple),
+    TaskReference("Tasks", IssMarkerFactory.CommonSection.PROPERTY_TASKS, IssMarkerFactory.CommonSection.PROPERTY_TASKS_VALUE,
+            "common.property.tasks", IssValueType.DirectMultiple),;
 
     private final String id, descriptionKey;
     private final boolean deprecated, required;

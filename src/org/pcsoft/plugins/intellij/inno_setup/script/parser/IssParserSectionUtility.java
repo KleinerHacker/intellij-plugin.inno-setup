@@ -5,14 +5,12 @@ import com.intellij.psi.tree.IElementType;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
+import java.util.function.Function;
+
 /**
  * Created by Christoph on 14.12.2014.
  */
 final class IssParserSectionUtility {
-
-    private static interface MarkerElementResolver {
-        IElementType resolveMarkerElement(final String identifier);
-    }
 
     public static void parseSections(PsiBuilder psiBuilder) {
         while (!psiBuilder.eof()) {
@@ -92,6 +90,10 @@ final class IssParserSectionUtility {
                         parseLineForDefaultSection(psiBuilder, "Icon Section", IssMarkerFactory.IconSection.SECTION_DEFINITION,
                                 IssIconProperty::getValueMarkerElementFromId, IssIconProperty::getItemMarkerElementFromId);
                         break;
+                    case InstallRun:
+                        parseLineForDefaultSection(psiBuilder, "Run Section", IssMarkerFactory.RunSection.SECTION_DEFINITION,
+                                IssRunProperty::getValueMarkerElementFromId, IssRunProperty::getItemMarkerElementFromId);
+                        break;
                     default:
                         throw new RuntimeException();
                 }
@@ -106,19 +108,19 @@ final class IssParserSectionUtility {
     }
 
     private static void parseLineForDefaultSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
-                                                   MarkerElementResolver resolver) {
-        parseLineForDefaultSection(psiBuilder, sectionName, definitionMarkerElement, null, resolver);
+                                                   Function<String, IElementType> definitionResolver) {
+        parseLineForDefaultSection(psiBuilder, sectionName, definitionMarkerElement, null, definitionResolver);
     }
 
     private static void parseLineForDefaultSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
-                                                   MarkerElementResolver singleValueResolver, MarkerElementResolver definitionResolver) {
+                                                   Function<String, IElementType> singleValueResolver, Function<String, IElementType> definitionResolver) {
         final PsiBuilder.Marker definitionMark = psiBuilder.mark();
         {
             while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.CRLF) {
                 final PsiBuilder.Marker itemMark = psiBuilder.mark();
                 {
                     final String identifier = psiBuilder.getTokenText();
-                    final IElementType markerElement = definitionResolver.resolveMarkerElement(identifier);
+                    final IElementType markerElement = definitionResolver.apply(identifier);
                     if (markerElement == null) {
                         itemMark.drop();
 
@@ -160,7 +162,7 @@ final class IssParserSectionUtility {
                         }
 
                         final IElementType singleValueMarkerElement = singleValueResolver == null ?
-                                null : singleValueResolver.resolveMarkerElement(identifier);
+                                null : singleValueResolver.apply(identifier);
                         if (singleValueMarkerElement != null) {
                             final PsiBuilder.Marker singleValueMark = psiBuilder.mark();
                             psiBuilder.advanceLexer();

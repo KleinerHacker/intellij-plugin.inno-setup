@@ -24,7 +24,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     CustomMessage("CustomMessages", null, "section.custom_messages", null),
     LanguageOption("LangOptions", null, "section.lang_options", null),
     Registry("Registry", null, "section.registry", null),
-    InstallRun("Run", null, "section.install_run", null),
+    InstallRun("Run", IssMarkerFactory.RunSection.SECTION, "section.install_run", IssIcons.IC_SECT_RUN),
     UninstallDelete("UninstallDelete", null, "section.uninstall_delete", null),
     UninstallRun("UninstallRun", null, "section.uninstall_run", null);
 
@@ -60,7 +60,7 @@ public enum IssSectionType implements IssSectionIdentifier {
         return id;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public String getDescriptionKey() {
         return descriptionKey;

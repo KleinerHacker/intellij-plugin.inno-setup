@@ -22,6 +22,16 @@ public final class IssMarkerFactory {
 
     public static final IElementType PROPERTY_UNKNOWN = new IElementType("PROPERTY_UNKNOWN", LANGUAGE);
 
+    public static final class CommonSection {
+        private static final String KEY = "COMMON_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType PROPERTY_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
+        public static final IElementType PROPERTY_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
+        public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
+    }
+
     public static final class SetupSection {
         private static final String KEY = "SETUP_SECTION";
         private static final String KEY_ITEM = KEY + "_ITEM";
@@ -43,8 +53,6 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_DESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_DESCRIPTION_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_GROUPDESCRIPTION = new IElementType(KEY_ITEM + "_GROUPDESCRIPTION", LANGUAGE);
         public static final IElementType PROPERTY_GROUPDESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_GROUPDESCRIPTION_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
@@ -73,10 +81,30 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_ICONINDEX_VALUE = new IElementType(KEY_ITEM + "_ICONINDEX_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_APPUSERMODELID = new IElementType(KEY_ITEM + "_APPUSERMODELID", LANGUAGE);
         public static final IElementType PROPERTY_APPUSERMODELID_VALUE = new IElementType(KEY_ITEM + "_APPUSERMODELID_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
+    public static final class RunSection {
+        private static final String KEY = "RUN_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME = new IElementType(KEY_ITEM + "_FILENAME", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME_VALUE = new IElementType(KEY_ITEM + "_FILENAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_DESCRIPTION = new IElementType(KEY_ITEM + "_DESCRIPTION", LANGUAGE);
+        public static final IElementType PROPERTY_DESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_DESCRIPTION_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_PARAMETERS = new IElementType(KEY_ITEM + "_PARAMETERS", LANGUAGE);
+        public static final IElementType PROPERTY_PARAMETERS_VALUE = new IElementType(KEY_ITEM + "_PARAMETERS_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_WORKINGDIR = new IElementType(KEY_ITEM + "_WORKINGDIR", LANGUAGE);
+        public static final IElementType PROPERTY_WORKINGDIR_VALUE = new IElementType(KEY_ITEM + "_WORKINGDIR_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_STATUSMSG = new IElementType(KEY_ITEM + "_STATUSMSG", LANGUAGE);
+        public static final IElementType PROPERTY_STATUSMSG_VALUE = new IElementType(KEY_ITEM + "_STATUSMSG_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_RUNONCEID = new IElementType(KEY_ITEM + "_RUNONCEID", LANGUAGE);
+        public static final IElementType PROPERTY_RUNONCEID_VALUE = new IElementType(KEY_ITEM + "_RUNONCEID_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VERB = new IElementType(KEY_ITEM + "_VERB", LANGUAGE);
+        public static final IElementType PROPERTY_VERB_VALUE = new IElementType(KEY_ITEM + "_VERB_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
@@ -107,10 +135,6 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_FONTINSTALL_VALUE = new IElementType(KEY_ITEM + "_FONTINSTALL_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_STRONGASSEMBLYNAME = new IElementType(KEY_ITEM + "_STRONGASSEMBLYNAME", LANGUAGE);
         public static final IElementType PROPERTY_STRONGASSEMBLYNAME_VALUE = new IElementType(KEY_ITEM + "_STRONGASSEMBLYNAME_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
@@ -127,10 +151,6 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_ATTRIBUTE_VALUE = new IElementType(KEY_ITEM + "_ATTRIBUTE_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_PERMISSIONS = new IElementType(KEY_ITEM + "_PERMISSIONS", LANGUAGE);
         public static final IElementType PROPERTY_PERMISSIONS_VALUE = new IElementType(KEY_ITEM + "_PERMISSIONS_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
-        public static final IElementType PROPERTY_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
-        public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }

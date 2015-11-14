@@ -30,12 +30,10 @@ public enum IssFileProperty implements IssDefinableSectionIdentifier {
             "file.property.strong_assembly_name", IssValueType.String),
     Flags("Flags", IssMarkerFactory.FileSection.PROPERTY_FLAGS, IssMarkerFactory.FileSection.PROPERTY_FLAGS_VALUE,
             "file.property.flags", IssValueType.DirectMultiple),
-    ComponentReference("Components", IssMarkerFactory.FileSection.PROPERTY_COMPONENTS, IssMarkerFactory.FileSection.PROPERTY_COMPONENTS_VALUE,
-            "common.property.components", IssValueType.DirectMultiple),
-    TaskReference("Tasks", IssMarkerFactory.FileSection.PROPERTY_TASKS, IssMarkerFactory.FileSection.PROPERTY_TASKS_VALUE,
-            "common.property.tasks", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),
+    ComponentReference(IssCommonProperty.ComponentReference),
+    TaskReference(IssCommonProperty.TaskReference),
     MinimalVersion(IssCommonProperty.MinimalVersion),
     OnlyBelowVersion(IssCommonProperty.OnlyBelowVersion);
 

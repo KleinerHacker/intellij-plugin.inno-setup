@@ -9,13 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssComponentSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssDirectorySectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssFileSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssIconSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTaskSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTypeSectionElement;
 
 import java.util.Collection;
 import java.util.List;
@@ -87,6 +82,14 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setAlignment(GutterIconRenderer.Alignment.RIGHT)
                                 .setTarget(psiElement)
                                 .setTooltipText("ICONS Section")
+                                .createLineMarkerInfo(psiElement)
+                );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssRunSectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_RUN)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("RUN Section")
                                 .createLineMarkerInfo(psiElement)
                 );
             }

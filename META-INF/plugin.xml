@@ -23,6 +23,7 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- ******************************** SCRIPT ********************************* -->
         <!-- Language -->
         <fileTypeFactory implementation="org.pcsoft.plugins.intellij.inno_setup.script.IssFileTypeFactory"/>
         <!-- Parser & Syntax -->
@@ -114,6 +115,11 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssIconPropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssIconFlagValueCompletionContributor"/>
+        <!-- Run -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssRunPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssRunFlagValueCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor

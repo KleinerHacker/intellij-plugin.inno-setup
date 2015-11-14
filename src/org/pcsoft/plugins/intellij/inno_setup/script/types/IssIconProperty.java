@@ -28,12 +28,10 @@ public enum IssIconProperty implements IssDefinableSectionIdentifier {
             "icon.property.appusermodelid", IssValueType.String),
     Flags("Flags", IssMarkerFactory.IconSection.PROPERTY_FLAGS, IssMarkerFactory.IconSection.PROPERTY_FLAGS_VALUE,
             "icon.property.flags", IssValueType.DirectMultiple),
-    ComponentReference("Components", IssMarkerFactory.IconSection.PROPERTY_COMPONENTS, IssMarkerFactory.IconSection.PROPERTY_COMPONENTS_VALUE,
-            "common.property.components", IssValueType.DirectMultiple),
-    TaskReference("Tasks", IssMarkerFactory.IconSection.PROPERTY_TASKS, IssMarkerFactory.IconSection.PROPERTY_TASKS_VALUE,
-            "common.property.tasks", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),
+    ComponentReference(IssCommonProperty.ComponentReference),
+    TaskReference(IssCommonProperty.TaskReference),
     MinimalVersion(IssCommonProperty.MinimalVersion),
     OnlyBelowVersion(IssCommonProperty.OnlyBelowVersion);
 

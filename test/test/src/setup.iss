@@ -40,3 +40,6 @@ Name: "testIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderSho
 Name: "doubleIcon"; Filename: "dhus";
 Name: "doubleIcon"; Filename: "dcls";
 Flags: CloseOnExit
+
+[Run]
+Filename: "testRun"; Flags: SkipIfNotSilent; Components: testComponent; Tasks: testTask
