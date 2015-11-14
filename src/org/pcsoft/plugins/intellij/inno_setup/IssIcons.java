@@ -11,6 +11,7 @@ public final class IssIcons {
 
     public static final Icon INNO_SETUP = IconLoader.findIcon("/icons/is.png");
     public static final Icon IS_SCRIPT = IconLoader.findIcon("/icons/is_script.png");
+    public static final Icon IS_CMD = IconLoader.findIcon("/icons/is_cmd.png");
 
     public static final Icon IC_REF_COMPONENT = IconLoader.findIcon("/icons/ic_sect_component_ref.png");
     public static final Icon IC_REF_TASK = IconLoader.findIcon("/icons/ic_sect_task_ref.png");
