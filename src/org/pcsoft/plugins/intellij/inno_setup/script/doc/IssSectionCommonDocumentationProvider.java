@@ -6,9 +6,9 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOAttributeValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOCopyModeValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonIOAttribute;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonIOPermissions;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonUserOrGroupIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOUserOrGroupIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileCopyMode;
 
 import java.util.ResourceBundle;
@@ -24,23 +24,23 @@ public class IssSectionCommonDocumentationProvider extends AbstractDocumentation
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
         if (element instanceof IssPropertyIOAttributeValueElement) {
             final IssPropertyIOAttributeValueElement directoryPropertyAttributeValueElement = (IssPropertyIOAttributeValueElement) element;
-            final IssCommonIOAttribute issCommonIOAttribute = IssCommonIOAttribute.fromId(directoryPropertyAttributeValueElement.getName());
-            if (issCommonIOAttribute == null)
+            final IssIOAttribute issIOAttribute = IssIOAttribute.fromId(directoryPropertyAttributeValueElement.getName());
+            if (issIOAttribute == null)
                 return "Unknown attribute";
 
-            return RESOURCE_BUNDLE.getString(issCommonIOAttribute.getDescriptionKey());
+            return RESOURCE_BUNDLE.getString(issIOAttribute.getDescriptionKey());
         } else if (element instanceof IssPropertyIOPermissionsValueElement) {
             final IssPropertyIOPermissionsValueElement directoryPropertyPermissionsValueElement = (IssPropertyIOPermissionsValueElement) element;
-            final IssCommonIOPermissions issCommonIOPermissions = IssCommonIOPermissions.fromId(directoryPropertyPermissionsValueElement.getPermission());
-            if (issCommonIOPermissions == null)
+            final IssIOPermissions issIOPermissions = IssIOPermissions.fromId(directoryPropertyPermissionsValueElement.getPermission());
+            if (issIOPermissions == null)
                 return "Unknown permission";
-            final IssCommonUserOrGroupIdentifier issCommonUserOrGroupIdentifier = IssCommonUserOrGroupIdentifier.fromId(
+            final IssIOUserOrGroupIdentifier issIOUserOrGroupIdentifier = IssIOUserOrGroupIdentifier.fromId(
                     directoryPropertyPermissionsValueElement.getUserOrGroupIdentifier());
-            if (issCommonUserOrGroupIdentifier == null)
+            if (issIOUserOrGroupIdentifier == null)
                 return "Unknown user or group identifier";
 
-            return RESOURCE_BUNDLE.getString(issCommonIOPermissions.getDescriptionKey()) + "<br/><i>As: " +
-                    RESOURCE_BUNDLE.getString(issCommonUserOrGroupIdentifier.getDescriptionKey()) + "</i>";
+            return RESOURCE_BUNDLE.getString(issIOPermissions.getDescriptionKey()) + "<br/><i>As: " +
+                    RESOURCE_BUNDLE.getString(issIOUserOrGroupIdentifier.getDescriptionKey()) + "</i>";
         } else if (element instanceof IssPropertyIOCopyModeValueElement) {
             final IssPropertyIOCopyModeValueElement filePropertyCopyModeValueElement = (IssPropertyIOCopyModeValueElement) element;
             final IssFileCopyMode fileCopyMode = IssFileCopyMode.fromId(filePropertyCopyModeValueElement.getName());

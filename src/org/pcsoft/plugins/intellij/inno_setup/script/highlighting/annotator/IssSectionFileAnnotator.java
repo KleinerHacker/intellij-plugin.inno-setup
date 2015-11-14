@@ -56,15 +56,15 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
         }
         if (fileDefinitionElement.getFileAttribute() != null) {
             fileDefinitionElement.getFileAttribute().getPropertyValueList().stream()
-                    .filter(item -> IssCommonIOAttribute.fromId(item.getName()) == null)
+                    .filter(item -> IssIOAttribute.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown attribute"));
         }
         if (fileDefinitionElement.getFilePermissions() != null) {
             fileDefinitionElement.getFilePermissions().getPropertyValueList().stream()
-                    .filter(item -> IssCommonIOPermissions.fromId(item.getPermission()) == null)
+                    .filter(item -> IssIOPermissions.fromId(item.getPermission()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
             fileDefinitionElement.getFilePermissions().getPropertyValueList().stream()
-                    .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
+                    .filter(item -> IssIOUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
         }
         if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null &&

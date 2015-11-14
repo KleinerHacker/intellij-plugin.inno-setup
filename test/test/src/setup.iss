@@ -10,14 +10,14 @@ Name: doubleTask; Description: "Hallo";
 Flags: CheckableAlone
 
 [TYPES]
-Name: bla; Description: "Bla"; Flags: IsCustom unknown IsCustom ;
+Name: bla1; Description: "Bla"; Flags: IsCustom unknown IsCustom ;
 Name: doubleType; Description: ""
 Name: doubleType; Description: "Hallo"
 Flags: IsCustom
 
 [Components]
 ; My Test Component
-Name: testComponent; Description: "B{app}la"; Types: bla blub bla; ExtraDiskSpaceRequired: -100
+Name: testComponent; Description: "B{app}la"; Types: bla1 blub bla1; ExtraDiskSpaceRequired: -100
 Name: doubleComponent; Description: "";
 Name: doubleComponent; Description: "Hallo";
 Flags:  Fixed
@@ -36,5 +36,7 @@ Name: "doubleDir";
 Flags: DeleteAfterInstall UninsAlwaysUninstall SetNTFSCompression
 
 [Icons]
-Name: "TestIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut; Tasks: bla testTask testTask; Components: testComponent bla testComponent
+Name: "testIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut; Tasks: bla testTask testTask; Components: testComponent bla testComponent
+Name: "doubleIcon"; Filename: "dhus";
+Name: "doubleIcon"; Filename: "dcls";
 Flags: CloseOnExit

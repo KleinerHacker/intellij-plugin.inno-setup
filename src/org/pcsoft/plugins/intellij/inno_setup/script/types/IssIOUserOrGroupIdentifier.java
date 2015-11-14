@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssCommonUserOrGroupIdentifier implements IssFlag {
+public enum IssIOUserOrGroupIdentifier implements IssFlag {
     Administrator("Admins", "common.user_or_group_identifier.admins"),
     AuthenticatedUser("AuthUsers", "common.user_or_group_identifier.authusers"),
     Everyone("Everyone", "common.user_or_group_identifier.everyone"),
@@ -12,18 +12,18 @@ public enum IssCommonUserOrGroupIdentifier implements IssFlag {
     User("Users", "common.user_or_group_identifier.users"),
     ;
 
-    public static IssCommonUserOrGroupIdentifier fromId(final String id) {
-        return IssFlag.findById(id, IssCommonUserOrGroupIdentifier.class);
+    public static IssIOUserOrGroupIdentifier fromId(final String id) {
+        return IssFlag.findById(id, IssIOUserOrGroupIdentifier.class);
     }
 
     private final String id, descriptionKey;
     private final boolean deprecated;
 
-    private IssCommonUserOrGroupIdentifier(String id, String descriptionKey) {
+    private IssIOUserOrGroupIdentifier(String id, String descriptionKey) {
         this(id, descriptionKey, false);
     }
 
-    private IssCommonUserOrGroupIdentifier(String id, String descriptionKey, boolean deprecated) {
+    private IssIOUserOrGroupIdentifier(String id, String descriptionKey, boolean deprecated) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.deprecated = deprecated;

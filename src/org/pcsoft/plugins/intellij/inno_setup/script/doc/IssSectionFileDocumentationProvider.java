@@ -24,12 +24,6 @@ public class IssSectionFileDocumentationProvider extends AbstractDocumentationPr
             ResourceBundle.getBundle("/messages/documentation_file"), ResourceBundle.getBundle("/messages/documentation_common")
     );
 
-    @Nullable
-    @Override
-    public String getQuickNavigateInfo(PsiElement element, PsiElement originalElement) {
-        return super.getQuickNavigateInfo(element, originalElement);
-    }
-
     @Override
     public PsiElement getDocumentationElementForLookupItem(PsiManager psiManager, Object object, PsiElement element) {
 //        if (PsiTreeUtil.getParentOfType(element, IssFileDefinitionElement.class) != null) {

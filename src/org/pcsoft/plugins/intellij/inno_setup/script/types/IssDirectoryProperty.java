@@ -8,17 +8,17 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 23.12.2014.
  */
 public enum IssDirectoryProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.DirectorySection.ITEM_NAME, IssMarkerFactory.DirectorySection.ITEM_NAME_VALUE,
+    Name("Name", IssMarkerFactory.DirectorySection.PROPERTY_NAME, IssMarkerFactory.DirectorySection.PROPERTY_NAME_VALUE,
             "directory.property.name", IssValueType.String, true),
-    Attributes("Attribs", IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE, IssMarkerFactory.DirectorySection.ITEM_ATTRIBUTE_VALUE,
+    Attributes("Attribs", IssMarkerFactory.DirectorySection.PROPERTY_ATTRIBUTE, IssMarkerFactory.DirectorySection.PROPERTY_ATTRIBUTE_VALUE,
             "directory.property.attribs", IssValueType.DirectMultiple),
-    Permissions("Permissions", IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS, IssMarkerFactory.DirectorySection.ITEM_PERMISSIONS_VALUE,
+    Permissions("Permissions", IssMarkerFactory.DirectorySection.PROPERTY_PERMISSIONS, IssMarkerFactory.DirectorySection.PROPERTY_PERMISSIONS_VALUE,
             "directory.property.permissions", IssValueType.DirectMultiple),
-    Flags("Flags", IssMarkerFactory.DirectorySection.ITEM_FLAGS, IssMarkerFactory.DirectorySection.ITEM_FLAGS_VALUE,
+    Flags("Flags", IssMarkerFactory.DirectorySection.PROPERTY_FLAGS, IssMarkerFactory.DirectorySection.PROPERTY_FLAGS_VALUE,
             "directory.property.flags", IssValueType.DirectMultiple),
-    ComponentReference("Components", IssMarkerFactory.DirectorySection.ITEM_COMPONENTS, IssMarkerFactory.DirectorySection.ITEM_COMPONENTS_VALUE,
+    ComponentReference("Components", IssMarkerFactory.DirectorySection.PROPERTY_COMPONENTS, IssMarkerFactory.DirectorySection.PROPERTY_COMPONENTS_VALUE,
             "common.property.components", IssValueType.DirectMultiple),
-    TaskReference("Tasks", IssMarkerFactory.DirectorySection.ITEM_TASKS, IssMarkerFactory.DirectorySection.ITEM_TASKS_VALUE,
+    TaskReference("Tasks", IssMarkerFactory.DirectorySection.PROPERTY_TASKS, IssMarkerFactory.DirectorySection.PROPERTY_TASKS_VALUE,
             "common.property.tasks", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),

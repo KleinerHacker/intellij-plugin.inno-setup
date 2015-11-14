@@ -2,6 +2,10 @@ package org.pcsoft.plugins.intellij.inno_setup.script.others;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +18,8 @@ public final class IssRefactoringSupportProvider extends RefactoringSupportProvi
 
     @Override
     public boolean isMemberInplaceRenameAvailable(PsiElement element, PsiElement context) {
-        return false;
-        /*element instanceof IssPropertyTaskReferenceValueElement || element instanceof IssTaskPropertyNameValueElement ||
-                element instanceof IssPropertyNameValueElement;*/
+        return element instanceof IssPropertyTaskReferenceValueElement || element instanceof IssPropertyTypeReferenceValueElement ||
+                element instanceof IssPropertyComponentReferenceValueElement || element instanceof IssPropertyNameValueElement;
     }
+
 }

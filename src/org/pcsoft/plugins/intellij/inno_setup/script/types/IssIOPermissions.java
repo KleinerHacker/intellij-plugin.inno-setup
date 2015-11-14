@@ -3,24 +3,24 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssCommonIOPermissions implements IssFlag {
+public enum IssIOPermissions implements IssFlag {
     Full("Full", "common.permissions.full"),
     Modify("Modify", "common.permissions.modify"),
     ReadExec("ReadExec", "common.permissions.readexec")
     ;
 
-    public static IssCommonIOPermissions fromId(final String id) {
-        return IssFlag.findById(id, IssCommonIOPermissions.class);
+    public static IssIOPermissions fromId(final String id) {
+        return IssFlag.findById(id, IssIOPermissions.class);
     }
 
     private final String id, descriptionKey;
     private final boolean deprecated;
 
-    private IssCommonIOPermissions(String id, String descriptionKey) {
+    private IssIOPermissions(String id, String descriptionKey) {
         this(id, descriptionKey, false);
     }
 
-    private IssCommonIOPermissions(String id, String descriptionKey, boolean deprecated) {
+    private IssIOPermissions(String id, String descriptionKey, boolean deprecated) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.deprecated = deprecated;

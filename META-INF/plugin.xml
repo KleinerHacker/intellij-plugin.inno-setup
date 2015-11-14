@@ -114,6 +114,8 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTaskGoToContributor"/>
         <gotoSymbolContributor
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionTypeGoToContributor"/>
+        <gotoSymbolContributor
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.contributors.go_to.IssSectionComponentGoToContributor"/>
 
         <!-- Manipulators -->
         <lang.elementManipulator
@@ -145,6 +147,8 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionFileDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDirectoryDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionIconDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionReferenceDocumentationProvider"/>
         <documentationProvider

@@ -8,15 +8,15 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 28.12.2014.
  */
 public enum IssComponentProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.ComponentSection.ITEM_NAME, IssMarkerFactory.ComponentSection.ITEM_NAME_VALUE,
+    Name("Name", IssMarkerFactory.ComponentSection.PROPERTY_NAME, IssMarkerFactory.ComponentSection.PROPERTY_NAME_VALUE,
             "component.property.name", IssValueType.DirectSingle, true),
-    Description("Description", IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION, IssMarkerFactory.ComponentSection.ITEM_DESCRIPTION_VALUE,
+    Description("Description", IssMarkerFactory.ComponentSection.PROPERTY_DESCRIPTION, IssMarkerFactory.ComponentSection.PROPERTY_DESCRIPTION_VALUE,
             "component.property.description", IssValueType.String, true),
-    TypeReference("Types", IssMarkerFactory.ComponentSection.ITEM_TYPES, IssMarkerFactory.ComponentSection.ITEM_TYPES_VALUE,
+    TypeReference("Types", IssMarkerFactory.ComponentSection.PROPERTY_TYPES, IssMarkerFactory.ComponentSection.PROPERTY_TYPES_VALUE,
             "component.property.types", IssValueType.DirectMultiple),
-    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED, IssMarkerFactory.ComponentSection.ITEM_EXTRADISKSPACEREQUIRED_VALUE,
+    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", IssMarkerFactory.ComponentSection.PROPERTY_EXTRADISKSPACEREQUIRED, IssMarkerFactory.ComponentSection.PROPERTY_EXTRADISKSPACEREQUIRED_VALUE,
             "component.property.extra_disk_space_required", IssValueType.Integer),
-    Flags("Flags", IssMarkerFactory.ComponentSection.ITEM_FLAGS, IssMarkerFactory.ComponentSection.ITEM_FLAGS_VALUE,
+    Flags("Flags", IssMarkerFactory.ComponentSection.PROPERTY_FLAGS, IssMarkerFactory.ComponentSection.PROPERTY_FLAGS_VALUE,
             "component.property.flags", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),

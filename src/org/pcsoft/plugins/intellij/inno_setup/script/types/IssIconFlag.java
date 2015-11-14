@@ -6,7 +6,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 public enum IssIconFlag implements IssFlag {
     CloseOnExit("CloseOnExit", "icon.flag.closeonexit"),
     CreateOnlyIfFileExists("CreateOnlyIfFileExists", "icon.flag.createonlyiffileexists"),
-    DontCloseOnExit("DontCloseOnExit", "icon.flag.closeonexit"),
+    DontCloseOnExit("DontCloseOnExit", "icon.flag.dontcloseonexit"),
     ExcludeFromShowInNewInstall("ExcludeFromShowInNewInstall", "icon.flag.excludefromshowinnewinstall"),
     FolderShortCut("FolderShortCut", "icon.flag.foldershortcut"),
     PreventPinning("PreventPinning", "icon.flag.preventpinning"),

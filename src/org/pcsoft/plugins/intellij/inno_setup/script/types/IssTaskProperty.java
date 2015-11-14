@@ -8,15 +8,15 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 22.12.2014.
  */
 public enum IssTaskProperty implements IssDefinableSectionIdentifier {
-    Name("Name", IssMarkerFactory.TaskSection.ITEM_NAME, IssMarkerFactory.TaskSection.ITEM_NAME_VALUE,
+    Name("Name", IssMarkerFactory.TaskSection.PROPERTY_NAME, IssMarkerFactory.TaskSection.PROPERTY_NAME_VALUE,
             "task.property.name", IssValueType.DirectSingle, true),
-    Description("Description", IssMarkerFactory.TaskSection.ITEM_DESCRIPTION, IssMarkerFactory.TaskSection.ITEM_DESCRIPTION_VALUE,
+    Description("Description", IssMarkerFactory.TaskSection.PROPERTY_DESCRIPTION, IssMarkerFactory.TaskSection.PROPERTY_DESCRIPTION_VALUE,
             "task.property.description", IssValueType.String, true),
-    GroupDescription("GroupDescription", IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION, IssMarkerFactory.TaskSection.ITEM_GROUPDESCRIPTION_VALUE,
+    GroupDescription("GroupDescription", IssMarkerFactory.TaskSection.PROPERTY_GROUPDESCRIPTION, IssMarkerFactory.TaskSection.PROPERTY_GROUPDESCRIPTION_VALUE,
             "task.property.group_description", IssValueType.String),
-    Flags("Flags", IssMarkerFactory.TaskSection.ITEM_FLAGS, IssMarkerFactory.TaskSection.ITEM_FLAGS_VALUE,
+    Flags("Flags", IssMarkerFactory.TaskSection.PROPERTY_FLAGS, IssMarkerFactory.TaskSection.PROPERTY_FLAGS_VALUE,
             "task.property.flags", IssValueType.DirectMultiple),
-    ComponentReference("Components", IssMarkerFactory.TaskSection.ITEM_COMPONENTS, IssMarkerFactory.TaskSection.ITEM_COMPONENTS_VALUE,
+    ComponentReference("Components", IssMarkerFactory.TaskSection.PROPERTY_COMPONENTS, IssMarkerFactory.TaskSection.PROPERTY_COMPONENTS_VALUE,
             "common.property.components", IssValueType.DirectMultiple),
     //Commons
     Languages(IssCommonProperty.Languages),

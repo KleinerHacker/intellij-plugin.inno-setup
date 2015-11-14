@@ -30,15 +30,15 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
         }
         if (directoryDefinitionElement.getDirectoryAttribute() != null) {
             directoryDefinitionElement.getDirectoryAttribute().getPropertyValueList().stream()
-                    .filter(item -> IssCommonIOAttribute.fromId(item.getName()) == null)
+                    .filter(item -> IssIOAttribute.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown attribute"));
         }
         if (directoryDefinitionElement.getDirectoryPermissions() != null) {
             directoryDefinitionElement.getDirectoryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssCommonIOPermissions.fromId(item.getPermission()) == null)
+                    .filter(item -> IssIOPermissions.fromId(item.getPermission()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
             directoryDefinitionElement.getDirectoryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssCommonUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
+                    .filter(item -> IssIOUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
         }
     }

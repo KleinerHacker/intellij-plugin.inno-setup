@@ -3,24 +3,24 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssCommonIOAttribute implements IssFlag {
-    ReadOnly("ReadOnly", ""),
-    Hidden("Hidden", ""),
-    System("System", "")
+public enum IssIOAttribute implements IssFlag {
+    ReadOnly("ReadOnly", "common.attribute.readonly"),
+    Hidden("Hidden", "common.attribute.hidden"),
+    System("System", "common.attribute.system")
     ;
 
-    public static IssCommonIOAttribute fromId(final String id) {
-        return IssFlag.findById(id, IssCommonIOAttribute.class);
+    public static IssIOAttribute fromId(final String id) {
+        return IssFlag.findById(id, IssIOAttribute.class);
     }
 
     private final String id, descriptionKey;
     private final boolean deprecated;
 
-    private IssCommonIOAttribute(String id, String descriptionKey) {
+    private IssIOAttribute(String id, String descriptionKey) {
         this(id, descriptionKey, false);
     }
 
-    private IssCommonIOAttribute(String id, String descriptionKey, boolean deprecated) {
+    private IssIOAttribute(String id, String descriptionKey, boolean deprecated) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.deprecated = deprecated;

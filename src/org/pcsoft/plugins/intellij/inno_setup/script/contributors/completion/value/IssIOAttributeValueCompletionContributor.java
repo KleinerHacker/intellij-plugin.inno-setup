@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.va
 
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOAttributeElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonIOAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOAttribute;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class IssIOAttributeValueCompletionContributor extends IssAbstractValueCo
 
     @Override
     protected IssFlag[] getFlagList() {
-        return IssCommonIOAttribute.values();
+        return IssIOAttribute.values();
     }
 
     @Override
