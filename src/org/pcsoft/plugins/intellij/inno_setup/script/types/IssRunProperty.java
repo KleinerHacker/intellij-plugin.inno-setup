@@ -19,7 +19,7 @@ public enum IssRunProperty implements IssDefinableSectionIdentifier {
     StatusMessage("StatusMsg", IssMarkerFactory.RunSection.PROPERTY_STATUSMSG, IssMarkerFactory.RunSection.PROPERTY_STATUSMSG_VALUE,
             "run.property.statusmsg", IssValueType.String),
     RunOnceId("RunOnceId", IssMarkerFactory.RunSection.PROPERTY_RUNONCEID, IssMarkerFactory.RunSection.PROPERTY_RUNONCEID_VALUE,
-            "run.property.parameters", IssValueType.String),
+            "run.property.runonceid", IssValueType.String),
     Verb("Verb", IssMarkerFactory.RunSection.PROPERTY_VERB, IssMarkerFactory.RunSection.PROPERTY_VERB_VALUE,
             "run.property.verb", IssValueType.String),
     Flags("Flags", IssMarkerFactory.RunSection.PROPERTY_FLAGS, IssMarkerFactory.RunSection.PROPERTY_FLAGS_VALUE,

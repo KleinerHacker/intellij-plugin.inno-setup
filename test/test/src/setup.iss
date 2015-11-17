@@ -33,7 +33,7 @@ Flags: 32bit
 Name: "tesDir"; Attribs: ReadOnly Hidden Hidden; Permissions: Admins-Full Users-Modify Admins-Full; Flags: DeleteAfterInstall SetNTFSCompression SetNTFSCompression unknown; Tasks: testTask unknown testTask; Components: testComponent unknown testComponent
 Name: "doubleDir";
 Name: "doubleDir";
-Flags: DeleteAfterInstall UninsAlwaysUninstall SetNTFSCompression
+Flags: DeleteAfterInstall
 
 [Icons]
 Name: "testIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut; Tasks: bla testTask testTask; Components: testComponent bla testComponent
@@ -42,4 +42,7 @@ Name: "doubleIcon"; Filename: "dcls";
 Flags: CloseOnExit
 
 [Run]
-Filename: "testRun"; Flags: SkipIfNotSilent; Components: testComponent; Tasks: testTask
+Filename: "testRun"; StatusMsg: "Hallo"; Flags: SkipIfNotSilent 32Bit 64Bit SkipIfNotSilent; Components: testComponent bla testComponent; Tasks: testTask bla testTask
+Filename: "doubleRun";
+Filename: "doubleRun";
+Flags: 64Bit

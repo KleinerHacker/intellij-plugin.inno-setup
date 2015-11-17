@@ -65,6 +65,8 @@
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionTypeAnnotator"/>
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionIconAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionRunAnnotator"/>
 
         <!-- Contributors -->
         <!-- Completion -->
@@ -161,6 +163,8 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDirectoryDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionIconDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionRunDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionReferenceDocumentationProvider"/>
         <documentationProvider
