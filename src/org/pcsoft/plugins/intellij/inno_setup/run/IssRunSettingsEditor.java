@@ -1,73 +1,74 @@
 package org.pcsoft.plugins.intellij.inno_setup.run;
 
+import com.intellij.ide.util.DirectoryChooser;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.openapi.ui.DialogBuilder;
+import com.intellij.openapi.project.ProjectCoreUtil;
 import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.ui.components.JBList;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.impl.file.PsiDirectoryFactory;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.ui.components.panels.VerticalBox;
+import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.configuration.IssInstallationPlace;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssFileType;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Christoph on 14.11.2015.
  */
 public class IssRunSettingsEditor extends SettingsEditor<IssRunConfiguration> {
-    private final ComboBox cmbInnoSetupInstallation = new ComboBox();
+    private final VerticalBox pnlSettings;
+    private final TextFieldWithBrowseButton txtScriptFile;
 
     public IssRunSettingsEditor() {
-        cmbInnoSetupInstallation.setRenderer(new BasicComboBoxRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value == null)
-                    return new JLabel();
+        pnlSettings = new VerticalBox();
 
-                return new JLabel(((IssInstallationPlace)value).getName());
+        txtScriptFile = new TextFieldWithBrowseButton();
+        txtScriptFile.setEditable(false);
+        txtScriptFile.addActionListener(e -> {
+            final List<PsiDirectory> psiDirectories = FileBasedIndex.getInstance().getContainingFiles(
+                    FileTypeIndex.NAME, IssFileType.INSTANCE, GlobalSearchScope.allScope(ProjectCoreUtil.theProject))
+                    .stream()
+                    .filter(item -> item.getExtension() != null)
+                    .filter(item -> item.getExtension().toLowerCase().equals("iss"))
+                    .map(item -> PsiDirectoryFactory.getInstance(ProjectCoreUtil.theProject).createDirectory(item))
+                    .collect(Collectors.toList());
+
+            final DirectoryChooser directoryChooser = new DirectoryChooser(ProjectCoreUtil.theProject);
+            directoryChooser.setTitle("Choose Script File");
+            directoryChooser.fillList(psiDirectories.toArray(new PsiDirectory[psiDirectories.size()]), null,
+                    ProjectCoreUtil.theProject, (String) null);
+            if (directoryChooser.showAndGet()) {
+                txtScriptFile.setText(directoryChooser.getSelectedDirectory().getVirtualFile().getPath());
             }
         });
+
+        final LabeledComponent<TextFieldWithBrowseButton> lblScriptFile = new LabeledComponent<>();
+        lblScriptFile.setText("Script File to compile:");
+        lblScriptFile.setComponent(txtScriptFile);
+
+        pnlSettings.add(lblScriptFile);
     }
 
     @Override
     protected void resetEditorFrom(IssRunConfiguration issRunConfiguration) {
-        final DefaultComboBoxModel<IssInstallationPlace> model = new DefaultComboBoxModel<>();
-        model.addElement(new IssInstallationPlace("Sample 1", new File("C:/")));
-        model.addElement(new IssInstallationPlace("Sample 2", new File("C:/")));
-        model.addElement(new IssInstallationPlace("Sample 3", new File("C:/")));
-
-        cmbInnoSetupInstallation.setModel(model);
-        cmbInnoSetupInstallation.setSelectedItem(issRunConfiguration.getInstallationPlace());
+        txtScriptFile.setText(issRunConfiguration.getScriptFile());
     }
 
     @Override
     protected void applyEditorTo(IssRunConfiguration issRunConfiguration) throws ConfigurationException {
-        issRunConfiguration.setInstallationPlace((IssInstallationPlace) cmbInnoSetupInstallation.getSelectedItem());
+        issRunConfiguration.setScriptFile(txtScriptFile.getText());
     }
 
     @NotNull
     @Override
     protected JComponent createEditor() {
-        final LabeledComponent<ComponentWithBrowseButton<ComboBox>> labeledComponent = new LabeledComponent<>();
-        labeledComponent.setText("Inno Setup Installation:");
-        labeledComponent.setComponent(new ComponentWithBrowseButton<>(cmbInnoSetupInstallation, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final DialogBuilder dialogBuilder = new DialogBuilder();
-                dialogBuilder.setTitle("Inno Setup Installation Manager");
-                dialogBuilder.addOkAction();
-                dialogBuilder.addCancelAction();
-                dialogBuilder.setCenterPanel(new JBList());
-
-                dialogBuilder.show();
-            }
-        }));
-        return labeledComponent;
+        return pnlSettings;
     }
 }

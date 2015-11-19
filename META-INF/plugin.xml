@@ -133,17 +133,17 @@
 
         <!-- Manipulators -->
         <lang.elementManipulator
-            forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement"
-            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyComponentReferenceValueElementManipulator"/>
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyComponentReferenceValueElementManipulator"/>
         <lang.elementManipulator
-            forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement"
-            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyNameValueElementManipulator"/>
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyNameValueElementManipulator"/>
         <lang.elementManipulator
-            forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement"
-            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTaskReferenceValueElementManipulator"/>
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTaskReferenceValueElementManipulator"/>
         <lang.elementManipulator
-            forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement"
-            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTypeReferenceValueElementManipulator"/>
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTypeReferenceValueElementManipulator"/>
 
         <lang.refactoringSupport language="iss"
                                  implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
@@ -178,6 +178,8 @@
 
         <!-- ************************* RUN & COMPILE ****************************** -->
         <configurationType implementation="org.pcsoft.plugins.intellij.inno_setup.run.IssRunConfigurationType"/>
+        <applicationService serviceImplementation="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings"/>
+        <applicationConfigurable provider="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerConfiguration" parentId="project.propCompiler"/>
     </extensions>
 
     <application-components>
