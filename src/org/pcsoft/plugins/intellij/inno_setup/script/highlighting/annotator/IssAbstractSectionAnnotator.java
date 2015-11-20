@@ -6,7 +6,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
@@ -73,7 +73,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
         for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyType().isDeprecated()) {
                 final Annotation warningAnnotation = annotationHolder.createWarningAnnotation(propertyElement, "Property is deprecated!");
-                warningAnnotation.setTextAttributes(IssHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
+                warningAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
             }
         }
     }

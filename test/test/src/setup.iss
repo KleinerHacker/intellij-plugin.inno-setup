@@ -1,7 +1,7 @@
-; [SETUP]
-; AppName=Test
-; Compression=lzma
-; Compression=zip
+[SETUP]
+AppName=Test
+Compression=lzma
+Compression=zip
 
 [Tasks]
 Name: testTask; Description: "My Test Task"; Components: testComponent unknown testComponent

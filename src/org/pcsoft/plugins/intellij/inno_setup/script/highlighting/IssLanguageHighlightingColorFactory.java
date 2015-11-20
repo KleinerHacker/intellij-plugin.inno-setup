@@ -11,7 +11,7 @@ import java.awt.Font;
 /**
  * Created by Christoph on 14.12.2014.
  */
-public final class IssHighlightingColorFactory {
+public final class IssLanguageHighlightingColorFactory {
 
     public static final TextAttributesKey SYNTAX_COMMENT = TextAttributesKey.createTextAttributesKey(
             "SYNTAX_COMMENT",
@@ -43,6 +43,10 @@ public final class IssHighlightingColorFactory {
             new TextAttributes(null, null, null, null, Font.BOLD)
     );
 
+    //********************************************************************************************************//
+    //********************************************************************************************************//
+    //********************************************************************************************************//
+
     public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_PROPERTY_NAME",
             new TextAttributes(JBColor.BLUE, null, null, null, Font.BOLD)
@@ -63,6 +67,6 @@ public final class IssHighlightingColorFactory {
             new TextAttributes(JBColor.BLUE, JBColor.YELLOW, JBColor.BLACK, EffectType.STRIKEOUT, Font.BOLD)
     );
 
-    private IssHighlightingColorFactory() {
+    private IssLanguageHighlightingColorFactory() {
     }
 }

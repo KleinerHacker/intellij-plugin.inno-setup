@@ -8,7 +8,7 @@ import com.intellij.openapi.options.colors.ColorSettingsPage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -25,11 +25,11 @@ import java.util.Map;
 public final class IssSyntaxColorSettingsPage implements ColorSettingsPage {
 
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
-            new AttributesDescriptor("Comments", IssHighlightingColorFactory.SYNTAX_COMMENT),
-            new AttributesDescriptor("Strings", IssHighlightingColorFactory.SYNTAX_STRING),
-            new AttributesDescriptor("Compiler Directives", IssHighlightingColorFactory.SYNTAX_CD),
-            new AttributesDescriptor("Section Title", IssHighlightingColorFactory.SYNTAX_SECTION_TITLE),
-            new AttributesDescriptor("Operators", IssHighlightingColorFactory.SYNTAX_OPERATORS)
+            new AttributesDescriptor("Comments", IssLanguageHighlightingColorFactory.SYNTAX_COMMENT),
+            new AttributesDescriptor("Strings", IssLanguageHighlightingColorFactory.SYNTAX_STRING),
+            new AttributesDescriptor("Compiler Directives", IssLanguageHighlightingColorFactory.SYNTAX_CD),
+            new AttributesDescriptor("Section Title", IssLanguageHighlightingColorFactory.SYNTAX_SECTION_TITLE),
+            new AttributesDescriptor("Operators", IssLanguageHighlightingColorFactory.SYNTAX_OPERATORS)
     };
 
     static {

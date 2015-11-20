@@ -6,7 +6,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssHighlightingColorFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 
 import java.util.HashMap;
@@ -33,12 +33,12 @@ public final class IssSyntaxHighlighter extends SyntaxHighlighterBase {
     }
 
     static {
-        keys.put(IssTokenFactory.BAD_CHARACTER, IssHighlightingColorFactory.SYNTAX_BAD_CHARACTER);
-        putTokenSet(IssTokenFactory.TS_COMMENTS, IssHighlightingColorFactory.SYNTAX_COMMENT);
-        keys.put(IssTokenFactory.STRING, IssHighlightingColorFactory.SYNTAX_STRING);
-        keys.put(IssTokenFactory.COMPILER_DIRECTIVE, IssHighlightingColorFactory.SYNTAX_CD);
-        keys.put(IssTokenFactory.SECTION_TITLE, IssHighlightingColorFactory.SYNTAX_SECTION_TITLE);
-        putTokenSet(IssTokenFactory.TS_OPERATORS, IssHighlightingColorFactory.SYNTAX_OPERATORS);
+        keys.put(IssTokenFactory.BAD_CHARACTER, IssLanguageHighlightingColorFactory.SYNTAX_BAD_CHARACTER);
+        putTokenSet(IssTokenFactory.TS_COMMENTS, IssLanguageHighlightingColorFactory.SYNTAX_COMMENT);
+        keys.put(IssTokenFactory.STRING, IssLanguageHighlightingColorFactory.SYNTAX_STRING);
+        keys.put(IssTokenFactory.COMPILER_DIRECTIVE, IssLanguageHighlightingColorFactory.SYNTAX_CD);
+        keys.put(IssTokenFactory.SECTION_TITLE, IssLanguageHighlightingColorFactory.SYNTAX_SECTION_TITLE);
+        putTokenSet(IssTokenFactory.TS_OPERATORS, IssLanguageHighlightingColorFactory.SYNTAX_OPERATORS);
     }
 
     private static void putTokenSet(TokenSet tokenSet, TextAttributesKey key) {
