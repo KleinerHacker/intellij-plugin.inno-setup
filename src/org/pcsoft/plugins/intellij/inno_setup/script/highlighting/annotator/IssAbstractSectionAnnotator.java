@@ -8,10 +8,11 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinablePropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,8 +52,8 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkRequiredProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        final List<IssDefinableSectionIdentifier> notFoundList = new ArrayList<>();
-        main: for (final IssDefinableSectionIdentifier identifier : definitionElement.getPropertyTypeList()) {
+        final List<IssDefinablePropertyIdentifier> notFoundList = new ArrayList<>();
+        main: for (final IssDefinablePropertyIdentifier identifier : definitionElement.getPropertyTypeList()) {
             if (!identifier.isRequired())
                 continue;
 
@@ -119,7 +120,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkPropertyValues(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+        for (final IssDefinablePropertyElement<?> propertyElement : (Collection<IssDefinablePropertyElement>)definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyValue() == null)
                 continue;
 

@@ -38,7 +38,9 @@ public final class IssMarkerFactory {
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType PROPERTY_APP_NAME = new IElementType(KEY_ITEM + "_APP_NAME", LANGUAGE);
+        public static final IElementType PROPERTY_APP_NAME_VALUE = new IElementType(KEY_ITEM + "_APP_NAME_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_APP_VERSION = new IElementType(KEY_ITEM + "_APP_VERSION", LANGUAGE);
+        public static final IElementType PROPERTY_APP_VERSION_VALUE = new IElementType(KEY_ITEM + "_APP_VERSION_VALUE", LANGUAGE);
     }
 
     public static final class TaskSection {

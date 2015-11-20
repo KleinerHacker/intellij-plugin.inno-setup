@@ -8,7 +8,7 @@ import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssInternalConstants;
 
 /**
@@ -21,7 +21,7 @@ public class IssInternalConstantCompletionContributor extends CompletionContribu
                 new CompletionProvider() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssFlag internalConstants : IssInternalConstants.values()) {
+                        for (final IssPropertyValue internalConstants : IssInternalConstants.values()) {
                             completionResultSet.addElement(LookupElementBuilder.create("{" + internalConstants.getId() + "}")
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.PINK)
                                     .withIcon(IssIcons.IC_INFO_CONSTANT).withStrikeoutness(internalConstants.isDeprecated())

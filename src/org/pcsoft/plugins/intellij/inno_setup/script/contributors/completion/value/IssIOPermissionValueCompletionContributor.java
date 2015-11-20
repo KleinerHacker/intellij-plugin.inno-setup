@@ -7,10 +7,10 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIOPermissionsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOUserOrGroupIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -22,8 +22,8 @@ public class IssIOPermissionValueCompletionContributor extends CompletionContrib
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssFlag userOrGroupIdentifier : IssIOUserOrGroupIdentifier.values()) {
-                            for (final IssFlag permission : IssIOPermissions.values()) {
+                        for (final IssPropertyValue userOrGroupIdentifier : IssIOUserOrGroupIdentifier.values()) {
+                            for (final IssPropertyValue permission : IssIOPermissions.values()) {
                                 completionResultSet.addElement(LookupElementBuilder.create(userOrGroupIdentifier.getId() + "-" + permission.getId())
                                         .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
                                         .withIcon(IssIcons.IC_INFO_PERMISSION).withStrikeoutness(permission.isDeprecated())

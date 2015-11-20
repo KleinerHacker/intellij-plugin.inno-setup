@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssFileFlag implements IssFlag {
+public enum IssFileFlag implements IssPropertyValue {
     $32Bit("32bit", "file.flag.32bit"),
     $64Bit("64bit", "file.flag.64bit"),
     AllowUnsafeFiles("AllowUnsafeFiles", "file.flag.allow_unsafe_files"),
@@ -44,7 +44,7 @@ public enum IssFileFlag implements IssFlag {
     UnsetNTFSCompression("UnsetNTFSCompression", "file.flag.unset_ntfs_compression");
 
     public static IssFileFlag fromId(final String id) {
-        return IssFlag.findById(id, IssFileFlag.class);
+        return IssPropertyValue.findById(id, IssFileFlag.class);
     }
 
     private final String id, descriptionKey;

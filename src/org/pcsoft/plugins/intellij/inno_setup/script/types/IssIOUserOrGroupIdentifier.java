@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssIOUserOrGroupIdentifier implements IssFlag {
+public enum IssIOUserOrGroupIdentifier implements IssPropertyValue {
     Administrator("Admins", "common.user_or_group_identifier.admins"),
     AuthenticatedUser("AuthUsers", "common.user_or_group_identifier.authusers"),
     Everyone("Everyone", "common.user_or_group_identifier.everyone"),
@@ -13,7 +13,7 @@ public enum IssIOUserOrGroupIdentifier implements IssFlag {
     ;
 
     public static IssIOUserOrGroupIdentifier fromId(final String id) {
-        return IssFlag.findById(id, IssIOUserOrGroupIdentifier.class);
+        return IssPropertyValue.findById(id, IssIOUserOrGroupIdentifier.class);
     }
 
     private final String id, descriptionKey;

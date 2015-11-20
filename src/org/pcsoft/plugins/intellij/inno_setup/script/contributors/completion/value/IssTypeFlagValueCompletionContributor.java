@@ -1,7 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeFlagsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeFlag;
 
 /**
@@ -13,7 +13,7 @@ public class IssTypeFlagValueCompletionContributor extends IssAbstractValueCompl
     }
 
     @Override
-    protected IssFlag[] getFlagList() {
+    protected IssPropertyValue[] getFlagList() {
         return IssTypeFlag.values();
     }
 }

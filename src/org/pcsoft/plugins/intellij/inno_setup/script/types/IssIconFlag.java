@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssIconFlag implements IssFlag {
+public enum IssIconFlag implements IssPropertyValue {
     CloseOnExit("CloseOnExit", "icon.flag.closeonexit"),
     CreateOnlyIfFileExists("CreateOnlyIfFileExists", "icon.flag.createonlyiffileexists"),
     DontCloseOnExit("DontCloseOnExit", "icon.flag.dontcloseonexit"),
@@ -17,7 +17,7 @@ public enum IssIconFlag implements IssFlag {
     ;
 
     public static IssIconFlag fromId(final String id) {
-        return IssFlag.findById(id, IssIconFlag.class);
+        return IssPropertyValue.findById(id, IssIconFlag.class);
     }
 
     private final String id, descriptionKey;

@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssRunFlag implements IssFlag {
+public enum IssRunFlag implements IssPropertyValue {
     $32Bit("32Bit", "run.flag.32bit"),
     $64Bit("64Bit", "run.flag.64bit"),
     HideWizard("HideWizard", "run.flag.hidewizard"),
@@ -24,7 +24,7 @@ public enum IssRunFlag implements IssFlag {
     ;
 
     public static IssRunFlag fromId(final String id) {
-        return IssFlag.findById(id, IssRunFlag.class);
+        return IssPropertyValue.findById(id, IssRunFlag.class);
     }
 
     private final String id, descriptionKey;

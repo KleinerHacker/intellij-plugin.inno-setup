@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssComponentFlag implements IssFlag {
+public enum IssComponentFlag implements IssPropertyValue {
     CheckableAlone("CheckableAlone", "component.flag.checkable_alone"),
     DoNotInheritCheck("DontInheritCheck", "component.flag.dont_inherit_check"),
     Exclusive("Exclusive", "component.flag.exclusive"),
@@ -12,7 +12,7 @@ public enum IssComponentFlag implements IssFlag {
     DisableNoUninstallWarnings("DisableNoUninstallWarnings", "component.flag.disable_no_uninstall_warning");
 
     public static IssComponentFlag fromId(final String id) {
-        return IssFlag.findById(id, IssComponentFlag.class);
+        return IssPropertyValue.findById(id, IssComponentFlag.class);
     }
 
     private final String id, descriptionKey;

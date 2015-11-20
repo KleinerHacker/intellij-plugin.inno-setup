@@ -7,7 +7,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssTypeProperty implements IssDefinableSectionIdentifier {
+public enum IssTypeProperty implements IssDefinablePropertyIdentifier {
     Name("Name", IssMarkerFactory.TypeSection.PROPERTY_NAME, IssMarkerFactory.TypeSection.PROPERTY_NAME_VALUE,
             "type.property.name", IssValueType.DirectSingle, true),
     Description("Description", IssMarkerFactory.TypeSection.PROPERTY_DESCRIPTION, IssMarkerFactory.TypeSection.PROPERTY_DESCRIPTION_VALUE,
@@ -20,45 +20,45 @@ public enum IssTypeProperty implements IssDefinableSectionIdentifier {
     OnlyBelowVersion(IssCommonProperty.OnlyBelowVersion);
 
     public static IssTypeProperty fromId(final String id) {
-        return IssSectionIdentifier.fromId(id, IssTypeProperty.class);
+        return IssPropertyIdentifier.fromId(id, IssTypeProperty.class);
     }
 
-    public static IElementType getItemMarkerElementFromId(final String id) {
-        return IssSectionIdentifier.getItemMarkerElementFromId(id, IssTypeProperty.class);
+    public static IElementType getPropertyMarkerElementFromId(final String id) {
+        return IssPropertyIdentifier.getItemMarkerElementFromId(id, IssTypeProperty.class);
     }
 
-    public static IElementType getValueMarkerElementFromId(final String id) {
-        return IssDefinableSectionIdentifier.getSingleValueMarkerElementFromId(id, IssTypeProperty.class);
+    public static IElementType getPropertyValueMarkerElementFromId(final String id) {
+        return IssPropertyIdentifier.getSingleValueMarkerElementFromId(id, IssTypeProperty.class);
     }
 
     private final String id, descriptionKey;
     private final boolean deprecated, required;
-    private final IElementType itemMarkerElement, valueMarkerElement;
+    private final IElementType itemMarkerElement, propertyValueMarkerElement;
     private final IssValueType valueType;
 
-    private IssTypeProperty(final IssDefinableSectionIdentifier sectionIdentifier) {
-        this(sectionIdentifier.getId(), sectionIdentifier.getItemMarkerElement(), sectionIdentifier.getValueMarkerElement(),
+    private IssTypeProperty(final IssDefinablePropertyIdentifier sectionIdentifier) {
+        this(sectionIdentifier.getId(), sectionIdentifier.getPropertyMarkerElement(), sectionIdentifier.getPropertyValueMarkerElement(),
                 sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
                 sectionIdentifier.isDeprecated());
     }
 
-    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType propertyValueMarkerElement, String descriptionKey,
                             IssValueType valueType) {
-        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, false);
+        this(id, itemMarkerElement, propertyValueMarkerElement, descriptionKey, valueType, false);
     }
 
-    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType propertyValueMarkerElement, String descriptionKey,
                             IssValueType valueType, boolean required) {
-        this(id, itemMarkerElement, valueMarkerElement, descriptionKey, valueType, required, false);
+        this(id, itemMarkerElement, propertyValueMarkerElement, descriptionKey, valueType, required, false);
     }
 
-    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType valueMarkerElement, String descriptionKey,
+    private IssTypeProperty(String id, IElementType itemMarkerElement, IElementType propertyValueMarkerElement, String descriptionKey,
                             IssValueType valueType, boolean required, boolean deprecated) {
         this.id = id;
         this.deprecated = deprecated;
         this.required = required;
         this.itemMarkerElement = itemMarkerElement;
-        this.valueMarkerElement = valueMarkerElement;
+        this.propertyValueMarkerElement = propertyValueMarkerElement;
         this.descriptionKey = descriptionKey;
         this.valueType = valueType;
     }
@@ -78,14 +78,13 @@ public enum IssTypeProperty implements IssDefinableSectionIdentifier {
 
     @NotNull
     @Override
-    public IElementType getItemMarkerElement() {
+    public IElementType getPropertyMarkerElement() {
         return itemMarkerElement;
     }
 
-
     @Override
-    public IElementType getValueMarkerElement() {
-        return valueMarkerElement;
+    public IElementType getPropertyValueMarkerElement() {
+        return propertyValueMarkerElement;
     }
 
     @Override

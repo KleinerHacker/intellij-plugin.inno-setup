@@ -1,7 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property;
 
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssDirectorySectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
 
 /**
@@ -13,7 +13,7 @@ public class IssDirectoryPropertyCompletionContributor extends IssAbstractProper
     }
 
     @Override
-    protected IssDefinableSectionIdentifier[] getSectionIdentifierList() {
+    protected IssDefinablePropertyIdentifier[] getSectionIdentifierList() {
         return IssDirectoryProperty.values();
     }
 }

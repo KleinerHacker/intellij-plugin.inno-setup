@@ -5,7 +5,7 @@ import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
 
 import java.util.Collection;
 
@@ -20,13 +20,13 @@ public class IssSectionAnnotator implements Annotator {
     }
 
     private void findDoubleSectionItems(PsiElement psiElement, AnnotationHolder annotationHolder) {
-        final Collection<IssPropertyElement> collection;
+        final Collection<? extends IssPropertyElement> collection;
         if (psiElement instanceof IssSetupSectionElement) {
             final IssSetupSectionElement setupSectionElement = (IssSetupSectionElement) psiElement;
-            if (setupSectionElement.getSectionItemList() == null || setupSectionElement.getSectionItemList().isEmpty())
+            if (setupSectionElement.getSectionPropertyList() == null || setupSectionElement.getSectionPropertyList().isEmpty())
                 return;
 
-            collection = setupSectionElement.getSectionItemList();
+            collection = setupSectionElement.getSectionPropertyList();
         } else if (psiElement instanceof IssDefinitionElement) {
             final IssDefinitionElement definitionElement = (IssDefinitionElement) psiElement;
             if (definitionElement.getDefinitionPropertyList() == null || definitionElement.getDefinitionPropertyList().isEmpty())
@@ -41,7 +41,7 @@ public class IssSectionAnnotator implements Annotator {
                 element -> element.getIdentifier() != null,
                 element -> element.getIdentifier().getText().toLowerCase(),
                 (element, key) -> {
-                    annotationHolder.createErrorAnnotation(element, "Section item '" + key + "' already defined!");
+                    annotationHolder.createErrorAnnotation(element, "Section property '" + key + "' already defined!");
                 }
         );
     }

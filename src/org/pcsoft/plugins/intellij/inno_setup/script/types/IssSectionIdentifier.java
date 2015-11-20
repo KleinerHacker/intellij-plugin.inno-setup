@@ -25,7 +25,7 @@ public interface IssSectionIdentifier {
         if (value == null)
             return null;
 
-        return value.getItemMarkerElement();
+        return value.getPropertyMarkerElement();
     }
 
     @NotNull
@@ -35,7 +35,9 @@ public interface IssSectionIdentifier {
     String getDescriptionKey();
 
     @NotNull
-    IElementType getItemMarkerElement();
+    IElementType getPropertyMarkerElement();
+
+    boolean isRequired();
 
     boolean isDeprecated();
 

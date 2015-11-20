@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssDirectoryFlag implements IssFlag {
+public enum IssDirectoryFlag implements IssPropertyValue {
     DeleteAfterInstall("DeleteAfterInstall", "directory.flag.delete_after_install"),
     SetNTFSCompression("SetNTFSCompression", "directory.flag.set_ntfs_compression"),
     UninstallAlwaysUninstall("UninsAlwaysUninstall", "directory.flag.unins_always_uninstall"),
@@ -11,7 +11,7 @@ public enum IssDirectoryFlag implements IssFlag {
     UnsetNTFSCompression("UnsetNTFSCompression", "directory.flag.unset_ntfs_compression");
 
     public static IssDirectoryFlag fromId(final String id) {
-        return IssFlag.findById(id, IssDirectoryFlag.class);
+        return IssPropertyValue.findById(id, IssDirectoryFlag.class);
     }
 
     private final String id, descriptionKey;

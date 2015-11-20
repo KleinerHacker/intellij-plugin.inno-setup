@@ -7,7 +7,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 
 import javax.swing.*;
 
@@ -21,7 +21,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssFlag item : getFlagList()) {
+                        for (final IssPropertyValue item : getFlagList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
                                     .withIcon(getIcon()).withStrikeoutness(item.isDeprecated())
@@ -34,7 +34,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
                 });
     }
 
-    protected abstract IssFlag[] getFlagList();
+    protected abstract IssPropertyValue[] getFlagList();
 
     protected Icon getIcon() {
         return null;

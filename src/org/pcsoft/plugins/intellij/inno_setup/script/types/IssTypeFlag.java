@@ -3,11 +3,11 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssTypeFlag implements IssFlag {
+public enum IssTypeFlag implements IssPropertyValue {
     IsCustom("IsCustom", "type.flag.is_custom");
 
     public static IssTypeFlag fromId(final String id) {
-        return IssFlag.findById(id, IssTypeFlag.class);
+        return IssPropertyValue.findById(id, IssTypeFlag.class);
     }
 
     private final String id, descriptionKey;

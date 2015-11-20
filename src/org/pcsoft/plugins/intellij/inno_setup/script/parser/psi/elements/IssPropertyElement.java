@@ -6,18 +6,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 
 import java.util.Collection;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public abstract class IssPropertyElement<V extends IssPropertyValueElement> extends IssAbstractElement {
+public abstract class IssPropertyElement<V extends IssPropertyValueElement, I extends IssPropertyIdentifier> extends IssAbstractElement {
     private final Class<V> valueClass;
-    private final IssDefinableSectionIdentifier propertyType;
+    private final I propertyType;
 
-    public IssPropertyElement(ASTNode node, @NotNull Class<V> valueClass, @NotNull IssDefinableSectionIdentifier propertyType) {
+    public IssPropertyElement(ASTNode node, @NotNull Class<V> valueClass, @NotNull I propertyType) {
         super(node);
         this.valueClass = valueClass;
         this.propertyType = propertyType;
@@ -33,11 +33,6 @@ public abstract class IssPropertyElement<V extends IssPropertyValueElement> exte
         return PsiTreeUtil.findChildOfType(this, IssValueElement.class);
     }
 
-    @Nullable
-    public final IssDefinitionElement getDefinition() {
-        return PsiTreeUtil.getParentOfType(this, IssDefinitionElement.class);
-    }
-
     @NotNull
     public final Collection<V> getPropertyValueList() {
         return PsiTreeUtil.findChildrenOfType(this, valueClass);
@@ -49,7 +44,7 @@ public abstract class IssPropertyElement<V extends IssPropertyValueElement> exte
     }
 
     @NotNull
-    public final IssDefinableSectionIdentifier getPropertyType() {
+    public final I getPropertyType() {
         return propertyType;
     }
 }

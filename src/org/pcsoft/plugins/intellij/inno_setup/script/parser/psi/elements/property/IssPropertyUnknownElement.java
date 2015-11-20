@@ -5,30 +5,23 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssValueType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnknownValueElement> {
+public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnknownValueElement, IssPropertyIdentifier> {
     public IssPropertyUnknownElement(ASTNode node) {
-        super(node, IssPropertyUnknownValueElement.class, new IssDefinableSectionIdentifier() {
+        super(node, IssPropertyUnknownValueElement.class, new IssPropertyIdentifier() {
             @Nullable
             @Override
-            public IElementType getValueMarkerElement() {
+            public IElementType getPropertyValueMarkerElement() {
                 return null;
             }
 
             @Override
             public boolean isRequired() {
                 return false;
-            }
-
-            @NotNull
-            @Override
-            public IssValueType getValueType() {
-                return IssValueType.Unknown;
             }
 
             @NotNull
@@ -45,7 +38,7 @@ public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnk
 
             @NotNull
             @Override
-            public IElementType getItemMarkerElement() {
+            public IElementType getPropertyMarkerElement() {
                 return null;
             }
 

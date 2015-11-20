@@ -3,14 +3,14 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssIOAttribute implements IssFlag {
+public enum IssIOAttribute implements IssPropertyValue {
     ReadOnly("ReadOnly", "common.attribute.readonly"),
     Hidden("Hidden", "common.attribute.hidden"),
     System("System", "common.attribute.system")
     ;
 
     public static IssIOAttribute fromId(final String id) {
-        return IssFlag.findById(id, IssIOAttribute.class);
+        return IssPropertyValue.findById(id, IssIOAttribute.class);
     }
 
     private final String id, descriptionKey;

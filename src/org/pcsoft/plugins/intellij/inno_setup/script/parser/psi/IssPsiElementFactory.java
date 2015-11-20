@@ -3,16 +3,16 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyUnknownElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionAppNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionAppVersionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.setup.IssSetupSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
@@ -325,9 +325,13 @@ public final class IssPsiElementFactory {
         if (IssMarkerFactory.SetupSection.SECTION.equals(node.getElementType())) {
             return new IssSetupSectionElement(node);
         } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_NAME.equals(node.getElementType())) {
-            return new IssSetupSectionAppNameElement(node);
+            return new IssPropertyDefaultElement(node, IssSetupProperty.AppName);
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_NAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
         } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION.equals(node.getElementType())) {
-            return new IssSetupSectionAppVersionElement(node);
+            return new IssPropertyDefaultElement(node, IssSetupProperty.AppVersion);
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
         }
 
         return null;

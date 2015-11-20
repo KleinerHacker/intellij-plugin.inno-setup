@@ -3,14 +3,14 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssInternalConstants implements IssFlag {
+public enum IssInternalConstants implements IssPropertyValue {
     App("app", "constant.internal.app"),
     Win("win", "constant.internal.win"),
     Sys("sys", "constant.internal.sys"),
     ;
 
     public static IssInternalConstants fromId(final String id) {
-        return IssFlag.findById(id, IssInternalConstants.class);
+        return IssPropertyValue.findById(id, IssInternalConstants.class);
     }
 
     private final String id, descriptionKey;

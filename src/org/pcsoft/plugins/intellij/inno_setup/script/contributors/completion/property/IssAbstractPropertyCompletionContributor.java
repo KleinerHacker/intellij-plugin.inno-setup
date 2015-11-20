@@ -7,7 +7,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinableSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -19,7 +19,7 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssDefi
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssDefinableSectionIdentifier item : getSectionIdentifierList()) {
+                        for (final IssDefinablePropertyIdentifier item : getSectionIdentifierList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.BLUE)
                                     .withStrikeoutness(item.isDeprecated()).withTailText(item.isRequired() ? " (Required)" : null)
@@ -32,5 +32,5 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssDefi
                 });
     }
 
-    protected abstract IssDefinableSectionIdentifier[] getSectionIdentifierList();
+    protected abstract IssDefinablePropertyIdentifier[] getSectionIdentifierList();
 }

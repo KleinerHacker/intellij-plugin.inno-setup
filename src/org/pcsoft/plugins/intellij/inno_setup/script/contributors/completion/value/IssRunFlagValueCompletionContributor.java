@@ -1,8 +1,8 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRunFlagsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyRunFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRunFlag;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class IssRunFlagValueCompletionContributor extends IssAbstractValueComple
     }
 
     @Override
-    protected IssFlag[] getFlagList() {
+    protected IssPropertyValue[] getFlagList() {
         return IssRunFlag.values();
     }
 

@@ -3,14 +3,14 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssIOPermissions implements IssFlag {
+public enum IssIOPermissions implements IssPropertyValue {
     Full("Full", "common.permissions.full"),
     Modify("Modify", "common.permissions.modify"),
     ReadExec("ReadExec", "common.permissions.readexec")
     ;
 
     public static IssIOPermissions fromId(final String id) {
-        return IssFlag.findById(id, IssIOPermissions.class);
+        return IssPropertyValue.findById(id, IssIOPermissions.class);
     }
 
     private final String id, descriptionKey;

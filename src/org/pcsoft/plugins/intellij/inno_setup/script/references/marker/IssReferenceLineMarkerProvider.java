@@ -8,15 +8,15 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinablePropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -64,7 +64,7 @@ public class IssReferenceLineMarkerProvider implements LineMarkerProvider {
                 IssFindUtils.findComponentReferenceElements(componentDefinitionElement.getProject());
         final List<IssDefinitionElement> definitionElementList = componentReferenceElementList.stream()
                 .filter(item -> item.getDefinition() != null)
-                .map(IssPropertyElement::getDefinition)
+                .map(IssDefinablePropertyElement::getDefinition)
                 .collect(Collectors.toList());
 
         return NavigationGutterIconBuilder.create(IssIcons.IC_REF_COMPONENT)
@@ -79,7 +79,7 @@ public class IssReferenceLineMarkerProvider implements LineMarkerProvider {
                 IssFindUtils.findTypeReferenceElements(typeDefinitionElement.getProject());
         final List<IssDefinitionElement> definitionElementList = typeReferenceElementList.stream()
                 .filter(item -> item.getDefinition() != null)
-                .map(IssPropertyElement::getDefinition)
+                .map(IssDefinablePropertyElement::getDefinition)
                 .collect(Collectors.toList());
 
         return NavigationGutterIconBuilder.create(IssIcons.IC_REF_TYPE)
@@ -94,7 +94,7 @@ public class IssReferenceLineMarkerProvider implements LineMarkerProvider {
                 IssFindUtils.findTaskReferenceElements(taskDefinitionElement.getProject());
         final List<IssDefinitionElement> definitionElementList = taskReferenceElementList.stream()
                 .filter(item -> item.getDefinition() != null)
-                .map(IssPropertyElement::getDefinition)
+                .map(IssDefinablePropertyElement::getDefinition)
                 .collect(Collectors.toList());
 
         return NavigationGutterIconBuilder.create(IssIcons.IC_REF_TASK)

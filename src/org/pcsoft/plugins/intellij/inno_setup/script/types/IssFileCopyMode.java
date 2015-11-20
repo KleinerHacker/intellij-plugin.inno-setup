@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssFileCopyMode implements IssFlag {
+public enum IssFileCopyMode implements IssPropertyValue {
     Normal("Normal", ""),
     AlwaysSkipIfSameOrOlder("AlwaysSkipIfSameOrOlder", ""),
     OnlyIfDoesntExists("OnlyIfDoesntExists", ""),
@@ -11,7 +11,7 @@ public enum IssFileCopyMode implements IssFlag {
     DontCopy("DontCopy", "");
 
     public static IssFileCopyMode fromId(final String id) {
-        return IssFlag.findById(id, IssFileCopyMode.class);
+        return IssPropertyValue.findById(id, IssFileCopyMode.class);
     }
 
     private final String id, descriptionKey;

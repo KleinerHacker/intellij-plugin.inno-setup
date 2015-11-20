@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.pr
 
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssComponentSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -13,7 +13,7 @@ public class IssComponentPropertyCompletionContributor extends IssAbstractProper
     }
 
     @Override
-    protected IssDefinableSectionIdentifier[] getSectionIdentifierList() {
+    protected IssDefinablePropertyIdentifier[] getSectionIdentifierList() {
         return IssComponentProperty.values();
     }
 }

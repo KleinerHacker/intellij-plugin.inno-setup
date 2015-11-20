@@ -133,16 +133,16 @@
 
         <!-- Manipulators -->
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyComponentReferenceValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyNameValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTaskReferenceValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTypeReferenceValueElementManipulator"/>
 
         <lang.refactoringSupport language="iss"

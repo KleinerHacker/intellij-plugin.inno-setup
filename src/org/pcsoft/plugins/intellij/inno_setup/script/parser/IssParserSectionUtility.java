@@ -40,7 +40,7 @@ final class IssParserSectionUtility {
                     sectionTitleMark.done(IssMarkerFactory.SECTION_TITLE);
 
                     parseSection(psiBuilder, sectionType);
-                    sectionMark.done(sectionType.getItemMarkerElement());
+                    sectionMark.done(sectionType.getPropertyMarkerElement());
                 }
             } else if (psiBuilder.getTokenType() == IssTokenFactory.CRLF) {
                 psiBuilder.advanceLexer();//Empty line
@@ -64,35 +64,36 @@ final class IssParserSectionUtility {
             } else if (psiBuilder.getTokenType() == IssTokenFactory.NAME) {
                 switch (sectionType) {
                     case Setup:
-                        parseLineForSetupSection(psiBuilder);
+                        parseLineForStandardSection(psiBuilder, "Setup Section", IssSetupProperty::getPropertyValueMarkerElementFromId,
+                                IssSetupProperty::getPropertyMarkerElementFromId);
                         break;
                     case Task:
-                        parseLineForDefaultSection(psiBuilder, "Tasks Section", IssMarkerFactory.TaskSection.SECTION_DEFINITION,
-                                IssTaskProperty::getValueMarkerElementFromId, IssTaskProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Tasks Section", IssMarkerFactory.TaskSection.SECTION_DEFINITION,
+                                IssTaskProperty::getPropertyValueMarkerElementFromId, IssTaskProperty::getPropertyMarkerElementFromId);
                         break;
                     case File:
-                        parseLineForDefaultSection(psiBuilder, "Files Section", IssMarkerFactory.FileSection.SECTION_DEFINITION,
-                                IssFileProperty::getValueMarkerElementFromId, IssFileProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Files Section", IssMarkerFactory.FileSection.SECTION_DEFINITION,
+                                IssFileProperty::getPropertyValueMarkerElementFromId, IssFileProperty::getPropertyMarkerElementFromId);
                         break;
                     case Directory:
-                        parseLineForDefaultSection(psiBuilder, "Dirs Section", IssMarkerFactory.DirectorySection.SECTION_DEFINITION,
-                                IssDirectoryProperty::getValueMarkerElementFromId, IssDirectoryProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Dirs Section", IssMarkerFactory.DirectorySection.SECTION_DEFINITION,
+                                IssDirectoryProperty::getPropertyValueMarkerElementFromId, IssDirectoryProperty::getPropertyMarkerElementFromId);
                         break;
                     case Component:
-                        parseLineForDefaultSection(psiBuilder, "Component Section", IssMarkerFactory.ComponentSection.SECTION_DEFINITION,
-                                IssComponentProperty::getValueMarkerElementFromId, IssComponentProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Component Section", IssMarkerFactory.ComponentSection.SECTION_DEFINITION,
+                                IssComponentProperty::getPropertyValueMarkerElementFromId, IssComponentProperty::getPropertyMarkerElementFromId);
                         break;
                     case Type:
-                        parseLineForDefaultSection(psiBuilder, "Type Section", IssMarkerFactory.TypeSection.SECTION_DEFINITION,
-                                IssTypeProperty::getValueMarkerElementFromId, IssTypeProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Type Section", IssMarkerFactory.TypeSection.SECTION_DEFINITION,
+                                IssTypeProperty::getPropertyValueMarkerElementFromId, IssTypeProperty::getPropertyMarkerElementFromId);
                         break;
                     case Icon:
-                        parseLineForDefaultSection(psiBuilder, "Icon Section", IssMarkerFactory.IconSection.SECTION_DEFINITION,
-                                IssIconProperty::getValueMarkerElementFromId, IssIconProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Icon Section", IssMarkerFactory.IconSection.SECTION_DEFINITION,
+                                IssIconProperty::getPropertyValueMarkerElementFromId, IssIconProperty::getPropertyMarkerElementFromId);
                         break;
                     case InstallRun:
-                        parseLineForDefaultSection(psiBuilder, "Run Section", IssMarkerFactory.RunSection.SECTION_DEFINITION,
-                                IssRunProperty::getValueMarkerElementFromId, IssRunProperty::getItemMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Run Section", IssMarkerFactory.RunSection.SECTION_DEFINITION,
+                                IssRunProperty::getPropertyValueMarkerElementFromId, IssRunProperty::getPropertyMarkerElementFromId);
                         break;
                     default:
                         throw new RuntimeException();
@@ -107,32 +108,32 @@ final class IssParserSectionUtility {
         }
     }
 
-    private static void parseLineForDefaultSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
-                                                   Function<String, IElementType> definitionResolver) {
-        parseLineForDefaultSection(psiBuilder, sectionName, definitionMarkerElement, null, definitionResolver);
+    private static void parseLineForDefinableSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
+                                                     Function<String, IElementType> definitionResolver) {
+        parseLineForDefinableSection(psiBuilder, sectionName, definitionMarkerElement, null, definitionResolver);
     }
 
-    private static void parseLineForDefaultSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
-                                                   Function<String, IElementType> singleValueResolver, Function<String, IElementType> definitionResolver) {
+    private static void parseLineForDefinableSection(PsiBuilder psiBuilder, String sectionName, IElementType definitionMarkerElement,
+                                                     Function<String, IElementType> singlePropertyValueResolver, Function<String, IElementType> propertyResolver) {
         final PsiBuilder.Marker definitionMark = psiBuilder.mark();
         {
             while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.CRLF) {
-                final PsiBuilder.Marker itemMark = psiBuilder.mark();
+                final PsiBuilder.Marker propertyMark = psiBuilder.mark();
                 {
                     final String identifier = psiBuilder.getTokenText();
-                    final IElementType markerElement = definitionResolver.apply(identifier);
+                    final IElementType markerElement = propertyResolver.apply(identifier);
                     if (markerElement == null) {
-                        itemMark.drop();
+                        propertyMark.drop();
 
                         final PsiBuilder.Marker errorMark = psiBuilder.mark();
                         psiBuilder.advanceLexer();
-                        errorMark.error("Unknown " + sectionName + " Item");
+                        errorMark.error("Unknown " + sectionName + " Property");
 
                         continue;
                     }
 
                     if (psiBuilder.getTokenType() != IssTokenFactory.NAME) {
-                        itemMark.drop();
+                        propertyMark.drop();
                         psiBuilder.advanceLexer();
                         psiBuilder.error("Name expected");
                         continue;
@@ -143,14 +144,14 @@ final class IssParserSectionUtility {
                     itemNameMark.done(IssMarkerFactory.IDENTIFIER);
 
                     if (psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_COLON) {
-                        itemMark.drop();
+                        propertyMark.drop();
                         psiBuilder.advanceLexer();
                         psiBuilder.error("':' expected");
                         continue;
                     }
                     psiBuilder.advanceLexer();
 
-                    final PsiBuilder.Marker itemValueMark = psiBuilder.mark();
+                    final PsiBuilder.Marker propertyValueMark = psiBuilder.mark();
                     while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.CRLF && psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_SEMICOLON) {
                         if (psiBuilder.getTokenType() != IssTokenFactory.WORD &&
                                 psiBuilder.getTokenType() != IssTokenFactory.STRING &&
@@ -161,26 +162,26 @@ final class IssParserSectionUtility {
                             continue;
                         }
 
-                        final IElementType singleValueMarkerElement = singleValueResolver == null ?
-                                null : singleValueResolver.apply(identifier);
-                        if (singleValueMarkerElement != null) {
+                        final IElementType singlePropertyValueMarkerElement = singlePropertyValueResolver == null ?
+                                null : singlePropertyValueResolver.apply(identifier);
+                        if (singlePropertyValueMarkerElement != null) {
                             final PsiBuilder.Marker singleValueMark = psiBuilder.mark();
                             psiBuilder.advanceLexer();
-                            singleValueMark.done(singleValueMarkerElement);
+                            singleValueMark.done(singlePropertyValueMarkerElement);
                         } else {
                             psiBuilder.advanceLexer();
                         }
                     }
-                    itemValueMark.done(IssMarkerFactory.VALUE);
+                    propertyValueMark.done(IssMarkerFactory.VALUE);
 
                     if ((!psiBuilder.eof() && (psiBuilder.getTokenType() == IssTokenFactory.CRLF || psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_SEMICOLON)) || psiBuilder.eof()) {
                         if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_SEMICOLON) {
                             psiBuilder.advanceLexer();
                         }
-                        itemMark.done(markerElement);
+                        propertyMark.done(markerElement);
                     } else {
-                        itemValueMark.drop();
-                        itemMark.drop();
+                        propertyValueMark.drop();
+                        propertyMark.drop();
 
                         psiBuilder.advanceLexer();
                         psiBuilder.error("';' or line end expected");
@@ -195,17 +196,18 @@ final class IssParserSectionUtility {
         definitionMark.done(definitionMarkerElement);
     }
 
-    private static void parseLineForSetupSection(PsiBuilder psiBuilder) {
-        final PsiBuilder.Marker itemMark = psiBuilder.mark();
+    private static void parseLineForStandardSection(PsiBuilder psiBuilder, String sectionName, Function<String, IElementType> singlePropertyValueResolver,
+                                                    Function<String, IElementType> propertyResolver) {
+        final PsiBuilder.Marker propertyMark = psiBuilder.mark();
         {
             final String identifier = psiBuilder.getTokenText();
-            final IssSetupProperty setupItem = IssSetupProperty.fromId(identifier);
-            if (setupItem == null) {
-                itemMark.drop();
+            final IElementType markerElement = propertyResolver.apply(identifier);
+            if (markerElement == null) {
+                propertyMark.drop();
 
                 final PsiBuilder.Marker errorMark = psiBuilder.mark();
                 psiBuilder.advanceLexer();
-                errorMark.error("Unknown Setup Section Item");
+                errorMark.error("Unknown " + sectionName + " Property");
 
                 return;
             }
@@ -216,13 +218,14 @@ final class IssParserSectionUtility {
 
             if (psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_EQUAL) {
                 psiBuilder.advanceLexer();
-                itemMark.drop();
+                propertyMark.drop();
                 psiBuilder.error("'=' expected");
                 return;
             }
             psiBuilder.advanceLexer();
 
-            final PsiBuilder.Marker itemValueMark = psiBuilder.mark();
+            final PsiBuilder.Marker propertyValueMark = psiBuilder.mark();
+            final PsiBuilder.Marker propertyValueInnerMark = psiBuilder.mark();
             while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.CRLF) {
                 if (psiBuilder.getTokenType() == IssTokenFactory.WORD ||
                         psiBuilder.getTokenType() == IssTokenFactory.STRING ||
@@ -234,13 +237,20 @@ final class IssParserSectionUtility {
                     errorMark.error("Unknown element");
                 }
             }
-            itemValueMark.done(IssMarkerFactory.VALUE);
+            final IElementType singlePropertyValueMarkerElement = singlePropertyValueResolver == null ?
+                    null : singlePropertyValueResolver.apply(identifier);
+            if (singlePropertyValueMarkerElement != null) {
+                propertyValueInnerMark.done(singlePropertyValueMarkerElement);
+            } else {
+                propertyValueInnerMark.drop();
+            }
+            propertyValueMark.done(IssMarkerFactory.VALUE);
 
             if (!psiBuilder.eof() && psiBuilder.getTokenType() == IssTokenFactory.CRLF) {
                 psiBuilder.advanceLexer();
             }
 
-            itemMark.done(setupItem.getItemMarkerElement());
+            propertyMark.done(markerElement);
         }
     }
 

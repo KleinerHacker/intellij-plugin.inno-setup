@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssDirectorySectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;

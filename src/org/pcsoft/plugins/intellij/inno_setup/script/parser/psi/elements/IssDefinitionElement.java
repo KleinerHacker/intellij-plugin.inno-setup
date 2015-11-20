@@ -4,14 +4,14 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 
 import java.util.Collection;
 
 /**
  * Created by Christoph on 23.12.2014.
  */
-public abstract class IssDefinitionElement<P extends IssDefinableSectionElement, T extends IssDefinableSectionIdentifier> extends IssAbstractElement {
+public abstract class IssDefinitionElement<P extends IssDefinableSectionElement, T extends IssDefinablePropertyIdentifier> extends IssAbstractElement {
 
     private final Class<P> clazz;
 
@@ -21,8 +21,8 @@ public abstract class IssDefinitionElement<P extends IssDefinableSectionElement,
     }
 
     @Nullable
-    public Collection<IssPropertyElement> getDefinitionPropertyList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssPropertyElement.class);
+    public Collection<IssDefinablePropertyElement> getDefinitionPropertyList() {
+        return PsiTreeUtil.findChildrenOfType(this, IssDefinablePropertyElement.class);
     }
 
     @Nullable

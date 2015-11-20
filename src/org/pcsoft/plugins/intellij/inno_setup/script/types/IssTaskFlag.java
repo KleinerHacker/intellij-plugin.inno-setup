@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssTaskFlag implements IssFlag {
+public enum IssTaskFlag implements IssPropertyValue {
     CheckableAlone("CheckableAlone", "task.flag.checkable_alone"),
     CheckedOnce("CheckedOnce", "task.flag.checked_once"),
     DoNotInheritCheck("DontInheritCheck", "task.flag.dont_inherit_check"),
@@ -12,7 +12,7 @@ public enum IssTaskFlag implements IssFlag {
     Unchecked("Unchecked", "task.flag.unchecked");
 
     public static IssTaskFlag fromId(final String id) {
-        return IssFlag.findById(id, IssTaskFlag.class);
+        return IssPropertyValue.findById(id, IssTaskFlag.class);
     }
 
     private final String id, descriptionKey;

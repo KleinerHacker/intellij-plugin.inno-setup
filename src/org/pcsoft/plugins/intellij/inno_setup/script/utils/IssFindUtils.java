@@ -9,10 +9,10 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssProp
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinableSectionIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 
 import java.util.Collection;
 
@@ -22,7 +22,7 @@ import java.util.Collection;
 public final class IssFindUtils {
 
     @Nullable
-    public static <T extends IssPropertyElement> T findProperty(PsiElement element, IssDefinableSectionIdentifier propertyType, Class<T> propertyClass) {
+    public static <T extends IssPropertyElement> T findProperty(PsiElement element, IssPropertyIdentifier propertyType, Class<T> propertyClass) {
         final Collection<T> collection = PsiTreeUtil.findChildrenOfType(element, propertyClass);
         return collection.stream()
                 .filter(item -> item.getIdentifier() != null)

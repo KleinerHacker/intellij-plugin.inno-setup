@@ -38,7 +38,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     }
 
     private final String id, descriptionKey;
-    private final boolean deprecated;
+    private final boolean deprecated, required;
     private final IElementType markerElement;
     private final javax.swing.Icon icon;
 
@@ -46,9 +46,14 @@ public enum IssSectionType implements IssSectionIdentifier {
         this(id, markerElement, descriptionKey, icon, false);
     }
 
-    private IssSectionType(String id, IElementType markerElement, String descriptionKey, Icon icon, boolean deprecated) {
+    private IssSectionType(String id, IElementType markerElement, String descriptionKey, Icon icon, boolean required) {
+        this(id, markerElement, descriptionKey, icon, required, false);
+    }
+
+    private IssSectionType(String id, IElementType markerElement, String descriptionKey, Icon icon, boolean required, boolean deprecated) {
         this.id = id;
         this.deprecated = deprecated;
+        this.required = required;
         this.descriptionKey = descriptionKey;
         this.markerElement = markerElement;
         this.icon = icon;
@@ -73,12 +78,19 @@ public enum IssSectionType implements IssSectionIdentifier {
 
     @NotNull
     @Override
-    public IElementType getItemMarkerElement() {
+    public IElementType getPropertyMarkerElement() {
         return markerElement;
+    }
+
+    @Override
+    public boolean isRequired() {
+        return required;
     }
 
     @Nullable
     public javax.swing.Icon getIcon() {
         return icon;
     }
+
+
 }
