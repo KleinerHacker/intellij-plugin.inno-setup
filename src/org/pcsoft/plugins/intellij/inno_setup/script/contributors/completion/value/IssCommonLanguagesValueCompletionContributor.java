@@ -1,10 +1,12 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
+import com.intellij.openapi.util.IconLoader;
 import org.apache.commons.lang.LocaleUtils;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyLanguagesElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -40,5 +42,16 @@ public class IssCommonLanguagesValueCompletionContributor extends IssAbstractVal
                 .collect(Collectors.toList());
 
         return list.toArray(new IssPropertyValue[list.size()]);
+    }
+
+    @Override
+    protected Icon getIcon(IssPropertyValue propertyValue) {
+        final Locale locale = Locale.forLanguageTag(propertyValue.getId());
+
+        Icon icon = IconLoader.findIcon("/icons/lan/" + locale.getCountry().toLowerCase() + ".png");
+        if (icon == null) {
+            icon = IconLoader.findIcon("/icons/lan/" + locale.getLanguage().toLowerCase() + ".png");
+        }
+        return icon;
     }
 }

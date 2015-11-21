@@ -25,7 +25,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
                         for (final IssPropertyValue item : getFlagList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
-                                    .withIcon(getIcon()).withStrikeoutness(item.isDeprecated())
+                                    .withIcon(getIcon(item)).withStrikeoutness(item.isDeprecated())
                                     .withInsertHandler((insertionContext, lookupElement) -> {
                                         insertionContext.getDocument().insertString(insertionContext.getTailOffset(), " ");
                                         insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
@@ -38,7 +38,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
     @NotNull
     protected abstract IssPropertyValue[] getFlagList();
 
-    protected Icon getIcon() {
+    protected Icon getIcon(IssPropertyValue propertyValue) {
         return null;
     }
 }
