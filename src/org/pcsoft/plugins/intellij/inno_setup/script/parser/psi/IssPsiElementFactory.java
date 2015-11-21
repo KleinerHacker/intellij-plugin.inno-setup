@@ -386,6 +386,18 @@ public final class IssPsiElementFactory {
             return new IssPropertyComponentReferenceElement(node, IssCommonProperty.ComponentReference);
         } else if (IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS_VALUE.equals(node.getElementType())) {
             return new IssPropertyComponentReferenceValueElement(node);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES.equals(node.getElementType())) {
+            return new IssPropertyLanguagesElement(node, IssCommonProperty.Languages);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES_VALUE.equals(node.getElementType())) {
+            return new IssPropertyLanguagesValueElement(node);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_MINVERSION.equals(node.getElementType())) {
+            return new IssPropertyWindowsVersionElement(node, IssCommonProperty.MinimalVersion);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_MINVERSION_VALUE.equals(node.getElementType())) {
+            return new IssPropertyWindowsVersionValueElement(node);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_ONLYBELOWVERSION.equals(node.getElementType())) {
+            return new IssPropertyWindowsVersionElement(node, IssCommonProperty.OnlyBelowVersion);
+        } else if (IssMarkerFactory.CommonSection.PROPERTY_ONLYBELOWVERSION_VALUE.equals(node.getElementType())) {
+            return new IssPropertyWindowsVersionValueElement(node);
         }
 
         return null;

@@ -26,6 +26,12 @@ public final class IssMarkerFactory {
         private static final String KEY = "COMMON_SECTION";
         private static final String KEY_ITEM = KEY + "_ITEM";
 
+        public static final IElementType PROPERTY_LANGUAGES = new IElementType(KEY_ITEM + "_LANGUAGES", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGES_VALUE = new IElementType(KEY_ITEM + "_LANGUAGES_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_MINVERSION = new IElementType(KEY_ITEM + "_MINVERSION", LANGUAGE);
+        public static final IElementType PROPERTY_MINVERSION_VALUE = new IElementType(KEY_ITEM + "_MINVERSION_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_ONLYBELOWVERSION = new IElementType(KEY_ITEM + "_ONLYBELOWVERSION", LANGUAGE);
+        public static final IElementType PROPERTY_ONLYBELOWVERSION_VALUE = new IElementType(KEY_ITEM + "_ONLYBELOWVERSION_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_TASKS = new IElementType(KEY_ITEM + "_TASKS", LANGUAGE);
         public static final IElementType PROPERTY_TASKS_VALUE = new IElementType(KEY_ITEM + "_TASKS_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);

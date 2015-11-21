@@ -4,7 +4,7 @@ Compression = lzma
 Compression = zip
 
 [Tasks]
-Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce
+Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce; Languages: de bla en de; MinVersion: 3.5
 Name: doubleTask; Description: "";
 Name: doubleTask; Description: "Hallo";
 Flags: CheckableAlone

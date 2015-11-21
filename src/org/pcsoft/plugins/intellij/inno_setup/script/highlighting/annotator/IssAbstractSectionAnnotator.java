@@ -156,10 +156,23 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
                         annotationHolder.createErrorAnnotation(propertyElement.getPropertyValue(), "Direct value expected");
                     }
                     break;
+                case DirectSingleWithNumber:
+                    checkForSingleValue(propertyElement, annotationHolder);
+                    if (propertyElement.getPropertyValue().getFirstChild().getNode().getElementType() == IssTokenFactory.STRING) {
+                        annotationHolder.createErrorAnnotation(propertyElement.getPropertyValue(), "Direct value expected");
+                    }
+                    break;
                 case DirectMultiple:
-                    for (final IssPropertyValueElement valueElement : (Collection<IssPropertyValueElement>)propertyElement.getPropertyValueList()) {
+                    for (final IssPropertyValueElement valueElement : propertyElement.getPropertyValueList()) {
                         if (valueElement.getFirstChild().getNode().getElementType() == IssTokenFactory.STRING ||
                                 NumberUtils.isNumber(valueElement.getText())) {
+                            annotationHolder.createErrorAnnotation(valueElement, "Direct value expected");
+                        }
+                    }
+                    break;
+                case DirectMultipleWithNumber:
+                    for (final IssPropertyValueElement valueElement : propertyElement.getPropertyValueList()) {
+                        if (valueElement.getFirstChild().getNode().getElementType() == IssTokenFactory.STRING) {
                             annotationHolder.createErrorAnnotation(valueElement, "Direct value expected");
                         }
                     }

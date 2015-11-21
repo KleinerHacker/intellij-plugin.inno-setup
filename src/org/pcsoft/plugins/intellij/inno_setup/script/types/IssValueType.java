@@ -6,7 +6,9 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types;
 public enum IssValueType {
     Unknown,
     DirectSingle,
+    DirectSingleWithNumber,
     DirectMultiple,
+    DirectMultipleWithNumber,
     String,
     Integer,
     Double

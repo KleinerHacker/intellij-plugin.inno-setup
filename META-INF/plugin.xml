@@ -50,9 +50,11 @@
 
         <!-- Annotators -->
         <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssExtendedHighlightingAnnotator"/>
+        <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssExtendedHighlightingAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionCommonAnnotator"/>
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionFileAnnotator"/>
         <annotator language="iss"
@@ -76,6 +78,8 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssCommonLanguagesValueCompletionContributor"/>
         <!-- Setup -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>

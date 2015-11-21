@@ -9,12 +9,12 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
  * Created by Christoph on 27.12.2014.
  */
 public enum IssCommonProperty implements IssDefinablePropertyIdentifier {
-    Languages("Languages", IssMarkerFactory.PROPERTY_UNKNOWN, null,
+    Languages("Languages", IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES, IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES_VALUE,
             "common.property.languages", IssValueType.DirectMultiple),
-    MinimalVersion("MinVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null,
-            "common.property.min_version", IssValueType.DirectSingle),
-    OnlyBelowVersion("OnlyBelowVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null,
-            "common.property.only_below_version", IssValueType.DirectSingle),
+    MinimalVersion("MinVersion", IssMarkerFactory.CommonSection.PROPERTY_MINVERSION, IssMarkerFactory.CommonSection.PROPERTY_MINVERSION_VALUE,
+            "common.property.min_version", IssValueType.DirectSingleWithNumber),
+    OnlyBelowVersion("OnlyBelowVersion", IssMarkerFactory.CommonSection.PROPERTY_ONLYBELOWVERSION, IssMarkerFactory.CommonSection.PROPERTY_ONLYBELOWVERSION_VALUE,
+            "common.property.only_below_version", IssValueType.DirectSingleWithNumber),
     ComponentReference("Components", IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS, IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS_VALUE,
             "common.property.components", IssValueType.DirectMultiple),
     TaskReference("Tasks", IssMarkerFactory.CommonSection.PROPERTY_TASKS, IssMarkerFactory.CommonSection.PROPERTY_TASKS_VALUE,
