@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property;
 
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssInstallRunSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssInstallRunProperty;
@@ -12,6 +13,7 @@ public class IssInstallRunPropertyCompletionContributor extends IssAbstractPrope
         super(IssInstallRunSectionElement.class);
     }
 
+    @NotNull
     @Override
     protected IssDefinablePropertyIdentifier[] getSectionIdentifierList() {
         return IssInstallRunProperty.values();

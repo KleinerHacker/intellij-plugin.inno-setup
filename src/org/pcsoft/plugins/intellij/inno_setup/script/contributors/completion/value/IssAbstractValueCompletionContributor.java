@@ -5,6 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
@@ -34,6 +35,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
                 });
     }
 
+    @NotNull
     protected abstract IssPropertyValue[] getFlagList();
 
     protected Icon getIcon() {

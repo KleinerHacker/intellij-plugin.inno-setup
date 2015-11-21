@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyInstallRunFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
@@ -15,6 +16,7 @@ public class IssInstallRunFlagValueCompletionContributor extends IssAbstractValu
         super(IssPropertyInstallRunFlagsElement.class);
     }
 
+    @NotNull
     @Override
     protected IssPropertyValue[] getFlagList() {
         return IssInstallRunFlag.values();

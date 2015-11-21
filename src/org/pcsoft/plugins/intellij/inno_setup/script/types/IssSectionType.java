@@ -17,7 +17,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     Component("Components", IssMarkerFactory.ComponentSection.SECTION, "section.components", IssIcons.IC_SECT_COMPONENT),
     Directory("Dirs", IssMarkerFactory.DirectorySection.SECTION, "section.dirs", IssIcons.IC_SECT_DIRECTORY),
     Icon("Icons", IssMarkerFactory.IconSection.SECTION, "section.icons", IssIcons.IC_SECT_ICON),
-    Ini("INI", null, "section.ini", null),
+    Ini("INI", IssMarkerFactory.INISection.SECTION, "section.ini", IssIcons.IC_SECT_INI),
     InstallDelete("InstallDelete", null, "section.install_delete", null),
     Language("Languages", null, "section.languages", null),
     Message("Messages", null, "section.messages", null),

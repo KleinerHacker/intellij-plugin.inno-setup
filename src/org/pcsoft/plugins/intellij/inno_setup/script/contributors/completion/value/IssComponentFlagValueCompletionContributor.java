@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
@@ -15,6 +16,7 @@ public class IssComponentFlagValueCompletionContributor extends IssAbstractValue
         super(IssPropertyComponentFlagsElement.class);
     }
 
+    @NotNull
     @Override
     protected IssPropertyValue[] getFlagList() {
         return IssComponentFlag.values();

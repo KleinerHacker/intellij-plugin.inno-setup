@@ -99,6 +99,10 @@ final class IssParserSectionUtility {
                         parseLineForDefinableSection(psiBuilder, "UninstallRun Section", IssMarkerFactory.UninstallRunSection.SECTION_DEFINITION,
                                 IssUninstallRunProperty::getPropertyValueMarkerElementFromId, IssUninstallRunProperty::getPropertyMarkerElementFromId);
                         break;
+                    case Ini:
+                        parseLineForDefinableSection(psiBuilder, "INI Section", IssMarkerFactory.INISection.SECTION_DEFINITION,
+                                IssINIProperty::getPropertyValueMarkerElementFromId, IssINIProperty::getPropertyMarkerElementFromId);
+                        break;
                     default:
                         throw new RuntimeException();
                 }

@@ -57,8 +57,8 @@ public class IssSectionInstallRunDocumentationProvider extends AbstractDocumenta
                 return RESOURCE_BUNDLE.getString(runProperty.getDescriptionKey());
             }
         } else if (element instanceof IssPropertyInstallRunFlagsValueElement) {
-            final IssPropertyInstallRunFlagsValueElement runDefinitionFlagsValueElement = (IssPropertyInstallRunFlagsValueElement) element;
-            final IssInstallRunFlag runFlag = IssInstallRunFlag.fromId(runDefinitionFlagsValueElement.getName());
+            final IssPropertyInstallRunFlagsValueElement installRunDefinitionFlagsValueElement = (IssPropertyInstallRunFlagsValueElement) element;
+            final IssInstallRunFlag runFlag = IssInstallRunFlag.fromId(installRunDefinitionFlagsValueElement.getName());
             if (runFlag == null)
                 return "Unknown flag";
 

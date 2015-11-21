@@ -52,16 +52,6 @@ public class IssSectionIconAnnotator extends IssAbstractSectionAnnotator<IssIcon
     @Override
     protected void detectWarnings(@NotNull IssIconDefinitionElement iconDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(iconDefinitionElement, annotationHolder);
-        if (iconDefinitionElement.getParentSection() != null && iconDefinitionElement.getName() != null) {
-            final long count = iconDefinitionElement.getParentSection().getDefinitionList().stream()
-                    .filter(item -> item != iconDefinitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equalsIgnoreCase(iconDefinitionElement.getName()))
-                    .count();
-            if (count > 0) {
-                annotationHolder.createWarningAnnotation(iconDefinitionElement, "Icon with name '" + iconDefinitionElement.getName() + "' already defined");
-            }
-        }
         checkForDoubleValues(iconDefinitionElement, annotationHolder);
     }
 

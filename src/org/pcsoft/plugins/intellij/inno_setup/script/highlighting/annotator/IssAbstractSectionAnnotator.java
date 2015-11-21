@@ -91,9 +91,9 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
                     .count();
             if (count > 0) {
                 if (doubletCheckType == DoubletCheckType.Error) {
-                    annotationHolder.createErrorAnnotation(definitionElement, "Component with name '" + definitionElement.getName() + "' already defined");
+                    annotationHolder.createErrorAnnotation(definitionElement, "Definition with name '" + definitionElement.getName() + "' already defined");
                 } else if (doubletCheckType == DoubletCheckType.Warning) {
-                    annotationHolder.createWarningAnnotation(definitionElement, "Component with name '" + definitionElement.getName() + "' already defined");
+                    annotationHolder.createWarningAnnotation(definitionElement, "Definition with name '" + definitionElement.getName() + "' already defined");
                 } else
                     throw new RuntimeException();
             }

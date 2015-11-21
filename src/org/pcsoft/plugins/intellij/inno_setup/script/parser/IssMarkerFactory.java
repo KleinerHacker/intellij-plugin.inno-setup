@@ -215,6 +215,24 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
 
+    public static final class INISection {
+        private static final String KEY = "INI_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME = new IElementType(KEY_ITEM + "_FILENAME", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME_VALUE = new IElementType(KEY_ITEM + "_FILENAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_SECTION = new IElementType(KEY_ITEM + "_SECTION", LANGUAGE);
+        public static final IElementType PROPERTY_SECTION_VALUE = new IElementType(KEY_ITEM + "_SECTION_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_KEY = new IElementType(KEY_ITEM + "_KEY", LANGUAGE);
+        public static final IElementType PROPERTY_KEY_VALUE = new IElementType(KEY_ITEM + "_KEY_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_STRING = new IElementType(KEY_ITEM + "_STRING", LANGUAGE);
+        public static final IElementType PROPERTY_STRING_VALUE = new IElementType(KEY_ITEM + "_STRING_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
     private IssMarkerFactory() {
     }
 }

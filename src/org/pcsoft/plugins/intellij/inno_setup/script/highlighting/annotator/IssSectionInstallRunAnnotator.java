@@ -23,24 +23,24 @@ public class IssSectionInstallRunAnnotator extends IssAbstractSectionAnnotator<I
     }
 
     private void checkForKnownValues(@NotNull IssInstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunFlags() != null) {
-            runDefinitionElement.getRunFlags().getPropertyValueList().stream()
+        if (runDefinitionElement.getInstallRunFlags() != null) {
+            runDefinitionElement.getInstallRunFlags().getPropertyValueList().stream()
                     .filter(item -> IssInstallRunFlag.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
         }
     }
 
     private void checkForReferences(@NotNull IssInstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunTaskReference() != null) {
-            runDefinitionElement.getRunTaskReference().getPropertyValueList().stream()
+        if (runDefinitionElement.getInstallRunTaskReference() != null) {
+            runDefinitionElement.getInstallRunTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
                         errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
         }
-        if (runDefinitionElement.getRunComponentReference() != null) {
-            runDefinitionElement.getRunComponentReference().getPropertyValueList().stream()
+        if (runDefinitionElement.getInstallRunComponentReference() != null) {
+            runDefinitionElement.getInstallRunComponentReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -53,22 +53,12 @@ public class IssSectionInstallRunAnnotator extends IssAbstractSectionAnnotator<I
     protected void detectWarnings(@NotNull IssInstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(runDefinitionElement, annotationHolder);
         checkForDoubleValues(runDefinitionElement, annotationHolder);
-        if (runDefinitionElement.getParentSection() != null && runDefinitionElement.getName() != null) {
-            final long count = runDefinitionElement.getParentSection().getDefinitionList().stream()
-                    .filter(item -> item != runDefinitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equalsIgnoreCase(runDefinitionElement.getName()))
-                    .count();
-            if (count > 0) {
-                annotationHolder.createWarningAnnotation(runDefinitionElement, "Run with destination '" + runDefinitionElement.getName() + "' already defined");
-            }
-        }
     }
 
     private void checkForDoubleValues(@NotNull IssInstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunFlags() != null) {
+        if (runDefinitionElement.getInstallRunFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunFlags().getPropertyValueList(),
+                    runDefinitionElement.getInstallRunFlags().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
@@ -78,18 +68,18 @@ public class IssSectionInstallRunAnnotator extends IssAbstractSectionAnnotator<I
     }
 
     private void checkForDoubleReferences(@NotNull IssInstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunTaskReference() != null) {
+        if (runDefinitionElement.getInstallRunTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunTaskReference().getPropertyValueList(),
+                    runDefinitionElement.getInstallRunTaskReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
                     }
             );
         }
-        if (runDefinitionElement.getRunComponentReference() != null) {
+        if (runDefinitionElement.getInstallRunComponentReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunComponentReference().getPropertyValueList(),
+                    runDefinitionElement.getInstallRunComponentReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");

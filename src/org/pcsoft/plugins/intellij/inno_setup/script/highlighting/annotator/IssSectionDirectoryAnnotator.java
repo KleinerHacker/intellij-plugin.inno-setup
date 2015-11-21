@@ -65,16 +65,6 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
     @Override
     protected void detectWarnings(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(directoryDefinitionElement, annotationHolder);
-        if (directoryDefinitionElement.getParentSection() != null && directoryDefinitionElement.getName() != null) {
-            final long count = directoryDefinitionElement.getParentSection().getDefinitionList().stream()
-                    .filter(item -> item != directoryDefinitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equalsIgnoreCase(directoryDefinitionElement.getName()))
-                    .count();
-            if (count > 0) {
-                annotationHolder.createWarningAnnotation(directoryDefinitionElement, "Directory with source '" + directoryDefinitionElement.getName() + "' already defined");
-            }
-        }
         checkForDoubleValues(directoryDefinitionElement, annotationHolder);
     }
 

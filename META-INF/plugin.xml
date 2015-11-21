@@ -71,6 +71,8 @@
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionInstallRunAnnotator"/>
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionUninstallRunAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionINIAnnotator"/>
 
         <!-- Contributors -->
         <!-- Completion -->
@@ -135,6 +137,11 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssUninstallRunPropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssUninstallRunFlagValueCompletionContributor"/>
+        <!-- INI -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssINIPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssINIFlagValueCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor
@@ -180,6 +187,8 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionInstallRunDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionUninstallRunDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionINIDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionSetupDocumentationProvider"/>
         <documentationProvider

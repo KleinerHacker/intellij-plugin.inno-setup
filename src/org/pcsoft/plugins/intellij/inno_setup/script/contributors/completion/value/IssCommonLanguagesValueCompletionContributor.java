@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
 import org.apache.commons.lang.LocaleUtils;
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyLanguagesElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 
@@ -16,6 +17,7 @@ public class IssCommonLanguagesValueCompletionContributor extends IssAbstractVal
         super(IssPropertyLanguagesElement.class);
     }
 
+    @NotNull
     @Override
     protected IssPropertyValue[] getFlagList() {
         final List<IssPropertyValue> list = ((List<Locale>)LocaleUtils.availableLocaleList()).stream()

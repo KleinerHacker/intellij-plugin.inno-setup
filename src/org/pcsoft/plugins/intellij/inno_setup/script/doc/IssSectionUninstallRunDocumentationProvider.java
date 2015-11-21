@@ -57,8 +57,8 @@ public class IssSectionUninstallRunDocumentationProvider extends AbstractDocumen
                 return RESOURCE_BUNDLE.getString(runProperty.getDescriptionKey());
             }
         } else if (element instanceof IssPropertyUninstallRunFlagsValueElement) {
-            final IssPropertyUninstallRunFlagsValueElement runDefinitionFlagsValueElement = (IssPropertyUninstallRunFlagsValueElement) element;
-            final IssUninstallRunFlag runFlag = IssUninstallRunFlag.fromId(runDefinitionFlagsValueElement.getName());
+            final IssPropertyUninstallRunFlagsValueElement uninstallRunDefinitionFlagsValueElement = (IssPropertyUninstallRunFlagsValueElement) element;
+            final IssUninstallRunFlag runFlag = IssUninstallRunFlag.fromId(uninstallRunDefinitionFlagsValueElement.getName());
             if (runFlag == null)
                 return "Unknown flag";
 

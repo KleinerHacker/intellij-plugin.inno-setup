@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyCompressionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCompressionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
@@ -12,6 +13,7 @@ public class IssTypeCompressionValueCompletionContributor extends IssAbstractVal
         super(IssPropertyCompressionElement.class);
     }
 
+    @NotNull
     @Override
     protected IssPropertyValue[] getFlagList() {
         return IssCompressionType.values();

@@ -23,24 +23,24 @@ public class IssSectionUninstallRunAnnotator extends IssAbstractSectionAnnotator
     }
 
     private void checkForKnownValues(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunFlags() != null) {
-            runDefinitionElement.getRunFlags().getPropertyValueList().stream()
+        if (runDefinitionElement.getUninstallRunFlags() != null) {
+            runDefinitionElement.getUninstallRunFlags().getPropertyValueList().stream()
                     .filter(item -> IssUninstallRunFlag.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
         }
     }
 
     private void checkForReferences(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunTaskReference() != null) {
-            runDefinitionElement.getRunTaskReference().getPropertyValueList().stream()
+        if (runDefinitionElement.getUninstallRunTaskReference() != null) {
+            runDefinitionElement.getUninstallRunTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
                         errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                     });
         }
-        if (runDefinitionElement.getRunComponentReference() != null) {
-            runDefinitionElement.getRunComponentReference().getPropertyValueList().stream()
+        if (runDefinitionElement.getUninstallRunComponentReference() != null) {
+            runDefinitionElement.getUninstallRunComponentReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
                     .forEach(item -> {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
@@ -53,22 +53,12 @@ public class IssSectionUninstallRunAnnotator extends IssAbstractSectionAnnotator
     protected void detectWarnings(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(runDefinitionElement, annotationHolder);
         checkForDoubleValues(runDefinitionElement, annotationHolder);
-        if (runDefinitionElement.getParentSection() != null && runDefinitionElement.getName() != null) {
-            final long count = runDefinitionElement.getParentSection().getDefinitionList().stream()
-                    .filter(item -> item != runDefinitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equalsIgnoreCase(runDefinitionElement.getName()))
-                    .count();
-            if (count > 0) {
-                annotationHolder.createWarningAnnotation(runDefinitionElement, "Uninstall Run with destination '" + runDefinitionElement.getName() + "' already defined");
-            }
-        }
     }
 
     private void checkForDoubleValues(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunFlags() != null) {
+        if (runDefinitionElement.getUninstallRunFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunFlags().getPropertyValueList(),
+                    runDefinitionElement.getUninstallRunFlags().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
@@ -78,18 +68,18 @@ public class IssSectionUninstallRunAnnotator extends IssAbstractSectionAnnotator
     }
 
     private void checkForDoubleReferences(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (runDefinitionElement.getRunTaskReference() != null) {
+        if (runDefinitionElement.getUninstallRunTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunTaskReference().getPropertyValueList(),
+                    runDefinitionElement.getUninstallRunTaskReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
                     }
             );
         }
-        if (runDefinitionElement.getRunComponentReference() != null) {
+        if (runDefinitionElement.getUninstallRunComponentReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
-                    runDefinitionElement.getRunComponentReference().getPropertyValueList(),
+                    runDefinitionElement.getUninstallRunComponentReference().getPropertyValueList(),
                     element -> element.getName().toLowerCase(),
                     (element, key) -> {
                         annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");

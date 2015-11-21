@@ -57,51 +57,51 @@ public class IssInstallRunDefinitionElement extends IssDefinitionElement<IssInst
     @Nullable
     @Override
     public String getName() {
-        return getRunFilename() == null ? null : getRunFilename().getPropertyValue() == null ? null : getRunFilename().getPropertyValue().getString();
+        return getInstallRunFilename() == null ? null : getInstallRunFilename().getPropertyValue() == null ? null : getInstallRunFilename().getPropertyValue().getString();
     }
 
     @Nullable
-    public IssPropertyStringElement getRunFilename() {
+    public IssPropertyStringElement getInstallRunFilename() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Filename, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyStringElement getRunDescription() {
+    public IssPropertyStringElement getInstallRunDescription() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Description, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyStringElement getRunParameters() {
+    public IssPropertyStringElement getInstallRunParameters() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Parameters, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyStringElement getRunWorkingDirectory() {
+    public IssPropertyStringElement getInstallRunWorkingDirectory() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.WorkingDirectory, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyStringElement getRunStatusMessage() {
+    public IssPropertyStringElement getInstallRunStatusMessage() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Filename, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyStringElement getRunVerb() {
+    public IssPropertyStringElement getInstallRunVerb() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Verb, IssPropertyStringElement.class);
     }
 
     @Nullable
-    public IssPropertyInstallRunFlagsElement getRunFlags() {
+    public IssPropertyInstallRunFlagsElement getInstallRunFlags() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.Flags, IssPropertyInstallRunFlagsElement.class);
     }
 
     @Nullable
-    public IssPropertyComponentReferenceElement getRunComponentReference() {
+    public IssPropertyComponentReferenceElement getInstallRunComponentReference() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.ComponentReference, IssPropertyComponentReferenceElement.class);
     }
 
     @Nullable
-    public IssPropertyTaskReferenceElement getRunTaskReference() {
+    public IssPropertyTaskReferenceElement getInstallRunTaskReference() {
         return IssFindUtils.findProperty(this, IssInstallRunProperty.TaskReference, IssPropertyTaskReferenceElement.class);
     }
 }

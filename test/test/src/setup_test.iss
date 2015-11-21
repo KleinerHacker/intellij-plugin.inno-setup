@@ -52,3 +52,11 @@ Filename: "testUninstallRun"; Flags: SkipIfDoesntExist 64Bit SkipIfDoesntExist b
 Filename: "doubleUninstallRun";
 Filename: "doubleUninstallRun";
 Flags: 64Bit
+
+[INI]
+Filename: "testINI"; Section: "test"; Flags: UninsDeleteEntry bla UninsDeleteEntry; Components: testComponent bla testComponent; Tasks: testTask bla testTask
+Filename: "doubleINI"; Section: "single";
+Filename: "doubleINI"; Section: "single"; Key: "abc";
+Filename: "doubleINI"; Section: "double";
+Filename: "doubleINI"; Section: "double";
+Flags: UninsDeleteSection

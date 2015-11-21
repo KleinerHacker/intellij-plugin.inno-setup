@@ -97,16 +97,6 @@ public class IssSectionFileAnnotator extends IssAbstractSectionAnnotator<IssFile
     @Override
     protected void detectWarnings(@NotNull IssFileDefinitionElement fileDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(fileDefinitionElement, annotationHolder);
-        if (fileDefinitionElement.getParentSection() != null && fileDefinitionElement.getName() != null) {
-            final long count = fileDefinitionElement.getParentSection().getDefinitionList().stream()
-                    .filter(item -> item != fileDefinitionElement)
-                    .filter(item -> item.getName() != null)
-                    .filter(item -> item.getName().equalsIgnoreCase(fileDefinitionElement.getName()))
-                    .count();
-            if (count > 0) {
-                annotationHolder.createWarningAnnotation(fileDefinitionElement, "File with source '" + fileDefinitionElement.getName() + "' already defined");
-            }
-        }
         checkForDoubleValues(fileDefinitionElement, annotationHolder);
         if (fileDefinitionElement.getFileExternalSize() != null && fileDefinitionElement.getFileExternalSize().getPropertyValue() != null &&
                 fileDefinitionElement.getFileExternalSize().getPropertyValue().getNumber() != null) {

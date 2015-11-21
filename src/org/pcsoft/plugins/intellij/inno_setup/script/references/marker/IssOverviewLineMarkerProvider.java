@@ -100,6 +100,14 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setTooltipText("UNINSTALLRUN Section")
                                 .createLineMarkerInfo(psiElement)
                 );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssINISectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_INI)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("INI Section")
+                                .createLineMarkerInfo(psiElement)
+                );
             }
         }
     }

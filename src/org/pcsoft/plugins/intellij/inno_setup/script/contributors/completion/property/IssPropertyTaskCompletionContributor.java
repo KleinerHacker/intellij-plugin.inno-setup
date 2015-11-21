@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property;
 
+import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTaskSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
@@ -12,6 +13,7 @@ public class IssPropertyTaskCompletionContributor extends IssAbstractPropertyCom
         super(IssTaskSectionElement.class);
     }
 
+    @NotNull
     @Override
     protected IssDefinablePropertyIdentifier[] getSectionIdentifierList() {
         return IssTaskProperty.values();
