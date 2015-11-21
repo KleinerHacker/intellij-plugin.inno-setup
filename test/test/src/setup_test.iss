@@ -1,7 +1,7 @@
 [SETUP]
-AppName=Test
-Compression=lzma
-Compression=zip
+AppName = Test
+Compression = lzma
+Compression = zip
 
 [Tasks]
 Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce

@@ -76,14 +76,16 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
+        <!-- Setup -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssTypeCompressionValueCompletionContributor"/>
         <!-- Task -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssPropertyTaskCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssTaskFlagValueCompletionContributor"/>
-        <!-- Setup -->
-        <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>
         <!-- Component -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssComponentPropertyCompletionContributor"/>
@@ -174,6 +176,8 @@
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionInstallRunDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionUninstallRunDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionSetupDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionReferenceDocumentationProvider"/>
         <documentationProvider

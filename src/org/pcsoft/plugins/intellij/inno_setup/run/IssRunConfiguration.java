@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
 
+import java.io.File;
+
 /**
  * Created by Christoph on 14.11.2015.
  */
@@ -38,6 +40,8 @@ public class IssRunConfiguration extends RunConfigurationBase {
     public void checkConfiguration() throws RuntimeConfigurationException {
         if (scriptFile == null || scriptFile.isEmpty())
             throw new RuntimeConfigurationException("No script file is set!");
+        if (!new File(scriptFile).exists())
+            throw new RuntimeConfigurationException("Given script file not exists!");
     }
 
     @Nullable

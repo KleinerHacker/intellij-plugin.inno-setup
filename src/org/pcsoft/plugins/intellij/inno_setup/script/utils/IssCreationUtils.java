@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.utils;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceValueElement;
@@ -31,6 +32,11 @@ public final class IssCreationUtils {
     public static IssPropertyNameValueElement createNameValueElement(final Project project, final String name) {
         final IssFile issFile = IssUtils.createFile(project, "[COMPONENTS]\nName: " + name);
         return PsiTreeUtil.findChildOfType(issFile, IssPropertyNameValueElement.class);
+    }
+
+    public static <T extends PsiElement>T createPropertyFor(final Project project, final String section, final String property, final Class<T> clazz) {
+        final IssFile issFile = IssUtils.createFile(project, "[" + section + "]\n" + property);
+        return PsiTreeUtil.findChildOfType(issFile, clazz);
     }
 
     private IssCreationUtils() {

@@ -10,6 +10,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.propert
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyUnknownElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyCompressionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyCompressionValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.*;
@@ -366,6 +368,10 @@ public final class IssPsiElementFactory {
             return new IssPropertyDefaultElement(node, IssSetupProperty.AppVersion);
         } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION_VALUE.equals(node.getElementType())) {
             return new IssPropertyDefaultValueElement(node);
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION.equals(node.getElementType())) {
+            return new IssPropertyCompressionElement(node, IssSetupProperty.Compression);
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION_VALUE.equals(node.getElementType())) {
+            return new IssPropertyCompressionValueElement(node);
         }
 
         return null;
