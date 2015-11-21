@@ -21,11 +21,19 @@ public class IssPropertyIOPermissionsValueElement extends IssPropertyValueElemen
 
     @NotNull
     public String getUserOrGroupIdentifier() {
-        return getText().substring(0, getText().indexOf("-"));
+        try {
+            return getText().substring(0, getText().indexOf("-"));
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     @NotNull
     public String getPermission() {
-        return getText().substring(getText().indexOf("-") + 1);
+        try {
+            return getText().substring(getText().indexOf("-") + 1);
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

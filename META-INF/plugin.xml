@@ -66,7 +66,9 @@
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionIconAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionRunAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionInstallRunAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionUninstallRunAnnotator"/>
 
         <!-- Contributors -->
         <!-- Completion -->
@@ -117,11 +119,16 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssIconPropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssIconFlagValueCompletionContributor"/>
-        <!-- Run -->
+        <!-- Install Run -->
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssRunPropertyCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssInstallRunPropertyCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssRunFlagValueCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssInstallRunFlagValueCompletionContributor"/>
+        <!-- Uninstall Run -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssUninstallRunPropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssUninstallRunFlagValueCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor
@@ -164,7 +171,9 @@
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionIconDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionRunDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionInstallRunDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionUninstallRunDocumentationProvider"/>
         <documentationProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionReferenceDocumentationProvider"/>
         <documentationProvider

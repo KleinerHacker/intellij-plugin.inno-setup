@@ -4,12 +4,12 @@ import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssRunDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyFileFlagsValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyRunFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssUninstallRunDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRunFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRunProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyFileFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyUninstallRunFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 
 import java.util.Arrays;
@@ -20,10 +20,10 @@ import java.util.ResourceBundle;
  * Created by Christoph on 28.12.2014.
  * <a href="Bla" target="_self">Bla</link>
  */
-public class IssSectionRunDocumentationProvider extends AbstractDocumentationProvider {
+public class IssSectionUninstallRunDocumentationProvider extends AbstractDocumentationProvider {
 
     private static final ResourceBundle RESOURCE_BUNDLE = new MultiResourceBundle(
-            ResourceBundle.getBundle("/messages/documentation_run"), ResourceBundle.getBundle("/messages/documentation_common")
+            ResourceBundle.getBundle("/messages/documentation_uninstall_run"), ResourceBundle.getBundle("/messages/documentation_common")
     );
 
     @Override
@@ -38,7 +38,7 @@ public class IssSectionRunDocumentationProvider extends AbstractDocumentationPro
     @Override
     public List<String> getUrlFor(PsiElement element, PsiElement originalElement) {
         if (element instanceof IssPropertyFileFlagsValueElement) {
-            return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_filessection.htm");
+            return Arrays.asList("http://www.jrsoftware.org/ishelp/topic_uninstallrunsection.htm");
         }
 
         return null;
@@ -49,16 +49,16 @@ public class IssSectionRunDocumentationProvider extends AbstractDocumentationPro
         if (element instanceof IssIdentifierElement) {
             final IssIdentifierElement identifierElement = (IssIdentifierElement) element;
 
-            if (PsiTreeUtil.getParentOfType(element, IssRunDefinitionElement.class) != null) {
-                final IssRunProperty runProperty = IssRunProperty.fromId(identifierElement.getName());
+            if (PsiTreeUtil.getParentOfType(element, IssUninstallRunDefinitionElement.class) != null) {
+                final IssUninstallRunProperty runProperty = IssUninstallRunProperty.fromId(identifierElement.getName());
                 if (runProperty == null)
-                    return "Unknown run property";
+                    return "Unknown uninstall run property";
 
                 return RESOURCE_BUNDLE.getString(runProperty.getDescriptionKey());
             }
-        } else if (element instanceof IssPropertyRunFlagsValueElement) {
-            final IssPropertyRunFlagsValueElement runDefinitionFlagsValueElement = (IssPropertyRunFlagsValueElement) element;
-            final IssRunFlag runFlag = IssRunFlag.fromId(runDefinitionFlagsValueElement.getName());
+        } else if (element instanceof IssPropertyUninstallRunFlagsValueElement) {
+            final IssPropertyUninstallRunFlagsValueElement runDefinitionFlagsValueElement = (IssPropertyUninstallRunFlagsValueElement) element;
+            final IssUninstallRunFlag runFlag = IssUninstallRunFlag.fromId(runDefinitionFlagsValueElement.getName());
             if (runFlag == null)
                 return "Unknown flag";
 

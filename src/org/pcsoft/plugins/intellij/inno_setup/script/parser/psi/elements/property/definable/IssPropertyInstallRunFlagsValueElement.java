@@ -7,9 +7,9 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssProp
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssPropertyRunFlagsValueElement extends IssPropertyValueElement {
+public class IssPropertyInstallRunFlagsValueElement extends IssPropertyValueElement {
 
-    public IssPropertyRunFlagsValueElement(ASTNode node) {
+    public IssPropertyInstallRunFlagsValueElement(ASTNode node) {
         super(node);
     }
 

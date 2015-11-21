@@ -92,8 +92,12 @@ final class IssParserSectionUtility {
                                 IssIconProperty::getPropertyValueMarkerElementFromId, IssIconProperty::getPropertyMarkerElementFromId);
                         break;
                     case InstallRun:
-                        parseLineForDefinableSection(psiBuilder, "Run Section", IssMarkerFactory.RunSection.SECTION_DEFINITION,
-                                IssRunProperty::getPropertyValueMarkerElementFromId, IssRunProperty::getPropertyMarkerElementFromId);
+                        parseLineForDefinableSection(psiBuilder, "Run Section", IssMarkerFactory.InstallRunSection.SECTION_DEFINITION,
+                                IssInstallRunProperty::getPropertyValueMarkerElementFromId, IssInstallRunProperty::getPropertyMarkerElementFromId);
+                        break;
+                    case UninstallRun:
+                        parseLineForDefinableSection(psiBuilder, "UninstallRun Section", IssMarkerFactory.UninstallRunSection.SECTION_DEFINITION,
+                                IssUninstallRunProperty::getPropertyValueMarkerElementFromId, IssUninstallRunProperty::getPropertyMarkerElementFromId);
                         break;
                     default:
                         throw new RuntimeException();

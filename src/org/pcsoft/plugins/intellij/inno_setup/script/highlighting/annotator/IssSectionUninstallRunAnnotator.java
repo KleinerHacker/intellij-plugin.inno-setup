@@ -4,33 +4,33 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssRunDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRunFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssUninstallRunDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunFlag;
 
 /**
  * Created by Christoph on 08.11.2015.
  */
-public class IssSectionRunAnnotator extends IssAbstractSectionAnnotator<IssRunDefinitionElement> {
+public class IssSectionUninstallRunAnnotator extends IssAbstractSectionAnnotator<IssUninstallRunDefinitionElement> {
 
-    public IssSectionRunAnnotator() {
-        super(IssRunDefinitionElement.class, DoubletCheckType.Warning);
+    public IssSectionUninstallRunAnnotator() {
+        super(IssUninstallRunDefinitionElement.class, DoubletCheckType.Warning);
     }
 
     @Override
-    protected void detectErrors(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    protected void detectErrors(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForReferences(runDefinitionElement, annotationHolder);
         checkForKnownValues(runDefinitionElement, annotationHolder);
     }
 
-    private void checkForKnownValues(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    private void checkForKnownValues(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (runDefinitionElement.getRunFlags() != null) {
             runDefinitionElement.getRunFlags().getPropertyValueList().stream()
-                    .filter(item -> IssRunFlag.fromId(item.getName()) == null)
+                    .filter(item -> IssUninstallRunFlag.fromId(item.getName()) == null)
                     .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
         }
     }
 
-    private void checkForReferences(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    private void checkForReferences(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (runDefinitionElement.getRunTaskReference() != null) {
             runDefinitionElement.getRunTaskReference().getPropertyValueList().stream()
                     .filter(item -> item.getReference().resolve() == null)
@@ -50,7 +50,7 @@ public class IssSectionRunAnnotator extends IssAbstractSectionAnnotator<IssRunDe
     }
 
     @Override
-    protected void detectWarnings(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    protected void detectWarnings(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         checkForDoubleReferences(runDefinitionElement, annotationHolder);
         checkForDoubleValues(runDefinitionElement, annotationHolder);
         if (runDefinitionElement.getParentSection() != null && runDefinitionElement.getName() != null) {
@@ -60,12 +60,12 @@ public class IssSectionRunAnnotator extends IssAbstractSectionAnnotator<IssRunDe
                     .filter(item -> item.getName().equalsIgnoreCase(runDefinitionElement.getName()))
                     .count();
             if (count > 0) {
-                annotationHolder.createWarningAnnotation(runDefinitionElement, "Run with destination '" + runDefinitionElement.getName() + "' already defined");
+                annotationHolder.createWarningAnnotation(runDefinitionElement, "Uninstall Run with destination '" + runDefinitionElement.getName() + "' already defined");
             }
         }
     }
 
-    private void checkForDoubleValues(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    private void checkForDoubleValues(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (runDefinitionElement.getRunFlags() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     runDefinitionElement.getRunFlags().getPropertyValueList(),
@@ -77,7 +77,7 @@ public class IssSectionRunAnnotator extends IssAbstractSectionAnnotator<IssRunDe
         }
     }
 
-    private void checkForDoubleReferences(@NotNull IssRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+    private void checkForDoubleReferences(@NotNull IssUninstallRunDefinitionElement runDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
         if (runDefinitionElement.getRunTaskReference() != null) {
             IssAnnotatorUtils.findDoubleValues(
                     runDefinitionElement.getRunTaskReference().getPropertyValueList(),

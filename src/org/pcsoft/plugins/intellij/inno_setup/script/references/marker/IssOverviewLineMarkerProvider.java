@@ -84,12 +84,20 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setTooltipText("ICONS Section")
                                 .createLineMarkerInfo(psiElement)
                 );
-            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssRunSectionElement) {
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssInstallRunSectionElement) {
                 collection.add(
-                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_RUN)
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_INSTALL_RUN)
                                 .setAlignment(GutterIconRenderer.Alignment.RIGHT)
                                 .setTarget(psiElement)
                                 .setTooltipText("RUN Section")
+                                .createLineMarkerInfo(psiElement)
+                );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssUninstallRunSectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_UNINSTALL_RUN)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("UNINSTALLRUN Section")
                                 .createLineMarkerInfo(psiElement)
                 );
             }

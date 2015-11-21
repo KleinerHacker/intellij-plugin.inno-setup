@@ -87,8 +87,8 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
 
-    public static final class RunSection {
-        private static final String KEY = "RUN_SECTION";
+    public static final class InstallRunSection {
+        private static final String KEY = "INSTALL_RUN_SECTION";
         private static final String KEY_ITEM = KEY + "_ITEM";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
@@ -103,6 +103,24 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_WORKINGDIR_VALUE = new IElementType(KEY_ITEM + "_WORKINGDIR_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_STATUSMSG = new IElementType(KEY_ITEM + "_STATUSMSG", LANGUAGE);
         public static final IElementType PROPERTY_STATUSMSG_VALUE = new IElementType(KEY_ITEM + "_STATUSMSG_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VERB = new IElementType(KEY_ITEM + "_VERB", LANGUAGE);
+        public static final IElementType PROPERTY_VERB_VALUE = new IElementType(KEY_ITEM + "_VERB_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
+    public static final class UninstallRunSection {
+        private static final String KEY = "UNINSTALL_RUN_SECTION";
+        private static final String KEY_ITEM = KEY + "_ITEM";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME = new IElementType(KEY_ITEM + "_FILENAME", LANGUAGE);
+        public static final IElementType PROPERTY_FILENAME_VALUE = new IElementType(KEY_ITEM + "_FILENAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_PARAMETERS = new IElementType(KEY_ITEM + "_PARAMETERS", LANGUAGE);
+        public static final IElementType PROPERTY_PARAMETERS_VALUE = new IElementType(KEY_ITEM + "_PARAMETERS_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_WORKINGDIR = new IElementType(KEY_ITEM + "_WORKINGDIR", LANGUAGE);
+        public static final IElementType PROPERTY_WORKINGDIR_VALUE = new IElementType(KEY_ITEM + "_WORKINGDIR_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_RUNONCEID = new IElementType(KEY_ITEM + "_RUNONCEID", LANGUAGE);
         public static final IElementType PROPERTY_RUNONCEID_VALUE = new IElementType(KEY_ITEM + "_RUNONCEID_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_VERB = new IElementType(KEY_ITEM + "_VERB", LANGUAGE);
