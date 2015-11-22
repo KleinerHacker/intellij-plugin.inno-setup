@@ -20,29 +20,15 @@ public class IssSectionTypeAnnotator extends IssAbstractSectionAnnotator<IssType
     }
 
     private void checkForKnownValues(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (typeDefinitionElement.getTypeFlags() != null) {
-            typeDefinitionElement.getTypeFlags().getPropertyValueList().stream()
-                    .filter(item -> IssTypeFlag.fromId(item.getName()) == null)
-                    .forEach(item -> {
-                        annotationHolder.createErrorAnnotation(item, "Unknown flag");
-                    });
-        }
+        checkForKnownValues(annotationHolder, typeDefinitionElement::getTypeFlags, p -> IssTypeFlag.fromId(p.getName()) == null, "Unknown flag");
     }
 
     @Override
     protected void detectWarnings(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        checkForDoubleReferences(typeDefinitionElement, annotationHolder);
+        checkForDoubleValues(typeDefinitionElement, annotationHolder);
     }
 
-    private void checkForDoubleReferences(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (typeDefinitionElement.getTypeFlags() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    typeDefinitionElement.getTypeFlags().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-                    }
-            );
-        }
+    private void checkForDoubleValues(@NotNull IssTypeDefinitionElement typeDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleValues(annotationHolder, typeDefinitionElement::getTypeFlags, "Flag '%s' already listed");
     }
 }

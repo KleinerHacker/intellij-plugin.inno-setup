@@ -24,7 +24,7 @@ Flags: Fixed
 
 [Files]
 Source: "testFile"; DestDir: "testDest"; Flags: UninsRemoveReadOnly 32bit 32bit bla; Components: testComponent bla testComponent; CopyMode: AlwaysOverwrite; Attribs: Hidden ReadOnly Hidden bla; Permissions: Users-Modify system-full Users-Modify bla; Tasks: testTask bla testTask; ExternalSize: -100
-Source: "doubleFile"; DestDir: "doubleDest";
+Source: "doubleFile"; DestDir: "doubleDest"; CopyMode: AlwaysSkipIfSameOrOlder DontCopy
 Source: "doubleFile"; DestDir: "doubleDest";
 Source: "doubleFile"; DestDir: "newDest";
 Flags: 32bit

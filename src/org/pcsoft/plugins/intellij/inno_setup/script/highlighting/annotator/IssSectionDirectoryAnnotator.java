@@ -1,11 +1,13 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIOPermissionsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOAttribute;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOUserOrGroupIdentifier;
 
 /**
  * Created by Christoph on 08.11.2015.
@@ -23,43 +25,17 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForKnownValues(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryFlags() != null) {
-            directoryDefinitionElement.getDirectoryFlags().getPropertyValueList().stream()
-                    .filter(item -> IssDirectoryFlag.fromId(item.getName()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
-        }
-        if (directoryDefinitionElement.getDirectoryAttribute() != null) {
-            directoryDefinitionElement.getDirectoryAttribute().getPropertyValueList().stream()
-                    .filter(item -> IssIOAttribute.fromId(item.getName()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown attribute"));
-        }
-        if (directoryDefinitionElement.getDirectoryPermissions() != null) {
-            directoryDefinitionElement.getDirectoryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssIOPermissions.fromId(item.getPermission()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
-            directoryDefinitionElement.getDirectoryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssIOUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
-        }
+        checkForKnownValues(annotationHolder, directoryDefinitionElement::getDirectoryFlags, p -> IssDirectoryFlag.fromId(p.getName()) == null, "Unknown flag");
+        checkForKnownValues(annotationHolder, directoryDefinitionElement::getDirectoryAttribute, p -> IssIOAttribute.fromId(p.getName()) == null, "Unknown attribute");
+        checkForKnownValues(annotationHolder, directoryDefinitionElement::getDirectoryPermissions,
+                p -> IssIOPermissions.fromId(((IssPropertyIOPermissionsValueElement)p).getPermission()) == null, "Unknown permission");
+        checkForKnownValues(annotationHolder, directoryDefinitionElement::getDirectoryPermissions,
+                p -> IssIOUserOrGroupIdentifier.fromId(((IssPropertyIOPermissionsValueElement)p).getUserOrGroupIdentifier()) == null, "Unknown user or group identifier");
     }
 
     private void checkForReferences(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryTaskReference() != null) {
-            directoryDefinitionElement.getDirectoryTaskReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
-        if (directoryDefinitionElement.getDirectoryComponentReference() != null) {
-            directoryDefinitionElement.getDirectoryComponentReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
+        checkForReferences(annotationHolder, directoryDefinitionElement::getDirectoryTaskReference, ERROR_REFERENCE_TASK);
+        checkForReferences(annotationHolder, directoryDefinitionElement::getDirectoryComponentReference, ERROR_REFERENCE_COMPONENT);
     }
 
     @Override
@@ -69,53 +45,13 @@ public class IssSectionDirectoryAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForDoubleValues(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryFlags() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryFlags().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-                    }
-            );
-        }
-        if (directoryDefinitionElement.getDirectoryAttribute() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryAttribute().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Attribute '" + key + "' already listed");
-                    }
-            );
-        }
-        if (directoryDefinitionElement.getDirectoryPermissions() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryPermissions().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Permission '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleValues(annotationHolder, directoryDefinitionElement::getDirectoryFlags, "Flag '%s' already listed");
+        checkForDoubleValues(annotationHolder, directoryDefinitionElement::getDirectoryAttribute, "Attribute '%s' already listed");
+        checkForDoubleValues(annotationHolder, directoryDefinitionElement::getDirectoryPermissions, "Permission '%s' already listed");
     }
 
     private void checkForDoubleReferences(@NotNull IssDirectoryDefinitionElement directoryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (directoryDefinitionElement.getDirectoryTaskReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryTaskReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
-                    }
-            );
-        }
-        if (directoryDefinitionElement.getDirectoryComponentReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    directoryDefinitionElement.getDirectoryComponentReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleReferences(annotationHolder, directoryDefinitionElement::getDirectoryTaskReference, WARN_REFERENCE_TASK);
+        checkForDoubleReferences(annotationHolder, directoryDefinitionElement::getDirectoryComponentReference, WARN_REFERENCE_COMPONENT);
     }
 }

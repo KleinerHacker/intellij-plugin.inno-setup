@@ -17,11 +17,19 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyI
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Created by Christoph on 08.11.2015.
  */
 public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement> implements Annotator {
+    protected static final String ERROR_REFERENCE_TASK = "Cannot find referenced task";
+    protected static final String ERROR_REFERENCE_COMPONENT = "Cannot find referenced component";
+    protected static final String WARN_REFERENCE_TASK = "Task '%s' already listed";
+    protected static final String WARN_REFERENCE_COMPONENT = "Component '%s' already listed";
+
     public enum DoubletCheckType {
         Error,
         Warning,
@@ -39,7 +47,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     @Override
     public final void annotate(@NotNull final PsiElement psiElement, @NotNull final AnnotationHolder annotationHolder) {
         if (elementClass.isAssignableFrom(psiElement.getClass())) {
-            final E definitionElement = (E)psiElement;
+            final E definitionElement = (E) psiElement;
 
             checkRequiredProperties(definitionElement, annotationHolder);
             checkDeprecatedProperties(definitionElement, annotationHolder);
@@ -53,11 +61,12 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
 
     private void checkRequiredProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
         final List<IssDefinablePropertyIdentifier> notFoundList = new ArrayList<>();
-        main: for (final IssDefinablePropertyIdentifier identifier : definitionElement.getPropertyTypeList()) {
+        main:
+        for (final IssDefinablePropertyIdentifier identifier : definitionElement.getPropertyTypeList()) {
             if (!identifier.isRequired())
                 continue;
 
-            for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+            for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>) definitionElement.getDefinitionPropertyList()) {
                 if (propertyElement.getPropertyType().equals(identifier))
                     continue main;
             }
@@ -71,7 +80,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkDeprecatedProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>)definitionElement.getDefinitionPropertyList()) {
+        for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>) definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyType().isDeprecated()) {
                 final Annotation warningAnnotation = annotationHolder.createWarningAnnotation(propertyElement, "Property is deprecated!");
                 warningAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
@@ -84,10 +93,10 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
             return;
 
         if (definitionElement.getParentSection() != null && areNeededDefinitionPropertiesExists(definitionElement)) {
-            final long count = ((Collection<IssDefinitionElement>)definitionElement.getParentSection().getDefinitionList()).stream()
+            final long count = ((Collection<IssDefinitionElement>) definitionElement.getParentSection().getDefinitionList()).stream()
                     .filter(item -> item != definitionElement)
-                    .filter(item -> areNeededDefinitionPropertiesExists((E)item))
-                    .filter(item -> areDefinitionSame((E)item, definitionElement))
+                    .filter(item -> areNeededDefinitionPropertiesExists((E) item))
+                    .filter(item -> areDefinitionSame((E) item, definitionElement))
                     .count();
             if (count > 0) {
                 if (doubletCheckType == DoubletCheckType.Error) {
@@ -102,6 +111,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
 
     /**
      * Check that all needed property elements of definition are exists (!= null)
+     *
      * @param definitionElement
      * @return
      */
@@ -111,6 +121,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
 
     /**
      * Check that all needed property of definition are the same (definitions are equal)
+     *
      * @param definitionElementLeft
      * @param definitionElementRight
      * @return
@@ -120,7 +131,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkPropertyValues(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssDefinablePropertyElement<?> propertyElement : (Collection<IssDefinablePropertyElement>)definitionElement.getDefinitionPropertyList()) {
+        for (final IssDefinablePropertyElement<?> propertyElement : (Collection<IssDefinablePropertyElement>) definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyValue() == null)
                 continue;
 
@@ -185,17 +196,61 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
 
     /**
      * Check that value list is exactly one
+     *
      * @param propertyElement
      * @param annotationHolder
      */
     private void checkForSingleValue(@NotNull IssPropertyElement propertyElement, @NotNull final AnnotationHolder annotationHolder) {
         if (propertyElement.getPropertyValueList().size() > 1) {
-            for (final IssPropertyValueElement valueElement : (Collection<IssPropertyValueElement>)propertyElement.getPropertyValueList()) {
+            for (final IssPropertyValueElement valueElement : (Collection<IssPropertyValueElement>) propertyElement.getPropertyValueList()) {
                 annotationHolder.createErrorAnnotation(valueElement, "Too many values were set for this property!");
             }
         }
     }
 
     protected abstract void detectErrors(@NotNull E element, @NotNull AnnotationHolder annotationHolder);
+
     protected abstract void detectWarnings(@NotNull E element, @NotNull AnnotationHolder annotationHolder);
+
+    //region Special Utility Methods (Static)
+    private static void checkForKnownValues(AnnotationHolder annotationHolder, Supplier<IssPropertyElement> propertySupplier,
+                                            Function<IssPropertyValueElement, Boolean> valueUnknownCheckCallback,
+                                            Consumer<IssPropertyValueElement> handleCallback) {
+        final IssPropertyElement propertyElement = propertySupplier.get();
+        if (propertyElement != null) {
+            propertyElement.getPropertyValueList().stream()
+                    .filter(item -> valueUnknownCheckCallback.apply((IssPropertyValueElement) item))
+                    .forEach(item -> handleCallback.accept((IssPropertyValueElement) item));
+        }
+    }
+
+    protected static void checkForKnownValues(AnnotationHolder annotationHolder, Supplier<IssPropertyElement> propertySupplier,
+                                              Function<IssPropertyValueElement, Boolean> valueUnknownCheckCallback, String errorMsg) {
+        checkForKnownValues(annotationHolder, propertySupplier, valueUnknownCheckCallback,
+                p -> annotationHolder.createErrorAnnotation(p, errorMsg));
+    }
+
+    protected static void checkForDoubleValues(AnnotationHolder annotationHolder, Supplier<IssPropertyElement> propertySupplier,
+                                               String warnMsg) {
+        final IssPropertyElement propertyElement = propertySupplier.get();
+        if (propertyElement != null) {
+            IssAnnotatorUtils.findDoubleValues(
+                    propertyElement.getPropertyValueList(),
+                    element -> ((IssPropertyValueElement) element).getName().toLowerCase(),
+                    (element, key) -> annotationHolder.createWarningAnnotation((IssPropertyValueElement) element, String.format(warnMsg, key))
+            );
+        }
+    }
+
+    protected static void checkForReferences(AnnotationHolder annotationHolder, Supplier<IssPropertyElement> propertySupplier, String errorMsg) {
+        checkForKnownValues(annotationHolder, propertySupplier, p -> p.getReference().resolve() == null, p -> {
+            final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(p, errorMsg);
+            errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
+        });
+    }
+
+    protected static void checkForDoubleReferences(AnnotationHolder annotationHolder, Supplier<IssPropertyElement> propertySupplier, String warnMsg) {
+        checkForDoubleValues(annotationHolder, propertySupplier, warnMsg);
+    }
+    //endregion
 }

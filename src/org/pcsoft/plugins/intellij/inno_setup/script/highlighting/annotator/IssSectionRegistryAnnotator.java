@@ -1,14 +1,10 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssRegistryDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOUserOrGroupIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRegistryFlag;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRegistryValueType;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIOPermissionsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
 
 /**
  * Created by Christoph on 08.11.2015.
@@ -47,48 +43,18 @@ public class IssSectionRegistryAnnotator extends IssAbstractSectionAnnotator<Iss
     }
 
     private void checkForKnownValues(@NotNull IssRegistryDefinitionElement registryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (registryDefinitionElement.getRegistryFlags() != null) {
-            registryDefinitionElement.getRegistryFlags().getPropertyValueList().stream()
-                    .filter(item -> IssRegistryFlag.fromId(item.getName()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown flag"));
-        }
-        if (registryDefinitionElement.getRegistryRoot() != null) {
-            registryDefinitionElement.getRegistryRoot().getPropertyValueList().stream()
-                    .filter(item -> item.getRootType() == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown root"));
-        }
-        if (registryDefinitionElement.getRegistryValueType() != null) {
-            registryDefinitionElement.getRegistryValueType().getPropertyValueList().stream()
-                    .filter(item -> IssRegistryValueType.fromId(item.getName()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown value type"));
-        }
-        if (registryDefinitionElement.getRegistryPermissions() != null) {
-            registryDefinitionElement.getRegistryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssIOPermissions.fromId(item.getPermission()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown permission"));
-            registryDefinitionElement.getRegistryPermissions().getPropertyValueList().stream()
-                    .filter(item -> IssIOUserOrGroupIdentifier.fromId(item.getUserOrGroupIdentifier()) == null)
-                    .forEach(item -> annotationHolder.createErrorAnnotation(item, "Unknown user or group identifier"));
-        }
+        checkForKnownValues(annotationHolder, registryDefinitionElement::getRegistryFlags, p -> IssRegistryFlag.fromId(p.getName()) == null, "Unknown flag");
+        checkForKnownValues(annotationHolder, registryDefinitionElement::getRegistryRoot, p -> IssRegistryRoot.fromId(p.getName()) == null, "Unknown root");
+        checkForKnownValues(annotationHolder, registryDefinitionElement::getRegistryValueType, p -> IssRegistryValueType.fromId(p.getName()) == null, "Unknown value type");
+        checkForKnownValues(annotationHolder, registryDefinitionElement::getRegistryPermissions,
+                p -> IssIOPermissions.fromId(((IssPropertyIOPermissionsValueElement)p).getPermission()) == null, "Unknown permission");
+        checkForKnownValues(annotationHolder, registryDefinitionElement::getRegistryPermissions,
+                p -> IssIOUserOrGroupIdentifier.fromId(((IssPropertyIOPermissionsValueElement)p).getUserOrGroupIdentifier()) == null, "Unknown user or group identifier");
     }
 
     private void checkForReferences(@NotNull IssRegistryDefinitionElement registryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (registryDefinitionElement.getRegistryTaskReference() != null) {
-            registryDefinitionElement.getRegistryTaskReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced task");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
-        if (registryDefinitionElement.getRegistryComponentReference() != null) {
-            registryDefinitionElement.getRegistryComponentReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
+        checkForReferences(annotationHolder, registryDefinitionElement::getRegistryTaskReference, ERROR_REFERENCE_TASK);
+        checkForReferences(annotationHolder, registryDefinitionElement::getRegistryComponentReference, ERROR_REFERENCE_COMPONENT);
     }
 
     @Override
@@ -98,44 +64,12 @@ public class IssSectionRegistryAnnotator extends IssAbstractSectionAnnotator<Iss
     }
 
     private void checkForDoubleValues(@NotNull IssRegistryDefinitionElement registryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (registryDefinitionElement.getRegistryFlags() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    registryDefinitionElement.getRegistryFlags().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-                    }
-            );
-        }
-        if (registryDefinitionElement.getRegistryPermissions() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    registryDefinitionElement.getRegistryPermissions().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Permission '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleValues(annotationHolder, registryDefinitionElement::getRegistryFlags, "Flag '%s' already listed");
+        checkForDoubleValues(annotationHolder, registryDefinitionElement::getRegistryPermissions, "Permission '%s' already listed");
     }
 
     private void checkForDoubleReferences(@NotNull IssRegistryDefinitionElement registryDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (registryDefinitionElement.getRegistryTaskReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    registryDefinitionElement.getRegistryTaskReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Task '" + key + "' already listed");
-                    }
-            );
-        }
-        if (registryDefinitionElement.getRegistryComponentReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    registryDefinitionElement.getRegistryComponentReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleReferences(annotationHolder, registryDefinitionElement::getRegistryTaskReference, WARN_REFERENCE_TASK);
+        checkForDoubleReferences(annotationHolder, registryDefinitionElement::getRegistryComponentReference, WARN_REFERENCE_COMPONENT);
     }
 }

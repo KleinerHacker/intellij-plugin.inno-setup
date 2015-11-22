@@ -1,9 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentFlag;
 
@@ -23,13 +21,7 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForKnownValues(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentFlags() != null) {
-            componentDefinitionElement.getComponentFlags().getPropertyValueList().stream()
-                    .filter(item -> IssComponentFlag.fromId(item.getName()) == null)
-                    .forEach(item -> {
-                        annotationHolder.createErrorAnnotation(item, "Unknown flag");
-                    });
-        }
+        checkForKnownValues(annotationHolder, componentDefinitionElement::getComponentFlags, p -> IssComponentFlag.fromId(p.getName()) == null, "Unknown flag");
         if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null &&
                 componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null &&
                 componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue().getNumber() != null) {
@@ -40,18 +32,12 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
     }
 
     private void checkForReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentTypeReference() != null) {
-            componentDefinitionElement.getComponentTypeReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced type");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
+        checkForReferences(annotationHolder, componentDefinitionElement::getComponentTypeReference, "Cannot find referenced type");
     }
 
     @Override
     protected void detectWarnings(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleValues(componentDefinitionElement, annotationHolder);
         checkForDoubleReferences(componentDefinitionElement, annotationHolder);
         if (componentDefinitionElement.getComponentExtraDiskSpaceRequired() != null &&
                 componentDefinitionElement.getComponentExtraDiskSpaceRequired().getPropertyValue() != null &&
@@ -62,24 +48,11 @@ public class IssSectionComponentAnnotator extends IssAbstractSectionAnnotator<Is
         }
     }
 
+    private void checkForDoubleValues(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleValues(annotationHolder, componentDefinitionElement::getComponentFlags, "Flag '%s' already listed");
+    }
+
     private void checkForDoubleReferences(@NotNull IssComponentDefinitionElement componentDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (componentDefinitionElement.getComponentTypeReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    componentDefinitionElement.getComponentTypeReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Type '" + key + "' already listed");
-                    }
-            );
-        }
-        if (componentDefinitionElement.getComponentFlags() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    componentDefinitionElement.getComponentFlags().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleReferences(annotationHolder, componentDefinitionElement::getComponentTypeReference, "Type '%s' already listed");
     }
 }

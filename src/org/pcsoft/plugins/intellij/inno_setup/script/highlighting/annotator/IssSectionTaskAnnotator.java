@@ -1,9 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
-import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskFlag;
 
@@ -23,49 +21,24 @@ public class IssSectionTaskAnnotator extends IssAbstractSectionAnnotator<IssTask
     }
 
     private void checkForKnownValues(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (taskDefinitionElement.getTaskFlags() != null) {
-            taskDefinitionElement.getTaskFlags().getPropertyValueList().stream()
-                    .filter(item -> IssTaskFlag.fromId(item.getName()) == null)
-                    .forEach(item -> {
-                        annotationHolder.createErrorAnnotation(item, "Unknown flag");
-                    });
-        }
+        checkForKnownValues(annotationHolder, taskDefinitionElement::getTaskFlags, p -> IssTaskFlag.fromId(p.getName()) == null, "Unknown flag");
     }
 
     private void checkForReferences(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (taskDefinitionElement.getTaskComponentReference() != null) {
-            taskDefinitionElement.getTaskComponentReference().getPropertyValueList().stream()
-                    .filter(item -> item.getReference().resolve() == null)
-                    .forEach(item -> {
-                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(item, "Cannot find referenced component");
-                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
-                    });
-        }
+        checkForReferences(annotationHolder, taskDefinitionElement::getTaskComponentReference, ERROR_REFERENCE_COMPONENT);
     }
 
     @Override
     protected void detectWarnings(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleValues(taskDefinitionElement, annotationHolder);
         checkForDoubleReferences(taskDefinitionElement, annotationHolder);
     }
 
+    private void checkForDoubleValues(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
+        checkForDoubleValues(annotationHolder, taskDefinitionElement::getTaskFlags, "Flag '%s' already listed");
+    }
+
     private void checkForDoubleReferences(@NotNull IssTaskDefinitionElement taskDefinitionElement, @NotNull AnnotationHolder annotationHolder) {
-        if (taskDefinitionElement.getTaskComponentReference() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    taskDefinitionElement.getTaskComponentReference().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Component '" + key + "' already listed");
-                    }
-            );
-        }
-        if (taskDefinitionElement.getTaskFlags() != null) {
-            IssAnnotatorUtils.findDoubleValues(
-                    taskDefinitionElement.getTaskFlags().getPropertyValueList(),
-                    element -> element.getName().toLowerCase(),
-                    (element, key) -> {
-                        annotationHolder.createWarningAnnotation(element, "Flag '" + key + "' already listed");
-                    }
-            );
-        }
+        checkForDoubleReferences(annotationHolder, taskDefinitionElement::getTaskComponentReference, WARN_REFERENCE_COMPONENT);
     }
 }

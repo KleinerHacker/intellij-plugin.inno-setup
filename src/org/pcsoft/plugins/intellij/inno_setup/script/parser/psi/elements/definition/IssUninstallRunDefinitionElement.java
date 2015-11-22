@@ -4,10 +4,7 @@ import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyInstallRunFlagsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyStringElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssUninstallRunSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunProperty;
@@ -72,8 +69,8 @@ public class IssUninstallRunDefinitionElement extends IssDefinitionElement<IssUn
     }
 
     @Nullable
-    public IssPropertyInstallRunFlagsElement getUninstallRunFlags() {
-        return IssFindUtils.findProperty(this, IssUninstallRunProperty.Flags, IssPropertyInstallRunFlagsElement.class);
+    public IssPropertyUninstallRunFlagsElement getUninstallRunFlags() {
+        return IssFindUtils.findProperty(this, IssUninstallRunProperty.Flags, IssPropertyUninstallRunFlagsElement.class);
     }
 
     @Nullable

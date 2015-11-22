@@ -201,7 +201,7 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.UninstallRunSection.PROPERTY_FLAGS.equals(node.getElementType())) {
             return new IssPropertyUninstallRunFlagsElement(node);
         } else if (IssMarkerFactory.UninstallRunSection.PROPERTY_FLAGS_VALUE.equals(node.getElementType())) {
-            return new IssPropertyInstallRunFlagsValueElement(node);
+            return new IssPropertyUninstallRunFlagsValueElement(node);
         }
 
         return null;
