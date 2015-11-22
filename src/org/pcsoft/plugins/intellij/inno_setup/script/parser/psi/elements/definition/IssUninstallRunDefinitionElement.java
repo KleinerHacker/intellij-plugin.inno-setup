@@ -1,20 +1,17 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyInstallRunFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyStringElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssUninstallRunSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
-
-import javax.swing.*;
 
 /**
  * Created by Christoph on 23.12.2014.
@@ -31,27 +28,16 @@ public class IssUninstallRunDefinitionElement extends IssDefinitionElement<IssUn
         return IssUninstallRunProperty.values();
     }
 
+    @Nullable
     @Override
-    public ItemPresentation getPresentation() {
-        return new ItemPresentation() {
-            @Nullable
-            @Override
-            public String getPresentableText() {
-                return getName();
-            }
+    protected String getDefinitionName() {
+        return getName();
+    }
 
-            @Nullable
-            @Override
-            public String getLocationString() {
-                return "UninstallRun";
-            }
-
-            @Nullable
-            @Override
-            public Icon getIcon(boolean b) {
-                return IssIcons.IC_SECT_UNINSTALL_RUN;
-            }
-        };
+    @NotNull
+    @Override
+    protected IssSectionType getSectionType() {
+        return IssSectionType.UninstallRun;
     }
 
     @Nullable

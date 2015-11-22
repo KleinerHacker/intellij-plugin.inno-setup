@@ -15,9 +15,4 @@ public class IssFileSectionElement extends IssDefinableSectionElement<IssFileDef
     public IssFileSectionElement(ASTNode node) {
         super(node, IssFileDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_FILE;
-    }
 }

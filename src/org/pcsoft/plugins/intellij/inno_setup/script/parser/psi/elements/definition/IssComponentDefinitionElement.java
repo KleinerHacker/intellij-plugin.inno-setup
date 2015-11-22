@@ -1,17 +1,14 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssComponentSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
-
-import javax.swing.*;
 
 /**
  * Created by Christoph on 28.12.2014.
@@ -28,27 +25,16 @@ public class IssComponentDefinitionElement extends IssDefinitionElement<IssCompo
         return IssComponentProperty.values();
     }
 
+    @Nullable
     @Override
-    public ItemPresentation getPresentation() {
-        return new ItemPresentation() {
-            @Nullable
-            @Override
-            public String getPresentableText() {
-                return getName();
-            }
+    protected String getDefinitionName() {
+        return getName();
+    }
 
-            @Nullable
-            @Override
-            public String getLocationString() {
-                return "Components";
-            }
-
-            @Nullable
-            @Override
-            public Icon getIcon(boolean b) {
-                return IssIcons.IC_SECT_COMPONENT;
-            }
-        };
+    @NotNull
+    @Override
+    protected IssSectionType getSectionType() {
+        return IssSectionType.Component;
     }
 
     @Nullable

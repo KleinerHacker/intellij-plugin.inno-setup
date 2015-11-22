@@ -15,9 +15,4 @@ public class IssInstallRunSectionElement extends IssDefinableSectionElement<IssI
     public IssInstallRunSectionElement(ASTNode node) {
         super(node, IssInstallRunDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_INSTALL_RUN;
-    }
 }

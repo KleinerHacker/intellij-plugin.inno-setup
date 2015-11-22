@@ -15,9 +15,4 @@ public class IssDirectorySectionElement extends IssDefinableSectionElement<IssDi
     public IssDirectorySectionElement(ASTNode node) {
         super(node, IssDirectoryDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_DIRECTORY;
-    }
 }

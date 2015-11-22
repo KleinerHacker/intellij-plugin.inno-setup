@@ -14,9 +14,4 @@ public class IssTypeSectionElement extends IssDefinableSectionElement<IssTypeDef
     public IssTypeSectionElement(ASTNode node) {
         super(node, IssTypeDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_TYPE;
-    }
 }

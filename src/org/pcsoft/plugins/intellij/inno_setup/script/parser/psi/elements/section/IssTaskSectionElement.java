@@ -15,9 +15,4 @@ public class IssTaskSectionElement extends IssDefinableSectionElement<IssTaskDef
     public IssTaskSectionElement(ASTNode node) {
         super(node, IssTaskDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_TASK;
-    }
 }

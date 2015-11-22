@@ -14,9 +14,4 @@ public class IssRegistrySectionElement extends IssDefinableSectionElement<IssReg
     public IssRegistrySectionElement(ASTNode node) {
         super(node, IssRegistryDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_TYPE;
-    }
 }

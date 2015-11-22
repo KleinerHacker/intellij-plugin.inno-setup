@@ -28,7 +28,7 @@ public abstract class IssSectionElement extends IssAbstractElement {
             @Nullable
             @Override
             public String getPresentableText() {
-                return getFirstChild().getText();
+                return getSectionType() == null ? "<UNKNOWN>" : getSectionType().getId();
             }
 
             @Nullable
@@ -40,7 +40,7 @@ public abstract class IssSectionElement extends IssAbstractElement {
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return IssSectionElement.this.getIcon(b);
+                return getSectionType() == null ? null : getSectionType().getIcon();
             }
         };
     }
@@ -49,6 +49,4 @@ public abstract class IssSectionElement extends IssAbstractElement {
     public IssSectionNameElement getSectionNameElement() {
         return PsiTreeUtil.findChildOfType(this, IssSectionNameElement.class);
     }
-
-    protected abstract Icon getIcon(boolean b);
 }

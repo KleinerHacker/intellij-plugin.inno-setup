@@ -1,17 +1,14 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssFileSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
-
-import javax.swing.*;
 
 /**
  * Created by Christoph on 23.12.2014.
@@ -28,27 +25,16 @@ public class IssFileDefinitionElement extends IssDefinitionElement<IssFileSectio
         return IssFileProperty.values();
     }
 
+    @Nullable
     @Override
-    public ItemPresentation getPresentation() {
-        return new ItemPresentation() {
-            @Nullable
-            @Override
-            public String getPresentableText() {
-                return getName();
-            }
+    protected String getDefinitionName() {
+        return getName();
+    }
 
-            @Nullable
-            @Override
-            public String getLocationString() {
-                return "Files";
-            }
-
-            @Nullable
-            @Override
-            public Icon getIcon(boolean b) {
-                return IssIcons.IC_SECT_FILE;
-            }
-        };
+    @NotNull
+    @Override
+    protected IssSectionType getSectionType() {
+        return IssSectionType.File;
     }
 
     @Nullable

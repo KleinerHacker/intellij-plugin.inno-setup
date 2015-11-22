@@ -15,9 +15,4 @@ public class IssUninstallRunSectionElement extends IssDefinableSectionElement<Is
     public IssUninstallRunSectionElement(ASTNode node) {
         super(node, IssUninstallRunDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_UNINSTALL_RUN;
-    }
 }

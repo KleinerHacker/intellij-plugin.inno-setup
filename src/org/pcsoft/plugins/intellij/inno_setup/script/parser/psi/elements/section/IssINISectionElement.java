@@ -15,9 +15,4 @@ public class IssINISectionElement extends IssDefinableSectionElement<IssINIDefin
     public IssINISectionElement(ASTNode node) {
         super(node, IssINIDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_INI;
-    }
 }

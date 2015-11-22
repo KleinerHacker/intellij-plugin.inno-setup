@@ -75,13 +75,13 @@ public final class IssPsiStructureViewElement implements StructureViewTreeElemen
     @Override
     public TreeElement[] getChildren() {
         if (!allowChildren) {
-            return EMPTY_ARRAY;
+            return StructureViewTreeElement.EMPTY_ARRAY;
         }
 
         if (element instanceof IssFile) {
             final Collection<IssSectionElement> sectionElements = PsiTreeUtil.findChildrenOfType(element, IssSectionElement.class);
             if (sectionElements == null || sectionElements.isEmpty())
-                return EMPTY_ARRAY;
+                return StructureViewTreeElement.EMPTY_ARRAY;
 
             final List<TreeElement> treeElementList = sectionElements.stream()
                     .map(IssPsiStructureViewElement::new)
@@ -90,7 +90,7 @@ public final class IssPsiStructureViewElement implements StructureViewTreeElemen
         } else if (element instanceof IssDefinableSectionElement) {
             final Collection<IssDefinitionElement> definitionList = ((IssDefinableSectionElement) element).getDefinitionList();
             if (definitionList == null || definitionList.isEmpty())
-                return EMPTY_ARRAY;
+                return StructureViewTreeElement.EMPTY_ARRAY;
 
             final List<TreeElement> treeElementList = definitionList.stream()
                     .map(definitionElement -> new IssPsiStructureViewElement(definitionElement, false))
@@ -98,6 +98,6 @@ public final class IssPsiStructureViewElement implements StructureViewTreeElemen
             return treeElementList.toArray(new TreeElement[treeElementList.size()]);
         }
 
-        return EMPTY_ARRAY;
+        return StructureViewTreeElement.EMPTY_ARRAY;
     }
 }

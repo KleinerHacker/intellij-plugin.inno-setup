@@ -14,9 +14,4 @@ public class IssIconSectionElement extends IssDefinableSectionElement<IssIconDef
     public IssIconSectionElement(ASTNode node) {
         super(node, IssIconDefinitionElement.class);
     }
-
-    @Override
-    protected Icon getIcon(boolean b) {
-        return IssIcons.IC_SECT_ICON;
-    }
 }
