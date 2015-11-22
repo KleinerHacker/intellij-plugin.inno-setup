@@ -14,15 +14,4 @@ public class IssUnknownElement extends IssAbstractElement {
     public IssUnknownElement(ASTNode node) {
         super(node);
     }
-
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        return null;
-    }
-
-    @Override
-    public PsiElement setName(String s) throws IncorrectOperationException {
-        return null;
-    }
 }

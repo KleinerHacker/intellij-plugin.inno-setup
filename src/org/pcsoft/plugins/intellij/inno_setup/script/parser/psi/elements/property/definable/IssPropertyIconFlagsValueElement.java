@@ -15,12 +15,6 @@ public class IssPropertyIconFlagsValueElement extends IssPropertyValueElement {
         super(node);
     }
 
-    @Nullable
-    @Override
-    public PsiElement getNameIdentifier() {
-        return this;
-    }
-
     @NotNull
     @Override
     public String getName() {

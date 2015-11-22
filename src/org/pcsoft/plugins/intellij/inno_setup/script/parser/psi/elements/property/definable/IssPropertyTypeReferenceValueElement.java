@@ -2,6 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.proper
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssCreationUtils;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssPropertyTypeReferenceValueElement extends IssPropertyValueElement {
+public class IssPropertyTypeReferenceValueElement extends IssPropertyValueElement implements PsiNameIdentifierOwner {
 
     public IssPropertyTypeReferenceValueElement(ASTNode node) {
         super(node);
