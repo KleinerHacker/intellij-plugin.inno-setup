@@ -3,6 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup;
 import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.Icon;
+import java.util.Locale;
 
 /**
  * Created by Christoph on 16.12.2014.
@@ -28,12 +29,22 @@ public final class IssIcons {
     public static final Icon IC_SECT_UNINSTALL_RUN = IconLoader.findIcon("/icons/ic_sect_uninstall_run.png");
     public static final Icon IC_SECT_INI = IconLoader.findIcon("/icons/ic_sect_ini.png");
     public static final Icon IC_SECT_REGISTRY = IconLoader.findIcon("/icons/ic_sect_registry.png");
+    public static final Icon IC_SECT_MESSAGES = IconLoader.findIcon("/icons/ic_sect_messages.png");
+    public static final Icon IC_SECT_CUSTOM_MESSAGES = IconLoader.findIcon("/icons/ic_sect_custom_messages.png");
 
     public static final Icon IC_INFO_FLAG = IconLoader.findIcon("/icons/ic_info_flag.png");
     public static final Icon IC_INFO_ATTRIBUTE = IconLoader.findIcon("/icons/ic_info_attribute.png");
     public static final Icon IC_INFO_CONSTANT = IconLoader.findIcon("/icons/ic_info_constant.png");
     public static final Icon IC_INFO_PERMISSION = IconLoader.findIcon("/icons/ic_info_permission.png");
     public static final Icon IC_INFO_COPYMODE = IconLoader.findIcon("/icons/ic_info_copymode.png");
+
+    public static Icon findIconByLocale(Locale locale) {
+        Icon icon = IconLoader.findIcon("/icons/lan/" + locale.getCountry().toLowerCase() + ".png");
+        if (icon == null) {
+            icon = IconLoader.findIcon("/icons/lan/" + locale.getLanguage().toLowerCase() + ".png");
+        }
+        return icon;
+    }
 
     private IssIcons() {
     }

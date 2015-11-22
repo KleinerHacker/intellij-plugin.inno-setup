@@ -2,6 +2,9 @@ package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.tree.IElementType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
@@ -70,6 +73,14 @@ public final class IssPsiElementFactory {
         final PsiElement registrySection = createForRegistrySection(node);
         if (registrySection != null)
             return registrySection;
+
+        final PsiElement customMessageSection = createForCustomMessageSection(node);
+        if (customMessageSection != null)
+            return customMessageSection;
+
+        final PsiElement messageSection = createForMessageSection(node);
+        if (messageSection != null)
+            return messageSection;
 
         //Default
         if (IssMarkerFactory.SECTION_TITLE.equals(node.getElementType())) {
@@ -448,6 +459,98 @@ public final class IssPsiElementFactory {
             return new IssPropertyCompressionElement(node, IssSetupProperty.Compression);
         } else if (IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION_VALUE.equals(node.getElementType())) {
             return new IssPropertyCompressionValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForCustomMessageSection(ASTNode node) {
+        if (IssMarkerFactory.CustomMessageSection.SECTION.equals(node.getElementType())) {
+            return new IssCustomMessageSectionElement(node);
+        } else if (IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultElement(node, new IssStandardPropertyIdentifier() {
+                @NotNull
+                @Override
+                public String getId() {
+                    return "";
+                }
+
+                @NotNull
+                @Override
+                public String getDescriptionKey() {
+                    return "";
+                }
+
+                @NotNull
+                @Override
+                public IElementType getPropertyMarkerElement() {
+                    return IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE;
+                }
+
+                @Nullable
+                @Override
+                public IElementType getPropertyValueMarkerElement() {
+                    return IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE_VALUE;
+                }
+
+                @Override
+                public boolean isRequired() {
+                    return false;
+                }
+
+                @Override
+                public boolean isDeprecated() {
+                    return false;
+                }
+            });
+        } else if (IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForMessageSection(ASTNode node) {
+        if (IssMarkerFactory.MessageSection.SECTION.equals(node.getElementType())) {
+            return new IssMessageSectionElement(node);
+        } else if (IssMarkerFactory.MessageSection.PROPERTY_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultElement(node, new IssStandardPropertyIdentifier() {
+                @NotNull
+                @Override
+                public String getId() {
+                    return "";
+                }
+
+                @NotNull
+                @Override
+                public String getDescriptionKey() {
+                    return "";
+                }
+
+                @NotNull
+                @Override
+                public IElementType getPropertyMarkerElement() {
+                    return IssMarkerFactory.MessageSection.PROPERTY_VALUE;
+                }
+
+                @Nullable
+                @Override
+                public IElementType getPropertyValueMarkerElement() {
+                    return IssMarkerFactory.MessageSection.PROPERTY_VALUE_VALUE;
+                }
+
+                @Override
+                public boolean isRequired() {
+                    return false;
+                }
+
+                @Override
+                public boolean isDeprecated() {
+                    return false;
+                }
+            });
+        } else if (IssMarkerFactory.MessageSection.PROPERTY_VALUE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
         }
 
         return null;

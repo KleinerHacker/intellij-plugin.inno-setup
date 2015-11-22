@@ -36,6 +36,22 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setTooltipText("SETUP Section")
                                 .createLineMarkerInfo(psiElement)
                 );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssCustomMessageSectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_CUSTOM_MESSAGES)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("CUSTOMMESSAGES Section")
+                                .createLineMarkerInfo(psiElement)
+                );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssMessageSectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_MESSAGES)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("MESSAGES Section")
+                                .createLineMarkerInfo(psiElement)
+                );
             } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssFileSectionElement) {
                 collection.add(
                         NavigationGutterIconBuilder.create(IssIcons.IC_SECT_FILE)

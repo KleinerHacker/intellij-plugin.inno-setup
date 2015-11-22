@@ -214,6 +214,8 @@
                                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssOverviewLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="iss"
                                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssReferenceLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="iss"
+                                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssLanguageLineMarkerProvider"/>
 
         <!-- ************************* RUN & COMPILE ****************************** -->
         <configurationType implementation="org.pcsoft.plugins.intellij.inno_setup.run.IssRunConfigurationType"/>

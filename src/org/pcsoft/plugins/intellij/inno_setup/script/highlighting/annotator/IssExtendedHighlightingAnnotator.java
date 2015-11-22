@@ -21,6 +21,12 @@ public class IssExtendedHighlightingAnnotator implements Annotator {
         if (psiElement instanceof IssIdentifierElement) {
             final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(psiElement, null);
             infoAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME);
+            if (psiElement.getText().contains(".")) {
+                final Annotation hintAnnotation = annotationHolder.createInfoAnnotation(new TextRange(
+                        psiElement.getTextRange().getStartOffset(), psiElement.getTextRange().getStartOffset() + psiElement.getText().indexOf(".")),
+                        null);
+                hintAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_LAN);
+            }
         } else if (psiElement instanceof IssPropertyValueElement) {
             IssRegexUtils.findInternalConstants(psiElement.getText(), textRange -> {
                 final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(new TextRange(

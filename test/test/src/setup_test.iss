@@ -47,6 +47,7 @@ Filename: "doubleRun";
 Filename: "doubleRun";
 Flags: 64Bit
 
+
 [UninstallRun]
 Filename: "testUninstallRun"; Flags: SkipIfDoesntExist 64Bit SkipIfDoesntExist bla; Components: testComponent bla testComponent; Tasks: testTask bla testTask
 Filename: "doubleUninstallRun";
@@ -67,3 +68,13 @@ Root: HKCU; Subkey: "other";
 Root: HKCU; Subkey: "other"; ValueName: "third";
 Root: HKCU; Subkey: "other";
 Flags: UninsDeleteEntry
+
+[CustomMessages]
+test=Bla
+de.test=Blub
+en-GB.test=Hello
+
+[Messages]
+forward=>>>
+de.forward=>>>
+en-GB.forward=>>>

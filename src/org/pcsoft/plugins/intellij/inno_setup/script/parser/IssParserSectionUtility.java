@@ -61,11 +61,19 @@ final class IssParserSectionUtility {
         while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.SECTION_TITLE) {
             if (psiBuilder.getTokenType() == IssTokenFactory.COMPILER_DIRECTIVE) {
                 IssParserCompilerDirectiveUtility.parseCompilerDirective(psiBuilder);
-            } else if (psiBuilder.getTokenType() == IssTokenFactory.NAME) {
+            } else if (psiBuilder.getTokenType() == IssTokenFactory.NAME || psiBuilder.getTokenType() == IssTokenFactory.WORD) {
                 switch (sectionType) {
                     case Setup:
                         parseLineForStandardSection(psiBuilder, "Setup Section", IssSetupProperty::getPropertyValueMarkerElementFromId,
                                 IssSetupProperty::getPropertyMarkerElementFromId);
+                        break;
+                    case CustomMessage:
+                        parseLineForStandardSection(psiBuilder, "CustomMessage Section", s -> IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE_VALUE,
+                                s -> IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE);
+                        break;
+                    case Message:
+                        parseLineForStandardSection(psiBuilder, "Message Section", s -> IssMarkerFactory.MessageSection.PROPERTY_VALUE_VALUE,
+                                s -> IssMarkerFactory.MessageSection.PROPERTY_VALUE);
                         break;
                     case Task:
                         parseLineForDefinableSection(psiBuilder, "Tasks Section", IssMarkerFactory.TaskSection.SECTION_DEFINITION,

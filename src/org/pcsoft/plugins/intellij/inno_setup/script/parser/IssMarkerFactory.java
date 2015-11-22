@@ -51,6 +51,24 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_COMPRESSION_VALUE = new IElementType(KEY_ITEM + "_COMPRESSION_VALUE", LANGUAGE);
     }
 
+    public static final class CustomMessageSection {
+        private static final String KEY = "CUSTOMMESSAGE_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType PROPERTY_VALUE = new IElementType(KEY_ITEM + "_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUE_VALUE = new IElementType(KEY_ITEM + "_VALUE_VALUE", LANGUAGE);
+    }
+
+    public static final class MessageSection {
+        private static final String KEY = "MESSAGE_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType PROPERTY_VALUE = new IElementType(KEY_ITEM + "_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUE_VALUE = new IElementType(KEY_ITEM + "_VALUE_VALUE", LANGUAGE);
+    }
+
     public static final class TaskSection {
         private static final String KEY = "TASK_SECTION";
         private static final String KEY_ITEM = KEY + "_PROPERTY";

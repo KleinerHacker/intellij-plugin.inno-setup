@@ -52,6 +52,11 @@ public final class IssLanguageHighlightingColorFactory {
             new TextAttributes(JBColor.BLUE, null, null, null, Font.BOLD)
     );
 
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_LAN = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_LAN",
+            new TextAttributes(JBColor.BLUE.brighter(), null, null, null, Font.BOLD | Font.ITALIC)
+    );
+
     public static final TextAttributesKey ANNOTATOR_ERROR_REFERENCE = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_ERROR_REFERENCE",
             new TextAttributes(JBColor.RED, null, null, null, Font.BOLD)
