@@ -60,3 +60,10 @@ Filename: "doubleINI"; Section: "single"; Key: "abc";
 Filename: "doubleINI"; Section: "double";
 Filename: "doubleINI"; Section: "double";
 Flags: UninsDeleteSection
+
+[Registry]
+Root: HKCR; Subkey: "test"; ValueName: "Value"; Flags: NoError  bla NoError; Components: testComponent bla testComponent; Tasks: testTask bla testTask; Permissions: Everyone-Modify bla Everyone-Modify;
+Root: HKCU; Subkey: "other";
+Root: HKCU; Subkey: "other"; ValueName: "third";
+Root: HKCU; Subkey: "other";
+Flags: UninsDeleteEntry

@@ -24,7 +24,7 @@ public final class IssMarkerFactory {
 
     public static final class CommonSection {
         private static final String KEY = "COMMON_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType PROPERTY_LANGUAGES = new IElementType(KEY_ITEM + "_LANGUAGES", LANGUAGE);
         public static final IElementType PROPERTY_LANGUAGES_VALUE = new IElementType(KEY_ITEM + "_LANGUAGES_VALUE", LANGUAGE);
@@ -40,7 +40,7 @@ public final class IssMarkerFactory {
 
     public static final class SetupSection {
         private static final String KEY = "SETUP_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType PROPERTY_APP_NAME = new IElementType(KEY_ITEM + "_APP_NAME", LANGUAGE);
@@ -53,7 +53,7 @@ public final class IssMarkerFactory {
 
     public static final class TaskSection {
         private static final String KEY = "TASK_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -69,7 +69,7 @@ public final class IssMarkerFactory {
 
     public static final class IconSection {
         private static final String KEY = "ICON_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -97,7 +97,7 @@ public final class IssMarkerFactory {
 
     public static final class InstallRunSection {
         private static final String KEY = "INSTALL_RUN_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -119,7 +119,7 @@ public final class IssMarkerFactory {
 
     public static final class UninstallRunSection {
         private static final String KEY = "UNINSTALL_RUN_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -139,7 +139,7 @@ public final class IssMarkerFactory {
 
     public static final class FileSection {
         private static final String KEY = "FILE_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -169,7 +169,7 @@ public final class IssMarkerFactory {
 
     public static final class DirectorySection {
         private static final String KEY = "DIRECTORY_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -185,7 +185,7 @@ public final class IssMarkerFactory {
 
     public static final class ComponentSection {
         private static final String KEY = "COMPONENT_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -203,7 +203,7 @@ public final class IssMarkerFactory {
 
     public static final class TypeSection {
         private static final String KEY = "TYPE_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -217,7 +217,7 @@ public final class IssMarkerFactory {
 
     public static final class INISection {
         private static final String KEY = "INI_SECTION";
-        private static final String KEY_ITEM = KEY + "_ITEM";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
@@ -229,6 +229,28 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_KEY_VALUE = new IElementType(KEY_ITEM + "_KEY_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_STRING = new IElementType(KEY_ITEM + "_STRING", LANGUAGE);
         public static final IElementType PROPERTY_STRING_VALUE = new IElementType(KEY_ITEM + "_STRING_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
+        public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
+    public static final class RegistrySection {
+        private static final String KEY = "REGISTRY_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_ROOT = new IElementType(KEY_ITEM + "_ROOT", LANGUAGE);
+        public static final IElementType PROPERTY_ROOT_VALUE = new IElementType(KEY_ITEM + "_ROOT_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_SUBKEY = new IElementType(KEY_ITEM + "_SUBKEY", LANGUAGE);
+        public static final IElementType PROPERTY_SUBKEY_VALUE = new IElementType(KEY_ITEM + "_SUBKEY_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUETYPE = new IElementType(KEY_ITEM + "_VALUETYPE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUETYPE_VALUE = new IElementType(KEY_ITEM + "_VALUETYPE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUENAME = new IElementType(KEY_ITEM + "_VALUENAME", LANGUAGE);
+        public static final IElementType PROPERTY_VALUENAME_VALUE = new IElementType(KEY_ITEM + "_VALUENAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_VALUEDATA = new IElementType(KEY_ITEM + "_VALUEDATA", LANGUAGE);
+        public static final IElementType PROPERTY_VALUEDATA_VALUE = new IElementType(KEY_ITEM + "_VALUEDATA_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_PERMISSIONS = new IElementType(KEY_ITEM + "_PERMISSIONS", LANGUAGE);
+        public static final IElementType PROPERTY_PERMISSIONS_VALUE = new IElementType(KEY_ITEM + "_PERMISSIONS_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }

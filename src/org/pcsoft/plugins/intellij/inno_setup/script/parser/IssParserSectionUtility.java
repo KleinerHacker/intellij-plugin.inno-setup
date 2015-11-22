@@ -103,6 +103,10 @@ final class IssParserSectionUtility {
                         parseLineForDefinableSection(psiBuilder, "INI Section", IssMarkerFactory.INISection.SECTION_DEFINITION,
                                 IssINIProperty::getPropertyValueMarkerElementFromId, IssINIProperty::getPropertyMarkerElementFromId);
                         break;
+                    case Registry:
+                        parseLineForDefinableSection(psiBuilder, "Registry Section", IssMarkerFactory.RegistrySection.SECTION_DEFINITION,
+                                IssRegistryProperty::getPropertyValueMarkerElementFromId, IssRegistryProperty::getPropertyMarkerElementFromId);
+                        break;
                     default:
                         throw new RuntimeException();
                 }

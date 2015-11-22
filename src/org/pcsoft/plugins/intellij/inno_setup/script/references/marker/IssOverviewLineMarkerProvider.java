@@ -108,6 +108,14 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setTooltipText("INI Section")
                                 .createLineMarkerInfo(psiElement)
                 );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssRegistrySectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_REGISTRY)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("REGISTRY Section")
+                                .createLineMarkerInfo(psiElement)
+                );
             }
         }
     }

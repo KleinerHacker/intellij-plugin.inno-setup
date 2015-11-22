@@ -23,7 +23,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     Message("Messages", null, "section.messages", null),
     CustomMessage("CustomMessages", null, "section.custom_messages", null),
     LanguageOption("LangOptions", null, "section.lang_options", null),
-    Registry("Registry", null, "section.registry", null),
+    Registry("Registry", IssMarkerFactory.RegistrySection.SECTION, "section.registry", IssIcons.IC_SECT_REGISTRY),
     InstallRun("Run", IssMarkerFactory.InstallRunSection.SECTION, "section.install_run", IssIcons.IC_SECT_INSTALL_RUN),
     UninstallDelete("UninstallDelete", null, "section.uninstall_delete", null),
     UninstallRun("UninstallRun", IssMarkerFactory.UninstallRunSection.SECTION, "section.uninstall_run", IssIcons.IC_SECT_UNINSTALL_RUN);

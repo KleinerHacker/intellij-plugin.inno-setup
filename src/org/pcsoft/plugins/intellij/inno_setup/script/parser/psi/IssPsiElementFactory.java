@@ -67,6 +67,10 @@ public final class IssPsiElementFactory {
         if (iniSection != null)
             return iniSection;
 
+        final PsiElement registrySection = createForRegistrySection(node);
+        if (registrySection != null)
+            return registrySection;
+
         //Default
         if (IssMarkerFactory.SECTION_TITLE.equals(node.getElementType())) {
             return new IssSectionNameElement(node);
@@ -386,6 +390,44 @@ public final class IssPsiElementFactory {
             return new IssPropertyINIFlagsElement(node);
         } else if (IssMarkerFactory.INISection.PROPERTY_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssPropertyINIFlagsValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForRegistrySection(ASTNode node) {
+        if (IssMarkerFactory.RegistrySection.SECTION.equals(node.getElementType())) {
+            return new IssRegistrySectionElement(node);
+        } else if (IssMarkerFactory.RegistrySection.SECTION_DEFINITION.equals(node.getElementType())) {
+            return new IssRegistryDefinitionElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_ROOT.equals(node.getElementType())) {
+            return new IssPropertyRegistryRootElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_ROOT_VALUE.equals(node.getElementType())) {
+            return new IssPropertyRegistryRootValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_SUBKEY.equals(node.getElementType())) {
+            return new IssPropertyStringElement(node, IssRegistryProperty.Subkey);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_SUBKEY_VALUE.equals(node.getElementType())) {
+            return new IssPropertyStringValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUETYPE.equals(node.getElementType())) {
+            return new IssPropertyRegistryValueTypeElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUETYPE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyRegistryValueTypeValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUENAME.equals(node.getElementType())) {
+            return new IssPropertyStringElement(node, IssRegistryProperty.ValueName);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUENAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyStringValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUEDATA.equals(node.getElementType())) {
+            return new IssPropertyStringElement(node, IssRegistryProperty.ValueData);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_VALUEDATA_VALUE.equals(node.getElementType())) {
+            return new IssPropertyStringValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_PERMISSIONS.equals(node.getElementType())) {
+            return new IssPropertyIOPermissionsElement(node, IssRegistryProperty.Permissions);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_PERMISSIONS_VALUE.equals(node.getElementType())) {
+            return new IssPropertyIOPermissionsValueElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_FLAGS.equals(node.getElementType())) {
+            return new IssPropertyRegistryFlagsElement(node);
+        } else if (IssMarkerFactory.RegistrySection.PROPERTY_FLAGS_VALUE.equals(node.getElementType())) {
+            return new IssPropertyRegistryFlagsValueElement(node);
         }
 
         return null;
