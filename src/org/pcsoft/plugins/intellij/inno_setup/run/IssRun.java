@@ -67,10 +67,8 @@ public class IssRun implements RunProfileState {
                     final BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
                     String line;
                     while ((line = reader.readLine()) != null) {
-//                        if (line.toLowerCase().contains("error") && line.toLowerCase().contains("line")) {
-//
-//                        }
                         consoleView.print(line + SystemUtils.LINE_SEPARATOR, ConsoleViewContentType.ERROR_OUTPUT);
+                        IssRunErrorHandler.handleError(runConfiguration.getProject(), line);
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
