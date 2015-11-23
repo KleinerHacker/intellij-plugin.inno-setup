@@ -34,7 +34,7 @@ public abstract class IssSectionElement extends IssAbstractElement {
             @Nullable
             @Override
             public String getLocationString() {
-                return getContainingFile().getName();
+                return getContainingFile() == null ? "<UNKNOWN>" : getContainingFile().getName();
             }
 
             @Nullable
