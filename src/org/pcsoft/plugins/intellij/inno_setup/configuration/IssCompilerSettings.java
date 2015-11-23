@@ -15,7 +15,10 @@ import java.io.File;
  */
 @State(name = "SaveIssCompilerSettings", storages = @Storage(file = StoragePathMacros.APP_CONFIG + "/is_compiler.xml"))
 public class IssCompilerSettings implements PersistentStateComponent<IssCompilerSettings> {
+    public static final String DEFAULT_LANGUAGES_PATH = "Languages";
+
     private String installationPlace;
+    private String languagePlace = DEFAULT_LANGUAGES_PATH;
 
     @Nullable
     @Override
@@ -34,6 +37,17 @@ public class IssCompilerSettings implements PersistentStateComponent<IssCompiler
 
     public void setInstallationPlace(String installationPlace) {
         this.installationPlace = installationPlace;
+    }
+
+    public String getLanguagePlace() {
+        return languagePlace;
+    }
+
+    public void setLanguagePlace(String languagePlace) {
+        this.languagePlace = languagePlace;
+        if (languagePlace == null || languagePlace.trim().isEmpty()) {
+            this.languagePlace = DEFAULT_LANGUAGES_PATH;
+        }
     }
 
     public void validate() throws RuntimeConfigurationException {

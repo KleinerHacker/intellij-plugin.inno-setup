@@ -1,57 +1,42 @@
 package org.pcsoft.plugins.intellij.inno_setup.configuration;
 
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.ProjectCoreUtil;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
+import org.pcsoft.plugins.intellij.inno_setup.configuration.ui.IssInstallationPathTextField;
+import org.pcsoft.plugins.intellij.inno_setup.configuration.ui.IssLanguageTable;
+import org.pcsoft.plugins.intellij.inno_setup.configuration.ui.IssLanguagesPathTextField;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
  * Created by Christoph on 17.11.2015.
  */
 public class IssCompilerConfigurable extends BaseConfigurable {
     private final BorderLayoutPanel pnlSettings;
-    private final TextFieldWithBrowseButton txtInstallationPlace;
+    private final IssInstallationPathTextField txtInstallationPath;
+    private final IssLanguagesPathTextField txtLanguagesPath;
+    private final JPanel pnlLanguages;
 
     private final IssCompilerSettings settings = ServiceManager.getService(IssCompilerSettings.class);
 
     public IssCompilerConfigurable() {
-        txtInstallationPlace = new TextFieldWithBrowseButton();
-        txtInstallationPlace.setEditable(false);
-        txtInstallationPlace.addActionListener(e -> {
-            txtInstallationPlace.setText("Test");
+        txtInstallationPath = new IssInstallationPathTextField(b -> myModified = true);
+        txtLanguagesPath = new IssLanguagesPathTextField(b -> myModified = true);
+        pnlLanguages = IssLanguageTable.createTable();
+        pnlLanguages.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
-            myModified = true;
-
-            final VirtualFile vFile = FileChooser.chooseFile(new FileChooserDescriptor(false, true, false, false, false, false), ProjectCoreUtil.theProject, null);
-            if (vFile != null) {
-                if (!new File(vFile.getPath(), "ISCC.exe").exists()) {
-                    JOptionPane.showMessageDialog(null, "Unable to find ISCC.exe in target directory!");
-                    return;
-                }
-
-                final String file = vFile.getPath();
-                txtInstallationPlace.setText(file);
-
-                myModified = true;
-            }
-        });
-
-        final LabeledComponent<TextFieldWithBrowseButton> pnlCompiler = new LabeledComponent<>();
-        pnlCompiler.setComponent(txtInstallationPlace);
+        final VerticalBox pnlBasicSettings = new VerticalBox();
+        pnlBasicSettings.add(txtInstallationPath);
+        pnlBasicSettings.add(txtLanguagesPath);
 
         pnlSettings = new BorderLayoutPanel();
-        pnlSettings.addToTop(pnlCompiler);
+        pnlSettings.addToTop(pnlBasicSettings);
+        pnlSettings.addToCenter(pnlLanguages);
     }
 
     @Nls
@@ -74,25 +59,27 @@ public class IssCompilerConfigurable extends BaseConfigurable {
 
     @Override
     public void apply() throws ConfigurationException {
-        settings.setInstallationPlace(txtInstallationPlace.getText());
+        settings.setInstallationPlace(txtInstallationPath.getValue());
+        settings.setLanguagePlace(txtLanguagesPath.getValue());
 
         myModified = false;
     }
 
     @Override
     public void reset() {
-        txtInstallationPlace.setText(settings.getInstallationPlace() == null ? "" : settings.getInstallationPlace());
+        txtInstallationPath.setValue(settings.getInstallationPlace() == null ? "" : settings.getInstallationPlace());
+        txtLanguagesPath.setValue(settings.getLanguagePlace() == null ? IssCompilerSettings.DEFAULT_LANGUAGES_PATH : settings.getLanguagePlace());
 
         myModified = false;
     }
 
     @Override
     public void disposeUIResources() {
-        txtInstallationPlace.dispose();
+
     }
 
     @Override
     public JComponent getPreferredFocusedComponent() {
-        return txtInstallationPlace;
+        return txtInstallationPath;
     }
 }
