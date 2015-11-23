@@ -1,6 +1,12 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting;
 
-import com.intellij.formatting.*;
+import com.intellij.formatting.Alignment;
+import com.intellij.formatting.FormattingModel;
+import com.intellij.formatting.FormattingModelBuilder;
+import com.intellij.formatting.FormattingModelProvider;
+import com.intellij.formatting.SpacingBuilder;
+import com.intellij.formatting.Wrap;
+import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -9,7 +15,6 @@ import com.intellij.psi.codeStyle.CodeStyleSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 
 /**
@@ -22,10 +27,10 @@ public class IssFormattingModelBuilder implements FormattingModelBuilder {
     public FormattingModel createModel(PsiElement psiElement, CodeStyleSettings codeStyleSettings) {
         return FormattingModelProvider.createFormattingModelForPsiFile(psiElement.getContainingFile(),
                 new IssBlock(psiElement.getNode(), Wrap.createWrap(WrapType.NONE, false), Alignment.createAlignment(),
-                        createSPaceBuilder(codeStyleSettings)), codeStyleSettings);
+                        createSpaceBuilder(codeStyleSettings)), codeStyleSettings);
     }
 
-    private static SpacingBuilder createSPaceBuilder(CodeStyleSettings codeStyleSettings) {
+    private static SpacingBuilder createSpaceBuilder(CodeStyleSettings codeStyleSettings) {
         final IssCodeStyleSettings customSettings = codeStyleSettings.getCustomSettings(IssCodeStyleSettings.class);
         return new SpacingBuilder(codeStyleSettings, IssLanguage.INSTANCE)
                 .around(IssTokenFactory.OPERATOR_EQUAL).spaceIf(/*customSettings.SPACES_SETUP_ASSIGNER*/ codeStyleSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
@@ -33,7 +38,7 @@ public class IssFormattingModelBuilder implements FormattingModelBuilder {
                 .before(IssTokenFactory.OPERATOR_COLON).none()
                 .after(IssTokenFactory.OPERATOR_SEMICOLON).spaceIf(/*customSettings.SPACES_PROPERTY_TERMINATOR*/ codeStyleSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
                 .before(IssTokenFactory.OPERATOR_SEMICOLON).none()
-                .before(IssMarkerFactory.SECTION_TITLE).none();
+                .before(IssTokenFactory.SECTION_TITLE).blankLines(codeStyleSettings.KEEP_BLANK_LINES_IN_CODE);
     }
 
     @Nullable

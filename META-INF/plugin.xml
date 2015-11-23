@@ -178,6 +178,7 @@
 
         <lang.refactoringSupport language="iss"
                                  implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
+        <statementUpDownMover implementation="org.pcsoft.plugins.intellij.inno_setup.script.others.IssStatementUpDownMover"/>
 
         <!-- Documentation -->
         <documentationProvider

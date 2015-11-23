@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.configuration;
 
+import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
@@ -35,7 +36,8 @@ public class IssCompilerSettings implements PersistentStateComponent<IssCompiler
         this.installationPlace = installationPlace;
     }
 
-    public boolean isValid() {
-        return new File(installationPlace, "ISCC.exe").exists();
+    public void validate() throws RuntimeConfigurationException {
+        if (!new File(installationPlace, "ISCC.exe").exists())
+            throw new RuntimeConfigurationException("No ISCC path configured!");
     }
 }

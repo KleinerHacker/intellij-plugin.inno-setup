@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiLiteral;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,4 +48,6 @@ public abstract class IssPropertyElement<V extends IssPropertyValueElement, I ex
     public final I getPropertyType() {
         return propertyType;
     }
+
+
 }

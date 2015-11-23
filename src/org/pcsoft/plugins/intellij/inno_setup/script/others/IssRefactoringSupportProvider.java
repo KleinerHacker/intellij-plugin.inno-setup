@@ -2,6 +2,8 @@ package org.pcsoft.plugins.intellij.inno_setup.script.others;
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.refactoring.RefactoringActionHandler;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceValueElement;
@@ -21,5 +23,6 @@ public final class IssRefactoringSupportProvider extends RefactoringSupportProvi
         return element instanceof IssPropertyTaskReferenceValueElement || element instanceof IssPropertyTypeReferenceValueElement ||
                 element instanceof IssPropertyComponentReferenceValueElement || element instanceof IssPropertyNameValueElement;
     }
+
 
 }
