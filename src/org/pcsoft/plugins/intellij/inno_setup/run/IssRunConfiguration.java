@@ -42,7 +42,7 @@ public class IssRunConfiguration extends RunConfigurationBase {
             throw new RuntimeConfigurationException("No script file is set!");
         if (!new File(scriptFile).exists())
             throw new RuntimeConfigurationException("Given script file not exists!");
-        compilerSettings.validate();
+        compilerSettings.validateForCompileRun();
     }
 
     @Nullable

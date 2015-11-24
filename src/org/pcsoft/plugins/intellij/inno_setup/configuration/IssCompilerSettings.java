@@ -50,8 +50,31 @@ public class IssCompilerSettings implements PersistentStateComponent<IssCompiler
         }
     }
 
-    public void validate() throws RuntimeConfigurationException {
-        if (!new File(installationPlace, "ISCC.exe").exists())
-            throw new RuntimeConfigurationException("No ISCC path configured!");
+    public File getInstallationPath() {
+        return new File(installationPlace);
+    }
+
+    public File getLanguagesPath() {
+        return new File(getInstallationPath(), languagePlace);
+    }
+
+    public void validateForCompileRun() throws RuntimeConfigurationException {
+        if (!getInstallationPath().exists())
+            throw new RuntimeConfigurationException("No Inno Setup Installation configured!");
+        if (!new File(getInstallationPath(), "ISCC.exe").exists())
+            throw new RuntimeConfigurationException("Unable to find ISCC.exe in Inno Setup Installation path!");
+    }
+
+    public boolean isValid() {
+        try {
+            validateForCompileRun();
+        } catch (RuntimeConfigurationException e) {
+            return false;
+        }
+
+        if (this.languagePlace == null || this.languagePlace.trim().isEmpty() || !getLanguagesPath().exists())
+            return false;
+
+        return true;
     }
 }

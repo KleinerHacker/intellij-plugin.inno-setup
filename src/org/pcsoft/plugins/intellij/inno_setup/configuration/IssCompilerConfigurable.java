@@ -17,26 +17,25 @@ import javax.swing.*;
  * Created by Christoph on 17.11.2015.
  */
 public class IssCompilerConfigurable extends BaseConfigurable {
-    private final BorderLayoutPanel pnlSettings;
+    private final BorderLayoutPanel pnlSettings = new BorderLayoutPanel();
     private final IssInstallationPathTextField txtInstallationPath;
     private final IssLanguagesPathTextField txtLanguagesPath;
-    private final JPanel pnlLanguages;
+    private final IssLanguageTable tblLanguages;
 
     private final IssCompilerSettings settings = ServiceManager.getService(IssCompilerSettings.class);
 
     public IssCompilerConfigurable() {
         txtInstallationPath = new IssInstallationPathTextField(b -> myModified = true);
         txtLanguagesPath = new IssLanguagesPathTextField(b -> myModified = true);
-        pnlLanguages = IssLanguageTable.createTable();
-        pnlLanguages.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        tblLanguages = new IssLanguageTable();
+        tblLanguages.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
         final VerticalBox pnlBasicSettings = new VerticalBox();
         pnlBasicSettings.add(txtInstallationPath);
         pnlBasicSettings.add(txtLanguagesPath);
 
-        pnlSettings = new BorderLayoutPanel();
         pnlSettings.addToTop(pnlBasicSettings);
-        pnlSettings.addToCenter(pnlLanguages);
+        pnlSettings.addToCenter(tblLanguages);
     }
 
     @Nls
@@ -61,6 +60,7 @@ public class IssCompilerConfigurable extends BaseConfigurable {
     public void apply() throws ConfigurationException {
         settings.setInstallationPlace(txtInstallationPath.getValue());
         settings.setLanguagePlace(txtLanguagesPath.getValue());
+        tblLanguages.refresh();
 
         myModified = false;
     }
@@ -69,6 +69,7 @@ public class IssCompilerConfigurable extends BaseConfigurable {
     public void reset() {
         txtInstallationPath.setValue(settings.getInstallationPlace() == null ? "" : settings.getInstallationPlace());
         txtLanguagesPath.setValue(settings.getLanguagePlace() == null ? IssCompilerSettings.DEFAULT_LANGUAGES_PATH : settings.getLanguagePlace());
+        tblLanguages.refresh();
 
         myModified = false;
     }
