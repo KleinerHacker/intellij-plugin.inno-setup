@@ -7,10 +7,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by Christoph on 12.12.2014.
  */
-public class IssFileTypeFactory extends FileTypeFactory {
+public class IssScriptFileTypeFactory extends FileTypeFactory {
 
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
-        fileTypeConsumer.consume(IssFileType.INSTANCE);
+        fileTypeConsumer.consume(IssScriptFileType.INSTANCE);
     }
 }

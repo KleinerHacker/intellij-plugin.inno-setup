@@ -5,35 +5,35 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 /**
  * Created by Christoph on 12.12.2014.
  */
-public class IssFileType extends LanguageFileType {
+public class IssLanguageFileType extends LanguageFileType {
 
-    public static final IssFileType INSTANCE = new IssFileType();
+    public static final IssLanguageFileType INSTANCE = new IssLanguageFileType();
 
-    private IssFileType() {
+    private IssLanguageFileType() {
         super(IssLanguage.INSTANCE);
     }
 
     @NotNull
     @Override
     public String getName() {
-        return "Inno Setup Script";
+        return "Inno Setup Language File";
     }
 
     @NotNull
     @Override
     public String getDescription() {
-        return "Setup Script for Inno Setup 5.5";
+        return "Language File for Inno Setup 5.5";
     }
 
     @NotNull
     @Override
     public String getDefaultExtension() {
-        return "iss";
+        return "isl";
     }
 
     @Nullable

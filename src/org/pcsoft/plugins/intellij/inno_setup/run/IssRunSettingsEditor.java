@@ -13,7 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.IssFileType;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 
 import javax.swing.*;
 import java.util.List;
@@ -33,7 +33,7 @@ public class IssRunSettingsEditor extends SettingsEditor<IssRunConfiguration> {
         txtScriptFile.setEditable(false);
         txtScriptFile.addActionListener(e -> {
             final List<PsiDirectory> psiDirectories = FileBasedIndex.getInstance().getContainingFiles(
-                    FileTypeIndex.NAME, IssFileType.INSTANCE, GlobalSearchScope.allScope(ProjectCoreUtil.theProject))
+                    FileTypeIndex.NAME, IssScriptFileType.INSTANCE, GlobalSearchScope.allScope(ProjectCoreUtil.theProject))
                     .stream()
                     .filter(item -> item.getExtension() != null)
                     .filter(item -> item.getExtension().toLowerCase().equals("iss"))

@@ -3,6 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.configuration;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.options.BaseConfigurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.components.panels.VerticalBox;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import org.jetbrains.annotations.Nls;
@@ -27,15 +28,17 @@ public class IssCompilerConfigurable extends BaseConfigurable {
     public IssCompilerConfigurable() {
         txtInstallationPath = new IssInstallationPathTextField(b -> myModified = true);
         txtLanguagesPath = new IssLanguagesPathTextField(b -> myModified = true);
-        tblLanguages = new IssLanguageTable();
-        tblLanguages.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+        tblLanguages = new IssLanguageTable(IssLanguageTable.ViewType.Normal, false);
+        final LabeledComponent<IssLanguageTable> pnlLanguages = new LabeledComponent<>();
+        pnlLanguages.setText("Languages");
+        pnlLanguages.setComponent(tblLanguages);
 
         final VerticalBox pnlBasicSettings = new VerticalBox();
         pnlBasicSettings.add(txtInstallationPath);
         pnlBasicSettings.add(txtLanguagesPath);
 
         pnlSettings.addToTop(pnlBasicSettings);
-        pnlSettings.addToCenter(tblLanguages);
+        pnlSettings.addToCenter(pnlLanguages);
     }
 
     @Nls

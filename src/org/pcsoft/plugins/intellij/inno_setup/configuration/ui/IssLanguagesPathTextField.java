@@ -5,8 +5,8 @@ import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
 
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 
 /**
@@ -15,21 +15,16 @@ import java.util.function.Consumer;
 public class IssLanguagesPathTextField extends LabeledComponent<TextFieldWithBrowseButton> {
     final TextFieldWithBrowseButton txtLanguagesPath = new TextFieldWithBrowseButton();
 
-    public IssLanguagesPathTextField(Consumer<Boolean> modificationCallback) {
+    public IssLanguagesPathTextField(final Consumer<Boolean> modificationCallback) {
         txtLanguagesPath.getButton().setIcon(AllIcons.Actions.Reset_to_default);
         txtLanguagesPath.addActionListener(e -> {
             txtLanguagesPath.setText(IssCompilerSettings.DEFAULT_LANGUAGES_PATH);
             modificationCallback.accept(true);
         });
-        txtLanguagesPath.getTextField().addInputMethodListener(new InputMethodListener() {
+        txtLanguagesPath.getTextField().addKeyListener(new KeyAdapter() {
             @Override
-            public void inputMethodTextChanged(InputMethodEvent event) {
+            public void keyTyped(KeyEvent e) {
                 modificationCallback.accept(true);
-            }
-
-            @Override
-            public void caretPositionChanged(InputMethodEvent event) {
-
             }
         });
 

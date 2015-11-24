@@ -2,14 +2,25 @@ package org.pcsoft.plugins.intellij.inno_setup.configuration.ui;
 
 import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.ActionToolbarPosition;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.ProjectCoreUtil;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.ui.components.BorderLayoutPanel;
+import org.apache.commons.lang.StringUtils;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
+import org.pcsoft.plugins.intellij.inno_setup.utils.IssEditorUtils;
+import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFile;
+import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFileSystem;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,17 +33,50 @@ import java.util.Scanner;
 public class IssLanguageTable extends BorderLayoutPanel {
     private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
 
+    public static enum ViewType {
+        Normal,
+        Simple
+    }
+
+    private static ActionToolbarPosition convert(ViewType viewType) {
+        switch (viewType) {
+            case Normal:
+                return ActionToolbarPosition.RIGHT;
+            case Simple:
+                return ActionToolbarPosition.TOP;
+            default:
+                throw new RuntimeException();
+        }
+    }
+
     private ListTable tbl;
+    private ViewType viewType;
 
-    public IssLanguageTable() {
+    public IssLanguageTable(ViewType viewType, final boolean supportOpenFile) {
+        this.tbl = new ListTable(new IssLanguageTableModel(viewType));
+        this.tbl.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (!supportOpenFile)
+                    return;
 
-        this.tbl = new ListTable(new IssLanguageTableModel());
+                if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2 && tbl.getSelectedRowCount() == 1) {
+                    handleOpenAction();
+                }
+            }
+        });
+        this.viewType = viewType;
 
         final ToolbarDecorator toolbarDecorator = ToolbarDecorator.createDecorator(tbl)
+                .setToolbarPosition(convert(viewType))
                 .setAddAction(e -> handleAddAction())
                 .setRemoveAction(e -> handleRemoveAction())
                 .setEditAction(e -> handleEditAction())
                 .addExtraAction(new AnActionButton("Refresh", AllIcons.Actions.Refresh) {
+                    {
+                        setShortcut(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0)));
+                    }
+
                     @Override
                     public void actionPerformed(AnActionEvent anActionEvent) {
                         refresh();
@@ -42,7 +86,27 @@ public class IssLanguageTable extends BorderLayoutPanel {
     }
 
     public void refresh() {
-        tbl.setModel(new IssLanguageTableModel());
+        tbl.setModel(new IssLanguageTableModel(viewType));
+    }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.viewType = viewType;
+        refresh();
+    }
+
+    private void handleOpenAction() {
+        final String fileName = tbl.getValueAt(tbl.getSelectedRow(), 0).toString();
+        final File file = new File(SETTINGS.getLanguagesPath(), fileName);
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable removing", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        IssEditorUtils.openFile(ProjectCoreUtil.theProject, new IssVirtualFile(file, IssVirtualFileSystem.getInstance()));
     }
 
     private void handleAddAction() {
@@ -58,7 +122,11 @@ public class IssLanguageTable extends BorderLayoutPanel {
                 try (final OutputStream out = new FileOutputStream(file, false)) {
                     String line = null;
                     while ((line = scanner.nextLine()) != null) {
-                        //TODO: Replace place holder
+                        line = line.replace("$LAN_NAME_EN$", result.getLanguageName())
+                                .replace("$LAN_NAME_LOCALE$", result.getLanguageNameLocale())
+                                .replace("$LAN_ID$", StringUtils.leftPad(new HexBinaryAdapter().marshal(result.getLanguageId()), 4, '0'))
+                                .replace("$LAN_CODEPAGE$", String.valueOf(result.getLanguageCodePage()));
+                        //TODO: <XXXX>
                         out.write(line.getBytes("Unicode"));
                     }
                 }

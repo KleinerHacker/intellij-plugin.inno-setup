@@ -25,7 +25,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- ******************************** SCRIPT ********************************* -->
         <!-- Language -->
-        <fileTypeFactory implementation="org.pcsoft.plugins.intellij.inno_setup.script.IssFileTypeFactory"/>
+        <fileTypeFactory implementation="org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileTypeFactory"/>
+        <fileTypeFactory implementation="org.pcsoft.plugins.intellij.inno_setup.script.IssLanguageFileTypeFactory"/>
         <!-- Parser & Syntax -->
         <lang.parserDefinition language="iss"
                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.IssParserDefinition"/>
@@ -218,10 +219,17 @@
         <codeInsight.lineMarkerProvider language="iss"
                                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssLanguageLineMarkerProvider"/>
 
+        <toolWindow factoryClass="org.pcsoft.plugins.intellij.inno_setup.configuration.ui.IssToolWindowFactory"
+                    conditionClass="org.pcsoft.plugins.intellij.inno_setup.configuration.ui.IssToolWindowCondition"
+                    canCloseContents="false" anchor="right" id="Inno Setup"/>
+
         <!-- ************************* RUN & COMPILE ****************************** -->
         <configurationType implementation="org.pcsoft.plugins.intellij.inno_setup.run.IssRunConfigurationType"/>
         <applicationService serviceImplementation="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings"/>
         <applicationConfigurable provider="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerConfiguration" parentId="project.propCompiler"/>
+
+        <!-- ************************* OTHERS ****************************** -->
+        <virtualFileSystem key="iss-file-system" implementationClass="org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFileSystem"/>
     </extensions>
 
     <application-components>

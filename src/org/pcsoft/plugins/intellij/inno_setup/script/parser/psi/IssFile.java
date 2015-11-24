@@ -4,7 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.IssFileType;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 
 /**
@@ -19,6 +19,6 @@ public class IssFile extends PsiFileBase {
     @NotNull
     @Override
     public FileType getFileType() {
-        return IssFileType.INSTANCE;
+        return IssScriptFileType.INSTANCE;
     }
 }

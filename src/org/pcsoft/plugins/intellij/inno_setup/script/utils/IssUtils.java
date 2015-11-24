@@ -11,7 +11,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.IssFileType;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
 
@@ -64,7 +64,7 @@ final class IssUtils {
 
     private static void findFiles(@NotNull Project project, @NotNull Consumer<IssFile> visitor) {
         final Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
-                FileTypeIndex.NAME, IssFileType.INSTANCE, GlobalSearchScope.allScope(project)
+                FileTypeIndex.NAME, IssScriptFileType.INSTANCE, GlobalSearchScope.allScope(project)
         );
         for (final VirtualFile virtualFile : virtualFiles) {
             final IssFile issFile = (IssFile) PsiManager.getInstance(project).findFile(virtualFile);

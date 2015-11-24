@@ -6,12 +6,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,8 +24,8 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
             PATTERN_UNICODE = Pattern.compile("<([0-9A-Z]{4})>");
     public static final List<List<String>> LISTSRMPTY_DATA_LIST = Arrays.asList(new ArrayList<>(), new ArrayList<>());
 
-    public IssLanguageTableModel() {
-        super(buildData(), buildColumns());
+    public IssLanguageTableModel(IssLanguageTable.ViewType viewType) {
+        super(buildData(viewType), buildColumns(viewType));
     }
 
     @Override
@@ -38,11 +33,18 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
         return false;
     }
 
-    private static String[] buildColumns() {
-        return new String[]{"Filename", "Language Name", "ID", "Code Page"};
+    private static String[] buildColumns(IssLanguageTable.ViewType viewType) {
+        switch (viewType) {
+            case Normal:
+                return new String[]{"Filename", "Language Name", "ID", "Code Page"};
+            case Simple:
+                return new String[] {"Filename", "Language Name"};
+            default:
+                throw new RuntimeException();
+        }
     }
 
-    private static List<List<String>> buildData() {
+    private static List<List<String>> buildData(IssLanguageTable.ViewType viewType) {
         final File installationPath = new File(SETTINGS.getInstallationPlace());
         if (!installationPath.exists()) {
             System.err.println("Unable to find installation path: " + installationPath.getAbsolutePath());
@@ -93,7 +95,14 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
             lanCodePageList.add(lanCodePage == null ? "UNKNOWN" : lanCodePage);
         }
 
-        return Arrays.asList(fileNameList, lanNameList, lanIdList, lanCodePageList);
+        switch (viewType) {
+            case Normal:
+                return Arrays.asList(fileNameList, lanNameList, lanIdList, lanCodePageList);
+            case Simple:
+                return Arrays.asList(fileNameList, lanNameList);
+            default:
+                throw new RuntimeException();
+        }
     }
 
     private static String convertFromUnicode(String text) throws UnsupportedEncodingException {
