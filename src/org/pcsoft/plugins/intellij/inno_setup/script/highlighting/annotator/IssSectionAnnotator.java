@@ -25,6 +25,7 @@ public class IssSectionAnnotator implements Annotator {
 
     private void findMissingSections(IssFile issFile, AnnotationHolder annotationHolder) {
         Stream.of(IssSectionType.values())
+                .filter(item -> item.getFileType() == null || item.getFileType().getPsiFileClass() == issFile.getClass())
                 .filter(IssSectionType::isRequired)
                 .forEach(sectionType -> {
                     final IssSectionElement sectionElement = issFile.getSectionList().stream()

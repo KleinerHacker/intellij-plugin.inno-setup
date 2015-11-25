@@ -31,6 +31,8 @@ public final class IssIcons {
     public static final Icon IC_SECT_REGISTRY = IconLoader.findIcon("/icons/ic_sect_registry.png");
     public static final Icon IC_SECT_MESSAGES = IconLoader.findIcon("/icons/ic_sect_messages.png");
     public static final Icon IC_SECT_CUSTOM_MESSAGES = IconLoader.findIcon("/icons/ic_sect_custom_messages.png");
+    public static final Icon IC_SECT_LANGUAGE_OPTION = IconLoader.findIcon("/icons/ic_sect_language_option.png");
+    public static final Icon IC_SECT_LANGUAGE = IconLoader.findIcon("/icons/ic_sect_language.png");
 
     public static final Icon IC_INFO_FLAG = IconLoader.findIcon("/icons/ic_info_flag.png");
     public static final Icon IC_INFO_ATTRIBUTE = IconLoader.findIcon("/icons/ic_info_attribute.png");

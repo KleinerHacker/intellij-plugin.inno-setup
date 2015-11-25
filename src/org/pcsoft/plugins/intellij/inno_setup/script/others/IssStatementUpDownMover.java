@@ -7,7 +7,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
@@ -19,7 +19,7 @@ public class IssStatementUpDownMover extends LineMover {
 
     @Override
     public boolean checkAvailable(Editor editor, PsiFile psiFile, MoveInfo moveInfo, boolean down) {
-        if (!(psiFile instanceof IssFile))
+        if (!(psiFile instanceof IssScriptFile))
             return false;
         if (!super.checkAvailable(editor, psiFile, moveInfo, down))
             return false;

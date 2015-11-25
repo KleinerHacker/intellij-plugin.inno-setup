@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,21 +62,21 @@ final class IssUtils {
         return list;
     }
 
-    private static void findFiles(@NotNull Project project, @NotNull Consumer<IssFile> visitor) {
+    private static void findFiles(@NotNull Project project, @NotNull Consumer<IssScriptFile> visitor) {
         final Collection<VirtualFile> virtualFiles = FileBasedIndex.getInstance().getContainingFiles(
                 FileTypeIndex.NAME, IssScriptFileType.INSTANCE, GlobalSearchScope.allScope(project)
         );
         for (final VirtualFile virtualFile : virtualFiles) {
-            final IssFile issFile = (IssFile) PsiManager.getInstance(project).findFile(virtualFile);
-            if (issFile != null) {
-                visitor.accept(issFile);
+            final IssScriptFile issScriptFile = (IssScriptFile) PsiManager.getInstance(project).findFile(virtualFile);
+            if (issScriptFile != null) {
+                visitor.accept(issScriptFile);
             }
         }
     }
 
     @NotNull
-    public static IssFile createFile(@NotNull Project project, @NotNull String text) {
-        return (IssFile) PsiFileFactory.getInstance(project).createFileFromText("tmp.asn", IssLanguage.INSTANCE, text);
+    public static IssScriptFile createFile(@NotNull Project project, @NotNull String text) {
+        return (IssScriptFile) PsiFileFactory.getInstance(project).createFileFromText("tmp.asn", IssLanguage.INSTANCE, text);
     }
 
     private IssUtils() {

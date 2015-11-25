@@ -13,9 +13,12 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguageFileType;
+import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssLexerAdapter;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssLanguageFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssPsiElementFactory;
 
 /**
@@ -67,7 +70,12 @@ public class IssParserDefinition implements ParserDefinition {
 
     @Override
     public PsiFile createFile(FileViewProvider fileViewProvider) {
-        return new IssFile(fileViewProvider);
+        if (fileViewProvider.getFileType().getClass() == IssScriptFileType.class)
+            return new IssScriptFile(fileViewProvider);
+        else if (fileViewProvider.getFileType().getClass() == IssLanguageFileType.class)
+            return new IssLanguageFile(fileViewProvider);
+
+        throw new RuntimeException();
     }
 
     @Override
