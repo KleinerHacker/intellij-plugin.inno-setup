@@ -20,9 +20,4 @@ public class IssRunConfigurationFactory extends ConfigurationFactory {
     public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
         return new IssRunConfiguration(project, this, "Inno Setup Compilation");
     }
-
-    @Override
-    public String getName() {
-        return "Inno Setup Configuration Factory";
-    }
 }

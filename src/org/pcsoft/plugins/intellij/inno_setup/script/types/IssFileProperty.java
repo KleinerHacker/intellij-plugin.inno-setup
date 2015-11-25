@@ -7,7 +7,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 23.12.2014.
  */
-public enum IssFileProperty implements IssDefinablePropertyIdentifier {
+public enum IssFileProperty implements IssPropertyIdentifier {
     Source("Source", IssMarkerFactory.FileSection.PROPERTY_SOURCE, IssMarkerFactory.FileSection.PROPERTY_SOURCE_VALUE,
             "file.property.source", IssValueType.String, true),
     DestinationDirectory("DestDir", IssMarkerFactory.FileSection.PROPERTY_DESTDIR, IssMarkerFactory.FileSection.PROPERTY_DESTDIR_VALUE,
@@ -54,7 +54,7 @@ public enum IssFileProperty implements IssDefinablePropertyIdentifier {
     private final IElementType itemMarkerElement, propertyValueMarkerElement;
     private final IssValueType valueType;
 
-    private IssFileProperty(final IssDefinablePropertyIdentifier sectionIdentifier) {
+    private IssFileProperty(final IssPropertyIdentifier sectionIdentifier) {
         this(sectionIdentifier.getId(), sectionIdentifier.getPropertyMarkerElement(), sectionIdentifier.getPropertyValueMarkerElement(),
                 sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
                 sectionIdentifier.isDeprecated());

@@ -7,7 +7,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 23.12.2014.
  */
-public enum IssInstallRunProperty implements IssDefinablePropertyIdentifier {
+public enum IssInstallRunProperty implements IssPropertyIdentifier {
     Filename("Filename", IssMarkerFactory.InstallRunSection.PROPERTY_FILENAME, IssMarkerFactory.InstallRunSection.PROPERTY_FILENAME_VALUE,
             "install_run.property.filename", IssValueType.String, true),
     Description("Description", IssMarkerFactory.InstallRunSection.PROPERTY_DESCRIPTION, IssMarkerFactory.InstallRunSection.PROPERTY_DESCRIPTION_VALUE,
@@ -46,7 +46,7 @@ public enum IssInstallRunProperty implements IssDefinablePropertyIdentifier {
     private final IElementType itemMarkerElement, propertyValueMarkerElement;
     private final IssValueType valueType;
 
-    private IssInstallRunProperty(final IssDefinablePropertyIdentifier sectionIdentifier) {
+    private IssInstallRunProperty(final IssPropertyIdentifier sectionIdentifier) {
         this(sectionIdentifier.getId(), sectionIdentifier.getPropertyMarkerElement(), sectionIdentifier.getPropertyValueMarkerElement(),
                 sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
                 sectionIdentifier.isDeprecated());

@@ -4,16 +4,17 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinablePropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -60,9 +61,9 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkRequiredProperties(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        final List<IssDefinablePropertyIdentifier> notFoundList = new ArrayList<>();
+        final List<IssPropertyIdentifier> notFoundList = new ArrayList<>();
         main:
-        for (final IssDefinablePropertyIdentifier identifier : definitionElement.getPropertyTypeList()) {
+        for (final IssPropertyIdentifier identifier : definitionElement.getPropertyTypeList()) {
             if (!identifier.isRequired())
                 continue;
 
@@ -131,7 +132,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
     }
 
     private void checkPropertyValues(@NotNull E definitionElement, @NotNull final AnnotationHolder annotationHolder) {
-        for (final IssDefinablePropertyElement<?> propertyElement : (Collection<IssDefinablePropertyElement>) definitionElement.getDefinitionPropertyList()) {
+        for (final IssPropertyElement<?> propertyElement : (Collection<IssPropertyElement>) definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyValue() == null)
                 continue;
 
@@ -186,6 +187,23 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
                         if (valueElement.getFirstChild().getNode().getElementType() == IssTokenFactory.STRING) {
                             annotationHolder.createErrorAnnotation(valueElement, "Direct value expected");
                         }
+                    }
+                    break;
+                case Boolean:
+                    checkForSingleValue(propertyElement, annotationHolder);
+                    try {
+                        BooleanUtils.toBoolean(propertyElement.getPropertyValue().getText(), "yes", "no");
+                    } catch (Exception e) {
+                        annotationHolder.createErrorAnnotation(propertyElement.getPropertyValue(), "Must be 'yes' or 'no'");
+                    }
+                    break;
+                case HexBinary:
+                    checkForSingleValue(propertyElement, annotationHolder);
+                    try {
+                        new HexBinaryAdapter().unmarshal((propertyElement.getPropertyValue().getText().length() % 2 != 0 ? "0" : "")
+                                + propertyElement.getPropertyValue().getText());
+                    } catch (Exception e) {
+                        annotationHolder.createErrorAnnotation(propertyElement.getPropertyValue(), "This is not a hex binary string!");
                     }
                     break;
                 default:

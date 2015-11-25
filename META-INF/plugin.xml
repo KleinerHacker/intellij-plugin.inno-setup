@@ -84,12 +84,19 @@
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssCommonLanguagesValueCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssLanguagesValueCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssFontValueCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssBooleanValueCompletionContributor"/>
         <!-- Setup -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssTypeCompressionValueCompletionContributor"/>
+        <!-- LanguageOption -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssLanguageOptionPropertyCompletionContributor"/>
         <!-- Task -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssPropertyTaskCompletionContributor"/>
@@ -165,16 +172,16 @@
 
         <!-- Manipulators -->
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyComponentReferenceValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyNameValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTaskReferenceValueElementManipulator"/>
         <lang.elementManipulator
-                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeReferenceValueElement"
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTypeReferenceValueElementManipulator"/>
 
         <lang.refactoringSupport language="iss"
@@ -225,6 +232,7 @@
 
         <!-- ************************* RUN & COMPILE ****************************** -->
         <configurationType implementation="org.pcsoft.plugins.intellij.inno_setup.run.IssRunConfigurationType"/>
+        <runConfigurationProducer implementation="org.pcsoft.plugins.intellij.inno_setup.run.IssRunConfigurationProducer"/>
         <applicationService serviceImplementation="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings"/>
         <applicationConfigurable provider="org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerConfiguration" parentId="project.propCompiler"/>
 

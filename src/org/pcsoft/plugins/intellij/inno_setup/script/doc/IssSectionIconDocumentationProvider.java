@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssIconDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIconFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIconFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconProperty;

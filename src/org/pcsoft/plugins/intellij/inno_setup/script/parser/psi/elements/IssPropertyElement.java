@@ -1,7 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiLiteral;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,11 +13,11 @@ import java.util.Collection;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public abstract class IssPropertyElement<V extends IssPropertyValueElement, I extends IssPropertyIdentifier> extends IssAbstractElement {
+public abstract class IssPropertyElement<V extends IssPropertyValueElement> extends IssAbstractElement {
     private final Class<V> valueClass;
-    private final I propertyType;
+    private final IssPropertyIdentifier propertyType;
 
-    public IssPropertyElement(ASTNode node, @NotNull Class<V> valueClass, @NotNull I propertyType) {
+    public IssPropertyElement(ASTNode node, @NotNull Class<V> valueClass, @NotNull IssPropertyIdentifier propertyType) {
         super(node);
         this.valueClass = valueClass;
         this.propertyType = propertyType;
@@ -45,8 +44,26 @@ public abstract class IssPropertyElement<V extends IssPropertyValueElement, I ex
     }
 
     @NotNull
-    public final I getPropertyType() {
+    public final IssPropertyIdentifier getPropertyType() {
         return propertyType;
+    }
+
+    @Nullable
+    public final IssDefinitionElement getDefinition() {
+        return PsiTreeUtil.getParentOfType(this, IssDefinitionElement.class);
+    }
+
+    public final boolean isUnderDefinition() {
+        if (getSection() == null) {
+            return getDefinition() != null;
+        } else {
+            return getSection() instanceof IssDefinableSectionElement;
+        }
+    }
+
+    @Nullable
+    public final IssSectionElement getSection() {
+        return PsiTreeUtil.getParentOfType(this, IssSectionElement.class);
     }
 
 

@@ -7,7 +7,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 23.12.2014.
  */
-public enum IssUninstallRunProperty implements IssDefinablePropertyIdentifier {
+public enum IssUninstallRunProperty implements IssPropertyIdentifier {
     Filename("Filename", IssMarkerFactory.UninstallRunSection.PROPERTY_FILENAME, IssMarkerFactory.UninstallRunSection.PROPERTY_FILENAME_VALUE,
             "uninstall_run.property.filename", IssValueType.String, true),
     Parameters("Parameters", IssMarkerFactory.UninstallRunSection.PROPERTY_PARAMETERS, IssMarkerFactory.UninstallRunSection.PROPERTY_PARAMETERS_VALUE,
@@ -44,7 +44,7 @@ public enum IssUninstallRunProperty implements IssDefinablePropertyIdentifier {
     private final IElementType itemMarkerElement, propertyValueMarkerElement;
     private final IssValueType valueType;
 
-    private IssUninstallRunProperty(final IssDefinablePropertyIdentifier sectionIdentifier) {
+    private IssUninstallRunProperty(final IssPropertyIdentifier sectionIdentifier) {
         this(sectionIdentifier.getId(), sectionIdentifier.getPropertyMarkerElement(), sectionIdentifier.getPropertyValueMarkerElement(),
                 sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
                 sectionIdentifier.isDeprecated());

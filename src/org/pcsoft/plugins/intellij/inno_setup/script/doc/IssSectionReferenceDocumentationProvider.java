@@ -4,12 +4,11 @@ import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinablePropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyComponentReferenceValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTaskReferenceValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyTypeReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement;
 
 /**
  * Created by Christoph on 05.01.2015.
@@ -65,10 +64,10 @@ public class IssSectionReferenceDocumentationProvider extends AbstractDocumentat
         if (element instanceof IssPropertyNameValueElement) {
             final IssPropertyNameValueElement nameValueElement = (IssPropertyNameValueElement) element;
             if (nameValueElement.getParent() == null || !(nameValueElement.getParent() instanceof IssPropertyElement) ||
-                    ((IssDefinablePropertyElement)nameValueElement.getParent()).getDefinition() == null)
+                    ((IssPropertyElement)nameValueElement.getParent()).getDefinition() == null)
                 return null;
 
-            return buildDocFromComment(((IssDefinablePropertyElement)nameValueElement.getParent()).getDefinition());
+            return buildDocFromComment(((IssPropertyElement)nameValueElement.getParent()).getDefinition());
         }
 
         return null;

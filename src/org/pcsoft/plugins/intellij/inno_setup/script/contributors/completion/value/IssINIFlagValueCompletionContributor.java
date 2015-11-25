@@ -1,7 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyINIFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyINIFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssINIFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 

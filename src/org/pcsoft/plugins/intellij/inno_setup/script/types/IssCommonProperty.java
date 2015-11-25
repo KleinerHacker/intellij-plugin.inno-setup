@@ -8,7 +8,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 27.12.2014.
  */
-public enum IssCommonProperty implements IssDefinablePropertyIdentifier {
+public enum IssCommonProperty implements IssPropertyIdentifier {
     Languages("Languages", IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES, IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES_VALUE,
             "common.property.languages", IssValueType.DirectMultiple),
     MinimalVersion("MinVersion", IssMarkerFactory.CommonSection.PROPERTY_MINVERSION, IssMarkerFactory.CommonSection.PROPERTY_MINVERSION_VALUE,

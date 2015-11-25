@@ -11,5 +11,7 @@ public enum IssValueType {
     DirectMultipleWithNumber,
     String,
     Integer,
-    Double
+    Double,
+    Boolean,
+    HexBinary
 }

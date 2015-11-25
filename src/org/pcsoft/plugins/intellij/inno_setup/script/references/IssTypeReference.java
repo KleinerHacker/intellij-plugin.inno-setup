@@ -9,7 +9,7 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -44,7 +44,10 @@ public class IssTypeReference extends IssAbstractReference {
     @Override
     public Object[] getVariants() {
         final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssFindUtils.findTypeDefinitionElements(myElement.getProject());
-        final List<LookupElement> lookupElementList = typeDefinitionElements.stream().map(LookupElementBuilder::create).collect(Collectors.toList());
+        final List<LookupElement> lookupElementList = typeDefinitionElements.stream()
+                .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
+                .map(item -> LookupElementBuilder.create(item).withPresentableText(item.getName()))
+                .collect(Collectors.toList());
 
         return lookupElementList.toArray();
     }

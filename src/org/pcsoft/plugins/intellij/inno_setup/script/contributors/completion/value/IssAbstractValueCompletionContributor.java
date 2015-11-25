@@ -6,6 +6,7 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
@@ -25,7 +26,7 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
                         for (final IssPropertyValue item : getFlagList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
                                     .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
-                                    .withIcon(getIcon(item)).withStrikeoutness(item.isDeprecated())
+                                    .withIcon(getIcon(item)).withStrikeoutness(item.isDeprecated()).withTailText(getTailText(item))
                                     .withInsertHandler((insertionContext, lookupElement) -> {
                                         insertionContext.getDocument().insertString(insertionContext.getTailOffset(), " ");
                                         insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
@@ -38,7 +39,13 @@ public abstract class IssAbstractValueCompletionContributor<E extends IssPropert
     @NotNull
     protected abstract IssPropertyValue[] getFlagList();
 
+    @Nullable
     protected Icon getIcon(IssPropertyValue propertyValue) {
+        return null;
+    }
+
+    @Nullable
+    protected String getTailText(IssPropertyValue propertyValue) {
         return null;
     }
 }

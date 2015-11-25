@@ -7,10 +7,10 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public enum IssSetupProperty implements IssStandardPropertyIdentifier {
+public enum IssSetupProperty implements IssPropertyIdentifier {
     //Compiler
     Compression("Compression", IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION, IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION_VALUE,
-            IssSetupPropertyClassifier.Compiler, "setup.property.compression"),
+            IssSetupPropertyClassifier.Compiler, "setup.property.compression", IssValueType.DirectSingle),
     CompressionThreads("CompressionThreads", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Compiler, ""),
     DiskClusterSize("DisClusterSize", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Compiler, ""),
     DiskSliceSize("DiskSliceSize", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Compiler, ""),
@@ -47,9 +47,9 @@ public enum IssSetupProperty implements IssStandardPropertyIdentifier {
     VersionInfoTextVersion("VersionInfoTextVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Compiler, ""),
     VersionInfoVersion("VersionInfoVersion", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Compiler, ""),
     // Installer
-    AppName("AppName", IssMarkerFactory.SetupSection.PROPERTY_APP_NAME, IssMarkerFactory.SetupSection.PROPERTY_APP_NAME_VALUE,
+    AppName("AppName", IssMarkerFactory.SetupSection.PROPERTY_APPNAME, IssMarkerFactory.SetupSection.PROPERTY_APPNAME_VALUE,
             IssSetupPropertyClassifier.Installer, "setup.property.appname", true),
-    AppVersion("AppVersion", IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION, IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION_VALUE,
+    AppVersion("AppVersion", IssMarkerFactory.SetupSection.PROPERTY_APPVERSION, IssMarkerFactory.SetupSection.PROPERTY_APPVERSION_VALUE,
             IssSetupPropertyClassifier.Installer, "setup.property.appversion", true),
     AllowCancelDuringInstall("AllowCancelDuringInstall", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Installer, ""),
     AllowNetworkDrive("AllowNetworkDrive", IssMarkerFactory.PROPERTY_UNKNOWN, null, IssSetupPropertyClassifier.Installer, ""),
@@ -181,20 +181,32 @@ public enum IssSetupProperty implements IssStandardPropertyIdentifier {
     private final IssSetupPropertyClassifier classifier;
     private final IElementType propertyMarkerElement, propertyValueMarkerElement;
     private final boolean required;
+    private final IssValueType valueType;
+
+    private IssSetupProperty(String id, IElementType propertyMarkerElement, IElementType propertyValueMarkerElement,
+                             IssSetupPropertyClassifier classifier, String descriptionKey) {
+        this(id, propertyMarkerElement, propertyValueMarkerElement, classifier, descriptionKey, IssValueType.DirectMultiple);
+    }
 
     private IssSetupProperty(String id, IElementType propertyMarkerElement, IElementType propertyValueMarkerElement, 
-                             IssSetupPropertyClassifier classifier, String descriptionKey) {
-        this(id, propertyMarkerElement, propertyValueMarkerElement, classifier, descriptionKey, false);
+                             IssSetupPropertyClassifier classifier, String descriptionKey, IssValueType valueType) {
+        this(id, propertyMarkerElement, propertyValueMarkerElement, classifier, descriptionKey, valueType, false);
     }
 
     private IssSetupProperty(String id, IElementType propertyMarkerElement, IElementType propertyValueMarkerElement,
                              IssSetupPropertyClassifier classifier, String descriptionKey, boolean required) {
+        this(id, propertyMarkerElement, propertyValueMarkerElement, classifier, descriptionKey, IssValueType.DirectMultiple, false);
+    }
+
+    private IssSetupProperty(String id, IElementType propertyMarkerElement, IElementType propertyValueMarkerElement,
+                             IssSetupPropertyClassifier classifier, String descriptionKey, IssValueType valueType, boolean required) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.classifier = classifier;
         this.propertyMarkerElement = propertyMarkerElement;
         this.propertyValueMarkerElement = propertyValueMarkerElement;
         this.required = required;
+        this.valueType = valueType;
     }
 
     @NotNull
@@ -221,6 +233,12 @@ public enum IssSetupProperty implements IssStandardPropertyIdentifier {
         return propertyValueMarkerElement;
     }
 
+    @NotNull
+    @Override
+    public IssValueType getValueType() {
+        return valueType;
+    }
+
     @Override
     public boolean isRequired() {
         return required;
@@ -230,6 +248,8 @@ public enum IssSetupProperty implements IssStandardPropertyIdentifier {
     public boolean isDeprecated() {
         return classifier == IssSetupPropertyClassifier.Obsolete;
     }
+
+
 
     @NotNull
     public IssSetupPropertyClassifier getClassifier() {

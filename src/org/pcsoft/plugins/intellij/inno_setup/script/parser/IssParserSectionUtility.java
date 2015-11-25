@@ -75,6 +75,10 @@ final class IssParserSectionUtility {
                         parseLineForStandardSection(psiBuilder, "Message Section", s -> IssMarkerFactory.MessageSection.PROPERTY_VALUE_VALUE,
                                 s -> IssMarkerFactory.MessageSection.PROPERTY_VALUE);
                         break;
+                    case LanguageOption:
+                        parseLineForStandardSection(psiBuilder, "LanguageOptions Section", IssLanguageOptionProperty::getPropertyValueMarkerElementFromId,
+                                IssLanguageOptionProperty::getPropertyMarkerElementFromId);
+                        break;
                     case Task:
                         parseLineForDefinableSection(psiBuilder, "Tasks Section", IssMarkerFactory.TaskSection.SECTION_DEFINITION,
                                 IssTaskProperty::getPropertyValueMarkerElementFromId, IssTaskProperty::getPropertyMarkerElementFromId);

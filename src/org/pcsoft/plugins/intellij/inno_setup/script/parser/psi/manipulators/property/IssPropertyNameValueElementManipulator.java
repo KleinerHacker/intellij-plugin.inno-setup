@@ -1,6 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property;
 
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.IssAbstractElementManipulator;
 
 /**

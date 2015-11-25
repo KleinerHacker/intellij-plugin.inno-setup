@@ -7,7 +7,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssRegistryProperty implements IssDefinablePropertyIdentifier {
+public enum IssRegistryProperty implements IssPropertyIdentifier {
     Root("Root", IssMarkerFactory.RegistrySection.PROPERTY_ROOT, IssMarkerFactory.RegistrySection.PROPERTY_ROOT_VALUE,
             "registry.property.root", IssValueType.DirectSingle, true),
     Subkey("Subkey", IssMarkerFactory.RegistrySection.PROPERTY_SUBKEY, IssMarkerFactory.RegistrySection.PROPERTY_SUBKEY_VALUE,
@@ -46,7 +46,7 @@ public enum IssRegistryProperty implements IssDefinablePropertyIdentifier {
     private final IElementType itemMarkerElement, propertyValueMarkerElement;
     private final IssValueType valueType;
 
-    private IssRegistryProperty(final IssDefinablePropertyIdentifier sectionIdentifier) {
+    private IssRegistryProperty(final IssPropertyIdentifier sectionIdentifier) {
         this(sectionIdentifier.getId(), sectionIdentifier.getPropertyMarkerElement(), sectionIdentifier.getPropertyValueMarkerElement(),
                 sectionIdentifier.getDescriptionKey(), sectionIdentifier.getValueType(), sectionIdentifier.isRequired(),
                 sectionIdentifier.isDeprecated());

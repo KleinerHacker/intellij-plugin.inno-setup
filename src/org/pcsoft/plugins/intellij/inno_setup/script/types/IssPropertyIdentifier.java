@@ -49,6 +49,9 @@ public interface IssPropertyIdentifier {
     @Nullable
     IElementType getPropertyValueMarkerElement();
 
+    @NotNull
+    IssValueType getValueType();
+
     boolean isRequired();
 
     boolean isDeprecated();

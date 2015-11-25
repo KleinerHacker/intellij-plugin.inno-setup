@@ -16,8 +16,8 @@ public abstract class IssStandardSectionElement extends IssSectionElement {
     }
 
     @Nullable
-    public Collection<IssStandardPropertyElement> getSectionPropertyList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssStandardPropertyElement.class);
+    public Collection<IssPropertyElement> getSectionPropertyList() {
+        return PsiTreeUtil.findChildrenOfType(this, IssPropertyElement.class);
     }
 
 }

@@ -52,6 +52,14 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
                                 .setTooltipText("MESSAGES Section")
                                 .createLineMarkerInfo(psiElement)
                 );
+            } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssLanguageOptionSectionElement) {
+                collection.add(
+                        NavigationGutterIconBuilder.create(IssIcons.IC_SECT_MESSAGES)
+                                .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                .setTarget(psiElement)
+                                .setTooltipText("LANGUAGEOPTIONS Section")
+                                .createLineMarkerInfo(psiElement)
+                );
             } else if (psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssFileSectionElement) {
                 collection.add(
                         NavigationGutterIconBuilder.create(IssIcons.IC_SECT_FILE)

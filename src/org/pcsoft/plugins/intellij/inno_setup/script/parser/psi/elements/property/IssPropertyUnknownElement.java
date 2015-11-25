@@ -6,11 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssValueType;
 
 /**
  * Created by Christoph on 27.12.2014.
  */
-public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnknownValueElement, IssPropertyIdentifier> {
+public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnknownValueElement> {
     public IssPropertyUnknownElement(ASTNode node) {
         super(node, IssPropertyUnknownValueElement.class, new IssPropertyIdentifier() {
             @Nullable
@@ -45,6 +46,12 @@ public class IssPropertyUnknownElement extends IssPropertyElement<IssPropertyUnk
             @Override
             public boolean isDeprecated() {
                 return false;
+            }
+
+            @NotNull
+            @Override
+            public IssValueType getValueType() {
+                return IssValueType.Unknown;
             }
         });
     }

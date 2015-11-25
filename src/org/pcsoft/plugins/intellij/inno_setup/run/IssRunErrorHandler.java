@@ -11,14 +11,29 @@ import java.util.regex.Pattern;
  * Created by Christoph on 22.11.2015.
  */
 public final class IssRunErrorHandler {
+    public static enum ErrorType {
+        Simple,
+        CodeLine
+    }
 
-    public static void handleError(Project project, String line) {
-        if (line.toLowerCase().contains("error") && line.toLowerCase().contains("line")) {
-            gotoError(project, line);
+    public static boolean hasError(String line, ErrorType type) {
+        switch (type) {
+            case Simple:
+                return line.toLowerCase().contains("error");
+            case CodeLine:
+                return hasError(line, ErrorType.Simple) && line.toLowerCase().contains("line");
+            default:
+                throw new RuntimeException();
         }
     }
 
-    private static void gotoError(Project project, String line) {
+    public static void handleError(Project project, String line) {
+        if (hasError(line, ErrorType.CodeLine)) {
+            handleCodeLineError(project, line);
+        }
+    }
+
+    private static void handleCodeLineError(Project project, String line) {
         final Pattern pattern = Pattern.compile(".+line\\s([0-9]+)\\sin\\s(.+):.+");
         final Matcher matcher = pattern.matcher(line);
         if (!matcher.matches()) {

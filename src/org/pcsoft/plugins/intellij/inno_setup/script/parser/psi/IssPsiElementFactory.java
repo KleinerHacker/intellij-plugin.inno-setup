@@ -8,17 +8,102 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssFileDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssINIDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssIconDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssInstallRunDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssRegistryDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssUninstallRunDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyBooleanElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyBooleanValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyCompressionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyCompressionValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDirectoryFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDirectoryFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyFileFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyFileFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyFontElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyFontValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyINIFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyINIFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOAttributeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOAttributeValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOCopyModeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOCopyModeValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIconFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIconFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyInstallRunFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyInstallRunFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIntegerElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIntegerValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryRootElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryRootValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryValueTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryValueTypeValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyStringElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyStringValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeFlagsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyUninstallRunFlagsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyUninstallRunFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyUnknownElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyWindowsVersionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyWindowsVersionValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyCompressionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyCompressionValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.standard.IssPropertyDefaultValueElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.*;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.*;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssComponentSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssCustomMessageSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssDirectorySectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssFileSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssINISectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssIconSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssInstallRunSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssLanguageOptionSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssMessageSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssRegistrySectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTaskSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTypeSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssUninstallRunSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssCommonProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssINIProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssInstallRunProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageOptionProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRegistryProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssUninstallRunProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssValueType;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -81,6 +166,10 @@ public final class IssPsiElementFactory {
         final PsiElement messageSection = createForMessageSection(node);
         if (messageSection != null)
             return messageSection;
+
+        final PsiElement languageOptionSection = createForLanguageOptionSection(node);
+        if (languageOptionSection != null)
+            return languageOptionSection;
 
         //Default
         if (IssMarkerFactory.SECTION_TITLE.equals(node.getElementType())) {
@@ -447,13 +536,13 @@ public final class IssPsiElementFactory {
     private static PsiElement createForSetupSection(ASTNode node) {
         if (IssMarkerFactory.SetupSection.SECTION.equals(node.getElementType())) {
             return new IssSetupSectionElement(node);
-        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_NAME.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APPNAME.equals(node.getElementType())) {
             return new IssPropertyDefaultElement(node, IssSetupProperty.AppName);
-        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_NAME_VALUE.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APPNAME_VALUE.equals(node.getElementType())) {
             return new IssPropertyDefaultValueElement(node);
-        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APPVERSION.equals(node.getElementType())) {
             return new IssPropertyDefaultElement(node, IssSetupProperty.AppVersion);
-        } else if (IssMarkerFactory.SetupSection.PROPERTY_APP_VERSION_VALUE.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.SetupSection.PROPERTY_APPVERSION_VALUE.equals(node.getElementType())) {
             return new IssPropertyDefaultValueElement(node);
         } else if (IssMarkerFactory.SetupSection.PROPERTY_COMPRESSION.equals(node.getElementType())) {
             return new IssPropertyCompressionElement(node, IssSetupProperty.Compression);
@@ -464,11 +553,67 @@ public final class IssPsiElementFactory {
         return null;
     }
 
+    private static PsiElement createForLanguageOptionSection(ASTNode node) {
+        if (IssMarkerFactory.LanguageOptionSection.SECTION.equals(node.getElementType())) {
+            return new IssLanguageOptionSectionElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGENAME.equals(node.getElementType())) { //TODO: Name element?
+            return new IssPropertyDefaultElement(node, IssLanguageOptionProperty.LanguageName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGENAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGEID.equals(node.getElementType())) {
+            return new IssPropertyDefaultElement(node, IssLanguageOptionProperty.LanguageID);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGEID_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDefaultValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGECODEPAGE.equals(node.getElementType())) {
+            return new IssPropertyIntegerElement(node, IssLanguageOptionProperty.LanguageCodePage);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_LANGUAGECODEPAGE.equals(node.getElementType())) {
+            return new IssPropertyIntegerValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_DIALOGFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontElement(node, IssLanguageOptionProperty.DialogFontName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_DIALOGFONTNAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyFontValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_DIALOGFONTSIZE.equals(node.getElementType())) {
+            return new IssPropertyIntegerElement(node, IssLanguageOptionProperty.DialogFontSize);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_DIALOGFONTSIZE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyIntegerValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_TITLEFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontElement(node, IssLanguageOptionProperty.TitleFontName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_TITLEFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_TITLEFONTSIZE.equals(node.getElementType())) {
+            return new IssPropertyIntegerElement(node, IssLanguageOptionProperty.TitleFontSize);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_TITLEFONTSIZE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyIntegerValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_WELCOMEFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontElement(node, IssLanguageOptionProperty.WelcomeFontName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_WELCOMEFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_WELCOMEFONTSIZE.equals(node.getElementType())) {
+            return new IssPropertyIntegerElement(node, IssLanguageOptionProperty.WelcomeFontName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_WELCOMEFONTSIZE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyIntegerValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_COPYRIGHTFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontElement(node, IssLanguageOptionProperty.CopyrightFontName);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_COPYRIGHTFONTNAME.equals(node.getElementType())) {
+            return new IssPropertyFontValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_COPYRIGHTFONTSIZE.equals(node.getElementType())) {
+            return new IssPropertyIntegerElement(node, IssLanguageOptionProperty.CopyrightFontSize);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_COPYRIGHTFONTSIZE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyIntegerValueElement(node);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_RIGHTTOLEFT.equals(node.getElementType())) {
+            return new IssPropertyBooleanElement(node, IssLanguageOptionProperty.RightToLeft);
+        } else if (IssMarkerFactory.LanguageOptionSection.PROPERTY_RIGHTTOLEFT_VALUE.equals(node.getElementType())) {
+            return new IssPropertyBooleanValueElement(node);
+        }
+
+        return null;
+    }
+
     private static PsiElement createForCustomMessageSection(ASTNode node) {
         if (IssMarkerFactory.CustomMessageSection.SECTION.equals(node.getElementType())) {
             return new IssCustomMessageSectionElement(node);
         } else if (IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE.equals(node.getElementType())) {
-            return new IssPropertyDefaultElement(node, new IssStandardPropertyIdentifier() {
+            return new IssPropertyDefaultElement(node, new IssPropertyIdentifier() {
                 @NotNull
                 @Override
                 public String getId() {
@@ -502,6 +647,12 @@ public final class IssPsiElementFactory {
                 public boolean isDeprecated() {
                     return false;
                 }
+
+                @NotNull
+                @Override
+                public IssValueType getValueType() {
+                    return IssValueType.Unknown;
+                }
             });
         } else if (IssMarkerFactory.CustomMessageSection.PROPERTY_VALUE_VALUE.equals(node.getElementType())) {
             return new IssPropertyDefaultValueElement(node);
@@ -514,7 +665,7 @@ public final class IssPsiElementFactory {
         if (IssMarkerFactory.MessageSection.SECTION.equals(node.getElementType())) {
             return new IssMessageSectionElement(node);
         } else if (IssMarkerFactory.MessageSection.PROPERTY_VALUE.equals(node.getElementType())) {
-            return new IssPropertyDefaultElement(node, new IssStandardPropertyIdentifier() {
+            return new IssPropertyDefaultElement(node, new IssPropertyIdentifier() {
                 @NotNull
                 @Override
                 public String getId() {
@@ -547,6 +698,12 @@ public final class IssPsiElementFactory {
                 @Override
                 public boolean isDeprecated() {
                     return false;
+                }
+
+                @NotNull
+                @Override
+                public IssValueType getValueType() {
+                    return IssValueType.Unknown;
                 }
             });
         } else if (IssMarkerFactory.MessageSection.PROPERTY_VALUE_VALUE.equals(node.getElementType())) {

@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.pr
 
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTaskSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
 
 /**
@@ -10,12 +10,12 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
  */
 public class IssPropertyTaskCompletionContributor extends IssAbstractPropertyCompletionContributor<IssTaskSectionElement> {
     public IssPropertyTaskCompletionContributor() {
-        super(IssTaskSectionElement.class);
+        super(IssTaskSectionElement.class, PropertyType.Definable);
     }
 
     @NotNull
     @Override
-    protected IssDefinablePropertyIdentifier[] getSectionIdentifierList() {
+    protected IssPropertyIdentifier[] getSectionIdentifierList() {
         return IssTaskProperty.values();
     }
 }

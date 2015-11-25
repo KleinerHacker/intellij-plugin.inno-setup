@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIOPermissionsValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDirectoryFlag;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOAttribute;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;

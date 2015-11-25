@@ -43,12 +43,43 @@ public final class IssMarkerFactory {
         private static final String KEY_ITEM = KEY + "_PROPERTY";
 
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
-        public static final IElementType PROPERTY_APP_NAME = new IElementType(KEY_ITEM + "_APP_NAME", LANGUAGE);
-        public static final IElementType PROPERTY_APP_NAME_VALUE = new IElementType(KEY_ITEM + "_APP_NAME_VALUE", LANGUAGE);
-        public static final IElementType PROPERTY_APP_VERSION = new IElementType(KEY_ITEM + "_APP_VERSION", LANGUAGE);
-        public static final IElementType PROPERTY_APP_VERSION_VALUE = new IElementType(KEY_ITEM + "_APP_VERSION_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_APPNAME = new IElementType(KEY_ITEM + "_APPNAME", LANGUAGE);
+        public static final IElementType PROPERTY_APPNAME_VALUE = new IElementType(KEY_ITEM + "_APPNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_APPVERSION = new IElementType(KEY_ITEM + "_APPVERSION", LANGUAGE);
+        public static final IElementType PROPERTY_APPVERSION_VALUE = new IElementType(KEY_ITEM + "_APPVERSION_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_COMPRESSION = new IElementType(KEY_ITEM + "_COMPRESSION", LANGUAGE);
         public static final IElementType PROPERTY_COMPRESSION_VALUE = new IElementType(KEY_ITEM + "_COMPRESSION_VALUE", LANGUAGE);
+    }
+
+    public static final class LanguageOptionSection {
+        private static final String KEY = "LANGUAGEOPTION_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGENAME = new IElementType(KEY_ITEM + "_LANGUAGENAME", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGENAME_VALUE = new IElementType(KEY_ITEM + "_LANGUAGENAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGEID = new IElementType(KEY_ITEM + "_LANGUAGEID", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGEID_VALUE = new IElementType(KEY_ITEM + "_LANGUAGEID_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGECODEPAGE = new IElementType(KEY_ITEM + "_LANGUAGECODEPAGE", LANGUAGE);
+        public static final IElementType PROPERTY_LANGUAGECODEPAGE_VALUE = new IElementType(KEY_ITEM + "_LANGUAGECODEPAGE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_DIALOGFONTNAME = new IElementType(KEY_ITEM + "_LANGUAGECODEPAGE", LANGUAGE);
+        public static final IElementType PROPERTY_DIALOGFONTNAME_VALUE = new IElementType(KEY_ITEM + "_DIALOGFONTNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_DIALOGFONTSIZE = new IElementType(KEY_ITEM + "_DIALOGFONTSIZE", LANGUAGE);
+        public static final IElementType PROPERTY_DIALOGFONTSIZE_VALUE = new IElementType(KEY_ITEM + "_DIALOGFONTSIZE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_WELCOMEFONTNAME = new IElementType(KEY_ITEM + "_WELCOMEFONTNAME", LANGUAGE);
+        public static final IElementType PROPERTY_WELCOMEFONTNAME_VALUE = new IElementType(KEY_ITEM + "_WELCOMEFONTNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_WELCOMEFONTSIZE = new IElementType(KEY_ITEM + "_WELCOMEFONTSIZE", LANGUAGE);
+        public static final IElementType PROPERTY_WELCOMEFONTSIZE_VALUE = new IElementType(KEY_ITEM + "_WELCOMEFONTSIZE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_TITLEFONTNAME = new IElementType(KEY_ITEM + "_TITLEFONTNAME", LANGUAGE);
+        public static final IElementType PROPERTY_TITLEFONTNAME_VALUE = new IElementType(KEY_ITEM + "_TITLEFONTNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_TITLEFONTSIZE = new IElementType(KEY_ITEM + "_TITLEFONTSIZE", LANGUAGE);
+        public static final IElementType PROPERTY_TITLEFONTSIZE_VALUE = new IElementType(KEY_ITEM + "_TITLEFONTSIZE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_COPYRIGHTFONTNAME = new IElementType(KEY_ITEM + "_COPYRIGHTFONTNAME", LANGUAGE);
+        public static final IElementType PROPERTY_COPYRIGHTFONTNAME_VALUE = new IElementType(KEY_ITEM + "_COPYRIGHTFONTNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_COPYRIGHTFONTSIZE = new IElementType(KEY_ITEM + "_COPYRIGHTFONTSIZE", LANGUAGE);
+        public static final IElementType PROPERTY_COPYRIGHTFONTSIZE_VALUE = new IElementType(KEY_ITEM + "_COPYRIGHTFONTSIZE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_RIGHTTOLEFT = new IElementType(KEY_ITEM + "_RIGHTTOLEFT", LANGUAGE);
+        public static final IElementType PROPERTY_RIGHTTOLEFT_VALUE = new IElementType(KEY_ITEM + "_RIGHTTOLEFT_VALUE", LANGUAGE);
     }
 
     public static final class CustomMessageSection {

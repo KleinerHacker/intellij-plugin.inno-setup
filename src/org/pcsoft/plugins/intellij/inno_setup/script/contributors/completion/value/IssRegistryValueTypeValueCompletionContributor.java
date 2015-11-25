@@ -1,7 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value;
 
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyRegistryValueTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyRegistryValueTypeElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssRegistryValueType;
 

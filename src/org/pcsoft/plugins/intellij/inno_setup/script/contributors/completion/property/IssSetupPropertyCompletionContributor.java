@@ -11,7 +11,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
  */
 public class IssSetupPropertyCompletionContributor extends IssAbstractPropertyCompletionContributor<IssSetupSectionElement> {
     public IssSetupPropertyCompletionContributor() {
-        super(IssSetupSectionElement.class);
+        super(IssSetupSectionElement.class, PropertyType.Standard);
     }
 
     @NotNull

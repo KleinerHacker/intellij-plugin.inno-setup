@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.concurrent.Executors;
 
 /**
  * Created by Christoph on 24.11.2015.
@@ -20,12 +21,7 @@ public class IssVirtualFile extends VirtualFile {
     public IssVirtualFile(File path, IssVirtualFileSystem virtualFileSystem) {
         this.path = path;
         this.virtualFileSystem = virtualFileSystem;
-        try {
-            this.content = IOUtils.getFileBytes(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-            content = new byte[0];
-        }
+        reload();
     }
 
     @NotNull
@@ -99,12 +95,25 @@ public class IssVirtualFile extends VirtualFile {
     }
 
     @Override
-    public void refresh(boolean b, boolean b1, @Nullable Runnable runnable) {
-
+    public void refresh(boolean async, boolean b1, @Nullable Runnable runnable) {
+        if (async) {
+            Executors.newCachedThreadPool().submit(this::reload);
+        } else {
+            reload();
+        }
     }
 
     @Override
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(path);
+    }
+
+    private void reload() {
+        try {
+            this.content = IOUtils.getFileBytes(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            content = new byte[0];
+        }
     }
 }

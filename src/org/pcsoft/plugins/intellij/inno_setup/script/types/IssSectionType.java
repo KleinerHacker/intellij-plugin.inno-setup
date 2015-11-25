@@ -9,7 +9,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
 import javax.swing.*;
 
 public enum IssSectionType implements IssSectionIdentifier {
-    Setup("Setup", IssMarkerFactory.SetupSection.SECTION, "section.setup", IssIcons.IC_SECT_SETUP),
+    Setup("Setup", IssMarkerFactory.SetupSection.SECTION, "section.setup", IssIcons.IC_SECT_SETUP, true),
     Code("Code", null, "section.code", null),
     Task("Tasks", IssMarkerFactory.TaskSection.SECTION, "section.tasks", IssIcons.IC_SECT_TASK),
     File("Files", IssMarkerFactory.FileSection.SECTION, "section.files", IssIcons.IC_SECT_FILE),
@@ -22,7 +22,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     Language("Languages", null, "section.languages", null),
     Message("Messages", IssMarkerFactory.MessageSection.SECTION, "section.messages", IssIcons.IC_SECT_MESSAGES),
     CustomMessage("CustomMessages", IssMarkerFactory.CustomMessageSection.SECTION, "section.custom_messages", IssIcons.IC_SECT_CUSTOM_MESSAGES),
-    LanguageOption("LangOptions", null, "section.lang_options", null),
+    LanguageOption("LangOptions", IssMarkerFactory.LanguageOptionSection.SECTION, "section.lang_options", IssIcons.IC_SECT_MESSAGES),
     Registry("Registry", IssMarkerFactory.RegistrySection.SECTION, "section.registry", IssIcons.IC_SECT_REGISTRY),
     InstallRun("Run", IssMarkerFactory.InstallRunSection.SECTION, "section.install_run", IssIcons.IC_SECT_INSTALL_RUN),
     UninstallDelete("UninstallDelete", null, "section.uninstall_delete", null),

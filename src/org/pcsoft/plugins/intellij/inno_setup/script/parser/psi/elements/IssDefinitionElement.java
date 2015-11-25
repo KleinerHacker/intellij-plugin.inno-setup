@@ -5,16 +5,16 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssDefinablePropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 
-import javax.swing.*;
+import javax.swing.Icon;
 import java.util.Collection;
 
 /**
  * Created by Christoph on 23.12.2014.
  */
-public abstract class IssDefinitionElement<P extends IssDefinableSectionElement, T extends IssDefinablePropertyIdentifier> extends IssAbstractElement {
+public abstract class IssDefinitionElement<P extends IssDefinableSectionElement, T extends IssPropertyIdentifier> extends IssAbstractElement {
 
     private final Class<P> clazz;
 
@@ -24,8 +24,8 @@ public abstract class IssDefinitionElement<P extends IssDefinableSectionElement,
     }
 
     @Nullable
-    public Collection<IssDefinablePropertyElement> getDefinitionPropertyList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssDefinablePropertyElement.class);
+    public Collection<IssPropertyElement> getDefinitionPropertyList() {
+        return PsiTreeUtil.findChildrenOfType(this, IssPropertyElement.class);
     }
 
     @Nullable

@@ -1,13 +1,14 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
+import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
 
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Created by Christoph on 27.12.2014.
@@ -16,33 +17,33 @@ public class IssSectionAnnotator implements Annotator {
 
     @Override
     public void annotate(PsiElement psiElement, AnnotationHolder annotationHolder) {
-        findDoubleSectionItems(psiElement, annotationHolder);
+        if (psiElement instanceof IssFile) {
+            findMissingSections((IssFile) psiElement, annotationHolder);
+            findDoubleSections((IssFile) psiElement, annotationHolder);
+        }
     }
 
-    private void findDoubleSectionItems(PsiElement psiElement, AnnotationHolder annotationHolder) {
-        final Collection<? extends IssPropertyElement> collection;
-        if (psiElement instanceof IssSetupSectionElement) {
-            final IssSetupSectionElement setupSectionElement = (IssSetupSectionElement) psiElement;
-            if (setupSectionElement.getSectionPropertyList() == null || setupSectionElement.getSectionPropertyList().isEmpty())
-                return;
+    private void findMissingSections(IssFile issFile, AnnotationHolder annotationHolder) {
+        Stream.of(IssSectionType.values())
+                .filter(IssSectionType::isRequired)
+                .forEach(sectionType -> {
+                    final IssSectionElement sectionElement = issFile.getSectionList().stream()
+                            .filter(item -> item.getSectionNameElement() != null)
+                            .filter(item -> item.getSectionNameElement().getName().equalsIgnoreCase(sectionType.getId()))
+                            .findFirst().orElse(null);
+                    if (sectionElement == null) {
+                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(issFile, "Unable to find required section: " + sectionType.getId());
+                        errorAnnotation.setFileLevelAnnotation(true);
+                    }
+                });
+    }
 
-            collection = setupSectionElement.getSectionPropertyList();
-        } else if (psiElement instanceof IssDefinitionElement) {
-            final IssDefinitionElement definitionElement = (IssDefinitionElement) psiElement;
-            if (definitionElement.getDefinitionPropertyList() == null || definitionElement.getDefinitionPropertyList().isEmpty())
-                return;
-
-            collection = definitionElement.getDefinitionPropertyList();
-        } else
-            return;
-
+    private void findDoubleSections(IssFile issFile, AnnotationHolder annotationHolder) {
         IssAnnotatorUtils.findDoubleValues(
-                collection,
-                element -> element.getIdentifier() != null,
-                element -> element.getIdentifier().getText().toLowerCase(),
-                (element, key) -> {
-                    annotationHolder.createErrorAnnotation(element, "Section property '" + key + "' already defined!");
-                }
+                issFile.getSectionList(),
+                item -> item.getSectionNameElement() != null,
+                item -> item.getSectionNameElement().getName(),
+                (item, key) -> annotationHolder.createErrorAnnotation(item, "Section '" + key + "' already defined!")
         );
     }
 }

@@ -4,7 +4,7 @@ Compression = lzma
 Compression = zip
 
 [Tasks]
-Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce; Languages: de bla en de; MinVersion: 3.5
+Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce; Languages:  de bla en de; MinVersion: 3.5
 Name: doubleTask; Description: "";
 Name: doubleTask; Description: "Hallo";
 Flags: CheckableAlone
@@ -68,6 +68,14 @@ Root: HKCU; Subkey: "other";
 Root: HKCU; Subkey: "other"; ValueName: "third";
 Root: HKCU; Subkey: "other";
 Flags: UninsDeleteEntry
+
+[LangOptions]
+LanguageName = MyLan
+LanguageID = 0F56
+LanguageCodePage = 124
+CopyrightFontName = MS Mincho
+CopyrightFontSize = 12
+RightToLeft = yes
 
 [CustomMessages]
 test=Bla

@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.va
 
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.definable.IssPropertyIOAttributeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOAttributeElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOAttribute;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
 

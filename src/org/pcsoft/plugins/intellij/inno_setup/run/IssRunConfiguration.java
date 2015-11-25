@@ -20,7 +20,7 @@ import java.io.File;
 /**
  * Created by Christoph on 14.11.2015.
  */
-public class IssRunConfiguration extends RunConfigurationBase {
+public class IssRunConfiguration extends LocatableConfigurationBase {
     private static final String KEY_SCRIPT_FILE = "ScriptFile";
 
     private final IssCompilerSettings compilerSettings = ServiceManager.getService(IssCompilerSettings.class);
@@ -43,6 +43,11 @@ public class IssRunConfiguration extends RunConfigurationBase {
         if (!new File(scriptFile).exists())
             throw new RuntimeConfigurationException("Given script file not exists!");
         compilerSettings.validateForCompileRun();
+    }
+
+    @Override
+    public String suggestedName() {
+        return "Inno Setup Compilation";
     }
 
     @Nullable
