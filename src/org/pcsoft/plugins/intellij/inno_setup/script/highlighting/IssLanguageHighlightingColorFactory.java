@@ -67,9 +67,14 @@ public final class IssLanguageHighlightingColorFactory {
             new TextAttributes(JBColor.PINK, null, null, null, Font.BOLD)
     );
 
-    public static final TextAttributesKey ANNOTATOR_WARN_PROPERTY_DEPRECATED = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATOR_WARN_PROPERTY_DEPRECATED",
-            new TextAttributes(JBColor.BLUE, JBColor.YELLOW, JBColor.BLACK, EffectType.STRIKEOUT, Font.BOLD)
+    public static final TextAttributesKey ANNOTATOR_WARN_DEPRECATED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_WARN_DEPRECATED",
+            new TextAttributes(JBColor.BLUE, null, JBColor.BLACK, EffectType.STRIKEOUT, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_ERROR_SECTION_NOT_ALLOWED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_ERROR_SECTION_NOT_ALLOWED",
+            new TextAttributes(null, null, JBColor.RED, EffectType.STRIKEOUT, Font.PLAIN)
     );
 
     private IssLanguageHighlightingColorFactory() {

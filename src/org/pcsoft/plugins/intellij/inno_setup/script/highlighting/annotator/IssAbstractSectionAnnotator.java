@@ -84,7 +84,7 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
         for (final IssPropertyElement propertyElement : (Collection<IssPropertyElement>) definitionElement.getDefinitionPropertyList()) {
             if (propertyElement.getPropertyType().isDeprecated()) {
                 final Annotation warningAnnotation = annotationHolder.createWarningAnnotation(propertyElement, "Property is deprecated!");
-                warningAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_WARN_PROPERTY_DEPRECATED);
+                warningAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_WARN_DEPRECATED);
             }
         }
     }

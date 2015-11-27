@@ -4,6 +4,7 @@ import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
@@ -19,6 +20,7 @@ public class IssSectionAnnotator implements Annotator {
     public void annotate(PsiElement psiElement, AnnotationHolder annotationHolder) {
         if (psiElement instanceof IssFile) {
             findMissingSections((IssFile) psiElement, annotationHolder);
+            findNotAllowedSections((IssFile) psiElement, annotationHolder);
             findDoubleSections((IssFile) psiElement, annotationHolder);
         }
     }
@@ -35,6 +37,22 @@ public class IssSectionAnnotator implements Annotator {
                     if (sectionElement == null) {
                         final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(issFile, "Unable to find required section: " + sectionType.getId());
                         errorAnnotation.setFileLevelAnnotation(true);
+                    }
+                });
+    }
+
+    private void findNotAllowedSections(IssFile issFile, AnnotationHolder annotationHolder) {
+        Stream.of(IssSectionType.values())
+                .filter(item -> item.getFileType() != null && item.getFileType().getPsiFileClass() != issFile.getClass())
+                .forEach(sectionType -> {
+                    final IssSectionElement sectionElement = issFile.getSectionList().stream()
+                            .filter(item -> item.getSectionNameElement() != null)
+                            .filter(item -> item.getSectionNameElement().getName().equalsIgnoreCase(sectionType.getId()))
+                            .findFirst().orElse(null);
+                    if (sectionElement != null) {
+                        final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(sectionElement, "Section '" + sectionType.getId() +
+                                "' not allowed for file with extension '" + issFile.getVirtualFile().getExtension() + "'");
+                        errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_SECTION_NOT_ALLOWED);
                     }
                 });
     }
