@@ -7,8 +7,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssPropertyLanguagesElement extends IssPropertyElement<IssPropertyLanguagesValueElement> {
-    public IssPropertyLanguagesElement(ASTNode node, IssPropertyIdentifier propertyIdentifier) {
-        super(node, IssPropertyLanguagesValueElement.class, propertyIdentifier);
+public class IssPropertyLanguagesReferenceElement extends IssPropertyElement<IssPropertyLanguagesReferenceValueElement> {
+    public IssPropertyLanguagesReferenceElement(ASTNode node, IssPropertyIdentifier propertyIdentifier) {
+        super(node, IssPropertyLanguagesReferenceValueElement.class, propertyIdentifier);
     }
 }

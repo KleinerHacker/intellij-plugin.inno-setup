@@ -1,11 +1,13 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
+import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesReferenceValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyWindowsVersionElement;
 
 /**
@@ -15,12 +17,12 @@ public class IssSectionCommonAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
-        if (psiElement instanceof IssPropertyLanguagesElement) {
-            final IssPropertyLanguagesElement languagesElement = (IssPropertyLanguagesElement) psiElement;
-            for (final IssPropertyLanguagesValueElement valueElement : languagesElement.getPropertyValueList()) {
-                if (valueElement.getLocale() == null || (valueElement.getLocale().getISO3Country().trim().isEmpty() &&
-                        valueElement.getLocale().getISO3Language().trim().isEmpty())) {
-                    annotationHolder.createErrorAnnotation(valueElement, "Unknown locale!");
+        if (psiElement instanceof IssPropertyLanguagesReferenceElement) {
+            final IssPropertyLanguagesReferenceElement languagesElement = (IssPropertyLanguagesReferenceElement) psiElement;
+            for (final IssPropertyLanguagesReferenceValueElement valueElement : languagesElement.getPropertyValueList()) {
+                if (valueElement.getReference().resolve() == null) {
+                    final Annotation errorAnnotation = annotationHolder.createErrorAnnotation(valueElement, "Unknown locale reference!");
+                    errorAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_ERROR_REFERENCE);
                 }
             }
 

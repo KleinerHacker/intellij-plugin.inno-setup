@@ -36,9 +36,9 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
     private static String[] buildColumns(IssLanguageTable.ViewType viewType) {
         switch (viewType) {
             case Normal:
-                return new String[]{"Filename", "Language Name", "ID", "Code Page"};
+                return new String[]{"", "Filename", "Language Name", "ID", "Code Page"};
             case Simple:
-                return new String[] {"Filename", "Language Name"};
+                return new String[] {"", "Filename", "Language Name"};
             default:
                 throw new RuntimeException();
         }
@@ -57,8 +57,11 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
             return LISTSRMPTY_DATA_LIST;
         }
 
-        final List<String> fileNameList = new ArrayList<>(), lanNameList = new ArrayList<>(), lanIdList = new ArrayList<>(), lanCodePageList = new ArrayList<>();
+        final List<String> fileNameList = new ArrayList<>(), lanNameList = new ArrayList<>(), lanIdList = new ArrayList<>(),
+                lanCodePageList = new ArrayList<>(), lanIconList = new ArrayList<>();
         for (final File file : languagePath.listFiles(pathname -> pathname.getAbsolutePath().toLowerCase().endsWith(".isl"))) {
+            lanIconList.add("Languages\\" + file.getName());
+
             String lanName = null, lanId = null, lanCodePage = null;
             try (final InputStream in = new FileInputStream(file)) {
                 try (final InputStreamReader reader = new InputStreamReader(in, "ISO-8859-1")) {
@@ -97,9 +100,9 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
 
         switch (viewType) {
             case Normal:
-                return Arrays.asList(fileNameList, lanNameList, lanIdList, lanCodePageList);
+                return Arrays.asList(lanIconList, fileNameList, lanNameList, lanIdList, lanCodePageList);
             case Simple:
-                return Arrays.asList(fileNameList, lanNameList);
+                return Arrays.asList(lanIconList, fileNameList, lanNameList);
             default:
                 throw new RuntimeException();
         }

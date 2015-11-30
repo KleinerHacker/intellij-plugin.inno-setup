@@ -83,9 +83,9 @@ RightToLeft = yes
 [CustomMessages]
 test=Bla
 de.test=Blub
-en-GB.test=Hello
+en.test=Hello
 
 [Messages]
 forward=>>>
 de.forward=>>>
-en-GB.forward=>>>
+en.forward=>>>

@@ -84,8 +84,6 @@
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssLanguagesValueCompletionContributor"/>
-        <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssFontValueCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssBooleanValueCompletionContributor"/>
@@ -186,6 +184,12 @@
         <lang.elementManipulator
                 forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceValueElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyTypeReferenceValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyLanguagesReferenceValueElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.IssPropertyLanguagesReferenceValueElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierReferenceElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.common.IssIdentifierReferenceElementManipulator"/>
 
         <lang.refactoringSupport language="iss"
                                  implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>

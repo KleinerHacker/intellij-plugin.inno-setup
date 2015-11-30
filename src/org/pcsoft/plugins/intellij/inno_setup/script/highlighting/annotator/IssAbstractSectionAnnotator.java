@@ -55,6 +55,14 @@ public abstract class IssAbstractSectionAnnotator<E extends IssDefinitionElement
             findDoubleSectionProperties(definitionElement, annotationHolder);
             checkPropertyValues(definitionElement, annotationHolder);
 
+            //Check for illegal reference
+            ((Collection<IssPropertyElement>) definitionElement.getDefinitionPropertyList()).stream()
+                    .filter(propertyElement -> propertyElement.getIdentifier() != null && propertyElement.getIdentifier().getIdentifierReference() != null)
+                    .forEach(propertyElement ->
+                            annotationHolder.createErrorAnnotation(propertyElement.getIdentifier().getIdentifierReference(),
+                                    "Illegal reference: not allowed here!")
+                    );
+
             detectErrors(definitionElement, annotationHolder);
             detectWarnings(definitionElement, annotationHolder);
         }

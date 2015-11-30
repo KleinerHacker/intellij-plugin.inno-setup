@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssLanguageDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
@@ -28,6 +29,17 @@ public final class IssFindUtils {
                 .filter(item -> item.getIdentifier() != null)
                 .filter(item -> item.getIdentifier().getName().equals(propertyType.getId()))
                 .findFirst().orElse(null);
+    }
+
+    @NotNull
+    public static Collection<IssLanguageDefinitionElement> findLanguageDefinitionElements(final Project project) {
+        return findLanguageDefinitionElements(project, null, false);
+    }
+
+    @NotNull
+    public static Collection<IssLanguageDefinitionElement> findLanguageDefinitionElements(final Project project, final String name, final boolean variant) {
+        return IssUtils.findElements(project, name, variant, IssLanguageDefinitionElement.class,
+                item -> item.getName() != null && !item.getName().trim().isEmpty(), IssLanguageDefinitionElement::getName);
     }
 
     @Nullable

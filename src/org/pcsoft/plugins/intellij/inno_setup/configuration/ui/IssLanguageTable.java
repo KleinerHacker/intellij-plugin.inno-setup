@@ -9,9 +9,12 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.ProjectCoreUtil;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.ToolbarDecorator;
+import com.intellij.util.IconUtil;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import org.apache.commons.lang.StringUtils;
+import org.jdesktop.swingx.JXImageView;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageType;
 import org.pcsoft.plugins.intellij.inno_setup.utils.IssEditorUtils;
 import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFile;
 import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFileSystem;
@@ -32,6 +35,7 @@ import java.util.Scanner;
  */
 public class IssLanguageTable extends BorderLayoutPanel {
     private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
+    private static final int ICON_SIZE = 32;
 
     public static enum ViewType {
         Normal,
@@ -54,6 +58,20 @@ public class IssLanguageTable extends BorderLayoutPanel {
 
     public IssLanguageTable(ViewType viewType, final boolean supportOpenFile) {
         this.tbl = new ListTable(new IssLanguageTableModel(viewType));
+        this.tbl.getColumnModel().getColumn(0).setMaxWidth(ICON_SIZE);
+        this.tbl.setDefaultRenderer(String.class, (table, value, isSelected, hasFocus, row, column) -> {
+            if (column > 0)
+                return new JLabel(value.toString());
+
+            final IssLanguageType languageType = IssLanguageType.findByFile(value.toString());
+            if (languageType == null || languageType.getFlagIcon() == null)
+                return new JLabel();
+
+            final JXImageView imageView = new JXImageView();
+            imageView.setImage(IconUtil.toImage(languageType.getFlagIcon()));
+
+            return imageView;
+        });
         this.tbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,6 +105,7 @@ public class IssLanguageTable extends BorderLayoutPanel {
 
     public void refresh() {
         tbl.setModel(new IssLanguageTableModel(viewType));
+        tbl.getColumnModel().getColumn(0).setMaxWidth(ICON_SIZE);
     }
 
     public ViewType getViewType() {

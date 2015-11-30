@@ -29,7 +29,9 @@ COMPILER_DIRECTIVE=#{NAME}
 SECTION_TITLE=\[{NAME}\]
 
 STRING=\"[^\n\r(\r\n)\"]*\"
-NUMBER=[0-9]+(\.[0-9]+)?
+DECIMAL=\.[0-9]+
+INTEGER=[0-9]+
+NUMBER=[-+]?{INTEGER}{DECIMAL}?
 
 %state ALLOW_ALL
 %state CODE

@@ -673,9 +673,9 @@ public final class IssPsiElementFactory {
         } else if (IssMarkerFactory.CommonSection.PROPERTY_COMPONENTS_VALUE.equals(node.getElementType())) {
             return new IssPropertyComponentReferenceValueElement(node);
         } else if (IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES.equals(node.getElementType())) {
-            return new IssPropertyLanguagesElement(node, IssCommonProperty.Languages);
+            return new IssPropertyLanguagesReferenceElement(node, IssCommonProperty.Languages);
         } else if (IssMarkerFactory.CommonSection.PROPERTY_LANGUAGES_VALUE.equals(node.getElementType())) {
-            return new IssPropertyLanguagesValueElement(node);
+            return new IssPropertyLanguagesReferenceValueElement(node);
         } else if (IssMarkerFactory.CommonSection.PROPERTY_MINVERSION.equals(node.getElementType())) {
             return new IssPropertyWindowsVersionElement(node, IssCommonProperty.MinimalVersion);
         } else if (IssMarkerFactory.CommonSection.PROPERTY_MINVERSION_VALUE.equals(node.getElementType())) {

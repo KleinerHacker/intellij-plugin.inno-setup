@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyStringElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssLanguageSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
@@ -48,4 +49,10 @@ public class IssLanguageDefinitionElement extends IssDefinitionElement<IssLangua
     public IssPropertyNameElement getLanguageName() {
         return IssFindUtils.findProperty(this, IssLanguageProperty.Name, IssPropertyNameElement.class);
     }
+
+    @Nullable
+    public IssPropertyStringElement getLanguageMessageFile() {
+        return IssFindUtils.findProperty(this, IssLanguageProperty.MessageFile, IssPropertyStringElement.class);
+    }
+
 }
