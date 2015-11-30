@@ -119,6 +119,10 @@ final class IssParserSectionUtility {
                         parseLineForDefinableSection(psiBuilder, "Registry Section", IssMarkerFactory.RegistrySection.SECTION_DEFINITION,
                                 IssRegistryProperty::getPropertyValueMarkerElementFromId, IssRegistryProperty::getPropertyMarkerElementFromId);
                         break;
+                    case Language:
+                        parseLineForDefinableSection(psiBuilder, "Language Section", IssMarkerFactory.LanguageSection.SECTION_DEFINITION,
+                                IssLanguageProperty::getPropertyValueMarkerElementFromId, IssLanguageProperty::getPropertyMarkerElementFromId);
+                        break;
                     default:
                         throw new RuntimeException();
                 }
@@ -236,9 +240,25 @@ final class IssParserSectionUtility {
                 return;
             }
 
-            final PsiBuilder.Marker itemNameMark = psiBuilder.mark();
+            final PsiBuilder.Marker propertyNameMark = psiBuilder.mark();
+            final PsiBuilder.Marker propertyNameInnerMark = psiBuilder.mark();
             psiBuilder.advanceLexer();
-            itemNameMark.done(IssMarkerFactory.IDENTIFIER);
+            if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_POINT) {
+                propertyNameInnerMark.done(IssMarkerFactory.IDENTIFIER_REFERENCE);
+                psiBuilder.advanceLexer();
+
+                final PsiBuilder.Marker propertyNameInnerNameMark = psiBuilder.mark();
+                if (psiBuilder.getTokenType() != IssTokenFactory.NAME && psiBuilder.getTokenType() != IssTokenFactory.WORD) {
+                    psiBuilder.advanceLexer();
+                    propertyNameInnerNameMark.error("Property Name expected!");
+                } else {
+                    psiBuilder.advanceLexer();
+                    propertyNameInnerNameMark.done(IssMarkerFactory.IDENTIFIER_NAME);
+                }
+            } else {
+                propertyNameInnerMark.done(IssMarkerFactory.IDENTIFIER_NAME);
+            }
+            propertyNameMark.done(IssMarkerFactory.IDENTIFIER);
 
             if (psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_EQUAL) {
                 psiBuilder.advanceLexer();

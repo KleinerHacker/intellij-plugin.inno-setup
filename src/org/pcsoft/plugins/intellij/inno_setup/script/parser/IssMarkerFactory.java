@@ -16,6 +16,8 @@ public final class IssMarkerFactory {
     public static final IElementType COMPILER_DIRECTIVE_SECTION = new IElementType("COMPILER_DIRECTIVE_SECTION", LANGUAGE);
 
     public static final IElementType IDENTIFIER = new IElementType("IDENTIFIER", LANGUAGE);
+    public static final IElementType IDENTIFIER_REFERENCE = new IElementType("IDENTIFIER_REFERENCE", LANGUAGE);
+    public static final IElementType IDENTIFIER_NAME = new IElementType("IDENTIFIER_NAME", LANGUAGE);
     public static final IElementType VALUE = new IElementType("VALUE", LANGUAGE);
 
     public static final IElementType SECTION_TITLE = new IElementType("SECTION_TITLE", LANGUAGE);
@@ -262,6 +264,24 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_DESCRIPTION_VALUE = new IElementType(KEY_ITEM + "_DESCRIPTION_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
+    }
+
+    public static final class LanguageSection {
+        private static final String KEY = "LANGUAGE_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_NAME = new IElementType(KEY_ITEM + "_NAME", LANGUAGE);
+        public static final IElementType PROPERTY_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_MEESAGEFILE = new IElementType(KEY_ITEM + "_MEESAGEFILE", LANGUAGE);
+        public static final IElementType PROPERTY_MEESAGEFILE_VALUE = new IElementType(KEY_ITEM + "_MEESAGEFILE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_LICENCEFILE = new IElementType(KEY_ITEM + "_LICENCEFILE", LANGUAGE);
+        public static final IElementType PROPERTY_LICENCEFILE_VALUE = new IElementType(KEY_ITEM + "_LICENCEFILE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_INFOBEFOREFILE = new IElementType(KEY_ITEM + "_INFOBEFOREFILE", LANGUAGE);
+        public static final IElementType PROPERTY_INFOBEFOREFILE_VALUE = new IElementType(KEY_ITEM + "_INFOBEFOREFILE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_INFOAFTERFILE = new IElementType(KEY_ITEM + "_INFOAFTERFILE", LANGUAGE);
+        public static final IElementType PROPERTY_INFOAFTERFILE_VALUE = new IElementType(KEY_ITEM + "_INFOAFTERFILE_VALUE", LANGUAGE);
     }
 
     public static final class INISection {

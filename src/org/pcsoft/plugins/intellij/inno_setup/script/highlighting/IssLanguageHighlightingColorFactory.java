@@ -28,6 +28,11 @@ public final class IssLanguageHighlightingColorFactory {
             new TextAttributes(JBColor.GREEN, null, null, null, Font.PLAIN)
     );
 
+    public static final TextAttributesKey SYNTAX_NUMBER = TextAttributesKey.createTextAttributesKey(
+            "SYNTAX_NUMBER",
+            new TextAttributes(JBColor.BLUE.darker(), null, null, null, Font.PLAIN)
+    );
+
     public static final TextAttributesKey SYNTAX_SECTION_TITLE = TextAttributesKey.createTextAttributesKey(
             "SYNTAX_SECTION_TITLE",
             new TextAttributes(null, null, JBColor.BLACK, EffectType.BOLD_DOTTED_LINE, Font.BOLD)

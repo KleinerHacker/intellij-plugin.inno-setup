@@ -36,6 +36,7 @@ public final class IssSyntaxHighlighter extends SyntaxHighlighterBase {
         keys.put(IssTokenFactory.BAD_CHARACTER, IssLanguageHighlightingColorFactory.SYNTAX_BAD_CHARACTER);
         putTokenSet(IssTokenFactory.TS_COMMENTS, IssLanguageHighlightingColorFactory.SYNTAX_COMMENT);
         keys.put(IssTokenFactory.STRING, IssLanguageHighlightingColorFactory.SYNTAX_STRING);
+        keys.put(IssTokenFactory.NUMBER, IssLanguageHighlightingColorFactory.SYNTAX_NUMBER);
         keys.put(IssTokenFactory.COMPILER_DIRECTIVE, IssLanguageHighlightingColorFactory.SYNTAX_CD);
         keys.put(IssTokenFactory.SECTION_TITLE, IssLanguageHighlightingColorFactory.SYNTAX_SECTION_TITLE);
         putTokenSet(IssTokenFactory.TS_OPERATORS, IssLanguageHighlightingColorFactory.SYNTAX_OPERATORS);

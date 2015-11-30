@@ -99,7 +99,7 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssLanguageOptionPropertyCompletionContributor"/>
         <!-- Task -->
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssPropertyTaskCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssTaskPropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssTaskFlagValueCompletionContributor"/>
         <!-- Component -->
@@ -109,7 +109,7 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssComponentFlagValueCompletionContributor"/>
         <!-- Type -->
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssPropertyTypeCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssTypePropertyCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssTypeFlagValueCompletionContributor"/>
         <!-- File -->
@@ -161,6 +161,9 @@
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssRegistryRootValueCompletionContributor"/>
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssRegistryValueTypeValueCompletionContributor"/>
+        <!-- Language -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssLanguagePropertyCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor

@@ -8,8 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssPropertyTypeCompletionContributor extends IssAbstractPropertyCompletionContributor<IssTypeSectionElement> {
-    public IssPropertyTypeCompletionContributor() {
+public class IssTypePropertyCompletionContributor extends IssAbstractPropertyCompletionContributor<IssTypeSectionElement> {
+    public IssTypePropertyCompletionContributor() {
         super(IssTypeSectionElement.class, PropertyType.Definable);
     }
 

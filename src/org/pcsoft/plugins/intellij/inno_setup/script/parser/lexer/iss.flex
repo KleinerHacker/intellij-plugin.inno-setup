@@ -16,15 +16,20 @@ import com.intellij.psi.TokenType;
 CRLF= \n|\r|\r\n
 WHITE_SPACE=[\ \t\f]
 COMMENT=;.*
+
 OPERATOR_COLON=:
 OPERATOR_SEMICOLON=;
 OPERATOR_EQUAL=\=
+OPERATOR_POINT=\.
+
 NAME=[A-Za-z0-9_]+
-WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"]+
+WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"\.]+
 EXTENDED_WORD=[^\ \t\f\n\r(\r\n)\"]+
 COMPILER_DIRECTIVE=#{NAME}
 SECTION_TITLE=\[{NAME}\]
+
 STRING=\"[^\n\r(\r\n)\"]*\"
+NUMBER=[0-9]+(\.[0-9]+)?
 
 %state ALLOW_ALL
 %state CODE
@@ -38,9 +43,11 @@ STRING=\"[^\n\r(\r\n)\"]*\"
 {OPERATOR_COLON}                                            { return IssTokenFactory.OPERATOR_COLON; }
 {OPERATOR_SEMICOLON}                                        { return IssTokenFactory.OPERATOR_SEMICOLON; }
 {OPERATOR_EQUAL}                                            { yybegin(ALLOW_ALL); return IssTokenFactory.OPERATOR_EQUAL; }
+{OPERATOR_POINT}                                        { return IssTokenFactory.OPERATOR_POINT; }
 {STRING}                                                    { return IssTokenFactory.STRING;}
 {NAME}                                                      { return IssTokenFactory.NAME; }
 {WORD}                                                      { return IssTokenFactory.WORD; }
+{NUMBER}                                                    { return IssTokenFactory.NUMBER; }
 <ALLOW_ALL> {
     {EXTENDED_WORD}                                         { return IssTokenFactory.WORD; }
 }

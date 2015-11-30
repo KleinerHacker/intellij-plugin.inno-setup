@@ -8,8 +8,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTaskProperty;
 /**
  * Created by Christoph on 22.12.2014.
  */
-public class IssPropertyTaskCompletionContributor extends IssAbstractPropertyCompletionContributor<IssTaskSectionElement> {
-    public IssPropertyTaskCompletionContributor() {
+public class IssTaskPropertyCompletionContributor extends IssAbstractPropertyCompletionContributor<IssTaskSectionElement> {
+    public IssTaskPropertyCompletionContributor() {
         super(IssTaskSectionElement.class, PropertyType.Definable);
     }
 

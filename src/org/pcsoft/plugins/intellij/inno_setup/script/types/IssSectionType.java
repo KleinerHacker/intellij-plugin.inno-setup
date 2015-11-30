@@ -19,7 +19,7 @@ public enum IssSectionType implements IssSectionIdentifier {
     Icon("Icons", IssMarkerFactory.IconSection.SECTION, "section.icons", IssIcons.IC_SECT_ICON, IssFileType.Script),
     INI("INI", IssMarkerFactory.INISection.SECTION, "section.ini", IssIcons.IC_SECT_INI, IssFileType.Script),
     InstallDelete("InstallDelete", null, "section.install_delete", null, IssFileType.Script),
-    Language("Languages", null, "section.languages", null, IssFileType.Script),
+    Language("Languages", IssMarkerFactory.LanguageSection.SECTION, "section.languages", IssIcons.IC_SECT_LANGUAGE, IssFileType.Script),
     Message("Messages", IssMarkerFactory.MessageSection.SECTION, "section.messages", IssIcons.IC_SECT_MESSAGES),
     CustomMessage("CustomMessages", IssMarkerFactory.CustomMessageSection.SECTION, "section.custom_messages", IssIcons.IC_SECT_CUSTOM_MESSAGES),
     LanguageOption("LangOptions", IssMarkerFactory.LanguageOptionSection.SECTION, "section.lang_options", IssIcons.IC_SECT_LANGUAGE_OPTION, IssFileType.Language),

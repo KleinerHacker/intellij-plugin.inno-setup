@@ -69,6 +69,9 @@ Root: HKCU; Subkey: "other"; ValueName: "third";
 Root: HKCU; Subkey: "other";
 Flags: UninsDeleteEntry
 
+[Languages]
+Name: en; MessageFile: "msg.isl"
+
 [LangOptions]
 LanguageName = MyLan
 LanguageID = 0F56
