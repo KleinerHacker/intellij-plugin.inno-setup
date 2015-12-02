@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* Created by Christoph on 18.12.2014.
-*/
+ * Created by Christoph on 18.12.2014.
+ */
 public class IssComponentReference extends IssAbstractReference {
 
     public IssComponentReference(PsiNamedElement element, boolean strictSearch) {
@@ -46,7 +47,11 @@ public class IssComponentReference extends IssAbstractReference {
         final Collection<IssComponentDefinitionElement> componentDefinitionNameValueElements = IssFindUtils.findComponentDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = componentDefinitionNameValueElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item).withPresentableText(item.getName()))
+                .map(item -> LookupElementBuilder.create(item)
+                        .withPresentableText(item.getName())
+                        .withTailText(item.getComponentDescription() != null && item.getComponentDescription().getPropertyValue() != null ?
+                                " \"" + item.getComponentDescription().getPropertyValue().getString() + "\"" : null)
+                        .withIcon(IssSectionType.Component.getIcon()))
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

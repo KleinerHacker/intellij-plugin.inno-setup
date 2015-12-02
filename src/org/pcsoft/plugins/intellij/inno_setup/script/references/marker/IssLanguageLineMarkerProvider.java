@@ -8,16 +8,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssLanguageDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssCustomMessageSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssMessageSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageType;
 
-import javax.swing.*;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Christoph on 22.11.2015.
@@ -35,21 +34,36 @@ public class IssLanguageLineMarkerProvider implements LineMarkerProvider {
         for (final PsiElement psiElement : list) {
             if (psiElement instanceof IssPropertyDefaultElement && (psiElement.getParent() instanceof IssCustomMessageSectionElement ||
                     psiElement.getParent() instanceof IssMessageSectionElement)) {
-                final IssIdentifierElement identifierElement = PsiTreeUtil.findChildOfType(psiElement, IssIdentifierElement.class);
-                if (identifierElement != null && identifierElement.getName().contains(".")) {
-                    final String lan = identifierElement.getName().substring(0, identifierElement.getName().indexOf("."));
-                    final Locale locale = Locale.forLanguageTag(lan);
-                    final Icon lanIcon = IssIcons.findIconByLocale(locale);
+                final IssIdentifierReferenceElement identifierReferenceElement = PsiTreeUtil.findChildOfType(psiElement, IssIdentifierReferenceElement.class);
+                if (identifierReferenceElement != null && identifierReferenceElement.getReference() != null && identifierReferenceElement.getReference().resolve() != null) {
+                    final PsiElement resolvedElement = identifierReferenceElement.getReference().resolve();
+                    final IssLanguageDefinitionElement languageDefinitionElement = PsiTreeUtil.getParentOfType(resolvedElement, IssLanguageDefinitionElement.class);
+                    if (languageDefinitionElement == null)
+                        continue;
+                    final IssLanguageType languageType = languageDefinitionElement.getLanguageType();
 
-                    if (lanIcon != null) {
+                    if (languageType != null) {
                         collection.add(
-                                NavigationGutterIconBuilder.create(lanIcon)
+                                NavigationGutterIconBuilder.create(languageType.getFlagIcon())
                                         .setAlignment(GutterIconRenderer.Alignment.RIGHT)
-                                        .setTarget(psiElement)
-                                        .setTooltipText(locale.getDisplayName())
+                                        .setTarget(languageDefinitionElement)
+                                        .setTooltipText(languageType.getName())
                                         .createLineMarkerInfo(psiElement)
                         );
                     }
+                }
+            } else if (psiElement instanceof IssLanguageDefinitionElement) {
+                final IssLanguageDefinitionElement languageDefinitionElement = (IssLanguageDefinitionElement) psiElement;
+                final IssLanguageType languageType = languageDefinitionElement.getLanguageType();
+
+                if (languageType != null) {
+                    collection.add(
+                            NavigationGutterIconBuilder.create(languageType.getFlagIcon())
+                                    .setAlignment(GutterIconRenderer.Alignment.RIGHT)
+                                    .setTarget(psiElement)
+                                    .setTooltipText(languageType.getName())
+                                    .createLineMarkerInfo(psiElement)
+                    );
                 }
             }
         }

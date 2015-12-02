@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* Created by Christoph on 18.12.2014.
-*/
+ * Created by Christoph on 18.12.2014.
+ */
 public class IssTaskReference extends IssAbstractReference {
 
     public IssTaskReference(PsiNamedElement element, boolean strictSearch) {
@@ -46,7 +47,13 @@ public class IssTaskReference extends IssAbstractReference {
         final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssFindUtils.findTaskDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = taskDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item).withPresentableText(item.getName()))
+                .map(item -> LookupElementBuilder.create(item)
+                        .withPresentableText(item.getName())
+                        .withTailText(item.getTaskDescription() != null && item.getTaskDescription().getPropertyValue() != null ?
+                                " \"" + item.getTaskDescription().getPropertyValue().getString() + "\"" : null)
+                        .withTypeText(item.getTaskGroupDescription() != null && item.getTaskGroupDescription().getPropertyValue() != null ?
+                                "\"" + item.getTaskGroupDescription().getPropertyValue().getString() + "\"" : null)
+                        .withIcon(IssSectionType.Task.getIcon()))
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

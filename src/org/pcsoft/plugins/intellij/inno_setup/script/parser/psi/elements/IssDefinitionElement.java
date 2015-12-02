@@ -5,8 +5,8 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
 import javax.swing.Icon;
 import java.util.Collection;
@@ -54,7 +54,7 @@ public abstract class IssDefinitionElement<P extends IssDefinableSectionElement,
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return getSectionType().getIcon();
+                return getPresentableIcon();
             }
         };
     }
@@ -63,4 +63,9 @@ public abstract class IssDefinitionElement<P extends IssDefinableSectionElement,
     protected abstract String getDefinitionName();
     @NotNull
     protected abstract IssSectionType getSectionType();
+
+    @Nullable
+    protected Icon getPresentableIcon() {
+        return getSectionType().getIcon();
+    }
 }

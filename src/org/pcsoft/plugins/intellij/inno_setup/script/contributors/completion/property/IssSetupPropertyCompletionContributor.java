@@ -3,8 +3,8 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.pr
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSetupProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssSetupProperty;
 
 /**
  * Created by Christoph on 22.12.2014.

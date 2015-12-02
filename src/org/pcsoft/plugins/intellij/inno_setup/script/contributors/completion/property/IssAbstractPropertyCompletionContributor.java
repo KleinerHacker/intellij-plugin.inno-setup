@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
 
 /**
  * Created by Christoph on 22.12.2014.

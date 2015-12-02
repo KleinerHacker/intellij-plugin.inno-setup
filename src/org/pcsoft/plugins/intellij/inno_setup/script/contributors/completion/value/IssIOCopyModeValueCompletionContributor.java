@@ -3,8 +3,8 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.va
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOCopyModeElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssFileCopyMode;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssFileCopyMode;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssPropertyValue;
 
 import javax.swing.*;
 

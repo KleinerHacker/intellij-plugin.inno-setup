@@ -22,40 +22,39 @@ OPERATOR_SEMICOLON=;
 OPERATOR_EQUAL=\=
 OPERATOR_POINT=\.
 
-NAME=[A-Za-z0-9_]+
-WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"\.]+
-EXTENDED_WORD=[^\ \t\f\n\r(\r\n)\"]+
-COMPILER_DIRECTIVE=#{NAME}
-SECTION_TITLE=\[{NAME}\]
+QUOTE=\"
+BRACE_CURLY_START=\{
+BRACE_CURLY_END=\}
+BRACE_BRACKET_START=\[
+BRACE_BRACKET_END=\]
+BRACE_START=\(
+BRACE_END=\)
+SHARP=#
 
-STRING=\"[^\n\r(\r\n)\"]*\"
+NAME=[A-Za-z0-9_]+
+WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"\.\{\}#\[\]\(\)]+
+
 DECIMAL=\.[0-9]+
 INTEGER=[0-9]+
 NUMBER=[-+]?{INTEGER}{DECIMAL}?
 
-%state ALLOW_ALL
-%state CODE
-
 %%
 
-{COMPILER_DIRECTIVE}                                        { return IssTokenFactory.COMPILER_DIRECTIVE; }
-
-^\[Code\]                                                   { yybegin(CODE); return IssTokenFactory.SECTION_TITLE; }
-^{SECTION_TITLE}                                            { yybegin(YYINITIAL); return IssTokenFactory.SECTION_TITLE; }
 {OPERATOR_COLON}                                            { return IssTokenFactory.OPERATOR_COLON; }
 {OPERATOR_SEMICOLON}                                        { return IssTokenFactory.OPERATOR_SEMICOLON; }
-{OPERATOR_EQUAL}                                            { yybegin(ALLOW_ALL); return IssTokenFactory.OPERATOR_EQUAL; }
-{OPERATOR_POINT}                                        { return IssTokenFactory.OPERATOR_POINT; }
-{STRING}                                                    { return IssTokenFactory.STRING;}
+{OPERATOR_EQUAL}                                            { return IssTokenFactory.OPERATOR_EQUAL; }
+{OPERATOR_POINT}                                            { return IssTokenFactory.OPERATOR_POINT; }
+{NUMBER}                                                    { return IssTokenFactory.NUMBER; }
+{SHARP}                                                     { return IssTokenFactory.SHARP; }
+{QUOTE}                                                     { return IssTokenFactory.QUOTE; }
+{BRACE_CURLY_START}                                         { return IssTokenFactory.BRACE_CURLY_START; }
+{BRACE_CURLY_END}                                           { return IssTokenFactory.BRACE_CURLY_END; }
+{BRACE_BRACKET_START}                                       { return IssTokenFactory.BRACE_BRACKET_START; }
+{BRACE_BRACKET_END}                                         { return IssTokenFactory.BRACE_BRACKET_END; }
+{BRACE_START}                                               { return IssTokenFactory.BRACE_START; }
+{BRACE_END}                                                 { return IssTokenFactory.BRACE_END; }
 {NAME}                                                      { return IssTokenFactory.NAME; }
 {WORD}                                                      { return IssTokenFactory.WORD; }
-{NUMBER}                                                    { return IssTokenFactory.NUMBER; }
-<ALLOW_ALL> {
-    {EXTENDED_WORD}                                         { return IssTokenFactory.WORD; }
-}
-<CODE> {
-    {EXTENDED_WORD}                                         { return IssTokenFactory.WORD; }
-}
 
 {CRLF}                                                      { yybegin(YYINITIAL); return IssTokenFactory.CRLF; }
 

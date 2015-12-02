@@ -1,18 +1,26 @@
+; Test
+#define hello "World"
+#define hello "He"
+#define unused "Test"
+#define my "Hallo Welt" abc123
+#define "test" wert
+#define world
+
 [SETUP]
-AppName = Test
+AppName = My Test {win} {#my} {#world} {#hel}
 Compression = lzma
 Compression = zip
 
 [Tasks]
-Name: testTask; Description: "My Test Task"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce; Languages:  de bla en de; MinVersion: 3.5
+Name: testTask; Description: "My Test Task"; GroupDescription: "Test"; Components: testComponent bla testComponent; Flags: CheckedOnce bla CheckedOnce; Languages: en de; MinVersion: 3.5
 Name: doubleTask; Description: "";
 Name: doubleTask; Description: "Hallo";
 Flags: CheckableAlone
 
-[TYPES]
+[Types]
 Name: testType; Description: "Bla"; Flags: IsCustom bla IsCustom;
 Name: doubleType; Description: ""
-Name: doubleType; Description: "Hallo"
+Name: doubleType; Description: "hfvidso"
 Flags: IsCustom
 
 [Components]
@@ -34,6 +42,8 @@ Name: "tesDir"; Attribs: ReadOnly Hidden Hidden bla; Permissions: Admins-Full Us
 Name: "doubleDir";
 Name: "doubleDir";
 Flags: DeleteAfterInstall
+
+
 
 [Icons]
 Name: "testIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut bla; Tasks: bla testTask testTask; Components: testComponent bla testComponent
@@ -70,7 +80,7 @@ Root: HKCU; Subkey: "other";
 Flags: UninsDeleteEntry
 
 [Languages]
-Name: en; MessageFile: "msg.isl"
+Name: en; MessageFile: "compiler:Languages\German.isl"
 
 [LangOptions]
 LanguageName = MyLan
@@ -84,6 +94,7 @@ RightToLeft = yes
 test=Bla
 de.test=Blub
 en.test=Hello
+en.gd=dk
 
 [Messages]
 forward=>>>

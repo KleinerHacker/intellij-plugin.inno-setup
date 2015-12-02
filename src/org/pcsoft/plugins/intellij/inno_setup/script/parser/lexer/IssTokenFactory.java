@@ -19,10 +19,7 @@ public final class IssTokenFactory {
 
     public static final IElementType NAME = new IElementType("NAME", LANGUAGE);
     public static final IElementType WORD = new IElementType("WORD", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE = new IElementType("COMPILER_DIRECTIVE", LANGUAGE);
-    public static final IElementType SECTION_TITLE = new IElementType("SECTION_TITLE", LANGUAGE);
 
-    public static final IElementType STRING = new IElementType("STRING", LANGUAGE);
     public static final IElementType NUMBER = new IElementType("NUMBER", LANGUAGE);
 
     public static final IElementType OPERATOR_COLON = new IElementType("OP_COLON", LANGUAGE);
@@ -30,10 +27,23 @@ public final class IssTokenFactory {
     public static final IElementType OPERATOR_EQUAL = new IElementType("OP_EQUAL", LANGUAGE);
     public static final IElementType OPERATOR_POINT = new IElementType("OP_POINT", LANGUAGE);
 
+    public static final IElementType QUOTE = new IElementType("QUOTE", LANGUAGE);
+    public static final IElementType SHARP = new IElementType("SHARP", LANGUAGE);
+    public static final IElementType BRACE_CURLY_START = new IElementType("BRACE_CURLY_START", LANGUAGE);
+    public static final IElementType BRACE_CURLY_END = new IElementType("BRACE_CURLY_START", LANGUAGE);
+    public static final IElementType BRACE_BRACKET_START = new IElementType("BRACE_BRACKET_START", LANGUAGE);
+    public static final IElementType BRACE_BRACKET_END = new IElementType("BRACE_BRACKET_START", LANGUAGE);
+    public static final IElementType BRACE_START = new IElementType("BRACE_START", LANGUAGE);
+    public static final IElementType BRACE_END = new IElementType("BRACE_START", LANGUAGE);
+
     public static final TokenSet TS_WHITE_SPACES = TokenSet.create(WHITE_SPACE);
     public static final TokenSet TS_COMMENTS = TokenSet.create(COMMENT);
     public static final TokenSet TS_OPERATORS = TokenSet.create(OPERATOR_COLON, OPERATOR_EQUAL, OPERATOR_SEMICOLON,
             OPERATOR_POINT);
+
+    public static final TokenSet TS_BRACE_CURLY = TokenSet.create(BRACE_CURLY_START, BRACE_CURLY_END);
+    public static final TokenSet TS_BRACE_BRACKET = TokenSet.create(BRACE_BRACKET_START, BRACE_BRACKET_END);
+    public static final TokenSet TS_BRACE = TokenSet.create(BRACE_START, BRACE_END);
 
     private IssTokenFactory() {
     }

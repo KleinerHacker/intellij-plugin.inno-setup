@@ -8,19 +8,23 @@ import com.intellij.openapi.actionSystem.CustomShortcutSet;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.ProjectCoreUtil;
 import com.intellij.ui.AnActionButton;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.ToolbarDecorator;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ui.components.BorderLayoutPanel;
 import org.apache.commons.lang.StringUtils;
-import org.jdesktop.swingx.JXImageView;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.IssCompilerSettings;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageType;
 import org.pcsoft.plugins.intellij.inno_setup.utils.IssEditorUtils;
 import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFile;
 import org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFileSystem;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,7 +39,7 @@ import java.util.Scanner;
  */
 public class IssLanguageTable extends BorderLayoutPanel {
     private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
-    private static final int ICON_SIZE = 32;
+    private static final int ICON_SIZE = 20;
 
     public static enum ViewType {
         Normal,
@@ -60,17 +64,40 @@ public class IssLanguageTable extends BorderLayoutPanel {
         this.tbl = new ListTable(new IssLanguageTableModel(viewType));
         this.tbl.getColumnModel().getColumn(0).setMaxWidth(ICON_SIZE);
         this.tbl.setDefaultRenderer(String.class, (table, value, isSelected, hasFocus, row, column) -> {
-            if (column > 0)
-                return new JLabel(value.toString());
+            if (column > 0) {
+                final JLabel label = new JLabel(value.toString()) {
+                    @Override
+                    public void paint(Graphics g) {
+                        if (isSelected) {
+                            g.setColor(JBColor.BLUE);
+                            g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+                        }
+                        super.paint(g);
+                    }
+                };
+                label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+                if (hasFocus) {
+                    label.setBorder(BorderFactory.createLineBorder(JBColor.BLUE));
+                }
+                if (isSelected) {
+                    label.setForeground(JBColor.WHITE);
+                }
+
+                return label;
+            }
 
             final IssLanguageType languageType = IssLanguageType.findByFile(value.toString());
-            if (languageType == null || languageType.getFlagIcon() == null)
+            if (languageType == null || languageType.getFlagIcon() == null) {
                 return new JLabel();
+            }
 
-            final JXImageView imageView = new JXImageView();
-            imageView.setImage(IconUtil.toImage(languageType.getFlagIcon()));
-
-            return imageView;
+            return new BorderLayoutPanel() {
+                @Override
+                public void paint(Graphics g) {
+                    super.paint(g);
+                    g.drawImage(IconUtil.toImage(languageType.getFlagIcon()), 0, 0, null);
+                }
+            };
         });
         this.tbl.addMouseListener(new MouseAdapter() {
             @Override
@@ -118,10 +145,10 @@ public class IssLanguageTable extends BorderLayoutPanel {
     }
 
     private void handleOpenAction() {
-        final String fileName = tbl.getValueAt(tbl.getSelectedRow(), 0).toString();
+        final String fileName = tbl.getValueAt(tbl.getSelectedRow(), 1).toString();
         final File file = new File(SETTINGS.getLanguagesPath(), fileName);
         if (!file.exists()) {
-            JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable removing", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable open", JOptionPane.ERROR_MESSAGE);
             return;
         }
 

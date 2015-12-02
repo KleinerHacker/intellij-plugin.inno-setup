@@ -9,8 +9,8 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionNameElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
 import java.util.Collection;
 import java.util.List;

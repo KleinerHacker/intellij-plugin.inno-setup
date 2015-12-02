@@ -38,7 +38,8 @@ public class IssFormattingModelBuilder implements FormattingModelBuilder {
                 .before(IssTokenFactory.OPERATOR_COLON).none()
                 .after(IssTokenFactory.OPERATOR_SEMICOLON).spaceIf(/*customSettings.SPACES_PROPERTY_TERMINATOR*/ codeStyleSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS)
                 .before(IssTokenFactory.OPERATOR_SEMICOLON).none()
-                .before(IssTokenFactory.SECTION_TITLE).blankLines(codeStyleSettings.KEEP_BLANK_LINES_IN_CODE);
+                .before(IssTokenFactory.BRACE_BRACKET_START).blankLines(codeStyleSettings.KEEP_BLANK_LINES_IN_CODE)
+                .after(IssTokenFactory.BRACE_BRACKET_END).lineBreakInCode();
     }
 
     @Nullable

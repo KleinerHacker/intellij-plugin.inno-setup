@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* Created by Christoph on 18.12.2014.
-*/
+ * Created by Christoph on 18.12.2014.
+ */
 public class IssLanguageReference extends IssAbstractReference {
 
     public IssLanguageReference(PsiNamedElement element, boolean strictSearch) {
@@ -46,8 +46,12 @@ public class IssLanguageReference extends IssAbstractReference {
         final Collection<IssLanguageDefinitionElement> languageDefinitionElements = IssFindUtils.findLanguageDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = languageDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item).withPresentableText(item.getName())) //TODO: Flag Icon
-                .collect(Collectors.toList());
+                .map(item -> LookupElementBuilder.create(item)
+                        .withPresentableText(item.getName())
+                        .withTailText(item.getLanguageMessageFile() != null && item.getLanguageMessageFile().getPropertyValue() != null ?
+                                " (" + item.getLanguageMessageFile().getPropertyValue().getString() + ")" : null)
+                        .withIcon(item.getLanguageType() != null ? item.getLanguageType().getFlagIcon() : null))
+        .collect(Collectors.toList());
 
         return lookupElementList.toArray();
     }

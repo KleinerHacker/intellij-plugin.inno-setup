@@ -8,9 +8,9 @@ import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIOPermissionsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOPermissions;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIOUserOrGroupIdentifier;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssIOPermissions;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssIOUserOrGroupIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssPropertyValue;
 
 /**
  * Created by Christoph on 22.12.2014.

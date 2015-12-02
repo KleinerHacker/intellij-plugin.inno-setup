@@ -4,7 +4,9 @@ import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionHeaderElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
 import javax.swing.Icon;
 
@@ -19,7 +21,7 @@ public abstract class IssSectionElement extends IssAbstractElement {
 
     @Nullable
     public IssSectionType getSectionType() {
-        return getSectionNameElement() == null ? null : IssSectionType.fromId(getSectionNameElement().getName());
+        return getSectionName() == null ? null : IssSectionType.fromId(getSectionName().getName());
     }
 
     @Override
@@ -46,7 +48,12 @@ public abstract class IssSectionElement extends IssAbstractElement {
     }
 
     @Nullable
-    public IssSectionNameElement getSectionNameElement() {
+    public IssSectionNameElement getSectionName() {
         return PsiTreeUtil.findChildOfType(this, IssSectionNameElement.class);
+    }
+
+    @Nullable
+    public IssSectionHeaderElement getSectionHeader() {
+        return PsiTreeUtil.findChildOfType(this, IssSectionHeaderElement.class);
     }
 }

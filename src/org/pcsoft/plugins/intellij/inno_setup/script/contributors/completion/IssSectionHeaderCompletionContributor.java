@@ -7,7 +7,7 @@ import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssLanguageFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
 /**
  * Created by Christoph on 27.12.2014.

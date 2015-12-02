@@ -10,8 +10,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.propert
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyStringElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssComponentSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssComponentProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssComponentProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 /**

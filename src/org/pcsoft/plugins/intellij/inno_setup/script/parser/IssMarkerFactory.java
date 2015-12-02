@@ -13,16 +13,27 @@ public final class IssMarkerFactory {
 
     public static final IElementType ISS_FILE = new IElementType("ISS_FILE", LANGUAGE);
 
-    public static final IElementType COMPILER_DIRECTIVE_SECTION = new IElementType("COMPILER_DIRECTIVE_SECTION", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_SECTION = new IElementType("COMPILER_DIRECTIVE_SYMBOL_SECTION", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_IDENTIFIER_PARAMETER = new IElementType("COMPILER_DIRECTIVE_SYMBOL_IDENTIFIER_PARAMETER", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_VALUE_PARAMETER = new IElementType("COMPILER_DIRECTIVE_SYMBOL_VALUE_PARAMETER", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE = new IElementType("COMPILER_DIRECTIVE", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE_PARAMETERS = new IElementType("COMPILER_DIRECTIVE_PARAMETERS", LANGUAGE);
 
     public static final IElementType IDENTIFIER = new IElementType("IDENTIFIER", LANGUAGE);
     public static final IElementType IDENTIFIER_REFERENCE = new IElementType("IDENTIFIER_REFERENCE", LANGUAGE);
     public static final IElementType IDENTIFIER_NAME = new IElementType("IDENTIFIER_NAME", LANGUAGE);
     public static final IElementType VALUE = new IElementType("VALUE", LANGUAGE);
+    public static final IElementType STRING = new IElementType("STRING", LANGUAGE);
 
-    public static final IElementType SECTION_TITLE = new IElementType("SECTION_TITLE", LANGUAGE);
+    public static final IElementType BUILTIN_CONSTANT = new IElementType("BUILTIN_CONSTANT", LANGUAGE);
+    public static final IElementType COMPILER_DIRECTIVE_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
+    public static final IElementType CONSTANT_NAME = new IElementType("CONSTANT_NAME", LANGUAGE);
+
+    public static final IElementType SECTION_NAME = new IElementType("SECTION_NAME", LANGUAGE);
+    public static final IElementType SECTION_HEADER = new IElementType("SECTION_HEADER", LANGUAGE);
 
     public static final IElementType PROPERTY_UNKNOWN = new IElementType("PROPERTY_UNKNOWN", LANGUAGE);
+    public static final IElementType SECTION_UNKNOWN = new IElementType("SECTION_UNKNOWN", LANGUAGE);
 
     public static final class CommonSection {
         private static final String KEY = "COMMON_SECTION";

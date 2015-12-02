@@ -44,6 +44,10 @@
                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
         <lang.formatter language="iss"
                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssFormattingModelBuilder"/>
+        <lang.braceMatcher language="iss"
+                           implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssBraceMatcher"/>
+        <lang.quoteHandler language="iss"
+                           implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssQuoteHandler"/>
         <codeStyleSettingsProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider
@@ -53,40 +57,46 @@
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssExtendedHighlightingAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionCommonAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionFileAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionFileAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionDirectoryAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionDirectoryAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionComponentAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionComponentAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionTaskAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionTaskAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionTypeAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionTypeAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionIconAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionIconAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionInstallRunAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionInstallRunAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionUninstallRunAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionUninstallRunAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionINIAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionINIAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionRegistryAnnotator"/>
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssSectionRegistryAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.cd.IssCompilerDirectiveSymbolSectionAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.cd.IssCompilerDirectiveCommonAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssConstantAnnotator"/>
 
         <!-- Contributors -->
         <!-- Completion -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssSectionHeaderCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssInternalConstantCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.type.IssFontTypeCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssFontValueCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.type.IssBooleanTypeCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssBooleanValueCompletionContributor"/>
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssBuiltinConstantCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssCompilerDirectiveCompletionContributor"/>
         <!-- Setup -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>
@@ -190,6 +200,9 @@
         <lang.elementManipulator
                 forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierReferenceElement"
                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.property.common.IssIdentifierReferenceElementManipulator"/>
+        <lang.elementManipulator
+                forClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement"
+                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.manipulators.constant.IssConstantNameElementManipulator"/>
 
         <lang.refactoringSupport language="iss"
                                  implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssRefactoringSupportProvider"/>
@@ -197,33 +210,37 @@
 
         <!-- Documentation -->
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionComponentDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionComponentDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionTypeDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionTypeDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionTaskDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionTaskDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionFileDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionFileDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionDirectoryDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionDirectoryDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionIconDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionIconDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionInstallRunDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionInstallRunDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionUninstallRunDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionUninstallRunDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionINIDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionINIDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionRegistryDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionRegistryDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionSetupDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionSetupDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionReferenceDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionReferenceDocumentationProvider"/>
         <documentationProvider
-                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssSectionCommonDocumentationProvider"/>
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.section.IssSectionCommonDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssConstantDocumentationProvider"/>
+        <documentationProvider
+                implementation="org.pcsoft.plugins.intellij.inno_setup.script.doc.IssCompilerDirectiveDocumentationProvider"/>
 
         <!-- Line Marker -->
         <codeInsight.lineMarkerProvider language="iss"

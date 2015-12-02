@@ -7,15 +7,17 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssDefi
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyStringElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssLanguageSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageProperty;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssSectionType;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssLanguageProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.IssLanguageType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
+
+import javax.swing.Icon;
 
 /**
  * Created by Christoph on 04.01.2015.
  */
-public class IssLanguageDefinitionElement extends IssDefinitionElement<IssLanguageSectionElement, IssTypeProperty> {
+public class IssLanguageDefinitionElement extends IssDefinitionElement<IssLanguageSectionElement, IssLanguageProperty> {
 
     public IssLanguageDefinitionElement(ASTNode node) {
         super(node, IssLanguageSectionElement.class);
@@ -23,20 +25,44 @@ public class IssLanguageDefinitionElement extends IssDefinitionElement<IssLangua
 
     @NotNull
     @Override
-    public IssTypeProperty[] getPropertyTypeList() {
-        return IssTypeProperty.values();
+    public IssLanguageProperty[] getPropertyTypeList() {
+        return IssLanguageProperty.values();
     }
 
     @Nullable
     @Override
     protected String getDefinitionName() {
-        return getName();
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getName());
+        if (getLanguageMessageFile() != null && getLanguageMessageFile().getPropertyValue() != null) {
+            sb.append(" (").append(getLanguageMessageFile().getPropertyValue().getString()).append(")");
+        }
+        return sb.toString();
     }
 
     @NotNull
     @Override
     protected IssSectionType getSectionType() {
-        return IssSectionType.Type;
+        return IssSectionType.Language;
+    }
+
+    @Nullable
+    @Override
+    protected Icon getPresentableIcon() {
+        final IssLanguageType languageType = getLanguageType();
+        return languageType == null ? super.getPresentableIcon() : languageType.getFlagIcon();
+    }
+
+    @Nullable
+    public IssLanguageType getLanguageType() {
+        if (getLanguageMessageFile() == null || getLanguageMessageFile().getPropertyValue() == null)
+            return null;
+
+        final IssLanguageType languageType = IssLanguageType.findByFile(getLanguageMessageFile().getPropertyValue().getString().replace("compiler:", ""));
+        if (languageType == null || languageType.getFlagIcon() == null)
+            return null;
+
+        return languageType;
     }
 
     @Nullable

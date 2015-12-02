@@ -6,6 +6,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssLanguageDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
@@ -13,7 +14,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definit
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
 
 import java.util.Collection;
 
@@ -29,6 +30,17 @@ public final class IssFindUtils {
                 .filter(item -> item.getIdentifier() != null)
                 .filter(item -> item.getIdentifier().getName().equals(propertyType.getId()))
                 .findFirst().orElse(null);
+    }
+
+    @NotNull
+    public static Collection<IssCompilerDirectiveSymbolSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project) {
+        return findCompilerDirectiveSymbolSectionElements(project, null, false);
+    }
+
+    @NotNull
+    public static Collection<IssCompilerDirectiveSymbolSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project, final String name, final boolean variant) {
+        return IssUtils.findElements(project, name, variant, IssCompilerDirectiveSymbolSectionElement.class,
+                item -> item.getSymbolName() != null && !item.getSymbolName().getName().trim().isEmpty(), item -> item.getSymbolName().getName());
     }
 
     @NotNull

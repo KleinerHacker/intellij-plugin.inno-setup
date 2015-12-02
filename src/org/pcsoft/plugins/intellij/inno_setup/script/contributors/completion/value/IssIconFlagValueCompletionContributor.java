@@ -3,8 +3,8 @@ package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.va
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyIconFlagsElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPropertyValue;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssIconFlag;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssPropertyValue;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.flag.IssIconFlag;
 
 import javax.swing.*;
 

@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
-* Created by Christoph on 18.12.2014.
-*/
+ * Created by Christoph on 18.12.2014.
+ */
 public class IssTypeReference extends IssAbstractReference {
 
     public IssTypeReference(PsiNamedElement element, boolean strictSearch) {
@@ -46,7 +47,11 @@ public class IssTypeReference extends IssAbstractReference {
         final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssFindUtils.findTypeDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = typeDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item).withPresentableText(item.getName()))
+                .map(item -> LookupElementBuilder.create(item)
+                        .withPresentableText(item.getName())
+                        .withTailText(item.getTypeDescription() != null && item.getTypeDescription().getPropertyValue() != null ?
+                                " \"" + item.getTypeDescription().getPropertyValue().getString() + "\"" : null)
+                        .withIcon(IssSectionType.Type.getIcon()))
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

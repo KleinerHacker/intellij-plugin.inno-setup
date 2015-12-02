@@ -27,8 +27,8 @@ public class IssSectionFoldingBuilder extends FoldingBuilderEx {
 
         final Collection<IssSectionElement> sectionElements = PsiTreeUtil.findChildrenOfType(psiElement, IssSectionElement.class);
         for (final IssSectionElement sectionElement : sectionElements) {
-            final int startOffset = sectionElement.getSectionNameElement() == null ? 0 :
-                    sectionElement.getSectionNameElement().getTextRange().getEndOffset();
+            final int startOffset = sectionElement.getSectionName() == null ? 0 :
+                    sectionElement.getSectionName().getTextRange().getEndOffset();
             final int endOffset = sectionElement.getTextRange().getEndOffset() - 1;
             if (endOffset <= startOffset)
                 continue;
