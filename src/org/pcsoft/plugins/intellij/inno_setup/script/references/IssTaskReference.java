@@ -47,13 +47,14 @@ public class IssTaskReference extends IssAbstractReference {
         final Collection<IssTaskDefinitionElement> taskDefinitionElements = IssFindUtils.findTaskDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = taskDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item)
-                        .withPresentableText(item.getName())
-                        .withTailText(item.getTaskDescription() != null && item.getTaskDescription().getPropertyValue() != null ?
-                                " \"" + item.getTaskDescription().getPropertyValue().getString() + "\"" : null)
-                        .withTypeText(item.getTaskGroupDescription() != null && item.getTaskGroupDescription().getPropertyValue() != null ?
-                                "\"" + item.getTaskGroupDescription().getPropertyValue().getString() + "\"" : null)
-                        .withIcon(IssSectionType.Task.getIcon()))
+                .map(item -> LookupElementBuilder.create(item.getName())
+                                .withCaseSensitivity(false)
+                                .withTailText(item.getTaskDescription() != null && item.getTaskDescription().getPropertyValue() != null ?
+                                        " \"" + item.getTaskDescription().getPropertyValue().getString() + "\"" : null)
+                                .withTypeText(item.getTaskGroupDescription() != null && item.getTaskGroupDescription().getPropertyValue() != null ?
+                                        "\"" + item.getTaskGroupDescription().getPropertyValue().getString() + "\"" : null)
+                                .withIcon(IssSectionType.Task.getIcon())
+                )
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

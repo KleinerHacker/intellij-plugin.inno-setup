@@ -55,7 +55,7 @@ public class IssBooleanTypeCompletionContributor extends IssAbstractValueComplet
 
     @Nullable
     @Override
-    protected String getTailText(IssPropertyValue propertyValue) {
+    public String getTailText(IssPropertyValue propertyValue) {
         return " (" + Boolean.toString(propertyValue.getId().equals("yes")) + ")";
     }
 }

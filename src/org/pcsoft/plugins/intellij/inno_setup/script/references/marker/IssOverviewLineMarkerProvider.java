@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionHeaderElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class IssOverviewLineMarkerProvider implements LineMarkerProvider {
     @Override
     public void collectSlowLineMarkers(@NotNull List<PsiElement> list, @NotNull Collection<LineMarkerInfo> collection) {
         list.stream()
-                .filter(psiElement -> psiElement instanceof IssSectionNameElement && psiElement.getParent() instanceof IssSectionElement)
+                .filter(psiElement -> psiElement instanceof IssSectionHeaderElement && psiElement.getParent() instanceof IssSectionElement)
                 .forEach(psiElement -> {
                     final RelatedItemLineMarkerInfo<PsiElement> markerInfo = buildMarker((IssSectionElement) psiElement.getParent(), psiElement);
                     if (markerInfo != null) {

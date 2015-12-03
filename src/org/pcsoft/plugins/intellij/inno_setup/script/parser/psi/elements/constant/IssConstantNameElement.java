@@ -9,11 +9,14 @@ import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssAbstractElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.references.IssCompilerDirectiveSymbolReference;
+import org.pcsoft.plugins.intellij.inno_setup.script.references.IssMessageReference;
 
 /**
  * Created by pfeifchr on 01.12.2015.
  */
 public class IssConstantNameElement extends IssAbstractElement implements PsiNamedElement {
+    private final IssCompilerDirectiveSymbolReference compilerDirectiveSymbolReference = new IssCompilerDirectiveSymbolReference(this, true);
+    private final IssMessageReference messageReference = new IssMessageReference(this, true);
 
     public IssConstantNameElement(ASTNode node) {
         super(node);
@@ -32,9 +35,11 @@ public class IssConstantNameElement extends IssAbstractElement implements PsiNam
 
     @Override
     public PsiReference getReference() {
-        if (PsiTreeUtil.getParentOfType(this, IssCompilerDirectiveConstantElement.class) == null)
-            return null;
+        if (PsiTreeUtil.getParentOfType(this, IssCompilerDirectiveConstantElement.class) != null)
+            return compilerDirectiveSymbolReference;
+        if (PsiTreeUtil.getParentOfType(this, IssMessageConstantElement.class) != null)
+            return messageReference;
 
-        return new IssCompilerDirectiveSymbolReference(this, true);
+        return null;
     }
 }

@@ -47,11 +47,12 @@ public class IssComponentReference extends IssAbstractReference {
         final Collection<IssComponentDefinitionElement> componentDefinitionNameValueElements = IssFindUtils.findComponentDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = componentDefinitionNameValueElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item)
-                        .withPresentableText(item.getName())
-                        .withTailText(item.getComponentDescription() != null && item.getComponentDescription().getPropertyValue() != null ?
-                                " \"" + item.getComponentDescription().getPropertyValue().getString() + "\"" : null)
-                        .withIcon(IssSectionType.Component.getIcon()))
+                .map(item -> LookupElementBuilder.create(item.getName())
+                                .withCaseSensitivity(false)
+                                .withTailText(item.getComponentDescription() != null && item.getComponentDescription().getPropertyValue() != null ?
+                                        " \"" + item.getComponentDescription().getPropertyValue().getString() + "\"" : null)
+                                .withIcon(IssSectionType.Component.getIcon())
+                )
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

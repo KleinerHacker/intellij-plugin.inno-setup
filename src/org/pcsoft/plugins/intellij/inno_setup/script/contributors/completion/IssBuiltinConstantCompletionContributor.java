@@ -11,8 +11,9 @@ import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssBuiltinConstant;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssPropertyValue;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant.IssBuiltinConstant;
+
+import java.awt.Font;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -24,15 +25,42 @@ public class IssBuiltinConstantCompletionContributor extends CompletionContribut
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
-                        for (final IssPropertyValue item : IssBuiltinConstant.values()) {
+                        for (final IssBuiltinConstant item : IssBuiltinConstant.values()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
-                                    .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.GREEN)
-                                    .withIcon(null /* TODO */).withStrikeoutness(item.isDeprecated()).withTypeText(null /* TODO */)
+                                    .withBoldness(item.getType().getFontStyle() == Font.BOLD)
+                                    .withCaseSensitivity(false)
+                                    .withItemTextForeground(item.getType().getTextColor())
+                                    .withIcon(null /* TODO */)
+                                    .withStrikeoutness(item.isDeprecated()).withTypeText(item.getType().getText())
                             );
                         }
                         completionResultSet.addElement(LookupElementBuilder.create("#")
-                                .withBoldness(true).withItemTextForeground(JBColor.BLUE.brighter())
+                                .withBoldness(false).withItemTextForeground(JBColor.BLUE.brighter())
                                 .withTypeText("Compiler Directive Constant")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("cm:")
+                                .withBoldness(false).withItemTextForeground(JBColor.GREEN)
+                                .withTypeText("Custom Message Constant")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("%")
+                                .withBoldness(false).withItemTextForeground(JBColor.YELLOW)
+                                .withTypeText("Environment Variable")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("param:")
+                                .withBoldness(false).withItemTextForeground(JBColor.YELLOW)
+                                .withTypeText("Command Line Parameter")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("reg:")
+                                .withBoldness(true).withItemTextForeground(JBColor.CYAN)
+                                .withTypeText("Registry Constant")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("ini:")
+                                .withBoldness(true).withItemTextForeground(JBColor.CYAN)
+                                .withTypeText("INI Constant")
+                        );
+                        completionResultSet.addElement(LookupElementBuilder.create("drive:")
+                                .withBoldness(true).withItemTextForeground(JBColor.YELLOW)
+                                .withTypeText("Drive Constant")
                         );
                     }
                 });

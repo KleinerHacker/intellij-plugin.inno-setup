@@ -79,11 +79,15 @@
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionRegistryAnnotator"/>
         <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionLanguageAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionInstallDeleteAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionUninstallDeleteAnnotator"/>
+        <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.cd.IssCompilerDirectiveSymbolSectionAnnotator"/>
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.cd.IssCompilerDirectiveCommonAnnotator"/>
-        <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssConstantAnnotator"/>
 
         <!-- Contributors -->
         <!-- Completion -->
@@ -172,6 +176,14 @@
         <!-- Language -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssLanguagePropertyCompletionContributor"/>
+        <!-- InstallDelete -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssInstallDeletePropertyCompletionContributor"/>
+        <!-- UninstallDelete -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssUninstallDeletePropertyCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.value.IssDeleteTypeValueCompletionContributor"/>
 
         <!-- Go To -->
         <gotoSymbolContributor

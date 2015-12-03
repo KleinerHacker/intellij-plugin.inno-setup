@@ -8,6 +8,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssDirectory
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssFileProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssINIProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssIconProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssInstallDeleteProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssInstallRunProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssLanguageOptionProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssLanguageProperty;
@@ -15,6 +16,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssRegistryP
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssSetupProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssTaskProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssUninstallDeleteProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssUninstallRunProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
 
@@ -151,6 +153,14 @@ final class IssParserSectionUtility {
                         case Language:
                             parseLineForDefinableSection(psiBuilder, "Language Section", IssMarkerFactory.LanguageSection.SECTION_DEFINITION,
                                     IssLanguageProperty::getPropertyValueMarkerElementFromId, IssLanguageProperty::getPropertyMarkerElementFromId);
+                            break;
+                        case InstallDelete:
+                            parseLineForDefinableSection(psiBuilder, "InstallDelete Section", IssMarkerFactory.InstallDeleteSection.SECTION_DEFINITION,
+                                    IssInstallDeleteProperty::getPropertyValueMarkerElementFromId, IssInstallDeleteProperty::getPropertyMarkerElementFromId);
+                            break;
+                        case UninstallDelete:
+                            parseLineForDefinableSection(psiBuilder, "UninstallDelete Section", IssMarkerFactory.UninstallDeleteSection.SECTION_DEFINITION,
+                                    IssUninstallDeleteProperty::getPropertyValueMarkerElementFromId, IssUninstallDeleteProperty::getPropertyMarkerElementFromId);
                             break;
                         default:
                             throw new RuntimeException();

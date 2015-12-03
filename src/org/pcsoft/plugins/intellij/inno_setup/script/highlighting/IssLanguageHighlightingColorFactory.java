@@ -44,20 +44,35 @@ public final class IssLanguageHighlightingColorFactory {
 
     public static final TextAttributesKey SYNTAX_OPERATORS = TextAttributesKey.createTextAttributesKey(
             "SYNTAX_OPERATORS",
-            new TextAttributes(null, null, null, null, Font.BOLD)
+            new TextAttributes(JBColor.BLACK, null, null, null, Font.BOLD)
     );
 
     //********************************************************************************************************//
     //********************************************************************************************************//
     //********************************************************************************************************//
 
-    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATOR_INFO_PROPERTY_NAME",
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_STANDARD = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_STANDARD",
+            new TextAttributes(JBColor.BLUE, null, null, null, Font.PLAIN)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_REQUIRED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_REQUIRED",
             new TextAttributes(JBColor.BLUE, null, null, null, Font.BOLD)
     );
 
-    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_LAN = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATOR_INFO_PROPERTY_LAN",
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED",
+            new TextAttributes(JBColor.GRAY, null, JBColor.GRAY, EffectType.STRIKEOUT, Font.PLAIN)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_LAN = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_LAN",
+            new TextAttributes(JBColor.GREEN, null, null, null, Font.PLAIN)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_REF = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_REF",
             new TextAttributes(JBColor.BLUE.brighter(), null, null, null, Font.BOLD | Font.ITALIC)
     );
 
@@ -71,9 +86,14 @@ public final class IssLanguageHighlightingColorFactory {
             new TextAttributes(JBColor.GRAY, null, null, null, 0)
     );
 
-    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATOR_INFO_CONSTANT",
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_DEFAULT = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_DEFAULT",
             new TextAttributes(JBColor.PINK, null, null, null, Font.ITALIC)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_MESSAGE = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_MESSAGE",
+            new TextAttributes(JBColor.GREEN, null, null, null, Font.ITALIC)
     );
 
     public static final TextAttributesKey ANNOTATOR_INFO_COMPILER_DIRECTIVE_CONSTANT = TextAttributesKey.createTextAttributesKey(

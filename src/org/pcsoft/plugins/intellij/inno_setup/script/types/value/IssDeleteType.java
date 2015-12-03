@@ -3,24 +3,24 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types.value;
 /**
  * Created by Christoph on 04.01.2015.
  */
-public enum IssBuiltinConstant implements IssPropertyValue {
-    App("app", "constant.internal.app"),
-    Win("win", "constant.internal.win"),
-    Sys("sys", "constant.internal.sys"),
+public enum IssDeleteType implements IssPropertyValue {
+    Files("Files", "common.delete_type.files"),
+    FilesAndOrDirectories("FilesAndOrDirs", "common.delete_type.filesandordirs"),
+    DirectoryIfEmpty("DirIfEmpty", "common.delete_type.dirifempty")
     ;
 
-    public static IssBuiltinConstant fromId(final String id) {
-        return IssPropertyValue.findById(id, IssBuiltinConstant.class);
+    public static IssDeleteType fromId(final String id) {
+        return IssPropertyValue.findById(id, IssDeleteType.class);
     }
 
     private final String id, descriptionKey;
     private final boolean deprecated;
 
-    private IssBuiltinConstant(String id, String descriptionKey) {
+    private IssDeleteType(String id, String descriptionKey) {
         this(id, descriptionKey, false);
     }
 
-    private IssBuiltinConstant(String id, String descriptionKey, boolean deprecated) {
+    private IssDeleteType(String id, String descriptionKey, boolean deprecated) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.deprecated = deprecated;

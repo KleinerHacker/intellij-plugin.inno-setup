@@ -6,9 +6,9 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveParametersElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIdentifierParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveStringParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssStringElement;
@@ -16,16 +16,20 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssCompilerDirectiveConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssMessageConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssFileDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssINIDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssIconDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssInstallDeleteDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssInstallRunDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssLanguageDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssRegistryDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssUninstallDeleteDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssUninstallRunDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyBooleanElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyBooleanValueElement;
@@ -37,6 +41,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.propert
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyCompressionValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultValueElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDeleteTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDeleteTypeValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDirectoryFlagsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDirectoryFlagsValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyFileFlagsElement;
@@ -92,6 +98,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssFileSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssINISectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssIconSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssInstallDeleteSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssInstallRunSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssLanguageOptionSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssLanguageSectionElement;
@@ -100,6 +107,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTaskSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssTypeSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssUninstallDeleteSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssUninstallRunSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionHeaderElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
@@ -111,6 +119,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssDirectory
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssFileProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssINIProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssIconProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssInstallDeleteProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssInstallRunProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssLanguageOptionProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssLanguageProperty;
@@ -119,6 +128,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssRegistryP
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssSetupProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssTaskProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssTypeProperty;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssUninstallDeleteProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssUninstallRunProperty;
 
 /**
@@ -191,6 +201,14 @@ public final class IssPsiElementFactory {
         if (languageSection != null)
             return languageSection;
 
+        final PsiElement installDeleteSection = createForInstallDeleteSection(node);
+        if (installDeleteSection != null)
+            return installDeleteSection;
+
+        final PsiElement uninstallDeleteSection = createForUninstallDeleteSection(node);
+        if (uninstallDeleteSection != null)
+            return uninstallDeleteSection;
+
         final PsiElement compilerDirectiveSection = createForCompilerDirective(node);
         if (compilerDirectiveSection != null)
             return compilerDirectiveSection;
@@ -212,10 +230,14 @@ public final class IssPsiElementFactory {
             return new IssStringElement(node);
         } else if (IssMarkerFactory.BUILTIN_CONSTANT.equals(node.getElementType())) {
             return new IssBuiltinConstantElement(node);
+        } else if (IssMarkerFactory.MESSAGE_CONSTANT.equals(node.getElementType())) {
+            return new IssMessageConstantElement(node);
         } else if (IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT.equals(node.getElementType())) {
             return new IssCompilerDirectiveConstantElement(node);
         } else if (IssMarkerFactory.CONSTANT_NAME.equals(node.getElementType())) {
             return new IssConstantNameElement(node);
+        } else if (IssMarkerFactory.CONSTANT_TYPE.equals(node.getElementType())) {
+            return new IssConstantTypeElement(node);
         } else if (IssMarkerFactory.PROPERTY_UNKNOWN.equals(node.getElementType())) {
             return new IssPropertyUnknownElement(node);
         }
@@ -625,6 +647,42 @@ public final class IssPsiElementFactory {
             return new IssPropertyRegistryFlagsElement(node);
         } else if (IssMarkerFactory.RegistrySection.PROPERTY_FLAGS_VALUE.equals(node.getElementType())) {
             return new IssPropertyRegistryFlagsValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForInstallDeleteSection(ASTNode node) {
+        if (IssMarkerFactory.InstallDeleteSection.SECTION.equals(node.getElementType())) {
+            return new IssInstallDeleteSectionElement(node);
+        } else if (IssMarkerFactory.InstallDeleteSection.SECTION_DEFINITION.equals(node.getElementType())) {
+            return new IssInstallDeleteDefinitionElement(node);
+        } else if (IssMarkerFactory.InstallDeleteSection.PROPERTY_TYPE.equals(node.getElementType())) {
+            return new IssPropertyDeleteTypeElement(node, IssInstallDeleteProperty.Type);
+        } else if (IssMarkerFactory.InstallDeleteSection.PROPERTY_TYPE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDeleteTypeValueElement(node);
+        } else if (IssMarkerFactory.InstallDeleteSection.PROPERTY_NAME.equals(node.getElementType())) {
+            return new IssPropertyStringElement(node, IssInstallDeleteProperty.Name);
+        } else if (IssMarkerFactory.InstallDeleteSection.PROPERTY_NAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyStringValueElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForUninstallDeleteSection(ASTNode node) {
+        if (IssMarkerFactory.UninstallDeleteSection.SECTION.equals(node.getElementType())) {
+            return new IssUninstallDeleteSectionElement(node);
+        } else if (IssMarkerFactory.UninstallDeleteSection.SECTION_DEFINITION.equals(node.getElementType())) {
+            return new IssUninstallDeleteDefinitionElement(node);
+        } else if (IssMarkerFactory.UninstallDeleteSection.PROPERTY_TYPE.equals(node.getElementType())) {
+            return new IssPropertyDeleteTypeElement(node, IssUninstallDeleteProperty.Type);
+        } else if (IssMarkerFactory.UninstallDeleteSection.PROPERTY_TYPE_VALUE.equals(node.getElementType())) {
+            return new IssPropertyDeleteTypeValueElement(node);
+        } else if (IssMarkerFactory.UninstallDeleteSection.PROPERTY_NAME.equals(node.getElementType())) {
+            return new IssPropertyStringElement(node, IssUninstallDeleteProperty.Name);
+        } else if (IssMarkerFactory.UninstallDeleteSection.PROPERTY_NAME_VALUE.equals(node.getElementType())) {
+            return new IssPropertyStringValueElement(node);
         }
 
         return null;

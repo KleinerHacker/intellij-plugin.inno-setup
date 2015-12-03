@@ -19,15 +19,16 @@ public enum IssSectionType implements IssSectionIdentifier {
     Directory("Dirs", IssMarkerFactory.DirectorySection.SECTION, "section.dirs", IssIcons.IC_SECT_DIRECTORY, IssFileType.Script),
     Icon("Icons", IssMarkerFactory.IconSection.SECTION, "section.icons", IssIcons.IC_SECT_ICON, IssFileType.Script),
     INI("INI", IssMarkerFactory.INISection.SECTION, "section.ini", IssIcons.IC_SECT_INI, IssFileType.Script),
-    InstallDelete("InstallDelete", null, "section.install_delete", null, IssFileType.Script),
     Language("Languages", IssMarkerFactory.LanguageSection.SECTION, "section.languages", IssIcons.IC_SECT_LANGUAGE, IssFileType.Script),
     Message("Messages", IssMarkerFactory.MessageSection.SECTION, "section.messages", IssIcons.IC_SECT_MESSAGES),
     CustomMessage("CustomMessages", IssMarkerFactory.CustomMessageSection.SECTION, "section.custom_messages", IssIcons.IC_SECT_CUSTOM_MESSAGES),
     LanguageOption("LangOptions", IssMarkerFactory.LanguageOptionSection.SECTION, "section.lang_options", IssIcons.IC_SECT_LANGUAGE_OPTION, IssFileType.Language),
     Registry("Registry", IssMarkerFactory.RegistrySection.SECTION, "section.registry", IssIcons.IC_SECT_REGISTRY, IssFileType.Script),
+    InstallDelete("InstallDelete", IssMarkerFactory.InstallDeleteSection.SECTION, "section.install_delete", IssIcons.IC_SECT_INSTALL_DELETE, IssFileType.Script),
+    UninstallDelete("UninstallDelete", IssMarkerFactory.UninstallDeleteSection.SECTION, "section.uninstall_delete", IssIcons.IC_SECT_UNINSTALL_DELETE, IssFileType.Script),
     InstallRun("Run", IssMarkerFactory.InstallRunSection.SECTION, "section.install_run", IssIcons.IC_SECT_INSTALL_RUN, IssFileType.Script),
-    UninstallDelete("UninstallDelete", null, "section.uninstall_delete", null, IssFileType.Script),
-    UninstallRun("UninstallRun", IssMarkerFactory.UninstallRunSection.SECTION, "section.uninstall_run", IssIcons.IC_SECT_UNINSTALL_RUN, IssFileType.Script);
+    UninstallRun("UninstallRun", IssMarkerFactory.UninstallRunSection.SECTION, "section.uninstall_run", IssIcons.IC_SECT_UNINSTALL_RUN, IssFileType.Script),
+    ;
 
     public static IssSectionType fromId(final String id) {
         final String preparedId = id.replace("[", "").replace("]", "");

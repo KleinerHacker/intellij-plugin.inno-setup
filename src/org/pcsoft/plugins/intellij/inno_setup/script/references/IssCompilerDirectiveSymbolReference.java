@@ -9,8 +9,8 @@ import com.intellij.psi.ResolveResult;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIdentifierParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIdentifierParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.utils.IssFindUtils;
 
 import java.util.Collection;
@@ -47,10 +47,12 @@ public class IssCompilerDirectiveSymbolReference extends IssAbstractReference {
         final Collection<IssCompilerDirectiveSymbolSectionElement> compilerDirectiveSectionElements = IssFindUtils.findCompilerDirectiveSymbolSectionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = compilerDirectiveSectionElements.stream()
                 .filter(item -> item.getSymbolName() != null && !item.getSymbolName().getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item.getSymbolName())
-                        .withItemTextForeground(JBColor.BLUE.brighter())
-                        .withPresentableText(item.getSymbolName().getName())
-                        .withIcon(null /* TODO */))
+                .map(item -> LookupElementBuilder.create(item.getSymbolName().getName())
+                                .withCaseSensitivity(false)
+                                .withItemTextForeground(JBColor.BLUE.brighter())
+                                .withPresentableText(item.getSymbolName().getName())
+                                .withIcon(null /* TODO */)
+                )
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

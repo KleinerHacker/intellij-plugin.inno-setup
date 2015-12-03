@@ -47,11 +47,12 @@ public class IssTypeReference extends IssAbstractReference {
         final Collection<IssTypeDefinitionElement> typeDefinitionElements = IssFindUtils.findTypeDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = typeDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item)
-                        .withPresentableText(item.getName())
-                        .withTailText(item.getTypeDescription() != null && item.getTypeDescription().getPropertyValue() != null ?
-                                " \"" + item.getTypeDescription().getPropertyValue().getString() + "\"" : null)
-                        .withIcon(IssSectionType.Type.getIcon()))
+                .map(item -> LookupElementBuilder.create(item.getName())
+                                .withCaseSensitivity(false)
+                                .withTailText(item.getTypeDescription() != null && item.getTypeDescription().getPropertyValue() != null ?
+                                        " \"" + item.getTypeDescription().getPropertyValue().getString() + "\"" : null)
+                                .withIcon(IssSectionType.Type.getIcon())
+                )
                 .collect(Collectors.toList());
 
         return lookupElementList.toArray();

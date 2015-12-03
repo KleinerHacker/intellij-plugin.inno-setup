@@ -46,11 +46,12 @@ public class IssLanguageReference extends IssAbstractReference {
         final Collection<IssLanguageDefinitionElement> languageDefinitionElements = IssFindUtils.findLanguageDefinitionElements(myElement.getProject());
         final List<LookupElement> lookupElementList = languageDefinitionElements.stream()
                 .filter(item -> item.getName() != null && !item.getName().trim().isEmpty())
-                .map(item -> LookupElementBuilder.create(item)
-                        .withPresentableText(item.getName())
-                        .withTailText(item.getLanguageMessageFile() != null && item.getLanguageMessageFile().getPropertyValue() != null ?
-                                " (" + item.getLanguageMessageFile().getPropertyValue().getString() + ")" : null)
-                        .withIcon(item.getLanguageType() != null ? item.getLanguageType().getFlagIcon() : null))
+                .map(item -> LookupElementBuilder.create(item.getName())
+                                .withCaseSensitivity(false)
+                                .withTailText(item.getLanguageMessageFile() != null && item.getLanguageMessageFile().getPropertyValue() != null ?
+                                        " (" + item.getLanguageMessageFile().getPropertyValue().getString() + ")" : null)
+                                .withIcon(item.getLanguageType() != null ? item.getLanguageType().getFlagIcon() : null)
+                )
         .collect(Collectors.toList());
 
         return lookupElementList.toArray();

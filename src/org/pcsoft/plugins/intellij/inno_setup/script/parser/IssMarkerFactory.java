@@ -26,8 +26,10 @@ public final class IssMarkerFactory {
     public static final IElementType STRING = new IElementType("STRING", LANGUAGE);
 
     public static final IElementType BUILTIN_CONSTANT = new IElementType("BUILTIN_CONSTANT", LANGUAGE);
+    public static final IElementType MESSAGE_CONSTANT = new IElementType("MESSAGE_CONSTANT", LANGUAGE);
     public static final IElementType COMPILER_DIRECTIVE_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
     public static final IElementType CONSTANT_NAME = new IElementType("CONSTANT_NAME", LANGUAGE);
+    public static final IElementType CONSTANT_TYPE = new IElementType("CONSTANT_TYPE", LANGUAGE);
 
     public static final IElementType SECTION_NAME = new IElementType("SECTION_NAME", LANGUAGE);
     public static final IElementType SECTION_HEADER = new IElementType("SECTION_HEADER", LANGUAGE);
@@ -35,6 +37,7 @@ public final class IssMarkerFactory {
     public static final IElementType PROPERTY_UNKNOWN = new IElementType("PROPERTY_UNKNOWN", LANGUAGE);
     public static final IElementType SECTION_UNKNOWN = new IElementType("SECTION_UNKNOWN", LANGUAGE);
 
+    //region Common
     public static final class CommonSection {
         private static final String KEY = "COMMON_SECTION";
         private static final String KEY_ITEM = KEY + "_PROPERTY";
@@ -50,7 +53,9 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_COMPONENTS = new IElementType(KEY_ITEM + "_COMPONENTS", LANGUAGE);
         public static final IElementType PROPERTY_COMPONENTS_VALUE = new IElementType(KEY_ITEM + "_COMPONENTS_VALUE", LANGUAGE);
     }
+    //endregion
 
+    //region Standard Sections
     public static final class SetupSection {
         private static final String KEY = "SETUP_SECTION";
         private static final String KEY_ITEM = KEY + "_PROPERTY";
@@ -94,7 +99,9 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_RIGHTTOLEFT = new IElementType(KEY_ITEM + "_RIGHTTOLEFT", LANGUAGE);
         public static final IElementType PROPERTY_RIGHTTOLEFT_VALUE = new IElementType(KEY_ITEM + "_RIGHTTOLEFT_VALUE", LANGUAGE);
     }
+    //endregion
 
+    //region Definable Sections
     public static final class CustomMessageSection {
         private static final String KEY = "CUSTOMMESSAGE_SECTION";
         private static final String KEY_ITEM = KEY + "_PROPERTY";
@@ -313,6 +320,30 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
 
+    public static final class InstallDeleteSection {
+        private static final String KEY = "INSTALLDELETE_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_TYPE = new IElementType(KEY_ITEM + "_TYPE", LANGUAGE);
+        public static final IElementType PROPERTY_TYPE_VALUE = new IElementType(KEY_ITEM + "_TYPE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_NAME = new IElementType(KEY_ITEM + "_NAME", LANGUAGE);
+        public static final IElementType PROPERTY_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
+    }
+
+    public static final class UninstallDeleteSection {
+        private static final String KEY = "UNINSTALLDELETE_SECTION";
+        private static final String KEY_ITEM = KEY + "_PROPERTY";
+
+        public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
+        public static final IElementType SECTION_DEFINITION = new IElementType(KEY + "_DEFINITION", LANGUAGE);
+        public static final IElementType PROPERTY_TYPE = new IElementType(KEY_ITEM + "_TYPE", LANGUAGE);
+        public static final IElementType PROPERTY_TYPE_VALUE = new IElementType(KEY_ITEM + "_TYPE_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_NAME = new IElementType(KEY_ITEM + "_NAME", LANGUAGE);
+        public static final IElementType PROPERTY_NAME_VALUE = new IElementType(KEY_ITEM + "_NAME_VALUE", LANGUAGE);
+    }
+
     public static final class RegistrySection {
         private static final String KEY = "REGISTRY_SECTION";
         private static final String KEY_ITEM = KEY + "_PROPERTY";
@@ -334,6 +365,7 @@ public final class IssMarkerFactory {
         public static final IElementType PROPERTY_FLAGS = new IElementType(KEY_ITEM + "_FLAGS", LANGUAGE);
         public static final IElementType PROPERTY_FLAGS_VALUE = new IElementType(KEY_ITEM + "_FLAGS_VALUE", LANGUAGE);
     }
+    //endregion
 
     private IssMarkerFactory() {
     }

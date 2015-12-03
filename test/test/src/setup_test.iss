@@ -1,13 +1,13 @@
-; Test
 #define hello "World"
 #define hello "He"
 #define unused "Test"
+; Test
 #define my "Hallo Welt" abc123
 #define "test" wert
 #define world
 
 [SETUP]
-AppName = My Test {win} {#my} {#world} {#hel}
+AppName = My Test {win} {#my} {#world} {#hel} {group} {cm:test}
 Compression = lzma
 Compression = zip
 
@@ -43,8 +43,6 @@ Name: "doubleDir";
 Name: "doubleDir";
 Flags: DeleteAfterInstall
 
-
-
 [Icons]
 Name: "testIcon"; Filename: "dfrfr"; Flags: FolderShortCut CloseOnExit FolderShortCut bla; Tasks: bla testTask testTask; Components: testComponent bla testComponent
 Name: "doubleIcon"; Filename: "dhus";
@@ -57,12 +55,23 @@ Filename: "doubleRun";
 Filename: "doubleRun";
 Flags: 64Bit
 
-
 [UninstallRun]
 Filename: "testUninstallRun"; Flags: SkipIfDoesntExist 64Bit SkipIfDoesntExist bla; Components: testComponent bla testComponent; Tasks: testTask bla testTask
 Filename: "doubleUninstallRun";
 Filename: "doubleUninstallRun";
 Flags: 64Bit
+
+[InstallDelete]
+Name: "testInstallDelete"; Type: Files DirIfEmpty; Components: testComponent bla testComponent; Tasks: testTask bla testTask
+Name: "double"; Type: Files
+Name: "double"; Type: bla
+Type: FilesAndOrDirs
+
+[UninstallDelete]
+Name: "testInstallDelete"; Type: Files DirIfEmpty; Components: testComponent bla testComponent; Tasks: testTask bla testTask
+Name: "double"; Type: Files
+Name: "double"; Type: DirIfEmpty
+Type: FilesAndOrDirs
 
 [INI]
 Filename: "testINI"; Section: "test"; Flags: UninsDeleteEntry bla UninsDeleteEntry; Components: testComponent bla testComponent; Tasks: testTask bla testTask
@@ -81,6 +90,9 @@ Flags: UninsDeleteEntry
 
 [Languages]
 Name: en; MessageFile: "compiler:Languages\German.isl"
+Name: de; MessageFile: ""
+Name: de; MessageFile: ""
+LicenceFile: ""
 
 [LangOptions]
 LanguageName = MyLan
@@ -91,12 +103,14 @@ CopyrightFontSize = 12
 RightToLeft = yes
 
 [CustomMessages]
-test=Bla
-de.test=Blub
-en.test=Hello
-en.gd=dk
+test = Bla
+de.test = Blub
+en.test = Hello
+dt.test = dk
 
 [Messages]
-forward=>>>
-de.forward=>>>
-en.forward=>>>
+forward = >>>
+de.forward = >>>
+en.forward = >>>
+de.test=bvfds
+en.test=fio

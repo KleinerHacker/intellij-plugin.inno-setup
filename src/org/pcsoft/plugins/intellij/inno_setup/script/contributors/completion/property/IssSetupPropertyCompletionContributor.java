@@ -6,6 +6,9 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssSetupProperty;
 
+import java.awt.Color;
+import java.awt.Font;
+
 /**
  * Created by Christoph on 22.12.2014.
  */
@@ -22,7 +25,18 @@ public class IssSetupPropertyCompletionContributor extends IssAbstractPropertyCo
 
     @Nullable
     @Override
-    protected String getTypeText(IssPropertyIdentifier propertyIdentifier) {
+    public String getTypeText(IssPropertyIdentifier propertyIdentifier) {
         return ((IssSetupProperty)propertyIdentifier).getClassifier().getText();
+    }
+
+    @Override
+    public boolean getBoldness(IssPropertyIdentifier propertyIdentifier) {
+        return ((IssSetupProperty)propertyIdentifier).getClassifier().getFontStyle() == Font.BOLD;
+    }
+
+    @NotNull
+    @Override
+    public Color getTextColor(IssPropertyIdentifier propertyIdentifier) {
+        return ((IssSetupProperty)propertyIdentifier).getClassifier().getTextColor();
     }
 }

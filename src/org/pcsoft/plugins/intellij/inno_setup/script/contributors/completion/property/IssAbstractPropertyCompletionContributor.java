@@ -12,13 +12,17 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
+import org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssLookupElementHint;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
+
+import javax.swing.Icon;
+import java.awt.Color;
 
 /**
  * Created by Christoph on 22.12.2014.
  */
-public abstract class IssAbstractPropertyCompletionContributor<E extends IssSectionElement> extends CompletionContributor {
+public abstract class IssAbstractPropertyCompletionContributor<E extends IssSectionElement> extends CompletionContributor implements IssLookupElementHint<IssPropertyIdentifier> {
     protected enum PropertyType {
         Standard,
         Definable
@@ -32,9 +36,9 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssSect
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
                         for (final IssPropertyIdentifier item : getSectionIdentifierList()) {
                             completionResultSet.addElement(LookupElementBuilder.create(item.getId())
-                                    .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.BLUE)
-                                    .withStrikeoutness(item.isDeprecated()).withTailText(item.isRequired() ? " (Required)" : null)
-                                    .withTypeText(getTypeText(item))
+                                    .withBoldness(getBoldness(item)).withCaseSensitivity(false).withItemTextForeground(getTextColor(item))
+                                    .withStrikeoutness(getStrikeout(item)).withTailText(getTailText(item))
+                                    .withTypeText(getTypeText(item)).withIcon(getIcon(item))
                                     .withInsertHandler((insertionContext, lookupElement) -> {
                                         if (type == PropertyType.Definable) {
                                             insertionContext.getDocument().insertString(insertionContext.getTailOffset(), ": ");
@@ -53,8 +57,37 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssSect
     @NotNull
     protected abstract IssPropertyIdentifier[] getSectionIdentifierList();
 
+    @Override
     @Nullable
-    protected String getTypeText(IssPropertyIdentifier propertyIdentifier) {
+    public String getTypeText(IssPropertyIdentifier propertyIdentifier) {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public String getTailText(IssPropertyIdentifier propertyIdentifier) {
+        return propertyIdentifier.isRequired() ? " (Required)" : null;
+    }
+
+    @Override
+    public boolean getBoldness(IssPropertyIdentifier propertyIdentifier) {
+        return true;
+    }
+
+    @Override
+    public boolean getStrikeout(IssPropertyIdentifier propertyIdentifier) {
+        return propertyIdentifier.isDeprecated();
+    }
+
+    @Override
+    @NotNull
+    public Color getTextColor(IssPropertyIdentifier propertyIdentifier) {
+        return JBColor.BLUE;
+    }
+
+    @Nullable
+    @Override
+    public Icon getIcon(IssPropertyIdentifier value) {
         return null;
     }
 }

@@ -11,7 +11,7 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.para
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssBuiltinConstant;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant.IssBuiltinConstant;
 
 import java.util.Arrays;
 import java.util.List;

@@ -23,7 +23,7 @@ public class IssFileFlagValueCompletionContributor extends IssAbstractValueCompl
     }
 
     @Override
-    protected Icon getIcon(IssPropertyValue propertyValue) {
+    public Icon getIcon(IssPropertyValue propertyValue) {
         return IssIcons.IC_INFO_FLAG;
     }
 }

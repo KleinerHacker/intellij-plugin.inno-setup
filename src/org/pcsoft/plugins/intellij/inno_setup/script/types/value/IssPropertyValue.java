@@ -10,6 +10,9 @@ public interface IssPropertyValue {
             throw new IllegalArgumentException("Class must be an enumeration");
 
         for (final T value : clazz.getEnumConstants()) {
+            if (value.getId() == null)
+                continue;
+
             if (value.getId().equalsIgnoreCase(id))
                 return value;
         }

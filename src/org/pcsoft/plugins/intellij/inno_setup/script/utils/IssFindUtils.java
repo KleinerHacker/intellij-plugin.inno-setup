@@ -12,8 +12,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definit
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTypeDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyDefaultElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTypeReferenceElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssCustomMessageSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssMessageSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
 
 import java.util.Collection;
@@ -121,6 +124,19 @@ public final class IssFindUtils {
     public static Collection<IssComponentDefinitionElement> findComponentDefinitionElements(final Project project, final String name, final boolean variant) {
         return IssUtils.findElements(project, name, variant, IssComponentDefinitionElement.class,
                 item -> item.getName() != null && !item.getName().trim().isEmpty(), IssComponentDefinitionElement::getName);
+    }
+
+    @NotNull
+    public static Collection<IssPropertyDefaultElement> findMessageDefinitionElements(final Project project) {
+        return findMessageDefinitionElements(project, null, false);
+    }
+
+    @NotNull
+    public static Collection<IssPropertyDefaultElement> findMessageDefinitionElements(final Project project, final String name, final boolean variant) {
+        return IssUtils.findElements(project, name, variant, IssPropertyDefaultElement.class,
+                item -> (item.getSection() instanceof IssMessageSectionElement || item.getSection() instanceof IssCustomMessageSectionElement) &&
+                        item.getIdentifier() != null && item.getIdentifier().getIdentifierName() != null,
+                item -> item.getIdentifier().getIdentifierName().getName());
     }
 
     private IssFindUtils() {
