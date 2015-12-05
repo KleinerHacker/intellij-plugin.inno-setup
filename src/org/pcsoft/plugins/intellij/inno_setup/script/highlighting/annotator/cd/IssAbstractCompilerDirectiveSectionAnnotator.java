@@ -1,10 +1,12 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.cd;
 
+import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssStringElement;
@@ -22,8 +24,10 @@ public abstract class IssAbstractCompilerDirectiveSectionAnnotator<T extends Iss
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
         if (sectionClass.isAssignableFrom(psiElement.getClass())) {
-            final T sectionElement = (T) psiElement;
+            final Annotation infoAnnotation = annotationHolder.createInfoAnnotation(psiElement, null);
+            infoAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATION_INFO_COMPILER_DIRECTIVE);
 
+            final T sectionElement = (T) psiElement;
             checkParameterList(sectionElement, annotationHolder);
 
             handleErrors(sectionElement, annotationHolder);
@@ -32,6 +36,7 @@ public abstract class IssAbstractCompilerDirectiveSectionAnnotator<T extends Iss
     }
 
     protected abstract void handleErrors(@NotNull T sectionElement, @NotNull AnnotationHolder annotationHolder);
+
     protected abstract void handleWarnings(@NotNull T sectionElement, @NotNull AnnotationHolder annotationHolder);
 
     private void checkParameterList(@NotNull T sectionElement, @NotNull AnnotationHolder annotationHolder) {

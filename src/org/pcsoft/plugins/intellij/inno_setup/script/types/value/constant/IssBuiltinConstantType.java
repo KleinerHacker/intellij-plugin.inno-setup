@@ -1,27 +1,23 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant;
 
-import com.intellij.ui.JBColor;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPresentationHint;
-
-import java.awt.Color;
-import java.awt.Font;
 
 /**
  * Created by pfeifchr on 03.12.2015.
  */
 public enum IssBuiltinConstantType implements IssPresentationHint {
-    Directory("Directory", Font.BOLD, JBColor.PINK),
-    ShellFolder("Shell-Folder", Font.ITALIC, JBColor.PINK),
-    Other(null, Font.PLAIN, JBColor.PINK);
+    Directory("Directory", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_BUILTIN_DIRECTORY),
+    ShellFolder("Shell-Folder", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_BUILTIN_SHELL),
+    Other(null, IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_BUILTIN_OTHER);
 
     private final String text;
-    private final int fontStyle;
-    private final Color textColor;
+    private final TextAttributesKey textAttributesKey;
 
-    private IssBuiltinConstantType(String text, int fontStyle, Color textColor) {
+    private IssBuiltinConstantType(String text, TextAttributesKey textAttributesKey) {
         this.text = text;
-        this.fontStyle = fontStyle;
-        this.textColor = textColor;
+        this.textAttributesKey = textAttributesKey;
     }
 
     public String getText() {
@@ -29,12 +25,7 @@ public enum IssBuiltinConstantType implements IssPresentationHint {
     }
 
     @Override
-    public int getFontStyle() {
-        return fontStyle;
-    }
-
-    @Override
-    public Color getTextColor() {
-        return textColor;
+    public TextAttributesKey getTextAttributesKey() {
+        return textAttributesKey;
     }
 }

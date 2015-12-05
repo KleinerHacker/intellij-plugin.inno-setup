@@ -5,11 +5,11 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.IssCompilerDirectiveSectionIdentifier;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.IssCompilerDirectiveSectionType;
@@ -28,8 +28,10 @@ public class IssCompilerDirectiveCompletionContributor extends CompletionContrib
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
                         for (final IssCompilerDirectiveSectionIdentifier item : IssCompilerDirectiveSectionType.values()) {
-                            completionResultSet.addElement(LookupElementBuilder.create(item.getId())
-                                            .withBoldness(true).withCaseSensitivity(false).withItemTextForeground(JBColor.BLUE.brighter())
+                            completionResultSet.addElement(
+                                    IssLanguageHighlightingColorFactory
+                                            .buildLookupElement(item.getId(), IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_COMPILER_DIRECTIVE)
+                                            .withCaseSensitivity(false)
                                             .withIcon(null /* TODO */)
                             );
                         }

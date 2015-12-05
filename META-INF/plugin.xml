@@ -55,7 +55,11 @@
 
         <!-- Annotators -->
         <annotator language="iss"
-                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssExtendedHighlightingAnnotator"/>
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssCommonAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssConstantAnnotator"/>
+        <annotator language="iss"
+                   implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.IssIdentifierAnnotator"/>
         <annotator language="iss"
                    implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator.section.IssSectionAnnotator"/>
         <annotator language="iss"
@@ -98,9 +102,12 @@
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.type.IssBooleanTypeCompletionContributor"/>
         <completion.contributor language="iss"
-                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssBuiltinConstantCompletionContributor"/>
-        <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssCompilerDirectiveCompletionContributor"/>
+        <!-- Constants -->
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.constant.IssBuiltinConstantCompletionContributor"/>
+        <completion.contributor language="iss"
+                                implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.constant.IssEnvironmentConstantCompletionContributor"/>
         <!-- Setup -->
         <completion.contributor language="iss"
                                 implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.property.IssSetupPropertyCompletionContributor"/>

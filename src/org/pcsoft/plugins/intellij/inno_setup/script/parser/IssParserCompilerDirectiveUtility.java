@@ -39,13 +39,7 @@ final class IssParserCompilerDirectiveUtility {
         int counter = 0;
         while (psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
             final PsiBuilder.Marker cdValueMark = psiBuilder.mark();
-            if (psiBuilder.getTokenType() == IssTokenFactory.QUOTE) {
-                IssParserValueUtility.parseSingleStringValue(psiBuilder);
-            } else if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_START) {
-                IssParserValueUtility.parseSingleConstantValue(psiBuilder);
-            } else {
-                psiBuilder.advanceLexer();
-            }
+            IssParserValueUtility.parseSingleValue(psiBuilder);
             if (parameters == null || parameters.length <= counter) {
                 cdValueMark.error("Unknown parameter for this compiler directive: " + compilerDirectiveType.getId());
             } else {

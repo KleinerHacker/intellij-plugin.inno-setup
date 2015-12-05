@@ -1,10 +1,14 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion;
 
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionProvider;
+import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssLanguageFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSectionType;
@@ -49,14 +53,17 @@ public class IssSectionHeaderCompletionContributor extends CompletionContributor
     }
 
     private void buildList(CompletionResultSet completionResultSet, IssSectionType item) {
-        completionResultSet.addElement(LookupElementBuilder.create("[" + item.getId() + "]")
-                .withBoldness(true).withCaseSensitivity(false).withIcon(item.getIcon())
-                .withInsertHandler((insertionContext, lookupElement) -> {
-                    if (insertionContext.getDocument().getCharsSequence().charAt(insertionContext.getStartOffset()-1) == '[') {
-                        insertionContext.getDocument().deleteString(insertionContext.getStartOffset()-1, insertionContext.getStartOffset());
-                    }
-                    insertionContext.getDocument().insertString(insertionContext.getTailOffset(), "\n");
-                    insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
-                }));
+        completionResultSet.addElement(
+                IssLanguageHighlightingColorFactory
+                        .buildLookupElement("[" + item.getId() + "]", IssLanguageHighlightingColorFactory.ANNOTATION_INFO_SECTION_TITLE)
+                        .withCaseSensitivity(false)
+                        .withIcon(item.getIcon())
+                        .withInsertHandler((insertionContext, lookupElement) -> {
+                            if (insertionContext.getDocument().getCharsSequence().charAt(insertionContext.getStartOffset() - 1) == '[') {
+                                insertionContext.getDocument().deleteString(insertionContext.getStartOffset() - 1, insertionContext.getStartOffset());
+                            }
+                            insertionContext.getDocument().insertString(insertionContext.getTailOffset(), "\n");
+                            insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
+                        }));
     }
 }

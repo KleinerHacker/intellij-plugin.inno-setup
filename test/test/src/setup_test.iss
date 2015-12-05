@@ -7,7 +7,7 @@
 #define world
 
 [SETUP]
-AppName = My Test {win} {#my} {#world} {#hel} {group} {cm:test}
+AppName = My Test {win} {#my} {#world} {#hel} {group} {cm:forward} {cm:test,{computerName}fd,abc123} {cm:bla} {%Path} {%APPDATA|{app}udo} {%abc}
 Compression = lzma
 Compression = zip
 

@@ -15,8 +15,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssCompilerDirectiveConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantArgumentElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantArgumentsElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssEnvironmentConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssMessageConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
@@ -213,6 +216,10 @@ public final class IssPsiElementFactory {
         if (compilerDirectiveSection != null)
             return compilerDirectiveSection;
 
+        final PsiElement constant = createForConstant(node);
+        if (constant != null)
+            return constant;
+
         //Default
         if (IssMarkerFactory.SECTION_NAME.equals(node.getElementType())) {
             return new IssSectionNameElement(node);
@@ -228,22 +235,36 @@ public final class IssPsiElementFactory {
             return new IssValueElement(node);
         } else if (IssMarkerFactory.STRING.equals(node.getElementType())) {
             return new IssStringElement(node);
-        } else if (IssMarkerFactory.BUILTIN_CONSTANT.equals(node.getElementType())) {
-            return new IssBuiltinConstantElement(node);
-        } else if (IssMarkerFactory.MESSAGE_CONSTANT.equals(node.getElementType())) {
-            return new IssMessageConstantElement(node);
-        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT.equals(node.getElementType())) {
-            return new IssCompilerDirectiveConstantElement(node);
-        } else if (IssMarkerFactory.CONSTANT_NAME.equals(node.getElementType())) {
-            return new IssConstantNameElement(node);
-        } else if (IssMarkerFactory.CONSTANT_TYPE.equals(node.getElementType())) {
-            return new IssConstantTypeElement(node);
         } else if (IssMarkerFactory.PROPERTY_UNKNOWN.equals(node.getElementType())) {
             return new IssPropertyUnknownElement(node);
         }
 
         return new IssUnknownElement(node);
     }
+
+    //region Constants
+    private static PsiElement createForConstant(ASTNode node) {
+        if (IssMarkerFactory.BUILTIN_CONSTANT.equals(node.getElementType())) {
+            return new IssBuiltinConstantElement(node);
+        } else if (IssMarkerFactory.MESSAGE_CONSTANT.equals(node.getElementType())) {
+            return new IssMessageConstantElement(node);
+        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT.equals(node.getElementType())) {
+            return new IssCompilerDirectiveConstantElement(node);
+        } else if (IssMarkerFactory.ENVIRONMENT_CONSTANT.equals(node.getElementType())) {
+            return new IssEnvironmentConstantElement(node);
+        } else if (IssMarkerFactory.CONSTANT_NAME.equals(node.getElementType())) {
+            return new IssConstantNameElement(node);
+        } else if (IssMarkerFactory.CONSTANT_TYPE.equals(node.getElementType())) {
+            return new IssConstantTypeElement(node);
+        } else if (IssMarkerFactory.CONSTANT_ARGUMENT.equals(node.getElementType())) {
+            return new IssConstantArgumentElement(node);
+        } else if (IssMarkerFactory.CONSTANT_ARGUMENTS.equals(node.getElementType())) {
+            return new IssConstantArgumentsElement(node);
+        }
+
+        return null;
+    }
+    //endregion
 
     //region Compiler Directives
     private static PsiElement createForCompilerDirective(ASTNode node) {

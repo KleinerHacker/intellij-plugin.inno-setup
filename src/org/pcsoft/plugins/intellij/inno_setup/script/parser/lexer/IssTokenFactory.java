@@ -26,9 +26,12 @@ public final class IssTokenFactory {
     public static final IElementType OPERATOR_SEMICOLON = new IElementType("OP_SEMICOLON", LANGUAGE);
     public static final IElementType OPERATOR_EQUAL = new IElementType("OP_EQUAL", LANGUAGE);
     public static final IElementType OPERATOR_POINT = new IElementType("OP_POINT", LANGUAGE);
+    public static final IElementType OPERATOR_COMMA = new IElementType("OP_COMMA", LANGUAGE);
+    public static final IElementType OPERATOR_PIPE = new IElementType("OP_PIPE", LANGUAGE);
 
     public static final IElementType QUOTE = new IElementType("QUOTE", LANGUAGE);
     public static final IElementType SHARP = new IElementType("SHARP", LANGUAGE);
+    public static final IElementType PERCENT = new IElementType("PERCENT", LANGUAGE);
     public static final IElementType BRACE_CURLY_START = new IElementType("BRACE_CURLY_START", LANGUAGE);
     public static final IElementType BRACE_CURLY_END = new IElementType("BRACE_CURLY_START", LANGUAGE);
     public static final IElementType BRACE_BRACKET_START = new IElementType("BRACE_BRACKET_START", LANGUAGE);

@@ -31,12 +31,12 @@ public class IssSetupPropertyCompletionContributor extends IssAbstractPropertyCo
 
     @Override
     public boolean getBoldness(IssPropertyIdentifier propertyIdentifier) {
-        return ((IssSetupProperty)propertyIdentifier).getClassifier().getFontStyle() == Font.BOLD;
+        return ((IssSetupProperty)propertyIdentifier).getClassifier().getTextAttributesKey().getDefaultAttributes().getFontType() == Font.BOLD;
     }
 
     @NotNull
     @Override
     public Color getTextColor(IssPropertyIdentifier propertyIdentifier) {
-        return ((IssSetupProperty)propertyIdentifier).getClassifier().getTextColor();
+        return ((IssSetupProperty)propertyIdentifier).getClassifier().getTextAttributesKey().getDefaultAttributes().getForegroundColor();
     }
 }

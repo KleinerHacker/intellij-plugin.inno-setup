@@ -4,12 +4,16 @@ import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.apache.commons.lang.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIdentifierParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssEnvironmentConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssMessageConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant.IssBuiltinConstant;
 
@@ -57,6 +61,16 @@ public class IssConstantDocumentationProvider extends AbstractDocumentationProvi
                     return "Unknown builtin constant";
 
                 return RESOURCE_BUNDLE.getString(builtinConstant.getDescriptionKey());
+            } else if (PsiTreeUtil.getParentOfType(element, IssMessageConstantElement.class) != null) {
+                if (originalElement instanceof IssIdentifierNameElement) {
+                    final IssIdentifierNameElement identifierNameElement = (IssIdentifierNameElement) originalElement;
+                    if (identifierNameElement.getParentProperty() != null && identifierNameElement.getParentProperty().getPropertyValue() != null) {
+                        return identifierNameElement.getParentProperty().getPropertyValue().getText();
+                    }
+                }
+            } else if (PsiTreeUtil.getParentOfType(element, IssEnvironmentConstantElement.class) != null) {
+                return "<b>Environment Variable '" + constantNameElement.getName() + "'</b><br/>" +
+                        ObjectUtils.defaultIfNull(System.getenv(constantNameElement.getName()), "NOT FOUND");
             }
         } else if (element instanceof IssCompilerDirectiveIdentifierParameterElement) {
             final IssCompilerDirectiveSectionElement sectionElement = ((IssCompilerDirectiveIdentifierParameterElement) element).getCompilerDirectiveSection();

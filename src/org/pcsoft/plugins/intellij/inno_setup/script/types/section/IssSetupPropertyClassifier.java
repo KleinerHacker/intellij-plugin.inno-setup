@@ -1,29 +1,26 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.types.section;
 
-import com.intellij.ui.JBColor;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssPresentationHint;
-
-import java.awt.Color;
-import java.awt.Font;
 
 /**
  * Created by Christoph on 21.11.2015.
  */
+//TODO
 public enum IssSetupPropertyClassifier implements IssPresentationHint {
-    Compiler("Compiler-related", Font.BOLD, JBColor.BLUE.brighter()),
-    Installer("Installer-related", Font.BOLD,  JBColor.BLUE),
-    Cosmetic("Cosmetic", Font.PLAIN, JBColor.GREEN),
-    Obsolete("Obsolete", Font.PLAIN, JBColor.GRAY)
+    Compiler("Compiler-related", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_CF_COMPILER_STANDARD),
+    Installer("Installer-related", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_CF_INSTALLER_STANDARD),
+    Cosmetic("Cosmetic", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_CF_COSMETIC_STANDARD),
+    Obsolete("Obsolete", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_CF_OBSOLETE)
     ;
 
     private final String text;
-    private final int fontStyle;
-    private final Color textColor;
+    private final TextAttributesKey textAttributesKey;
 
-    private IssSetupPropertyClassifier(String text, int fontStyle, Color textColor) {
+    private IssSetupPropertyClassifier(String text, TextAttributesKey textAttributesKey) {
         this.text = text;
-        this.fontStyle = fontStyle;
-        this.textColor = textColor;
+        this.textAttributesKey = textAttributesKey;
     }
 
     public String getText() {
@@ -31,12 +28,7 @@ public enum IssSetupPropertyClassifier implements IssPresentationHint {
     }
 
     @Override
-    public int getFontStyle() {
-        return fontStyle;
-    }
-
-    @Override
-    public Color getTextColor() {
-        return textColor;
+    public TextAttributesKey getTextAttributesKey() {
+        return textAttributesKey;
     }
 }

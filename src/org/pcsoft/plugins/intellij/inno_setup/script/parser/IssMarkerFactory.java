@@ -28,8 +28,11 @@ public final class IssMarkerFactory {
     public static final IElementType BUILTIN_CONSTANT = new IElementType("BUILTIN_CONSTANT", LANGUAGE);
     public static final IElementType MESSAGE_CONSTANT = new IElementType("MESSAGE_CONSTANT", LANGUAGE);
     public static final IElementType COMPILER_DIRECTIVE_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
+    public static final IElementType ENVIRONMENT_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
     public static final IElementType CONSTANT_NAME = new IElementType("CONSTANT_NAME", LANGUAGE);
     public static final IElementType CONSTANT_TYPE = new IElementType("CONSTANT_TYPE", LANGUAGE);
+    public static final IElementType CONSTANT_ARGUMENTS = new IElementType("CONSTANT_ARGUMENTS", LANGUAGE);
+    public static final IElementType CONSTANT_ARGUMENT = new IElementType("CONSTANT_ARGUMENT", LANGUAGE);
 
     public static final IElementType SECTION_NAME = new IElementType("SECTION_NAME", LANGUAGE);
     public static final IElementType SECTION_HEADER = new IElementType("SECTION_HEADER", LANGUAGE);
