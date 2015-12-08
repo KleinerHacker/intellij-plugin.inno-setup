@@ -5,19 +5,18 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.contributors.completion.IssLookupElementHint;
+import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssPropertyIdentifier;
 
 import javax.swing.Icon;
-import java.awt.Color;
 
 /**
  * Created by Christoph on 22.12.2014.
@@ -35,10 +34,12 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssSect
                     @Override
                     protected void addCompletions(CompletionParameters completionParameters, ProcessingContext processingContext, CompletionResultSet completionResultSet) {
                         for (final IssPropertyIdentifier item : getSectionIdentifierList()) {
-                            completionResultSet.addElement(LookupElementBuilder.create(item.getId())
-                                    .withBoldness(getBoldness(item)).withCaseSensitivity(false).withItemTextForeground(getTextColor(item))
-                                    .withStrikeoutness(getStrikeout(item)).withTailText(getTailText(item))
-                                    .withTypeText(getTypeText(item)).withIcon(getIcon(item))
+                            completionResultSet.addElement(IssLanguageHighlightingColorFactory
+                                    .buildLookupElement(getItemText(item), getTextAttributesKey(item))
+                                    .withCaseSensitivity(false)
+                                    .withTailText(getTailText(item))
+                                    .withTypeText(getTypeText(item))
+                                    .withIcon(getIcon(item))
                                     .withInsertHandler((insertionContext, lookupElement) -> {
                                         if (type == PropertyType.Definable) {
                                             insertionContext.getDocument().insertString(insertionContext.getTailOffset(), ": ");
@@ -54,6 +55,23 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssSect
                 });
     }
 
+    @Override
+    @NotNull
+    public TextAttributesKey getTextAttributesKey(IssPropertyIdentifier value) {
+        if (value.isRequired())
+            return IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_REQUIRED;
+        else if (value.isDeprecated())
+            return IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED;
+        else
+            return IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_STANDARD;
+    }
+
+    @NotNull
+    @Override
+    public String getItemText(IssPropertyIdentifier value) {
+        return value.getId();
+    }
+
     @NotNull
     protected abstract IssPropertyIdentifier[] getSectionIdentifierList();
 
@@ -67,22 +85,6 @@ public abstract class IssAbstractPropertyCompletionContributor<E extends IssSect
     @Nullable
     public String getTailText(IssPropertyIdentifier propertyIdentifier) {
         return propertyIdentifier.isRequired() ? " (Required)" : null;
-    }
-
-    @Override
-    public boolean getBoldness(IssPropertyIdentifier propertyIdentifier) {
-        return true;
-    }
-
-    @Override
-    public boolean getStrikeout(IssPropertyIdentifier propertyIdentifier) {
-        return propertyIdentifier.isDeprecated();
-    }
-
-    @Override
-    @NotNull
-    public Color getTextColor(IssPropertyIdentifier propertyIdentifier) {
-        return JBColor.BLUE;
     }
 
     @Nullable

@@ -19,12 +19,12 @@ public abstract class IssCompilerDirectiveSectionElement extends IssAbstractElem
 
     @Override
     public String getName() {
-        return getCompilerDirective() == null ? null : getCompilerDirective().getName();
+        return getCompilerDirectiveIdentifier() == null ? null : getCompilerDirectiveIdentifier().getName();
     }
 
     @Nullable
-    public final IssCompilerDirectiveElement getCompilerDirective() {
-        return PsiTreeUtil.findChildOfType(this, IssCompilerDirectiveElement.class);
+    public final IssCompilerDirectiveIdentifierElement getCompilerDirectiveIdentifier() {
+        return PsiTreeUtil.findChildOfType(this, IssCompilerDirectiveIdentifierElement.class);
     }
 
     @NotNull

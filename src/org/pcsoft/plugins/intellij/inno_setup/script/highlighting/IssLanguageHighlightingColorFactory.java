@@ -8,7 +8,7 @@ import com.intellij.ui.JBColor;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.section.IssSetupPropertyClassifier;
 
-import java.awt.*;
+import java.awt.Font;
 
 /**
  * Created by Christoph on 14.12.2014.
@@ -49,11 +49,19 @@ public final class IssLanguageHighlightingColorFactory {
     );
     public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED",
-            new TextAttributes(IssLanguageHighlightingConstants.Colors.IGNORABLE, null, JBColor.GRAY, EffectType.STRIKEOUT, Font.PLAIN)
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.SETUP, null, IssLanguageHighlightingConstants.Colors.SETUP, EffectType.STRIKEOUT, Font.PLAIN)
     );
     public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_NAME_STANDARD = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_PROPERTY_NAME_STANDARD",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.SETUP, null, null, null, Font.PLAIN)
+    );
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_VALUE_DEPRECATED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_DEPRECATED",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.VALUE, null, IssLanguageHighlightingConstants.Colors.VALUE, EffectType.STRIKEOUT, Font.PLAIN)
+    );
+    public static final TextAttributesKey ANNOTATOR_INFO_PROPERTY_VALUE_STANDARD = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_PROPERTY_NAME_STANDARD",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.VALUE, null, null, null, Font.PLAIN)
     );
 
     public static LookupElementBuilder buildLookupElement(String text, TextAttributesKey textAttributesKey) {
@@ -95,19 +103,44 @@ public final class IssLanguageHighlightingColorFactory {
     //********************************************************************************************************//
     //********************************************************************************************************//
 
+    public static final TextAttributesKey ANNOTATOR_INFO_ESCAPING = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_ESCAPING",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.VALUE, null, null, null, Font.ITALIC)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_FILE_LINK = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_FILE_LINK",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.LINK, null, null, null, Font.ITALIC)
+    );
+
     public static final TextAttributesKey ANNOTATOR_INFO_STRING = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_STRING",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.MESSAGES, null, null, null, Font.PLAIN)
     );
 
-    public static final TextAttributesKey ANNOTATION_INFO_SECTION_TITLE = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATION_INFO_SECTION_TITLE",
+    public static final TextAttributesKey ANNOTATOR_INFO_SECTION_TITLE = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_SECTION_TITLE",
             new TextAttributes(null, null, JBColor.BLACK, EffectType.BOLD_DOTTED_LINE, Font.BOLD)
     );
 
-    public static final TextAttributesKey ANNOTATION_INFO_COMPILER_DIRECTIVE = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATION_INFO_COMPILER_DIRECTIVE",
+    public static final TextAttributesKey ANNOTATOR_INFO_COMPILER_DIRECTIVE = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_COMPILER_DIRECTIVE",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, null, null, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_STANDARD = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_STANDARD",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, null, null, Font.ITALIC)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_DEPRECATED = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_DEPRECATED",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, IssLanguageHighlightingConstants.Colors.COMPILER, EffectType.STRIKEOUT, Font.ITALIC)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_SPECIAL = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_COMPILER_DIRECTIVE_PARAMETER_SPECIAL",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, null, null, Font.ITALIC | Font.BOLD)
     );
 
     @NotNull
@@ -168,7 +201,6 @@ public final class IssLanguageHighlightingColorFactory {
             "ANNOTATOR_INFO_UNUSED",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.IGNORABLE, null, null, null, 0)
     );
-
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_BUILTIN_SHELL = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_SHELL",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.ITALIC)
@@ -177,6 +209,7 @@ public final class IssLanguageHighlightingColorFactory {
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_DIRECTORY",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.BOLD)
     );
+
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_BUILTIN_OTHER = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_OTHER",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.PLAIN)
@@ -197,9 +230,24 @@ public final class IssLanguageHighlightingColorFactory {
             new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, null, null, Font.ITALIC)
     );
 
-    public static final TextAttributesKey ANNOTATION_INFO_COMPILER_DIRECTIVE_PARAMETER = TextAttributesKey.createTextAttributesKey(
-            "ANNOTATION_INFO_COMPILER_DIRECTIVE_PARAMETER",
-            new TextAttributes(IssLanguageHighlightingConstants.Colors.COMPILER, null, null, null, Font.ITALIC)
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_DRIVE = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_DRIVE",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.SYSTEM, null, null, null, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_INI = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_INI",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERN, null, null, null, Font.BOLD)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_REGISTRY = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_REGISTRY",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERN, null, null, null, Font.ITALIC)
+    );
+
+    public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_PARAMETER = TextAttributesKey.createTextAttributesKey(
+            "ANNOTATOR_INFO_CONSTANT_PARAMETER",
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.SETUP, null, null, null, Font.BOLD)
     );
 
     public static final TextAttributesKey ANNOTATOR_WARN_DEPRECATED = TextAttributesKey.createTextAttributesKey(

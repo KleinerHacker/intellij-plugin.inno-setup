@@ -12,9 +12,4 @@ public class IssCompilerDirectiveConstantElement extends IssConstantElement {
     public IssCompilerDirectiveConstantElement(ASTNode node) {
         super(node);
     }
-
-    @Nullable
-    public IssConstantNameElement getConstantName() {
-        return PsiTreeUtil.getChildOfType(this, IssConstantNameElement.class);
-    }
 }

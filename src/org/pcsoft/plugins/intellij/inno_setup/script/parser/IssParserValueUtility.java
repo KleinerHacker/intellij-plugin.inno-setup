@@ -4,159 +4,124 @@ import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.IElementType;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.lexer.IssTokenFactory;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant.IssConstantType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.value.constant.IssConstantTypeType;
 
 /**
  * Created by pfeifchr on 01.12.2015.
  */
 public final class IssParserValueUtility {
 
+    private static void parseEscapingValue(PsiBuilder psiBuilder, IElementType endToken) {
+        while (psiBuilder.getTokenType() != endToken && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
+            parseSingleValue(psiBuilder);
+        }
+        if (psiBuilder.getTokenType() == endToken && !psiBuilder.eof()) {
+            psiBuilder.advanceLexer();
+        }
+    }
+
     //region Constant Value
-    public static void parseSingleConstantValue(PsiBuilder psiBuilder) {
+    private static void parseSingleConstantValue(PsiBuilder psiBuilder) {
         final PsiBuilder.Marker constantMark = psiBuilder.mark();
         psiBuilder.advanceLexer();
+        //Check for escaping
+        if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_START) {
+            psiBuilder.advanceLexer();
+            parseEscapingValue(psiBuilder, IssTokenFactory.BRACE_CURLY_END);
+            constantMark.done(IssMarkerFactory.ESCAPING);
+            return;
+        }
 
         final IssConstantType constantType = getConstantType(psiBuilder);
-        final IElementType constantElementType;
-        switch (constantType) {
-            case Builtin:
-                constantElementType = handleBuiltinConstant(psiBuilder);
-                break;
-            case Message:
-                constantElementType = handleMessageConstant(psiBuilder);
-                break;
-            case CompilerDirective:
-                constantElementType = handleCompilerDirectiveConstant(psiBuilder);
-                break;
-            case Environment:
-                constantElementType = handleEnvironmentConstant(psiBuilder);
-                break;
-            default:
-                throw new RuntimeException();
+        if (constantType == null) {
+            while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
+                psiBuilder.advanceLexer();
+            }
+            if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END && !psiBuilder.eof()) {
+                psiBuilder.advanceLexer();
+            }
+            constantMark.error("Unknown constant type!");
+            return;
         }
 
-        constantMark.done(constantElementType);
-    }
+        parseConstant(psiBuilder, constantType);
 
-    private static IElementType handleBuiltinConstant(PsiBuilder psiBuilder) {
-        final PsiBuilder.Marker constantNameMark = psiBuilder.mark();
-        while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-        }
-        constantNameMark.done(IssMarkerFactory.CONSTANT_NAME);
-        if (!psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
+        if (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END) {
+            psiBuilder.error("'{' expected!");
+            if (!psiBuilder.eof()) {
+                psiBuilder.advanceLexer();
+            }
         } else {
-            psiBuilder.error("'}' expected");
+            psiBuilder.advanceLexer();
         }
 
-        return IssMarkerFactory.BUILTIN_CONSTANT;
+        constantMark.done(constantType.getElementType());
     }
 
-    private static IElementType handleMessageConstant(PsiBuilder psiBuilder) {
-        final PsiBuilder.Marker constantTypeMark = psiBuilder.mark();
-        psiBuilder.advanceLexer(); //'cm'
-        constantTypeMark.done(IssMarkerFactory.CONSTANT_TYPE);
-        psiBuilder.advanceLexer(); //':'
-
-        final PsiBuilder.Marker constantNameMark = psiBuilder.mark();
-        psiBuilder.advanceLexer();
-        constantNameMark.done(IssMarkerFactory.CONSTANT_NAME);
-
-        //Arguments
-        if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA && !psiBuilder.eof()) {
-            psiBuilder.advanceLexer(); //','
-            //Build error for ',}' or line end or ',,'
-            if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END || psiBuilder.getTokenType() == IssTokenFactory.CRLF ||
-                    psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA || psiBuilder.eof()) {
-                psiBuilder.error("Argument expected");
-            } else {
-                final PsiBuilder.Marker argumentsMark = psiBuilder.mark();
-                //Loop for all arguments until '}'
-                while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
-                    final PsiBuilder.Marker argumentMark = psiBuilder.mark();
-                    //Loop for one argument with any content until ',' or '}'
-                    while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF &&
-                            psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_COMMA && !psiBuilder.eof()) {
-                        parseSingleValue(psiBuilder);
-                    }
-                    argumentMark.done(IssMarkerFactory.CONSTANT_ARGUMENT);
-                    //goon if comma
-                    if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA && !psiBuilder.eof()) {
-                        psiBuilder.advanceLexer();
-                        //Build error for ',}' or line end or ',,'
-                        if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END || psiBuilder.getTokenType() == IssTokenFactory.CRLF ||
-                                psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA || psiBuilder.eof()) {
-                            psiBuilder.error("Argument expected");
-                        }
-                    }
-                }
-                argumentsMark.done(IssMarkerFactory.CONSTANT_ARGUMENTS);
+    private static void parseConstant(PsiBuilder psiBuilder, IssConstantType constantType) {
+        //Parse type
+        if (constantType.getType() != IssConstantTypeType.None) {
+            final PsiBuilder.Marker constantTypeMark = psiBuilder.mark();
+            switch (constantType.getType()) {
+                case SingleCharacter:
+                    psiBuilder.advanceLexer(); //'X'
+                    constantTypeMark.done(IssMarkerFactory.Constant.TYPE);
+                    break;
+                case TypeName:
+                    psiBuilder.advanceLexer();//'abc'
+                    constantTypeMark.done(IssMarkerFactory.Constant.TYPE);
+                    psiBuilder.advanceLexer();//':'
+                    break;
+                default:
+                    throw new RuntimeException();
             }
         }
 
-        if (!psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-        } else {
-            psiBuilder.error("'}' expected");
-        }
-
-        return IssMarkerFactory.MESSAGE_CONSTANT;
-    }
-
-    private static IElementType handleEnvironmentConstant(PsiBuilder psiBuilder) {
-        final PsiBuilder.Marker constantTypeMark = psiBuilder.mark();
-        psiBuilder.advanceLexer(); //'%'
-        constantTypeMark.done(IssMarkerFactory.CONSTANT_TYPE);
-
+        //Parse name
         final PsiBuilder.Marker constantNameMark = psiBuilder.mark();
-        psiBuilder.advanceLexer();
-        constantNameMark.done(IssMarkerFactory.CONSTANT_NAME);
+        parseConstantValue(psiBuilder);
+        constantNameMark.done(IssMarkerFactory.Constant.NAME);
 
-        //Default Value
-        if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_PIPE && !psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-            //Check for '|}' or line end
-            if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_PIPE || psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END ||
-                    psiBuilder.getTokenType() == IssTokenFactory.CRLF || psiBuilder.eof()) {
-                psiBuilder.error("Default Value expected");
-            } else {
-                final PsiBuilder.Marker argumentsMark = psiBuilder.mark();
+        //Parse arguments
+        if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA) {
+            psiBuilder.advanceLexer();//','
+            final PsiBuilder.Marker argumentsMark = psiBuilder.mark();
+            while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF &&
+                    psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_PIPE && !psiBuilder.eof()) {
                 final PsiBuilder.Marker argumentMark = psiBuilder.mark();
-                while (psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_PIPE && psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END &&
-                        psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
-                    parseSingleValue(psiBuilder);
+                parseConstantValue(psiBuilder);
+                argumentMark.done(IssMarkerFactory.Constant.ARGUMENT);
+
+                if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA) {
+                    psiBuilder.advanceLexer();//Goon
                 }
-                argumentMark.done(IssMarkerFactory.CONSTANT_ARGUMENT);
-                argumentsMark.done(IssMarkerFactory.CONSTANT_ARGUMENTS);
             }
+            argumentsMark.done(IssMarkerFactory.Constant.ARGUMENTS);
         }
 
-        if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END && !psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-        } else {
-            psiBuilder.error("'}' expected");
+        //Parse default value
+        if (psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_PIPE) {
+            psiBuilder.advanceLexer();//'|'
+            final PsiBuilder.Marker defaultValueMark = psiBuilder.mark();
+            parseConstantValue(psiBuilder);
+            defaultValueMark.done(IssMarkerFactory.Constant.DEFAULT_VALUE);
         }
-
-        return IssMarkerFactory.ENVIRONMENT_CONSTANT;
     }
 
-    private static IElementType handleCompilerDirectiveConstant(PsiBuilder psiBuilder) {
-        final PsiBuilder.Marker constantTypeMark = psiBuilder.mark();
-        psiBuilder.advanceLexer(); //'#'
-        constantTypeMark.done(IssMarkerFactory.CONSTANT_TYPE);
-
-        final PsiBuilder.Marker constantNameMark = psiBuilder.mark();
-        while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-        }
-        constantNameMark.done(IssMarkerFactory.CONSTANT_NAME);
-        if (!psiBuilder.eof()) {
-            psiBuilder.advanceLexer();
-        } else {
-            psiBuilder.error("'}' expected");
+    private static void parseConstantValue(PsiBuilder psiBuilder) {
+        if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_END || psiBuilder.getTokenType() == IssTokenFactory.CRLF ||
+                psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_COMMA || psiBuilder.getTokenType() == IssTokenFactory.OPERATOR_PIPE || psiBuilder.eof()) {
+            psiBuilder.error("Argument expected!");
+            if (!psiBuilder.eof()) {
+                psiBuilder.advanceLexer();
+            }
+            return;
         }
 
-        return IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT;
+        while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF &&
+                psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_COMMA && psiBuilder.getTokenType() != IssTokenFactory.OPERATOR_PIPE && !psiBuilder.eof()) {
+            parseSingleValue(psiBuilder);
+        }
     }
 
     private static IssConstantType getConstantType(PsiBuilder psiBuilder) {
@@ -182,7 +147,7 @@ public final class IssParserValueUtility {
     //endregion
 
     //region String Value
-    public static void parseSingleStringValue(PsiBuilder psiBuilder) {
+    private static void parseSingleStringValue(PsiBuilder psiBuilder) {
         final PsiBuilder.Marker stringMark = psiBuilder.mark();
         psiBuilder.advanceLexer();
         while (psiBuilder.getTokenType() != IssTokenFactory.QUOTE && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
@@ -201,6 +166,27 @@ public final class IssParserValueUtility {
     }
     //endregion
 
+    //region File Link Value
+    private static void parseSingleFileLinkValue(PsiBuilder psiBuilder) {
+        final PsiBuilder.Marker fileLinkMark = psiBuilder.mark();
+        psiBuilder.advanceLexer();
+        while (psiBuilder.getTokenType() != IssTokenFactory.BRACE_ANGLE_END && psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
+            if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_START) {
+                parseSingleConstantValue(psiBuilder);
+            } else {
+                psiBuilder.advanceLexer();
+            }
+        }
+
+        if (psiBuilder.getTokenType() != IssTokenFactory.BRACE_ANGLE_END) {
+            psiBuilder.error("'>' expected");
+        } else {
+            psiBuilder.advanceLexer();
+        }
+        fileLinkMark.done(IssMarkerFactory.FILE_LINK);
+    }
+    //endregion
+
     /**
      * Parse a single value like a normal direct value, a string (with quotes) or a constant (with '{')
      * @param psiBuilder
@@ -210,6 +196,8 @@ public final class IssParserValueUtility {
             IssParserValueUtility.parseSingleStringValue(psiBuilder);
         } else if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_START) {
             IssParserValueUtility.parseSingleConstantValue(psiBuilder);
+        } else if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_ANGLE_START) {
+            IssParserValueUtility.parseSingleFileLinkValue(psiBuilder);
         } else {
             psiBuilder.advanceLexer();
         }

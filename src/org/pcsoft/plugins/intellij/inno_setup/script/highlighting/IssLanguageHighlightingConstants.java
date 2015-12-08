@@ -21,6 +21,7 @@ public final class IssLanguageHighlightingConstants {
         public static final Color VALUE = JBColor.BLUE.darker();
         public static final Color OPERATOR = JBColor.BLACK;
         public static final Color DESIGN = JBColor.MAGENTA;
+        public static final Color LINK = JBColor.RED.darker();
     }
 
     private IssLanguageHighlightingConstants() {

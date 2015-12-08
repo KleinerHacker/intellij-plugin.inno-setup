@@ -9,10 +9,15 @@ import org.pcsoft.plugins.intellij.inno_setup.script.types.value.IssPropertyValu
  * Created by pfeifchr on 03.12.2015.
  */
 public enum IssConstantType implements IssPropertyValue {
-    Builtin(null, "constant.type.builtin", IssMarkerFactory.BUILTIN_CONSTANT),
-    Message("cm", "constant.type.message", IssMarkerFactory.MESSAGE_CONSTANT),
-    Environment("%", "constant.type.environment", IssMarkerFactory.ENVIRONMENT_CONSTANT),
-    CompilerDirective("#", "constant.type.compiler_directive", IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT);
+    Builtin(null, "constant.type.builtin", IssMarkerFactory.Constant.TYPE_BUILTIN, IssConstantTypeType.None),
+    Message("cm", "constant.type.message", IssMarkerFactory.Constant.TYPE_MESSAGE, IssConstantTypeType.TypeName),
+    Environment("%", "constant.type.environment", IssMarkerFactory.Constant.TYPE_ENVIRONMENT, IssConstantTypeType.SingleCharacter),
+    CompilerDirective("#", "constant.type.compiler_directive", IssMarkerFactory.Constant.TYPE_COMPILER_DIRECTIVE, IssConstantTypeType.SingleCharacter),
+    Drive("drive", "constant.type.drive", IssMarkerFactory.Constant.TYPE_DRIVE, IssConstantTypeType.TypeName),
+    INI("ini", "constant.type.ini", IssMarkerFactory.Constant.TYPE_INI, IssConstantTypeType.TypeName),
+    Registry("reg", "constant.type.reg", IssMarkerFactory.Constant.TYPE_REGISTRY, IssConstantTypeType.TypeName),
+    Parameter("param", "constant.type.param", IssMarkerFactory.Constant.TYPE_PARAMETER, IssConstantTypeType.TypeName),
+    ;
 
     @NotNull
     public static IssConstantType fromId(final String id) {
@@ -22,11 +27,13 @@ public enum IssConstantType implements IssPropertyValue {
 
     private final String id, descriptionKey;
     private final IElementType elementType;
+    private final IssConstantTypeType type;
 
-    private IssConstantType(String id, String descriptionKey, IElementType elementType) {
+    private IssConstantType(String id, String descriptionKey, @NotNull IElementType elementType, @NotNull IssConstantTypeType type) {
         this.id = id;
         this.descriptionKey = descriptionKey;
         this.elementType = elementType;
+        this.type = type;
     }
 
     @Override
@@ -44,7 +51,13 @@ public enum IssConstantType implements IssPropertyValue {
         return descriptionKey;
     }
 
+    @NotNull
     public IElementType getElementType() {
         return elementType;
+    }
+
+    @NotNull
+    public IssConstantTypeType getType() {
+        return type;
     }
 }

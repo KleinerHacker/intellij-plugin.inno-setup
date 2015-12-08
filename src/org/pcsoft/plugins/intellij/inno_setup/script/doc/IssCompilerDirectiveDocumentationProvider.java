@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.inno_setup.script.doc;
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider;
 import com.intellij.psi.PsiElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveIdentifierElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.MultiResourceBundle;
 
@@ -31,8 +31,8 @@ public class IssCompilerDirectiveDocumentationProvider extends AbstractDocumenta
 
     @Override
     public String generateDoc(PsiElement element, PsiElement originalElement) {
-        if (element instanceof IssCompilerDirectiveElement) {
-            final IssCompilerDirectiveElement compilerDirectiveElement = (IssCompilerDirectiveElement) element;
+        if (element instanceof IssCompilerDirectiveIdentifierElement) {
+            final IssCompilerDirectiveIdentifierElement compilerDirectiveElement = (IssCompilerDirectiveIdentifierElement) element;
             final IssCompilerDirectiveSectionElement sectionElement = compilerDirectiveElement.getCompilerDirectiveSection();
             if (sectionElement == null)
                 return "Unknown section type";

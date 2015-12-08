@@ -2,11 +2,11 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter;
 
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.IssValueType;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Created by pfeifchr on 02.12.2015.
@@ -25,8 +25,10 @@ public interface IssCompilerDirectiveParameterIdentifier {
     @NotNull
     IElementType getElementType();
 
-    @NotNull
-    IssValueType getValueType();
-
     int getOrderNumber();
+
+    boolean isOptional();
+
+    @NotNull
+    Predicate<String> isParameter();
 }

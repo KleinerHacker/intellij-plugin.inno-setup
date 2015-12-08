@@ -5,9 +5,7 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.ui.JBColor;
 import com.intellij.util.ProcessingContext;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssLanguage;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
@@ -52,29 +50,29 @@ public class IssBuiltinConstantCompletionContributor extends CompletionContribut
                                         .withCaseSensitivity(false)
                                         .withTypeText("Environment Variable")
                         );
-                        completionResultSet.addElement(LookupElementBuilder.create("param:")
-                                .withCaseSensitivity(false)
-                                .withBoldness(false)
-                                .withItemTextForeground(JBColor.YELLOW)
-                                .withTypeText("Command Line Parameter")
+                        completionResultSet.addElement(
+                                IssLanguageHighlightingColorFactory
+                                        .buildLookupElement("param:", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_PARAMETER)
+                                        .withCaseSensitivity(false)
+                                        .withTypeText("Command Line Parameter")
                         );
-                        completionResultSet.addElement(LookupElementBuilder.create("reg:")
-                                .withCaseSensitivity(false)
-                                .withBoldness(true)
-                                .withItemTextForeground(JBColor.CYAN)
-                                .withTypeText("Registry Constant")
+                        completionResultSet.addElement(
+                                IssLanguageHighlightingColorFactory
+                                        .buildLookupElement("reg:", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_REGISTRY)
+                                        .withCaseSensitivity(false)
+                                        .withTypeText("Registry Constant")
                         );
-                        completionResultSet.addElement(LookupElementBuilder.create("ini:")
-                                .withCaseSensitivity(false)
-                                .withBoldness(true)
-                                .withItemTextForeground(JBColor.CYAN)
-                                .withTypeText("INI Constant")
+                        completionResultSet.addElement(
+                                IssLanguageHighlightingColorFactory
+                                        .buildLookupElement("ini:", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_INI)
+                                        .withCaseSensitivity(false)
+                                        .withTypeText("INI Constant")
                         );
-                        completionResultSet.addElement(LookupElementBuilder.create("drive:")
-                                .withCaseSensitivity(false)
-                                .withBoldness(true)
-                                .withItemTextForeground(JBColor.YELLOW)
-                                .withTypeText("Drive Constant")
+                        completionResultSet.addElement(
+                                IssLanguageHighlightingColorFactory
+                                        .buildLookupElement("drive:", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_CONSTANT_DRIVE)
+                                        .withCaseSensitivity(false)
+                                        .withTypeText("Drive Constant")
                         );
                     }
                 });

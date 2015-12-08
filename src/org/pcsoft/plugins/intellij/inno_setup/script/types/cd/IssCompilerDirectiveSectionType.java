@@ -3,8 +3,11 @@ package org.pcsoft.plugins.intellij.inno_setup.script.types.cd;
 import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolParameterType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveIncludeParameterType;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveParameterIdentifier;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectivePreProcessorParameterType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolDefineParameterType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolUndefineParameterType;
 
 import javax.swing.Icon;
 import java.util.stream.Stream;
@@ -13,7 +16,10 @@ import java.util.stream.Stream;
  * Created by pfeifchr on 01.12.2015.
  */
 public enum IssCompilerDirectiveSectionType implements IssCompilerDirectiveSectionIdentifier {
-    Symbol("define", "cd.define", null, IssMarkerFactory.COMPILER_DIRECTIVE_SYMBOL_SECTION, IssCompilerDirectiveSymbolParameterType.class),
+    SymbolDefine("define", "cd.define", null, IssMarkerFactory.CompilerDirective.SymbolDefine.SECTION, IssCompilerDirectiveSymbolDefineParameterType.class),
+    SymbolUndefine("undef", "cd.undef", null, IssMarkerFactory.CompilerDirective.SymbolUndefine.SECTION, IssCompilerDirectiveSymbolUndefineParameterType.class),
+    PreProcessor("preproc", "cd.preproc", null, IssMarkerFactory.CompilerDirective.PreProcessor.SECTION, IssCompilerDirectivePreProcessorParameterType.class),
+    Include("include", "cd.preproc", null, IssMarkerFactory.CompilerDirective.Include.SECTION, IssCompilerDirectiveIncludeParameterType.class),
     ;
 
     public static IssCompilerDirectiveSectionType fromId(final String id) {

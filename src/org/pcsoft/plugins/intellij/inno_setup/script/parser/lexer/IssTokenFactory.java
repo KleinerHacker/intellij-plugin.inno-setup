@@ -38,6 +38,8 @@ public final class IssTokenFactory {
     public static final IElementType BRACE_BRACKET_END = new IElementType("BRACE_BRACKET_START", LANGUAGE);
     public static final IElementType BRACE_START = new IElementType("BRACE_START", LANGUAGE);
     public static final IElementType BRACE_END = new IElementType("BRACE_START", LANGUAGE);
+    public static final IElementType BRACE_ANGLE_START = new IElementType("BRACE_ANGLE_START", LANGUAGE);
+    public static final IElementType BRACE_ANGLE_END = new IElementType("BRACE_ANGLE_END", LANGUAGE);
 
     public static final TokenSet TS_WHITE_SPACES = TokenSet.create(WHITE_SPACE);
     public static final TokenSet TS_COMMENTS = TokenSet.create(COMMENT);
@@ -47,6 +49,7 @@ public final class IssTokenFactory {
     public static final TokenSet TS_BRACE_CURLY = TokenSet.create(BRACE_CURLY_START, BRACE_CURLY_END);
     public static final TokenSet TS_BRACE_BRACKET = TokenSet.create(BRACE_BRACKET_START, BRACE_BRACKET_END);
     public static final TokenSet TS_BRACE = TokenSet.create(BRACE_START, BRACE_END);
+    public static final TokenSet TS_BRACE_ANGLE = TokenSet.create(BRACE_ANGLE_START, BRACE_ANGLE_END);
 
     private IssTokenFactory() {
     }

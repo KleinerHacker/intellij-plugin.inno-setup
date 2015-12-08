@@ -6,7 +6,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.IssPropertyElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolDefineSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssLanguageDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssTaskDefinitionElement;
@@ -36,13 +36,13 @@ public final class IssFindUtils {
     }
 
     @NotNull
-    public static Collection<IssCompilerDirectiveSymbolSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project) {
+    public static Collection<IssCompilerDirectiveSymbolDefineSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project) {
         return findCompilerDirectiveSymbolSectionElements(project, null, false);
     }
 
     @NotNull
-    public static Collection<IssCompilerDirectiveSymbolSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project, final String name, final boolean variant) {
-        return IssUtils.findElements(project, name, variant, IssCompilerDirectiveSymbolSectionElement.class,
+    public static Collection<IssCompilerDirectiveSymbolDefineSectionElement> findCompilerDirectiveSymbolSectionElements(final Project project, final String name, final boolean variant) {
+        return IssUtils.findElements(project, name, variant, IssCompilerDirectiveSymbolDefineSectionElement.class,
                 item -> item.getSymbolName() != null && !item.getSymbolName().getName().trim().isEmpty(), item -> item.getSymbolName().getName());
     }
 

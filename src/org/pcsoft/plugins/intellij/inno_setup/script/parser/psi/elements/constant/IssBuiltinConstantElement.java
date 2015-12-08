@@ -14,7 +14,7 @@ public class IssBuiltinConstantElement extends IssConstantElement {
     }
 
     @Nullable
-    public IssBuiltinConstant getConstant() {
+    public IssBuiltinConstant getBuiltinConstant() {
         return IssBuiltinConstant.fromId(super.getName());
     }
 }

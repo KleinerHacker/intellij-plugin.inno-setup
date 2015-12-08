@@ -13,32 +13,83 @@ public final class IssMarkerFactory {
 
     public static final IElementType ISS_FILE = new IElementType("ISS_FILE", LANGUAGE);
 
-    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_SECTION = new IElementType("COMPILER_DIRECTIVE_SYMBOL_SECTION", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_IDENTIFIER_PARAMETER = new IElementType("COMPILER_DIRECTIVE_SYMBOL_IDENTIFIER_PARAMETER", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE_SYMBOL_VALUE_PARAMETER = new IElementType("COMPILER_DIRECTIVE_SYMBOL_VALUE_PARAMETER", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE = new IElementType("COMPILER_DIRECTIVE", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE_PARAMETERS = new IElementType("COMPILER_DIRECTIVE_PARAMETERS", LANGUAGE);
-
     public static final IElementType IDENTIFIER = new IElementType("IDENTIFIER", LANGUAGE);
     public static final IElementType IDENTIFIER_REFERENCE = new IElementType("IDENTIFIER_REFERENCE", LANGUAGE);
     public static final IElementType IDENTIFIER_NAME = new IElementType("IDENTIFIER_NAME", LANGUAGE);
     public static final IElementType VALUE = new IElementType("VALUE", LANGUAGE);
     public static final IElementType STRING = new IElementType("STRING", LANGUAGE);
-
-    public static final IElementType BUILTIN_CONSTANT = new IElementType("BUILTIN_CONSTANT", LANGUAGE);
-    public static final IElementType MESSAGE_CONSTANT = new IElementType("MESSAGE_CONSTANT", LANGUAGE);
-    public static final IElementType COMPILER_DIRECTIVE_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
-    public static final IElementType ENVIRONMENT_CONSTANT = new IElementType("COMPILER_DIRECTIVE_CONSTANT", LANGUAGE);
-    public static final IElementType CONSTANT_NAME = new IElementType("CONSTANT_NAME", LANGUAGE);
-    public static final IElementType CONSTANT_TYPE = new IElementType("CONSTANT_TYPE", LANGUAGE);
-    public static final IElementType CONSTANT_ARGUMENTS = new IElementType("CONSTANT_ARGUMENTS", LANGUAGE);
-    public static final IElementType CONSTANT_ARGUMENT = new IElementType("CONSTANT_ARGUMENT", LANGUAGE);
+    public static final IElementType FILE_LINK = new IElementType("FILE_LINK", LANGUAGE);
+    public static final IElementType ESCAPING = new IElementType("ESCAPING", LANGUAGE);
 
     public static final IElementType SECTION_NAME = new IElementType("SECTION_NAME", LANGUAGE);
     public static final IElementType SECTION_HEADER = new IElementType("SECTION_HEADER", LANGUAGE);
 
     public static final IElementType PROPERTY_UNKNOWN = new IElementType("PROPERTY_UNKNOWN", LANGUAGE);
     public static final IElementType SECTION_UNKNOWN = new IElementType("SECTION_UNKNOWN", LANGUAGE);
+
+    //region Compiler Directives
+    public static final class CompilerDirective {
+        private static final String KEY = "COMPILER_DIRECTIVE";
+
+        public static final IElementType PARAMETERS = new IElementType(KEY + "_PARAMETERS", LANGUAGE);
+        public static final IElementType IDENTIFIER = new IElementType(KEY + "IDENTIFIER", LANGUAGE);
+
+        public static final class SymbolDefine {
+            private static final String SUB_KEY = KEY + "_SYMBOL_DEFINE";
+            private static final String PARAMETER = SUB_KEY + "_PARAMETER";
+
+            public static final IElementType SECTION = new IElementType(SUB_KEY + "_SECTION", LANGUAGE);
+            public static final IElementType PARAMETER_IDENTIFIER = new IElementType(PARAMETER + "_IDENTIFIER", LANGUAGE);
+            public static final IElementType PARAMETER_VALUE = new IElementType(PARAMETER + "_VALUE", LANGUAGE);
+            public static final IElementType PARAMETER_VISIBILITY = new IElementType(PARAMETER + "_VISIBILITY", LANGUAGE);
+        }
+
+        public static final class SymbolUndefine {
+            private static final String SUB_KEY = KEY + "_SYMBOL_UNDEFINE";
+            private static final String PARAMETER = SUB_KEY + "_PARAMETER";
+
+            public static final IElementType SECTION = new IElementType(SUB_KEY + "_SECTION", LANGUAGE);
+            public static final IElementType PARAMETER_IDENTIFIER = new IElementType(PARAMETER + "_IDENTIFIER", LANGUAGE);
+            public static final IElementType PARAMETER_VISIBILITY = new IElementType(PARAMETER + "_VISIBILITY", LANGUAGE);
+        }
+
+        public static final class PreProcessor {
+            private static final String SUB_KEY = KEY + "_PREPROCESSOR";
+            private static final String PARAMETER = SUB_KEY + "_PARAMETER";
+
+            public static final IElementType SECTION = new IElementType(SUB_KEY + "_SECTION", LANGUAGE);
+            public static final IElementType PARAMETER_TYPE = new IElementType(PARAMETER + "_TYPE", LANGUAGE);
+        }
+
+        public static final class Include {
+            private static final String SUB_KEY = KEY + "_INCLUDE";
+            private static final String PARAMETER = SUB_KEY + "_PARAMETER";
+
+            public static final IElementType SECTION = new IElementType(SUB_KEY + "_SECTION", LANGUAGE);
+            public static final IElementType PARAMETER_FILE = new IElementType(PARAMETER + "_FILE", LANGUAGE);
+        }
+    }
+    //endregion
+
+    //region Constants
+    public static final class Constant {
+        private static final String KEY = "CONSTANT";
+
+        public static final IElementType TYPE_BUILTIN = new IElementType(KEY + "_TYPE_BUILTIN", LANGUAGE);
+        public static final IElementType TYPE_MESSAGE = new IElementType(KEY + "_TYPE_MESSAGE", LANGUAGE);
+        public static final IElementType TYPE_COMPILER_DIRECTIVE = new IElementType(KEY + "_TYPE_COMPILER_DIRECTIVE", LANGUAGE);
+        public static final IElementType TYPE_ENVIRONMENT = new IElementType(KEY + "_TYPE_ENVIRONMENT", LANGUAGE);
+        public static final IElementType TYPE_DRIVE = new IElementType(KEY + "_TYPE_DRIVE", LANGUAGE);
+        public static final IElementType TYPE_INI = new IElementType(KEY + "_TYPE_INI", LANGUAGE);
+        public static final IElementType TYPE_REGISTRY = new IElementType(KEY + "_TYPE_REG", LANGUAGE);
+        public static final IElementType TYPE_PARAMETER = new IElementType(KEY + "_TYPE_PARAM", LANGUAGE);
+        public static final IElementType NAME = new IElementType(KEY + "_NAME", LANGUAGE);
+        public static final IElementType TYPE = new IElementType(KEY + "_TYPE", LANGUAGE);
+        public static final IElementType ARGUMENTS = new IElementType(KEY + "_ARGUMENTS", LANGUAGE);
+        public static final IElementType ARGUMENT = new IElementType(KEY + "_ARGUMENT", LANGUAGE);
+        public static final IElementType DEFAULT_VALUE = new IElementType(KEY + "_DEFAULT_VALUE", LANGUAGE);
+    }
+    //endregion
 
     //region Common
     public static final class CommonSection {

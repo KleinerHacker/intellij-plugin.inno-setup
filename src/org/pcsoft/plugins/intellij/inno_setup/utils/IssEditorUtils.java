@@ -14,7 +14,7 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.apache.commons.lang.SystemUtils;
-import org.pcsoft.plugins.intellij.inno_setup.run.IssRunErrorHandler;
+import org.pcsoft.plugins.intellij.inno_setup.configuration.run.IssCompileRunErrorHandler;
 import org.pcsoft.plugins.intellij.inno_setup.script.IssScriptFileType;
 
 /**
@@ -53,7 +53,7 @@ public final class IssEditorUtils {
             if (fileEditors.length <= 0) {
                 final Editor textEditor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, virtualFile, lineNumber, column), true);
                 if (textEditor == null) {
-                    Logger.getInstance(IssRunErrorHandler.class).error("Unable to find file: " + virtualFile.getPath());
+                    Logger.getInstance(IssCompileRunErrorHandler.class).error("Unable to find file: " + virtualFile.getPath());
                     return;
                 }
             }
@@ -70,7 +70,7 @@ public final class IssEditorUtils {
                     FileTypeIndex.NAME, IssScriptFileType.INSTANCE, GlobalSearchScope.allScope(project)
             ).stream().filter(item -> item.getPath().replace("/", SystemUtils.FILE_SEPARATOR).equals(file.replace("/", SystemUtils.FILE_SEPARATOR))).findFirst().orElse(null);
             if (virtualFile == null) {
-                Logger.getInstance(IssRunErrorHandler.class).error("Unable to find file: " + file);
+                Logger.getInstance(IssCompileRunErrorHandler.class).error("Unable to find file: " + file);
                 return null;
             }
 

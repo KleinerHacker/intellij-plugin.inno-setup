@@ -27,8 +27,8 @@ public final class IssSyntaxColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] DESCRIPTORS = new AttributesDescriptor[]{
             new AttributesDescriptor("Comments", IssLanguageHighlightingColorFactory.SYNTAX_COMMENT),
             new AttributesDescriptor("Strings", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_STRING),
-            new AttributesDescriptor("Compiler Directives", IssLanguageHighlightingColorFactory.ANNOTATION_INFO_COMPILER_DIRECTIVE),
-            new AttributesDescriptor("Section Title", IssLanguageHighlightingColorFactory.ANNOTATION_INFO_SECTION_TITLE),
+            new AttributesDescriptor("Compiler Directives", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_COMPILER_DIRECTIVE),
+            new AttributesDescriptor("Section Title", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_SECTION_TITLE),
             new AttributesDescriptor("Operators", IssLanguageHighlightingColorFactory.SYNTAX_OPERATORS)
     };
 

@@ -31,11 +31,13 @@ BRACE_BRACKET_START=\[
 BRACE_BRACKET_END=\]
 BRACE_START=\(
 BRACE_END=\)
+BRACE_ANGLE_START=\<
+BRACE_ANGLE_END=\>
 SHARP=#
 PERCENT=%
 
 NAME=[A-Za-z0-9_]+
-WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"\.\{\}#\[\]\(\)\%\,\|]+
+WORD=[^\ \t\f\n\r(\r\n)\=\:\;\"\.\{\}#\[\]\(\)\%\,\|\<\>]+
 
 DECIMAL=\.[0-9]+
 INTEGER=[0-9]+
@@ -59,6 +61,8 @@ NUMBER=[-+]?{INTEGER}{DECIMAL}?
 {BRACE_BRACKET_END}                                         { return IssTokenFactory.BRACE_BRACKET_END; }
 {BRACE_START}                                               { return IssTokenFactory.BRACE_START; }
 {BRACE_END}                                                 { return IssTokenFactory.BRACE_END; }
+{BRACE_ANGLE_START}                                         { return IssTokenFactory.BRACE_ANGLE_START; }
+{BRACE_ANGLE_END}                                           { return IssTokenFactory.BRACE_ANGLE_END; }
 {NAME}                                                      { return IssTokenFactory.NAME; }
 {WORD}                                                      { return IssTokenFactory.WORD; }
 

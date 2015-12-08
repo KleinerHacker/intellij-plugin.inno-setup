@@ -31,13 +31,19 @@ final class IssParserCompilerDirectiveUtility {
         //CD Key Word
         final PsiBuilder.Marker cdMark = psiBuilder.mark();
         psiBuilder.advanceLexer();
-        cdMark.done(IssMarkerFactory.COMPILER_DIRECTIVE);
+        cdMark.done(IssMarkerFactory.CompilerDirective.IDENTIFIER);
 
         //Parameters
         final PsiBuilder.Marker cdParametersMark = psiBuilder.mark();
         final IssCompilerDirectiveParameterIdentifier[] parameters = IssCompilerDirectiveParameterIdentifier.getValues(compilerDirectiveType.getParameterIdentifierClass());
         int counter = 0;
         while (psiBuilder.getTokenType() != IssTokenFactory.CRLF && !psiBuilder.eof()) {
+            if (parameters != null) {
+                while ( parameters.length > counter && !parameters[counter].isParameter().test(psiBuilder.getTokenText())) {
+                    counter++;
+                }
+            }
+
             final PsiBuilder.Marker cdValueMark = psiBuilder.mark();
             IssParserValueUtility.parseSingleValue(psiBuilder);
             if (parameters == null || parameters.length <= counter) {
@@ -47,7 +53,7 @@ final class IssParserCompilerDirectiveUtility {
             }
             counter++;
         }
-        cdParametersMark.done(IssMarkerFactory.COMPILER_DIRECTIVE_PARAMETERS);
+        cdParametersMark.done(IssMarkerFactory.CompilerDirective.PARAMETERS);
 
         cdSectionMark.done(compilerDirectiveType.getElementType());
     }

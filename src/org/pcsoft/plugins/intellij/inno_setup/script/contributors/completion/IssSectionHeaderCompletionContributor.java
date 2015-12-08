@@ -55,7 +55,7 @@ public class IssSectionHeaderCompletionContributor extends CompletionContributor
     private void buildList(CompletionResultSet completionResultSet, IssSectionType item) {
         completionResultSet.addElement(
                 IssLanguageHighlightingColorFactory
-                        .buildLookupElement("[" + item.getId() + "]", IssLanguageHighlightingColorFactory.ANNOTATION_INFO_SECTION_TITLE)
+                        .buildLookupElement("[" + item.getId() + "]", IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_SECTION_TITLE)
                         .withCaseSensitivity(false)
                         .withIcon(item.getIcon())
                         .withInsertHandler((insertionContext, lookupElement) -> {

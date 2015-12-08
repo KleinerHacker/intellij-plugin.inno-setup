@@ -241,7 +241,8 @@ final class IssParserSectionUtility {
                                 psiBuilder.getTokenType() != IssTokenFactory.NAME &&
                                 psiBuilder.getTokenType() != IssTokenFactory.NUMBER &&
                                 psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_START &&
-                                psiBuilder.getTokenType() != IssTokenFactory.QUOTE) {
+                                psiBuilder.getTokenType() != IssTokenFactory.QUOTE &&
+                                psiBuilder.getTokenType() != IssTokenFactory.BRACE_ANGLE_START) {
                             final PsiBuilder.Marker errorMark = psiBuilder.mark();
                             psiBuilder.advanceLexer();
                             errorMark.error("Unknown element");
@@ -326,16 +327,17 @@ final class IssParserSectionUtility {
 
             final PsiBuilder.Marker propertyValueMark = psiBuilder.mark();
             while (!psiBuilder.eof() && psiBuilder.getTokenType() != IssTokenFactory.CRLF) {
-                if (psiBuilder.getTokenType() != IssTokenFactory.WORD &&
-                        psiBuilder.getTokenType() != IssTokenFactory.NAME &&
-                        psiBuilder.getTokenType() != IssTokenFactory.NUMBER &&
-                        psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_START &&
-                        psiBuilder.getTokenType() != IssTokenFactory.QUOTE) {
-                    final PsiBuilder.Marker errorMark = psiBuilder.mark();
-                    psiBuilder.advanceLexer();
-                    errorMark.error("Unknown element");
-                    continue;
-                }
+//                if (psiBuilder.getTokenType() != IssTokenFactory.WORD &&
+//                        psiBuilder.getTokenType() != IssTokenFactory.NAME &&
+//                        psiBuilder.getTokenType() != IssTokenFactory.NUMBER &&
+//                        psiBuilder.getTokenType() != IssTokenFactory.BRACE_CURLY_START &&
+//                        psiBuilder.getTokenType() != IssTokenFactory.QUOTE &&
+//                        psiBuilder.getTokenType() != IssTokenFactory.BRACE_ANGLE_START) {
+//                    final PsiBuilder.Marker errorMark = psiBuilder.mark();
+//                    psiBuilder.advanceLexer();
+//                    errorMark.error("Unknown element");
+//                    continue;
+//                }
 
                 final IElementType singlePropertyValueMarkerElement = singlePropertyValueResolver == null ?
                         null : singlePropertyValueResolver.apply(identifier);
@@ -355,13 +357,7 @@ final class IssParserSectionUtility {
 
     private static void parseSingleValue(PsiBuilder psiBuilder, IElementType singlePropertyValueMarkerElement) {
         final PsiBuilder.Marker singleValueMark = psiBuilder.mark();
-        if (psiBuilder.getTokenType() == IssTokenFactory.QUOTE) {
-            IssParserValueUtility.parseSingleStringValue(psiBuilder);
-        } else if (psiBuilder.getTokenType() == IssTokenFactory.BRACE_CURLY_START) {
-            IssParserValueUtility.parseSingleConstantValue(psiBuilder);
-        } else {
-            psiBuilder.advanceLexer();
-        }
+        IssParserValueUtility.parseSingleValue(psiBuilder);
         singleValueMark.done(singlePropertyValueMarkerElement);
     }
 

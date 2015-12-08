@@ -6,21 +6,34 @@ import com.intellij.psi.tree.IElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.IssMarkerFactory;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveIdentifierElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveIncludeSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveParametersElement;
-import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectivePreProcessorSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolDefineSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.IssCompilerDirectiveSymbolUndefineSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIdentifierParameterElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveIncludeFileParameterElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectivePreProcessorTypeParameterElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveStringParameterElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.cd.parameter.IssCompilerDirectiveVisibilityParameterElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssEscapingElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssFileLinkElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssStringElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssUnknownElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssBuiltinConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssCompilerDirectiveConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantArgumentElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantArgumentsElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantDefaultValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssConstantTypeElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssDriveConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssEnvironmentConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssINIConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssMessageConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssParameterConstantElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant.IssRegistryConstantElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssComponentDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssDirectoryDefinitionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.definition.IssFileDefinitionElement;
@@ -115,7 +128,8 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionHeaderElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.IssValueType;
-import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolParameterType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolDefineParameterType;
+import org.pcsoft.plugins.intellij.inno_setup.script.types.cd.parameter.IssCompilerDirectiveSymbolUndefineParameterType;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssCommonProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssComponentProperty;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssDirectoryProperty;
@@ -235,6 +249,10 @@ public final class IssPsiElementFactory {
             return new IssValueElement(node);
         } else if (IssMarkerFactory.STRING.equals(node.getElementType())) {
             return new IssStringElement(node);
+        } else if (IssMarkerFactory.ESCAPING.equals(node.getElementType())) {
+            return new IssEscapingElement(node);
+        } else if (IssMarkerFactory.FILE_LINK.equals(node.getElementType())) {
+            return new IssFileLinkElement(node);
         } else if (IssMarkerFactory.PROPERTY_UNKNOWN.equals(node.getElementType())) {
             return new IssPropertyUnknownElement(node);
         }
@@ -242,52 +260,108 @@ public final class IssPsiElementFactory {
         return new IssUnknownElement(node);
     }
 
-    //region Constants
-    private static PsiElement createForConstant(ASTNode node) {
-        if (IssMarkerFactory.BUILTIN_CONSTANT.equals(node.getElementType())) {
-            return new IssBuiltinConstantElement(node);
-        } else if (IssMarkerFactory.MESSAGE_CONSTANT.equals(node.getElementType())) {
-            return new IssMessageConstantElement(node);
-        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_CONSTANT.equals(node.getElementType())) {
-            return new IssCompilerDirectiveConstantElement(node);
-        } else if (IssMarkerFactory.ENVIRONMENT_CONSTANT.equals(node.getElementType())) {
-            return new IssEnvironmentConstantElement(node);
-        } else if (IssMarkerFactory.CONSTANT_NAME.equals(node.getElementType())) {
-            return new IssConstantNameElement(node);
-        } else if (IssMarkerFactory.CONSTANT_TYPE.equals(node.getElementType())) {
-            return new IssConstantTypeElement(node);
-        } else if (IssMarkerFactory.CONSTANT_ARGUMENT.equals(node.getElementType())) {
-            return new IssConstantArgumentElement(node);
-        } else if (IssMarkerFactory.CONSTANT_ARGUMENTS.equals(node.getElementType())) {
-            return new IssConstantArgumentsElement(node);
-        }
-
-        return null;
-    }
-    //endregion
-
     //region Compiler Directives
     private static PsiElement createForCompilerDirective(ASTNode node) {
-        final PsiElement symbolSection = createForCompilerDirectiveSymbolSection(node);
-        if (symbolSection != null)
-            return symbolSection;
+        final PsiElement symbolDefineSection = createForCompilerDirectiveSymbolDefineSection(node);
+        if (symbolDefineSection != null)
+            return symbolDefineSection;
 
-        if (IssMarkerFactory.COMPILER_DIRECTIVE.equals(node.getElementType())) {
-            return new IssCompilerDirectiveElement(node);
-        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_PARAMETERS.equals(node.getElementType())) {
+        final PsiElement symbolUndefineSection = createForCompilerDirectiveSymbolUndefineSection(node);
+        if (symbolUndefineSection != null)
+            return symbolUndefineSection;
+
+        final PsiElement preProcessorSection = createForCompilerDirectivePreProcessorSection(node);
+        if (preProcessorSection != null)
+            return preProcessorSection;
+
+        final PsiElement includeSection = createForCompilerDirectiveIncludeSection(node);
+        if (includeSection != null)
+            return includeSection;
+
+        if (IssMarkerFactory.CompilerDirective.IDENTIFIER.equals(node.getElementType())) {
+            return new IssCompilerDirectiveIdentifierElement(node);
+        } else if (IssMarkerFactory.CompilerDirective.PARAMETERS.equals(node.getElementType())) {
             return new IssCompilerDirectiveParametersElement(node);
         }
 
         return null;
     }
 
-    private static PsiElement createForCompilerDirectiveSymbolSection(ASTNode node) {
-        if (IssMarkerFactory.COMPILER_DIRECTIVE_SYMBOL_SECTION.equals(node.getElementType())) {
-            return new IssCompilerDirectiveSymbolSectionElement(node);
-        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_SYMBOL_IDENTIFIER_PARAMETER.equals(node.getElementType())) {
-            return new IssCompilerDirectiveIdentifierParameterElement(node, IssCompilerDirectiveSymbolParameterType.Identifier);
-        } else if (IssMarkerFactory.COMPILER_DIRECTIVE_SYMBOL_VALUE_PARAMETER.equals(node.getElementType())) {
-            return new IssCompilerDirectiveStringParameterElement(node, IssCompilerDirectiveSymbolParameterType.Value);
+    private static PsiElement createForCompilerDirectiveSymbolDefineSection(ASTNode node) {
+        if (IssMarkerFactory.CompilerDirective.SymbolDefine.SECTION.equals(node.getElementType())) {
+            return new IssCompilerDirectiveSymbolDefineSectionElement(node);
+        } else if (IssMarkerFactory.CompilerDirective.SymbolDefine.PARAMETER_IDENTIFIER.equals(node.getElementType())) {
+            return new IssCompilerDirectiveIdentifierParameterElement(node, IssCompilerDirectiveSymbolDefineParameterType.Identifier);
+        } else if (IssMarkerFactory.CompilerDirective.SymbolDefine.PARAMETER_VALUE.equals(node.getElementType())) {
+            return new IssCompilerDirectiveStringParameterElement(node, IssCompilerDirectiveSymbolDefineParameterType.Value);
+        } else if (IssMarkerFactory.CompilerDirective.SymbolDefine.PARAMETER_VISIBILITY.equals(node.getElementType())) {
+            return new IssCompilerDirectiveVisibilityParameterElement(node, IssCompilerDirectiveSymbolDefineParameterType.Visibility);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForCompilerDirectiveSymbolUndefineSection(ASTNode node) {
+        if (IssMarkerFactory.CompilerDirective.SymbolUndefine.SECTION.equals(node.getElementType())) {
+            return new IssCompilerDirectiveSymbolUndefineSectionElement(node);
+        } else if (IssMarkerFactory.CompilerDirective.SymbolUndefine.PARAMETER_IDENTIFIER.equals(node.getElementType())) {
+            return new IssCompilerDirectiveIdentifierParameterElement(node, IssCompilerDirectiveSymbolUndefineParameterType.Identifier);
+        } else if (IssMarkerFactory.CompilerDirective.SymbolUndefine.PARAMETER_VISIBILITY.equals(node.getElementType())) {
+            return new IssCompilerDirectiveVisibilityParameterElement(node, IssCompilerDirectiveSymbolUndefineParameterType.Visibility);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForCompilerDirectivePreProcessorSection(ASTNode node) {
+        if (IssMarkerFactory.CompilerDirective.PreProcessor.SECTION.equals(node.getElementType())) {
+            return new IssCompilerDirectivePreProcessorSectionElement(node);
+        } else if (IssMarkerFactory.CompilerDirective.PreProcessor.PARAMETER_TYPE.equals(node.getElementType())) {
+            return new IssCompilerDirectivePreProcessorTypeParameterElement(node);
+        }
+
+        return null;
+    }
+
+    private static PsiElement createForCompilerDirectiveIncludeSection(ASTNode node) {
+        if (IssMarkerFactory.CompilerDirective.Include.SECTION.equals(node.getElementType())) {
+            return new IssCompilerDirectiveIncludeSectionElement(node);
+        } else if (IssMarkerFactory.CompilerDirective.Include.PARAMETER_FILE.equals(node.getElementType())) {
+            return new IssCompilerDirectiveIncludeFileParameterElement(node);
+        }
+
+        return null;
+    }
+    //endregion
+
+    //region Constants
+    private static PsiElement createForConstant(ASTNode node) {
+        if (IssMarkerFactory.Constant.TYPE_BUILTIN.equals(node.getElementType())) {
+            return new IssBuiltinConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_MESSAGE.equals(node.getElementType())) {
+            return new IssMessageConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_COMPILER_DIRECTIVE.equals(node.getElementType())) {
+            return new IssCompilerDirectiveConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_ENVIRONMENT.equals(node.getElementType())) {
+            return new IssEnvironmentConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_DRIVE.equals(node.getElementType())) {
+            return new IssDriveConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_INI.equals(node.getElementType())) {
+            return new IssINIConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_REGISTRY.equals(node.getElementType())) {
+            return new IssRegistryConstantElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE_PARAMETER.equals(node.getElementType())) {
+            return new IssParameterConstantElement(node);
+        } else if (IssMarkerFactory.Constant.NAME.equals(node.getElementType())) {
+            return new IssConstantNameElement(node);
+        } else if (IssMarkerFactory.Constant.TYPE.equals(node.getElementType())) {
+            return new IssConstantTypeElement(node);
+        } else if (IssMarkerFactory.Constant.ARGUMENT.equals(node.getElementType())) {
+            return new IssConstantArgumentElement(node);
+        } else if (IssMarkerFactory.Constant.ARGUMENTS.equals(node.getElementType())) {
+            return new IssConstantArgumentsElement(node);
+        } else if (IssMarkerFactory.Constant.DEFAULT_VALUE.equals(node.getElementType())) {
+            return new IssConstantDefaultValueElement(node);
         }
 
         return null;
@@ -592,11 +666,11 @@ public final class IssPsiElementFactory {
             return new IssPropertyStringElement(node, IssLanguageProperty.LicenceFile);
         } else if (IssMarkerFactory.LanguageSection.PROPERTY_LICENCEFILE_VALUE.equals(node.getElementType())) {
             return new IssPropertyStringValueElement(node);
-        }else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOBEFOREFILE.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOBEFOREFILE.equals(node.getElementType())) {
             return new IssPropertyStringElement(node, IssLanguageProperty.InfoBeforeFile);
         } else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOBEFOREFILE_VALUE.equals(node.getElementType())) {
             return new IssPropertyStringValueElement(node);
-        }else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOAFTERFILE.equals(node.getElementType())) {
+        } else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOAFTERFILE.equals(node.getElementType())) {
             return new IssPropertyStringElement(node, IssLanguageProperty.InfoAfterFile);
         } else if (IssMarkerFactory.LanguageSection.PROPERTY_INFOAFTERFILE_VALUE.equals(node.getElementType())) {
             return new IssPropertyStringValueElement(node);

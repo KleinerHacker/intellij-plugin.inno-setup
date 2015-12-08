@@ -1,13 +1,27 @@
 #define hello "World"
 #define hello "He"
-#define unused "Test"
+#define private unused "Test"
 ; Test
 #define my "Hallo Welt" abc123
 #define "test" wert
 #define world
 
+#undef private unused
+#undef world nnkl
+#undef abc
+
+#preproc fud
+#preproc
+#preproc builtin xd
+#preproc ispp
+
+#include <file>
+#include <file2> df
+#include
+#include "abc.de"
+
 [SETUP]
-AppName = My Test {win} {#my} {#world} {#hel} {group} {cm:forward} {cm:test,{computerName}fd,abc123} {cm:bla} {%Path} {%APPDATA|{app}udo} {%abc}
+AppName = My Test {{fdu-{sysWOW64}-{{fcfd}-so} {win} {#my} {#world} {#hel} {group,abc|fbg} {cm:forward} {cm:test,{computerName}fd,abc123|abc} {cm:bla} {%Path,abc} {%APPDATA|{app}udo} {%abc} {drive:{src}\abc} {ini:{src}\abc,sec,key|123} {ini:{src}\abc} {reg:fuio,bfdo|rvgneio} {reg:ofh} {param:fhio|fruie} {param:fdl}
 Compression = lzma
 Compression = zip
 

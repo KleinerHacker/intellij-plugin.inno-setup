@@ -21,7 +21,8 @@ public class IssBraceMatcher extends PairedBraceMatcherAdapter {
                 return new BracePair[] {
                         new BracePair(IssTokenFactory.BRACE_CURLY_START, IssTokenFactory.BRACE_CURLY_END, false),
                         new BracePair(IssTokenFactory.BRACE_BRACKET_START, IssTokenFactory.BRACE_BRACKET_END, false),
-                        new BracePair(IssTokenFactory.BRACE_START, IssTokenFactory.BRACE_END, false)
+                        new BracePair(IssTokenFactory.BRACE_START, IssTokenFactory.BRACE_END, false),
+                        new BracePair(IssTokenFactory.BRACE_ANGLE_START, IssTokenFactory.BRACE_ANGLE_END, false)
                 };
             }
 

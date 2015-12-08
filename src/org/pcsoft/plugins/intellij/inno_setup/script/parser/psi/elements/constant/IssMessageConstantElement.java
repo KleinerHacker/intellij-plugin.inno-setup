@@ -1,7 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.constant;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -17,6 +16,6 @@ public class IssMessageConstantElement extends IssConstantElement {
 
     @NotNull
     public Collection<IssConstantArgumentElement> getMessageArgumentList() {
-        return PsiTreeUtil.findChildrenOfType(this, IssConstantArgumentElement.class);
+        return getConstantArgumentList();
     }
 }
