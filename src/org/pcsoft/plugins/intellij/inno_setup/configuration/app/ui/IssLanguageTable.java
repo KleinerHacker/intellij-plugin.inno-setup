@@ -38,7 +38,7 @@ import java.util.Scanner;
  * Created by Christoph on 23.11.2015.
  */
 public class IssLanguageTable extends BorderLayoutPanel {
-    private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
+    private static final IssCompilerSettings COMPILER_SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
     private static final int ICON_SIZE = 20;
 
     public static enum ViewType {
@@ -146,7 +146,7 @@ public class IssLanguageTable extends BorderLayoutPanel {
 
     private void handleOpenAction() {
         final String fileName = tbl.getValueAt(tbl.getSelectedRow(), 1).toString();
-        final File file = new File(SETTINGS.getLanguagesPath(), fileName);
+        final File file = new File(COMPILER_SETTINGS.getLanguagesPath(), fileName);
         if (!file.exists()) {
             JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable open", JOptionPane.ERROR_MESSAGE);
             return;
@@ -156,9 +156,14 @@ public class IssLanguageTable extends BorderLayoutPanel {
     }
 
     private void handleAddAction() {
+        if (COMPILER_SETTINGS.getInstallationPath() == null) {
+            JOptionPane.showMessageDialog(this, "Set Inno Setup basic compiler settings.", "Setting Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         final IssAddLanguageDialog.Result result = IssAddLanguageDialog.show(tbl);
         if (result != null) {
-            final File file = new File(SETTINGS.getLanguagesPath(), result.getLanguageName() + ".isl");
+            final File file = new File(COMPILER_SETTINGS.getLanguagesPath(), result.getLanguageName() + ".isl");
             if (file.exists()) {
                 JOptionPane.showMessageDialog(tbl, "Language file with name '" + file.getName() + "' already exists!", "Cannot add language file", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -186,21 +191,26 @@ public class IssLanguageTable extends BorderLayoutPanel {
     }
 
     private void handleRemoveAction() {
+        if (COMPILER_SETTINGS.getInstallationPath() == null) {
+            JOptionPane.showMessageDialog(this, "Set Inno Setup basic compiler settings.", "Setting Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         final String originalFileName = tbl.getValueAt(tbl.getSelectedRow(), 0).toString();
         final String newFileName = originalFileName + ".orig";
 
         if (JOptionPane.showConfirmDialog(tbl, "Are you sure to remove selected language file(s)?", "Remove language file(s)",
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-            final File originalFile = new File(SETTINGS.getLanguagesPath(), originalFileName);
+            final File originalFile = new File(COMPILER_SETTINGS.getLanguagesPath(), originalFileName);
             if (!originalFile.exists()) {
                 JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable removing", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            File newFile = new File(SETTINGS.getLanguagesPath(), newFileName);
+            File newFile = new File(COMPILER_SETTINGS.getLanguagesPath(), newFileName);
             int counter = 0;
             while (newFile.exists()) {
                 counter++;
-                newFile = new File(SETTINGS.getLanguagesPath(), newFileName + counter);
+                newFile = new File(COMPILER_SETTINGS.getLanguagesPath(), newFileName + counter);
             }
             if (!originalFile.renameTo(newFile)) {
                 JOptionPane.showMessageDialog(tbl, "Removing failed!", "Unable removing", JOptionPane.ERROR_MESSAGE);
@@ -212,6 +222,11 @@ public class IssLanguageTable extends BorderLayoutPanel {
     }
 
     private void handleEditAction() {
+        if (COMPILER_SETTINGS.getInstallationPath() == null) {
+            JOptionPane.showMessageDialog(this, "Set Inno Setup basic compiler settings.", "Setting Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         final String originalFileName = tbl.getValueAt(tbl.getSelectedRow(), 0).toString();
 
         final String newFileName = JOptionPane.showInputDialog(tbl, "Enter a new ISL file name:", originalFileName);
@@ -221,12 +236,12 @@ public class IssLanguageTable extends BorderLayoutPanel {
                 return;
             }
 
-            final File originalFile = new File(SETTINGS.getLanguagesPath(), originalFileName);
+            final File originalFile = new File(COMPILER_SETTINGS.getLanguagesPath(), originalFileName);
             if (!originalFile.exists()) {
                 JOptionPane.showMessageDialog(tbl, "Cannot find file!", "Unable to rename", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            final File newFile = new File(SETTINGS.getLanguagesPath(), newFileName);
+            final File newFile = new File(COMPILER_SETTINGS.getLanguagesPath(), newFileName);
             if (newFile.exists()) {
                 JOptionPane.showMessageDialog(tbl, "File with new name already exists!", "Unable to rename", JOptionPane.ERROR_MESSAGE);
                 return;

@@ -11,6 +11,7 @@ import org.pcsoft.plugins.intellij.inno_setup.IssConstants;
 import org.pcsoft.plugins.intellij.inno_setup.IssIcons;
 import org.pcsoft.plugins.intellij.inno_setup.configuration.app.IssCompilerSettings;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -21,6 +22,11 @@ public class IssHelpToolWindowFactory implements ToolWindowFactoryEx {
 
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        if (COMPILER_SETTINGS.getInstallationPath() == null) {
+            JOptionPane.showMessageDialog(toolWindow.getComponent(), "Set Inno Setup basic compiler settings.", "Setting Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         toolWindow.getContentManager().addContent(new ContentImpl(new IssChmHelpBrowser(new File(COMPILER_SETTINGS.getInstallationPath(), IssConstants.HELP_IS), false, .2f), "Script Help", true));
         toolWindow.getContentManager().addContent(new ContentImpl(new IssChmHelpBrowser(new File(COMPILER_SETTINGS.getInstallationPath(), IssConstants.HELP_ISPP), false, .2f), "Pre-Processor Help", true));
     }

@@ -124,8 +124,10 @@ public class IssLanguageContentPanel extends BorderLayoutPanel {
             tblMessages.updateData(((LanguageItem) e.getItem()).messageMap);
             tblCustomMessages.updateData(((LanguageItem) e.getItem()).customMessageMap);
         });
-        cmbLanguage.setSelectedIndex(-1);
-        cmbLanguage.setSelectedIndex(0);
+        if (cmbLanguage.getModel().getSize() > 0) {
+            cmbLanguage.setSelectedIndex(-1);
+            cmbLanguage.setSelectedIndex(0);
+        }
 
         final LabeledComponent<ComboBox> pnlLanguages = new LabeledComponent<>();
         pnlLanguages.setText("Installed Languages:");

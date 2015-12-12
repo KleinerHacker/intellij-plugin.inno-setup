@@ -50,12 +50,13 @@ public class IssCompilerSettings implements PersistentStateComponent<IssCompiler
         }
     }
 
+    @Nullable
     public File getInstallationPath() {
-        return new File(installationPlace);
+        return installationPlace == null ? null : new File(installationPlace);
     }
 
     public File getLanguagesPath() {
-        return new File(getInstallationPath(), languagePlace);
+        return getInstallationPath() == null ? null : new File(getInstallationPath(), languagePlace);
     }
 
     public void validateForCompileRun() throws RuntimeConfigurationException {

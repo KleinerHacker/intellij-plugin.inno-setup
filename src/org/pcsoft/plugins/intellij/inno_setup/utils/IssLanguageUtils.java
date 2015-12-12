@@ -15,6 +15,9 @@ public final class IssLanguageUtils {
     private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
 
     public static List<File> findLanguageFiles() {
+        if (SETTINGS.getInstallationPlace() == null)
+            return new ArrayList<>();
+
         final File installationPath = new File(SETTINGS.getInstallationPlace());
         if (!installationPath.exists()) {
             Logger.getInstance(IssLanguageUtils.class).error("Unable to find installation path: " + installationPath.getAbsolutePath());
