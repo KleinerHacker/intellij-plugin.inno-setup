@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.types;
 
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.openapi.util.io.FileUtil;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -41,6 +42,21 @@ public enum IssLanguageType {
     public static IssLanguageType findByFile(final String file) {
         for (final IssLanguageType type : values()) {
             if (type.file.equalsIgnoreCase(file))
+                return type;
+        }
+
+        return null;
+    }
+
+    @Nullable
+    public static IssLanguageType findByName(final String baseFilename) {
+        for (final IssLanguageType type : values()) {
+            String name = FileUtil.getNameWithoutExtension(type.file);
+            if (name.contains("\\")) {
+                name = name.substring(name.indexOf('\\') + 1);
+            }
+
+            if (name.equalsIgnoreCase(baseFilename))
                 return type;
         }
 

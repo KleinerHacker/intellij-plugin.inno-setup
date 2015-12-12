@@ -7,11 +7,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHighlightingColorFactory;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyAppIdElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyAppIdValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierNameElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.common.IssIdentifierReferenceElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssCustomMessageSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssMessageSectionElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.IssSetupSectionElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.quickfix.IssPropertyAppIdGenerationQuickFix;
 import org.pcsoft.plugins.intellij.inno_setup.script.types.property.IssSetupProperty;
 
 /**
@@ -58,6 +61,15 @@ public class IssIdentifierAnnotator implements Annotator {
             } else {
                 infoAnnotation.setTextAttributes(IssLanguageHighlightingColorFactory.ANNOTATOR_INFO_PROPERTY_NAME_STANDARD);
             }
+        }
+
+        //Additional QuickFix
+        if (PsiTreeUtil.getParentOfType(identifierNameElement, IssPropertyAppIdElement.class) != null) {
+            final IssPropertyAppIdValueElement element = PsiTreeUtil.getParentOfType(identifierNameElement, IssPropertyAppIdElement.class).getPropertyValue();
+            if (element == null)
+                return;
+
+            infoAnnotation.registerFix(new IssPropertyAppIdGenerationQuickFix(element));
         }
     }
 }

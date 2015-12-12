@@ -2,10 +2,10 @@
     <id>org.pcsoft.plugins.intellij.inno_setup</id>
     <name>Inno Setup Script Support Plugin</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">PC-Soft</vendor>
+    <vendor url="https://github.com/KleinerHacker/intellij-plugin.inno-setup">PC-Soft</vendor>
 
     <description><![CDATA[
-      Support for Inno Setup Script Files (*.iss)
+      Support for Inno Setup Script Files (*.iss) and compiler (ISCC)
     ]]></description>
 
     <change-notes><![CDATA[
@@ -42,12 +42,12 @@
         <!-- Others -->
         <lang.commenter language="iss"
                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssCommenter"/>
-        <lang.formatter language="iss"
-                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssFormattingModelBuilder"/>
         <lang.braceMatcher language="iss"
                            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssBraceMatcher"/>
         <lang.quoteHandler language="iss"
                            implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.others.IssQuoteHandler"/>
+        <lang.formatter language="iss"
+                        implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssFormattingModelBuilder"/>
         <codeStyleSettingsProvider
                 implementation="org.pcsoft.plugins.intellij.inno_setup.script.structure.formatting.IssCodeStyleSettingsProvider"/>
         <langCodeStyleSettingsProvider
@@ -283,10 +283,6 @@
         <codeInsight.lineMarkerProvider language="iss"
                                         implementationClass="org.pcsoft.plugins.intellij.inno_setup.script.references.marker.IssLanguageLineMarkerProvider"/>
 
-        <toolWindow factoryClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssToolWindowFactory"
-                    conditionClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssToolWindowCondition"
-                    canCloseContents="false" anchor="right" id="Inno Setup"/>
-
         <!-- ************************* RUN & COMPILE ****************************** -->
         <configurationType implementation="org.pcsoft.plugins.intellij.inno_setup.configuration.run.IssCompileRunConfigurationType"/>
         <runConfigurationProducer implementation="org.pcsoft.plugins.intellij.inno_setup.configuration.run.IssCompileRunConfigurationProducer"/>
@@ -295,6 +291,13 @@
 
         <!-- ************************* OTHERS ****************************** -->
         <virtualFileSystem key="iss-file-system" implementationClass="org.pcsoft.plugins.intellij.inno_setup.vfs.IssVirtualFileSystem"/>
+        <toolWindow factoryClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssBaseToolWindowFactory"
+                    conditionClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssBaseToolWindowCondition"
+                    canCloseContents="false" anchor="right" id="Inno Setup"/>
+        <toolWindow factoryClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssHelpToolWindowFactory"
+                    conditionClass="org.pcsoft.plugins.intellij.inno_setup.ui.IssHelpToolWindowCondition"
+                    canCloseContents="false" anchor="bottom" id="Inno Setup Help"/>
+        <errorQuickFixProvider implementation="org.pcsoft.plugins.intellij.inno_setup.script.quickfix.IssQuickFixProvider"/>
     </extensions>
 
     <application-components>
@@ -314,6 +317,12 @@
         <action class="org.pcsoft.plugins.intellij.inno_setup.action.IssCompileWithISIDEAction" id="ISS_COMPILE_WITH_ISIDE">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="StructureViewPopupMenu" anchor="last"/>
+        </action>
+        <action class="org.pcsoft.plugins.intellij.inno_setup.action.IssCreateScriptAction" id="ISS_CREATE_SCRIPT">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+        <action class="org.pcsoft.plugins.intellij.inno_setup.script.action.IssGenerateAppIdAction" id="ISS_GENERATE_APP_ID">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
 

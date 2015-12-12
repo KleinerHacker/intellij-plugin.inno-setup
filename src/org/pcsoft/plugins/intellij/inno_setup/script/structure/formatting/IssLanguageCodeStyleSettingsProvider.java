@@ -37,7 +37,8 @@ public class IssLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSetti
 
     @Override
     public String getCodeSample(@NotNull SettingsType settingsType) {
-        return "#define mySymbol abc\n\n"+
+        return "#define mySym \"abc\"\n" +
+                "#define mySymbol \"123\"\n\n"+
                 "[Setup]\n"+
                 "AppName = {#mySombol}\n" +
                 "AppVersion = 1.2.3\n\n" +

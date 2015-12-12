@@ -1,8 +1,8 @@
 package org.pcsoft.plugins.intellij.inno_setup.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.roots.ui.componentsList.components.ScrollablePanel;
 import com.intellij.openapi.ui.Splitter;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
 import javafx.application.Platform;
 import org.apache.commons.lang.SystemUtils;
@@ -12,12 +12,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pcsoft.plugins.intellij.inno_setup.utils.IssChmUtils;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -49,17 +47,13 @@ public class IssChmHelpBrowser extends Splitter {
     private final Tree tvHelp;
     private final JWebView webView;
 
-    public IssChmHelpBrowser() {
-        super(true);
+    public IssChmHelpBrowser(boolean vertical, float proportion) {
+        super(vertical, proportion);
 
         tvHelp = new Tree();
         tvHelp.setRootVisible(false);
-        tvHelp.setCellRenderer(new TreeCellRenderer() {
-            @Override
-            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                return new JLabel(value.toString(), leaf ? AllIcons.FileTypes.Text : AllIcons.FileTypes.Archive, JLabel.LEFT);
-            }
-        });
+        tvHelp.setCellRenderer((tree, value, selected, expanded, leaf, row, hasFocus) ->
+                new JLabel(value.toString(), leaf ? AllIcons.FileTypes.Text : AllIcons.FileTypes.Archive, JLabel.LEFT));
         tvHelp.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -76,15 +70,14 @@ public class IssChmHelpBrowser extends Splitter {
         });
         webView = new JWebView();
 
-        final ScrollablePanel pnlScroll = new ScrollablePanel(new BorderLayout());
-        pnlScroll.add(tvHelp);
+        final JBScrollPane pnlScroll = new JBScrollPane(tvHelp);
 
         setFirstComponent(pnlScroll);
         setSecondComponent(webView);
     }
 
-    public IssChmHelpBrowser(File chmFile) {
-        this();
+    public IssChmHelpBrowser(File chmFile, boolean vertical, float proportion) {
+        this(vertical, proportion);
         showHelp(chmFile);
     }
 

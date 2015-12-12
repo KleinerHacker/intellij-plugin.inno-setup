@@ -201,6 +201,7 @@ public final class IssLanguageHighlightingColorFactory {
             "ANNOTATOR_INFO_UNUSED",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.IGNORABLE, null, null, null, 0)
     );
+
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_BUILTIN_SHELL = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_SHELL",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.ITALIC)
@@ -209,7 +210,6 @@ public final class IssLanguageHighlightingColorFactory {
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_DIRECTORY",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.BOLD)
     );
-
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_BUILTIN_OTHER = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_BUILTIN_OTHER",
             new TextAttributes(IssLanguageHighlightingConstants.Colors.BUILTIN, null, null, null, Font.PLAIN)
@@ -237,12 +237,12 @@ public final class IssLanguageHighlightingColorFactory {
 
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_INI = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_INI",
-            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERN, null, null, null, Font.BOLD)
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERNAL, null, null, null, Font.BOLD)
     );
 
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_REGISTRY = TextAttributesKey.createTextAttributesKey(
             "ANNOTATOR_INFO_CONSTANT_REGISTRY",
-            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERN, null, null, null, Font.ITALIC)
+            new TextAttributes(IssLanguageHighlightingConstants.Colors.EXTERNAL, null, null, null, Font.ITALIC)
     );
 
     public static final TextAttributesKey ANNOTATOR_INFO_CONSTANT_PARAMETER = TextAttributesKey.createTextAttributesKey(

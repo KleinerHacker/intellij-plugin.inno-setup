@@ -22,6 +22,7 @@
 
 [SETUP]
 AppName = My Test {{fdu-{sysWOW64}-{{fcfd}-so} {win} {#my} {#world} {#hel} {group,abc|fbg} {cm:forward} {cm:test,{computerName}fd,abc123|abc} {cm:bla} {%Path,abc} {%APPDATA|{app}udo} {%abc} {drive:{src}\abc} {ini:{src}\abc,sec,key|123} {ini:{src}\abc} {reg:fuio,bfdo|rvgneio} {reg:ofh} {param:fhio|fruie} {param:fdl}
+AppId = {{CLymBQ3kvH-9cZXMCFzAk84SI-kMCe8A0BwE0s-bObUzAJvzt3i6-668VYdtQHrmdF-a8w22Jw1LbmjUI-4tFR65MyJO1Mp}
 Compression = lzma
 Compression = zip
 

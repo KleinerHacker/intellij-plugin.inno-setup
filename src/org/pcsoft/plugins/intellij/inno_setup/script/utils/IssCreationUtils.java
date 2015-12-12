@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.IssScriptFile;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyAppIdValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyComponentReferenceValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyNameValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyTaskReferenceValueElement;
@@ -13,6 +14,11 @@ import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.propert
  * Created by Christoph on 13.11.2015.
  */
 public final class IssCreationUtils {
+
+    public static IssPropertyAppIdValueElement createAppIdValueElement(final Project project, final String value) {
+        final IssScriptFile issScriptFile = IssUtils.createFile(project, "[SETUP]\nAppId = " + value);
+        return PsiTreeUtil.findChildOfType(issScriptFile, IssPropertyAppIdValueElement.class);
+    }
 
     public static IssPropertyTypeReferenceValueElement createTypeReferenceValueElement(final Project project, final String value) {
         final IssScriptFile issScriptFile = IssUtils.createFile(project, "[COMPONENTS]\nTypes: " + value);

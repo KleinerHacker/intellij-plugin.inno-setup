@@ -5,12 +5,14 @@
 #define MyAppVersion "$APPVERSION$"
 #define MyAppPublisher "$APPPUBLISHER$"
 #define MyAppURL "$APPURL$"
+
 #define MySetupName "$SETUPNAME$"
+#define MySetupOut "$SETUPOUT$"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
-AppId={{88ADCC7C-15AB-40B6-87AE-5BA54BBD4E3C}
+AppId={{$APPID$}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -21,5 +23,6 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename={#MySetupName}
+OutputDir={#MySetupOut}
 Compression=lzma
 SolidCompression=yes

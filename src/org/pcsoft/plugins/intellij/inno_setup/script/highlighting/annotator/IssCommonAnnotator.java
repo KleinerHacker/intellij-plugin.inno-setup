@@ -1,5 +1,6 @@
 package org.pcsoft.plugins.intellij.inno_setup.script.highlighting.annotator;
 
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -9,7 +10,10 @@ import org.pcsoft.plugins.intellij.inno_setup.script.highlighting.IssLanguageHig
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssEscapingElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssFileLinkElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.common.IssStringElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyAppIdElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.property.IssPropertyAppIdValueElement;
 import org.pcsoft.plugins.intellij.inno_setup.script.parser.psi.elements.section.common.IssSectionNameElement;
+import org.pcsoft.plugins.intellij.inno_setup.script.quickfix.IssPropertyAppIdGenerationQuickFix;
 
 /**
  * Created by Christoph on 15.12.2014.

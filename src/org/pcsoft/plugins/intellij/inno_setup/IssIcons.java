@@ -11,7 +11,9 @@ import java.util.Locale;
 public final class IssIcons {
 
     public static final Icon INNO_SETUP = IconLoader.findIcon("/icons/is.png");
+    public static final Icon INNO_SETUP_HELP = IconLoader.findIcon("/icons/is_help.png");
     public static final Icon IS_SCRIPT = IconLoader.findIcon("/icons/is_script.png");
+    public static final Icon IS_SCRIPT_BIG = IconLoader.findIcon("/icons/is_script_big.png");
     public static final Icon IS_CMD = IconLoader.findIcon("/icons/is_cmd.png");
 
     public static final Icon IC_REF_COMPONENT = IconLoader.findIcon("/icons/ic_sect_component_ref.png");

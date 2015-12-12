@@ -1,12 +1,16 @@
 package org.pcsoft.plugins.intellij.inno_setup.configuration.app.ui;
 
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.diagnostic.Logger;
-import org.pcsoft.plugins.intellij.inno_setup.configuration.app.IssCompilerSettings;
+import org.pcsoft.plugins.intellij.inno_setup.utils.IssLanguageUtils;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +22,10 @@ import java.util.regex.Pattern;
  * Created by Christoph on 23.11.2015.
  */
 final class IssLanguageTableModel extends ListWrappingTableModel {
-    private static final IssCompilerSettings SETTINGS = ServiceManager.getService(IssCompilerSettings.class);
     private static final Pattern PATTERN_LAN_NAME = Pattern.compile("LanguageName\\s*=\\s*(.+)"), PATTERN_LAN_ID = Pattern.compile("LanguageID\\s*=\\s*(.+)"),
             PATTERN_LAN_CODEPAGE = Pattern.compile("LanguageCodePage\\s*=\\s*(.+)"),
             PATTERN_UNICODE = Pattern.compile("<([0-9A-Z]{4})>");
-    public static final List<List<String>> LISTSRMPTY_DATA_LIST = Arrays.asList(new ArrayList<>(), new ArrayList<>());
+    public static final List<List<String>> LIST_EMPTY_DATA_LIST = Arrays.asList(new ArrayList<>(), new ArrayList<>());
 
     public IssLanguageTableModel(IssLanguageTable.ViewType viewType) {
         super(buildData(viewType), buildColumns(viewType));
@@ -45,21 +48,10 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
     }
 
     private static List<List<String>> buildData(IssLanguageTable.ViewType viewType) {
-        final File installationPath = new File(SETTINGS.getInstallationPlace());
-        if (!installationPath.exists()) {
-            System.err.println("Unable to find installation path: " + installationPath.getAbsolutePath());
-            return LISTSRMPTY_DATA_LIST;
-        }
-
-        final File languagePath = new File(installationPath, SETTINGS.getLanguagePlace());
-        if (!languagePath.exists()) {
-            System.err.println("Unable to find languages path: " + languagePath.getAbsolutePath());
-            return LISTSRMPTY_DATA_LIST;
-        }
-
         final List<String> fileNameList = new ArrayList<>(), lanNameList = new ArrayList<>(), lanIdList = new ArrayList<>(),
                 lanCodePageList = new ArrayList<>(), lanIconList = new ArrayList<>();
-        for (final File file : languagePath.listFiles(pathname -> pathname.getAbsolutePath().toLowerCase().endsWith(".isl"))) {
+
+        for (final File file : IssLanguageUtils.findLanguageFiles()) {
             lanIconList.add("Languages\\" + file.getName());
 
             String lanName = null, lanId = null, lanCodePage = null;
@@ -89,7 +81,7 @@ final class IssLanguageTableModel extends ListWrappingTableModel {
                 }
             } catch (IOException e) {
                 Logger.getInstance(IssLanguageTableModel.class).error("IO", e);
-                return LISTSRMPTY_DATA_LIST;
+                return LIST_EMPTY_DATA_LIST;
             }
 
             fileNameList.add(file.getName());

@@ -117,6 +117,8 @@ public final class IssMarkerFactory {
         public static final IElementType SECTION = new IElementType(KEY, LANGUAGE);
         public static final IElementType PROPERTY_APPNAME = new IElementType(KEY_ITEM + "_APPNAME", LANGUAGE);
         public static final IElementType PROPERTY_APPNAME_VALUE = new IElementType(KEY_ITEM + "_APPNAME_VALUE", LANGUAGE);
+        public static final IElementType PROPERTY_APPID = new IElementType(KEY_ITEM + "_APPID", LANGUAGE);
+        public static final IElementType PROPERTY_APPID_VALUE = new IElementType(KEY_ITEM + "_APPID_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_APPVERSION = new IElementType(KEY_ITEM + "_APPVERSION", LANGUAGE);
         public static final IElementType PROPERTY_APPVERSION_VALUE = new IElementType(KEY_ITEM + "_APPVERSION_VALUE", LANGUAGE);
         public static final IElementType PROPERTY_COMPRESSION = new IElementType(KEY_ITEM + "_COMPRESSION", LANGUAGE);
