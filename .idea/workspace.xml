@@ -2,716 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/resourceBundles.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/InnoSetupScriptPlugin.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libs/jsoup-1.8.3.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/arrow_right.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_attribute.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_constant.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_copymode.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_flag.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_font.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_info_permission.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_component.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_component_ref.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_custom_messages.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_directory.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_file.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_ini.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_install_delete.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_install_run.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_language.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_language_option.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_messages.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_registry.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_setup.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_task.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_task_ref.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_type.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_type_ref.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_uninstall_delete.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/ic_sect_uninstall_run.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/is.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/is_cmd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/is_help.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/is_script.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/is_script_big.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_ASEAN.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_African Union(OAS).png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Arab League.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_CARICOM.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_CIS.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Commonwealth.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_England.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_European Union.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Islamic Conference.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Kosovo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_NATO.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Northern Cyprus.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Northern Ireland.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_OPEC.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Olimpic Movement.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Red Cross.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Scotland.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Somaliland.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_United Nations.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/_Wales.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ad.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ae.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/af.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ag.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ai.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/al.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/am.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/an.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ao.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/aq.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ar.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/as.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/at.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/au.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/aw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/az.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ba.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bb.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/be.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bf.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bi.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bj.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/br.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bs.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/by.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/bz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ca.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cf.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ch.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ci.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ck.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/co.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cy.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/cz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/de.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/dj.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/dk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/dm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/do.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/dz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ec.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ee.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/eg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/eh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/er.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/es.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/et.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/fi.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/fj.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/fm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/fo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/fr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ga.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gb.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ge.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gi.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gp.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gq.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/gy.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/hk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/hn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/hr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ht.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/hu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/id.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ie.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/il.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/im.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/in.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/iq.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ir.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/is.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/it.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/je.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/jm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/jo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/jp.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ke.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ki.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/km.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kp.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ky.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/kz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/la.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lb.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/li.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ls.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/lv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ly.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ma.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/md.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/me.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mh.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ml.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mo.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mq.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ms.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mx.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/my.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/mz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/na.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/nc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ne.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ng.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ni.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/nl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/no.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/np.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/nr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/nz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/om.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pa.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pe.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pf.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ph.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ps.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/pw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/py.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/qa.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/re.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ro.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/rs.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ru.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/rw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sa.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sb.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sd.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/se.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/si.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sk.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/so.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/st.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sy.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/sz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/td.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/th.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tj.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tl.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/to.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tr.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tt.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tv.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/tz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ua.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ug.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/us.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/uy.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/uz.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/va.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/vc.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ve.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/vg.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/vi.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/vn.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/vu.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ws.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/ye.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/za.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/zm.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/lan/zw.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/icons/stop.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_common.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_compiler_directive.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_component.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_constant.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_directory.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_file.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_icon.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_ini.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_install_run.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_registry.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_section.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_setup.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_task.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_type.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/messages/documentation_uninstall_run.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/templates/template.isl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/res/templates/template.iss" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/IssConstants.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/IssIcons.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/action/IssCompileWithISIDEAction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/action/IssCreateScriptAction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/action/IssOpenWithISIDEAction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/IssCompilerConfigurable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/IssCompilerConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/IssCompilerSettings.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/ui/IssAddLanguageDialog.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/ui/IssInstallationPathTextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/ui/IssLanguageTable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/ui/IssLanguageTableModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/app/ui/IssLanguagesPathTextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRun.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunConfiguration.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunConfigurationFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunConfigurationProducer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunConfigurationType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunConsoleView.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunErrorHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunHighlightingColorFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunOutputLogging.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunSettingsEditor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/IssCompileRunUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssCompileOutputLoggingComboBox.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssOutputBaseFilenameTextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssOutputDirTextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssScriptFileTextField.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssSymbolList.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssSymbolListModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/configuration/run/ui/IssSymbolValue.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/IssLanguage.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/IssLanguageFileType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/IssLanguageFileTypeFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/IssScriptFileType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/IssScriptFileTypeFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/action/IssGenerateAppIdAction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/IssCompilerDirectiveCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/IssLookupElementHint.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/IssSectionHeaderCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/cd/IssAbstractCompilerDirectiveValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/cd/IssPreProcessorTypeCompilerDirectiveValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/cd/IssVisibilityCompilerDirectiveValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/constant/IssBuiltinConstantCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/constant/IssEnvironmentConstantCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssAbstractPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssComponentPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssDirectoryPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssFilePropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssINIPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssIconPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssInstallDeletePropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssInstallRunPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssLanguageOptionPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssLanguagePropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssRegistryPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssSetupPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssTaskPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssTypePropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssUninstallDeletePropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/property/IssUninstallRunPropertyCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/type/IssBooleanTypeCompletionContributorProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/type/IssFontTypeCompletionContributorProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssAbstractPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssComponentFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssDeleteTypePropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssDirectoryFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssFileFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssINIFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssIOAttributePropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssIOCopyModePropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssIOPermissionValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssIconFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssInstallRunFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssRegistryFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssRegistryRootPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssRegistryValueTypePropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssTaskFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssTypeCompressionPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssTypeFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/completion/value/IssUninstallRunFlagPropertyValueCompletionContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/go_to/IssSectionComponentGoToContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/go_to/IssSectionTaskGoToContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/contributors/go_to/IssSectionTypeGoToContributor.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/IssCompilerDirectiveDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/IssConstantDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionCommonDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionComponentDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionDirectoryDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionFileDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionINIDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionIconDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionInstallRunDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionReferenceDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionRegistryDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionSetupDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionTaskDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionTypeDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/doc/section/IssSectionUninstallRunDocumentationProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/IssLanguageHighlightingColorFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/IssLanguageHighlightingConstants.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/IssAnnotatorUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/IssCommonAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/IssConstantAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/IssIdentifierAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssAbstractCompilerDirectiveSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssCompilerDirectiveCommonAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssCompilerDirectiveIncludeSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssCompilerDirectivePreProcessorSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssCompilerDirectiveSymbolDefineSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/cd/IssCompilerDirectiveSymbolUndefineSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssAbstractSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionComponentAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionDirectoryAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionFileAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionINIAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionIconAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionInstallDeleteAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionInstallRunAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionLanguageAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionRegistryAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionTaskAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionTypeAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionUninstallDeleteAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/annotator/section/IssSectionUninstallRunAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/syntax/IssSyntaxColorSettingsPage.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/syntax/IssSyntaxHighlighter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/syntax/IssSyntaxHighlighterFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/highlighting/syntax/IssSyntaxHighlightingLexer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/others/IssBraceMatcher.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/others/IssCommenter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/others/IssQuoteHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/others/IssRefactoringSupportProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/others/IssStatementUpDownMover.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssMarkerFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssParser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssParserCompilerDirectiveUtility.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssParserDefinition.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssParserSectionUtility.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/IssParserValueUtility.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/lexer/IssLexerAdapter.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/lexer/IssTokenFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/lexer/_IssLexer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/lexer/iss.flex" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/IssFile.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/IssLanguageFile.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/IssPsiElementFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/IssScriptFile.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssAbstractElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssDefinableSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssPropertyElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssPropertyValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/IssStandardSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveIdentifierElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveIncludeSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveParametersElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectivePreProcessorSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveSymbolDefineSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/IssCompilerDirectiveSymbolUndefineSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/parameter/IssCompilerDirectiveIdentifierParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/parameter/IssCompilerDirectiveIncludeFileParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/parameter/IssCompilerDirectivePreProcessorTypeParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/parameter/IssCompilerDirectiveStringParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/cd/parameter/IssCompilerDirectiveVisibilityParameterElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/common/IssEscapingElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/common/IssFileLinkElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/common/IssStringElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/common/IssUnknownElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssBuiltinConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssCompilerDirectiveConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantArgumentElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantArgumentsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantDefaultValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantNameElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssConstantTypeElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssDriveConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssEnvironmentConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssINIConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssMessageConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssParameterConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/constant/IssRegistryConstantElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssComponentDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssDirectoryDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssFileDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssINIDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssIconDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssInstallDeleteDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssInstallRunDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssLanguageDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssRegistryDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssTaskDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssTypeDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssUninstallDeleteDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/definition/IssUninstallRunDefinitionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyAppIdElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyAppIdValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyBooleanElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyBooleanValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyComponentFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyComponentFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyComponentReferenceElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyComponentReferenceValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyCompressionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyCompressionValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDefaultElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDefaultValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDeleteTypeElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDeleteTypeValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDirectoryFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDirectoryFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDoubleElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyDoubleValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyFileFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyFileFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyFontElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyFontValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyHexBinaryElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyHexBinaryValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyINIFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyINIFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOAttributeElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOAttributeValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOCopyModeElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOCopyModeValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOPermissionsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIOPermissionsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIconFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIconFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyInstallRunFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyInstallRunFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIntegerElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyIntegerValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyLanguagesReferenceElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyLanguagesReferenceValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyNameElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyNameValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryRootElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryRootValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryValueTypeElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyRegistryValueTypeValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyStringElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyStringValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTaskFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTaskFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTaskReferenceElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTaskReferenceValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTypeFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTypeFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTypeReferenceElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyTypeReferenceValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyUninstallRunFlagsElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyUninstallRunFlagsValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyUnknownElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyUnknownValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyWindowsVersionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/IssPropertyWindowsVersionValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/common/IssIdentifierElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/common/IssIdentifierNameElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/common/IssIdentifierReferenceElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/property/common/IssValueElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssComponentSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssCustomMessageSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssDirectorySectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssFileSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssINISectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssIconSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssInstallDeleteSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssInstallRunSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssLanguageOptionSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssLanguageSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssMessageSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssRegistrySectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssSetupSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssTaskSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssTypeSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssUninstallDeleteSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/IssUninstallRunSectionElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/common/IssSectionHeaderElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/elements/section/common/IssSectionNameElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/IssAbstractElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/cd/parameter/IssCompilerDirectiveIdentifierParameterElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/constant/IssConstantNameElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/IssPropertyComponentReferenceValueElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/IssPropertyLanguagesReferenceValueElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/IssPropertyNameValueElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/IssPropertyTaskReferenceValueElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/IssPropertyTypeReferenceValueElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/parser/psi/manipulators/property/common/IssIdentifierReferenceElementManipulator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/quickfix/IssAbstractQuickFix.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/quickfix/IssPropertyAppIdGenerationQuickFix.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/quickfix/IssQuickFixProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssAbstractReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssCompilerDirectiveSymbolDefineReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssComponentReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssLanguageReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssMessageReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssTaskReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/IssTypeReference.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/marker/IssLanguageLineMarkerProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/marker/IssOverviewLineMarkerProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/references/marker/IssReferenceLineMarkerProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/folding/IssSectionFoldingBuilder.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/formatting/IssBlock.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/formatting/IssCodeStyleSettings.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/formatting/IssCodeStyleSettingsProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/formatting/IssFormattingModelBuilder.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/formatting/IssLanguageCodeStyleSettingsProvider.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/tree/IssPsiStructureViewElement.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/tree/IssStructureViewFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/structure/tree/IssStructureViewModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/IssFileType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/IssLanguageType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/IssPresentationHint.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/IssValueType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/MultiResourceBundle.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/IssCompilerDirectiveSectionIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/IssCompilerDirectiveSectionType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/parameter/IssCompilerDirectiveIncludeParameterType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/parameter/IssCompilerDirectiveParameterIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/parameter/IssCompilerDirectivePreProcessorParameterType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/parameter/IssCompilerDirectiveSymbolDefineParameterType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/parameter/IssCompilerDirectiveSymbolUndefineParameterType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/value/IssCompilerDirectivePreProcessorType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/value/IssCompilerDirectiveValueIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/cd/value/IssCompilerDirectiveVisibility.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssCommonProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssComponentProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssDirectoryProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssFileProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssINIProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssIconProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssInstallDeleteProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssInstallRunProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssLanguageOptionProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssLanguageProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssPropertyIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssRegistryProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssSetupProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssTaskProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssTypeProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssUninstallDeleteProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/property/IssUninstallRunProperty.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/section/IssSectionIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/section/IssSectionType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/section/IssSetupPropertyClassifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssCompressionType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssDeleteType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssFileCopyMode.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssIOAttribute.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssIOPermissions.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssIOUserOrGroupIdentifier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssPropertyValue.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssRegistryRoot.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/IssRegistryValueType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/constant/IssBuiltinConstant.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/constant/IssBuiltinConstantType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/constant/IssConstantType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/constant/IssConstantTypeType.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssComponentFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssDirectoryFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssFileFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssINIFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssIconFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssInstallRunFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssRegistryFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssTaskFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssTypeFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/types/value/flag/IssUninstallRunFlag.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/utils/IssCreationUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/utils/IssFindUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/utils/IssRegexUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/utils/IssRegexUtilsTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/script/utils/IssUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssBaseToolWindowCondition.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssBaseToolWindowFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssChmHelpBrowser.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssCreateScriptWizardDialog.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssCreateScriptWizardModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssHelpToolWindowCondition.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssHelpToolWindowFactory.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssKeyValueTable.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssKeyValueTableModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/IssLanguageContentPanel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/ui/JWebView.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/utils/IssChmUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/utils/IssEditorUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/utils/IssLanguageUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/utils/IssUtils.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/vfs/IssVirtualFile.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/inno_setup/vfs/IssVirtualFileSystem.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/.name" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/codeStyleSettings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/uiDesigner.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test/src/Default.isl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/test/src/setup_test.iss" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/test/.idea/copyright/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/.idea/workspace.xml" afterPath="$PROJECT_DIR$/test/.idea/workspace.xml" />
     </list>
     <ignored path="inno-setup-support.iws" />
@@ -733,130 +24,77 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+      <file leaf-file-name="Section.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="32" column="136" selection-start-line="32" selection-start-column="136" selection-end-line="32" selection-end-column="136" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="iss.bnf" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
-              <folding>
-                <element signature="e#0#790#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_IssLexer.flex" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IssSyntaxHighlighter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="42" column="51" selection-start-line="42" selection-start-column="51" selection-end-line="42" selection-end-column="51" />
+            <state relative-caret-position="136">
+              <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1847#1848#0" expanded="true" />
-                <element signature="e#1891#1892#0" expanded="true" />
+                <element signature="e#1354#1355#0" expanded="true" />
+                <element signature="e#1381#1382#0" expanded="true" />
+                <element signature="e#1424#1425#0" expanded="true" />
+                <element signature="e#1451#1452#0" expanded="true" />
+                <element signature="e#1507#1508#0" expanded="true" />
+                <element signature="e#1537#1538#0" expanded="true" />
+                <element signature="e#1618#1619#0" expanded="true" />
+                <element signature="e#1658#1659#0" expanded="true" />
+                <element signature="e#1707#1708#0" expanded="true" />
+                <element signature="e#1738#1739#0" expanded="true" />
+                <element signature="e#1789#1790#0" expanded="true" />
+                <element signature="e#1822#1823#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IssBraceMatcher.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssBraceMatcher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="23" column="19" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#932#933#0" expanded="true" />
-                <element signature="e#956#957#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IssQuoteMatcher.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssQuoteMatcher.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#346#347#0" expanded="true" />
-                <element signature="e#389#390#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IssSyntaxHighlighterFactory.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighterFactory.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="41" selection-start-line="17" selection-start-column="41" selection-end-line="17" selection-end-column="41" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IssLexerAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/IssLexerAdapter.java">
+      <file leaf-file-name="IssIcons.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
-              <caret line="11" column="35" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+              <caret line="13" column="78" selection-start-line="13" selection-start-column="78" selection-end-line="13" selection-end-column="78" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SectionSetup.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionSetup.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="20">
+              <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#255#256#0" expanded="true" />
-                <element signature="e#306#307#0" expanded="true" />
+                <element signature="e#1033#1034#0" expanded="true" />
+                <element signature="e#1060#1061#0" expanded="true" />
+                <element signature="e#1113#1114#0" expanded="true" />
+                <element signature="e#1145#1146#0" expanded="true" />
+                <element signature="e#1198#1199#0" expanded="true" />
+                <element signature="e#1233#1234#0" expanded="true" />
+                <element signature="e#1282#1283#0" expanded="true" />
+                <element signature="e#1313#1314#0" expanded="true" />
+                <element signature="e#1364#1365#0" expanded="true" />
+                <element signature="e#1397#1398#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IssParserDefinition.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserDefinition.java">
+      <file leaf-file-name="SectionBase.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionBase.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="61" column="56" selection-start-line="61" selection-start-column="56" selection-end-line="61" selection-end-column="56" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1036#1037#0" expanded="true" />
-                <element signature="e#1080#1081#0" expanded="true" />
-                <element signature="e#1148#1149#0" expanded="true" />
-                <element signature="e#1186#1187#0" expanded="true" />
-                <element signature="e#1249#1250#0" expanded="true" />
-                <element signature="e#1276#1277#0" expanded="true" />
-                <element signature="e#1348#1349#0" expanded="true" />
-                <element signature="e#1401#1402#0" expanded="true" />
-                <element signature="e#1470#1471#0" expanded="true" />
-                <element signature="e#1519#1520#0" expanded="true" />
-                <element signature="e#1596#1597#0" expanded="true" />
-                <element signature="e#1633#1634#0" expanded="true" />
-                <element signature="e#1716#1717#0" expanded="true" />
-                <element signature="e#1781#1782#0" expanded="true" />
-                <element signature="e#1863#1864#0" expanded="true" />
-                <element signature="e#1915#1916#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="119">
+              <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SectionVariant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -867,6 +105,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -881,7 +121,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssLanguage.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileTypeFactory.java" />
@@ -899,6 +138,14 @@
         <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/ValueType.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionValue.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionBase.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionType.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionSetup.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java" />
       </list>
     </option>
   </component>
@@ -1026,89 +273,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="parser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inno-setup-support" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intellij-plugin.inno-setup" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="iss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lexer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inno-setup-support" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intellij-plugin.inno-setup" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="iss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="highlighting" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="inno-setup-support" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intellij-plugin.inno-setup" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="iss" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="language" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="common" />
+              <option name="myItemId" value="type" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1141,6 +306,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="META-INF" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inno-setup-support" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intellij-plugin.inno-setup" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="icons" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1481,7 +664,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1492,7 +675,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="PsiViewer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1544,7 +727,7 @@
         <state relative-caret-position="408">
           <caret line="24" column="0" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
           <folding>
-            <element signature="e#0#790#0" expanded="true" />
+            <element signature="e#0#790#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1658,16 +841,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="79" selection-start-line="10" selection-start-column="79" selection-end-line="10" selection-end-column="79" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssLanguage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -1771,23 +944,23 @@
         <state relative-caret-position="238">
           <caret line="61" column="56" selection-start-line="61" selection-start-column="56" selection-end-line="61" selection-end-column="56" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1036#1037#0" expanded="true" />
-            <element signature="e#1080#1081#0" expanded="true" />
-            <element signature="e#1148#1149#0" expanded="true" />
-            <element signature="e#1186#1187#0" expanded="true" />
-            <element signature="e#1249#1250#0" expanded="true" />
-            <element signature="e#1276#1277#0" expanded="true" />
-            <element signature="e#1348#1349#0" expanded="true" />
-            <element signature="e#1401#1402#0" expanded="true" />
-            <element signature="e#1470#1471#0" expanded="true" />
-            <element signature="e#1519#1520#0" expanded="true" />
-            <element signature="e#1596#1597#0" expanded="true" />
-            <element signature="e#1633#1634#0" expanded="true" />
-            <element signature="e#1716#1717#0" expanded="true" />
-            <element signature="e#1781#1782#0" expanded="true" />
-            <element signature="e#1863#1864#0" expanded="true" />
-            <element signature="e#1915#1916#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#1036#1037#0" expanded="false" />
+            <element signature="e#1080#1081#0" expanded="false" />
+            <element signature="e#1148#1149#0" expanded="false" />
+            <element signature="e#1186#1187#0" expanded="false" />
+            <element signature="e#1249#1250#0" expanded="false" />
+            <element signature="e#1276#1277#0" expanded="false" />
+            <element signature="e#1348#1349#0" expanded="false" />
+            <element signature="e#1401#1402#0" expanded="false" />
+            <element signature="e#1470#1471#0" expanded="false" />
+            <element signature="e#1519#1520#0" expanded="false" />
+            <element signature="e#1596#1597#0" expanded="false" />
+            <element signature="e#1633#1634#0" expanded="false" />
+            <element signature="e#1716#1717#0" expanded="false" />
+            <element signature="e#1781#1782#0" expanded="false" />
+            <element signature="e#1863#1864#0" expanded="false" />
+            <element signature="e#1915#1916#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1815,7 +988,7 @@
         <state relative-caret-position="289">
           <caret line="17" column="41" selection-start-line="17" selection-start-column="41" selection-end-line="17" selection-end-column="41" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1877,7 +1050,7 @@
         <state relative-caret-position="396">
           <caret line="25" column="14" selection-start-line="25" selection-start-column="14" selection-end-line="25" selection-end-column="14" />
           <folding>
-            <element signature="e#0#790#0" expanded="true" />
+            <element signature="e#0#790#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1887,6 +1060,100 @@
         <state relative-caret-position="175">
           <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/ValueType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionSetup.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+          <folding>
+            <element signature="e#1033#1034#0" expanded="true" />
+            <element signature="e#1060#1061#0" expanded="true" />
+            <element signature="e#1113#1114#0" expanded="true" />
+            <element signature="e#1145#1146#0" expanded="true" />
+            <element signature="e#1198#1199#0" expanded="true" />
+            <element signature="e#1233#1234#0" expanded="true" />
+            <element signature="e#1282#1283#0" expanded="true" />
+            <element signature="e#1313#1314#0" expanded="true" />
+            <element signature="e#1364#1365#0" expanded="true" />
+            <element signature="e#1397#1398#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/icons/ic_sect_setup.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="13" column="78" selection-start-line="13" selection-start-column="78" selection-end-line="13" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="10" column="43" selection-start-line="10" selection-start-column="43" selection-end-line="10" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1354#1355#0" expanded="true" />
+            <element signature="e#1381#1382#0" expanded="true" />
+            <element signature="e#1424#1425#0" expanded="true" />
+            <element signature="e#1451#1452#0" expanded="true" />
+            <element signature="e#1507#1508#0" expanded="true" />
+            <element signature="e#1537#1538#0" expanded="true" />
+            <element signature="e#1618#1619#0" expanded="true" />
+            <element signature="e#1658#1659#0" expanded="true" />
+            <element signature="e#1707#1708#0" expanded="true" />
+            <element signature="e#1738#1739#0" expanded="true" />
+            <element signature="e#1789#1790#0" expanded="true" />
+            <element signature="e#1822#1823#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
