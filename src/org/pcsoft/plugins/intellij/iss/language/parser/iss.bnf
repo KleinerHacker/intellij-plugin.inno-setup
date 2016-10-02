@@ -1,0 +1,30 @@
+{
+    parserClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParser"
+    parserUtilClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParserUtil"
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="Iss"
+    psiImplClassSuffix="Impl"
+    psiPackage="org.pcsoft.plugins.intellij.iss.language.parser.psi.element"
+    psiImplPackage="org.pcsoft.plugins.intellij.iss.language.parser.psi.element"
+
+    elementTypeHolderClass="org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes"
+    elementTypeClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.IssElementType"
+    tokenTypeClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.IssTokenType"
+
+    psiImplUtilClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.IssPsiUtils"
+}
+
+issFile ::= section*
+
+/* Sections */
+section ::= sectionTitle sectionContent
+sectionTitle ::= '[' NAME ']' EOL
+sectionContent ::= (sectionLine? EOL)* sectionLine?
+sectionLine ::= (element ';')* element
+
+/* Elements */
+element ::= key '=' value
+key ::= NAME
+value ::= NAME | NUMBER | string
+private string ::= '"' TEXT '"'
