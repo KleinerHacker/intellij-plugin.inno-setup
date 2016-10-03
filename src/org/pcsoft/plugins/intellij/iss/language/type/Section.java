@@ -1,8 +1,11 @@
 package org.pcsoft.plugins.intellij.iss.language.type;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.IssIcons;
 
 import javax.swing.*;
+import java.util.stream.Stream;
 
 /**
  * Created by Christoph on 02.10.2016.
@@ -15,6 +18,13 @@ public enum Section implements SectionType {
     private final SectionVariant variant;
     private final Class<? extends SectionValue> sectionValueClass;
     private final boolean required, deprecated;
+
+    @Nullable
+    public static Section fromName(@NotNull final String name) {
+        return Stream.of(values())
+                .filter(item -> item.getName().equals(name))
+                .findFirst().orElse(null);
+    }
 
     private Section(String name, Icon icon, SectionVariant variant, Class<? extends SectionValue> sectionValueClass) {
         this(name, icon, variant, sectionValueClass, false);

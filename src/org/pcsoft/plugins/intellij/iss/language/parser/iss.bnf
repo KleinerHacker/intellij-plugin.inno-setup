@@ -19,12 +19,19 @@ issFile ::= section*
 
 /* Sections */
 section ::= sectionTitle sectionContent
+{
+    methods=[getPresentation getName getSectionType]
+}
 sectionTitle ::= '[' NAME ']' EOL
+{
+    methods=[getName]
+}
 sectionContent ::= (sectionLine? EOL)* sectionLine?
 sectionLine ::= (element ';')* element
 
 /* Elements */
 element ::= key '=' value
-key ::= NAME
-value ::= NAME | NUMBER | string
+private key ::= NAME
+private value ::= type | NUMBER | string
+type ::= NAME
 private string ::= '"' TEXT '"'

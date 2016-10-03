@@ -31,6 +31,8 @@
         <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
         <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
         <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
+        <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
     </extensions>
 
     <actions>
