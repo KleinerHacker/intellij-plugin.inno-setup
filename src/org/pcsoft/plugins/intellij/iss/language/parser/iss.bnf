@@ -26,12 +26,21 @@ sectionTitle ::= '[' NAME ']' EOL
 {
     methods=[getName]
 }
-sectionContent ::= (sectionLine? EOL)* sectionLine?
-sectionLine ::= (element ';')* element
+sectionContent ::= sectionLine*
+sectionLine ::= singleProperty | multiProperty
+
+singleProperty ::= singleElement EOL
+multiProperty ::= (multiElement ';')* multiElement EOL
 
 /* Elements */
-element ::= key '=' value
-private key ::= NAME
-private value ::= type | NUMBER | string
-type ::= NAME
-private string ::= '"' TEXT '"'
+singleElement ::= key '=' singleValue
+multiElement::= key ':' multiValue
+
+key ::= NAME
+singleValue ::= (constValue | NUMBER | NAME | TEXT)*
+multiValue ::= (refValue | NUMBER | stringValue | constValue)
+
+/* Types */
+refValue ::= NAME
+stringValue ::= '"' (constValue | STRING)* '"'
+constValue ::= '{' NAME '}'

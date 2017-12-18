@@ -24,37 +24,47 @@ EOL=\r | \n | \r\n
 WHITE_SPACE=" "
 NAME=[A-Za-z_]{1}[A-Za-z0-9\-_]*
 NUMBER=([0-9]*\.)?[0-9]+
-TEXT=[^\"]*
-COMMENT="--"[^\r\n]*
+STRING=[^\"]+
+TEXT=[\\/?!|#+*~äöüÄÖÜß().:,;A-Za-z0-9\-_&%$§\"\'°\^<>" "\[\]]+
+COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
-BRACES_CORNER_OPEN="["
-BRACES_CORNER_CLOSE="]"
-QUOTE=\"
-SPLITTER=";"
-OPERATOR="="
 
 %state YYSTRING
+%state YYVALUE
 
 %%
 <YYINITIAL> {
   {WHITE_SPACE}             { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  ^{EOL}                    { return com.intellij.psi.TokenType.WHITE_SPACE; }
   {EOL}                     { return EOL; }
-  {COMMENT}                 { return COMMENT; }
+  ^{COMMENT}                { return COMMENT; }
 
-  {BRACES_CORNER_OPEN}      { return BRACES_CORNER_OPEN; }
-  {BRACES_CORNER_CLOSE}     { return BRACES_CORNER_CLOSE; }
+  \[                        { return BRACES_CORNER_OPEN; }
+  \]                        { return BRACES_CORNER_CLOSE; }
+  <YYVALUE> {
+      \{                    { return BRACES_CURLY_OPEN; }
+      \}                    { return BRACES_CURLY_CLOSE; }
+  }
 
   <YYSTRING> {
-    {QUOTE}                 { if (yystate() == YYSTRING) yybegin(YYINITIAL); else yybegin(YYSTRING); return QUOTE; }
-  }
-  {SPLITTER}                { return SPLITTER; }
-  {OPERATOR}                { return OPERATOR; }
+      \"                    { if (yystate() == YYSTRING) yybegin(YYINITIAL); else yybegin(YYSTRING); return QUOTE; }
+   }
+
+  ";"                       { yybegin(YYINITIAL); return SPLITTER; }
+  "="                       { yybegin(YYVALUE); return OPERATOR; }
+  ":"                       { return OPERATOR; }
 
   {NUMBER}                  { return NUMBER; }
-  {NAME}                    { return NAME; }
+  <YYVALUE> {
+      {NAME}                { return NAME; }
+  }
+}
+<YYVALUE> {
+  {EOL}                     { yybegin(YYINITIAL); return EOL; }
+  {TEXT}                    { return TEXT; }
 }
 <YYSTRING> {
-  {TEXT}                    { return TEXT; }
+  {STRING}                  { return STRING; }
 }
 
 [^]                         { return com.intellij.psi.TokenType.BAD_CHARACTER; }

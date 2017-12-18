@@ -6,7 +6,7 @@ import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.IssLanguage;
-import org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighter;
+import org.pcsoft.plugins.intellij.iss.language.highlighting.IssHighlighting;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionTitle;
 import org.pcsoft.plugins.intellij.iss.language.type.Section;
@@ -46,8 +46,8 @@ public class IssCompletionContributor extends CompletionContributor {
                             for (final SectionValue sectionValue : enumList) {
                                 completionResultSet.addElement(
                                         LookupElementBuilder.create(sectionValue.getName())
-                                                .withItemTextForeground(IssSyntaxHighlighter.KEYWORD.getDefaultAttributes().getForegroundColor())
-                                                .withBoldness(IssSyntaxHighlighter.KEYWORD.getDefaultAttributes().getFontType() == Font.BOLD)
+                                                .withItemTextForeground(IssHighlighting.KEYWORD.getDefaultAttributes().getForegroundColor())
+                                                .withBoldness(IssHighlighting.KEYWORD.getDefaultAttributes().getFontType() == Font.BOLD)
                                                 .withTypeText(section.getName())
                                                 .withIcon(section.getIcon())
                                 );

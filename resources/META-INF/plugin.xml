@@ -29,10 +29,12 @@
         <lang.parserDefinition language="Inno-Setup"
                                implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
         <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
         <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
         <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MarkerAnnotator"/>
     </extensions>
 
     <actions>
