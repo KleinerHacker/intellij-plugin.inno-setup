@@ -56,12 +56,12 @@ public class IssColoringPage implements ColorSettingsPage {
                 "<KEY>OutputDir</KEY>=userdocs:Inno Setup Examples Output\n" +
                 "\n" +
                 "[<LABEL>Files</LABEL>]\n" +
-                "<KEY>Source</KEY>: \"MyProg.exe\"; <KEY>DestDir</KEY>: \"{app}\"\n" +
-                "<KEY>Source</KEY>: \"MyProg.chm\"; <KEY>DestDir</KEY>: \"{app}\"\n" +
-                "<KEY>Source</KEY>: \"Readme.txt\"; <KEY>DestDir</KEY>: \"{app}\"; <KEY>Flags</KEY>: isreadme\n" +
+                "<KEY>Source</KEY>: \"MyProg.exe\"; <KEY>DestDir</KEY>: \"<CONST>{app}</CONST>\"\n" +
+                "<KEY>Source</KEY>: \"MyProg.chm\"; <KEY>DestDir</KEY>: \"<CONST>{app}</CONST>\"\n" +
+                "<KEY>Source</KEY>: \"Readme.txt\"; <KEY>DestDir</KEY>: \"<CONST>{app}</CONST>\"; <KEY>Flags</KEY>: isreadme\n" +
                 "\n" +
                 "[<LABEL>Icons</LABEL>]\n" +
-                "<KEY>Name</KEY>: \"{group}\\My Program\"; <KEY>Filename</KEY>: \"{app}\\MyProg.exe\"";
+                "<KEY>Name</KEY>: \"<CONST>{group}</CONST>\\My Program\"; <KEY>Filename</KEY>: \"<CONST>{app}</CONST>\\MyProg.exe\"";
     }
 
     @Nullable

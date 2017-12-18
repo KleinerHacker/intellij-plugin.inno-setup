@@ -24,7 +24,7 @@ EOL=\r | \n | \r\n
 WHITE_SPACE=" "
 NAME=[A-Za-z_]{1}[A-Za-z0-9\-_]*
 NUMBER=([0-9]*\.)?[0-9]+
-STRING=[^\"]+
+STRING=[^\"\{\}]+
 TEXT=[\\/?!|#+*~äöüÄÖÜß().:,;A-Za-z0-9\-_&%$§\"\'°\^<>" "\[\]]+
 COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
@@ -41,7 +41,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
   \[                        { return BRACES_CORNER_OPEN; }
   \]                        { return BRACES_CORNER_CLOSE; }
-  <YYVALUE> {
+  <YYVALUE, YYSTRING> {
       \{                    { return BRACES_CURLY_OPEN; }
       \}                    { return BRACES_CURLY_CLOSE; }
   }
@@ -55,7 +55,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
   ":"                       { return OPERATOR; }
 
   {NUMBER}                  { return NUMBER; }
-  <YYVALUE> {
+  <YYVALUE, YYSTRING> {
       {NAME}                { return NAME; }
   }
 }
