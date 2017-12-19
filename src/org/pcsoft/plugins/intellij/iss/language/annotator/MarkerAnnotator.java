@@ -10,6 +10,7 @@ import org.pcsoft.plugins.intellij.iss.language.highlighting.IssHighlighting;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstValue;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionTitle;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssStringValue;
 
 public class MarkerAnnotator implements Annotator {
 
@@ -18,12 +19,15 @@ public class MarkerAnnotator implements Annotator {
         if (psiElement instanceof IssKey) {
             Annotation annotation = annotationHolder.createAnnotation(HighlightSeverity.INFORMATION, psiElement.getTextRange(), null);
             annotation.setTextAttributes(IssHighlighting.KEYWORD);
+        } else if (psiElement instanceof IssStringValue) {
+            Annotation annotation = annotationHolder.createAnnotation(HighlightSeverity.INFORMATION, psiElement.getTextRange(), null);
+            annotation.setTextAttributes(IssHighlighting.STRING);
         } else if (psiElement instanceof IssConstValue) {
             Annotation annotation = annotationHolder.createAnnotation(HighlightSeverity.INFORMATION, psiElement.getTextRange(), null);
             annotation.setTextAttributes(IssHighlighting.CONST);
         } else if (psiElement instanceof IssSectionTitle) {
             Annotation annotation = annotationHolder.createAnnotation(HighlightSeverity.INFORMATION, psiElement.getFirstChild().getNextSibling().getTextRange(), null);
             annotation.setTextAttributes(IssHighlighting.LABEL);
-        }
+        } 
     }
 }

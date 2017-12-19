@@ -11,4 +11,9 @@ public class IssLanguage extends Language {
     public IssLanguage() {
         super("Inno-Setup");
     }
+
+    @Override
+    public boolean isCaseSensitive() {
+        return false;
+    }
 }

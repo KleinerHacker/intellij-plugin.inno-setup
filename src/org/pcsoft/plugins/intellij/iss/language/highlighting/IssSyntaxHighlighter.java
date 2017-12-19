@@ -32,7 +32,7 @@ public class IssSyntaxHighlighter extends SyntaxHighlighterBase {
             return new TextAttributesKey[]{IssHighlighting.BRACES};
         } else if (iElementType.equals(IssCustomTypes.COMMENT)) {
             return new TextAttributesKey[]{IssHighlighting.COMMENT};
-        } else if (iElementType.equals(IssCustomTypes.QUOTE) || iElementType.equals(IssGenTypes.STRING)) {
+        } else if (iElementType.equals(IssCustomTypes.QUOTE)) {
             return new TextAttributesKey[]{IssHighlighting.STRING};
         } else if (iElementType.equals(IssGenTypes.NUMBER)) {
             return new TextAttributesKey[]{IssHighlighting.NUMBER};

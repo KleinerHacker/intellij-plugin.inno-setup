@@ -10,6 +10,6 @@ import org.jetbrains.annotations.NotNull;
 public class IssFileTypeFactory extends FileTypeFactory {
     @Override
     public void createFileTypes(@NotNull FileTypeConsumer fileTypeConsumer) {
-        fileTypeConsumer.consume(IssFileType.INSTANCE, "inno-setup");
+        fileTypeConsumer.consume(IssFileType.INSTANCE, "iss");
     }
 }

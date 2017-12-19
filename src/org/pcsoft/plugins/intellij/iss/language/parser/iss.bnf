@@ -28,19 +28,31 @@ sectionTitle ::= '[' NAME ']' EOL
 }
 sectionContent ::= sectionLine*
 sectionLine ::= singleProperty | multiProperty
+{
+    methods=[getPresentation getSection]
+}
 
 singleProperty ::= singleElement EOL
-multiProperty ::= (multiElement ';')* multiElement EOL
+multiProperty ::= (multiElement ';')* multiElement? EOL
 
 /* Elements */
 singleElement ::= key '=' singleValue
 multiElement::= key ':' multiValue
 
 key ::= NAME
+{
+    methods=[getSection getName]
+}
 singleValue ::= (constValue | NUMBER | NAME | TEXT)*
-multiValue ::= (refValue | NUMBER | stringValue | constValue)
+multiValue ::= (refValue+ | NUMBER | stringValue | constValue)
 
 /* Types */
 refValue ::= NAME
-stringValue ::= '"' (constValue | STRING)* '"'
+stringValue ::= '"' (constValue | NAME | STRING)* '"'
+{
+    methods=[getValue]
+}
 constValue ::= '{' NAME '}'
+{
+    methods=[getName]
+}

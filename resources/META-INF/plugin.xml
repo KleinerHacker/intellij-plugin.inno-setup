@@ -1,17 +1,15 @@
 <idea-plugin version="2">
-    <id>com.your.company.unique.plugin.id</id>
-    <name>Plugin display name here</name>
+    <id>org.pcsoft.plugins.intellij.iss</id>
+    <name>Inno Setup Support</name>
     <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor>PC-Soft</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      Support Plugin for Inno Setup Script / Compiler and other useful features.
+      <b>You need an Inno Setup installation.</b>
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
     ]]>
     </change-notes>
 
@@ -25,16 +23,23 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- File Type & Parsing -->
         <fileTypeFactory implementation="org.pcsoft.plugins.intellij.iss.language.IssFileTypeFactory"/>
         <lang.parserDefinition language="Inno-Setup"
                                implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParserDefinition"/>
-        <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
+        <!-- Braces & Quotes -->
         <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
         <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
-        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
+        <!-- Structure View -->
         <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MarkerAnnotator"/>
+        <!-- Highlighting -->
+        <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
+        <!-- Annotators -->
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MarkerAnnotator" order="LAST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownElementKeyAnnotator" order="FIRST"/>
+        <!-- Contributors -->
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
     </extensions>
 
     <actions>
