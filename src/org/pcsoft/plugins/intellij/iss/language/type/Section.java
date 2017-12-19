@@ -8,6 +8,7 @@ import org.pcsoft.plugins.intellij.iss.language.type.base.SectionValue;
 import org.pcsoft.plugins.intellij.iss.language.type.section.SectionDirs;
 import org.pcsoft.plugins.intellij.iss.language.type.section.SectionFiles;
 import org.pcsoft.plugins.intellij.iss.language.type.section.SectionSetup;
+import org.pcsoft.plugins.intellij.iss.language.type.section.SectionTypes;
 
 import javax.swing.*;
 import java.util.stream.Stream;
@@ -17,13 +18,18 @@ import java.util.stream.Stream;
  */
 public enum Section implements SectionType {
     Setup("Setup", IssIcons.Sections.Setup, SectionVariant.SingleValue, SectionSetup.class, true),
-    Files("Files", null, SectionVariant.MultiValue, SectionFiles.class, false),
-    Dirs("Dirs", null, SectionVariant.MultiValue, SectionDirs.class, false),
+    Files("Files", IssIcons.Sections.Files, SectionVariant.MultiValue, SectionFiles.class, false),
+    Directories("Dirs", IssIcons.Sections.Directories, SectionVariant.MultiValue, SectionDirs.class, false),
+    Types("Types", IssIcons.Sections.Types, SectionVariant.MultiValue, SectionTypes.class, false),
     ;
 
+    @NotNull
     private final String name;
+    @Nullable
     private final Icon icon;
+    @NotNull
     private final SectionVariant variant;
+    @NotNull
     private final Class<? extends SectionValue> sectionValueClass;
     private final boolean required, deprecated;
 
@@ -37,15 +43,15 @@ public enum Section implements SectionType {
                 .findFirst().orElse(null);
     }
 
-    private Section(String name, Icon icon, SectionVariant variant, Class<? extends SectionValue> sectionValueClass) {
+    private Section(@NotNull String name, @Nullable Icon icon, @NotNull SectionVariant variant, @NotNull Class<? extends SectionValue> sectionValueClass) {
         this(name, icon, variant, sectionValueClass, false);
     }
 
-    private Section(String name, Icon icon, SectionVariant variant, Class<? extends SectionValue> sectionValueClass, boolean required) {
+    private Section(@NotNull String name, @Nullable Icon icon, @NotNull SectionVariant variant, @NotNull Class<? extends SectionValue> sectionValueClass, boolean required) {
         this(name, icon, variant, sectionValueClass, required, false);
     }
 
-    private Section(String name, Icon icon, SectionVariant variant, Class<? extends SectionValue> sectionValueClass, boolean required, boolean deprecated) {
+    private Section(@NotNull String name, @Nullable Icon icon, @NotNull SectionVariant variant, @NotNull Class<? extends SectionValue> sectionValueClass, boolean required, boolean deprecated) {
         this.name = name;
         this.icon = icon;
         this.variant = variant;

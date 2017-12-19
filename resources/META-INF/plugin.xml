@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.pcsoft.plugins.intellij.iss</id>
     <name>Inno Setup Support</name>
-    <version>1.0</version>
+    <version>0.1</version>
     <vendor>PC-Soft</vendor>
 
     <description><![CDATA[
@@ -40,6 +40,9 @@
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownElementKeyAnnotator" order="FIRST"/>
         <!-- Contributors -->
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
+        <!-- Documentation -->
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssElementKeyDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionTitleDocumentationProvider"/>
     </extensions>
 
     <actions>

@@ -12,6 +12,9 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -20,22 +23,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="IssCompletionContributor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssCompletionContributor.java">
+      <file leaf-file-name="IssStructureViewElement.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="96" column="44" lean-forward="false" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_IssLexer.flex" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="36" column="78" lean-forward="true" selection-start-line="36" selection-start-column="78" selection-end-line="36" selection-end-column="78" />
-              <folding />
+            <state relative-caret-position="-510">
+              <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+              <folding>
+                <element signature="e#1388#1389#0" expanded="true" />
+                <element signature="e#1423#1424#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -43,8 +39,33 @@
       <file leaf-file-name="iss.bnf" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="39" column="34" lean-forward="true" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+            <state relative-caret-position="305">
+              <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#790#0" expanded="true" />
+                <element signature="e#883#923#0" expanded="true" />
+                <element signature="e#1079#1107#0" expanded="true" />
+                <element signature="e#1321#1341#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SectionTypes.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTypes.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IssPsiUtils.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="226">
+              <caret line="90" column="42" lean-forward="false" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -64,6 +85,11 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>TEXT</find>
+      <find>^file.</find>
+      <find>^directory.</find>
+      <find>^setup.</find>
+      <find>^section.</find>
+      <find>^type.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -77,24 +103,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/IssLexerAdapter.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserDefinition.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighterFactory.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssQuoteMatcher.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionBase.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/CompletionContributor.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewModel.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewFactory.java" />
-        <option value="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSection.java" />
-        <option value="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionImpl.java" />
-        <option value="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssTypeImpl.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssCustomTypes.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssBraceMatcher.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/KeyAnnotator.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssHighlighting.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssHighlightingPage.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileTypeFactory.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighter.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssColoringPage.java" />
@@ -102,8 +111,6 @@
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssLanguage.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownElementAnnotator.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionType.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java" />
-        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownElementKeyAnnotator.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java" />
@@ -113,13 +120,11 @@
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionDirs.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionFiles.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionBase.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ValueFilesFlags.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ValueFilesFlagType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/ValueType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValueType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValue.java" />
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionAttributesValueType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionFiles.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionDirsFlagValueType.java" />
@@ -128,6 +133,27 @@
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionSetupCompressionValueType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionSetup.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssCompletionContributor.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssDocumentationProvider.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionFilesFlagValueType.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserUtil.java" />
+        <option value="F:/Toolbox/apps/IDEA-C/ch-0/173.3942.27/lib/openapi.jar!/com/intellij/psi/PsiNameIdentifierOwner.class" />
+        <option value="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssKeyImpl.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" />
+        <option value="$PROJECT_DIR$/resources/messages/documentation_file.properties" />
+        <option value="$PROJECT_DIR$/resources/messages/documentation_directory.properties" />
+        <option value="$PROJECT_DIR$/resources/messages/documentation_setup.properties" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssElementKeyDocumentationProvider.java" />
+        <option value="$PROJECT_DIR$/resources/messages/documentation_section.properties" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssSectionTitleDocumentationProvider.java" />
+        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionTypesFlagValueType.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java" />
+        <option value="$PROJECT_DIR$/resources/messages/documentation_type.properties" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssDocumentationBundle.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTypes.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" />
       </list>
     </option>
   </component>
@@ -195,6 +221,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -206,38 +233,30 @@
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
               <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
-              <item name="gen" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
               <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
-              <item name="gen" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="messages" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
               <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
-              <item name="gen" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-              <item name="lexer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
-              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
               <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="iss" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
               <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="iss" type="462c0819:PsiDirectoryNode" />
-              <item name="language" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
@@ -245,7 +264,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="iss" type="462c0819:PsiDirectoryNode" />
               <item name="language" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
+              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="iss" type="462c0819:PsiDirectoryNode" />
+              <item name="language" type="462c0819:PsiDirectoryNode" />
+              <item name="doc" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
@@ -254,20 +280,52 @@
               <item name="iss" type="462c0819:PsiDirectoryNode" />
               <item name="language" type="462c0819:PsiDirectoryNode" />
               <item name="parser" type="462c0819:PsiDirectoryNode" />
-              <item name="lexer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
+              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="iss" type="462c0819:PsiDirectoryNode" />
+              <item name="language" type="462c0819:PsiDirectoryNode" />
+              <item name="tree" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
+              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="iss" type="462c0819:PsiDirectoryNode" />
+              <item name="language" type="462c0819:PsiDirectoryNode" />
+              <item name="type" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
+              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="iss" type="462c0819:PsiDirectoryNode" />
+              <item name="language" type="462c0819:PsiDirectoryNode" />
+              <item name="type" type="462c0819:PsiDirectoryNode" />
+              <item name="section" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="inno-setup-support" type="b2602c69:ProjectViewProjectNode" />
+              <item name="intellij-plugin.inno-setup" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="iss" type="462c0819:PsiDirectoryNode" />
+              <item name="language" type="462c0819:PsiDirectoryNode" />
+              <item name="type" type="462c0819:PsiDirectoryNode" />
+              <item name="value" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../intellij-plugin.asn1" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.completion" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -285,16 +343,18 @@
     <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.pcsoft.plugins.intellij.iss.language.parser" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.pcsoft.plugins.intellij.iss.language.type.value" />
+      <recent name="org.pcsoft.plugins.intellij.iss.language.type.section" />
+      <recent name="org.pcsoft.plugins.intellij.iss.language.doc" />
       <recent name="org.pcsoft.plugins.intellij.iss.language.type" />
       <recent name="org.pcsoft.plugins.intellij.iss.language.parser.psi" />
     </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.pcsoft.plugins.intellij.iss.language.parser" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -569,11 +629,12 @@
       <updated>1475222075071</updated>
       <workItem from="1513675434587" duration="17209000" />
       <workItem from="1513709092205" duration="197000" />
+      <workItem from="1513710930031" duration="7310000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27544000" />
+    <option name="totallyTimeSpent" value="34854000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -581,7 +642,7 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32866153" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3277592" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -593,13 +654,14 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1380597" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21748401" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32887402" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39910814" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -610,7 +672,6 @@
       <window_info id="SonarQube" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293623" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -628,7 +689,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="6" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="antWorkspaceConfiguration">
@@ -636,86 +699,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssElement.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewModel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="34" lean-forward="false" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionImpl.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssVisitor.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionLineImpl.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssMultiValue.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssTypeImpl.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssReferenceImpl.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/IssLexerAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="27" lean-forward="true" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
-          <folding>
-            <element signature="e#255#256#0" expanded="false" />
-            <element signature="e#306#307#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/IssGenTypes.java" />
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssCustomTypes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="16" column="68" lean-forward="false" selection-start-line="16" selection-start-column="68" selection-end-line="16" selection-end-column="68" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssBraceMatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="18" column="97" lean-forward="false" selection-start-line="18" selection-start-column="97" selection-end-line="18" selection-end-column="97" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssQuoteMatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="10" column="34" lean-forward="false" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighterFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="17" column="41" lean-forward="false" selection-start-line="17" selection-start-column="41" selection-end-line="17" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssHighlighting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="108" lean-forward="false" selection-start-line="6" selection-start-column="108" selection-end-line="6" selection-end-column="108" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="34" column="60" lean-forward="false" selection-start-line="34" selection-start-column="60" selection-end-line="34" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssColoringPage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="663">
@@ -749,10 +732,10 @@
         <state relative-caret-position="272">
           <caret line="16" column="21" lean-forward="false" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
           <folding>
-            <element signature="e#270#271#0" expanded="true" />
-            <element signature="e#305#306#0" expanded="true" />
-            <element signature="e#359#360#0" expanded="true" />
-            <element signature="e#387#388#0" expanded="true" />
+            <element signature="e#270#271#0" expanded="false" />
+            <element signature="e#305#306#0" expanded="false" />
+            <element signature="e#359#360#0" expanded="false" />
+            <element signature="e#387#388#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -764,25 +747,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="18" lean-forward="false" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionTitle.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="10" column="9" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="8" lean-forward="true" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -808,21 +776,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="24" column="28" lean-forward="false" selection-start-line="24" selection-start-column="28" selection-end-line="24" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -837,45 +790,259 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="111" column="12" lean-forward="false" selection-start-line="111" selection-start-column="12" selection-end-line="111" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionBase.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionType.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValueType.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValue.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionFilesFlagValueType.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionAttributesValueType.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionDirsFlagValueType.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionBooleanValueType.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionDirs.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionSetupCompressionValueType.java" />
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionFiles.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionSetup.java" />
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssCompletionContributor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
+        <state relative-caret-position="1360">
           <caret line="96" column="44" lean-forward="false" selection-start-line="96" selection-start-column="44" selection-end-line="96" selection-end-column="44" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf">
+    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="39" column="34" lean-forward="true" selection-start-line="39" selection-start-column="34" selection-end-line="39" selection-end-column="34" />
+        <state relative-caret-position="85">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionDirs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="10" column="12" lean-forward="false" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionFilesFlagValueType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="19" column="22" lean-forward="false" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="60" lean-forward="false" selection-start-line="7" selection-start-column="60" selection-end-line="7" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Toolbox/apps/IDEA-C/ch-0/173.3942.27/lib/openapi.jar!/com/intellij/psi/PsiNameIdentifierOwner.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Toolbox/apps/IDEA-C/ch-0/173.3942.27/lib/openapi.jar!/com/intellij/psi/PsiJavaDocumentedElement.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="10" column="17" lean-forward="false" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://F:/Toolbox/apps/IDEA-C/ch-0/173.3942.27/lib/openapi.jar!/com/intellij/lang/documentation/DocumentationProviderEx.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="44" column="25" lean-forward="false" selection-start-line="44" selection-start-column="25" selection-end-line="44" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssKeyImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="26" column="3" lean-forward="false" selection-start-line="26" selection-start-column="3" selection-end-line="26" selection-end-column="3" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="32" column="14" lean-forward="true" selection-start-line="32" selection-start-column="14" selection-end-line="32" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionFiles.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="10" column="12" lean-forward="false" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/messages/documentation_file.properties">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
-          <caret line="36" column="78" lean-forward="true" selection-start-line="36" selection-start-column="78" selection-end-line="36" selection-end-column="78" />
+          <caret line="72" column="24" lean-forward="false" selection-start-line="72" selection-start-column="24" selection-end-line="72" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/messages/documentation_setup.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/messages/documentation_directory.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="256" lean-forward="false" selection-start-line="19" selection-start-column="256" selection-end-line="19" selection-end-column="256" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/messages/documentation_section.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="40" column="415" lean-forward="false" selection-start-line="40" selection-start-column="415" selection-end-line="40" selection-end-column="415" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="44" column="128" lean-forward="false" selection-start-line="44" selection-start-column="128" selection-end-line="44" selection-end-column="128" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssElementType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionTypesFlagValueType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="6" column="15" lean-forward="false" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="84" lean-forward="false" selection-start-line="16" selection-start-column="84" selection-end-line="16" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/messages/documentation_type.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="49" lean-forward="true" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="28" column="28" lean-forward="true" selection-start-line="28" selection-start-column="28" selection-end-line="28" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssSectionTitleDocumentationProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssElementKeyDocumentationProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="42" lean-forward="true" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssDocumentationBundle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="103" lean-forward="false" selection-start-line="14" selection-start-column="103" selection-end-line="14" selection-end-column="103" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1088#1089#0" expanded="true" />
+            <element signature="e#1177#1178#0" expanded="true" />
+            <element signature="e#1237#1238#0" expanded="true" />
+            <element signature="e#1289#1290#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-510">
+          <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+          <folding>
+            <element signature="e#1388#1389#0" expanded="true" />
+            <element signature="e#1423#1424#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#790#0" expanded="true" />
+            <element signature="e#883#923#0" expanded="true" />
+            <element signature="e#1079#1107#0" expanded="true" />
+            <element signature="e#1321#1341#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTypes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="14" column="50" lean-forward="false" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="90" column="42" lean-forward="false" selection-start-line="90" selection-start-column="42" selection-end-line="90" selection-end-column="42" />
           <folding />
         </state>
       </provider>

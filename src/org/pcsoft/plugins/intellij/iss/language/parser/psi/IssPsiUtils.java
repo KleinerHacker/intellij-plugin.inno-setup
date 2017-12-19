@@ -85,7 +85,14 @@ public interface IssPsiUtils {
             @Nullable
             @Override
             public String getPresentableText() {
-                return sectionLine.getText();
+                if (sectionLine.getSingleProperty() != null)
+                    return sectionLine.getSingleProperty().getSingleElement().getKey().getName();
+                else if (sectionLine.getMultiProperty() != null) {
+                    //TODO: Choose element
+                    return sectionLine.getMultiProperty().getMultiElementList().get(0).getMultiValue().getText();
+                }
+
+                return null;
             }
 
             @Nullable
