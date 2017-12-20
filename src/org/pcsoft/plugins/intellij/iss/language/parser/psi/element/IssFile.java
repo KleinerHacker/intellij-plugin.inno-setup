@@ -3,7 +3,9 @@ package org.pcsoft.plugins.intellij.iss.language.parser.psi.element;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.IssFileType;
 import org.pcsoft.plugins.intellij.iss.language.IssLanguage;
 
@@ -31,5 +33,10 @@ public class IssFile extends PsiFileBase {
     @Override
     public Icon getIcon(int flags) {
         return super.getIcon(flags);
+    }
+
+    @Nullable
+    public IssSection[] getSections() {
+        return PsiTreeUtil.getChildrenOfType(this, IssSection.class);
     }
 }

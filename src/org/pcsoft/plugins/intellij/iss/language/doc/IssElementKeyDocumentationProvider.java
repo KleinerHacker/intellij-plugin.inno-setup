@@ -7,6 +7,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 
 public class IssElementKeyDocumentationProvider extends DocumentationProviderEx {
 
@@ -16,13 +17,15 @@ public class IssElementKeyDocumentationProvider extends DocumentationProviderEx 
             IssKey key = (IssKey) element;
             if (key.getSection() == null)
                 return null;
-            String sectionName = key.getSection().getName();
-            if (!IssDocumentationBundle.containsSectionBundle(sectionName))
+            final SectionType sectionType = key.getSection().getSectionType();
+            if (sectionType == null || sectionType == SectionType.Messages || sectionType == SectionType.CustomMessages)
+                return null;
+            if (!IssDocumentationBundle.containsSectionBundle(sectionType.getName()))
                 return null;
 
-            if (!IssDocumentationBundle.getSectionBundle(sectionName).containsKey("property." + key.getName().toLowerCase()))
+            if (!IssDocumentationBundle.getSectionBundle(sectionType.getName()).containsKey("property." + key.getName().toLowerCase()))
                 return null;
-            return IssDocumentationBundle.getSectionBundle(sectionName).getString("property." + key.getName().toLowerCase());
+            return IssDocumentationBundle.getSectionBundle(sectionType.getName()).getString("property." + key.getName().toLowerCase());
         }
 
         return null;
@@ -31,9 +34,14 @@ public class IssElementKeyDocumentationProvider extends DocumentationProviderEx 
     @Nullable
     @Override
     public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-        if (contextElement != null && contextElement.getParent() instanceof IssKey)
+        if (contextElement != null && contextElement.getParent() instanceof IssKey && checkSection((IssKey) contextElement.getParent()))
             return contextElement.getParent();
 
         return null;
+    }
+
+    private static boolean checkSection(@NotNull IssKey key) {
+        return key.getSection() != null && key.getSection().getSectionType() != null && key.getSection().getSectionType() != SectionType.Messages &&
+                key.getSection().getSectionType() != SectionType.CustomMessages;
     }
 }

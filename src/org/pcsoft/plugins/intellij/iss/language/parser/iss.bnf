@@ -26,25 +26,37 @@ sectionTitle ::= '[' NAME ']' EOL
 {
     methods=[getName]
 }
-sectionContent ::= sectionLine*
-sectionLine ::= singleProperty | multiProperty
+sectionContent ::= (sectionLine+ | CODE)?
+sectionLine ::= defaultSectionLine | multipleSectionLine
 {
     methods=[getPresentation getSection]
 }
 
-singleProperty ::= singleElement EOL
-multiProperty ::= (multiElement ';')* multiElement? EOL
+defaultSectionLine ::= defaultProperty EOL
+multipleSectionLine ::= (multipleProperty ';')* multipleProperty? EOL
 
 /* Elements */
-singleElement ::= key '=' singleValue
-multiElement::= key ':' multiValue
+defaultProperty ::= defaultKey '=' defaultValue
+{
+    methods=[getName]
+}
+multipleProperty::= multipleKey ':' multipleValue
+{
+    methods=[getName]
+}
 
-key ::= NAME
+defaultKey ::= (NAME '.')* NAME
 {
     methods=[getSection getName]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey"
 }
-singleValue ::= (constValue | NUMBER | NAME | TEXT)*
-multiValue ::= (refValue+ | NUMBER | stringValue | constValue)
+multipleKey ::= NAME
+{
+    methods=[getSection getName]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey"
+}
+defaultValue ::= (constValue | NUMBER | NAME | TEXT)*
+multipleValue ::= (refValue+ | NUMBER | stringValue | constValue)
 
 /* Types */
 refValue ::= NAME

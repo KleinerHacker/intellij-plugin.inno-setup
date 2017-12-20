@@ -9,12 +9,11 @@ import org.pcsoft.plugins.intellij.iss.language.IssLanguage;
 import org.pcsoft.plugins.intellij.iss.language.highlighting.IssHighlighting;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultiElement;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionTitle;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSingleElement;
-import org.pcsoft.plugins.intellij.iss.language.type.Section;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionValue;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionValueType;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssDefaultProperty;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
 
 import java.awt.*;
 
@@ -26,47 +25,47 @@ public class IssCompletionContributor extends CompletionContributor {
         buildSectionExtension();
 
         //Section values for each section
-        for (final Section section : Section.values()) {
-            final Class<? extends SectionValue> sectionValueClass = section.getSectionValueClass();
-            final SectionValue[] sectionValueList = sectionValueClass.getEnumConstants();
-            buildSectionValueExtension(section, sectionValueList);
+        for (final SectionType sectionType : SectionType.values()) {
+            final Class<? extends SectionProperty> sectionValueClass = sectionType.getSectionValueClass();
+            final SectionProperty[] sectionPropertyList = sectionValueClass.getEnumConstants();
+            buildSectionValueExtension(sectionType, sectionPropertyList);
 
             //Section value types for each section value with type enumeration
-            for (SectionValue sectionValue : sectionValueList) {
-                final Class<? extends SectionValueType> sectionValueTypeClass = sectionValue.getSectionValueTypeClass();
+            for (SectionProperty sectionProperty : sectionPropertyList) {
+                final Class<? extends PropertySpecialValueType> sectionValueTypeClass = sectionProperty.getSectionValueTypeClass();
                 if (sectionValueTypeClass == null)
                     continue;
-                final SectionValueType[] sectionValueTypeList = sectionValueTypeClass.getEnumConstants();
-                buildSectionValueTypeExtension(sectionValue, sectionValueTypeList);
+                final PropertySpecialValueType[] propertySpecialValueTypeList = sectionValueTypeClass.getEnumConstants();
+                buildSectionValueTypeExtension(sectionProperty, propertySpecialValueTypeList);
             }
         }
     }
 
-    private void buildSectionValueTypeExtension(SectionValue sectionValue, SectionValueType[] sectionValueTypeList) {
+    private void buildSectionValueTypeExtension(SectionProperty sectionProperty, PropertySpecialValueType[] propertySpecialValueTypeList) {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement()
                         .afterLeaf(
                                 PlatformPatterns.or(
                                         PlatformPatterns.psiElement()
                                                 .withText(":")
-                                                .afterLeaf(sectionValue.getName())
-                                                .withParent(IssMultiElement.class),
+                                                .afterLeaf(sectionProperty.getName())
+                                                .withParent(IssMultipleProperty.class),
                                         PlatformPatterns.psiElement()
                                                 .withText("=")
-                                                .afterLeaf(sectionValue.getName())
-                                                .withParent(IssSingleElement.class)
+                                                .afterLeaf(sectionProperty.getName())
+                                                .withParent(IssDefaultProperty.class)
                                 )
                         )
                         .withLanguage(IssLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-                        for (final SectionValueType sectionValueType : sectionValueTypeList) {
+                        for (final PropertySpecialValueType propertySpecialValueType : propertySpecialValueTypeList) {
                             completionResultSet.addElement(
-                                    LookupElementBuilder.create(sectionValueType.getName())
+                                    LookupElementBuilder.create(propertySpecialValueType.getName())
                                             .withItemTextForeground(IssHighlighting.LABEL.getDefaultAttributes().getForegroundColor())
                                             .withBoldness(IssHighlighting.LABEL.getDefaultAttributes().getFontType() == Font.BOLD)
-                                            .withTypeText(sectionValue.getName())
+                                            .withTypeText(sectionProperty.getName())
                             );
                         }
                     }
@@ -74,7 +73,7 @@ public class IssCompletionContributor extends CompletionContributor {
         );
     }
 
-    private void buildSectionValueExtension(Section section, SectionValue[] sectionValueList) {
+    private void buildSectionValueExtension(SectionType sectionType, SectionProperty[] sectionPropertyList) {
         extend(CompletionType.BASIC,
                 PlatformPatterns.psiElement()
                         .afterLeaf(
@@ -88,13 +87,13 @@ public class IssCompletionContributor extends CompletionContributor {
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-                        for (final SectionValue sectionValue : sectionValueList) {
+                        for (final SectionProperty sectionProperty : sectionPropertyList) {
                             completionResultSet.addElement(
-                                    LookupElementBuilder.create(sectionValue.getName())
+                                    LookupElementBuilder.create(sectionProperty.getName())
                                             .withItemTextForeground(IssHighlighting.KEYWORD.getDefaultAttributes().getForegroundColor())
                                             .withBoldness(IssHighlighting.KEYWORD.getDefaultAttributes().getFontType() == Font.BOLD)
-                                            .withTypeText(section.getName())
-                                            .withIcon(section.getIcon())
+                                            .withTypeText(sectionType.getName())
+                                            .withIcon(sectionType.getIcon())
                             );
                         }
                     }
@@ -104,19 +103,19 @@ public class IssCompletionContributor extends CompletionContributor {
 
     private void buildSectionExtension() {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(IssGenTypes.NAME)
+                PlatformPatterns.psiElement()
                         .afterLeaf(
                                 PlatformPatterns.psiElement(IssCustomTypes.BRACES_CORNER_OPEN)
-                                        .withParent(IssSectionTitle.class)
+                                        //.withParent(IssSectionTitle.class) TODO: Wrong element for pattern is used
                         )
                         .withLanguage(IssLanguage.INSTANCE),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(@NotNull CompletionParameters completionParameters, ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-                        for (final Section section : Section.values()) {
+                        for (final SectionType sectionType : SectionType.values()) {
                             completionResultSet.addElement(
-                                    LookupElementBuilder.create(section.getName())
-                                            .withIcon(section.getIcon())
+                                    LookupElementBuilder.create(sectionType.getName())
+                                            .withIcon(sectionType.getIcon())
                             );
                         }
                     }

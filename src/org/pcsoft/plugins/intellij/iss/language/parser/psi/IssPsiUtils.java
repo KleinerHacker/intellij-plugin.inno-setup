@@ -3,13 +3,17 @@ package org.pcsoft.plugins.intellij.iss.language.parser.psi;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
-import org.pcsoft.plugins.intellij.iss.language.type.Section;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
 
 import javax.swing.*;
+import java.util.stream.Stream;
 
 /**
  * Created by Christoph on 30.09.2016.
@@ -33,37 +37,79 @@ public interface IssPsiUtils {
     }
 
     @NotNull
-    static ItemPresentation getPresentation(final IssSection section) {
+    static ItemPresentation getPresentation(final IssSection issSection) {
         return new ItemPresentation() {
             @Nullable
             @Override
             public String getPresentableText() {
-                return section.getName();
+                return issSection.getName();
             }
 
             @Nullable
             @Override
             public String getLocationString() {
-                return section.getContainingFile() == null ? null : section.getContainingFile().getName();
+                //Initial checks (single values only)
+                final SectionType sectionType = issSection.getSectionType();
+                if (sectionType == null)
+                    return null;
+                if (sectionType.getVariant() != SectionTypeVariant.Default)
+                    return null;
+                if (issSection.getSectionContent().getSectionLineList().isEmpty())
+                    return null;
+                final Class<? extends SectionProperty> sectionValueClass = sectionType.getSectionValueClass();
+
+                //Find key and its content value
+                final SectionProperty sectionPropertyKey = Stream.of(sectionValueClass.getEnumConstants())
+                        .filter(SectionProperty::isKey)
+                        .findFirst().orElse(null);
+                if (sectionPropertyKey == null)
+                    return null;
+                final String sectionValueKeyContent =  getSectionValueContent(sectionPropertyKey);
+                if (StringUtils.isEmpty(sectionValueKeyContent))
+                    return null;
+
+                //Find info and its content value
+                final SectionProperty sectionPropertyInfo = Stream.of(sectionValueClass.getEnumConstants())
+                        .filter(SectionProperty::isInfo)
+                        .findFirst().orElse(null);
+                final String sectionValueInfoContent = getSectionValueContent(sectionPropertyInfo);
+
+                //Contract strings
+                return sectionValueKeyContent + (sectionValueInfoContent == null ? "" : " " + sectionValueInfoContent);
             }
 
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                final Section sectionType = section.getSectionType();
+                final SectionType sectionType = issSection.getSectionType();
                 return sectionType == null ? null : sectionType.getIcon();
+            }
+
+            /**
+             * Find content value for given section value
+             * @param sectionPropertyInfo
+             * @return
+             */
+            @Nullable
+            private String getSectionValueContent(SectionProperty sectionPropertyInfo) {
+                return sectionPropertyInfo == null ? null : issSection.getSectionContent().getSectionLineList().stream()
+                        .filter(issSectionLine -> issSectionLine.getDefaultSectionLine() != null)
+                        .map(issSectionLine1 -> issSectionLine1.getDefaultSectionLine().getDefaultProperty())
+                        .filter(singleElement -> singleElement.getName().equalsIgnoreCase(sectionPropertyInfo.getName()))
+                        .map(singleElement -> singleElement.getDefaultValue().getText())
+                        .findFirst().orElse(null);
             }
         };
     }
 
     @Nullable
-    static Section getSectionType(final IssSection section) {
-        return Section.fromName(section.getName() == null ? "" : section.getName());
+    static SectionType getSectionType(final IssSection section) {
+        return SectionType.fromName(section.getName() == null ? "" : section.getName());
     }
 
     //</editor-fold>
 
-    //<editor-fold desc="Element Key">
+    //<editor-fold desc="Key">
 
     @Nullable
     static IssSection getSection(final IssKey key) {
@@ -85,20 +131,47 @@ public interface IssPsiUtils {
             @Nullable
             @Override
             public String getPresentableText() {
-                if (sectionLine.getSingleProperty() != null)
-                    return sectionLine.getSingleProperty().getSingleElement().getKey().getName();
-                else if (sectionLine.getMultiProperty() != null) {
-                    //TODO: Choose element
-                    return sectionLine.getMultiProperty().getMultiElementList().get(0).getMultiValue().getText();
-                }
+                if (sectionLine.getMultipleSectionLine() == null)
+                    return null;
+                if (sectionLine.getSection() == null)
+                    return null;
+                final SectionType sectionType = sectionLine.getSection().getSectionType();
+                if (sectionType == null)
+                    return null;
+                final SectionProperty[] sectionPropertyList = sectionType.getSectionValueClass().getEnumConstants();
+                if (sectionPropertyList.length <= 0)
+                    return null;
+                final SectionProperty sectionProperty = Stream.of(sectionPropertyList)
+                        .filter(SectionProperty::isKey).findFirst().orElse(sectionPropertyList[0]);
 
-                return null;
+                return sectionLine.getMultipleSectionLine().getMultiplePropertyList().stream()
+                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(sectionProperty.getName()))
+                        .map(multiElement -> multiElement.getMultipleValue().getText())
+                        .findFirst().orElse(null);
             }
 
             @Nullable
             @Override
             public String getLocationString() {
-                return sectionLine.getSection() == null ? null : sectionLine.getSection().getName();
+                if (sectionLine.getMultipleSectionLine() == null)
+                    return null;
+                if (sectionLine.getSection() == null)
+                    return null;
+                final SectionType sectionType = sectionLine.getSection().getSectionType();
+                if (sectionType == null)
+                    return null;
+                final SectionProperty[] sectionPropertyList = sectionType.getSectionValueClass().getEnumConstants();
+                if (sectionPropertyList.length <= 0)
+                    return null;
+                final SectionProperty sectionProperty = Stream.of(sectionPropertyList)
+                        .filter(SectionProperty::isInfo).findFirst().orElse(null);
+                if (sectionProperty == null)
+                    return null;
+
+                return sectionLine.getMultipleSectionLine().getMultiplePropertyList().stream()
+                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(sectionProperty.getName()))
+                        .map(multiElement -> multiElement.getMultipleValue().getText())
+                        .findFirst().orElse(null);
             }
 
             @Nullable
@@ -122,7 +195,17 @@ public interface IssPsiUtils {
     }
 
     @NotNull
-    static String getName(final  IssConstValue constValue) {
+    static String getName(final IssConstValue constValue) {
         return constValue.getFirstChild().getNextSibling().getText();
+    }
+
+    @NotNull
+    static String getName(final IssDefaultProperty defaultProperty) {
+        return defaultProperty.getDefaultKey().getName();
+    }
+
+    @NotNull
+    static String getName(final IssMultipleProperty issMultipleProperty) {
+        return issMultipleProperty.getMultipleKey().getName();
     }
 }

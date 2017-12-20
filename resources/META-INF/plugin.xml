@@ -36,8 +36,10 @@
         <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
         <!-- Annotators -->
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MarkerAnnotator" order="LAST"/>
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownElementKeyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MissingRequiredPropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
         <!-- Contributors -->
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
         <!-- Documentation -->

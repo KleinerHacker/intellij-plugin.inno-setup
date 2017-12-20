@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssFile;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSection;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionLine;
-import org.pcsoft.plugins.intellij.iss.language.type.SectionVariant;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -78,7 +78,7 @@ public class IssStructureViewElement implements StructureViewTreeElement, Sortab
             return sections.stream()
                     .map(IssStructureViewElement::new)
                     .toArray(TreeElement[]::new);
-        } else if (element instanceof IssSection && ((IssSection) element).getSectionType() != null && ((IssSection) element).getSectionType().getVariant() == SectionVariant.MultiValue) {
+        } else if (element instanceof IssSection && ((IssSection) element).getSectionType() != null && ((IssSection) element).getSectionType().getVariant() == SectionTypeVariant.LineBased) {
             final Collection<IssSectionLine> sectionLines = PsiTreeUtil.findChildrenOfType(element, IssSectionLine.class);
             return sectionLines.stream()
                     .map(IssStructureViewElement::new)

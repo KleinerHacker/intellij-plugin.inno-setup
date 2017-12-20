@@ -8,6 +8,8 @@ import static org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes.*;
 %%
 
 %{
+  private boolean isInCode = false;
+
   public _IssLexer() {
     this((java.io.Reader)null);
   }
@@ -19,6 +21,7 @@ import static org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes.*;
 %function advance
 %type IElementType
 %unicode
+%ignorecase
 
 EOL=\r | \n | \r\n
 WHITE_SPACE=" "
@@ -31,6 +34,8 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 %state YYSTRING
 %state YYVALUE
+%state YYCODE
+%state YYTITLE
 
 %%
 <YYINITIAL> {
@@ -39,8 +44,12 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
   {EOL}                     { return EOL; }
   ^{COMMENT}                { return COMMENT; }
 
-  \[                        { return BRACES_CORNER_OPEN; }
-  \]                        { return BRACES_CORNER_CLOSE; }
+  \[                        { yybegin(YYTITLE); return BRACES_CORNER_OPEN; }
+  <YYTITLE> {
+    {NAME}                  { isInCode = yytext().toString().equalsIgnoreCase("code"); return NAME; }
+    \]                      { return BRACES_CORNER_CLOSE; }
+    {EOL}                   { yybegin(isInCode ? YYCODE : YYINITIAL); isInCode = false; return EOL; }
+  }
   <YYVALUE, YYSTRING> {
       \{                    { return BRACES_CURLY_OPEN; }
       \}                    { return BRACES_CURLY_CLOSE; }
@@ -65,6 +74,10 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 }
 <YYSTRING> {
   {STRING}                  { return STRING; }
+}
+<YYCODE> {
+  {WHITE_SPACE}|{EOL}       { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  [^]+                      { return CODE; }
 }
 
 [^]                         { return com.intellij.psi.TokenType.BAD_CHARACTER; }

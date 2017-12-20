@@ -13,6 +13,11 @@ public class IssDocumentationBundle {
         RESOURCE_BUNDLE_SECTION_MAP.put("files", ResourceBundle.getBundle("/messages/documentation_file"));
         RESOURCE_BUNDLE_SECTION_MAP.put("dirs", ResourceBundle.getBundle("/messages/documentation_directory"));
         RESOURCE_BUNDLE_SECTION_MAP.put("types", ResourceBundle.getBundle("/messages/documentation_type"));
+        RESOURCE_BUNDLE_SECTION_MAP.put("components", ResourceBundle.getBundle("/messages/documentation_component"));
+        RESOURCE_BUNDLE_SECTION_MAP.put("tasks", ResourceBundle.getBundle("/messages/documentation_task"));
+        RESOURCE_BUNDLE_SECTION_MAP.put("icons", ResourceBundle.getBundle("/messages/documentation_icon"));
+        RESOURCE_BUNDLE_SECTION_MAP.put("ini", ResourceBundle.getBundle("/messages/documentation_ini"));
+        RESOURCE_BUNDLE_SECTION_MAP.put("registry", ResourceBundle.getBundle("/messages/documentation_registry"));
     }
 
     public static ResourceBundle getSectionBundle(String sectionName) {

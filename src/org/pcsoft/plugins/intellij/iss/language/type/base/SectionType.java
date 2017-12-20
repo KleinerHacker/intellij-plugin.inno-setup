@@ -2,7 +2,7 @@ package org.pcsoft.plugins.intellij.iss.language.type.base;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.SectionVariant;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
 
 import javax.swing.*;
 
@@ -15,7 +15,7 @@ public interface SectionType extends SectionBase {
     @Nullable
     Icon getIcon();
     @NotNull
-    SectionVariant getVariant();
+    SectionTypeVariant getVariant();
     @NotNull
-    Class<? extends SectionValue> getSectionValueClass();
+    Class<? extends SectionProperty> getSectionValueClass();
 }
