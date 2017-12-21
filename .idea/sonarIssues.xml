@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="issues">
+    <option name="index">
+      <map>
+        <entry key="/a.dummy">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/fragment.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssDefaultPropertyImpl.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssVisitor.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/META-INF/plugin.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_common.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_component.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_directory.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_file.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_icon.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_ini.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_install_run.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_registry.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_section.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_task.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_type.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/resources/messages/documentation_uninstall_run.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileTypeFactory.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssLanguage.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/DoublePropertyAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/DoublePropertyValueAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/MarkerAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/MissingRequiredAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/MissingRequiredPropertyAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PostHighlightingAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PropertySpecialValueTypeCheckAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PropertyValueTypeCheckAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/SectionTypePropertyAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownElementAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownElementKeyAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownPropertyKeyAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownSectionNameAnnotator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssCompletionContributor.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssDocumentationBundle.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssElementKeyDocumentationProvider.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssPropertyKeyDocumentationProvider.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssPropertyValueDocumentationProvider.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssColoringPage.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssFile.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssKey.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionLine.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssValue.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PropertyValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/Section.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionDirs.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionFiles.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionSetup.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionTypeVariant.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionValue.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionVariant.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/ValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/PropertySpecialValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/PropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/PropertyValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionBase.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValue.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/ValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/ElementAttributes.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsDeprecated.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsInfoProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsKeyProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsReferenceKey.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsRequired.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/ReferenceTo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/ComponentsPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/DirsPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/EmptyPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/FilesPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/INIPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/IconsPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/InstallRunPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/LangOptionsPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/LanguagesPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/RegistryPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionComponentsProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionDirs.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionDirsProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionFiles.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionFilesProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionINIProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionIconsProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionInstallDeleteProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionInstallRunProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionLangOptionsProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionLanguagesProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionMessagesProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionRegistryProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionSetup.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionSetupProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTasksProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTypes.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionTypesProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionUnInstallDeleteProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SectionUninstallRunProperty.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/SetupPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/TasksPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/TypesPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/UnInstallDeletePropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/section/UninstallRunPropertyType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyAttributesValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyBooleanValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyComponentsFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyDirsFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyFilesFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyINIFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyIconsFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyInstallRunFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyRegistryFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyRegistryRootValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyRegistryTypeValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertySetupCompressionValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyTasksFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyTypesFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyUnInstallTypeValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyUnInstallValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PropertyUninstallRunFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionAttributesValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionBooleanValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionDirsFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionFilesFlagValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/SectionSetupCompressionValueType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ValueFilesFlagType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ValueFilesFlags.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
