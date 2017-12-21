@@ -30,8 +30,9 @@
         <!-- Braces & Quotes -->
         <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
         <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
-        <!-- Structure View -->
+        <!-- Structure -->
         <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
+        <lang.foldingBuilder language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.folding.IssSectionFoldingBuilder"/>
         <!-- Highlighting -->
         <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
@@ -46,7 +47,9 @@
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertySpecialValueTypeCheckAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
         <!-- Contributors -->
-        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssSectionCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertyKeyCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertySpecialValueCompletionContributor"/>
         <!-- Documentation -->
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionTitleDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>
