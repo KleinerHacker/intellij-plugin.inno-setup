@@ -10,6 +10,7 @@ DefaultDirName={pf}\My Program
 DefaultGroupName=My Program
 UninstallDisplayIcon={app}\MyProg.exe
 OutputDir=userdocs:Inno Setup Examples Output
+AlwaysCreateUninstallIcon=fdff
 
 [Types]
 Name: "full"; Description: "Full installation"

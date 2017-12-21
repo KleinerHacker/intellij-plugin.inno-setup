@@ -65,6 +65,7 @@ public class IssCompletionContributor extends CompletionContributor {
                             .withItemTextForeground(IssHighlighting.LABEL.getDefaultAttributes().getForegroundColor())
                             .withBoldness(IssHighlighting.LABEL.getDefaultAttributes().getFontType() == Font.BOLD)
                             .withTypeText(propertyType.getName())
+                            .withStrikeoutness(propertySpecialValueType.isDeprecated())
             );
         }
     }
@@ -92,6 +93,8 @@ public class IssCompletionContributor extends CompletionContributor {
                             .withItemTextForeground(IssHighlighting.KEYWORD.getDefaultAttributes().getForegroundColor())
                             .withBoldness(IssHighlighting.KEYWORD.getDefaultAttributes().getFontType() == Font.BOLD)
                             .withTypeText(sectionType.getName())
+                            .withBoldness(propertyType.isRequired())
+                            .withStrikeoutness(propertyType.isDeprecated())
                             .withIcon(sectionType.getIcon())
             );
         }
@@ -101,6 +104,8 @@ public class IssCompletionContributor extends CompletionContributor {
         for (final SectionType sectionType : SectionType.values()) {
             completionResultSet.addElement(
                     LookupElementBuilder.create(sectionType.getName())
+                            .withStrikeoutness(sectionType.isDeprecated())
+                            .withBoldness(sectionType.isRequired())
                             .withIcon(sectionType.getIcon())
             );
         }
