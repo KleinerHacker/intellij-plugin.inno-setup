@@ -10,7 +10,7 @@ import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import javax.swing.*;
 import java.util.stream.Stream;
@@ -20,6 +20,7 @@ import java.util.stream.Stream;
  */
 public interface IssPsiUtils {
 
+    //<editor-fold desc="Section Title">
     @Nullable
     static String getName(final IssSectionTitle sectionTitle) {
         final ASTNode childByType = sectionTitle.getNode().findChildByType(IssGenTypes.NAME);
@@ -28,6 +29,12 @@ public interface IssPsiUtils {
 
         return childByType.getText();
     }
+
+    @Nullable
+    static SectionType getSectionType(final IssSectionTitle sectionTitle) {
+        return SectionType.fromName(sectionTitle.getName());
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Section">
 
@@ -54,25 +61,25 @@ public interface IssPsiUtils {
                     return null;
                 if (sectionType.getVariant() != SectionTypeVariant.Default)
                     return null;
-                if (issSection.getSectionContent().getSectionLineList().isEmpty())
+                if (issSection.getMultipleSectionLineList().isEmpty() && issSection.getDefaultSectionLineList().isEmpty())
                     return null;
-                final Class<? extends SectionProperty> sectionValueClass = sectionType.getSectionValueClass();
+                final Class<? extends PropertyType> sectionValueClass = sectionType.getSectionPropertyClass();
 
                 //Find key and its content value
-                final SectionProperty sectionPropertyKey = Stream.of(sectionValueClass.getEnumConstants())
-                        .filter(SectionProperty::isKey)
+                final PropertyType propertyTypeKey = Stream.of(sectionValueClass.getEnumConstants())
+                        .filter(PropertyType::isKey)
                         .findFirst().orElse(null);
-                if (sectionPropertyKey == null)
+                if (propertyTypeKey == null)
                     return null;
-                final String sectionValueKeyContent =  getSectionValueContent(sectionPropertyKey);
+                final String sectionValueKeyContent = getSectionValueContent(propertyTypeKey);
                 if (StringUtils.isEmpty(sectionValueKeyContent))
                     return null;
 
                 //Find info and its content value
-                final SectionProperty sectionPropertyInfo = Stream.of(sectionValueClass.getEnumConstants())
-                        .filter(SectionProperty::isInfo)
+                final PropertyType propertyTypeInfo = Stream.of(sectionValueClass.getEnumConstants())
+                        .filter(PropertyType::isInfo)
                         .findFirst().orElse(null);
-                final String sectionValueInfoContent = getSectionValueContent(sectionPropertyInfo);
+                final String sectionValueInfoContent = getSectionValueContent(propertyTypeInfo);
 
                 //Contract strings
                 return sectionValueKeyContent + (sectionValueInfoContent == null ? "" : " " + sectionValueInfoContent);
@@ -87,15 +94,14 @@ public interface IssPsiUtils {
 
             /**
              * Find content value for given section value
-             * @param sectionPropertyInfo
+             * @param propertyTypeInfo
              * @return
              */
             @Nullable
-            private String getSectionValueContent(SectionProperty sectionPropertyInfo) {
-                return sectionPropertyInfo == null ? null : issSection.getSectionContent().getSectionLineList().stream()
-                        .filter(issSectionLine -> issSectionLine.getDefaultSectionLine() != null)
-                        .map(issSectionLine1 -> issSectionLine1.getDefaultSectionLine().getDefaultProperty())
-                        .filter(singleElement -> singleElement.getName().equalsIgnoreCase(sectionPropertyInfo.getName()))
+            private String getSectionValueContent(PropertyType propertyTypeInfo) {
+                return propertyTypeInfo == null ? null : issSection.getDefaultSectionLineList().stream()
+                        .map(IssDefaultSectionLine::getDefaultProperty)
+                        .filter(singleElement -> singleElement.getName().equalsIgnoreCase(propertyTypeInfo.getName()))
                         .map(singleElement -> singleElement.getDefaultValue().getText())
                         .findFirst().orElse(null);
             }
@@ -104,7 +110,7 @@ public interface IssPsiUtils {
 
     @Nullable
     static SectionType getSectionType(final IssSection section) {
-        return SectionType.fromName(section.getName() == null ? "" : section.getName());
+        return section.getSectionTitle().getSectionType();
     }
 
     //</editor-fold>
@@ -121,6 +127,36 @@ public interface IssPsiUtils {
         return key.getText();
     }
 
+    @Nullable
+    static PropertyType getPropertyType(final IssKey key) {
+        final IssSection section = key.getSection();
+        if (section == null)
+            return null;
+        final SectionType sectionType = section.getSectionType();
+        if (sectionType == null)
+            return null;
+        final Class<? extends PropertyType> sectionPropertyClass = sectionType.getSectionPropertyClass();
+
+        for (PropertyType propertyType : sectionPropertyClass.getEnumConstants()) {
+            if (propertyType.getName().equalsIgnoreCase(key.getName()))
+                return propertyType;
+        }
+
+        return null;
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Value">
+    @Nullable
+    static IssSection getSection(final IssValue value) {
+        return PsiTreeUtil.getParentOfType(value, IssSection.class);
+    }
+
+    @Nullable
+    static IssProperty getProperty(final IssValue value) {
+        return PsiTreeUtil.getParentOfType(value, IssProperty.class);
+    }
     //</editor-fold>
 
     //<editor-fold desc="Section Line">
@@ -131,21 +167,21 @@ public interface IssPsiUtils {
             @Nullable
             @Override
             public String getPresentableText() {
-                if (sectionLine.getMultipleSectionLine() == null)
+                if (!(sectionLine instanceof IssMultipleSectionLine))
                     return null;
                 if (sectionLine.getSection() == null)
                     return null;
                 final SectionType sectionType = sectionLine.getSection().getSectionType();
                 if (sectionType == null)
                     return null;
-                final SectionProperty[] sectionPropertyList = sectionType.getSectionValueClass().getEnumConstants();
-                if (sectionPropertyList.length <= 0)
+                final PropertyType[] propertyTypeList = sectionType.getSectionPropertyClass().getEnumConstants();
+                if (propertyTypeList.length <= 0)
                     return null;
-                final SectionProperty sectionProperty = Stream.of(sectionPropertyList)
-                        .filter(SectionProperty::isKey).findFirst().orElse(sectionPropertyList[0]);
+                final PropertyType propertyType = Stream.of(propertyTypeList)
+                        .filter(PropertyType::isKey).findFirst().orElse(propertyTypeList[0]);
 
-                return sectionLine.getMultipleSectionLine().getMultiplePropertyList().stream()
-                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(sectionProperty.getName()))
+                return ((IssMultipleSectionLine)sectionLine).getMultiplePropertyList().stream()
+                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(propertyType.getName()))
                         .map(multiElement -> multiElement.getMultipleValue().getText())
                         .findFirst().orElse(null);
             }
@@ -153,23 +189,23 @@ public interface IssPsiUtils {
             @Nullable
             @Override
             public String getLocationString() {
-                if (sectionLine.getMultipleSectionLine() == null)
+                if (!(sectionLine instanceof IssMultipleSectionLine))
                     return null;
                 if (sectionLine.getSection() == null)
                     return null;
                 final SectionType sectionType = sectionLine.getSection().getSectionType();
                 if (sectionType == null)
                     return null;
-                final SectionProperty[] sectionPropertyList = sectionType.getSectionValueClass().getEnumConstants();
-                if (sectionPropertyList.length <= 0)
+                final PropertyType[] propertyTypeList = sectionType.getSectionPropertyClass().getEnumConstants();
+                if (propertyTypeList.length <= 0)
                     return null;
-                final SectionProperty sectionProperty = Stream.of(sectionPropertyList)
-                        .filter(SectionProperty::isInfo).findFirst().orElse(null);
-                if (sectionProperty == null)
+                final PropertyType propertyType = Stream.of(propertyTypeList)
+                        .filter(PropertyType::isInfo).findFirst().orElse(null);
+                if (propertyType == null)
                     return null;
 
-                return sectionLine.getMultipleSectionLine().getMultiplePropertyList().stream()
-                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(sectionProperty.getName()))
+                return ((IssMultipleSectionLine)sectionLine).getMultiplePropertyList().stream()
+                        .filter(multiElement -> multiElement.getName().equalsIgnoreCase(propertyType.getName()))
                         .map(multiElement -> multiElement.getMultipleValue().getText())
                         .findFirst().orElse(null);
             }
@@ -199,13 +235,47 @@ public interface IssPsiUtils {
         return constValue.getFirstChild().getNextSibling().getText();
     }
 
+    //<editor-fold desc="Property">
+
     @NotNull
-    static String getName(final IssDefaultProperty defaultProperty) {
-        return defaultProperty.getDefaultKey().getName();
+    static String getName(final IssProperty property) {
+        if (property instanceof IssMultipleProperty)
+            return ((IssMultipleProperty) property).getMultipleKey().getName();
+        else if (property instanceof IssDefaultProperty)
+            return ((IssDefaultProperty) property).getDefaultKey().getName();
+
+        throw new RuntimeException();
     }
 
     @NotNull
-    static String getName(final IssMultipleProperty issMultipleProperty) {
-        return issMultipleProperty.getMultipleKey().getName();
+    static IssKey getKey(final IssProperty property) {
+        if (property instanceof IssMultipleProperty)
+            return ((IssMultipleProperty) property).getMultipleKey();
+        else if (property instanceof IssDefaultProperty)
+            return ((IssDefaultProperty) property).getDefaultKey();
+
+        throw new RuntimeException();
     }
+
+    @Nullable
+    static PropertyType getPropertyType(final IssProperty property) {
+        return property.getKey().getPropertyType();
+    }
+
+    @Nullable
+    static IssValue getValue(final IssProperty property) {
+        if (property instanceof IssDefaultProperty)
+            return ((IssDefaultProperty) property).getDefaultValue();
+        else if (property instanceof IssMultipleProperty)
+            return ((IssMultipleProperty) property).getMultipleValue();
+
+        throw new RuntimeException();
+    }
+
+    @Nullable
+    static IssSection getSection(final IssProperty property) {
+        return PsiTreeUtil.getParentOfType(property, IssSection.class);
+    }
+
+    //</editor-fold>
 }

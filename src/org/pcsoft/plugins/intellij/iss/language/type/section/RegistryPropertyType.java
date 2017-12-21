@@ -3,12 +3,10 @@ package org.pcsoft.plugins.intellij.iss.language.type.section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsInfoProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsKeyProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryFlagValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryRootValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryTypeValueType;
@@ -16,7 +14,7 @@ import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryTypeV
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum SectionRegistryProperty implements SectionProperty {
+public enum RegistryPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
     Root("Root", PropertyValueType.SingleValue, PropertyRegistryRootValueType.class),
     @IsRequired @IsInfoProperty
@@ -26,30 +24,39 @@ public enum SectionRegistryProperty implements SectionProperty {
     ValueData("ValueData", new PropertyValueType[] {PropertyValueType.String, PropertyValueType.Number, PropertyValueType.ByteArray}),
     Permissions("Permissions", PropertyValueType.SingleValue),
     Flags("Flags", PropertyValueType.SingleValue, PropertyRegistryFlagValueType.class),
+    @ReferenceTo(SectionType.Components)
+    Components("Components", PropertyValueType.MultiValue),
+    @ReferenceTo(SectionType.Tasks)
+    Tasks("Tasks", PropertyValueType.MultiValue),
+    Languages("Languages", PropertyValueType.MultiValue),
+    MinVersion("MinVersion", PropertyValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
     ;
 
     private final String name;
     private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> sectionValueTypeClass;
+    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
+    private final boolean isReferenceKey;
+    private final SectionType referenceTargetSectionType;
 
-    private SectionRegistryProperty(String name, PropertyValueType propertyValueType) {
+    private RegistryPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private SectionRegistryProperty(String name, PropertyValueType[] propertyValueTypes) {
+    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private SectionRegistryProperty(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, sectionValueTypeClass);
+    private RegistryPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private SectionRegistryProperty(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
+    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
-        this.sectionValueTypeClass = sectionValueTypeClass;
+        this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
             required = getClass().getField(name()).getAnnotation(IsRequired.class) != null;
@@ -57,6 +64,10 @@ public enum SectionRegistryProperty implements SectionProperty {
 
             isKey = getClass().getField(name()).getAnnotation(IsKeyProperty.class) != null;
             isInfo = getClass().getField(name()).getAnnotation(IsInfoProperty.class) != null;
+
+            isReferenceKey = getClass().getField(name()).getAnnotation(IsReferenceKey.class) != null;
+            final ReferenceTo referenceToAnnotation = getClass().getField(name()).getAnnotation(ReferenceTo.class);
+            referenceTargetSectionType = referenceToAnnotation == null ? null : referenceToAnnotation.value();
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -76,8 +87,8 @@ public enum SectionRegistryProperty implements SectionProperty {
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getSectionValueTypeClass() {
-        return sectionValueTypeClass;
+    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+        return propertySpecialValueTypeClass;
     }
 
     @Override
@@ -98,5 +109,15 @@ public enum SectionRegistryProperty implements SectionProperty {
     @Override
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    @Override
+    public boolean isReferenceKey() {
+        return isReferenceKey;
+    }
+
+    @Override
+    public SectionType getReferenceTargetSectionType() {
+        return referenceTargetSectionType;
     }
 }

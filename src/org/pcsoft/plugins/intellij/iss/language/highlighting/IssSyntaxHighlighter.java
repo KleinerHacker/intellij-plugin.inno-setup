@@ -34,7 +34,7 @@ public class IssSyntaxHighlighter extends SyntaxHighlighterBase {
             return new TextAttributesKey[]{IssHighlighting.COMMENT};
         } else if (iElementType.equals(IssCustomTypes.QUOTE)) {
             return new TextAttributesKey[]{IssHighlighting.STRING};
-        } else if (iElementType.equals(IssGenTypes.NUMBER)) {
+        } else if (iElementType.equals(IssGenTypes.NUMBER) || iElementType.equals(IssGenTypes.VERSION)) {
             return new TextAttributesKey[]{IssHighlighting.NUMBER};
         }
 

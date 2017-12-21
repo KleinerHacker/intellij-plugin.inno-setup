@@ -17,5 +17,5 @@ public interface SectionType extends SectionBase {
     @NotNull
     SectionTypeVariant getVariant();
     @NotNull
-    Class<? extends SectionProperty> getSectionValueClass();
+    Class<? extends PropertyType> getSectionPropertyClass();
 }

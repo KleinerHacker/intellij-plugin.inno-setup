@@ -4,19 +4,31 @@ import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 
-public enum PropertyRegistryRootValueType implements PropertySpecialValueType {
-    HKCR("HKCR"),
-    HKCU("HKCU"),
-    HKLM("HKLM"),
-    HKU("HKU"),
-    HKCC("HKCC"),
+public enum PropertyInstallRunFlagValueType implements PropertySpecialValueType {
+    Bit32("32Bit"),
+    Bit64("64Bit"),
+    HideWizard("hideWizard"),
+    NoWait("noWait"),
+    PostInstall("postInstall"),
+    RunAsCurrentUser("runAsCurrentUser"),
+    RunAsOriginalUser("runAsOriginalUser"),
+    RunHidden("runHidden"),
+    RunMaximized("runMaximized"),
+    RunMinimized("runMinimized"),
+    ShellExec("shellExec"),
+    SkipIfDoesNotExist("skipIfDoesntExist"),
+    SkipIfNotSilent("skipIfNotSilent"),
+    SkipIfSilent("skipIfSilent"),
+    Unchecked("unchecked"),
+    WaitUntilIdle("waitUntilIdle"),
+    WaitUntilTerminated("waitUntilTerminated"),
     ;
 
     @NotNull
     private String name;
     private boolean deprecated;
 
-    private PropertyRegistryRootValueType(@NotNull String name) {
+    private PropertyInstallRunFlagValueType(@NotNull String name) {
         this.name = name;
 
         try {

@@ -9,23 +9,28 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 
-public class IssElementKeyDocumentationProvider extends DocumentationProviderEx {
+public class IssPropertyKeyDocumentationProvider extends DocumentationProviderEx {
 
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
         if (element instanceof IssKey) {
             IssKey key = (IssKey) element;
+
             if (key.getSection() == null)
                 return null;
             final SectionType sectionType = key.getSection().getSectionType();
             if (sectionType == null || sectionType == SectionType.Messages || sectionType == SectionType.CustomMessages)
                 return null;
-            if (!IssDocumentationBundle.containsSectionBundle(sectionType.getName()))
+            if (!IssDocumentationBundle.containsSectionPropertyBundle(sectionType.getName()))
                 return null;
 
-            if (!IssDocumentationBundle.getSectionBundle(sectionType.getName()).containsKey("property." + key.getName().toLowerCase()))
-                return null;
-            return IssDocumentationBundle.getSectionBundle(sectionType.getName()).getString("property." + key.getName().toLowerCase());
+            final String bundleStringKey = "property." + key.getName().toLowerCase();
+            if (!IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).containsKey(bundleStringKey)) {
+                if (!IssDocumentationBundle.getSectionPropertyCommonBundle().containsKey(bundleStringKey))
+                    return null;
+                return IssDocumentationBundle.getSectionPropertyCommonBundle().getString(bundleStringKey);
+            }
+            return IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).getString(bundleStringKey);
         }
 
         return null;

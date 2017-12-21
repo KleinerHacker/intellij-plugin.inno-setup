@@ -3,16 +3,14 @@ package org.pcsoft.plugins.intellij.iss.language.type.section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsInfoProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsKeyProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyFilesFlagValueType;
 
-public enum SectionFilesProperty implements SectionProperty {
+public enum FilesPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
     Source("Source", PropertyValueType.String),
     @IsRequired @IsInfoProperty
@@ -26,30 +24,39 @@ public enum SectionFilesProperty implements SectionProperty {
     FontInstall("FontInstall", PropertyValueType.String),
     StrongAssemblyName("StrongAssemblyName", PropertyValueType.String),
     Flags("Flags", PropertyValueType.MultiValue, PropertyFilesFlagValueType.class),
+    @ReferenceTo(SectionType.Components)
+    Components("Components", PropertyValueType.MultiValue),
+    @ReferenceTo(SectionType.Tasks)
+    Tasks("Tasks", PropertyValueType.MultiValue),
+    Languages("Languages", PropertyValueType.MultiValue),
+    MinVersion("MinVersion", PropertyValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
     ;
 
     private final String name;
     private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> sectionValueTypeClass;
+    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
+    private final boolean isReferenceKey;
+    private final SectionType referenceTargetSectionType;
 
-    private SectionFilesProperty(String name, PropertyValueType propertyValueType) {
+    private FilesPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private SectionFilesProperty(String name, PropertyValueType[] propertyValueTypes) {
+    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private SectionFilesProperty(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, sectionValueTypeClass);
+    private FilesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private SectionFilesProperty(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
+    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
-        this.sectionValueTypeClass = sectionValueTypeClass;
+        this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
             required = getClass().getField(name()).getAnnotation(IsRequired.class) != null;
@@ -57,6 +64,10 @@ public enum SectionFilesProperty implements SectionProperty {
 
             isKey = getClass().getField(name()).getAnnotation(IsKeyProperty.class) != null;
             isInfo = getClass().getField(name()).getAnnotation(IsInfoProperty.class) != null;
+
+            isReferenceKey = getClass().getField(name()).getAnnotation(IsReferenceKey.class) != null;
+            final ReferenceTo referenceToAnnotation = getClass().getField(name()).getAnnotation(ReferenceTo.class);
+            referenceTargetSectionType = referenceToAnnotation == null ? null : referenceToAnnotation.value();
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -76,8 +87,8 @@ public enum SectionFilesProperty implements SectionProperty {
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getSectionValueTypeClass() {
-        return sectionValueTypeClass;
+    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+        return propertySpecialValueTypeClass;
     }
 
     @Override
@@ -98,5 +109,15 @@ public enum SectionFilesProperty implements SectionProperty {
     @Override
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    @Override
+    public boolean isReferenceKey() {
+        return isReferenceKey;
+    }
+
+    @Override
+    public SectionType getReferenceTargetSectionType() {
+        return referenceTargetSectionType;
     }
 }

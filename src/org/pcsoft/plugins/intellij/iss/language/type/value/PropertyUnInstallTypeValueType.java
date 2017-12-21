@@ -4,19 +4,17 @@ import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 
-public enum PropertyRegistryRootValueType implements PropertySpecialValueType {
-    HKCR("HKCR"),
-    HKCU("HKCU"),
-    HKLM("HKLM"),
-    HKU("HKU"),
-    HKCC("HKCC"),
+public enum PropertyUnInstallTypeValueType implements PropertySpecialValueType {
+    Files("files"),
+    FilesAndOrDirectories("filesAndOrDirs"),
+    DirectoryIfEmpty("dirIfEmpty"),
     ;
 
     @NotNull
     private String name;
     private boolean deprecated;
 
-    private PropertyRegistryRootValueType(@NotNull String name) {
+    private PropertyUnInstallTypeValueType(@NotNull String name) {
         this.name = name;
 
         try {

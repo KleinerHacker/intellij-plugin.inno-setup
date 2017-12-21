@@ -3,49 +3,48 @@ package org.pcsoft.plugins.intellij.iss.language.type.section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsInfoProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsKeyProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyTasksFlagValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum SectionTasksProperty implements SectionProperty {
-    @IsRequired @IsKeyProperty
-    Name("Name", PropertyValueType.SingleValue),
+public enum TasksPropertyType implements PropertyType {
+    @IsRequired @IsKeyProperty @IsReferenceKey
+    Name("Name", PropertyValueType.SingleValue, PropertyValueType.String),
     @IsRequired @IsInfoProperty
     Description("Description", PropertyValueType.String),
     GroupDescription("GroupDescription", PropertyValueType.String),
     Components("Components", PropertyValueType.MultiValue),
     Flags("Flags", PropertyValueType.MultiValue, PropertyTasksFlagValueType.class),
+    Languages("Languages", PropertyValueType.MultiValue),
+    MinVersion("MinVersion", PropertyValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
     ;
 
     private final String name;
     private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> sectionValueTypeClass;
+    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
+    private final boolean isReferenceKey;
+    private final SectionType referenceTargetSectionType;
 
-    private SectionTasksProperty(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private TasksPropertyType(String name, PropertyValueType... propertyValueType) {
+        this(name, propertyValueType, null);
     }
 
-    private SectionTasksProperty(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private TasksPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private SectionTasksProperty(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, sectionValueTypeClass);
-    }
-
-    private SectionTasksProperty(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
+    private TasksPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
-        this.sectionValueTypeClass = sectionValueTypeClass;
+        this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
             required = getClass().getField(name()).getAnnotation(IsRequired.class) != null;
@@ -53,6 +52,10 @@ public enum SectionTasksProperty implements SectionProperty {
 
             isKey = getClass().getField(name()).getAnnotation(IsKeyProperty.class) != null;
             isInfo = getClass().getField(name()).getAnnotation(IsInfoProperty.class) != null;
+
+            isReferenceKey = getClass().getField(name()).getAnnotation(IsReferenceKey.class) != null;
+            final ReferenceTo referenceToAnnotation = getClass().getField(name()).getAnnotation(ReferenceTo.class);
+            referenceTargetSectionType = referenceToAnnotation == null ? null : referenceToAnnotation.value();
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -72,8 +75,8 @@ public enum SectionTasksProperty implements SectionProperty {
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getSectionValueTypeClass() {
-        return sectionValueTypeClass;
+    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+        return propertySpecialValueTypeClass;
     }
 
     @Override
@@ -94,5 +97,15 @@ public enum SectionTasksProperty implements SectionProperty {
     @Override
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    @Override
+    public boolean isReferenceKey() {
+        return isReferenceKey;
+    }
+
+    @Override
+    public SectionType getReferenceTargetSectionType() {
+        return referenceTargetSectionType;
     }
 }

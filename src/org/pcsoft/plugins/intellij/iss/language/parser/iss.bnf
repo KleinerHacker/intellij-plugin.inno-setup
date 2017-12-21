@@ -22,45 +22,59 @@ section ::= sectionTitle sectionContent
 {
     methods=[getPresentation getName getSectionType]
 }
-sectionTitle ::= '[' NAME ']' EOL
+sectionTitle ::= '[' NAME? ']' EOL
 {
-    methods=[getName]
+    methods=[getName getSectionType]
 }
-sectionContent ::= (sectionLine+ | CODE)?
-sectionLine ::= defaultSectionLine | multipleSectionLine
-{
-    methods=[getPresentation getSection]
-}
+private sectionContent ::= ((defaultSectionLine | multipleSectionLine)+ | CODE)?
 
 defaultSectionLine ::= defaultProperty EOL
+{
+    methods=[getPresentation getSection]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionLine"
+}
 multipleSectionLine ::= (multipleProperty ';')* multipleProperty? EOL
+{
+    methods=[getPresentation getSection]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionLine"
+}
 
 /* Elements */
 defaultProperty ::= defaultKey '=' defaultValue
 {
-    methods=[getName]
+    methods=[getName getKey getPropertyType getValue getSection]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssProperty"
 }
-multipleProperty::= multipleKey ':' multipleValue
+multipleProperty::= multipleKey ':' multipleValue?
 {
-    methods=[getName]
+    methods=[getName getKey getPropertyType getValue getSection]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssProperty"
 }
 
 defaultKey ::= (NAME '.')* NAME
 {
-    methods=[getSection getName]
+    methods=[getSection getName getPropertyType]
     implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey"
 }
 multipleKey ::= NAME
 {
-    methods=[getSection getName]
+    methods=[getSection getName getPropertyType]
     implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey"
 }
-defaultValue ::= (constValue | NUMBER | NAME | TEXT)*
-multipleValue ::= (refValue+ | NUMBER | stringValue | constValue)
+defaultValue ::= (constValue | NUMBER | VERSION | byteArrayValue | NAME | TEXT)*
+{
+    methods=[getSection getProperty]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssValue"
+}
+multipleValue ::= (refValue+ | NUMBER | VERSION | byteArrayValue | stringValue | constValue)
+{
+    methods=[getSection getProperty]
+    implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssValue"
+}
 
 /* Types */
 refValue ::= NAME
-stringValue ::= '"' (constValue | NAME | STRING)* '"'
+stringValue ::= '"' (constValue | refValue | STRING)* '"'
 {
     methods=[getValue]
 }
@@ -68,3 +82,4 @@ constValue ::= '{' NAME '}'
 {
     methods=[getName]
 }
+byteArrayValue ::= (HEX_BYTE ' ')* HEX_BYTE

@@ -3,7 +3,7 @@ package org.pcsoft.plugins.intellij.iss.language.type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.IssIcons;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
 import org.pcsoft.plugins.intellij.iss.language.type.section.*;
@@ -16,19 +16,24 @@ import java.util.stream.Stream;
  */
 public enum SectionType implements org.pcsoft.plugins.intellij.iss.language.type.base.SectionType {
     @IsRequired
-    Setup("Setup", IssIcons.Sections.Setup, SectionTypeVariant.Default, SectionSetupProperty.class),
-    Files("Files", IssIcons.Sections.Files, SectionTypeVariant.LineBased, SectionFilesProperty.class),
-    Directories("Dirs", IssIcons.Sections.Directories, SectionTypeVariant.LineBased, SectionDirsProperty.class),
-    Types("Types", IssIcons.Sections.Types, SectionTypeVariant.LineBased, SectionTypesProperty.class),
-    Components("Components", IssIcons.Sections.Components, SectionTypeVariant.LineBased, SectionComponentsProperty.class),
-    Tasks("Tasks", IssIcons.Sections.Tasks, SectionTypeVariant.LineBased, SectionTasksProperty.class),
-    Icons("Icons", IssIcons.Sections.Icons, SectionTypeVariant.LineBased, SectionIconsProperty.class),
-    INI("INI", IssIcons.Sections.INI, SectionTypeVariant.LineBased, SectionINIProperty.class),
-    Languages("Languages", IssIcons.Sections.Languages, SectionTypeVariant.LineBased, SectionLanguagesProperty.class),
-    Messages("Messages", IssIcons.Sections.Messages, SectionTypeVariant.Default, SectionMessagesProperty.class),
-    CustomMessages("CustomMessages", IssIcons.Sections.CustomMessages, SectionTypeVariant.Default, SectionCustomMessagesProperty.class),
-    LangOptions("LangOptions", IssIcons.Sections.LangOptions, SectionTypeVariant.Default, SectionLangOptionsProperty.class),
-    Registry("Registry", IssIcons.Sections.Registry, SectionTypeVariant.LineBased, SectionRegistryProperty.class),
+    Setup("Setup", IssIcons.Sections.Setup, SectionTypeVariant.Default, SetupPropertyType.class),
+    Files("Files", IssIcons.Sections.Files, SectionTypeVariant.LineBased, FilesPropertyType.class),
+    Directories("Dirs", IssIcons.Sections.Directories, SectionTypeVariant.LineBased, DirsPropertyType.class),
+    Types("Types", IssIcons.Sections.Types, SectionTypeVariant.LineBased, TypesPropertyType.class),
+    Components("Components", IssIcons.Sections.Components, SectionTypeVariant.LineBased, ComponentsPropertyType.class),
+    Tasks("Tasks", IssIcons.Sections.Tasks, SectionTypeVariant.LineBased, TasksPropertyType.class),
+    Icons("Icons", IssIcons.Sections.Icons, SectionTypeVariant.LineBased, IconsPropertyType.class),
+    INI("INI", IssIcons.Sections.INI, SectionTypeVariant.LineBased, INIPropertyType.class),
+    Languages("Languages", IssIcons.Sections.Languages, SectionTypeVariant.LineBased, LanguagesPropertyType.class),
+    Messages("Messages", IssIcons.Sections.Messages, SectionTypeVariant.Default, EmptyPropertyType.class),
+    CustomMessages("CustomMessages", IssIcons.Sections.CustomMessages, SectionTypeVariant.Default, EmptyPropertyType.class),
+    LangOptions("LangOptions", IssIcons.Sections.LangOptions, SectionTypeVariant.Default, LangOptionsPropertyType.class),
+    Registry("Registry", IssIcons.Sections.Registry, SectionTypeVariant.LineBased, RegistryPropertyType.class),
+    InstallDelete("InstallDelete", IssIcons.Sections.InstallDelete, SectionTypeVariant.LineBased, UnInstallDeletePropertyType.class),
+    UninstallDelete("UninstallDelete", IssIcons.Sections.UninstallDelete, SectionTypeVariant.LineBased, UnInstallDeletePropertyType.class),
+    InstallRun("Run", IssIcons.Sections.InstallRun, SectionTypeVariant.LineBased, InstallRunPropertyType.class),
+    UninstallRun("UninstallRun", IssIcons.Sections.UninstallRun, SectionTypeVariant.LineBased, UninstallRunPropertyType.class),
+    Code("Code", null, SectionTypeVariant.Code, EmptyPropertyType.class),
     ;
 
     @NotNull
@@ -38,7 +43,7 @@ public enum SectionType implements org.pcsoft.plugins.intellij.iss.language.type
     @NotNull
     private final SectionTypeVariant variant;
     @NotNull
-    private final Class<? extends SectionProperty> sectionValueClass;
+    private final Class<? extends PropertyType> sectionPropertyClass;
     private final boolean required, deprecated;
 
     @Nullable
@@ -51,11 +56,11 @@ public enum SectionType implements org.pcsoft.plugins.intellij.iss.language.type
                 .findFirst().orElse(null);
     }
 
-    private SectionType(@NotNull String name, @Nullable Icon icon, @NotNull SectionTypeVariant variant, @NotNull Class<? extends SectionProperty> sectionValueClass) {
+    private SectionType(@NotNull String name, @Nullable Icon icon, @NotNull SectionTypeVariant variant, @NotNull Class<? extends PropertyType> sectionPropertyClass) {
         this.name = name;
         this.icon = icon;
         this.variant = variant;
-        this.sectionValueClass = sectionValueClass;
+        this.sectionPropertyClass = sectionPropertyClass;
 
         try {
             required = getClass().getField(name()).getAnnotation(IsRequired.class) != null;
@@ -85,8 +90,8 @@ public enum SectionType implements org.pcsoft.plugins.intellij.iss.language.type
 
     @NotNull
     @Override
-    public Class<? extends SectionProperty> getSectionValueClass() {
-        return sectionValueClass;
+    public Class<? extends PropertyType> getSectionPropertyClass() {
+        return sectionPropertyClass;
     }
 
     @Override

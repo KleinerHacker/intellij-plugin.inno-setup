@@ -3,19 +3,17 @@ package org.pcsoft.plugins.intellij.iss.language.type.section;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsInfoProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsKeyProperty;
-import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyBooleanValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.value.PropertySetupCompressionValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum SectionSetupProperty implements SectionProperty {
+public enum SetupPropertyType implements PropertyType {
     //Compiler related
     ASLRCompatible("ASLRCompatible", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
     Compression("Compression", PropertyValueType.SingleValue, "lzma2/max", PropertySetupCompressionValueType.class),
@@ -31,7 +29,7 @@ public enum SectionSetupProperty implements SectionProperty {
     @IsRequired @IsKeyProperty
     AppName("AppName", PropertyValueType.String, null),
     @IsRequired @IsInfoProperty
-    AppVersion("AppVersion", PropertyValueType.SingleValue, null),
+    AppVersion("AppVersion", PropertyValueType.Version, null),
     //Cosmetic
     AppCopyright("AppCopyright", PropertyValueType.String, null),
     BackColor("BackColor", new PropertyValueType[]{PropertyValueType.SingleValue, PropertyValueType.Number}, "clBlue"),
@@ -40,27 +38,29 @@ public enum SectionSetupProperty implements SectionProperty {
     private final String name;
     private final PropertyValueType[] propertyValueTypes;
     private final Object defaultValue;
-    private final Class<? extends PropertySpecialValueType> sectionValueTypeClass;
+    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
+    private final boolean isReferenceKey;
+    private final SectionType referenceTargetSectionType;
 
-    private SectionSetupProperty(String name, PropertyValueType propertyValueType, Object defaultValue) {
+    private SetupPropertyType(String name, PropertyValueType propertyValueType, Object defaultValue) {
         this(name, new PropertyValueType[]{propertyValueType}, defaultValue, null);
     }
 
-    private SectionSetupProperty(String name, PropertyValueType[] propertyValueTypes, Object defaultValue) {
+    private SetupPropertyType(String name, PropertyValueType[] propertyValueTypes, Object defaultValue) {
         this(name, propertyValueTypes, defaultValue, null);
     }
 
-    private SectionSetupProperty(String name, PropertyValueType propertyValueType, Object defaultValue, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, defaultValue, sectionValueTypeClass);
+    private SetupPropertyType(String name, PropertyValueType propertyValueType, Object defaultValue, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new PropertyValueType[]{propertyValueType}, defaultValue, propertySpecialValueTypeClass);
     }
 
-    private SectionSetupProperty(String name, PropertyValueType[] propertyValueTypes, Object defaultValue, Class<? extends PropertySpecialValueType> sectionValueTypeClass) {
+    private SetupPropertyType(String name, PropertyValueType[] propertyValueTypes, Object defaultValue, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.defaultValue = defaultValue;
-        this.sectionValueTypeClass = sectionValueTypeClass;
+        this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
             required = getClass().getField(name()).getAnnotation(IsRequired.class) != null;
@@ -68,6 +68,10 @@ public enum SectionSetupProperty implements SectionProperty {
 
             isKey = getClass().getField(name()).getAnnotation(IsKeyProperty.class) != null;
             isInfo = getClass().getField(name()).getAnnotation(IsInfoProperty.class) != null;
+
+            isReferenceKey = getClass().getField(name()).getAnnotation(IsReferenceKey.class) != null;
+            final ReferenceTo referenceToAnnotation = getClass().getField(name()).getAnnotation(ReferenceTo.class);
+            referenceTargetSectionType = referenceToAnnotation == null ? null : referenceToAnnotation.value();
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
         }
@@ -92,8 +96,8 @@ public enum SectionSetupProperty implements SectionProperty {
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getSectionValueTypeClass() {
-        return sectionValueTypeClass;
+    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+        return propertySpecialValueTypeClass;
     }
 
     @Override
@@ -114,5 +118,15 @@ public enum SectionSetupProperty implements SectionProperty {
     @Override
     public boolean isDeprecated() {
         return deprecated;
+    }
+
+    @Override
+    public boolean isReferenceKey() {
+        return isReferenceKey;
+    }
+
+    @Override
+    public SectionType getReferenceTargetSectionType() {
+        return referenceTargetSectionType;
     }
 }

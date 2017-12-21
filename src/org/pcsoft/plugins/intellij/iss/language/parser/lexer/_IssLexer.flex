@@ -25,10 +25,12 @@ import static org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes.*;
 
 EOL=\r | \n | \r\n
 WHITE_SPACE=" "
-NAME=[A-Za-z_]{1}[A-Za-z0-9\-_]*
-NUMBER=([0-9]*\.)?[0-9]+
+NAME=[A-Za-z_]{1}[A-Za-z0-9\-_\\\/]*[A-Za-z0-9\_]?
+HEX_BYTE=[0-9a-fA-F]{2}
+NUMBER=[0-9]+|\$({HEX_BYTE})+
+VERSION=([0-9]+\.)*[0-9]+
 STRING=[^\"\{\}]+
-TEXT=[^\r|\n|\r\n]+
+TEXT=[^\r|\n|\r\n|\{|\}|0-9]+
 COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 
@@ -39,7 +41,9 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}             { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  <YYTITLE> {
+    {WHITE_SPACE}           { return com.intellij.psi.TokenType.WHITE_SPACE; }
+  }
   ^{EOL}                    { return com.intellij.psi.TokenType.WHITE_SPACE; }
   {EOL}                     { return EOL; }
   ^{COMMENT}                { return COMMENT; }
@@ -63,9 +67,13 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
   "="                       { yybegin(YYVALUE); return OPERATOR; }
   ":"                       { return OPERATOR; }
 
+  <YYVALUE> {
   {NUMBER}                  { return NUMBER; }
-  <YYVALUE, YYSTRING> {
-      {NAME}                { return NAME; }
+  {VERSION}                 { return VERSION; }
+  {HEX_BYTE}                { return HEX_BYTE; }
+      <YYSTRING> {
+          {NAME}            { return NAME; }
+      }
   }
 }
 <YYVALUE> {

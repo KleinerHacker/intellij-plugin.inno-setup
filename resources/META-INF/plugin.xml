@@ -37,14 +37,20 @@
         <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
         <!-- Annotators -->
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MissingRequiredPropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownSectionNameAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SectionTypePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertyValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertySpecialValueTypeCheckAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
         <!-- Contributors -->
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssCompletionContributor"/>
         <!-- Documentation -->
-        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssElementKeyDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionTitleDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyValueDocumentationProvider"/>
     </extensions>
 
     <actions>

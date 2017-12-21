@@ -10,4 +10,5 @@ public enum PropertyValueType {
     Number,
     Boolean,
     ByteArray,
+    Version
 }

@@ -5,13 +5,10 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssFile;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleSectionLine;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSection;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionLine;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
-import org.pcsoft.plugins.intellij.iss.language.type.base.SectionProperty;
+import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -33,23 +30,23 @@ public class MissingRequiredPropertyAnnotator implements Annotator {
             }
         } else if (psiElement instanceof IssSectionLine) {
             final IssSectionLine issSectionLine = (IssSectionLine) psiElement;
-            final IssMultipleSectionLine multiProperty = issSectionLine.getMultipleSectionLine();
-            if (multiProperty == null)
+            if (!(issSectionLine instanceof IssMultipleSectionLine))
                 return;
+            final IssMultipleSectionLine multipleSectionLine = (IssMultipleSectionLine) issSectionLine;
             final IssSection issSection = issSectionLine.getSection();
             if (issSection == null)
                 return;
             final SectionType sectionType = issSection.getSectionType();
             if (sectionType == null)
                 return;
-            final Class<? extends SectionProperty> sectionValueClass = sectionType.getSectionValueClass();
+            final Class<? extends PropertyType> sectionValueClass = sectionType.getSectionPropertyClass();
 
-            for (SectionProperty sectionProperty : sectionValueClass.getEnumConstants()) {
-                if (!sectionProperty.isRequired())
+            for (PropertyType propertyType : sectionValueClass.getEnumConstants()) {
+                if (!propertyType.isRequired())
                     continue;
 
-                if (multiProperty.getMultiplePropertyList().isEmpty() || !findRequiredMultiProperty(multiProperty, sectionProperty)) {
-                    annotationHolder.createErrorAnnotation(issSectionLine, "Cannot find required property " + sectionProperty.getName())
+                if (multipleSectionLine.getMultiplePropertyList().isEmpty() || !findRequiredMultiProperty(multipleSectionLine, propertyType)) {
+                    annotationHolder.createErrorAnnotation(issSectionLine, "Cannot find required property " + propertyType.getName())
                             .setAfterEndOfLine(true);
                 }
             }
@@ -60,29 +57,28 @@ public class MissingRequiredPropertyAnnotator implements Annotator {
                 return;
             if (sectionType.getVariant() != SectionTypeVariant.Default)
                 return;
-            final List<IssSectionLine> sectionLineList = issSection.getSectionContent().getSectionLineList();
-            final Class<? extends SectionProperty> sectionValueClass = sectionType.getSectionValueClass();
+            final List<IssDefaultSectionLine> sectionLineList = issSection.getDefaultSectionLineList();
+            final Class<? extends PropertyType> sectionValueClass = sectionType.getSectionPropertyClass();
 
-            for (SectionProperty sectionProperty : sectionValueClass.getEnumConstants()) {
-                if (!sectionProperty.isRequired())
+            for (PropertyType propertyType : sectionValueClass.getEnumConstants()) {
+                if (!propertyType.isRequired())
                     continue;
 
-                if (sectionLineList.isEmpty() || !findRequiredSingleProperty(sectionLineList, sectionProperty)) {
-                    annotationHolder.createErrorAnnotation(issSection.getSectionTitle(), "Cannot find required property " + sectionProperty.getName());
+                if (sectionLineList.isEmpty() || !findRequiredSingleProperty(sectionLineList, propertyType)) {
+                    annotationHolder.createErrorAnnotation(issSection.getSectionTitle(), "Cannot find required property " + propertyType.getName());
                 }
             }
         }
     }
 
-    private boolean findRequiredSingleProperty(List<IssSectionLine> sectionLineList, SectionProperty sectionProperty) {
+    private boolean findRequiredSingleProperty(List<IssDefaultSectionLine> sectionLineList, PropertyType propertyType) {
         return sectionLineList.stream()
-                .filter(issSectionLine -> issSectionLine.getDefaultSectionLine() != null)
-                .anyMatch(issSectionLine -> issSectionLine.getDefaultSectionLine().getDefaultProperty().getName().equalsIgnoreCase(sectionProperty.getName()));
+                .anyMatch(issSectionLine -> issSectionLine.getDefaultProperty().getName().equalsIgnoreCase(propertyType.getName()));
     }
 
-    private boolean findRequiredMultiProperty(IssMultipleSectionLine multipleSectionLine, SectionProperty sectionProperty) {
+    private boolean findRequiredMultiProperty(IssMultipleSectionLine multipleSectionLine, PropertyType propertyType) {
         return multipleSectionLine.getMultiplePropertyList().stream()
-                .anyMatch(el -> el.getName().equalsIgnoreCase(sectionProperty.getName()));
+                .anyMatch(el -> el.getName().equalsIgnoreCase(propertyType.getName()));
     }
 
     private boolean findRequiredSection(IssSection[] sections, SectionType sectionType) {

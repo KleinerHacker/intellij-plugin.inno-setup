@@ -4,10 +4,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssDefaultProperty;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleProperty;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleSectionLine;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSection;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
 
@@ -26,13 +23,12 @@ public class DoublePropertyAnnotator implements Annotator {
                 return;
             if (sectionType.getVariant() != SectionTypeVariant.Default)
                 return;
-            if (section.getSectionContent().getSectionLineList().isEmpty())
+            if (section.getDefaultSectionLineList().isEmpty())
                 return;
 
             //Find all single properties in section
-            final List<IssDefaultProperty> defaultProperties = section.getSectionContent().getSectionLineList().stream()
-                    .filter(issSectionLine -> issSectionLine.getDefaultSectionLine() != null)
-                    .map(issSectionLine -> issSectionLine.getDefaultSectionLine().getDefaultProperty())
+            final List<IssDefaultProperty> defaultProperties = section.getDefaultSectionLineList().stream()
+                    .map(IssDefaultSectionLine::getDefaultProperty)
                     .collect(Collectors.toList());
             //Find all double single properties
             for (IssDefaultProperty defaultProperty : defaultProperties) {

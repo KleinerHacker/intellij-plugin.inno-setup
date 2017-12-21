@@ -2,6 +2,7 @@ package org.pcsoft.plugins.intellij.iss.language.type.value;
 
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 
 public enum PropertyDirsFlagValueType implements PropertySpecialValueType {
     DeleteAfterInstall("deleteAfterInstall"),
@@ -16,12 +17,13 @@ public enum PropertyDirsFlagValueType implements PropertySpecialValueType {
     private boolean deprecated;
 
     private PropertyDirsFlagValueType(@NotNull String name) {
-        this(name, false);
-    }
-
-    private PropertyDirsFlagValueType(@NotNull String name, boolean deprecated) {
         this.name = name;
-        this.deprecated = deprecated;
+
+        try {
+            deprecated = getClass().getField(name()).getAnnotation(IsDeprecated.class) != null;
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @NotNull
