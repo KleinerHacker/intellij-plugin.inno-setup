@@ -9,13 +9,13 @@ import javax.swing.*;
 /**
  * Created by Christoph on 02.10.2016.
  */
-public interface SectionType extends SectionBase {
-    @NotNull
-    String getName();
+public interface SectionType extends TypeBase {
     @Nullable
     Icon getIcon();
     @NotNull
     SectionTypeVariant getVariant();
     @NotNull
     Class<? extends PropertyType> getSectionPropertyClass();
+
+    boolean isRequired();
 }

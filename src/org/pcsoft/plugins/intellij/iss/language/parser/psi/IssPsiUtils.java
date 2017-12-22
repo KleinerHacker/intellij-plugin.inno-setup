@@ -10,6 +10,7 @@ import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
+import org.pcsoft.plugins.intellij.iss.language.type.base.ConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import javax.swing.*;
@@ -230,10 +231,23 @@ public interface IssPsiUtils {
         return stringValue.getText().replace("\"", "");
     }
 
-    @NotNull
+    //<editor-fold desc="Constant">
+    @Nullable
     static String getName(final IssConstValue constValue) {
-        return constValue.getFirstChild().getNextSibling().getText();
+        if (constValue.getConstName() == null)
+            return null;
+
+        return constValue.getConstName().getText();
     }
+
+    @Nullable
+    static ConstantType getConstantType(final IssConstValue constValue) {
+        if (constValue.getName() == null)
+            return null;
+
+        return ConstantType.fromName(constValue.getName());
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Property">
 

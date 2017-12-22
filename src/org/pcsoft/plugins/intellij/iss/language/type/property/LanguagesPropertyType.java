@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,23 +7,18 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyUnInstallTypeValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum UnInstallDeletePropertyType implements PropertyType {
+public enum LanguagesPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Type("Type", PropertyValueType.SingleValue, PropertyUnInstallTypeValueType.class),
-    @IsRequired @IsInfoProperty
     Name("Name", PropertyValueType.String),
-    @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
-    @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    @IsRequired @IsInfoProperty
+    MessageFile("MessageFile", PropertyValueType.String),
+    LicenseFile("LicenseFile", PropertyValueType.String),
+    InfoBeforeFile("InfoBeforeFile", PropertyValueType.String),
+    InfoAfterFile("InfoAfterFile", PropertyValueType.String),
     ;
 
     private final String name;
@@ -34,19 +29,19 @@ public enum UnInstallDeletePropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType) {
+    private LanguagesPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private LanguagesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

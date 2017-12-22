@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,7 +86,7 @@ public enum SetupPropertyType implements PropertyType {
     ArchitecturesInstallIn64BitMode("ArchitecturesInstallIn64BitMode", PropertyValueType.MultiValue, PropertyArchitectures64ValueType.class),
     ChangesAssociations("ChangesAssociations", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
     ChangesEnvironment("ChangesEnvironment", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    CloseApplications("CloseApplications", PropertyValueType.Boolean, true, PropertyBooleanWithForceValueType.class),
+    CloseApplications("CloseApplications", PropertyValueType.BooleanEx, true, PropertyBooleanWithForceValueType.class),
     CloseApplicationsFilter("CloseApplicationsFilter", PropertyValueType.String, "*.exe,*.dll,*.chm"),
     CreateAppDir("CreateAppDir", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
     CreateUninstallRegKey("CreateUninstallRegKey", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
@@ -96,10 +96,10 @@ public enum SetupPropertyType implements PropertyType {
     DefaultUserInfoName("DefaultUserInfoName", PropertyValueType.String, null),
     DefaultUserInfoOrg("DefaultUserInfoOrg", PropertyValueType.String, null),
     DefaultUserInfoSerial("DefaultUserInfoSerial", PropertyValueType.String, null),
-    DirExistsWarning("DirExistsWarning", PropertyValueType.Boolean, null, PropertyBooleanWithAutoValueType.class),
-    DisableDirPage("DisableDirPage", PropertyValueType.Boolean, null, PropertyBooleanWithAutoValueType.class),
+    DirExistsWarning("DirExistsWarning", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
+    DisableDirPage("DisableDirPage", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
     DisableFinishedPage("DisableFinishedPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    DisableProgramGroupPage("DisableProgramGroupPage", PropertyValueType.Boolean, null, PropertyBooleanWithAutoValueType.class),
+    DisableProgramGroupPage("DisableProgramGroupPage", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
     DisableReadyMemo("DisableReadyMemo", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
     DisableReadyPage("DisableReadyPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
     DisableStartupPrompt("DisableStartupPrompt", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
@@ -118,7 +118,7 @@ public enum SetupPropertyType implements PropertyType {
     RestartIfNeededByRun("RestartIfNeededByRun", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
     SetupLogging("SetupLogging", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
     SetupMutex("SetupMutex", PropertyValueType.String, null),
-    ShowLanguageDialog("ShowLanguageDialog", PropertyValueType.Boolean, true, PropertyBooleanWithAutoValueType.class),
+    ShowLanguageDialog("ShowLanguageDialog", PropertyValueType.BooleanEx, true, PropertyBooleanWithAutoValueType.class),
     ShowUndisplayableLanguages("ShowUndisplayableLanguages", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
     TimeStampRounding("TimeStampRounding", PropertyValueType.Number, 2),
     TimeStampsInUTC("TimeStampsInUTC", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),

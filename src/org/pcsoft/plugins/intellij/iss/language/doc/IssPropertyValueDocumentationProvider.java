@@ -32,7 +32,7 @@ public class IssPropertyValueDocumentationProvider extends DocumentationProvider
         final SectionType sectionType = value.getSection().getSectionType();
         if (sectionType == null || sectionType == SectionType.Messages || sectionType == SectionType.CustomMessages)
             return null;
-        if (!IssDocumentationBundle.containsSectionPropertyBundle(sectionType.getName()))
+        if (!IssDocumentationBundle.containsPropertyBundle(sectionType.getName()))
             return null;
 
         final PropertyType propertyType = value.getProperty().getPropertyType();
@@ -40,9 +40,9 @@ public class IssPropertyValueDocumentationProvider extends DocumentationProvider
             return null;
 
         final String bundleStringKey = propertyType.getName().toLowerCase() + "." + value.getText().toLowerCase();
-        if (!IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).containsKey(bundleStringKey))
+        if (!IssDocumentationBundle.getPropertyBundle(sectionType.getName()).containsKey(bundleStringKey))
             return null;
-        return IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).getString(bundleStringKey);
+        return IssDocumentationBundle.getPropertyBundle(sectionType.getName()).getString(bundleStringKey);
     }
     //</editor-fold>
 

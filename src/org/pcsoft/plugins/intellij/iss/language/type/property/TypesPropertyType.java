@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,18 +7,20 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyTypesFlagValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum LanguagesPropertyType implements PropertyType {
-    @IsRequired @IsKeyProperty
-    Name("Name", PropertyValueType.String),
+public enum TypesPropertyType implements PropertyType {
+    @IsRequired @IsKeyProperty @IsReferenceKey
+    Name("Name", PropertyValueType.SingleValue, PropertyValueType.String),
     @IsRequired @IsInfoProperty
-    MessageFile("MessageFile", PropertyValueType.String),
-    LicenseFile("LicenseFile", PropertyValueType.String),
-    InfoBeforeFile("InfoBeforeFile", PropertyValueType.String),
-    InfoAfterFile("InfoAfterFile", PropertyValueType.String),
+    Description("Description", PropertyValueType.String),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyTypesFlagValueType.class),
+    Languages("Languages", PropertyValueType.MultiValue),
+    MinVersion("MinVersion", PropertyValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
     ;
 
     private final String name;
@@ -29,19 +31,15 @@ public enum LanguagesPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private LanguagesPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private TypesPropertyType(String name, PropertyValueType... propertyValueType) {
+        this(name, propertyValueType, null);
     }
 
-    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
-    }
-
-    private LanguagesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private TypesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private TypesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

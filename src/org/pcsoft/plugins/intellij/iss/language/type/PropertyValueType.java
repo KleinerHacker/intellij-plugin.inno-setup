@@ -9,6 +9,7 @@ public enum PropertyValueType {
     MultiValue,
     Number,
     Boolean,
+    BooleanEx,
     ByteArray,
     Version
 }

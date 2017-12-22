@@ -13,10 +13,11 @@ Compression=lzma2
 SolidCompression=yes
 OutputDir=userdocs:Inno Setup Examples Output
 BackColor=$00FF
+DisableDirPage=auto1
 AllowNoIcon:yes; ASLRCompatible: no
 
 [Files]
-Source: 10; DestDir: "{app}";
+Source: 10; DestDir: "{sys}";
 Source: "MyProg.chm"; DestDir: "{app}"
 Source: "Readme.txt"; DestDir: "{app}"; Flags: isReadMe;
 Flags=setNtfsCompression isReadMe
@@ -44,7 +45,7 @@ Section: "Hallo"
 Root: HKCU; Subkey: "ff"; ValueType: expandSZ; ValueData: $00FF
 
 [InstallDelete]
-Type: files; Name: "{app}"
+Type: files; Name: "{app:kkk}"
 
 [UninstallDelete]
 Type: dirIfEmpty; Name: "{pup}"

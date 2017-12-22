@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,20 +7,20 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyComponentsFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyUnInstallTypeValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum ComponentsPropertyType implements PropertyType {
-    @IsRequired @IsKeyProperty @IsReferenceKey
-    Name("Name", PropertyValueType.SingleValue, PropertyValueType.String),
+public enum UnInstallDeletePropertyType implements PropertyType {
+    @IsRequired @IsKeyProperty
+    Type("Type", PropertyValueType.SingleValue, PropertyUnInstallTypeValueType.class),
     @IsRequired @IsInfoProperty
-    Description("Description", PropertyValueType.String),
-    @ReferenceTo(SectionType.Types)
-    Types("Types", PropertyValueType.MultiValue),
-    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", PropertyValueType.MultiValue),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyComponentsFlagValueType.class),
+    Name("Name", PropertyValueType.String),
+    @ReferenceTo(SectionType.Components)
+    Components("Components", PropertyValueType.MultiValue),
+    @ReferenceTo(SectionType.Tasks)
+    Tasks("Tasks", PropertyValueType.MultiValue),
     Languages("Languages", PropertyValueType.MultiValue),
     MinVersion("MinVersion", PropertyValueType.Version),
     OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
@@ -34,15 +34,19 @@ public enum ComponentsPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private ComponentsPropertyType(String name, PropertyValueType... propertyValueType) {
-        this(name, propertyValueType, null);
+    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType) {
+        this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private ComponentsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes) {
+        this(name, propertyValueTypes, null);
+    }
+
+    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private ComponentsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

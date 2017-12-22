@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,27 +7,11 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyBooleanValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum LangOptionsPropertyType implements PropertyType {
-    @IsRequired @IsKeyProperty
-    LanguageName("LanguageName", PropertyValueType.String),
-    @IsRequired @IsInfoProperty
-    LanguageID("LanguageID", PropertyValueType.Number),
-    @IsRequired
-    LanguageCodePage("LanguageCodePage", PropertyValueType.Number),
-    DialogFontName("DialogFontName", PropertyValueType.String),
-    DialogFontSize("DialogFontSize", PropertyValueType.Number),
-    WelcomeFontName("WelcomeFontName", PropertyValueType.String),
-    WelcomeFontSize("WelcomeFontSize", PropertyValueType.Number),
-    TitleFontName("TitleFontName", PropertyValueType.String),
-    TitleFontSize("TitleFontSize", PropertyValueType.Number),
-    CopyrightFontName("CopyrightFontName", PropertyValueType.String),
-    CopyrightFontSize("CopyrightFontSize", PropertyValueType.Number),
-    RightToLeft("RightToLeft", PropertyValueType.Boolean, PropertyBooleanValueType.class),
+public enum EmptyPropertyType implements PropertyType {
     ;
 
     private final String name;
@@ -38,19 +22,19 @@ public enum LangOptionsPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private LangOptionsPropertyType(String name, PropertyValueType propertyValueType) {
+    private EmptyPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private LangOptionsPropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private EmptyPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private LangOptionsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private EmptyPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private LangOptionsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private EmptyPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

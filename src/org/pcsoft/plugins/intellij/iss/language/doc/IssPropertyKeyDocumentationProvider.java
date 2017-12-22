@@ -21,16 +21,16 @@ public class IssPropertyKeyDocumentationProvider extends DocumentationProviderEx
             final SectionType sectionType = key.getSection().getSectionType();
             if (sectionType == null || sectionType == SectionType.Messages || sectionType == SectionType.CustomMessages)
                 return null;
-            if (!IssDocumentationBundle.containsSectionPropertyBundle(sectionType.getName()))
+            if (!IssDocumentationBundle.containsPropertyBundle(sectionType.getName()))
                 return null;
 
             final String bundleStringKey = "property." + key.getName().toLowerCase();
-            if (!IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).containsKey(bundleStringKey)) {
-                if (!IssDocumentationBundle.getSectionPropertyCommonBundle().containsKey(bundleStringKey))
+            if (!IssDocumentationBundle.getPropertyBundle(sectionType.getName()).containsKey(bundleStringKey)) {
+                if (!IssDocumentationBundle.getPropertyCommonBundle().containsKey(bundleStringKey))
                     return null;
-                return IssDocumentationBundle.getSectionPropertyCommonBundle().getString(bundleStringKey);
+                return IssDocumentationBundle.getPropertyCommonBundle().getString(bundleStringKey);
             }
-            return IssDocumentationBundle.getSectionPropertyBundle(sectionType.getName()).getString(bundleStringKey);
+            return IssDocumentationBundle.getPropertyBundle(sectionType.getName()).getString(bundleStringKey);
         }
 
         return null;

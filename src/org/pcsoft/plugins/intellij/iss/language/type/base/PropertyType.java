@@ -7,9 +7,7 @@ import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
 /**
  * Created by Christoph on 02.10.2016.
  */
-public interface PropertyType extends SectionBase {
-    @NotNull
-    String getName();
+public interface PropertyType extends TypeBase {
     @NotNull
     PropertyValueType[] getPropertyValueTypes();
     @Nullable
@@ -20,4 +18,6 @@ public interface PropertyType extends SectionBase {
 
     boolean isReferenceKey();
     SectionType getReferenceTargetSectionType();
+
+    boolean isRequired();
 }

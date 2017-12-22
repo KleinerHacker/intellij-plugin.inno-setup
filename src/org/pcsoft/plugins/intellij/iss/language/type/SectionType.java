@@ -6,7 +6,7 @@ import org.pcsoft.plugins.intellij.iss.IssIcons;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsRequired;
-import org.pcsoft.plugins.intellij.iss.language.type.section.*;
+import org.pcsoft.plugins.intellij.iss.language.type.property.*;
 
 import javax.swing.*;
 import java.util.stream.Stream;

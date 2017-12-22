@@ -78,8 +78,14 @@ stringValue ::= '"' (constValue | refValue | STRING)* '"'
 {
     methods=[getValue]
 }
-constValue ::= '{' NAME '}'
+constValue ::= '{' (constName (':' constArgumentList ('|' constDefault)? )? )? '}'
 {
-    methods=[getName]
+    methods=[getName getConstantType]
 }
 byteArrayValue ::= (HEX_BYTE ' ')* HEX_BYTE
+
+/* Sub Types */
+private constArgumentList ::= (constArgument ',')* constArgument
+constName ::= NAME
+constArgument ::= NAME
+constDefault ::= NAME

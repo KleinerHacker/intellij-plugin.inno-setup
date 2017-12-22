@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,23 +7,23 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyFilesFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryRootValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryTypeValueType;
 
-public enum FilesPropertyType implements PropertyType {
+/**
+ * Created by Christoph on 02.10.2016.
+ */
+public enum RegistryPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Source("Source", PropertyValueType.String),
+    Root("Root", PropertyValueType.SingleValue, PropertyRegistryRootValueType.class),
     @IsRequired @IsInfoProperty
-    DestDir("DestDir", PropertyValueType.String),
-    DestName("DestName", PropertyValueType.String),
-    Excludes("Excludes", PropertyValueType.String),
-    ExternalSize("ExternalSize", PropertyValueType.Number),
-    CopyMode("CopyMode", PropertyValueType.SingleValue),
-    Attributes("Attribs", PropertyValueType.MultiValue, PropertyAttributesValueType.class),
+    Subkey("Subkey", PropertyValueType.String),
+    ValueType("ValueType", PropertyValueType.SingleValue, PropertyRegistryTypeValueType.class),
+    ValueName("ValueName", PropertyValueType.String),
+    ValueData("ValueData", new PropertyValueType[] {PropertyValueType.String, PropertyValueType.Number, PropertyValueType.ByteArray}),
     Permissions("Permissions", PropertyValueType.SingleValue),
-    FontInstall("FontInstall", PropertyValueType.String),
-    StrongAssemblyName("StrongAssemblyName", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyFilesFlagValueType.class),
+    Flags("Flags", PropertyValueType.SingleValue, PropertyRegistryFlagValueType.class),
     @ReferenceTo(SectionType.Components)
     Components("Components", PropertyValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
@@ -41,19 +41,19 @@ public enum FilesPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private FilesPropertyType(String name, PropertyValueType propertyValueType) {
+    private RegistryPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private FilesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private RegistryPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

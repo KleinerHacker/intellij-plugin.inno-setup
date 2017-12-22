@@ -30,6 +30,11 @@ public final class IssIcons {
         public static final Icon UninstallRun = IconLoader.getIcon("/icons/ic_sect_uninstall_run.png");
     }
 
+    public static final class Constants {
+        public static final Icon Directory = IconLoader.getIcon("/icons/ic_const_directory.png");
+        public static final Icon Shell = IconLoader.getIcon("/icons/ic_const_shell.png");
+    }
+
     private IssIcons() {
     }
 }

@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,17 +7,23 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyUninstallRunFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyFilesFlagValueType;
 
-public enum UninstallRunPropertyType implements PropertyType {
+public enum FilesPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Filename("Filename", PropertyValueType.String),
-    Parameters("Parameters", PropertyValueType.String),
-    WorkingDirectory("WorkingDir", PropertyValueType.String),
-    @IsInfoProperty
-    RunOnceID("RunOnceID", PropertyValueType.String),
-    Verb("Verb", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyUninstallRunFlagValueType.class),
+    Source("Source", PropertyValueType.String),
+    @IsRequired @IsInfoProperty
+    DestDir("DestDir", PropertyValueType.String),
+    DestName("DestName", PropertyValueType.String),
+    Excludes("Excludes", PropertyValueType.String),
+    ExternalSize("ExternalSize", PropertyValueType.Number),
+    CopyMode("CopyMode", PropertyValueType.SingleValue),
+    Attributes("Attribs", PropertyValueType.MultiValue, PropertyAttributesValueType.class),
+    Permissions("Permissions", PropertyValueType.SingleValue),
+    FontInstall("FontInstall", PropertyValueType.String),
+    StrongAssemblyName("StrongAssemblyName", PropertyValueType.String),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyFilesFlagValueType.class),
     @ReferenceTo(SectionType.Components)
     Components("Components", PropertyValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
@@ -35,19 +41,19 @@ public enum UninstallRunPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private UninstallRunPropertyType(String name, PropertyValueType propertyValueType) {
+    private FilesPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private UninstallRunPropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private UninstallRunPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private FilesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private UninstallRunPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

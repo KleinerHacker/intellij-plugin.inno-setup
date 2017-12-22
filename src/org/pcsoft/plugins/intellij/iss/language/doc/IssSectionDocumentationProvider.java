@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionTitle;
 
-public class IssSectionTitleDocumentationProvider extends DocumentationProviderEx {
+public class IssSectionDocumentationProvider extends DocumentationProviderEx {
 
     @Override
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
@@ -17,9 +17,9 @@ public class IssSectionTitleDocumentationProvider extends DocumentationProviderE
             if (sectionTitle.getName() == null)
                 return null;
 
-            if (!IssDocumentationBundle.getSectionTitleBundle().containsKey(sectionTitle.getName().toLowerCase()))
+            if (!IssDocumentationBundle.getSectionBundle().containsKey(sectionTitle.getName().toLowerCase()))
                 return null;
-            return IssDocumentationBundle.getSectionTitleBundle().getString(sectionTitle.getName().toLowerCase());
+            return IssDocumentationBundle.getSectionBundle().getString(sectionTitle.getName().toLowerCase());
         }
 
         return null;

@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,17 +7,20 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyTypesFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyComponentsFlagValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum TypesPropertyType implements PropertyType {
+public enum ComponentsPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty @IsReferenceKey
     Name("Name", PropertyValueType.SingleValue, PropertyValueType.String),
     @IsRequired @IsInfoProperty
     Description("Description", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyTypesFlagValueType.class),
+    @ReferenceTo(SectionType.Types)
+    Types("Types", PropertyValueType.MultiValue),
+    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", PropertyValueType.MultiValue),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyComponentsFlagValueType.class),
     Languages("Languages", PropertyValueType.MultiValue),
     MinVersion("MinVersion", PropertyValueType.Version),
     OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
@@ -31,15 +34,15 @@ public enum TypesPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private TypesPropertyType(String name, PropertyValueType... propertyValueType) {
+    private ComponentsPropertyType(String name, PropertyValueType... propertyValueType) {
         this(name, propertyValueType, null);
     }
 
-    private TypesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private ComponentsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private TypesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private ComponentsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

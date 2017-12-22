@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,23 +7,15 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryFlagValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryRootValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryTypeValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyDirsFlagValueType;
 
-/**
- * Created by Christoph on 02.10.2016.
- */
-public enum RegistryPropertyType implements PropertyType {
+public enum DirsPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Root("Root", PropertyValueType.SingleValue, PropertyRegistryRootValueType.class),
-    @IsRequired @IsInfoProperty
-    Subkey("Subkey", PropertyValueType.String),
-    ValueType("ValueType", PropertyValueType.SingleValue, PropertyRegistryTypeValueType.class),
-    ValueName("ValueName", PropertyValueType.String),
-    ValueData("ValueData", new PropertyValueType[] {PropertyValueType.String, PropertyValueType.Number, PropertyValueType.ByteArray}),
+    Name("Name", PropertyValueType.String),
+    Attributes("Attribs", PropertyValueType.MultiValue, PropertyAttributesValueType.class),
     Permissions("Permissions", PropertyValueType.SingleValue),
-    Flags("Flags", PropertyValueType.SingleValue, PropertyRegistryFlagValueType.class),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyDirsFlagValueType.class),
     @ReferenceTo(SectionType.Components)
     Components("Components", PropertyValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
@@ -41,19 +33,19 @@ public enum RegistryPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private RegistryPropertyType(String name, PropertyValueType propertyValueType) {
+    private DirsPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private DirsPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private DirsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private DirsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
@@ -120,4 +112,6 @@ public enum RegistryPropertyType implements PropertyType {
     public SectionType getReferenceTargetSectionType() {
         return referenceTargetSectionType;
     }
+
+
 }

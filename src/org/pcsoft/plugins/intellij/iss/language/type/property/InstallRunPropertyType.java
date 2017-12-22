@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,21 +7,18 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyIconsFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyInstallRunFlagValueType;
 
-public enum IconsPropertyType implements PropertyType {
+public enum InstallRunPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Name("Name", PropertyValueType.String),
-    @IsRequired @IsInfoProperty
     Filename("Filename", PropertyValueType.String),
+    @IsInfoProperty
+    Description("Description", PropertyValueType.String),
     Parameters("Parameters", PropertyValueType.String),
     WorkingDirectory("WorkingDir", PropertyValueType.String),
-    HotKey("HotKey", PropertyValueType.String),
-    Comment("Comment", PropertyValueType.String),
-    IconFilename("IconFilename", PropertyValueType.String),
-    IconIndex("IconIndex", PropertyValueType.Number),
-    AppUserModelID("AppUserModelID", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyIconsFlagValueType.class),
+    StatusMessage("StatusMsg", PropertyValueType.String),
+    Verb("Verb", PropertyValueType.String),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyInstallRunFlagValueType.class),
     @ReferenceTo(SectionType.Components)
     Components("Components", PropertyValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
@@ -39,19 +36,19 @@ public enum IconsPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private IconsPropertyType(String name, PropertyValueType propertyValueType) {
+    private InstallRunPropertyType(String name, PropertyValueType propertyValueType) {
         this(name, new PropertyValueType[]{propertyValueType}, null);
     }
 
-    private IconsPropertyType(String name, PropertyValueType[] propertyValueTypes) {
+    private InstallRunPropertyType(String name, PropertyValueType[] propertyValueTypes) {
         this(name, propertyValueTypes, null);
     }
 
-    private IconsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private InstallRunPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private IconsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private InstallRunPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

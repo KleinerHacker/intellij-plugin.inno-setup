@@ -37,6 +37,9 @@ public class PropertySpecialValueTypeCheckAnnotator implements Annotator {
         if (specialTypeClass == null)
             return;
 
+        if (propertyType.getPropertyValueTypes().length > 1)
+            return; //Ignore cause other values than enum values are allowed.
+
         for (PropertyValueType valueType : propertyType.getPropertyValueTypes()) {
             switch (valueType) {
                 case MultiValue:
@@ -51,6 +54,7 @@ public class PropertySpecialValueTypeCheckAnnotator implements Annotator {
                         }
                     }
                     break;
+                case BooleanEx:
                 case SingleValue:
                     if (value != null && !StringUtils.isEmpty(value.getText())) {
                         if (Stream.of(specialTypeClass.getEnumConstants()).noneMatch(o -> o.getName().equalsIgnoreCase(value.getText()))) {

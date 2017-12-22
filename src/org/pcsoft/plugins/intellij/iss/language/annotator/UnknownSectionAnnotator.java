@@ -13,7 +13,7 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class UnknownSectionNameAnnotator implements Annotator {
+public class UnknownSectionAnnotator implements Annotator {
 
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {

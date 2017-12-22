@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.language.type.section;
+package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,11 +7,22 @@ import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
+import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyTasksFlagValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
-public enum EmptyPropertyType implements PropertyType {
+public enum TasksPropertyType implements PropertyType {
+    @IsRequired @IsKeyProperty @IsReferenceKey
+    Name("Name", PropertyValueType.SingleValue, PropertyValueType.String),
+    @IsRequired @IsInfoProperty
+    Description("Description", PropertyValueType.String),
+    GroupDescription("GroupDescription", PropertyValueType.String),
+    Components("Components", PropertyValueType.MultiValue),
+    Flags("Flags", PropertyValueType.MultiValue, PropertyTasksFlagValueType.class),
+    Languages("Languages", PropertyValueType.MultiValue),
+    MinVersion("MinVersion", PropertyValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
     ;
 
     private final String name;
@@ -22,19 +33,15 @@ public enum EmptyPropertyType implements PropertyType {
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private EmptyPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private TasksPropertyType(String name, PropertyValueType... propertyValueType) {
+        this(name, propertyValueType, null);
     }
 
-    private EmptyPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
-    }
-
-    private EmptyPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private TasksPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
     }
 
-    private EmptyPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private TasksPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
         this.propertyValueTypes = propertyValueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;

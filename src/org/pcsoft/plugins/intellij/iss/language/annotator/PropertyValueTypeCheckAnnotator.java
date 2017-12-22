@@ -56,6 +56,7 @@ public class PropertyValueTypeCheckAnnotator implements Annotator {
                             return true;
                     }
                     break;
+                case BooleanEx:
                 case SingleValue:
                     if (!StringUtils.isEmpty(valueText) && valueText.matches("[a-zA-Z_][a-zA-Z0-9\\-_\\\\/]*[a-zA-Z0-9_]?"))
                         return true;

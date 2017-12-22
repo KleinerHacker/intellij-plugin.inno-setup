@@ -38,8 +38,9 @@
         <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
         <!-- Annotators -->
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MissingRequiredPropertyAnnotator" order="FIRST"/>
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownSectionNameAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownSectionAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownConstantAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SectionTypePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>
@@ -50,10 +51,12 @@
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssSectionCompletionContributor"/>
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertyKeyCompletionContributor"/>
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertySpecialValueCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssConstantCompletionContributor"/>
         <!-- Documentation -->
-        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionTitleDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyValueDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssConstantDocumentationProvider"/>
     </extensions>
 
     <actions>
