@@ -15,7 +15,19 @@
     psiImplUtilClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.IssPsiUtils"
 }
 
-issFile ::= section*
+issFile ::= preprocessorList? section*
+
+/* Preprocessor */
+preprocessorList ::= (preprocessorElement EOL)+
+preprocessorElement ::= preprocessorName preprocessorValue*
+{
+    methods=[getName]
+}
+preprocessorName ::= '#' NAME?
+{
+    methods=[getName]
+}
+preprocessorValue ::= NAME | stringValue
 
 /* Sections */
 section ::= sectionTitle sectionContent

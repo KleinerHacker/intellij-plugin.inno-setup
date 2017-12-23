@@ -2,6 +2,8 @@ package org.pcsoft.plugins.intellij.iss.language.highlighting;
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.ui.JBColor;
 
 public class IssHighlighting {
     public static final TextAttributesKey OPERATOR = TextAttributesKey.createTextAttributesKey("ISS_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
@@ -13,4 +15,6 @@ public class IssHighlighting {
     public static final TextAttributesKey CONST = TextAttributesKey.createTextAttributesKey("ISS_CONST", DefaultLanguageHighlighterColors.CONSTANT);
     public static final TextAttributesKey COMMENT = TextAttributesKey.createTextAttributesKey("ISS_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey LABEL = TextAttributesKey.createTextAttributesKey("ISS_LABEL", DefaultLanguageHighlighterColors.LABEL);
+    public static final TextAttributesKey PREPROCESSOR = TextAttributesKey.createTextAttributesKey("ISS_PREPROCESSOR",
+            new TextAttributes(JBColor.BLUE, null, null, null, 0));
 }

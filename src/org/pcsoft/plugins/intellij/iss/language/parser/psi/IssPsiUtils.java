@@ -292,4 +292,19 @@ public interface IssPsiUtils {
     }
 
     //</editor-fold>
+
+    static String getName(final IssPreprocessorName preprocessorName) {
+        ASTNode nameNode = preprocessorName.getNode().findChildByType(IssGenTypes.NAME);
+        if (nameNode == null)
+            return null;
+
+        return nameNode.getText();
+    }
+
+    static String getName(final IssPreprocessorElement preprocessorElement) {
+        if (preprocessorElement.getPreprocessorName() == null)
+            return null;
+
+        return preprocessorElement.getPreprocessorName().getName();
+    }
 }

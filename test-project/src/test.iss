@@ -3,6 +3,8 @@
 
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
 
+#include hhh gh "göf"
+
 [Setup]
 AppName={pf}\My Program
 AppVersion=1.5

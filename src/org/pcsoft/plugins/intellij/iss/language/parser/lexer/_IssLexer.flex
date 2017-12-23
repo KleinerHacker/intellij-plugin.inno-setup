@@ -67,6 +67,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
   ";"                       { yybegin(YYINITIAL); return SPLITTER; }
   "="                       { yybegin(YYVALUE); return OPERATOR; }
+  "#"                       { return OPERATOR; }
   <YYCONST> {
       ":"                   { return OPERATOR; }
       "|"                   { return OPERATOR; }
@@ -90,7 +91,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 }
 <YYVALUE> {
   {EOL}                     { yybegin(YYINITIAL); return EOL; }
-  {VALUE_TEXT}                    { return TEXT; }
+  {VALUE_TEXT}              { return TEXT; }
 }
 <YYCONST> {
   {CONST_TEXT}              { return TEXT; }
