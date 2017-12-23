@@ -33,7 +33,7 @@ NUMBER=[0-9]+|\$({HEX_BYTE})+
 VERSION=([0-9]+\.)*[0-9]+
 STRING=[^\"\{\}]+
 VALUE_TEXT=[^\r|\n|\r\n|\{|\}|0-9]+
-CONST_TEXT=[^\{\}\,\|\:]+
+CONST_TEXT=[^\{\}\,\|\:\%]+
 COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 
@@ -71,6 +71,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
       ":"                   { return OPERATOR; }
       "|"                   { return OPERATOR; }
       ","                   { return SPLITTER; }
+      "%"                   { return OPERATOR; }
   }
   "."                       { return SPLITTER; }
 

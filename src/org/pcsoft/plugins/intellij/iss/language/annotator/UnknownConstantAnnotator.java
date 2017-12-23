@@ -20,14 +20,21 @@ public class UnknownConstantAnnotator implements Annotator {
             final IssConstValue constValue = (IssConstValue) psiElement;
             final ConstantType constantType = constValue.getConstantType();
 
-            if (constValue.getName() == null) {
+            if (constValue.getName() == null || constValue.getName().equals("%")) {
                 annotationHolder.createErrorAnnotation(constValue, "No name for constant found");
             } else if (constantType == null) {
                 final IssConstName constName = constValue.getConstName();
                 if (constName != null) {
-                    annotationHolder.createErrorAnnotation(constName, "Unknown constant, allowed are " +
-                            Arrays.toString(Stream.of(ConstantType.getAllConstantTypes()).map(ConstantType::getName).toArray()))
-                            .setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                    if (constName.getText().startsWith("%")) {
+                        if (!System.getenv().containsKey(constName.getText().substring(1))) {
+                            annotationHolder.createWarningAnnotation(constName, "Unknown environment variable, found were " +
+                                    Arrays.toString(System.getenv().values().toArray()));
+                        }
+                    } else {
+                        annotationHolder.createErrorAnnotation(constName, "Unknown constant, allowed are " +
+                                Arrays.toString(Stream.of(ConstantType.getAllConstantTypes()).map(ConstantType::getName).toArray()))
+                                .setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
+                    }
                 }
             }
         }

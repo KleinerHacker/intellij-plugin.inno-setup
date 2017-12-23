@@ -6,7 +6,7 @@
 [Setup]
 AppName={pf}\My Program
 AppVersion=1.5
-DefaultDirName={pf}\My Program
+DefaultDirName={pf}\My Program\{%cbf}
 DefaultGroupName=My Program
 UninstallDisplayIcon={app}\MyProg.exe
 Compression=lzma2

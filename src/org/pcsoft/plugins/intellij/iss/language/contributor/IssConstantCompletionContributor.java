@@ -15,6 +15,8 @@ import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstValue
 import org.pcsoft.plugins.intellij.iss.language.type.constant.DirectoryConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.constant.ShellFolderConstantType;
 
+import java.util.Map;
+
 /**
  * Created by Christoph on 03.10.2016.
  */
@@ -24,12 +26,18 @@ public class IssConstantCompletionContributor extends CompletionContributor {
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet completionResultSet) {
         final PsiElement element = parameters.getOriginalPosition() != null ? parameters.getOriginalPosition() : parameters.getPosition();
 
-        if (getConstantElementPattern().accepts(element)) {
+        if (getEnvironmentVariableElementPattern().accepts(element)) {
+            handleEnvironmentVariables(completionResultSet);
+        } else if (getConstantElementPattern().accepts(element)) {
             handleConstantDirectory(completionResultSet);
             handleConstantShellFolder(completionResultSet);
+            completionResultSet.addElement(
+                    LookupElementBuilder.create("%")
+            );
         }
     }
 
+    //<editor-fold desc="Handlers">
     private void handleConstantDirectory(@NotNull CompletionResultSet completionResultSet) {
         for (final DirectoryConstantType constantType : DirectoryConstantType.values()) {
             completionResultSet.addElement(
@@ -50,6 +58,17 @@ public class IssConstantCompletionContributor extends CompletionContributor {
         }
     }
 
+    private void handleEnvironmentVariables(@NotNull CompletionResultSet completionResultSet) {
+        for (final Map.Entry<String, String> value : System.getenv().entrySet()) {
+            completionResultSet.addElement(
+                    LookupElementBuilder.create(value.getKey())
+                            .withTailText(" (" + value.getValue() + ")")
+            );
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Patterns">
     @NotNull
     private ElementPattern<PsiElement> getConstantElementPattern() {
         return PlatformPatterns.psiElement()
@@ -59,4 +78,19 @@ public class IssConstantCompletionContributor extends CompletionContributor {
                 )
                 .withLanguage(IssLanguage.INSTANCE);
     }
+
+    @NotNull
+    private ElementPattern<PsiElement> getEnvironmentVariableElementPattern() {
+        return PlatformPatterns.psiElement()
+                .afterLeaf(
+                        PlatformPatterns.psiElement()
+                                .withText("%")
+                                .afterLeaf(
+                                        PlatformPatterns.psiElement(IssCustomTypes.BRACES_CURLY_OPEN)
+                                                .withParent(IssConstValue.class)
+                                )
+                )
+                .withLanguage(IssLanguage.INSTANCE);
+    }
+    //</editor-fold>
 }
