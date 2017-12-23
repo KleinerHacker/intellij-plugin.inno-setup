@@ -47,7 +47,7 @@ public enum DirectoryConstantType implements ConstantType {
     @NotNull
     private final String name;
     private final int argumentCount;
-    private final boolean allowDefault;
+    private final boolean needDefault;
     private final boolean deprecated;
 
     private DirectoryConstantType(@NotNull String name) {
@@ -58,14 +58,14 @@ public enum DirectoryConstantType implements ConstantType {
         this(name, argumentCount, false);
     }
 
-    private DirectoryConstantType(@NotNull String name, boolean allowDefault) {
-        this(name, 0, allowDefault);
+    private DirectoryConstantType(@NotNull String name, boolean needDefault) {
+        this(name, 0, needDefault);
     }
 
-    private DirectoryConstantType(@NotNull String name, int argumentCount, boolean allowDefault) {
+    private DirectoryConstantType(@NotNull String name, int argumentCount, boolean needDefault) {
         this.name = name;
         this.argumentCount = argumentCount;
-        this.allowDefault = allowDefault;
+        this.needDefault = needDefault;
 
         try {
             deprecated = getClass().getField(name()).getAnnotation(IsDeprecated.class) != null;
@@ -85,8 +85,8 @@ public enum DirectoryConstantType implements ConstantType {
         return argumentCount;
     }
 
-    public boolean allowDefault() {
-        return allowDefault;
+    public boolean needDefault() {
+        return needDefault;
     }
 
     @Override

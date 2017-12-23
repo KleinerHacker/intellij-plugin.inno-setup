@@ -78,7 +78,7 @@ stringValue ::= '"' (constValue | refValue | STRING)* '"'
 {
     methods=[getValue]
 }
-constValue ::= '{' (constName (':' constArgumentList ('|' constDefault)? )? )? '}'
+constValue ::= '{' (constName (':' constArgumentList )? ('|' constDefault)? )? '}'
 {
     methods=[getName getConstantType]
 }

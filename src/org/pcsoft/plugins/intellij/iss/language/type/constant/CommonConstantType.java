@@ -6,36 +6,35 @@ import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.type.base.ConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.IsDeprecated;
 
-public enum ShellFolderConstantType implements ConstantType {
-    Group("group"),
-    LocalAppData("localAppData"),
-    SendTo("sendTo"),
-    UserAppData("userAppData"),
-    CommonAppData("commonAppData"),
-    UserCf("userCf"),
-    UserDesktop("userDesktop"),
-    CommonDesktop("commonDesktop"),
-    UserDocs("userDocs"),
-    CommonDocs("commonDocs"),
-    UserFavorites("userFavorites"),
-    CommonFavorites("commonFavorites"),
-    UserPf("userPf"),
-    UserPrograms("userPrograms"),
-    CommonPrograms("commonPrograms"),
-    UserStartMenu("userStartMenu"),
-    CommonStartMenu("commonStartMenu"),
-    UserStartup("userStartup"),
-    CommonStartup("commonStartup"),
-    UserTemplates("userTemplates"),
-    CommonTemplates("commonTemplates"),
+public enum CommonConstantType implements ConstantType {
+    Cmd("cmd"),
+    ComputerName("computerName"),
+    Drive("drive", 1),
+    GroupName("groupName"),
+    Hwnd("hwnd"),
+    WizardHwnd("wizardHwnd"),
+    Ini("ini", 3, true),
+    Language("language"),
+    Cm("cm", -1),
+    Reg("reg", 2, true),
+    Param("param", 1, true),
+    SrcExe("srcExe"),
+    UninstallExe("uninstallExe"),
+    SysUserInfoName("sysUserInfoName"),
+    SysUserInfoOrg("sysUserInfoOrg"),
+    UserInfoName("userInfoName"),
+    UserInfoOrg("userInfoOrg"),
+    UserInfoSerial("userInfoSerial"),
+    UserName("userName"),
+    Log("log"),
     ;
 
     @Nullable
-    public static ShellFolderConstantType fromName(@Nullable final String name) {
+    public static CommonConstantType fromName(@Nullable final String name) {
         if (StringUtils.isEmpty(name))
             return null;
 
-        for (final ShellFolderConstantType constantType : values()) {
+        for (final CommonConstantType constantType : values()) {
             if (constantType.getName().equalsIgnoreCase(name))
                 return constantType;
         }
@@ -43,24 +42,25 @@ public enum ShellFolderConstantType implements ConstantType {
         return null;
     }
 
+    @NotNull
     private final String name;
     private final int argumentCount;
     private final boolean needDefault;
     private final boolean deprecated;
 
-    private ShellFolderConstantType(String name) {
+    private CommonConstantType(@NotNull String name) {
         this(name, 0);
     }
 
-    private ShellFolderConstantType(String name, int argumentCount) {
+    private CommonConstantType(@NotNull String name, int argumentCount) {
         this(name, argumentCount, false);
     }
 
-    private ShellFolderConstantType(String name, boolean needDefault) {
+    private CommonConstantType(@NotNull String name, boolean needDefault) {
         this(name, 0, needDefault);
     }
 
-    private ShellFolderConstantType(String name, int argumentCount, boolean needDefault) {
+    private CommonConstantType(@NotNull String name, int argumentCount, boolean needDefault) {
         this.name = name;
         this.argumentCount = argumentCount;
         this.needDefault = needDefault;

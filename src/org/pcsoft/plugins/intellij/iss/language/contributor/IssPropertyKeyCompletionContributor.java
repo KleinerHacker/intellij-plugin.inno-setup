@@ -14,6 +14,7 @@ import org.pcsoft.plugins.intellij.iss.language.highlighting.IssHighlighting;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSection;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
+import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import java.awt.*;
@@ -57,6 +58,15 @@ public class IssPropertyKeyCompletionContributor extends CompletionContributor {
                             .withTypeText(sectionType.getName())
                             .withBoldness(propertyType.isRequired())
                             .withStrikeoutness(propertyType.isDeprecated())
+                            .withInsertHandler((insertionContext, lookupElement) -> {
+                                if (sectionType.getVariant() == SectionTypeVariant.LineBased) {
+                                    insertionContext.getDocument().insertString(insertionContext.getTailOffset(), ": ");
+                                    insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
+                                } else if (sectionType.getVariant() == SectionTypeVariant.Default) {
+                                    insertionContext.getDocument().insertString(insertionContext.getTailOffset(), "=");
+                                    insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
+                                }
+                            })
             );
         }
     }

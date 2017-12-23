@@ -46,6 +46,7 @@
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertyValueTypeCheckAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertySpecialValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.WrongConstantUsageAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
         <!-- Contributors -->
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssSectionCompletionContributor"/>
