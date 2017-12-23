@@ -27,9 +27,10 @@
         <fileTypeFactory implementation="org.pcsoft.plugins.intellij.iss.language.IssFileTypeFactory"/>
         <lang.parserDefinition language="Inno-Setup"
                                implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParserDefinition"/>
-        <!-- Braces & Quotes -->
+        <!-- Common -->
         <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
         <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
+        <lang.commenter language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssCommenter"/>
         <!-- Structure -->
         <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
         <lang.foldingBuilder language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.folding.IssSectionFoldingBuilder"/>
