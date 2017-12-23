@@ -4,6 +4,7 @@ import com.intellij.lang.documentation.DocumentationProviderEx;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSectionTitle;
@@ -28,8 +29,9 @@ public class IssSectionDocumentationProvider extends DocumentationProviderEx {
     @Nullable
     @Override
     public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-        if (contextElement != null && contextElement.getParent() instanceof IssSectionTitle)
-            return contextElement.getParent();
+        IssSectionTitle issSectionTitle = PsiTreeUtil.getParentOfType(contextElement, IssSectionTitle.class);
+        if (contextElement != null && issSectionTitle != null)
+            return issSectionTitle;
 
         return null;
     }

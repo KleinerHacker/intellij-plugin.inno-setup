@@ -9,6 +9,8 @@ import static org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes.*;
 
 %{
   private boolean isInCode = false;
+  private int constCounter = 0;
+  private int beforeConstMode;
 
   public _IssLexer() {
     this((java.io.Reader)null);
@@ -30,7 +32,8 @@ HEX_BYTE=[0-9a-fA-F]{2}
 NUMBER=[0-9]+|\$({HEX_BYTE})+
 VERSION=([0-9]+\.)*[0-9]+
 STRING=[^\"\{\}]+
-TEXT=[^\r|\n|\r\n|\{|\}|0-9]+
+VALUE_TEXT=[^\r|\n|\r\n|\{|\}|0-9]+
+CONST_TEXT=[^\{\}\,\|\:]+
 COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 
@@ -38,11 +41,12 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 %state YYVALUE
 %state YYCODE
 %state YYTITLE
+%state YYCONST
 
 %%
 <YYINITIAL> {
   <YYTITLE> {
-    {WHITE_SPACE}           { return com.intellij.psi.TokenType.WHITE_SPACE; }
+      {WHITE_SPACE}         { return com.intellij.psi.TokenType.WHITE_SPACE; }
   }
   ^{EOL}                    { return com.intellij.psi.TokenType.WHITE_SPACE; }
   {EOL}                     { return EOL; }
@@ -50,13 +54,11 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
   \[                        { yybegin(YYTITLE); return BRACES_CORNER_OPEN; }
   <YYTITLE> {
-    {NAME}                  { isInCode = yytext().toString().equalsIgnoreCase("code"); return NAME; }
-    \]                      { return BRACES_CORNER_CLOSE; }
-    {EOL}                   { yybegin(isInCode ? YYCODE : YYINITIAL); isInCode = false; return EOL; }
+      \]                    { return BRACES_CORNER_CLOSE; }
   }
-  <YYVALUE, YYSTRING> {
-      \{                    { return BRACES_CURLY_OPEN; }
-      \}                    { return BRACES_CURLY_CLOSE; }
+  <YYVALUE, YYSTRING, YYCONST> {
+      \{                    { if (constCounter <= 0) { beforeConstMode = yystate(); yybegin(YYCONST); } constCounter++; return BRACES_CURLY_OPEN; }
+      \}                    { if (constCounter > 0) {constCounter--; if (constCounter <= 0) yybegin(beforeConstMode); } return BRACES_CURLY_CLOSE; }
   }
 
   <YYSTRING> {
@@ -65,20 +67,32 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
   ";"                       { yybegin(YYINITIAL); return SPLITTER; }
   "="                       { yybegin(YYVALUE); return OPERATOR; }
-  ":"                       { return OPERATOR; }
+  <YYCONST> {
+      ":"                   { return OPERATOR; }
+      "|"                   { return OPERATOR; }
+      ","                   { return SPLITTER; }
+  }
+  "."                       { return SPLITTER; }
 
   <YYVALUE> {
   {NUMBER}                  { return NUMBER; }
   {VERSION}                 { return VERSION; }
-  {HEX_BYTE}                { return HEX_BYTE; }
-      <YYSTRING> {
+      <YYSTRING, YYCONST> {
           {NAME}            { return NAME; }
       }
+  {HEX_BYTE}                { return HEX_BYTE; }
   }
+}
+<YYTITLE> {
+    {EOL}                   { yybegin(isInCode ? YYCODE : YYINITIAL); isInCode = false; return EOL; }
+    {NAME}                  { isInCode = yytext().toString().equalsIgnoreCase("code"); return NAME; }
 }
 <YYVALUE> {
   {EOL}                     { yybegin(YYINITIAL); return EOL; }
-  {TEXT}                    { return TEXT; }
+  {VALUE_TEXT}                    { return TEXT; }
+}
+<YYCONST> {
+  {CONST_TEXT}              { return TEXT; }
 }
 <YYSTRING> {
   {STRING}                  { return STRING; }

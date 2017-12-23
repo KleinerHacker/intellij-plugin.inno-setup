@@ -45,7 +45,7 @@ Section: "Hallo"
 Root: HKCU; Subkey: "ff"; ValueType: expandSZ; ValueData: $00FF
 
 [InstallDelete]
-Type: files; Name: "{app:kkk}"
+Type: files; Name: "{app:{sys:sd|{win}},aa|ss}"
 
 [UninstallDelete]
 Type: dirIfEmpty; Name: "{pup}"

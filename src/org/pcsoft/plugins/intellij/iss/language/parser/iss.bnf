@@ -87,5 +87,5 @@ byteArrayValue ::= (HEX_BYTE ' ')* HEX_BYTE
 /* Sub Types */
 private constArgumentList ::= (constArgument ',')* constArgument
 constName ::= NAME
-constArgument ::= NAME
-constDefault ::= NAME
+constArgument ::= (constValue | NAME | TEXT)
+constDefault ::= (constValue | NAME | TEXT)

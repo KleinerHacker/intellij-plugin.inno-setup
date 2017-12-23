@@ -4,6 +4,7 @@ import com.intellij.lang.documentation.DocumentationProviderEx;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssKey;
@@ -39,7 +40,8 @@ public class IssPropertyKeyDocumentationProvider extends DocumentationProviderEx
     @Nullable
     @Override
     public PsiElement getCustomDocumentationElement(@NotNull Editor editor, @NotNull PsiFile file, @Nullable PsiElement contextElement) {
-        if (contextElement != null && contextElement.getParent() instanceof IssKey && checkSection((IssKey) contextElement.getParent()))
+        IssKey issKey = PsiTreeUtil.getParentOfType(contextElement, IssKey.class);
+        if (contextElement != null && issKey != null && checkSection(issKey))
             return contextElement.getParent();
 
         return null;
