@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>org.pcsoft.plugins.intellij.iss</id>
     <name>Inno Setup Support</name>
-    <version>0.1</version>
+    <version>0.2</version>
     <vendor>PC-Soft</vendor>
 
     <description><![CDATA[
