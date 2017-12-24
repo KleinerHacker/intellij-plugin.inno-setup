@@ -16,7 +16,8 @@ public class IssBraceMatcher implements PairedBraceMatcher{
     public BracePair[] getPairs() {
         return new BracePair[] {
                 new BracePair(IssCustomTypes.BRACES_CORNER_OPEN, IssCustomTypes.BRACES_CORNER_CLOSE, false),
-                new BracePair(IssCustomTypes.BRACES_CURLY_OPEN, IssCustomTypes.BRACES_CURLY_CLOSE, false)
+                new BracePair(IssCustomTypes.BRACES_CURLY_OPEN, IssCustomTypes.BRACES_CURLY_CLOSE, false),
+                new BracePair(IssCustomTypes.BRACES_ANGLE_OPEN, IssCustomTypes.BRACES_ANGLE_CLOSE, false),
         };
     }
 

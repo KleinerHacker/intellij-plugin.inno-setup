@@ -2,9 +2,9 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 
@@ -13,37 +13,37 @@ import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
  */
 public enum LanguagesPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Name("Name", PropertyValueType.String),
+    Name("Name", ValueType.String),
     @IsRequired @IsInfoProperty
-    MessageFile("MessageFile", PropertyValueType.String),
-    LicenseFile("LicenseFile", PropertyValueType.String),
-    InfoBeforeFile("InfoBeforeFile", PropertyValueType.String),
-    InfoAfterFile("InfoAfterFile", PropertyValueType.String),
+    MessageFile("MessageFile", ValueType.String),
+    LicenseFile("LicenseFile", ValueType.String),
+    InfoBeforeFile("InfoBeforeFile", ValueType.String),
+    InfoAfterFile("InfoAfterFile", ValueType.String),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private LanguagesPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private LanguagesPropertyType(String name, ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private LanguagesPropertyType(String name, ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private LanguagesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private LanguagesPropertyType(String name, ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private LanguagesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private LanguagesPropertyType(String name, ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -69,13 +69,13 @@ public enum LanguagesPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

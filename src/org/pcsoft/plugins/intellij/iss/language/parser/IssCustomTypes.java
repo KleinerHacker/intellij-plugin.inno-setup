@@ -16,6 +16,9 @@ public interface IssCustomTypes {
     IElementType BRACES_CURLY_OPEN = new IssTokenType("BRACES_CURLY_OPEN");
     IElementType BRACES_CURLY_CLOSE = new IssTokenType("BRACES_CURLY_CLOSE");
 
+    IElementType BRACES_ANGLE_OPEN = new IssTokenType("BRACES_ANGLE_OPEN");
+    IElementType BRACES_ANGLE_CLOSE = new IssTokenType("BRACES_ANGLE_CLOSE");
+
     IElementType QUOTE = new IssTokenType("QUOTE");
     IElementType SPLITTER = new IssTokenType("SPLITTER");
     IElementType OPERATOR = new IssTokenType("OPERATOR");

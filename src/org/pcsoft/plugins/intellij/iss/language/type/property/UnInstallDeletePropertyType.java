@@ -2,53 +2,53 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyUnInstallTypeValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.UnInstallTypeValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
 public enum UnInstallDeletePropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Type("Type", PropertyValueType.SingleValue, PropertyUnInstallTypeValueType.class),
+    Type("Type", ValueType.SingleValue, UnInstallTypeValueType.class),
     @IsRequired @IsInfoProperty
-    Name("Name", PropertyValueType.String),
+    Name("Name", ValueType.String),
     @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
+    Components("Components", ValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    Tasks("Tasks", ValueType.MultiValue),
+    Languages("Languages", ValueType.MultiValue),
+    MinVersion("MinVersion", ValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", ValueType.Version),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private UnInstallDeletePropertyType(String name, ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private UnInstallDeletePropertyType(String name, ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private UnInstallDeletePropertyType(String name, ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private UnInstallDeletePropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private UnInstallDeletePropertyType(String name, ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -74,13 +74,13 @@ public enum UnInstallDeletePropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

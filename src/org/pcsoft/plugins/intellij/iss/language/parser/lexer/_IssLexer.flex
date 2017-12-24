@@ -42,6 +42,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 %state YYCODE
 %state YYTITLE
 %state YYCONST
+%state YYFILE
 
 %%
 <YYINITIAL> {
@@ -60,6 +61,10 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
       \{                    { if (constCounter <= 0) { beforeConstMode = yystate(); yybegin(YYCONST); } constCounter++; return BRACES_CURLY_OPEN; }
       \}                    { if (constCounter > 0) {constCounter--; if (constCounter <= 0) yybegin(beforeConstMode); } return BRACES_CURLY_CLOSE; }
   }
+  \<                        { yybegin(YYFILE); return BRACES_ANGLE_OPEN; }
+  <YYFILE> {
+      \>                    { yybegin(YYINITIAL); return BRACES_ANGLE_CLOSE; }
+  }
 
   <YYSTRING> {
       \"                    { if (yystate() == YYSTRING) yybegin(YYINITIAL); else yybegin(YYSTRING); return QUOTE; }
@@ -74,12 +79,14 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
       ","                   { return SPLITTER; }
       "%"                   { return OPERATOR; }
   }
-  "."                       { return SPLITTER; }
+  <YYFILE> {
+      "."                   { return SPLITTER; }
+  }
 
   <YYVALUE> {
   {NUMBER}                  { return NUMBER; }
   {VERSION}                 { return VERSION; }
-      <YYSTRING, YYCONST> {
+      <YYSTRING, YYCONST, YYFILE> {
           {NAME}            { return NAME; }
       }
   {HEX_BYTE}                { return HEX_BYTE; }

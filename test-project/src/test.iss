@@ -3,7 +3,11 @@
 
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
 
-#include hhh gh "göf"
+#include hhh gh
+#include "hello"
+#preproc builtin
+#preproc ggg
+#aba ggg
 
 [Setup]
 AppName={pf}\My Program

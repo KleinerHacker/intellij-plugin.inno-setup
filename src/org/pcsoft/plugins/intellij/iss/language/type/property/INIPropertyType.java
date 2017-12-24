@@ -2,56 +2,56 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyINIFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.INIFlagValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
 public enum INIPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Filename("Filename", PropertyValueType.String),
+    Filename("Filename", ValueType.String),
     @IsRequired @IsInfoProperty
-    Section("Section", PropertyValueType.String),
-    Key("Key", PropertyValueType.String),
-    String("String", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyINIFlagValueType.class),
+    Section("Section", ValueType.String),
+    Key("Key", ValueType.String),
+    String("String", ValueType.String),
+    Flags("Flags", ValueType.MultiValue, INIFlagValueType.class),
     @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
+    Components("Components", ValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    Tasks("Tasks", ValueType.MultiValue),
+    Languages("Languages", ValueType.MultiValue),
+    MinVersion("MinVersion", ValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", ValueType.Version),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private INIPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private INIPropertyType(String name, ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private INIPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private INIPropertyType(String name, ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private INIPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private INIPropertyType(String name, ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private INIPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private INIPropertyType(String name, ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -77,13 +77,13 @@ public enum INIPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

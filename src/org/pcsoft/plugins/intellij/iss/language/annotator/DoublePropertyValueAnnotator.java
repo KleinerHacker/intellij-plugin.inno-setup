@@ -7,7 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssProperty;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import java.util.Collection;
@@ -25,7 +25,7 @@ public class DoublePropertyValueAnnotator implements Annotator {
                 return;
 
 
-            if (Stream.of(propertyType.getPropertyValueTypes()).anyMatch(propertyValueType -> propertyValueType == PropertyValueType.MultiValue)) {
+            if (Stream.of(propertyType.getValueTypes()).anyMatch(propertyValueType -> propertyValueType == ValueType.MultiValue)) {
                 final Collection<IssRefValue> refValues = PsiTreeUtil.findChildrenOfType(property.getValue(), IssRefValue.class);
                 for (IssRefValue refValue : refValues) {
                     refValues.stream()

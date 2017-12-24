@@ -2,60 +2,60 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyFilesFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.AttributesValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.FilesFlagValueType;
 
 public enum FilesPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Source("Source", PropertyValueType.String),
+    Source("Source", ValueType.String),
     @IsRequired @IsInfoProperty
-    DestDir("DestDir", PropertyValueType.String),
-    DestName("DestName", PropertyValueType.String),
-    Excludes("Excludes", PropertyValueType.String),
-    ExternalSize("ExternalSize", PropertyValueType.Number),
-    CopyMode("CopyMode", PropertyValueType.SingleValue),
-    Attributes("Attribs", PropertyValueType.MultiValue, PropertyAttributesValueType.class),
-    Permissions("Permissions", PropertyValueType.SingleValue),
-    FontInstall("FontInstall", PropertyValueType.String),
-    StrongAssemblyName("StrongAssemblyName", PropertyValueType.String),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyFilesFlagValueType.class),
+    DestDir("DestDir", ValueType.String),
+    DestName("DestName", ValueType.String),
+    Excludes("Excludes", ValueType.String),
+    ExternalSize("ExternalSize", ValueType.Number),
+    CopyMode("CopyMode", ValueType.SingleValue),
+    Attributes("Attribs", ValueType.MultiValue, AttributesValueType.class),
+    Permissions("Permissions", ValueType.SingleValue),
+    FontInstall("FontInstall", ValueType.String),
+    StrongAssemblyName("StrongAssemblyName", ValueType.String),
+    Flags("Flags", ValueType.MultiValue, FilesFlagValueType.class),
     @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
+    Components("Components", ValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    Tasks("Tasks", ValueType.MultiValue),
+    Languages("Languages", ValueType.MultiValue),
+    MinVersion("MinVersion", ValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", ValueType.Version),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private FilesPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private FilesPropertyType(String name, ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private FilesPropertyType(String name, ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private FilesPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private FilesPropertyType(String name, ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private FilesPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private FilesPropertyType(String name, ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -81,13 +81,13 @@ public enum FilesPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

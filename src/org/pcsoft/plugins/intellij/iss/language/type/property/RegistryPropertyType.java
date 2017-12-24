@@ -2,60 +2,60 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryFlagValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryRootValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyRegistryTypeValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.RegistryFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.RegistryRootValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.RegistryTypeValueType;
 
 /**
  * Created by Christoph on 02.10.2016.
  */
 public enum RegistryPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Root("Root", PropertyValueType.SingleValue, PropertyRegistryRootValueType.class),
+    Root("Root", org.pcsoft.plugins.intellij.iss.language.type.ValueType.SingleValue, RegistryRootValueType.class),
     @IsRequired @IsInfoProperty
-    Subkey("Subkey", PropertyValueType.String),
-    ValueType("ValueType", PropertyValueType.SingleValue, PropertyRegistryTypeValueType.class),
-    ValueName("ValueName", PropertyValueType.String),
-    ValueData("ValueData", new PropertyValueType[] {PropertyValueType.String, PropertyValueType.Number, PropertyValueType.ByteArray}),
-    Permissions("Permissions", PropertyValueType.SingleValue),
-    Flags("Flags", PropertyValueType.SingleValue, PropertyRegistryFlagValueType.class),
+    Subkey("Subkey", org.pcsoft.plugins.intellij.iss.language.type.ValueType.String),
+    ValueType("ValueType", org.pcsoft.plugins.intellij.iss.language.type.ValueType.SingleValue, RegistryTypeValueType.class),
+    ValueName("ValueName", org.pcsoft.plugins.intellij.iss.language.type.ValueType.String),
+    ValueData("ValueData", new ValueType[] {org.pcsoft.plugins.intellij.iss.language.type.ValueType.String, org.pcsoft.plugins.intellij.iss.language.type.ValueType.Number, org.pcsoft.plugins.intellij.iss.language.type.ValueType.ByteArray}),
+    Permissions("Permissions", org.pcsoft.plugins.intellij.iss.language.type.ValueType.SingleValue),
+    Flags("Flags", org.pcsoft.plugins.intellij.iss.language.type.ValueType.SingleValue, RegistryFlagValueType.class),
     @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
+    Components("Components", org.pcsoft.plugins.intellij.iss.language.type.ValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    Tasks("Tasks", org.pcsoft.plugins.intellij.iss.language.type.ValueType.MultiValue),
+    Languages("Languages", org.pcsoft.plugins.intellij.iss.language.type.ValueType.MultiValue),
+    MinVersion("MinVersion", org.pcsoft.plugins.intellij.iss.language.type.ValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", org.pcsoft.plugins.intellij.iss.language.type.ValueType.Version),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final org.pcsoft.plugins.intellij.iss.language.type.ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private RegistryPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private RegistryPropertyType(String name, org.pcsoft.plugins.intellij.iss.language.type.ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private RegistryPropertyType(String name, org.pcsoft.plugins.intellij.iss.language.type.ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private RegistryPropertyType(String name, org.pcsoft.plugins.intellij.iss.language.type.ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private RegistryPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private RegistryPropertyType(String name, org.pcsoft.plugins.intellij.iss.language.type.ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -81,13 +81,13 @@ public enum RegistryPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public org.pcsoft.plugins.intellij.iss.language.type.ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

@@ -2,52 +2,52 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyAttributesValueType;
-import org.pcsoft.plugins.intellij.iss.language.type.value.PropertyDirsFlagValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.AttributesValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.value.DirsFlagValueType;
 
 public enum DirsPropertyType implements PropertyType {
     @IsRequired @IsKeyProperty
-    Name("Name", PropertyValueType.String),
-    Attributes("Attribs", PropertyValueType.MultiValue, PropertyAttributesValueType.class),
-    Permissions("Permissions", PropertyValueType.SingleValue),
-    Flags("Flags", PropertyValueType.MultiValue, PropertyDirsFlagValueType.class),
+    Name("Name", ValueType.String),
+    Attributes("Attribs", ValueType.MultiValue, AttributesValueType.class),
+    Permissions("Permissions", ValueType.SingleValue),
+    Flags("Flags", ValueType.MultiValue, DirsFlagValueType.class),
     @ReferenceTo(SectionType.Components)
-    Components("Components", PropertyValueType.MultiValue),
+    Components("Components", ValueType.MultiValue),
     @ReferenceTo(SectionType.Tasks)
-    Tasks("Tasks", PropertyValueType.MultiValue),
-    Languages("Languages", PropertyValueType.MultiValue),
-    MinVersion("MinVersion", PropertyValueType.Version),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version),
+    Tasks("Tasks", ValueType.MultiValue),
+    Languages("Languages", ValueType.MultiValue),
+    MinVersion("MinVersion", ValueType.Version),
+    OnlyBelowVersion("OnlyBelowVersion", ValueType.Version),
     ;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final ValueType[] valueTypes;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private DirsPropertyType(String name, PropertyValueType propertyValueType) {
-        this(name, new PropertyValueType[]{propertyValueType}, null);
+    private DirsPropertyType(String name, ValueType valueType) {
+        this(name, new ValueType[]{valueType}, null);
     }
 
-    private DirsPropertyType(String name, PropertyValueType[] propertyValueTypes) {
-        this(name, propertyValueTypes, null);
+    private DirsPropertyType(String name, ValueType[] valueTypes) {
+        this(name, valueTypes, null);
     }
 
-    private DirsPropertyType(String name, PropertyValueType propertyValueType, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, propertySpecialValueTypeClass);
+    private DirsPropertyType(String name, ValueType valueType, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, propertySpecialValueTypeClass);
     }
 
-    private DirsPropertyType(String name, PropertyValueType[] propertyValueTypes, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private DirsPropertyType(String name, ValueType[] valueTypes, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
         try {
@@ -73,13 +73,13 @@ public enum DirsPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

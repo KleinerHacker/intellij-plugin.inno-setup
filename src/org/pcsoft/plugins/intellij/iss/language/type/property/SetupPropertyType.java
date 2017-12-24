@@ -2,9 +2,9 @@ package org.pcsoft.plugins.intellij.iss.language.type.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.type.PropertyValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
-import org.pcsoft.plugins.intellij.iss.language.type.base.PropertySpecialValueType;
+import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.annotation.*;
 import org.pcsoft.plugins.intellij.iss.language.type.value.*;
@@ -14,195 +14,195 @@ import org.pcsoft.plugins.intellij.iss.language.type.value.*;
  */
 public enum SetupPropertyType implements PropertyType {
     //Compiler related
-    ASLRCompatible("ASLRCompatible", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    Compression("Compression", PropertyValueType.SingleValue, "lzma2/max", PropertyCompressionValueType.class),
-    CompressionThreads("CompressionThreads", new PropertyValueType[]{PropertyValueType.SingleValue, PropertyValueType.Number}, "auto", PropertyCompressionThreadsValueType.class),
-    DEPCompatible("DEPCompatible", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    DiskClusterSize("DiskCluster", PropertyValueType.Number, 512),
-    DiskSliceSize("DiskSliceSize", new PropertyValueType[]{PropertyValueType.SingleValue, PropertyValueType.Number}, "max", PropertyDiskSliceSizeValueType.class),
-    DiskSpanning("DiskSpanning", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    Encryption("Encryption", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    InternalCompressLevel("InternalCompressLevel", PropertyValueType.SingleValue, "normal", PropertyCompressionLevelValueType.class),
-    LZMAAlgorithm("LZMAAlgorithm", PropertyValueType.Number, null),
-    LZMABlockSize("LZMABlockSize", PropertyValueType.Number, null),
-    LZMADictionarySize("LZMADictionarySize", PropertyValueType.Number, null),
-    LZMAMatchFinder("LZMAMatchFinder", PropertyValueType.Number, null, PropertyLZMAMatchFinderValueType.class),
-    LZMANumBlockThreads("LZMANumBlockThreads", PropertyValueType.Number, 1),
-    LZMANumFastBytes("LZMANumFastBytes", PropertyValueType.Number, null),
-    LZMAUseSeparateProcess("LZMAUseSeparateProcess", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    MergeDuplicateFiles("MergeDuplicateFiles", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    Output("Output", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    OutputBaseFilename("OutputBaseFilename", PropertyValueType.String, "mysetup"),
-    OutputDir("OutputDir", PropertyValueType.String, "Output"),
-    OutputManifestFile("OutputManifestFile", PropertyValueType.String, null),
-    ReserveBytes("ReserveBytes", PropertyValueType.Number, 0),
-    SignedUninstaller("SignedUninstaller", PropertyValueType.Boolean, null, PropertyBooleanValueType.class),
-    SignedUninstallerDir("SignedUninstallerDir", PropertyValueType.String, null),
-    SignTool("SignTool", PropertyValueType.String, null),
-    SignToolRetryCount("SignToolRetryCount", PropertyValueType.Number, 2),
-    SlicesPerDisk("SlicesPerDisk", PropertyValueType.Number, 1),
-    SolidCompression("SolidCompression", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    SourceDir("SourceDir", PropertyValueType.String, null),
-    TerminalServicesAware("TerminalServicesAware", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UseSetupLdr("UseSetupLdr", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    VersionInfoCompany("VersionInfoCompany", PropertyValueType.String, null),
-    VersionInfoCopyright("VersionInfoCopyright", PropertyValueType.String, null),
-    VersionInfoDescription("VersionInfoDescription", PropertyValueType.String, null),
-    VersionInfoProductName("VersionInfoProductName", PropertyValueType.String, null),
-    VersionInfoProductTextVersion("VersionInfoProductTextVersion", PropertyValueType.String, null),
-    VersionInfoProductVersion("VersionInfoProductVersion", PropertyValueType.Version, null),
-    VersionInfoTextVersion("VersionInfoTextVersion", PropertyValueType.String, null),
-    VersionInfoVersion("VersionInfoVersion", PropertyValueType.Version, "0.0.0.0"),
+    ASLRCompatible("ASLRCompatible", ValueType.Boolean, true, BooleanValueType.class),
+    Compression("Compression", ValueType.SingleValue, "lzma2/max", CompressionValueType.class),
+    CompressionThreads("CompressionThreads", new ValueType[]{ValueType.SingleValue, ValueType.Number}, "auto", CompressionThreadsValueType.class),
+    DEPCompatible("DEPCompatible", ValueType.Boolean, true, BooleanValueType.class),
+    DiskClusterSize("DiskCluster", ValueType.Number, 512),
+    DiskSliceSize("DiskSliceSize", new ValueType[]{ValueType.SingleValue, ValueType.Number}, "max", DiskSliceSizeValueType.class),
+    DiskSpanning("DiskSpanning", ValueType.Boolean, false, BooleanValueType.class),
+    Encryption("Encryption", ValueType.Boolean, false, BooleanValueType.class),
+    InternalCompressLevel("InternalCompressLevel", ValueType.SingleValue, "normal", CompressionLevelValueType.class),
+    LZMAAlgorithm("LZMAAlgorithm", ValueType.Number, null),
+    LZMABlockSize("LZMABlockSize", ValueType.Number, null),
+    LZMADictionarySize("LZMADictionarySize", ValueType.Number, null),
+    LZMAMatchFinder("LZMAMatchFinder", ValueType.Number, null, LZMAMatchFinderValueType.class),
+    LZMANumBlockThreads("LZMANumBlockThreads", ValueType.Number, 1),
+    LZMANumFastBytes("LZMANumFastBytes", ValueType.Number, null),
+    LZMAUseSeparateProcess("LZMAUseSeparateProcess", ValueType.Boolean, false, BooleanValueType.class),
+    MergeDuplicateFiles("MergeDuplicateFiles", ValueType.Boolean, true, BooleanValueType.class),
+    Output("Output", ValueType.Boolean, true, BooleanValueType.class),
+    OutputBaseFilename("OutputBaseFilename", ValueType.String, "mysetup"),
+    OutputDir("OutputDir", ValueType.String, "Output"),
+    OutputManifestFile("OutputManifestFile", ValueType.String, null),
+    ReserveBytes("ReserveBytes", ValueType.Number, 0),
+    SignedUninstaller("SignedUninstaller", ValueType.Boolean, null, BooleanValueType.class),
+    SignedUninstallerDir("SignedUninstallerDir", ValueType.String, null),
+    SignTool("SignTool", ValueType.String, null),
+    SignToolRetryCount("SignToolRetryCount", ValueType.Number, 2),
+    SlicesPerDisk("SlicesPerDisk", ValueType.Number, 1),
+    SolidCompression("SolidCompression", ValueType.Boolean, false, BooleanValueType.class),
+    SourceDir("SourceDir", ValueType.String, null),
+    TerminalServicesAware("TerminalServicesAware", ValueType.Boolean, true, BooleanValueType.class),
+    UseSetupLdr("UseSetupLdr", ValueType.Boolean, true, BooleanValueType.class),
+    VersionInfoCompany("VersionInfoCompany", ValueType.String, null),
+    VersionInfoCopyright("VersionInfoCopyright", ValueType.String, null),
+    VersionInfoDescription("VersionInfoDescription", ValueType.String, null),
+    VersionInfoProductName("VersionInfoProductName", ValueType.String, null),
+    VersionInfoProductTextVersion("VersionInfoProductTextVersion", ValueType.String, null),
+    VersionInfoProductVersion("VersionInfoProductVersion", ValueType.Version, null),
+    VersionInfoTextVersion("VersionInfoTextVersion", ValueType.String, null),
+    VersionInfoVersion("VersionInfoVersion", ValueType.Version, "0.0.0.0"),
     //Intsaller related
-    AllowCancelDuringInstall("AllowCancelDuringInstall", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AllowNetworkDrive("AllowNetworkDrive", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AllowNoIcon("AllowNoIcon", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AllowRootDirectory("AllowRootDirectory", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AllowUNCPath("AllowUNCPath", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AlwaysRestart("AlwaysRestart", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AlwaysShowComponentsList("AlwaysShowComponentsList", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AlwaysShowDirOnReadyPage("AlwaysShowDirOnReadyPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AlwaysShowGroupOnReadyPage("AlwaysShowGroupOnReadyPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AlwaysUsePersonalGroup("AlwaysUsePersonalGroup", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    AppendDefaultDirName("AppendDefaultDirName", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AppendDefaultGroupName("AppendDefaultGroupName", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    AppComments("AppComments", PropertyValueType.String, null),
-    AppContact("AppContact", PropertyValueType.String, null),
-    AppId("AppId", PropertyValueType.String, null),
-    AppModifyPath("AppModifyPath", PropertyValueType.String, null),
-    AppMutex("AppMutex", PropertyValueType.String, null),
+    AllowCancelDuringInstall("AllowCancelDuringInstall", ValueType.Boolean, true, BooleanValueType.class),
+    AllowNetworkDrive("AllowNetworkDrive", ValueType.Boolean, true, BooleanValueType.class),
+    AllowNoIcon("AllowNoIcon", ValueType.Boolean, false, BooleanValueType.class),
+    AllowRootDirectory("AllowRootDirectory", ValueType.Boolean, false, BooleanValueType.class),
+    AllowUNCPath("AllowUNCPath", ValueType.Boolean, true, BooleanValueType.class),
+    AlwaysRestart("AlwaysRestart", ValueType.Boolean, false, BooleanValueType.class),
+    AlwaysShowComponentsList("AlwaysShowComponentsList", ValueType.Boolean, true, BooleanValueType.class),
+    AlwaysShowDirOnReadyPage("AlwaysShowDirOnReadyPage", ValueType.Boolean, false, BooleanValueType.class),
+    AlwaysShowGroupOnReadyPage("AlwaysShowGroupOnReadyPage", ValueType.Boolean, false, BooleanValueType.class),
+    AlwaysUsePersonalGroup("AlwaysUsePersonalGroup", ValueType.Boolean, false, BooleanValueType.class),
+    AppendDefaultDirName("AppendDefaultDirName", ValueType.Boolean, true, BooleanValueType.class),
+    AppendDefaultGroupName("AppendDefaultGroupName", ValueType.Boolean, true, BooleanValueType.class),
+    AppComments("AppComments", ValueType.String, null),
+    AppContact("AppContact", ValueType.String, null),
+    AppId("AppId", ValueType.String, null),
+    AppModifyPath("AppModifyPath", ValueType.String, null),
+    AppMutex("AppMutex", ValueType.String, null),
     @IsRequired @IsKeyProperty
-    AppName("AppName", PropertyValueType.String, null),
-    AppPublisher("AppPublisher", PropertyValueType.String, null),
-    AppPublisherURL("AppPublisherURL", PropertyValueType.String, null),
-    AppReadmeFile("AppReadmeFile", PropertyValueType.String, null),
-    AppSupportPhone("AppSupportPhone", PropertyValueType.String, null),
-    AppSupportURL("AppSupportURL", PropertyValueType.String, null),
-    AppUpdatesURL("AppUpdatesURL", PropertyValueType.String, null),
-    AppVerName("AppVerName", PropertyValueType.String, null),
+    AppName("AppName", ValueType.String, null),
+    AppPublisher("AppPublisher", ValueType.String, null),
+    AppPublisherURL("AppPublisherURL", ValueType.String, null),
+    AppReadmeFile("AppReadmeFile", ValueType.String, null),
+    AppSupportPhone("AppSupportPhone", ValueType.String, null),
+    AppSupportURL("AppSupportURL", ValueType.String, null),
+    AppUpdatesURL("AppUpdatesURL", ValueType.String, null),
+    AppVerName("AppVerName", ValueType.String, null),
     @IsRequired @IsInfoProperty
-    AppVersion("AppVersion", PropertyValueType.Version, null),
-    ArchitecturesAllowed("ArchitecturesAllowed", PropertyValueType.MultiValue, null, PropertyArchitecturesValueType.class),
-    ArchitecturesInstallIn64BitMode("ArchitecturesInstallIn64BitMode", PropertyValueType.MultiValue, PropertyArchitectures64ValueType.class),
-    ChangesAssociations("ChangesAssociations", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    ChangesEnvironment("ChangesEnvironment", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    CloseApplications("CloseApplications", PropertyValueType.BooleanEx, true, PropertyBooleanWithForceValueType.class),
-    CloseApplicationsFilter("CloseApplicationsFilter", PropertyValueType.String, "*.exe,*.dll,*.chm"),
-    CreateAppDir("CreateAppDir", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    CreateUninstallRegKey("CreateUninstallRegKey", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    DefaultDialogFontName("DefaultDialogFontName", PropertyValueType.String, "Tahoma"),
-    DefaultDirName("DefaultDirName", PropertyValueType.String, null),
-    DefaultGroupName("DefaultGroupName", PropertyValueType.String, null),
-    DefaultUserInfoName("DefaultUserInfoName", PropertyValueType.String, null),
-    DefaultUserInfoOrg("DefaultUserInfoOrg", PropertyValueType.String, null),
-    DefaultUserInfoSerial("DefaultUserInfoSerial", PropertyValueType.String, null),
-    DirExistsWarning("DirExistsWarning", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
-    DisableDirPage("DisableDirPage", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
-    DisableFinishedPage("DisableFinishedPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    DisableProgramGroupPage("DisableProgramGroupPage", PropertyValueType.BooleanEx, null, PropertyBooleanWithAutoValueType.class),
-    DisableReadyMemo("DisableReadyMemo", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    DisableReadyPage("DisableReadyPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    DisableStartupPrompt("DisableStartupPrompt", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    DisableWelcomePage("DisableWelcomePage", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    EnableDirDoesntExistWarning("EnableDirDoesntExistWarning", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", PropertyValueType.Number, 0),
-    InfoAfterFile("InfoAfterFile", PropertyValueType.String, null),
-    InfoBeforeFile("InfoBeforeFile", PropertyValueType.String, null),
-    LanguageDetectionMethod("LanguageDetectionMethod", PropertyValueType.SingleValue, PropertyLanguageDetectionValueType.class),
-    LicenseFile("LicenseFile", PropertyValueType.String, null),
-    MinVersion("MinVersion", PropertyValueType.Version, null),
-    OnlyBelowVersion("OnlyBelowVersion", PropertyValueType.Version, null),
-    Password("Password", PropertyValueType.String, null),
-    PrivilegesRequired("PrivilegesRequired", PropertyValueType.SingleValue, PropertyPrivilegesValueType.class),
-    RestartApplications("RestartApplications", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    RestartIfNeededByRun("RestartIfNeededByRun", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    SetupLogging("SetupLogging", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    SetupMutex("SetupMutex", PropertyValueType.String, null),
-    ShowLanguageDialog("ShowLanguageDialog", PropertyValueType.BooleanEx, true, PropertyBooleanWithAutoValueType.class),
-    ShowUndisplayableLanguages("ShowUndisplayableLanguages", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    TimeStampRounding("TimeStampRounding", PropertyValueType.Number, 2),
-    TimeStampsInUTC("TimeStampsInUTC", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    TouchDate("TouchDate", PropertyValueType.SingleValue, "current", PropertyTouchDateValueType.class),
-    TouchTime("TouchTime", PropertyValueType.SingleValue, "current", PropertyTouchTimeValueType.class),
-    Uninstallable("Uninstallable", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UninstallDisplayIcon("UninstallDisplayIcon", PropertyValueType.String, null),
-    UninstallDisplayName("UninstallDisplayName", PropertyValueType.String, null),
-    UninstallDisplaySize("UninstallDisplaySize", PropertyValueType.Number, null),
-    UninstallFilesDir("UninstallFilesDir", PropertyValueType.String, "{app}"),
-    UninstallLogMode("UninstallLogMode", PropertyValueType.SingleValue, PropertyLogModeValueType.class),
-    UninstallRestartComputer("UninstallRestartComputer", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    UpdateUninstallLogAppName("UpdateUninstallLogAppName", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousAppDir("UsePreviousAppDir", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousGroup("UsePreviousGroup", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousLanguage("UsePreviousLanguage", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousSetupType("UsePreviousSetupType", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousTasks("UsePreviousTasks", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UsePreviousUserInfo("UsePreviousUserInfo", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    UserInfoPage("UserInfoPage", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
+    AppVersion("AppVersion", ValueType.Version, null),
+    ArchitecturesAllowed("ArchitecturesAllowed", ValueType.MultiValue, null, ArchitecturesValueType.class),
+    ArchitecturesInstallIn64BitMode("ArchitecturesInstallIn64BitMode", ValueType.MultiValue, Architectures64ValueType.class),
+    ChangesAssociations("ChangesAssociations", ValueType.Boolean, false, BooleanValueType.class),
+    ChangesEnvironment("ChangesEnvironment", ValueType.Boolean, false, BooleanValueType.class),
+    CloseApplications("CloseApplications", ValueType.BooleanEx, true, BooleanWithForceValueType.class),
+    CloseApplicationsFilter("CloseApplicationsFilter", ValueType.String, "*.exe,*.dll,*.chm"),
+    CreateAppDir("CreateAppDir", ValueType.Boolean, true, BooleanValueType.class),
+    CreateUninstallRegKey("CreateUninstallRegKey", ValueType.Boolean, true, BooleanValueType.class),
+    DefaultDialogFontName("DefaultDialogFontName", ValueType.String, "Tahoma"),
+    DefaultDirName("DefaultDirName", ValueType.String, null),
+    DefaultGroupName("DefaultGroupName", ValueType.String, null),
+    DefaultUserInfoName("DefaultUserInfoName", ValueType.String, null),
+    DefaultUserInfoOrg("DefaultUserInfoOrg", ValueType.String, null),
+    DefaultUserInfoSerial("DefaultUserInfoSerial", ValueType.String, null),
+    DirExistsWarning("DirExistsWarning", ValueType.BooleanEx, null, BooleanWithAutoValueType.class),
+    DisableDirPage("DisableDirPage", ValueType.BooleanEx, null, BooleanWithAutoValueType.class),
+    DisableFinishedPage("DisableFinishedPage", ValueType.Boolean, false, BooleanValueType.class),
+    DisableProgramGroupPage("DisableProgramGroupPage", ValueType.BooleanEx, null, BooleanWithAutoValueType.class),
+    DisableReadyMemo("DisableReadyMemo", ValueType.Boolean, false, BooleanValueType.class),
+    DisableReadyPage("DisableReadyPage", ValueType.Boolean, false, BooleanValueType.class),
+    DisableStartupPrompt("DisableStartupPrompt", ValueType.Boolean, true, BooleanValueType.class),
+    DisableWelcomePage("DisableWelcomePage", ValueType.Boolean, true, BooleanValueType.class),
+    EnableDirDoesntExistWarning("EnableDirDoesntExistWarning", ValueType.Boolean, false, BooleanValueType.class),
+    ExtraDiskSpaceRequired("ExtraDiskSpaceRequired", ValueType.Number, 0),
+    InfoAfterFile("InfoAfterFile", ValueType.String, null),
+    InfoBeforeFile("InfoBeforeFile", ValueType.String, null),
+    LanguageDetectionMethod("LanguageDetectionMethod", ValueType.SingleValue, LanguageDetectionValueType.class),
+    LicenseFile("LicenseFile", ValueType.String, null),
+    MinVersion("MinVersion", ValueType.Version, null),
+    OnlyBelowVersion("OnlyBelowVersion", ValueType.Version, null),
+    Password("Password", ValueType.String, null),
+    PrivilegesRequired("PrivilegesRequired", ValueType.SingleValue, PrivilegesValueType.class),
+    RestartApplications("RestartApplications", ValueType.Boolean, true, BooleanValueType.class),
+    RestartIfNeededByRun("RestartIfNeededByRun", ValueType.Boolean, true, BooleanValueType.class),
+    SetupLogging("SetupLogging", ValueType.Boolean, false, BooleanValueType.class),
+    SetupMutex("SetupMutex", ValueType.String, null),
+    ShowLanguageDialog("ShowLanguageDialog", ValueType.BooleanEx, true, BooleanWithAutoValueType.class),
+    ShowUndisplayableLanguages("ShowUndisplayableLanguages", ValueType.Boolean, false, BooleanValueType.class),
+    TimeStampRounding("TimeStampRounding", ValueType.Number, 2),
+    TimeStampsInUTC("TimeStampsInUTC", ValueType.Boolean, false, BooleanValueType.class),
+    TouchDate("TouchDate", ValueType.SingleValue, "current", TouchDateValueType.class),
+    TouchTime("TouchTime", ValueType.SingleValue, "current", TouchTimeValueType.class),
+    Uninstallable("Uninstallable", ValueType.Boolean, true, BooleanValueType.class),
+    UninstallDisplayIcon("UninstallDisplayIcon", ValueType.String, null),
+    UninstallDisplayName("UninstallDisplayName", ValueType.String, null),
+    UninstallDisplaySize("UninstallDisplaySize", ValueType.Number, null),
+    UninstallFilesDir("UninstallFilesDir", ValueType.String, "{app}"),
+    UninstallLogMode("UninstallLogMode", ValueType.SingleValue, LogModeValueType.class),
+    UninstallRestartComputer("UninstallRestartComputer", ValueType.Boolean, false, BooleanValueType.class),
+    UpdateUninstallLogAppName("UpdateUninstallLogAppName", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousAppDir("UsePreviousAppDir", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousGroup("UsePreviousGroup", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousLanguage("UsePreviousLanguage", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousSetupType("UsePreviousSetupType", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousTasks("UsePreviousTasks", ValueType.Boolean, true, BooleanValueType.class),
+    UsePreviousUserInfo("UsePreviousUserInfo", ValueType.Boolean, true, BooleanValueType.class),
+    UserInfoPage("UserInfoPage", ValueType.Boolean, false, BooleanValueType.class),
     //Cosmetic
-    AppCopyright("AppCopyright", PropertyValueType.String, null),
-    BackColor("BackColor", new PropertyValueType[]{PropertyValueType.SingleValue, PropertyValueType.Number}, "clBlue", PropertyColorValueType.class),
-    BackColor2("BackColor2", new PropertyValueType[]{PropertyValueType.SingleValue, PropertyValueType.Number}, "clBlack", PropertyColorValueType.class),
-    BackColorDirection("BackColorDirection", PropertyValueType.SingleValue, "topToBottom", PropertyColorDirectionValueType.class),
-    BackSolid("BackSolid", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    FlatComponentsList("FlatComponentsList", PropertyValueType.String, null),
-    SetupIconFile("SetupIconFile", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    ShowComponentSizes("ShowComponentSizes", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    ShowTasksTreeLines("ShowTasksTreeLines", PropertyValueType.Boolean, false, PropertyBooleanValueType.class),
-    WindowShowCaption("WindowShowCaption", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    WindowStartMaximized("WindowStartMaximized", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    WindowResizable("WindowResizable", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    WindowVisible("WindowVisible", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    WizardImageAlphaFormat("WizardImageAlphaFormat", PropertyValueType.SingleValue, "none", PropertyAlphaFormatValueType.class),
-    WizardImageFile("WizardImageFile", PropertyValueType.String, "compiler:WIZMODERNIMAGE.BMP"),
-    WizardImageStretch("WizardImageStretch", PropertyValueType.Boolean, true, PropertyBooleanValueType.class),
-    WizardSmallImageFile("WizardSmallImageFile", PropertyValueType.String, "compiler:WIZMODERNSMALLIMAGE.BMP"),
+    AppCopyright("AppCopyright", ValueType.String, null),
+    BackColor("BackColor", new ValueType[]{ValueType.SingleValue, ValueType.Number}, "clBlue", ColorValueType.class),
+    BackColor2("BackColor2", new ValueType[]{ValueType.SingleValue, ValueType.Number}, "clBlack", ColorValueType.class),
+    BackColorDirection("BackColorDirection", ValueType.SingleValue, "topToBottom", ColorDirectionValueType.class),
+    BackSolid("BackSolid", ValueType.Boolean, false, BooleanValueType.class),
+    FlatComponentsList("FlatComponentsList", ValueType.String, null),
+    SetupIconFile("SetupIconFile", ValueType.Boolean, false, BooleanValueType.class),
+    ShowComponentSizes("ShowComponentSizes", ValueType.Boolean, true, BooleanValueType.class),
+    ShowTasksTreeLines("ShowTasksTreeLines", ValueType.Boolean, false, BooleanValueType.class),
+    WindowShowCaption("WindowShowCaption", ValueType.Boolean, true, BooleanValueType.class),
+    WindowStartMaximized("WindowStartMaximized", ValueType.Boolean, true, BooleanValueType.class),
+    WindowResizable("WindowResizable", ValueType.Boolean, true, BooleanValueType.class),
+    WindowVisible("WindowVisible", ValueType.Boolean, true, BooleanValueType.class),
+    WizardImageAlphaFormat("WizardImageAlphaFormat", ValueType.SingleValue, "none", AlphaFormatValueType.class),
+    WizardImageFile("WizardImageFile", ValueType.String, "compiler:WIZMODERNIMAGE.BMP"),
+    WizardImageStretch("WizardImageStretch", ValueType.Boolean, true, BooleanValueType.class),
+    WizardSmallImageFile("WizardSmallImageFile", ValueType.String, "compiler:WIZMODERNSMALLIMAGE.BMP"),
     //Obsolete
     @IsDeprecated
-    AlwaysCreateUninstallIcon("AlwaysCreateUninstallIcon", PropertyValueType.String, null),
+    AlwaysCreateUninstallIcon("AlwaysCreateUninstallIcon", ValueType.String, null),
     @IsDeprecated
-    DisableAppendDir("DisableAppendDir", PropertyValueType.String, null),
+    DisableAppendDir("DisableAppendDir", ValueType.String, null),
     @IsDeprecated
-    DontMergeDuplicateFiles("DontMergeDuplicateFiles", PropertyValueType.String, null),
+    DontMergeDuplicateFiles("DontMergeDuplicateFiles", ValueType.String, null),
     @IsDeprecated
-    MessagesFile("MessagesFile", PropertyValueType.String, null),
+    MessagesFile("MessagesFile", ValueType.String, null),
     @IsDeprecated
-    UninstallIconFile("UninstallIconFile", PropertyValueType.String, null),
+    UninstallIconFile("UninstallIconFile", ValueType.String, null),
     @IsDeprecated
-    UninstallIconName("UninstallIconName", PropertyValueType.String, null),
+    UninstallIconName("UninstallIconName", ValueType.String, null),
     @IsDeprecated
-    UninstallStyle("UninstallStyle", PropertyValueType.String, null),
+    UninstallStyle("UninstallStyle", ValueType.String, null),
     @IsDeprecated
-    WizardImageBackColor("WizardImageBackColor", PropertyValueType.String, null),
+    WizardImageBackColor("WizardImageBackColor", ValueType.String, null),
     @IsDeprecated
-    WizardSmallImageBackColor("WizardSmallImageBackColor", PropertyValueType.String, null),
+    WizardSmallImageBackColor("WizardSmallImageBackColor", ValueType.String, null),
     @IsDeprecated
-    WizardStyle("WizardStyle", PropertyValueType.String, null),;
+    WizardStyle("WizardStyle", ValueType.String, null),;
 
     private final String name;
-    private final PropertyValueType[] propertyValueTypes;
+    private final ValueType[] valueTypes;
     private final Object defaultValue;
-    private final Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass;
+    private final Class<? extends SpecialValueType> propertySpecialValueTypeClass;
     private final boolean required, deprecated;
     private final boolean isKey, isInfo;
     private final boolean isReferenceKey;
     private final SectionType referenceTargetSectionType;
 
-    private SetupPropertyType(String name, PropertyValueType propertyValueType, Object defaultValue) {
-        this(name, new PropertyValueType[]{propertyValueType}, defaultValue, null);
+    private SetupPropertyType(String name, ValueType valueType, Object defaultValue) {
+        this(name, new ValueType[]{valueType}, defaultValue, null);
     }
 
-    private SetupPropertyType(String name, PropertyValueType[] propertyValueTypes, Object defaultValue) {
-        this(name, propertyValueTypes, defaultValue, null);
+    private SetupPropertyType(String name, ValueType[] valueTypes, Object defaultValue) {
+        this(name, valueTypes, defaultValue, null);
     }
 
-    private SetupPropertyType(String name, PropertyValueType propertyValueType, Object defaultValue, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
-        this(name, new PropertyValueType[]{propertyValueType}, defaultValue, propertySpecialValueTypeClass);
+    private SetupPropertyType(String name, ValueType valueType, Object defaultValue, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
+        this(name, new ValueType[]{valueType}, defaultValue, propertySpecialValueTypeClass);
     }
 
-    private SetupPropertyType(String name, PropertyValueType[] propertyValueTypes, Object defaultValue, Class<? extends PropertySpecialValueType> propertySpecialValueTypeClass) {
+    private SetupPropertyType(String name, ValueType[] valueTypes, Object defaultValue, Class<? extends SpecialValueType> propertySpecialValueTypeClass) {
         this.name = name;
-        this.propertyValueTypes = propertyValueTypes;
+        this.valueTypes = valueTypes;
         this.defaultValue = defaultValue;
         this.propertySpecialValueTypeClass = propertySpecialValueTypeClass;
 
@@ -229,8 +229,8 @@ public enum SetupPropertyType implements PropertyType {
 
     @NotNull
     @Override
-    public PropertyValueType[] getPropertyValueTypes() {
-        return propertyValueTypes;
+    public ValueType[] getValueTypes() {
+        return valueTypes;
     }
 
     @Nullable
@@ -240,7 +240,7 @@ public enum SetupPropertyType implements PropertyType {
 
     @Nullable
     @Override
-    public Class<? extends PropertySpecialValueType> getPropertySpecialValueTypeClass() {
+    public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return propertySpecialValueTypeClass;
     }
 

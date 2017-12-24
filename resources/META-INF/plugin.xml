@@ -42,11 +42,12 @@
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownSectionAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownConstantAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPreprocessorAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SectionTypePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertyValueTypeCheckAnnotator" order="FIRST"/>
-        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PropertySpecialValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.ValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SpecialValueTypeCheckAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.WrongConstantUsageAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
         <!-- Contributors -->
@@ -54,6 +55,8 @@
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertyKeyCompletionContributor"/>
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertySpecialValueCompletionContributor"/>
         <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssConstantCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPreprocessorCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPreprocessorSpecialValueCompletionContributor"/>
         <!-- Documentation -->
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>

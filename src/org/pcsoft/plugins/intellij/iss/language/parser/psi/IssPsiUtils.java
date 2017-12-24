@@ -181,7 +181,7 @@ public interface IssPsiUtils {
                 final PropertyType propertyType = Stream.of(propertyTypeList)
                         .filter(PropertyType::isKey).findFirst().orElse(propertyTypeList[0]);
 
-                return ((IssMultipleSectionLine)sectionLine).getMultiplePropertyList().stream()
+                return ((IssMultipleSectionLine) sectionLine).getMultiplePropertyList().stream()
                         .filter(multiElement -> multiElement.getName().equalsIgnoreCase(propertyType.getName()))
                         .map(multiElement -> multiElement.getMultipleValue().getText())
                         .findFirst().orElse(null);
@@ -205,7 +205,7 @@ public interface IssPsiUtils {
                 if (propertyType == null)
                     return null;
 
-                return ((IssMultipleSectionLine)sectionLine).getMultiplePropertyList().stream()
+                return ((IssMultipleSectionLine) sectionLine).getMultiplePropertyList().stream()
                         .filter(multiElement -> multiElement.getName().equalsIgnoreCase(propertyType.getName()))
                         .map(multiElement -> multiElement.getMultipleValue().getText())
                         .findFirst().orElse(null);
@@ -293,6 +293,8 @@ public interface IssPsiUtils {
 
     //</editor-fold>
 
+    //<editor-fold desc="Preprocessor Name">
+    @Nullable
     static String getName(final IssPreprocessorName preprocessorName) {
         ASTNode nameNode = preprocessorName.getNode().findChildByType(IssGenTypes.NAME);
         if (nameNode == null)
@@ -301,10 +303,27 @@ public interface IssPsiUtils {
         return nameNode.getText();
     }
 
+    @Nullable
+    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getPreprocessorType(final IssPreprocessorName preprocessorName) {
+        if (preprocessorName.getName() == null)
+            return null;
+
+        return org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType.fromName(preprocessorName.getName());
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Preprocessor Element">
+    @Nullable
     static String getName(final IssPreprocessorElement preprocessorElement) {
         if (preprocessorElement.getPreprocessorName() == null)
             return null;
 
         return preprocessorElement.getPreprocessorName().getName();
     }
+
+    @Nullable
+    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getPreprocessorType(final IssPreprocessorElement preprocessorElement) {
+        return preprocessorElement.getPreprocessorName().getPreprocessorType();
+    }
+    //</editor-fold>
 }

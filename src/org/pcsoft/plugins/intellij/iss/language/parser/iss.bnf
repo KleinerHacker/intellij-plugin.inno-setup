@@ -21,13 +21,13 @@ issFile ::= preprocessorList? section*
 preprocessorList ::= (preprocessorElement EOL)+
 preprocessorElement ::= preprocessorName preprocessorValue*
 {
-    methods=[getName]
+    methods=[getName getPreprocessorType]
 }
 preprocessorName ::= '#' NAME?
 {
-    methods=[getName]
+    methods=[getName getPreprocessorType]
 }
-preprocessorValue ::= NAME | stringValue
+preprocessorValue ::= NAME | stringValue | fileValue | TEXT
 
 /* Sections */
 section ::= sectionTitle sectionContent
@@ -95,6 +95,7 @@ constValue ::= '{' (constName (':' constArgumentList )? ('|' constDefault)? )? '
     methods=[getName getConstantType]
 }
 byteArrayValue ::= (HEX_BYTE ' ')* HEX_BYTE
+fileValue ::= '<' (NAME ('.' NAME)?)? '>'
 
 /* Sub Types */
 private constArgumentList ::= (constArgument ',')* constArgument
