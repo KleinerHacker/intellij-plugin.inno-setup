@@ -9,6 +9,7 @@ import org.pcsoft.plugins.intellij.iss.language.type.value.PreprocessorTypeValue
 public enum PreprocessorType implements org.pcsoft.plugins.intellij.iss.language.type.base.PreprocessorType {
     Include("include", ValueType.String),
     PreProc("preproc", ValueType.SingleValue, PreprocessorTypeValueType.class),
+    Define("define", new ValueType[] {ValueType.SingleValue, ValueType.String, ValueType.Number}, PreprocessorTypeValueType.class),
     ;
 
     @Nullable

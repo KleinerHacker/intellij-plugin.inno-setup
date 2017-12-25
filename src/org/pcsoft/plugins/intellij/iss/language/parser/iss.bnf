@@ -99,6 +99,6 @@ fileValue ::= '<' (NAME ('.' NAME)?)? '>'
 
 /* Sub Types */
 private constArgumentList ::= (constArgument ',')* constArgument
-constName ::= ('%'? NAME) | '%'
+constName ::= (('%' | '#')? NAME) | ('%' | '#')
 constArgument ::= (constValue | NAME | TEXT)
 constDefault ::= (constValue | NAME | TEXT)

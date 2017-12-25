@@ -65,7 +65,12 @@
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action class="org.pcsoft.plugins.intellij.iss.ide.action.IssCreateScriptAction" id="ISS_CREATE_SCRIPT">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+        <action class="org.pcsoft.plugins.intellij.iss.ide.action.IssGenerateAppIdAction" id="ISS_GENERATE_APP_ID">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
     </actions>
 
 </idea-plugin>

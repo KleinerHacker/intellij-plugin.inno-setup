@@ -9,6 +9,7 @@ import javax.swing.*;
  */
 public final class IssIcons {
     public static final Icon FILE = IconLoader.getIcon("/icons/is_script.png");
+    public static final Icon FILE_BIG = IconLoader.getIcon("/icons/is_script_big.png");
 
     public static final class Sections {
         public static final Icon Setup = IconLoader.getIcon("/icons/ic_sect_setup.png");

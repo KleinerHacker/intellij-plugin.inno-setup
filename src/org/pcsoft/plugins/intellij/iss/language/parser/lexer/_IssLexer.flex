@@ -31,9 +31,9 @@ NAME=[A-Za-z_]{1}[A-Za-z0-9\-_\\\/]*[A-Za-z0-9\_]?
 HEX_BYTE=[0-9a-fA-F]{2}
 NUMBER=[0-9]+|\$({HEX_BYTE})+
 VERSION=([0-9]+\.)*[0-9]+
-STRING=[^\"\{\}]+
-VALUE_TEXT=[^\r|\n|\r\n|\{|\}|0-9]+
-CONST_TEXT=[^\{\}\,\|\:\%]+
+STRING=([^\"\{] | \{\{ | \"\")+
+VALUE_TEXT=([^\r|\n|\{] | \{\{ | \"\")+
+CONST_TEXT=([^\{\}\,\|\:\%\#] | \{\{ | \"\")+
 COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
 
@@ -59,7 +59,6 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
   }
   <YYVALUE, YYSTRING, YYCONST> {
       \{                    { if (constCounter <= 0) { beforeConstMode = yystate(); yybegin(YYCONST); } constCounter++; return BRACES_CURLY_OPEN; }
-      \}                    { if (constCounter > 0) {constCounter--; if (constCounter <= 0) yybegin(beforeConstMode); } return BRACES_CURLY_CLOSE; }
   }
   \<                        { yybegin(YYFILE); return BRACES_ANGLE_OPEN; }
   <YYFILE> {
@@ -93,14 +92,16 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
   }
 }
 <YYTITLE> {
-    {EOL}                   { yybegin(isInCode ? YYCODE : YYINITIAL); isInCode = false; return EOL; }
-    {NAME}                  { isInCode = yytext().toString().equalsIgnoreCase("code"); return NAME; }
+  {EOL}                     { yybegin(isInCode ? YYCODE : YYINITIAL); isInCode = false; return EOL; }
+  {NAME}                    { isInCode = yytext().toString().equalsIgnoreCase("code"); return NAME; }
 }
 <YYVALUE> {
   {EOL}                     { yybegin(YYINITIAL); return EOL; }
   {VALUE_TEXT}              { return TEXT; }
 }
 <YYCONST> {
+  //Only here to interpret it only in constant values
+  \}                        { if (constCounter > 0) {constCounter--; if (constCounter <= 0) yybegin(beforeConstMode); } return BRACES_CURLY_CLOSE; }
   {CONST_TEXT}              { return TEXT; }
 }
 <YYSTRING> {
