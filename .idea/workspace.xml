@@ -68,8 +68,8 @@
       <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="45" column="143" lean-forward="false" selection-start-line="45" selection-start-column="143" selection-end-line="45" selection-end-column="143" />
+            <state relative-caret-position="490">
+              <caret line="76" column="115" lean-forward="false" selection-start-line="76" selection-start-column="115" selection-end-line="76" selection-end-column="115" />
               <folding />
             </state>
           </provider>
@@ -197,7 +197,7 @@
   <component name="MavenProjectNavigator">
     <treeState />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -888,15 +888,15 @@
       <workItem from="1514045934542" duration="10367000" />
       <workItem from="1514111716392" duration="5269000" />
       <workItem from="1514230462026" duration="7654000" />
-      <workItem from="1514314561098" duration="11045000" />
+      <workItem from="1514314561098" duration="11170000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130873000" />
+    <option name="totallyTimeSpent" value="130998000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1390,8 +1390,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="45" column="143" lean-forward="false" selection-start-line="45" selection-start-column="143" selection-end-line="45" selection-end-column="143" />
+        <state relative-caret-position="490">
+          <caret line="76" column="115" lean-forward="false" selection-start-line="76" selection-start-column="115" selection-end-line="76" selection-end-column="115" />
           <folding />
         </state>
       </provider>
