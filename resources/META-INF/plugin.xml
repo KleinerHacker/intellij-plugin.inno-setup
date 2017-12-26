@@ -62,6 +62,11 @@
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyValueDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssConstantDocumentationProvider"/>
+        <!-- Manipulators -->
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssIdentifierValue"
+                                 implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssIdentifierValueManipulator"/>
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue"
+                                 implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssRefValueManipulator"/>
     </extensions>
 
     <actions>

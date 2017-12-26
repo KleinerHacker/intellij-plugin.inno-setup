@@ -9,7 +9,8 @@ import org.pcsoft.plugins.intellij.iss.language.type.value.PreprocessorTypeValue
 public enum PreprocessorType implements org.pcsoft.plugins.intellij.iss.language.type.base.PreprocessorType {
     Include("include", ValueType.String),
     PreProc("preproc", ValueType.SingleValue, PreprocessorTypeValueType.class),
-    Define("define", new ValueType[] {ValueType.SingleValue, ValueType.String, ValueType.Number}, PreprocessorTypeValueType.class),
+    @IsReferenceKey
+    Define("define", ValueType.SingleValue, ValueType.String, ValueType.Number),
     ;
 
     @Nullable
@@ -28,6 +29,7 @@ public enum PreprocessorType implements org.pcsoft.plugins.intellij.iss.language
     private final String name;
     private final ValueType[] valueTypes;
     private final Class<? extends SpecialValueType> specialValueTypeClass;
+    private final boolean referenceKey;
     private final boolean deprecated;
 
     private PreprocessorType(String name, ValueType... valueTypes) {
@@ -44,6 +46,7 @@ public enum PreprocessorType implements org.pcsoft.plugins.intellij.iss.language
         this.specialValueTypeClass = specialValueTypeClass;
 
         try {
+            referenceKey =  getClass().getField(name()).getAnnotation(IsReferenceKey.class) != null;
             deprecated = getClass().getField(name()).getAnnotation(IsDeprecated.class) != null;
         } catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
@@ -66,6 +69,11 @@ public enum PreprocessorType implements org.pcsoft.plugins.intellij.iss.language
     @Override
     public Class<? extends SpecialValueType> getSpecialValueTypeClass() {
         return specialValueTypeClass;
+    }
+
+    @Override
+    public boolean isReferenceKey() {
+        return referenceKey;
     }
 
     @Override

@@ -3,13 +3,11 @@ package org.pcsoft.plugins.intellij.iss.language.annotator;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleProperty;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorElement;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorValue;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssProperty;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
 import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.ValueType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
@@ -30,6 +28,8 @@ public class ValueTypeCheckAnnotator implements Annotator {
             final PropertyType propertyType = property.getPropertyType();
             if (propertyType == null)
                 return;
+            if (PsiTreeUtil.findChildOfType(property.getValue(), IssConstValue.class) != null)
+                return; //Constant values allowed always
             final String valueText = property.getValue().getText();
 
             if (!checkValue(propertyType.getValueTypes(), valueText, s -> !(property instanceof IssMultipleProperty) || s.matches("\"[^\"]*\""))) {

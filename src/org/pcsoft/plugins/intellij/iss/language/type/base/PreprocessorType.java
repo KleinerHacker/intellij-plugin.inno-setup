@@ -9,4 +9,6 @@ public interface PreprocessorType extends TypeBase {
     ValueType[] getValueTypes();
     @Nullable
     Class<? extends SpecialValueType> getSpecialValueTypeClass();
+
+    boolean isReferenceKey();
 }

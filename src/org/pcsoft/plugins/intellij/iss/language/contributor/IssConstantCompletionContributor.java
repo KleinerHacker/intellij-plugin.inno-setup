@@ -38,6 +38,9 @@ public class IssConstantCompletionContributor extends CompletionContributor {
             completionResultSet.addElement(
                     LookupElementBuilder.create("%")
             );
+            completionResultSet.addElement(
+                    LookupElementBuilder.create("#")
+            );
         }
     }
 

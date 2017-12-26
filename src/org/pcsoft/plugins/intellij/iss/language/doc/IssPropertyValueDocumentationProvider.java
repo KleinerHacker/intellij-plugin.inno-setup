@@ -7,6 +7,7 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssStringValue;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssValue;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
@@ -18,8 +19,10 @@ public class IssPropertyValueDocumentationProvider extends DocumentationProvider
     public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
         if (element instanceof IssValue) {
             return buildDocumentation((IssValue) element);
-        } else if (element instanceof IssRefValue) {
+        } else if (element instanceof IssRefValue && element.getParent() instanceof IssValue) {
             return buildDocumentation((IssValue) element.getParent());
+        } else if (element instanceof IssRefValue && element.getParent() instanceof IssStringValue && element.getParent().getParent() instanceof IssValue) {
+            return buildDocumentation((IssValue) element.getParent().getParent());
         }
 
         return null;
@@ -64,7 +67,12 @@ public class IssPropertyValueDocumentationProvider extends DocumentationProvider
     }
 
     private static boolean checkSection(@NotNull IssRefValue value) {
-        return checkSection((IssValue) value.getParent());
+        if (value.getParent() instanceof IssValue)
+            return checkSection((IssValue) value.getParent());
+        else if (value.getParent() instanceof IssStringValue && value.getParent().getParent() instanceof IssValue)
+            return checkSection((IssValue) value.getParent().getParent());
+
+        return false;
     }
     //</editor-fold>
 }

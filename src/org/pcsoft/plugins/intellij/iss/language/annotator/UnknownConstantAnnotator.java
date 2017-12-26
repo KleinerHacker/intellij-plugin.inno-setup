@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstName;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstValue;
+import org.pcsoft.plugins.intellij.iss.language.reference.IssDefineSymbolReference;
 import org.pcsoft.plugins.intellij.iss.language.type.base.ConstantType;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class UnknownConstantAnnotator implements Annotator {
             final IssConstValue constValue = (IssConstValue) psiElement;
             final ConstantType constantType = constValue.getConstantType();
 
-            if (constValue.getName() == null || constValue.getName().equals("%")) {
+            if (constValue.getName() == null || constValue.getName().equals("%") || constValue.getName().equals("#")) {
                 annotationHolder.createErrorAnnotation(constValue, "No name for constant found");
             } else if (constantType == null) {
                 final IssConstName constName = constValue.getConstName();
@@ -29,6 +30,11 @@ public class UnknownConstantAnnotator implements Annotator {
                         if (!System.getenv().containsKey(constName.getText().substring(1))) {
                             annotationHolder.createWarningAnnotation(constName, "Unknown environment variable, found were " +
                                     Arrays.toString(System.getenv().values().toArray()));
+                        }
+                    } else if (constName.getText().startsWith("#")) {
+                        if (new IssDefineSymbolReference(constName.getRefValue(), true).multiResolve(true).length <= 0) {
+                            annotationHolder.createErrorAnnotation(constName, "Unknown constant symbol")
+                                    .setHighlightType(ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                         }
                     } else {
                         annotationHolder.createErrorAnnotation(constName, "Unknown constant, allowed are " +

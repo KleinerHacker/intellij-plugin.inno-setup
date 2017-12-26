@@ -1,5 +1,8 @@
 package org.pcsoft.plugins.intellij.iss.util;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 
 public final class IssUtils {
@@ -33,6 +36,13 @@ public final class IssUtils {
             return (char) (RANDOM.nextBoolean() ? 'a' + value : 'A' + value);
 
         return (char) ('0' + (value - 26));
+    }
+
+    public static boolean checkString(@NotNull String str1, @Nullable String str2, boolean strict) {
+        if (strict)
+            return str1.equalsIgnoreCase(str2);
+        else
+            return str2 == null || str1.startsWith(str2);
     }
 
     private IssUtils() {

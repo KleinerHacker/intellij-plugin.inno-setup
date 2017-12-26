@@ -27,7 +27,7 @@ preprocessorName ::= '#' NAME?
 {
     methods=[getName getPreprocessorType]
 }
-preprocessorValue ::= NAME | stringValue | fileValue | TEXT
+preprocessorValue ::= identifierValue | stringValue | fileValue | TEXT
 
 /* Sections */
 section ::= sectionTitle sectionContent
@@ -84,8 +84,19 @@ multipleValue ::= (refValue+ | NUMBER | VERSION | byteArrayValue | stringValue |
     implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssValue"
 }
 
+/* Common */
+identifierValue ::= NAME
+{
+    methods=[getName setName]
+    implements="com.intellij.psi.PsiNamedElement"
+}
+
 /* Types */
 refValue ::= NAME
+{
+    methods=[getName setName getNameIdentifier getReferences]
+    implements="com.intellij.psi.PsiNameIdentifierOwner"
+}
 stringValue ::= '"' (constValue | refValue | STRING)* '"'
 {
     methods=[getValue]
@@ -99,6 +110,6 @@ fileValue ::= '<' (NAME ('.' NAME)?)? '>'
 
 /* Sub Types */
 private constArgumentList ::= (constArgument ',')* constArgument
-constName ::= (('%' | '#')? NAME) | ('%' | '#')
+constName ::= (('%' | '#')? refValue) | ('%' | '#')
 constArgument ::= (constValue | NAME | TEXT)
 constDefault ::= (constValue | NAME | TEXT)

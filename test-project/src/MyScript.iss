@@ -6,7 +6,7 @@
 #define MyAppPublisher "MyCompany"
 #define MyAppURL "http://www.mycompany.com"
 
-#define MySetupName "MySe{pf}tup"
+#define MySetupName "MySetup"
 #define MySetupOut "."
 
 [Setup]

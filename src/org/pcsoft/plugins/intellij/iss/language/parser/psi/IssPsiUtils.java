@@ -2,18 +2,25 @@ package org.pcsoft.plugins.intellij.iss.language.parser.psi;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
+import org.pcsoft.plugins.intellij.iss.language.reference.IssDefineSymbolReference;
+import org.pcsoft.plugins.intellij.iss.language.reference.IssTypesReference;
+import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
 import org.pcsoft.plugins.intellij.iss.language.type.base.ConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.PropertyType;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -324,6 +331,77 @@ public interface IssPsiUtils {
     @Nullable
     static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getPreprocessorType(final IssPreprocessorElement preprocessorElement) {
         return preprocessorElement.getPreprocessorName().getPreprocessorType();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Identifier Value">
+    @NotNull
+    static String getName(final IssIdentifierValue identifierValue) {
+        return identifierValue.getText();
+    }
+
+    @Nullable
+    static PsiElement setName(final IssIdentifierValue identifierValue, final String name) {
+        return null;
+    }
+
+    @Nullable
+    static PsiElement getNameIdentifier(final IssIdentifierValue identifierValue) {
+        final IssPreprocessorElement preprocessorElement = PsiTreeUtil.getParentOfType(identifierValue, IssPreprocessorElement.class);
+        if (preprocessorElement != null) {
+            final PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
+            if (preprocessorType == null)
+                return null;
+
+            switch (preprocessorType) {
+                case Define:
+                    if (preprocessorElement.getPreprocessorValueList().isEmpty())
+                        return null;
+                    return preprocessorElement.getPreprocessorValueList().get(0);
+                case Include:
+                case PreProc:
+                    return null;
+                default:
+                    throw new RuntimeException();
+            }
+        }
+
+        return null;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Reference Value">
+    @NotNull
+    static String getName(final IssRefValue refValue) {
+        return refValue.getText();
+    }
+
+    @Nullable
+    static PsiElement setName(final IssRefValue refValue, final String name) {
+        return null;
+    }
+
+    @Nullable
+    static PsiElement getNameIdentifier(final IssRefValue refValue) {
+        return refValue;
+    }
+
+    @NotNull
+    static PsiReference[] getReferences(final IssRefValue refValue) {
+        final List<PsiReference> list = new ArrayList<>();
+        if (PsiTreeUtil.getParentOfType(refValue, IssConstValue.class) != null) {
+            list.add(new IssDefineSymbolReference(refValue, true));
+        } else if (PsiTreeUtil.getParentOfType(refValue, IssProperty.class) != null) {
+            final IssProperty property = PsiTreeUtil.getParentOfType(refValue, IssProperty.class);
+            final PropertyType propertyType = property.getPropertyType();
+            if (propertyType != null) {
+                if (propertyType.getReferenceTargetSectionType() == SectionType.Types) {
+                    list.add(new IssTypesReference(refValue, true));
+                }
+            }
+        }
+
+        return list.toArray(new PsiReference[list.size()]);
     }
     //</editor-fold>
 }

@@ -71,8 +71,8 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
 
   ";"                       { yybegin(YYINITIAL); return SPLITTER; }
   "="                       { yybegin(YYVALUE); return OPERATOR; }
-  "#"                       { return OPERATOR; }
   <YYCONST> {
+      "#"                   { return OPERATOR; }
       ":"                   { return OPERATOR; }
       "|"                   { return OPERATOR; }
       ","                   { return SPLITTER; }

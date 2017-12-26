@@ -23,7 +23,7 @@ public class UnknownPreprocessorAnnotator implements Annotator {
 
             if (preprocessorName.getName() == null || preprocessorName.getName().equals("#")) {
                 annotationHolder.createErrorAnnotation(preprocessorName, "No name for preprocessor found");
-            } else if (preprocessorType == null) {
+            } if (preprocessorType == null) {
                 final ASTNode child = preprocessorName.getNode().findChildByType(IssGenTypes.NAME);
                 if (child != null) {
                     annotationHolder.createErrorAnnotation(child, "Unknown preprocessor, allowed are " +
