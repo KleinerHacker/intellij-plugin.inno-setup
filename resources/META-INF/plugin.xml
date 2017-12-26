@@ -43,6 +43,7 @@
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownConstantAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPreprocessorAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownValueReferenceAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SectionTypePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
         <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>

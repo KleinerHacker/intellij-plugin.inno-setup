@@ -18,17 +18,20 @@ Name: "compact"; Description: "Compact installation"
 Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 [Components]
-Name: "program"; Description: "Program Files"; Types: full compact custom; Flags: fixed
-Name: "help"; Description: "Help File"; Types: full
+Name: "program"; Description: "Program Files"; Types: full compact custom1; Flags: fixed
+Name: "help"; Description: "Help File"; Types: full;
 Name: "readme"; Description: "Readme File"; Types: full
 Name: "readme\en"; Description: "English"; Flags: exclusive
 Name: "readme\de"; Description: "German"; Flags: exclusive; MinVersion: 1.9
 
 [Files]
-Source: "MyProg.exe"; DestDir: "{app}"; Components: program
+Source: "MyProg.exe"; DestDir: "{app}"; Components: program1; Tasks: bub bub1
 Source: "MyProg.chm"; DestDir: "{app}"; Components: help
 Source: "Readme.txt"; DestDir: "{app}"; Components: readme\en; Flags: isreadme
 Source: "Readme-German.txt"; DestName: "Liesmich.txt"; DestDir: "{app}"; Components: readme\de; Flags: isreadme
 
 [Icons]
 Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
+
+[Tasks]
+Name: "bub"; Description: "kflöd"

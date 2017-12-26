@@ -43,11 +43,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IssPsiUtils.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="IssPsiUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="405" column="17" lean-forward="true" selection-start-line="405" selection-start-column="17" selection-end-line="405" selection-end-column="17" />
+            <state relative-caret-position="303">
+              <caret line="390" column="12" lean-forward="true" selection-start-line="390" selection-start-column="12" selection-end-line="390" selection-end-column="12" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UnknownValueReferenceAnnotator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownValueReferenceAnnotator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="39" column="96" lean-forward="false" selection-start-line="39" selection-start-column="96" selection-end-line="39" selection-end-column="96" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="plugin.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="45" column="143" lean-forward="false" selection-start-line="45" selection-start-column="143" selection-end-line="45" selection-end-column="143" />
               <folding />
             </state>
           </provider>
@@ -105,7 +127,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownConstantNameAnnotator.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownSectionAnnotator.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssConstantDocumentationProvider.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssPropertyKeyDocumentationProvider.java" />
@@ -141,7 +162,6 @@
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssAbstractReference.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssSearchUtils.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/manipulator/IssRefValueManipulator.java" />
-        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssIdentifierValueImpl.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PreprocessorType.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" />
@@ -156,6 +176,8 @@
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssTasksReference.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssComponentsReference.java" />
         <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" />
+        <option value="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownValueReferenceAnnotator.java" />
+        <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -175,7 +197,7 @@
   <component name="MavenProjectNavigator">
     <treeState />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
@@ -866,15 +888,15 @@
       <workItem from="1514045934542" duration="10367000" />
       <workItem from="1514111716392" duration="5269000" />
       <workItem from="1514230462026" duration="7654000" />
-      <workItem from="1514314561098" duration="10533000" />
+      <workItem from="1514314561098" duration="11045000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="130361000" />
+    <option name="totallyTimeSpent" value="130873000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -951,13 +973,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorSpecialValueCompletionContributor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="38" column="46" lean-forward="false" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownSectionAnnotator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1186,14 +1201,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="609">
-          <caret line="70" column="0" lean-forward="false" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/gen/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssIdentifierValueImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
@@ -1365,8 +1372,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="405" column="17" lean-forward="true" selection-start-line="405" selection-start-column="17" selection-end-line="405" selection-end-column="17" />
+        <state relative-caret-position="303">
+          <caret line="390" column="12" lean-forward="true" selection-start-line="390" selection-start-column="12" selection-end-line="390" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownValueReferenceAnnotator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="39" column="96" lean-forward="false" selection-start-line="39" selection-start-column="96" selection-end-line="39" selection-end-column="96" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="45" column="143" lean-forward="false" selection-start-line="45" selection-start-column="143" selection-end-line="45" selection-end-column="143" />
           <folding />
         </state>
       </provider>
