@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
+import org.pcsoft.plugins.intellij.iss.language.reference.IssComponentsReference;
 import org.pcsoft.plugins.intellij.iss.language.reference.IssDefineSymbolReference;
+import org.pcsoft.plugins.intellij.iss.language.reference.IssTasksReference;
 import org.pcsoft.plugins.intellij.iss.language.reference.IssTypesReference;
 import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
@@ -397,6 +399,10 @@ public interface IssPsiUtils {
             if (propertyType != null) {
                 if (propertyType.getReferenceTargetSectionType() == SectionType.Types) {
                     list.add(new IssTypesReference(refValue, true));
+                } else if (propertyType.getReferenceTargetSectionType() == SectionType.Tasks) {
+                    list.add(new IssTasksReference(refValue, true));
+                } else if (propertyType.getReferenceTargetSectionType() == SectionType.Components) {
+                    list.add(new IssComponentsReference(refValue, true));
                 }
             }
         }

@@ -4,9 +4,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.*;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssFile;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssMultipleProperty;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorElement;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssSection;
 import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
+import org.pcsoft.plugins.intellij.iss.language.type.property.ComponentsPropertyType;
+import org.pcsoft.plugins.intellij.iss.language.type.property.TasksPropertyType;
 import org.pcsoft.plugins.intellij.iss.language.type.property.TypesPropertyType;
 
 import java.util.ArrayList;
@@ -53,8 +58,76 @@ public final class IssSearchForElementUtils {
                 .filter(issMultipleProperty -> issMultipleProperty != null && issMultipleProperty.getMultipleValue() != null)
                 .filter(issMultipleProperty -> {
                     if (!issMultipleProperty.getMultipleValue().getRefValueList().isEmpty())
+                        //Single value case for key
                         return IssUtils.checkString(issMultipleProperty.getMultipleValue().getRefValueList().get(0).getName(), key, strict);
                     else if (!issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().isEmpty())
+                        //String case for key
+                        return IssUtils.checkString(issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().get(0).getName(), key, strict);
+
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    public static List<IssMultipleProperty> searchForTasks(@NotNull Project project, @NotNull IssFile file) {
+        return searchForTasks(project, file, null, false);
+    }
+
+    @NotNull
+    public static List<IssMultipleProperty> searchForTasks(@NotNull Project project, @NotNull IssFile file, @Nullable String key, boolean strict) {
+        if (file.getSections() == null)
+            return new ArrayList<>();
+        final IssSection section = Stream.of(file.getSections())
+                .filter(issSection -> issSection.getSectionType() == SectionType.Tasks)
+                .findFirst().orElse(null);
+        if (section == null)
+            return new ArrayList<>();
+
+        return section.getMultipleSectionLineList().stream()
+                .map(issMultipleSectionLine -> issMultipleSectionLine.getMultiplePropertyList().stream()
+                        .filter(issMultipleProperty -> issMultipleProperty.getPropertyType() == TasksPropertyType.Name)
+                        .findFirst().orElse(null))
+                .filter(issMultipleProperty -> issMultipleProperty != null && issMultipleProperty.getMultipleValue() != null)
+                .filter(issMultipleProperty -> {
+                    if (!issMultipleProperty.getMultipleValue().getRefValueList().isEmpty())
+                        //Single value case for key
+                        return IssUtils.checkString(issMultipleProperty.getMultipleValue().getRefValueList().get(0).getName(), key, strict);
+                    else if (!issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().isEmpty())
+                        //String case for key
+                        return IssUtils.checkString(issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().get(0).getName(), key, strict);
+
+                    return false;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    public static List<IssMultipleProperty> searchForComponents(@NotNull Project project, @NotNull IssFile file) {
+        return searchForComponents(project, file, null, false);
+    }
+
+    @NotNull
+    public static List<IssMultipleProperty> searchForComponents(@NotNull Project project, @NotNull IssFile file, @Nullable String key, boolean strict) {
+        if (file.getSections() == null)
+            return new ArrayList<>();
+        final IssSection section = Stream.of(file.getSections())
+                .filter(issSection -> issSection.getSectionType() == SectionType.Components)
+                .findFirst().orElse(null);
+        if (section == null)
+            return new ArrayList<>();
+
+        return section.getMultipleSectionLineList().stream()
+                .map(issMultipleSectionLine -> issMultipleSectionLine.getMultiplePropertyList().stream()
+                        .filter(issMultipleProperty -> issMultipleProperty.getPropertyType() == ComponentsPropertyType.Name)
+                        .findFirst().orElse(null))
+                .filter(issMultipleProperty -> issMultipleProperty != null && issMultipleProperty.getMultipleValue() != null)
+                .filter(issMultipleProperty -> {
+                    if (!issMultipleProperty.getMultipleValue().getRefValueList().isEmpty())
+                        //Single value case for key
+                        return IssUtils.checkString(issMultipleProperty.getMultipleValue().getRefValueList().get(0).getName(), key, strict);
+                    else if (!issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().isEmpty())
+                        //String case for key
                         return IssUtils.checkString(issMultipleProperty.getMultipleValue().getStringValue().getRefValueList().get(0).getName(), key, strict);
 
                     return false;
