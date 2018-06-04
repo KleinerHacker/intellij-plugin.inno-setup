@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.pcsoft.plugins.intellij.iss</id>
     <name>Inno Setup Support</name>
-    <version>0.3</version>
+    <version>0.3.1</version>
     <vendor>PC-Soft</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        0.3.1
+        =====
+
+        - Fix for precompiler directive
     ]]>
     </change-notes>
 
