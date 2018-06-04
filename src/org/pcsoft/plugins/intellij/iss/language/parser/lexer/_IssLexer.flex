@@ -77,6 +77,7 @@ COMMENT=";"[^\r|\n|\r\n]*{EOL}
       "|"                   { return OPERATOR; }
       ","                   { return SPLITTER; }
       "%"                   { return OPERATOR; }
+      "+"                   { return OPERATOR; }
   }
   <YYFILE> {
       "."                   { return SPLITTER; }

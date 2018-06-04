@@ -19,7 +19,7 @@ issFile ::= preprocessorList? section*
 
 /* Preprocessor */
 preprocessorList ::= (preprocessorElement EOL)+
-preprocessorElement ::= preprocessorName preprocessorValue*
+preprocessorElement ::= preprocessorName (preprocessorValue (("+" | "-" | "/" | "*") preprocessorValue)*)?
 {
     methods=[getName getPreprocessorType]
 }
@@ -27,7 +27,7 @@ preprocessorName ::= '#' NAME?
 {
     methods=[getName getPreprocessorType]
 }
-preprocessorValue ::= identifierValue | stringValue | fileValue | TEXT
+preprocessorValue ::= NUMBER | identifierValue | stringValue | fileValue | TEXT
 
 /* Sections */
 section ::= sectionTitle sectionContent
