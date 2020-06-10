@@ -18,7 +18,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="141.0"/>
+    <idea-version since-build="200.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -27,6 +27,9 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Module Type -->
+        <moduleType id="ISS_MODULE" implementationClass="org.pcsoft.plugins.intellij.iss.module.IssModuleType"/>
+
         <!-- File Type & Parsing -->
         <fileTypeFactory implementation="org.pcsoft.plugins.intellij.iss.language.IssFileTypeFactory"/>
         <lang.parserDefinition language="Inno-Setup"

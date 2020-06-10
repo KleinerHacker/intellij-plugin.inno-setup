@@ -1,18 +1,19 @@
 package org.pcsoft.plugins.intellij.iss.ide.action;
 
-import com.intellij.ide.highlighter.ModuleFileType;
-import com.intellij.ide.highlighter.ProjectFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.OpenFileDescriptor;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.apache.commons.lang.SystemUtils;
 import org.pcsoft.plugins.intellij.iss.IssIcons;
 import org.pcsoft.plugins.intellij.iss.ide.ui.IssCreateScriptWizardDialog;
+import org.pcsoft.plugins.intellij.iss.module.IssModuleType;
 import org.pcsoft.plugins.intellij.iss.util.IssUtils;
 
 import javax.swing.*;
@@ -31,9 +32,9 @@ public class IssCreateScriptAction extends AnAction {
     public void update(AnActionEvent e) {
         final Project project = CommonDataKeys.PROJECT.getData(e.getDataContext());
         final VirtualFile virtualFile = CommonDataKeys.VIRTUAL_FILE.getData(e.getDataContext());
+        final Module module = ModuleUtil.findModuleForFile(virtualFile, project);
 
-        e.getPresentation().setVisible(project != null && virtualFile != null && virtualFile.getFileType() != ModuleFileType.INSTANCE &&
-                virtualFile.getFileType() != ProjectFileType.INSTANCE);
+        e.getPresentation().setVisible(project != null && virtualFile != null && module.getModuleTypeName().equals(IssModuleType.ID));
     }
 
     @Override
@@ -83,7 +84,7 @@ public class IssCreateScriptAction extends AnAction {
 
         return line.replace("$APPNAME$", result.getAppName()).replace("$APPVERSION$", result.getAppVersion())
                 .replace("$APPPUBLISHER$", result.getAppPublisher()).replace("$APPURL$", result.getAppPublisherURL())
-                .replace("$SETUPNAME$", result.getSetupBaseFilename()).replace("$SETUPOUT$", result.getSetupOutputDirectory());
+                .replace("$SETUPNAME$", result.getSetupBaseFilename()).replace("$SETUPOUT$", "out");
     }
 
     private static String extractPath(VirtualFile virtualFile) {

@@ -178,14 +178,9 @@ public class IssCreateScriptWizardModel extends WizardModel {
                 final LabeledComponent<JTextField> pnlBaseFilename = new LabeledComponent<>();
                 pnlBaseFilename.setText("Enter Setup File Name (without extension):");
                 pnlBaseFilename.setComponent(txtBaseFilename);
-
-                final LabeledComponent<TextFieldWithBrowseButton> pnlOutputDir = new LabeledComponent<>();
-                pnlOutputDir.setText("Select Setup Output Directory:");
-                pnlOutputDir.setComponent(txtOutputDir);
                 //endregion
 
                 pnl.add(pnlBaseFilename);
-                pnl.add(pnlOutputDir);
             }
 
             pnlPage.setPreferredSize(new Dimension(600, 480));

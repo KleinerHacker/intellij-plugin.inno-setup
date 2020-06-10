@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.*;
 
 public class IssBuildTarget extends BuildTarget<IssBuildRootDescriptor> {
-    public IssBuildTarget(BuildTargetType<?> targetType) {
+    public IssBuildTarget(BuildTargetType<? extends BuildTarget<IssBuildRootDescriptor>> targetType) {
         super(targetType);
     }
 
