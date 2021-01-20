@@ -1,0 +1,95 @@
+<idea-plugin>
+    <id>org.pcsoft.plugins.intellij.iss</id>
+    <name>Inno Setup Support</name>
+    <version>0.3.2</version>
+    <vendor>PC-Soft</vendor>
+
+    <description><![CDATA[
+      Support Plugin for Inno Setup Script / Compiler and other useful features.
+      <b>You need an Inno Setup installation.</b>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        0.3.2
+        =====
+
+        - Fix precompiler completely
+
+        0.3.1
+        =====
+
+        - Fix for precompiler directive
+    ]]>
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="203"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <depends>com.intellij.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Module Type -->
+        <moduleType id="ISS_MODULE" implementationClass="org.pcsoft.plugins.intellij.iss.module.IssModuleType"/>
+
+        <!-- File Type & Parsing -->
+        <fileTypeFactory implementation="org.pcsoft.plugins.intellij.iss.language.IssFileTypeFactory"/>
+        <lang.parserDefinition language="Inno-Setup"
+                               implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.IssParserDefinition"/>
+        <!-- Common -->
+        <lang.braceMatcher language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssBraceMatcher"/>
+        <lang.quoteHandler language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssQuoteMatcher"/>
+        <lang.commenter language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.common.IssCommenter"/>
+        <!-- Structure -->
+        <lang.psiStructureViewFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.tree.IssStructureViewFactory"/>
+        <lang.foldingBuilder language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.structure.folding.IssSectionFoldingBuilder"/>
+        <!-- Highlighting -->
+        <lang.syntaxHighlighterFactory language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.highlighting.IssSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="org.pcsoft.plugins.intellij.iss.language.highlighting.IssColoringPage"/>
+        <!-- Annotators -->
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.MissingRequiredPropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownSectionAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPropertyKeyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownConstantAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownPreprocessorAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.UnknownValueReferenceAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SectionTypePropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.DoublePropertyValueAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.ValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.SpecialValueTypeCheckAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.WrongConstantUsageAnnotator" order="FIRST"/>
+        <annotator language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.annotator.PostHighlightingAnnotator" order="LAST"/>
+        <!-- Contributors -->
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssSectionCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertyKeyCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPropertySpecialValueCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssConstantCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPreprocessorCompletionContributor"/>
+        <completion.contributor language="Inno-Setup" implementationClass="org.pcsoft.plugins.intellij.iss.language.contributor.IssPreprocessorSpecialValueCompletionContributor"/>
+        <!-- Documentation -->
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssSectionDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyKeyDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyValueDocumentationProvider"/>
+        <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssConstantDocumentationProvider"/>
+        <!-- Manipulators -->
+        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue"
+                                 implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssRefValueManipulator"/>
+
+        <compilerFactory implementation="org.pcsoft.plugins.intellij.iss.ide.build.compiler.IssCompilerFactory"/>
+    </extensions>
+
+    <actions>
+        <action class="org.pcsoft.plugins.intellij.iss.ide.action.IssCreateScriptAction" id="ISS_CREATE_SCRIPT">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+        <action class="org.pcsoft.plugins.intellij.iss.ide.action.IssGenerateAppIdAction" id="ISS_GENERATE_APP_ID">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+
+</idea-plugin>
