@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.pcsoft.plugins.intellij.iss</id>
     <name>Inno Setup Support</name>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <vendor>PC-Soft</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+        0.3.2
+        =====
+
+        - Fix precompiler completely
+
         0.3.1
         =====
 
@@ -71,8 +76,6 @@
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssPropertyValueDocumentationProvider"/>
         <documentationProvider implementation="org.pcsoft.plugins.intellij.iss.language.doc.IssConstantDocumentationProvider"/>
         <!-- Manipulators -->
-        <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssIdentifierValue"
-                                 implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssIdentifierValueManipulator"/>
         <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue"
                                  implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssRefValueManipulator"/>
 
