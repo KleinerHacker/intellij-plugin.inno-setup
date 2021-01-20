@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -386,7 +387,7 @@
       <workItem from="1592200548836" duration="622000" />
       <workItem from="1611167631734" duration="123000" />
       <workItem from="1611167770052" duration="8433000" />
-      <workItem from="1611176306155" duration="953000" />
+      <workItem from="1611176306155" duration="1585000" />
     </task>
     <servers />
   </component>
