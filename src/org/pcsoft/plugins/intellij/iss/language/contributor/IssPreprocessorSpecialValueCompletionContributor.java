@@ -5,15 +5,17 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.pcsoft.plugins.intellij.iss.language.IssLanguage;
 import org.pcsoft.plugins.intellij.iss.language.highlighting.IssHighlighting;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssGenTypes;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstName;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorElement;
-import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorName;
 import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.base.SpecialValueType;
 
@@ -45,7 +47,7 @@ public class IssPreprocessorSpecialValueCompletionContributor extends Completion
                 return;
             preprocessorElement = (IssPreprocessorElement) currentElement;
         }
-        PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
+        PreprocessorType preprocessorType = preprocessorElement.getType();
         if (preprocessorType == null)
             return;
         Class<? extends SpecialValueType> specialValueTypeClass = preprocessorType.getSpecialValueTypeClass();
@@ -71,7 +73,12 @@ public class IssPreprocessorSpecialValueCompletionContributor extends Completion
                                 .afterLeaf(
                                         PlatformPatterns.psiElement()
                                                 .withText("#")
-                                                .withParent(IssPreprocessorName.class)
+                                                .without(new PatternCondition<>("Without Const Name") {
+                                                    @Override
+                                                    public boolean accepts(@NotNull PsiElement psiElement, ProcessingContext processingContext) {
+                                                        return psiElement.getParent() instanceof IssConstName;
+                                                    }
+                                                })
                                 )
                 )
                 .withLanguage(IssLanguage.INSTANCE);

@@ -19,15 +19,30 @@ issFile ::= preprocessorList? section*
 
 /* Preprocessor */
 preprocessorList ::= (preprocessorElement EOL)+
-preprocessorElement ::= preprocessorName (preprocessorValue (("+" | "-" | "/" | "*") preprocessorValue)*)?
+preprocessorElement ::= preprocessorType (preprocessorInclude | preprocessorDefine | preprocessorPreproc)
 {
-    methods=[getName getPreprocessorType]
+    methods=[getType]
+    recoverWhile=preprocessorNoStop
 }
-preprocessorName ::= '#' NAME?
+private preprocessorNoStop ::= ! EOL
+preprocessorType ::= '#' NAME
 {
-    methods=[getName getPreprocessorType]
+    methods=[getType]
 }
-preprocessorValue ::= NUMBER | identifierValue | stringValue | fileValue | TEXT
+preprocessorInclude ::= stringValue | fileValue
+{
+    methods=[getFile]
+}
+preprocessorPreproc ::= NAME
+{
+    methods=[getType]
+}
+preprocessorDefine ::= preprocessorName preprocessorValue (("+" | "-" | "/" | "*") preprocessorValue)*
+{
+    methods=[getName]
+}
+preprocessorName ::= NAME
+preprocessorValue ::= NUMBER | stringValue
 
 /* Sections */
 section ::= sectionTitle sectionContent
@@ -84,13 +99,6 @@ multipleValue ::= (refValue+ | NUMBER | VERSION | byteArrayValue | stringValue |
     implements="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssValue"
 }
 
-/* Common */
-identifierValue ::= NAME
-{
-    methods=[getName setName]
-    implements="com.intellij.psi.PsiNamedElement"
-}
-
 /* Types */
 refValue ::= NAME
 {
@@ -107,6 +115,9 @@ constValue ::= '{' (constName (':' constArgumentList )? ('|' constDefault)? )? '
 }
 byteArrayValue ::= (HEX_BYTE ' ')* HEX_BYTE
 fileValue ::= '<' (NAME ('.' NAME)?)? '>'
+{
+    methods=[getValue]
+}
 
 /* Sub Types */
 private constArgumentList ::= (constArgument ',')* constArgument

@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.openapi.project.Project;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
@@ -13,10 +14,13 @@ import org.pcsoft.plugins.intellij.iss.IssIcons;
 import org.pcsoft.plugins.intellij.iss.language.IssLanguage;
 import org.pcsoft.plugins.intellij.iss.language.parser.IssCustomTypes;
 import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssConstValue;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssFile;
+import org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssPreprocessorElement;
 import org.pcsoft.plugins.intellij.iss.language.type.base.ConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.constant.CommonConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.constant.DirectoryConstantType;
 import org.pcsoft.plugins.intellij.iss.language.type.constant.ShellFolderConstantType;
+import org.pcsoft.plugins.intellij.iss.util.IssSearchForElementUtils;
 
 import java.util.Map;
 
@@ -41,6 +45,7 @@ public class IssConstantCompletionContributor extends CompletionContributor {
             completionResultSet.addElement(
                     LookupElementBuilder.create("#")
             );
+            handleConstantCustom(completionResultSet, element.getProject(), (IssFile) element.getContainingFile());
         }
     }
 
@@ -73,6 +78,19 @@ public class IssConstantCompletionContributor extends CompletionContributor {
                     LookupElementBuilder.create(constantType.getName())
                             .withStrikeoutness(constantType.isDeprecated())
                             .withInsertHandler((insertionContext, lookupElement) -> handleConstantInsertion(insertionContext, constantType))
+            );
+        }
+    }
+
+    private void handleConstantCustom(@NotNull CompletionResultSet completionResultSet, Project project, IssFile file) {
+        for (final IssPreprocessorElement preprocessorElement : IssSearchForElementUtils.searchForDefineSymbols(project, file)) {
+            completionResultSet.addElement(
+                    LookupElementBuilder.create(preprocessorElement.getPreprocessorDefine().getName())
+                            .withIcon(IssIcons.Constants.Custom)
+                            .withInsertHandler((insertionContext, lookupElement) -> {
+                                insertionContext.getDocument().insertString(insertionContext.getStartOffset(), "#");
+                                insertionContext.getEditor().getCaretModel().moveToOffset(insertionContext.getTailOffset());
+                            })
             );
         }
     }

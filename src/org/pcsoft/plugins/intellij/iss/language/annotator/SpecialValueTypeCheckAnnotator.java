@@ -32,12 +32,12 @@ public class SpecialValueTypeCheckAnnotator implements Annotator {
             checkValue(propertyType.getValueTypes(), property.getValue(), specialTypeClass, annotationHolder);
         } else if (psiElement instanceof IssPreprocessorElement) {
             final IssPreprocessorElement preprocessorElement = (IssPreprocessorElement) psiElement;
-            final PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
-            if (preprocessorType == null)
+            final PreprocessorType preprocessorType = preprocessorElement.getType();
+            if (preprocessorType != org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType.Define)
                 return;
             final Class<? extends SpecialValueType> specialTypeClass = preprocessorType.getSpecialValueTypeClass();
 
-            for (final IssPreprocessorValue preprocessorValue : preprocessorElement.getPreprocessorValueList()) {
+            for (final IssPreprocessorValue preprocessorValue : preprocessorElement.getPreprocessorDefine().getPreprocessorValueList()) {
                 checkValue(preprocessorType.getValueTypes(), preprocessorValue, specialTypeClass, annotationHolder);
             }
         }

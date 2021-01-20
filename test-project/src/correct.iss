@@ -3,7 +3,7 @@
 
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
 
-#define "hello" + "world" - 1234
+#define MyName "hello" + "world" - 1234
 
 [Setup]
 AppName=My Program

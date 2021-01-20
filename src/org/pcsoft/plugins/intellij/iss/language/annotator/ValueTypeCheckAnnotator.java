@@ -38,15 +38,16 @@ public class ValueTypeCheckAnnotator implements Annotator {
             }
         } else if (psiElement instanceof IssPreprocessorElement) {
             final IssPreprocessorElement preprocessorElement = (IssPreprocessorElement) psiElement;
-            if (preprocessorElement.getPreprocessorValueList().isEmpty()) {
-                annotationHolder.createErrorAnnotation(preprocessorElement.getPreprocessorName(), "Missing value");
-                return;
-            }
-            final PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
-            if (preprocessorType == null)
+            final PreprocessorType preprocessorType = preprocessorElement.getType();
+            if (preprocessorType != PreprocessorType.Define)
                 return;
 
-            for (final IssPreprocessorValue preprocessorValue : preprocessorElement.getPreprocessorValueList()) {
+            if (preprocessorElement.getPreprocessorDefine().getPreprocessorValueList().isEmpty()) {
+                annotationHolder.createErrorAnnotation(preprocessorElement.getPreprocessorDefine().getPreprocessorName(), "Missing value");
+                return;
+            }
+
+            for (final IssPreprocessorValue preprocessorValue : preprocessorElement.getPreprocessorDefine().getPreprocessorValueList()) {
                 final String valueText = preprocessorValue.getText();
 
                 if (!checkValue(preprocessorType.getValueTypes(), valueText, s -> s.matches("\"[^\"]*\""))) {

@@ -5,6 +5,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +15,7 @@ import org.pcsoft.plugins.intellij.iss.language.reference.IssComponentsReference
 import org.pcsoft.plugins.intellij.iss.language.reference.IssDefineSymbolReference;
 import org.pcsoft.plugins.intellij.iss.language.reference.IssTasksReference;
 import org.pcsoft.plugins.intellij.iss.language.reference.IssTypesReference;
+import org.pcsoft.plugins.intellij.iss.language.type.PreprocType;
 import org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionType;
 import org.pcsoft.plugins.intellij.iss.language.type.SectionTypeVariant;
@@ -240,6 +242,11 @@ public interface IssPsiUtils {
         return stringValue.getText().replace("\"", "");
     }
 
+    @NotNull
+    static String getValue(final IssFileValue stringValue) {
+        return stringValue.getText().substring(1, stringValue.getText().length() - 1);
+    }
+
     //<editor-fold desc="Constant">
     @Nullable
     static String getName(final IssConstValue constValue) {
@@ -302,10 +309,10 @@ public interface IssPsiUtils {
 
     //</editor-fold>
 
-    //<editor-fold desc="Preprocessor Name">
+    //<editor-fold desc="Preprocessor Type">
     @Nullable
-    static String getName(final IssPreprocessorName preprocessorName) {
-        ASTNode nameNode = preprocessorName.getNode().findChildByType(IssGenTypes.NAME);
+    static String getName(final IssPreprocessorType preprocessorType) {
+        ASTNode nameNode = preprocessorType.getNode().findChildByType(IssGenTypes.NAME);
         if (nameNode == null)
             return null;
 
@@ -313,60 +320,57 @@ public interface IssPsiUtils {
     }
 
     @Nullable
-    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getPreprocessorType(final IssPreprocessorName preprocessorName) {
-        if (preprocessorName.getName() == null)
-            return null;
-
-        return org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType.fromName(preprocessorName.getName());
+    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getType(final IssPreprocessorType preprocessorType) {
+        return org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType.fromName(preprocessorType.getText().substring(1));
     }
     //</editor-fold>
 
     //<editor-fold desc="Preprocessor Element">
     @Nullable
-    static String getName(final IssPreprocessorElement preprocessorElement) {
-        if (preprocessorElement.getPreprocessorName() == null)
+    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getType(final IssPreprocessorElement preprocessorElement) {
+        final PreprocessorType type = preprocessorElement.getPreprocessorType().getType();
+        if (type == null)
             return null;
 
-        return preprocessorElement.getPreprocessorName().getName();
-    }
-
-    @Nullable
-    static org.pcsoft.plugins.intellij.iss.language.type.PreprocessorType getPreprocessorType(final IssPreprocessorElement preprocessorElement) {
-        return preprocessorElement.getPreprocessorName().getPreprocessorType();
+        switch (type) {
+            case Define:
+                return preprocessorElement.getPreprocessorDefine() == null ? null : type;
+            case PreProc:
+                return preprocessorElement.getPreprocessorPreproc() == null ? null : type;
+            case Include:
+                return preprocessorElement.getPreprocessorInclude() == null ? null : type;
+            default:
+                throw new NotImplementedException();
+        }
     }
     //</editor-fold>
 
-    //<editor-fold desc="Identifier Value">
+    //<editor-fold desc="Preprocessor Define">
     @NotNull
-    static String getName(final IssIdentifierValue identifierValue) {
-        return identifierValue.getText();
+    static String getName(final IssPreprocessorDefine preprocessorDefine) {
+        return preprocessorDefine.getPreprocessorName().getText();
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Preprocessor Preproc">
     @Nullable
-    static PsiElement setName(final IssIdentifierValue identifierValue, final String name) {
-        return null;
+    static PreprocType getType(final IssPreprocessorPreproc preprocessorPreproc) {
+        String value = preprocessorPreproc.getText();
+        if (value == null)
+            return null;
+
+        return PreprocType.fromName(value);
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Preprocessor Include">
     @Nullable
-    static PsiElement getNameIdentifier(final IssIdentifierValue identifierValue) {
-        final IssPreprocessorElement preprocessorElement = PsiTreeUtil.getParentOfType(identifierValue, IssPreprocessorElement.class);
-        if (preprocessorElement != null) {
-            final PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
-            if (preprocessorType == null)
-                return null;
+    static String getFile(final IssPreprocessorInclude preprocessorInclude) {
+        if (preprocessorInclude.getStringValue() != null)
+            return preprocessorInclude.getStringValue().getValue();
 
-            switch (preprocessorType) {
-                case Define:
-                    if (preprocessorElement.getPreprocessorValueList().isEmpty())
-                        return null;
-                    return preprocessorElement.getPreprocessorValueList().get(0);
-                case Include:
-                case PreProc:
-                    return null;
-                default:
-                    throw new RuntimeException();
-            }
-        }
+        if (preprocessorInclude.getFileValue() != null)
+            return preprocessorInclude.getFileValue().getValue();
 
         return null;
     }

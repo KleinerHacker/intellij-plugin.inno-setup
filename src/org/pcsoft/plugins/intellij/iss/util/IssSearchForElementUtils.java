@@ -30,9 +30,8 @@ public final class IssSearchForElementUtils {
     public static List<IssPreprocessorElement> searchForDefineSymbols(@NotNull Project project, @NotNull IssFile file, @Nullable String key, boolean strict) {
         final Collection<IssPreprocessorElement> preprocessorElements = PsiTreeUtil.findChildrenOfType(file, IssPreprocessorElement.class);
         return preprocessorElements.stream()
-                .filter(preprocessorElement -> preprocessorElement.getPreprocessorType() == PreprocessorType.Define)
-                .filter(preprocessorElement -> !preprocessorElement.getPreprocessorValueList().isEmpty())
-                .filter(preprocessorElement -> IssUtils.checkString(preprocessorElement.getPreprocessorValueList().get(0).getText(), key, strict))
+                .filter(preprocessorElement -> preprocessorElement.getType() == PreprocessorType.Define)
+                .filter(preprocessorElement -> IssUtils.checkString(preprocessorElement.getPreprocessorDefine().getPreprocessorName().getText(), key, strict))
                 .collect(Collectors.toList());
     }
 

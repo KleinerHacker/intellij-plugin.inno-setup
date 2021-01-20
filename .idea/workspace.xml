@@ -6,10 +6,23 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inno-setup-support.iml" beforeDir="false" afterPath="$PROJECT_DIR$/inno-setup-support.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTarget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTarget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PostHighlightingAnnotator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PostHighlightingAnnotator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/SpecialValueTypeCheckAnnotator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/SpecialValueTypeCheckAnnotator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownPreprocessorAnnotator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownPreprocessorAnnotator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/ValueTypeCheckAnnotator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/ValueTypeCheckAnnotator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssConstantCompletionContributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssConstantCompletionContributor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorCompletionContributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorCompletionContributor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorSpecialValueCompletionContributor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorSpecialValueCompletionContributor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/manipulator/IssIdentifierValueManipulator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssDefineSymbolReference.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssDefineSymbolReference.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PreprocessorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PreprocessorType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssSearchForElementUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssSearchForElementUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/src/correct.iss" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/src/correct.iss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +40,8 @@
       <list>
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -134,8 +147,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/icons" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -150,6 +164,9 @@
     <option name="AUTOSCROLL_FROM_SOURCE" value="false" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.pcsoft.plugins.intellij.iss.language.parser" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources\icons" />
       <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources" />
@@ -160,9 +177,6 @@
       <recent name="org.pcsoft.plugins.intellij.iss.language.contributor" />
       <recent name="org.pcsoft.plugins.intellij.iss.language.type.value" />
       <recent name="org.pcsoft.plugins.intellij.iss.language.type.constant" />
-    </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.pcsoft.plugins.intellij.iss.language.parser" />
     </key>
   </component>
   <component name="RunManager">
@@ -271,6 +285,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -341,6 +366,7 @@
       </method>
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -374,11 +400,14 @@
       <workItem from="1530430921992" duration="377000" />
       <workItem from="1531854885150" duration="291000" />
       <workItem from="1591806864480" duration="4613000" />
+      <workItem from="1592200548836" duration="622000" />
+      <workItem from="1611167631734" duration="123000" />
+      <workItem from="1611167770052" duration="8433000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -387,97 +416,6 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="440" y="94" key="#Project_Structure" timestamp="1591806915594">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="440" y="94" key="#Project_Structure/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591806915594" />
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591807919094">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591807919094" />
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1591808772996">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591808772996" />
-    <state x="715" y="223" key="#xdebugger.evaluate" timestamp="1591810287432">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="715" y="223" key="#xdebugger.evaluate/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591810287432" />
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1591809877698">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591809877698" />
-    <state width="1877" height="213" key="GridCell.Tab.0.bottom" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.bottom/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.0.center" timestamp="1591811493295">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.center/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493295" />
-    <state width="1877" height="213" key="GridCell.Tab.0.left" timestamp="1591811493295">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.left/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493295" />
-    <state width="1877" height="213" key="GridCell.Tab.0.right" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.0.right/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.1.bottom" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.1.bottom/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.1.center" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.1.center/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.1.left" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.1.left/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.1.right" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.1.right/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.2.bottom" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.2.bottom/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.2.center" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.2.center/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.2.left" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.2.left/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state width="1877" height="213" key="GridCell.Tab.2.right" timestamp="1591811493296">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="213" key="GridCell.Tab.2.right/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591811493296" />
-    <state x="342" y="127" key="new project wizard" timestamp="1591809897115">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="342" y="127" key="new project wizard/1920.-105.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1591809897115" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssDefineSymbolReference.java</url>
-          <line>37</line>
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="NONE" type="java-line">
-          <url>file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssDefineSymbolReference.java</url>
-          <line>24</line>
-          <log-expression expression="key" language="JAVA" />
-          <option name="timeStamp" value="71" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

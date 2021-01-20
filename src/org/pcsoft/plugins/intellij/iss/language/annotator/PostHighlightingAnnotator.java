@@ -3,6 +3,7 @@ package org.pcsoft.plugins.intellij.iss.language.annotator;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
+import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
@@ -41,9 +42,19 @@ public class PostHighlightingAnnotator implements Annotator {
                         attributesKey.getDefaultAttributes().getBackgroundColor(), attributesKey.getDefaultAttributes().getForegroundColor(),
                         EffectType.STRIKEOUT, attributesKey.getDefaultAttributes().getFontType()));
             }
-        } else if (psiElement instanceof IssPreprocessorName) {
-            Annotation annotation = annotationHolder.createInfoAnnotation(psiElement, null);
-            annotation.setTextAttributes(IssHighlighting.PREPROCESSOR);
+        } else if (psiElement instanceof IssPreprocessorDefine) {
+            final IssPreprocessorDefine preprocessorDefine = (IssPreprocessorDefine) psiElement;
+            annotationHolder
+                    .newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .textAttributes(IssHighlighting.PREPROCESSOR)
+                    .range(preprocessorDefine.getPreprocessorName())
+                    .create();
+        } else if (psiElement instanceof IssPreprocessorType) {
+            annotationHolder
+                    .newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .textAttributes(IssHighlighting.KEYWORD)
+                    .range(psiElement.getNode())
+                    .create();
         }
     }
 }

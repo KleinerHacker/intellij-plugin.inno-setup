@@ -25,7 +25,8 @@ public class IssDefineSymbolReference extends IssAbstractReference {
         final List<IssPreprocessorElement> preprocessorElements = IssSearchForElementUtils.searchForDefineSymbols(myElement.getProject(),
                 (IssFile) myElement.getContainingFile(), key, b);
         final List<PsiElementResolveResult> resolveResults = preprocessorElements.stream()
-                .map(preprocessorElement -> preprocessorElement.getPreprocessorValueList().get(0).getIdentifierValue())
+                .filter(preprocessorElement -> preprocessorElement.getType() == PreprocessorType.Define)
+                .map(preprocessorElement -> preprocessorElement.getPreprocessorDefine().getPreprocessorName())
                 .map(PsiElementResolveResult::new)
                 .collect(Collectors.toList());
 
@@ -37,30 +38,26 @@ public class IssDefineSymbolReference extends IssAbstractReference {
     public Object[] getVariants() {
         final List<IssPreprocessorElement> preprocessorElements = IssSearchForElementUtils.searchForDefineSymbols(myElement.getProject(),
                 (IssFile) myElement.getContainingFile());
-        final List<LookupElementBuilder> lookupElements = preprocessorElements.stream()
+
+        return preprocessorElements.stream()
+                .filter(preprocessorElement -> preprocessorElement.getType() == PreprocessorType.Define)
                 .map(preprocessorElement ->
-                        LookupElementBuilder.create(preprocessorElement.getPreprocessorValueList().get(0).getIdentifierValue().getText())
+                        LookupElementBuilder.create(preprocessorElement.getPreprocessorDefine().getPreprocessorName())
                                 .withCaseSensitivity(false)
                                 .withTailText(preprocessorElement.getContainingFile().getName())
-                )
-                .collect(Collectors.toList());
-
-        return lookupElements.toArray();
+                ).toArray();
     }
 
     @Override
     public boolean isReferenceTo(PsiElement element) {
-        if (element instanceof IssIdentifierValue) {
+        if (element instanceof IssPreprocessorName) {
             final IssPreprocessorElement preprocessorElement = PsiTreeUtil.getParentOfType(element, IssPreprocessorElement.class);
             if (preprocessorElement != null) {
-                final PreprocessorType preprocessorType = preprocessorElement.getPreprocessorType();
+                final PreprocessorType preprocessorType = preprocessorElement.getType();
                 if (preprocessorType != PreprocessorType.Define)
                     return false;
-                final List<IssPreprocessorValue> preprocessorValueList = preprocessorElement.getPreprocessorValueList();
-                if (preprocessorValueList.isEmpty())
-                    return false;
 
-                return preprocessorValueList.get(0).getIdentifierValue().getText().equalsIgnoreCase(myElement.getName());
+                return preprocessorElement.getPreprocessorDefine().getPreprocessorName().getText().equalsIgnoreCase(myElement.getName());
             }
         }
 
