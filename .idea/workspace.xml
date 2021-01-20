@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +22,7 @@
         <option value="Interface" />
         <option value="Class" />
         <option value="Enum" />
+        <option value="module-info" />
       </list>
     </option>
   </component>
@@ -130,7 +130,7 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/icons" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -386,7 +386,7 @@
       <workItem from="1592200548836" duration="622000" />
       <workItem from="1611167631734" duration="123000" />
       <workItem from="1611167770052" duration="8433000" />
-      <workItem from="1611176306155" duration="180000" />
+      <workItem from="1611176306155" duration="953000" />
     </task>
     <servers />
   </component>
