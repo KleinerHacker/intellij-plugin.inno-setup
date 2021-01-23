@@ -27,7 +27,11 @@ public class IssBuilderService extends BuilderService {
                 new TargetBuilder<IssBuildRootDescriptor, IssBuildTarget>(Collections.singletonList(new IssBuildTargetType())) {
                     @Override
                     public void build(@NotNull IssBuildTarget issBuildTarget, @NotNull DirtyFilesHolder<IssBuildRootDescriptor, IssBuildTarget> dirtyFilesHolder, @NotNull BuildOutputConsumer buildOutputConsumer, @NotNull CompileContext compileContext) throws ProjectBuildException, IOException {
-
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @NotNull

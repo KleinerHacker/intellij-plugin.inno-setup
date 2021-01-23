@@ -1,6 +1,7 @@
 package org.pcsoft.plugins.intellij.iss;
 
 import com.intellij.openapi.util.IconLoader;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -8,6 +9,8 @@ import javax.swing.*;
  * Created by Christoph on 30.09.2016.
  */
 public final class IssIcons {
+    @NotNull
+    public static final Icon SDK = IconLoader.findIcon("/icons/is.png");
     public static final Icon MODULE = IconLoader.findIcon("/icons/is.png");
     public static final Icon FILE = IconLoader.findIcon("/icons/is_script.png");
     public static final Icon FILE_BIG = IconLoader.findIcon("/icons/is_script_big.png");

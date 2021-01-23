@@ -9,8 +9,10 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.commons.io.FileUtils;
@@ -18,7 +20,9 @@ import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.ide.action.IssCreateScriptAction;
+import org.pcsoft.plugins.intellij.iss.ide.build.sdk.IssSdkType;
 import org.pcsoft.plugins.intellij.iss.module.model.IssModuleModel;
+import org.pcsoft.plugins.intellij.iss.module.wizards.IssModuleCreationWizardStep;
 import org.pcsoft.plugins.intellij.iss.util.IssUtils;
 
 import javax.swing.*;
@@ -37,10 +41,15 @@ public class IssModuleBuilder extends ModuleBuilder {
         return IssModuleType.getInstance();
     }
 
+    @Override
+    public boolean isSuitableSdkType(SdkTypeId sdkType) {
+        return sdkType.getName().equals(IssSdkType.NAME);
+    }
+
     @Nullable
     @Override
     public ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
-        return new IssModuleWizardStep(model);
+        return new IssModuleCreationWizardStep(model);
     }
 
     @Override
@@ -80,6 +89,9 @@ public class IssModuleBuilder extends ModuleBuilder {
 
             LocalFileSystem.getInstance().refresh(false);
         }
+
+        ProjectRootManager.getInstance(modifiableRootModel.getProject()).setProjectSdkName(IssSdkType.NAME, IssSdkType.NAME);
+        modifiableRootModel.setSdk(ProjectRootManager.getInstance(modifiableRootModel.getProject()).getProjectSdk());
     }
 
     private void createFolder(String rootDir, String folder, ContentEntry e, FolderType type) {

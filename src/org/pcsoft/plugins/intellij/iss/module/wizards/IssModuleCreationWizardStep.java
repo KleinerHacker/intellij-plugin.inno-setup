@@ -1,4 +1,4 @@
-package org.pcsoft.plugins.intellij.iss.module;
+package org.pcsoft.plugins.intellij.iss.module.wizards;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ui.components.JBCheckBox;
@@ -10,7 +10,7 @@ import org.pcsoft.plugins.intellij.iss.util.IssUiUtils;
 import javax.swing.*;
 import java.awt.*;
 
-public class IssModuleWizardStep extends ModuleWizardStep {
+public class IssModuleCreationWizardStep extends ModuleWizardStep {
     private final JPanel pnlRoot;
     private final JBCheckBox ckbCreateScript;
     private final JBTextField txtFilename;
@@ -20,7 +20,7 @@ public class IssModuleWizardStep extends ModuleWizardStep {
 
     private final IssModuleModel model;
 
-    public IssModuleWizardStep(IssModuleModel model) {
+    public IssModuleCreationWizardStep(IssModuleModel model) {
         this.model = model;
 
         final VerticalBox pnlMain = new VerticalBox();

@@ -79,7 +79,7 @@
         <!-- Manipulators -->
         <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue"
                                  implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssRefValueManipulator"/>
-
+        <sdkType implementation="org.pcsoft.plugins.intellij.iss.ide.build.sdk.IssSdkType"/>
         <compilerFactory implementation="org.pcsoft.plugins.intellij.iss.ide.build.compiler.IssCompilerFactory"/>
     </extensions>
 
