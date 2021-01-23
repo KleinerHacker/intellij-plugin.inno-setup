@@ -8,6 +8,7 @@ import javax.swing.*;
  * Created by Christoph on 30.09.2016.
  */
 public final class IssIcons {
+    public static final Icon MODULE = IconLoader.findIcon("/icons/is.png");
     public static final Icon FILE = IconLoader.findIcon("/icons/is_script.png");
     public static final Icon FILE_BIG = IconLoader.findIcon("/icons/is_script_big.png");
 

@@ -8,9 +8,10 @@ import org.pcsoft.plugins.intellij.iss.module.model.IssModuleModel;
 import org.pcsoft.plugins.intellij.iss.util.IssUiUtils;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class IssModuleWizardStep extends ModuleWizardStep {
-    private final VerticalBox pnlMain;
+    private final JPanel pnlRoot;
     private final JBCheckBox ckbCreateScript;
     private final JBTextField txtFilename;
     private final JBTextField txtAppName, txtAppVersion;
@@ -21,7 +22,8 @@ public class IssModuleWizardStep extends ModuleWizardStep {
 
     public IssModuleWizardStep(IssModuleModel model) {
         this.model = model;
-        pnlMain = new VerticalBox();
+
+        final VerticalBox pnlMain = new VerticalBox();
         {
             ckbCreateScript = new JBCheckBox("Create Script");
             txtFilename = new JBTextField();
@@ -53,11 +55,14 @@ public class IssModuleWizardStep extends ModuleWizardStep {
             ));
             pnlMain.add(IssUiUtils.createLabeledComponent("Setup Base Name:", txtBaseSetupName));
         }
+
+        pnlRoot = new JPanel(new BorderLayout());
+        pnlRoot.add(pnlMain, BorderLayout.NORTH);
     }
 
     @Override
     public JComponent getComponent() {
-        return pnlMain;
+        return pnlRoot;
     }
 
     @Override

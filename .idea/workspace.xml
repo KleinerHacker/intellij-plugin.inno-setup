@@ -2,8 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/MyScript.iss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/correct.iss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/test.iss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleWizardStep.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleWizardStep.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/sonarIssues.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/test-project.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/src/MyScript.iss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/src/correct.iss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/src/test.iss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/test-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/test-project.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,15 +284,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -388,6 +403,7 @@
       <workItem from="1611167631734" duration="123000" />
       <workItem from="1611167770052" duration="8433000" />
       <workItem from="1611176306155" duration="1585000" />
+      <workItem from="1611434897998" duration="1318000" />
     </task>
     <servers />
   </component>

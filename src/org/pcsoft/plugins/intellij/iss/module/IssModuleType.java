@@ -42,6 +42,6 @@ public class IssModuleType extends ModuleType<IssModuleBuilder> {
     @NotNull
     @Override
     public Icon getNodeIcon(boolean b) {
-        return IssIcons.FILE;
+        return IssIcons.MODULE;
     }
 }

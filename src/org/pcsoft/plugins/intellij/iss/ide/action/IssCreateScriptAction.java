@@ -8,6 +8,7 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import org.apache.commons.lang.SystemUtils;
@@ -21,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class IssCreateScriptAction extends AnAction {
@@ -34,7 +36,8 @@ public class IssCreateScriptAction extends AnAction {
         final VirtualFile virtualFile = CommonDataKeys.VIRTUAL_FILE.getData(e.getDataContext());
         final Module module = ModuleUtil.findModuleForFile(virtualFile, project);
 
-        e.getPresentation().setVisible(project != null && virtualFile != null && module.getModuleTypeName().equals(IssModuleType.ID));
+        e.getPresentation().setVisible(module != null && Objects.equals(module.getModuleTypeName(), IssModuleType.ID) &&
+                (ModuleRootManager.getInstance(module).getFileIndex().isInSourceContent(virtualFile) || ModuleRootManager.getInstance(module).getFileIndex().isInTestSourceContent(virtualFile)));
     }
 
     @Override
