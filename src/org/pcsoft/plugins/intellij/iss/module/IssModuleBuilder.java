@@ -13,12 +13,12 @@ import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.pcsoft.plugins.intellij.iss.ide.action.IssCreateScriptAction;
 import org.pcsoft.plugins.intellij.iss.module.model.IssModuleModel;
+import org.pcsoft.plugins.intellij.iss.util.FileUtils;
 import org.pcsoft.plugins.intellij.iss.util.IssUtils;
 
 import javax.swing.*;
