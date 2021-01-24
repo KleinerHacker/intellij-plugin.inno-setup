@@ -18,9 +18,9 @@
       <list>
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
         <option value="module-info" />
+        <option value="Class" />
       </list>
     </option>
   </component>
