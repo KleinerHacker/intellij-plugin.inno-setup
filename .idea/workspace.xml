@@ -2,25 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/MyScript.iss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/correct.iss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-project/scripts/runtime/test.iss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleWizardStep.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleWizardStep.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/sonarIssues.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/test-project.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/src/MyScript.iss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/src/correct.iss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/src/test.iss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/test-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/test-project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/META-INF/services/org.jetbrains.jps.incremental.BuilderService" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/services/org.jetbrains.jps.incremental.BuilderService" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildRootDescriptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTarget.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTargetLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTargetType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuilderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/compiler/IssCompiler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/compiler/IssCompilerFactory.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,9 +29,9 @@
       <list>
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
         <option value="module-info" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -146,6 +137,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
+    <property name="jdk.selected.JAVA_MODULE" value="Open 11.0.2 x64" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/icons" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -284,6 +276,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -393,6 +396,8 @@
       <workItem from="1611167770052" duration="8433000" />
       <workItem from="1611176306155" duration="1585000" />
       <workItem from="1611434897998" duration="1318000" />
+      <workItem from="1611484662390" duration="1545000" />
+      <workItem from="1611604805135" duration="2140000" />
     </task>
     <servers />
   </component>
@@ -406,6 +411,17 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/builder/IssModuleLevelBuilder.java</url>
+          <line>20</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

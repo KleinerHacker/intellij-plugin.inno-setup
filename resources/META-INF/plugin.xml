@@ -80,7 +80,7 @@
         <lang.elementManipulator forClass="org.pcsoft.plugins.intellij.iss.language.parser.psi.element.IssRefValue"
                                  implementationClass="org.pcsoft.plugins.intellij.iss.language.parser.manipulator.IssRefValueManipulator"/>
 
-        <compilerFactory implementation="org.pcsoft.plugins.intellij.iss.ide.build.compiler.IssCompilerFactory"/>
+        <compileServer.plugin/>
     </extensions>
 
     <actions>
