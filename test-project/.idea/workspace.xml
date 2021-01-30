@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bad7bdf1-f5a9-4966-a11a-04d2796724a9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/META-INF/plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/org/pcsoft/plugins/intellij/iss/module/wizards/IssModuleModifyWizardStep.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/org/pcsoft/plugins/intellij/iss/module/IssModuleConfigurationEditorProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/org/pcsoft/plugins/intellij/iss/module/IssModuleConfigurationEditorProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,6 +31,19 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -45,6 +56,11 @@
       <workItem from="1612000523620" duration="6000" />
       <workItem from="1612002050769" duration="8000" />
       <workItem from="1612002302407" duration="9000" />
+      <workItem from="1612032102924" duration="11000" />
+      <workItem from="1612032653244" duration="8000" />
+      <workItem from="1612033286701" duration="19000" />
+      <workItem from="1612033681209" duration="13000" />
+      <workItem from="1612033823330" duration="11000" />
     </task>
     <servers />
   </component>

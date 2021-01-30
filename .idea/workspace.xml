@@ -2,11 +2,457 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/wizards/IssModuleModifyWizardStep.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/inno-setup-support.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/META-INF/services/org.jetbrains.jps.incremental.BuilderService" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/arrow_right.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_const_custom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_const_directory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_const_shell.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_attribute.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_constant.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_copymode.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_flag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_font.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_info_permission.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_component.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_component_ref.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_custom_messages.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_directory.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_file.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_ini.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_install_delete.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_install_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_language.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_language_option.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_messages.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_registry.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_setup.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_task.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_task_ref.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_type.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_type_ref.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_uninstall_delete.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/ic_sect_uninstall_run.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/is.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/is_cmd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/is_help.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/is_script.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/is_script_big.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_ASEAN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_African Union(OAS).png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Arab League.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_CARICOM.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_CIS.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Commonwealth.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_England.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_European Union.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Islamic Conference.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Kosovo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_NATO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Northern Cyprus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Northern Ireland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_OPEC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Olimpic Movement.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Red Cross.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Scotland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Somaliland.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_United Nations.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/_Wales.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ad.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ae.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/af.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ag.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ai.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/al.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/am.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/an.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ao.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/aq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/as.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/at.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/au.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/aw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/az.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ba.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/be.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bj.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/br.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/by.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/bz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ca.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ch.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ci.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ck.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/co.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cv.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/cz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/de.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/dj.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/dk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/dm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/do.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/dz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ec.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ee.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/eg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/eh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/er.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/es.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/et.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/fi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/fj.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/fm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/fo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/fr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ga.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ge.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/gy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/hk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/hn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/hr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ht.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/hu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/id.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ie.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/il.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/im.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/in.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/iq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ir.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/is.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/it.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/je.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/jm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/jo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/jp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ke.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ki.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/km.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kp.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ky.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/kz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/la.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/li.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ls.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/lv.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ly.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ma.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/md.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/me.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mh.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ml.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mq.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ms.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mv.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/my.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/mz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/na.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/nc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ne.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ng.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ni.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/nl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/no.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/np.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/nr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/nz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/om.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pe.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ph.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ps.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/pw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/py.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/qa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/re.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ro.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/rs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ru.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/rw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sb.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sd.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/se.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/si.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sk.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/so.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/st.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sv.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/sz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/td.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/th.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tj.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tl.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/to.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tr.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tt.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tv.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/tz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ua.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ug.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/us.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/uy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/uz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/va.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/vc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ve.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/vg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/vi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/vn.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/vu.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ws.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/ye.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/za.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/zm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/lan/zw.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/icons/stop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_common.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_compiler_directive.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_component.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_constant.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_directory.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_file.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_icon.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_ini.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_install_run.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_registry.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_section.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_setup.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_task.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_type.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/messages/documentation_uninstall_run.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/templates/template.isl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/templates/template.iss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssCreateScriptAction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/action/IssGenerateAppIdAction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildRootDescriptor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTarget.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTargetLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuildTargetType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuilderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/compiler/IssCompiler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/compiler/IssCompilerFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/sdk/IssSdkType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardDialog.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/ui/IssCreateScriptWizardModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssFileTypeFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/IssLanguage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/DoublePropertyAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/DoublePropertyValueAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/MissingRequiredPropertyAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/PostHighlightingAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/SectionTypePropertyAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/SpecialValueTypeCheckAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownConstantAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownPreprocessorAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownPropertyKeyAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownSectionAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/UnknownValueReferenceAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/ValueTypeCheckAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/annotator/WrongConstantUsageAnnotator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssBraceMatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssCommenter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/common/IssQuoteMatcher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssConstantCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPreprocessorSpecialValueCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPropertyKeyCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssPropertySpecialValueCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/contributor/IssSectionCompletionContributor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssConstantDocumentationProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssDocumentationBundle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssPropertyKeyDocumentationProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssPropertyValueDocumentationProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/doc/IssSectionDocumentationProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssColoringPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssHighlighting.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/highlighting/IssSyntaxHighlighterFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssCustomTypes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserDefinition.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/IssParserUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/iss.bnf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/IssLexerAdapter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/lexer/_IssLexer.flex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/manipulator/IssAbstractElementManipulator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/manipulator/IssRefValueManipulator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssElementType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssPsiUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/IssTokenType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssFile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssKey.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssProperty.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssSectionLine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/parser/psi/element/IssValue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssAbstractReference.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssComponentsReference.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssDefineSymbolReference.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssTasksReference.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/reference/IssTypesReference.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/folding/IssSectionFoldingBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewElement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/structure/tree/IssStructureViewModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PreprocType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/PreprocessorType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/SectionTypeVariant.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/ValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/ConstantType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/PreprocessorType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/PropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SectionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/SpecialValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/TypeBase.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsDeprecated.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsInfoProperty.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsKeyProperty.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsReferenceKey.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/IsRequired.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/base/annotation/ReferenceTo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/constant/CommonConstantType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/constant/DirectoryConstantType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/constant/ShellFolderConstantType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/ComponentsPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/DirsPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/EmptyPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/FilesPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/INIPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/IconsPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/InstallRunPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/LangOptionsPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/LanguagesPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/RegistryPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/SetupPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/TasksPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/TypesPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/UnInstallDeletePropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/property/UninstallRunPropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/AlphaFormatValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/Architectures64ValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ArchitecturesValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/AttributesValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/BooleanValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/BooleanWithAutoValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/BooleanWithForceValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ColorDirectionValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ColorValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/ComponentsFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/CompressionLevelValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/CompressionThreadsValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/CompressionValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/DirsFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/DiskSliceSizeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/FilesFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/INIFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/IconsFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/InstallRunFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/LZMAMatchFinderValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/LanguageDetectionValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/LogModeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PreprocessorTypeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/PrivilegesValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/RegistryFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/RegistryRootValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/RegistryTypeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/TasksFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/TouchDateValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/TouchTimeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/TypesFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/UnInstallTypeValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/language/type/value/UninstallRunFlagValueType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleConfigurationEditorProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/model/IssModuleModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/wizards/IssModuleCreationWizardStep.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssSearchForElementUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssUiUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/util/IssUtils.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test-project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-project/test-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/test-project.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,10 +588,15 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/icons" />
+    <property name="jdk.selected.JAVA_MODULE" value="Open 11.0.2 x64" />
+    <property name="last_opened_file_path" value="F:/Toolbox/apps/IDEA-C/ch-0/203.7148.57/lib" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -168,6 +619,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources\icons" />
       <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="G:\Workspace\IntelliJ\intellij-plugin.inno-setup\Builder\resources\META-INF" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.pcsoft.plugins.intellij.iss.language.reference" />
@@ -283,15 +737,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -347,7 +799,7 @@
       </method>
     </configuration>
     <configuration name="Plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
-      <module name="inno-setup-support" />
+      <module name="inno-setup-support.core" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <alternative-path path="1.8 U92 (x64)" alternative-path-enabled="false" />
@@ -357,7 +809,7 @@
       </method>
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
-      <module name="inno-setup-support" />
+      <module name="inno-setup-support.core" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file enabled="true" id="idea.log" />
@@ -405,6 +857,9 @@
       <workItem from="1611167770052" duration="8433000" />
       <workItem from="1611176306155" duration="1585000" />
       <workItem from="1611434897998" duration="6023000" />
+      <workItem from="1612031692314" duration="2844000" />
+      <workItem from="1612034653657" duration="168000" />
+      <workItem from="1612034836657" duration="2300000" />
     </task>
     <task id="LOCAL-00001" summary="fix module and UI">
       <created>1611436430530</created>
@@ -429,6 +884,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">

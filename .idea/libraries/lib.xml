@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="file://F:/Toolbox/apps/IDEA-C/ch-0/203.7148.57/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://F:/Toolbox/apps/IDEA-C/ch-0/203.7148.57/lib" />
+    </SOURCES>
+    <jarDirectory url="file://F:/Toolbox/apps/IDEA-C/ch-0/203.7148.57/lib" recursive="false" />
+    <jarDirectory url="file://F:/Toolbox/apps/IDEA-C/ch-0/203.7148.57/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>

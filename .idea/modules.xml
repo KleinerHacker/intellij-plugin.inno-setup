@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/inno-setup-support.iml" filepath="$PROJECT_DIR$/inno-setup-support.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Builder/inno-setup-support.builder.iml" filepath="$PROJECT_DIR$/Builder/inno-setup-support.builder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Core/inno-setup-support.core.iml" filepath="$PROJECT_DIR$/Core/inno-setup-support.core.iml" />
     </modules>
   </component>
 </project>
