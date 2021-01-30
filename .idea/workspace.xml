@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="fix module and UI">
+    <list default="true" id="1d4e40fc-36b6-4531-9e29-ed811be7d6d2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/META-INF/plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/META-INF/plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/IssIcons.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuilderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/ide/build/IssBuilderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/IssModuleWizardStep.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/wizards/IssModuleCreationWizardStep.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-project/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pcsoft/plugins/intellij/iss/module/wizards/IssModuleModifyWizardStep.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test-project/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-project/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,7 +60,20 @@
     </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="dev-idea" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -274,13 +283,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -407,6 +418,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">

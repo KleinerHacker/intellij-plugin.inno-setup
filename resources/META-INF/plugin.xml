@@ -35,6 +35,8 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Module Type -->
         <moduleType id="ISS_MODULE" implementationClass="org.pcsoft.plugins.intellij.iss.module.IssModuleType"/>
+        <moduleBuilder id="ISS_MODULE" builderClass="org.pcsoft.plugins.intellij.iss.module.IssModuleBuilder"/>
+        <moduleConfigurationEditorProvider id="ISS_MODULE" implementation="org.pcsoft.plugins.intellij.iss.module.IssModuleConfigurationEditorProvider"/>
 
         <!-- File Type & Parsing -->
         <fileTypeFactory implementation="org.pcsoft.plugins.intellij.iss.language.IssFileTypeFactory"/>
