@@ -33,13 +33,13 @@ public class IssBuildTarget extends BuildTarget<IssBuildRootDescriptor> {
     @NotNull
     @Override
     public List<IssBuildRootDescriptor> computeRootDescriptors(JpsModel jpsModel, ModuleExcludeIndex moduleExcludeIndex, IgnoredFileIndex ignoredFileIndex, BuildDataPaths buildDataPaths) {
-        return Collections.singletonList(new IssBuildRootDescriptor());
+        return Collections.singletonList(new IssBuildRootDescriptor(this));
     }
 
     @Nullable
     @Override
     public IssBuildRootDescriptor findRootDescriptor(String s, BuildRootIndex buildRootIndex) {
-        return new IssBuildRootDescriptor();
+        return new IssBuildRootDescriptor(this);
     }
 
     @NotNull

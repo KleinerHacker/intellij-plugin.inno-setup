@@ -6,6 +6,12 @@ import org.jetbrains.jps.builders.BuildTarget;
 import java.io.File;
 
 public class IssBuildRootDescriptor extends BuildRootDescriptor {
+    private final BuildTarget<?> target;
+
+    public IssBuildRootDescriptor(BuildTarget<?> target) {
+        this.target = target;
+    }
+
     @Override
     public String getRootId() {
         return "ISS";
@@ -18,6 +24,6 @@ public class IssBuildRootDescriptor extends BuildRootDescriptor {
 
     @Override
     public BuildTarget<?> getTarget() {
-        return null;
+        return target;
     }
 }

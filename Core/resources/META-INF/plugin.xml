@@ -84,7 +84,7 @@
                                  implementationClass="org.pcsoft.plugins.intellij.iss.core.language.parser.manipulator.IssRefValueManipulator"/>
         <sdkType implementation="org.pcsoft.plugins.intellij.iss.core.ide.build.sdk.IssSdkType"/>
 
-        <compileServer.plugin>inno-setup-support.builder.jar</compileServer.plugin>
+        <compileServer.plugin>inno-setup-plugin.builder-jps-plugin.jar</compileServer.plugin>
     </extensions>
 
     <actions>
