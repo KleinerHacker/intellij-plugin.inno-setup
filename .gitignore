@@ -1,3 +1,4 @@
-out
-gen
-inno-setup-support.jar
+.gradle
+.idea
+.intellijPlatform
+build
