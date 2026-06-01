@@ -2,13 +2,8 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 
 rootProject.name = "inno-setup"
 
-pluginManagement {
-    plugins {
-        id("org.jetbrains.kotlin.jvm") version "2.2.20"
-        id("org.jetbrains.changelog") version "2.5.0"
-    }
-}
-
+// Settings-level plugins must be hardcoded here: the version catalog is not yet initialized
+// when this plugins {} block is evaluated by Gradle.
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("org.jetbrains.intellij.platform.settings") version "2.16.0"
@@ -16,7 +11,6 @@ plugins {
 
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
-    // Configure all projects' repositories
     repositories {
         mavenCentral()
 

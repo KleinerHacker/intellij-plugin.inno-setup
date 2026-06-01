@@ -1,21 +1,23 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.changelog")
-    id("org.jetbrains.intellij.platform")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.changelog)
+    id("org.jetbrains.intellij.platform")  // version managed by settings plugin
 }
 
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
     testImplementation(libs.junit)
 
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    compileOnly(libs.jackson.yaml)
+    compileOnly(libs.jackson.kotlin)
+    testImplementation(libs.jackson.yaml)
+    testImplementation(libs.jackson.kotlin)
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
-        intellijIdea("2025.3.5")
+        intellijIdea(libs.versions.idea.get())
         testFramework(TestFrameworkType.Platform)
 
         // Add plugin dependencies for compilation here:
