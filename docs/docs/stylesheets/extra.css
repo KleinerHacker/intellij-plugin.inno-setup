@@ -1,0 +1,35 @@
+/* === Custom brand colors (inno-setup-icon.png) === */
+[data-md-color-primary="custom"] {
+  --md-primary-fg-color:        #1565C0;
+  --md-primary-fg-color--light: #1E88E5;
+  --md-primary-fg-color--dark:  #0D47A1;
+  --md-primary-bg-color:        #ffffff;
+  --md-primary-bg-color--light: #ffffffb3;
+}
+
+[data-md-color-accent="custom"] {
+  --md-accent-fg-color:              #2979FF;
+  --md-accent-fg-color--transparent: #2979ff1a;
+  --md-accent-bg-color:              #ffffff;
+  --md-accent-bg-color--light:       #ffffffb3;
+}
+
+/* === Logo-Größe im Header === */
+.md-header__button.md-logo img {
+  height: 48px;
+  width: auto;
+}
+
+/* === Banner als Titel-Ersatz im Header === */
+.md-header__title .md-ellipsis {
+  display: inline-block;
+  width: 320px;
+  height: 52px;
+  background-image: url('../assets/images/inno-setup-banner.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  color: transparent;
+  vertical-align: middle;
+}
+
