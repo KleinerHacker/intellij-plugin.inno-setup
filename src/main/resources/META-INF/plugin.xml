@@ -23,6 +23,7 @@
     <!-- Extensions defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService"/>
     </extensions>
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
         <supportsKotlinPluginMode supportsK2="true"/>

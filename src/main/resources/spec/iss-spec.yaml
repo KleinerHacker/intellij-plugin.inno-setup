@@ -1,0 +1,1785 @@
+sections:
+
+  # ---------------------------------------------------------------------------
+  # [Setup] — directive section
+  # ---------------------------------------------------------------------------
+  - name: Setup
+    type: directive
+    deprecated: false
+    description: "Defines compiler settings and installer behaviour. Every script must contain this section. <b>AppName</b> and <b>AppVersion</b> are the only required directives."
+    attributes:
+
+      # --- Required ---
+      - name: AppName
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "The full name of the application, e.g. <code>My Program</code>. Displayed throughout the wizard and in Add/Remove Programs."
+        array: false
+
+      - name: AppVersion
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "The version string of the application, e.g. <code>1.0</code>. Shown in Add/Remove Programs and used for upgrade detection."
+        array: false
+
+      # --- Compiler directives ---
+      - name: Compression
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Compression algorithm for setup files. Valid values: <code>lzma2/ultra64</code> (default, best ratio), <code>bzip2</code>, <code>deflate</code>, <code>none</code>."
+        array: false
+
+      - name: OutputDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Directory where the compiled Setup EXE is written. Relative to the script file location. Default: <code>Output</code>."
+        array: false
+
+      - name: OutputBaseFilename
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Base filename (without <code>.exe</code>) of the compiled installer, e.g. <code>myapp-setup</code>. Default: <code>setup</code>."
+        array: false
+
+      - name: SourceDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Base directory for relative paths used in <code>[Files]</code> and other sections. Defaults to the directory containing the script."
+        array: false
+
+      - name: SetupIconFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to an <code>.ico</code> file used as the icon for the compiled Setup EXE."
+        array: false
+
+      - name: EncryptionKey
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Password used to encrypt the setup's files. The installer will prompt for this password at runtime."
+        array: false
+
+      # --- Publisher / URLs ---
+      - name: AppPublisher
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Publisher name shown in Add/Remove Programs."
+        array: false
+
+      - name: AppPublisherURL
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "URL of the publisher's website, shown in Add/Remove Programs."
+        array: false
+
+      - name: AppSupportURL
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Support URL shown in Add/Remove Programs."
+        array: false
+
+      - name: AppUpdatesURL
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Updates/download URL shown in Add/Remove Programs."
+        array: false
+
+      # --- Install paths ---
+      - name: DefaultDirName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default installation directory shown on the Select Destination page, e.g. <code>{autopf}\\MyApp</code>. Supports Inno Setup directory constants."
+        array: false
+
+      - name: DefaultGroupName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default Start Menu folder name shown on the Select Start Menu Folder page."
+        array: false
+
+      # --- Privileges ---
+      - name: PrivilegesRequired
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Required privilege level. Valid values: <code>admin</code> (default), <code>lowest</code>, <code>none</code>."
+        array: false
+
+      - name: PrivilegesRequiredOverridesAllowed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Allows the user to override the privilege requirement. Values: <code>commandline</code>, <code>dialog</code>."
+        array: false
+
+      # --- Version constraints ---
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version required to run the installer, e.g. <code>6.1</code> for Windows 7. Use <code>0</code> to never install."
+        array: false
+
+      - name: ArchitecturesAllowed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Space-separated list of allowed CPU architectures: <code>x86</code>, <code>x64</code>, <code>arm64</code>, <code>ia64</code>. Default: all."
+        array: true
+
+      - name: ArchitecturesInstallIn64BitMode
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Architectures for which the installer runs in 64-bit mode, e.g. <code>x64compatible arm64</code>."
+        array: true
+
+      # --- Runtime behaviour ---
+      - name: AppMutex
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Mutex name checked before installation starts. If the mutex exists, the installer warns that the application is already running."
+        array: false
+
+      - name: CloseApplications
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the installer automatically closes applications that lock files being updated."
+        array: false
+
+      - name: LicenseFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a <code>.txt</code> or <code>.rtf</code> license file shown on the License Agreement page."
+        array: false
+
+      - name: InfoBeforeFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page before installation begins."
+        array: false
+
+      - name: InfoAfterFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page after installation completes."
+        array: false
+
+      # --- Uninstall ---
+      - name: AllowNoIcons
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, a <i>Don't create a Start Menu folder</i> checkbox is shown on the Select Start Menu Folder page."
+        array: false
+
+      - name: UninstallDisplayName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name shown for the application in Add/Remove Programs. Defaults to <code>AppName</code>."
+        array: false
+
+      - name: UninstallDisplayIcon
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to an EXE, DLL, or ICO used as the icon in Add/Remove Programs, e.g. <code>{app}\\MyApp.exe</code>."
+        array: false
+
+      - name: CreateUninstallRegKey
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "Controls whether the uninstall registry key is created under <code>HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall</code>. Default: <code>yes</code>."
+        array: false
+
+      - name: Uninstallable
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Pascal expression or <code>yes</code>/<code>no</code> controlling whether an uninstaller entry is created. Default: <code>yes</code>."
+        array: false
+
+      # --- Wizard pages ---
+      - name: DisableDirPage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Controls the Select Destination Directory page visibility. Values: <code>yes</code>, <code>no</code>, <code>auto</code> (default)."
+        array: false
+
+      - name: DisableProgramGroupPage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Controls the Select Start Menu Folder page visibility. Values: <code>yes</code>, <code>no</code>, <code>auto</code> (default)."
+        array: false
+
+      - name: DisableWelcomePage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the Welcome page is not shown. Default: <code>no</code>."
+        array: false
+
+      - name: DisableReadyPage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the Ready to Install page is not shown. Default: <code>no</code>."
+        array: false
+
+      - name: UsePreviousAppDir
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the previously installed directory is pre-filled on reinstall. Default: <code>yes</code>."
+        array: false
+
+      - name: UsePreviousGroup
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the previously used Start Menu folder is pre-filled on reinstall. Default: <code>yes</code>."
+        array: false
+
+      - name: UserInfoPage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, a page is shown asking for the user name, company name, and optional serial number."
+        array: false
+
+      # --- Cosmetic ---
+      - name: WizardStyle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Visual style of the wizard. Values: <code>classic</code>, <code>modern</code> (default)."
+        array: false
+
+      - name: WizardResizable
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the wizard window can be resized by the user."
+        array: false
+
+      - name: WizardImageFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a BMP file displayed on the left side of the wizard in classic style."
+        array: false
+
+      - name: WizardSmallImageFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a BMP file displayed in the top-right corner of the wizard."
+        array: false
+
+      - name: SetupLogging
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, a log file is automatically created in the user's temp directory during installation."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Types] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Types
+    type: parameter
+    deprecated: false
+    description: "Defines named installation profiles (e.g. <i>Full</i>, <i>Compact</i>, <i>Custom</i>) shown in the wizard. Referenced by <code>[Components]</code> entries."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Internal identifier for this installation type. Referenced by the <code>Types</code> parameter in <code>[Components]</code>."
+        array: false
+
+      - name: Description
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Human-readable label displayed in the wizard for this installation type."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Behavioural flags. <code>iscustom</code>: marks this type as the user-customisable type (only one allowed per script)."
+        array: true
+
+  # ---------------------------------------------------------------------------
+  # [Components] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Components
+    type: parameter
+    deprecated: false
+    description: "Defines selectable installation features shown in the wizard. Supports a backslash hierarchy for parent/child grouping, e.g. <code>main\\help</code>."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Internal identifier for this component. Use backslash for hierarchy, e.g. <code>extra\\plugins</code>."
+        array: false
+
+      - name: Description
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Label shown for this component in the wizard's component list."
+        array: false
+
+      - name: Types
+        type:
+          kind: reference
+          section: Types
+        required: false
+        deprecated: false
+        description: "Space-separated list of installation type names (from <code>[Types]</code>) that include this component by default."
+        array: true
+
+      - name: ExtraDiskSpaceRequired
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Additional disk space in bytes required by this component, beyond the files it installs. Shown on the Select Components page."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Behavioural flags: <code>fixed</code>, <code>checkablealone</code>, <code>exclusive</code>, <code>restart</code>, <code>dontinheritcheck</code>, <code>disablenouninstallwarning</code>."
+        array: true
+
+      # Common parameters
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
+        array: true
+
+  # ---------------------------------------------------------------------------
+  # [Tasks] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Tasks
+    type: parameter
+    deprecated: false
+    description: "Defines checkboxes and radio buttons shown on the Select Additional Tasks wizard page. Entries in other sections are linked via their <code>Tasks</code> parameter."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Internal identifier for this task. Use backslash for sub-tasks, e.g. <code>desktopicon\\user</code>."
+        array: false
+
+      - name: Description
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Label shown next to the checkbox or radio button in the wizard."
+        array: false
+
+      - name: GroupDescription
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Optional heading text displayed above a group of tasks."
+        array: false
+
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names (from <code>[Components]</code>). This task is only shown when at least one listed component is selected."
+        array: true
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Behavioural flags: <code>checkablealone</code>, <code>checkedonce</code>, <code>dontinheritcheck</code>, <code>exclusive</code>, <code>restart</code>, <code>unchecked</code>."
+        array: true
+
+      # Common parameters
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
+        array: true
+
+  # ---------------------------------------------------------------------------
+  # [Dirs] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Dirs
+    type: parameter
+    deprecated: false
+    description: "Creates additional directories during installation. Primarily useful for empty directories; directories needed by <code>[Files]</code> are created automatically."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Full path of the directory to create, e.g. <code>{app}\\data</code>. Supports all Inno Setup directory constants."
+        array: false
+
+      - name: Attribs
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "File system attributes to set on the directory: <code>readonly</code>, <code>hidden</code>, <code>system</code>, <code>notcontentindexed</code>."
+        array: true
+
+      - name: Permissions
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "ACL permissions to grant, e.g. <code>users-modify</code>, <code>everyone-readexec</code>. Avoid setting ACLs on top-level system directories."
+        array: true
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Behavioural flags: <code>deleteafterinstall</code>, <code>setntfscompression</code>, <code>uninsalwaysuninstall</code>, <code>uninsneveruninstall</code>, <code>unsetntfscompression</code>."
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Files] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Files
+    type: parameter
+    deprecated: false
+    description: "Specifies files to be installed. Wildcards and recursive directory copying are supported. This is the primary section for bundling application files."
+    attributes:
+
+      - name: Source
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Source file path or wildcard pattern, e.g. <code>MyProg.exe</code> or <code>Plugins\\*</code>. Relative to <code>SourceDir</code>."
+        array: false
+
+      - name: DestDir
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Destination directory on the target machine, e.g. <code>{app}</code> or <code>{sys}</code>. Supports all Inno Setup constants."
+        array: false
+
+      - name: DestName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Rename the file when installing. If omitted, the original filename is kept."
+        array: false
+
+      - name: Excludes
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Comma-separated list of filename patterns to exclude when using wildcards, e.g. <code>*.pdb,*.log</code>."
+        array: false
+
+      - name: ExternalSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Size in bytes of an external file (used with <code>external</code> flag) for accurate disk-space calculation."
+        array: false
+
+      - name: Attribs
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "File attributes to set after installation: <code>readonly</code>, <code>hidden</code>, <code>system</code>, <code>notcontentindexed</code>."
+        array: true
+
+      - name: Permissions
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "ACL permissions, e.g. <code>users-modify</code>, <code>everyone-readexec</code>."
+        array: true
+
+      - name: FontInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Registry font name used when installing a font file, e.g. <code>My Font (TrueType)</code>. Triggers font registration."
+        array: false
+
+      - name: StrongAssemblyName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: ".NET strong assembly name for GAC registration."
+        array: false
+
+      - name: Hash
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Expected SHA-256 hash of the source file for integrity verification at compile time."
+        array: false
+
+      - name: ISSigAllowedKeys
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Comma-separated list of key identifiers from <code>[ISSigKeys]</code> used to verify the file's <code>.issig</code> signature."
+        array: true
+
+      - name: ExtractArchivePassword
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Password for an encrypted archive (used with <code>extractarchive</code> flag). Stored unencrypted in the installer."
+        array: false
+
+      - name: DownloadISSigSource
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "URL of the <code>.issig</code> signature file for a downloaded file."
+        array: false
+
+      - name: DownloadUserName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "HTTP Basic Auth username for authenticated file downloads (used with <code>download</code> flag)."
+        array: false
+
+      - name: DownloadPassword
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "HTTP Basic Auth password for authenticated file downloads (used with <code>download</code> flag)."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: >
+          Behavioural flags (space-separated): <code>32bit</code>, <code>64bit</code>, <code>comparetimestamp</code>,
+          <code>confirmoverwrite</code>, <code>deleteafterinstall</code>, <code>dontcopy</code>, <code>download</code>,
+          <code>external</code>, <code>extractarchive</code>, <code>ignoreversion</code>, <code>isreadme</code>,
+          <code>nocompression</code>, <code>onlyifdoesntexist</code>, <code>recursesubdirs</code>,
+          <code>createallsubdirs</code>, <code>regserver</code>, <code>regtypelib</code>, <code>restartreplace</code>,
+          <code>sharedfile</code>.
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Icons] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Icons
+    type: parameter
+    deprecated: false
+    description: "Creates shortcuts (Start Menu, Desktop, etc.) during installation. Each entry creates one shortcut."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Full path and name of the shortcut, e.g. <code>{group}\\My Program</code> or <code>{commondesktop}\\My Program</code>."
+        array: false
+
+      - name: Filename
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Target of the shortcut — an executable, document, folder, or URL."
+        array: false
+
+      - name: Parameters
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Command-line arguments passed to the target when the shortcut is activated."
+        array: false
+
+      - name: WorkingDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Working directory set when the shortcut is launched. Defaults to the target's directory."
+        array: false
+
+      - name: HotKey
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Global keyboard shortcut to launch the target, e.g. <code>ctrl+alt+k</code>."
+        array: false
+
+      - name: Comment
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Tooltip text shown when the user hovers over the shortcut."
+        array: false
+
+      - name: IconFilename
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to an <code>.ico</code>, <code>.exe</code>, or <code>.dll</code> containing the icon for this shortcut."
+        array: false
+
+      - name: IconIndex
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Zero-based index of the icon within <code>IconFilename</code>. Default: <code>0</code>."
+        array: false
+
+      - name: AppUserModelID
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Windows 7+ Application User Model ID, used to group taskbar buttons and toast notifications."
+        array: false
+
+      - name: AppUserModelToastActivatorCLSID
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Windows 10+ COM CLSID for toast notification activation."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Behavioural flags: <code>runminimized</code>, <code>runmaximized</code>, <code>closeonexit</code>, <code>createonlyiffileexists</code>, <code>preventpinning</code>."
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Registry] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Registry
+    type: parameter
+    deprecated: false
+    description: "Creates, modifies, or deletes registry keys and values during installation. Supports optional cleanup on uninstall via flags."
+    attributes:
+
+      - name: Root
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Registry root hive: <code>HKCU</code>, <code>HKLM</code>, <code>HKCR</code>, <code>HKU</code>, <code>HKCC</code>, <code>HKA</code>. Append <code>32</code> or <code>64</code> to force a specific registry view."
+        array: false
+
+      - name: Subkey
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Registry key path relative to <code>Root</code>, e.g. <code>Software\\My Company\\My App</code>."
+        array: false
+
+      - name: ValueType
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Type of the registry value: <code>none</code> (key only), <code>string</code>, <code>expandsz</code>, <code>multisz</code>, <code>dword</code>, <code>qword</code>, <code>binary</code>."
+        array: false
+
+      - name: ValueName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of the registry value. Leave empty to set the default value of the key."
+        array: false
+
+      - name: ValueData
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Data to write. Use <code>{olddata}</code> to append to an existing value, or <code>{break}</code> as a line separator for <code>multisz</code>."
+        array: false
+
+      - name: Permissions
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "ACL permissions for the key: <code>full</code>, <code>modify</code>, <code>read</code>."
+        array: true
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: >
+          Behavioural flags: <code>createvalueifdoesntexist</code>, <code>deletekey</code>, <code>deletevalue</code>,
+          <code>dontcreatekey</code>, <code>noerror</code>, <code>preservestringtype</code>,
+          <code>uninsclearvalue</code>, <code>uninsdeletekey</code>, <code>uninsdeletekeyifempty</code>,
+          <code>uninsdeletevalue</code>.
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Run] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Run
+    type: parameter
+    deprecated: false
+    description: "Executes programs or opens files after a successful installation, before the final wizard page. Entries run sequentially."
+    attributes:
+
+      - name: Filename
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Path to the executable, document, or folder to launch. Use <code>shellexec</code> flag to open non-executables."
+        array: false
+
+      - name: Description
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for an optional checkbox shown on the post-install page (requires <code>postinstall</code> flag)."
+        array: false
+
+      - name: Parameters
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Command-line arguments passed to <code>Filename</code>."
+        array: false
+
+      - name: WorkingDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
+        array: false
+
+      - name: StatusMsg
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status message shown in the progress window while this entry executes."
+        array: false
+
+      - name: RunOnceId
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Unique identifier preventing duplicate execution on repeated installs (used in <code>[UninstallRun]</code>)."
+        array: false
+
+      - name: Verb
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shell verb used with the <code>shellexec</code> flag, e.g. <code>open</code>, <code>print</code>."
+        array: false
+
+      - name: OnLog
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: >
+          Behavioural flags: <code>postinstall</code>, <code>shellexec</code>, <code>nowait</code>,
+          <code>runhidden</code>, <code>skipifsilent</code>, <code>skipifnotsilent</code>,
+          <code>unchecked</code>, <code>waituntilterminated</code>, <code>waituntilidle</code>,
+          <code>logoutput</code>, <code>runasoriginaluser</code>.
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [UninstallRun] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: UninstallRun
+    type: parameter
+    deprecated: false
+    description: "Executes programs at the start of uninstallation. Entries run sequentially. Same parameters as <code>[Run]</code>."
+    attributes:
+
+      - name: Filename
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Path to the executable, document, or folder to launch during uninstallation."
+        array: false
+
+      - name: Description
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for an optional checkbox shown on the post-uninstall page (requires <code>postinstall</code> flag)."
+        array: false
+
+      - name: Parameters
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Command-line arguments passed to <code>Filename</code>."
+        array: false
+
+      - name: WorkingDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
+        array: false
+
+      - name: StatusMsg
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status message shown in the progress window while this entry executes."
+        array: false
+
+      - name: RunOnceId
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Unique identifier preventing this entry from executing more than once across multiple uninstall runs."
+        array: false
+
+      - name: Verb
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shell verb used with the <code>shellexec</code> flag, e.g. <code>open</code>, <code>print</code>."
+        array: false
+
+      - name: OnLog
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
+        array: false
+
+      - name: Flags
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: >
+          Behavioural flags: <code>postinstall</code>, <code>shellexec</code>, <code>nowait</code>,
+          <code>runhidden</code>, <code>skipifsilent</code>, <code>skipifnotsilent</code>,
+          <code>unchecked</code>, <code>waituntilterminated</code>, <code>waituntilidle</code>,
+          <code>logoutput</code>, <code>runasoriginaluser</code>.
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Languages] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: Languages
+    type: parameter
+    deprecated: false
+    description: "Declares the languages available in the installer. Each entry points to an ISL message file. The first entry becomes the default language."
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Internal language identifier, e.g. <code>english</code>, <code>german</code>. Referenced by the <code>Languages</code> common parameter."
+        array: false
+
+      - name: MessagesFile
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Path to the ISL message file. Use <code>compiler:Default.isl</code> for the built-in English messages or <code>compiler:Languages\\German.isl</code> for bundled translations."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [InstallDelete] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: InstallDelete
+    type: parameter
+    deprecated: false
+    description: "Deletes files or directories at the beginning of installation, before any files are copied. Useful for removing stale files from previous versions."
+    attributes:
+
+      - name: Type
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "What to delete: <code>files</code> (matching files), <code>filesandordirs</code> (files and subdirectories), <code>dirifempty</code> (directory only if empty)."
+        array: false
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."
+        array: false
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [UninstallDelete] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: UninstallDelete
+    type: parameter
+    deprecated: false
+    description: "Deletes files or directories during uninstallation, in addition to the files tracked by the installer. Useful for cleaning up generated files."
+    attributes:
+
+      - name: Type
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "What to delete: <code>files</code> (matching files), <code>filesandordirs</code> (files and subdirectories), <code>dirifempty</code> (directory only if empty)."
+        array: false
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."
+        array: false
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: false
+        deprecated: false
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: false
+        deprecated: false
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: false
+        deprecated: false
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [Code] — code section
+  # ---------------------------------------------------------------------------
+  - name: Code
+    type: code
+    deprecated: false
+    description: "Contains Pascal Script (RemObjects Pascal Script) for runtime customisation of the installer. Unlike other sections, this section does not use Key=Value or Key: Value syntax — it contains free-form Pascal source code compiled and executed by the installer at runtime."
+    attributes: []

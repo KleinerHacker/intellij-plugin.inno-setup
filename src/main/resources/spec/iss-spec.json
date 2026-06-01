@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/iss-spec",
+  "type": "object",
+  "required": ["sections"],
+  "properties": {
+    "sections": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/section" }
+    }
+  },
+  "definitions": {
+    "section": {
+      "type": "object",
+      "required": ["name", "type", "deprecated", "description", "attributes"],
+      "properties": {
+        "name":        { "type": "string" },
+        "type":        { "type": "string", "enum": ["directive", "parameter", "code"] },
+        "deprecated":  { "type": "boolean" },
+        "description": { "type": "string" },
+        "attributes":  { "type": "array", "items": { "$ref": "#/definitions/attribute" } }
+      },
+      "additionalProperties": false
+    },
+    "attribute": {
+      "type": "object",
+      "required": ["name", "type", "required", "deprecated", "description", "array"],
+      "properties": {
+        "name":        { "type": "string" },
+        "type":        { "$ref": "#/definitions/attributeType" },
+        "required":    { "type": "boolean" },
+        "deprecated":  { "type": "boolean" },
+        "description": { "type": "string" },
+        "array":       { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "attributeType": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "dataType"],
+          "properties": {
+            "kind":     { "type": "string", "enum": ["native"] },
+            "dataType": { "type": "string", "enum": ["string", "boolean", "integer"] }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "section"],
+          "properties": {
+            "kind":    { "type": "string", "enum": ["reference"] },
+            "section": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}
