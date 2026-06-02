@@ -19,7 +19,7 @@ abstract class IssNamedElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), 
             ?: node.findChildByType(IssTypes.STRING)
             ?: return this
         val newEl = com.intellij.psi.PsiFileFactory.getInstance(project)
-            .createFileFromText("dummy.iss", IssFileType, "[Tasks]\nName: $name\n") as IssFile
+            .createFileFromText("dummy.iss", IssFileType.INSTANCE, "[Tasks]\nName: $name\n") as IssFile
         val newId = newEl.node.findChildByType(IssTypes.IDENTIFIER) ?: return this
         node.replaceChild(id, newId)
         return this

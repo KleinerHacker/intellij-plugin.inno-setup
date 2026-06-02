@@ -4,5 +4,5 @@ import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.psi.FileViewProvider
 
 class IssFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, IssLanguage) {
-    override fun getFileType() = IssFileType
+    override fun getFileType() = IssFileType.INSTANCE
 }

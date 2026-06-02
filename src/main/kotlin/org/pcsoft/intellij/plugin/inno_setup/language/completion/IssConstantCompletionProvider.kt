@@ -5,8 +5,8 @@ import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
+import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
@@ -34,7 +34,7 @@ object IssConstantCompletionProvider : CompletionProvider<CompletionParameters>(
                 .create(if (const.parameterized) "${const.name}:" else const.name)
                 .withTypeText(const.category.name.lowercase().replace('_', ' '))
                 .withTailText(tail, true)
-                .withIcon(AllIcons.Nodes.Static)
+                .withIcon(IssIcons.Constant)
                 .withInsertHandler { ctx, _ ->
                     if (!const.parameterized)
                         ctx.document.insertString(ctx.tailOffset, "}")
@@ -48,7 +48,7 @@ object IssConstantCompletionProvider : CompletionProvider<CompletionParameters>(
                 .create("#$name")
                 .withTypeText("define")
                 .withTailText(value?.let { " = $it" } ?: "", true)
-                .withIcon(AllIcons.Nodes.Variable)
+                .withIcon(IssIcons.Variable)
                 .withInsertHandler { ctx, _ ->
                     ctx.document.insertString(ctx.tailOffset, "}")
                     ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
@@ -61,7 +61,7 @@ object IssConstantCompletionProvider : CompletionProvider<CompletionParameters>(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")
                         .withTypeText("${v.type} · ISPP")
-                        .withIcon(AllIcons.Nodes.Variable)
+                        .withIcon(IssIcons.Variable)
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, "}")
                             ctx.editor.caretModel.moveToOffset(ctx.tailOffset)

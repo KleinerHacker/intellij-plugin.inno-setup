@@ -4,9 +4,8 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.components.service
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.editor.colors.CodeInsightColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import org.pcsoft.intellij.plugin.inno_setup.language.IssAnnotatorHighlighting
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
@@ -71,10 +70,10 @@ class IssAnnotator : Annotator {
         if (specSection == null) {
             holder.newAnnotation(HighlightSeverity.ERROR, "Unknown section: '${name.text}'")
                 .range(name.textRange)
-                .textAttributes(CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
+                .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         } else {
-            highlight(name.textRange, DefaultLanguageHighlighterColors.CLASS_NAME, holder)
+            highlight(name.textRange, IssAnnotatorHighlighting.SECTION_NAME, holder)
         }
     }
 
@@ -136,15 +135,15 @@ class IssAnnotator : Annotator {
             attr == null ->
                 holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '${range}'")
                     .range(range)
-                    .textAttributes(CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
+                    .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
             attr.deprecated ->
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(range)
-                    .textAttributes(CodeInsightColors.DEPRECATED_ATTRIBUTES)
+                    .textAttributes(IssAnnotatorHighlighting.DEPRECATED)
                     .create()
             else ->
-                highlight(range, DefaultLanguageHighlighterColors.INSTANCE_FIELD, holder)
+                highlight(range, IssAnnotatorHighlighting.PARAM_KEY, holder)
         }
     }
 
@@ -158,7 +157,7 @@ class IssAnnotator : Annotator {
                 val pair = value.containingParamPair()
                 if (pair?.isReferenceParam() == true) {
                     value.identifiers().forEach {
-                        highlight(it.textRange, DefaultLanguageHighlighterColors.CLASS_REFERENCE, holder)
+                        highlight(it.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
                     }
                 }
             }
@@ -188,15 +187,15 @@ class IssAnnotator : Annotator {
                 def == null ->
                     holder.newAnnotation(HighlightSeverity.ERROR, "Unknown flag: '${node.text}'")
                         .range(node.textRange)
-                        .textAttributes(CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
+                        .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                         .create()
                 def.deprecated ->
                     holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                         .range(node.textRange)
-                        .textAttributes(CodeInsightColors.DEPRECATED_ATTRIBUTES)
+                        .textAttributes(IssAnnotatorHighlighting.DEPRECATED)
                         .create()
                 else ->
-                    highlight(node.textRange, DefaultLanguageHighlighterColors.STATIC_FIELD, holder)
+                    highlight(node.textRange, IssAnnotatorHighlighting.FLAG, holder)
             }
         }
 
@@ -234,10 +233,7 @@ class IssAnnotator : Annotator {
 
     private fun annotateConstant(constant: IssConstant, holder: AnnotationHolder) {
         if (constant.isInCodeSection()) return
-        val body = constant.constantBody ?: run {
-            highlight(constant.textRange, DefaultLanguageHighlighterColors.CLASS_REFERENCE, holder)
-            return
-        }
+        val body = constant.constantBody
         val name = body.text.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins  = service<IssConstantService>().spec.constants
@@ -252,10 +248,10 @@ class IssAnnotator : Annotator {
         if (!known) {
             holder.newAnnotation(HighlightSeverity.ERROR, "Unknown constant: '{${body.text}}'")
                 .range(constant.textRange)
-                .textAttributes(CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES)
+                .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         } else {
-            highlight(constant.textRange, DefaultLanguageHighlighterColors.CLASS_REFERENCE, holder)
+            highlight(constant.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
         }
     }
 
@@ -274,7 +270,7 @@ class IssAnnotator : Annotator {
                 val absoluteEnd   = strNode.textRange.startOffset + 1 + close + 1
                 highlight(
                     TextRange(absoluteStart, absoluteEnd),
-                    DefaultLanguageHighlighterColors.CLASS_REFERENCE,
+                    IssAnnotatorHighlighting.REFERENCE,
                     holder
                 )
                 pos = close + 1
@@ -286,7 +282,7 @@ class IssAnnotator : Annotator {
         val hash    = directive.node.findChildByType(IssTypes.HASH) ?: return
         val keyword = directive.node.findChildByType(IssTypes.IDENTIFIER) ?: return
         val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
-        highlight(keywordRange, DefaultLanguageHighlighterColors.KEYWORD, holder)
+        highlight(keywordRange, IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD, holder)
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =

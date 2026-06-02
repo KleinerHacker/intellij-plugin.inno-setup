@@ -1,6 +1,5 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.structure
 
-import com.intellij.icons.AllIcons
 import com.intellij.ide.structureView.*
 import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.lang.PsiStructureViewFactory
@@ -8,6 +7,7 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.*
 import org.pcsoft.intellij.plugin.inno_setup.language.psi.*
 import javax.swing.Icon
@@ -40,9 +40,9 @@ class IssStructureViewElement(private val element: PsiElement) : StructureViewTr
     override fun getValue(): Any = element
 
     override fun getPresentation(): ItemPresentation = when (element) {
-        is IssFile           -> SimpleItemPresentation(element.name, IssFileType.icon)
-        is IssSection        -> SimpleItemPresentation(element.nameText(), AllIcons.Nodes.Class)
-        is IssParameterEntry -> SimpleItemPresentation(element.displayName(), AllIcons.Nodes.Field)
+        is IssFile           -> SimpleItemPresentation(element.name, IssIcons.ScriptFile)
+        is IssSection        -> SimpleItemPresentation(element.nameText(), IssIcons.Section)
+        is IssParameterEntry -> SimpleItemPresentation(element.displayName(), IssIcons.ParameterEntry)
         else                 -> SimpleItemPresentation(element.text ?: "", null)
     }
 

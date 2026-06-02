@@ -2,9 +2,9 @@ package org.pcsoft.intellij.plugin.inno_setup.language.highlight
 
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
+import org.pcsoft.intellij.plugin.inno_setup.language.IssSyntaxHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.lexer.IssLexerAdapter
 import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTypes
 
@@ -18,17 +18,17 @@ class IssTokenHighlighter : SyntaxHighlighterBase() {
     companion object {
         // IssTypes has both PSI element types and token types — use the token types for highlighting
         private val ATTRIBUTES: Map<IElementType, TextAttributesKey> = hashMapOf<IElementType, TextAttributesKey>().also { m ->
-            m[IssTypes.COMMENT]   = DefaultLanguageHighlighterColors.LINE_COMMENT
-            m[IssTypes.STRING]    = DefaultLanguageHighlighterColors.STRING
-            m[IssTypes.NUMBER]    = DefaultLanguageHighlighterColors.NUMBER
-            m[IssTypes.LBRACKET]  = DefaultLanguageHighlighterColors.BRACKETS
-            m[IssTypes.RBRACKET]  = DefaultLanguageHighlighterColors.BRACKETS
-            m[IssTypes.LBRACE]    = DefaultLanguageHighlighterColors.BRACES
-            m[IssTypes.RBRACE]    = DefaultLanguageHighlighterColors.BRACES
-            m[IssTypes.EQ]        = DefaultLanguageHighlighterColors.OPERATION_SIGN
-            m[IssTypes.COLON]     = DefaultLanguageHighlighterColors.OPERATION_SIGN
-            m[IssTypes.SEMICOLON] = DefaultLanguageHighlighterColors.OPERATION_SIGN
-            m[IssTypes.HASH]      = DefaultLanguageHighlighterColors.KEYWORD
+            m[IssTypes.COMMENT]   = IssSyntaxHighlighting.COMMENT
+            m[IssTypes.STRING]    = IssSyntaxHighlighting.STRING
+            m[IssTypes.NUMBER]    = IssSyntaxHighlighting.NUMBER
+            m[IssTypes.LBRACKET]  = IssSyntaxHighlighting.BRACKET
+            m[IssTypes.RBRACKET]  = IssSyntaxHighlighting.BRACKET
+            m[IssTypes.LBRACE]    = IssSyntaxHighlighting.BRACE
+            m[IssTypes.RBRACE]    = IssSyntaxHighlighting.BRACE
+            m[IssTypes.EQ]        = IssSyntaxHighlighting.OPERATION_SIGN
+            m[IssTypes.COLON]     = IssSyntaxHighlighting.OPERATION_SIGN
+            m[IssTypes.SEMICOLON] = IssSyntaxHighlighting.OPERATION_SIGN
+            m[IssTypes.HASH]      = IssSyntaxHighlighting.KEYWORD
         }
     }
 }

@@ -2,8 +2,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.completion
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
+import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
@@ -149,7 +149,7 @@ private object IssIsppDirectiveProvider : CompletionProvider<CompletionParameter
                     LookupElementBuilder.create(dir.name)
                         .withTypeText("ISPP")
                         .withTailText("  ${dir.syntax}", true)
-                        .withIcon(AllIcons.Nodes.Static)
+                        .withIcon(IssIcons.Constant)
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, " ")
                             ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
