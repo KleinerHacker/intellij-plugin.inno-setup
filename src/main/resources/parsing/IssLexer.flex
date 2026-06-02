@@ -23,7 +23,7 @@ WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 STRING     = \"[^\"]*\"
 COMMENT    = ";"[^\r\n]*
-VALUE_CHAR = [^\r\n{};:=\"\t ]
+VALUE_CHAR = [^\r\n{};:=\"()\t ]
 
 %state VALUE
 
@@ -33,6 +33,8 @@ VALUE_CHAR = [^\r\n{};:=\"\t ]
     {COMMENT}    { return IssTypes.COMMENT; }
     "["          { return IssTypes.LBRACKET; }
     "]"          { return IssTypes.RBRACKET; }
+    "("          { return IssTypes.LPAREN; }
+    ")"          { return IssTypes.RPAREN; }
     "#"          { return IssTypes.HASH; }
     {IDENTIFIER} { return IssTypes.IDENTIFIER; }
     "="          { yybegin(VALUE); return IssTypes.EQ; }
@@ -47,6 +49,8 @@ VALUE_CHAR = [^\r\n{};:=\"\t ]
     {STRING}      { return IssTypes.STRING; }
     "{"           { return IssTypes.LBRACE; }
     "}"           { return IssTypes.RBRACE; }
+    "("           { return IssTypes.LPAREN; }
+    ")"           { return IssTypes.RPAREN; }
     {NUMBER}      { return IssTypes.NUMBER; }
     ":"           { return IssTypes.COLON; }
     "#"           { return IssTypes.HASH; }

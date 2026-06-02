@@ -54,6 +54,14 @@
         <completion.contributor language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.completion.IssCompletionContributor"/>
 
+        <!-- Brace matching: [], {}, () -->
+        <lang.braceMatcher language="ISS"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.quote.IssBraceMatcher"/>
+
+        <!-- Quote handler: " -->
+        <typedHandler
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.quote.IssQuoteHandler"/>
+
         <!-- Code folding -->
         <lang.foldingBuilder language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.highlight.IssCodeFoldingBuilder"/>

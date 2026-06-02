@@ -17,6 +17,8 @@
     RBRACKET    = "]"
     LBRACE      = "{"
     RBRACE      = "}"
+    LPAREN      = "("
+    RPAREN      = ")"
     EQ          = "="
     COLON       = ":"
     SEMICOLON   = ";"
@@ -58,7 +60,7 @@ paramPair      ::= paramKey COLON paramValue {
 }
 paramKey       ::= IDENTIFIER
 
-paramValue     ::= (constant | STRING | NUMBER | IDENTIFIER | VALUE_CHAR)*
+paramValue     ::= (constant | STRING | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)*
 
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE
