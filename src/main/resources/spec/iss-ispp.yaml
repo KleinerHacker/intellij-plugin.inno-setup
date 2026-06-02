@@ -1,0 +1,278 @@
+directives:
+  - name: define
+    syntax: "#define Name [Value]"
+    description: "Defines a macro variable. Without value, defines it as void (empty)."
+    deprecated: false
+
+  - name: undef
+    syntax: "#undef Name"
+    description: "Undefines a previously defined identifier."
+    deprecated: false
+
+  - name: dim
+    syntax: "#dim Name[Size]"
+    description: "Declares an array variable of the given size."
+    deprecated: false
+
+  - name: redim
+    syntax: "#redim Name[NewSize]"
+    description: "Resizes an existing array."
+    deprecated: false
+
+  - name: include
+    syntax: "#include Filename"
+    description: >
+      Includes another script file. Use <code>compiler:filename</code> to search
+      in the compiler directory.
+      <b>Example:</b> <code>#include "common.iss"</code>
+    deprecated: false
+
+  - name: file
+    syntax: "#file Filename"
+    description: "Similar to #include but for binary/raw file inclusion."
+    deprecated: false
+
+  - name: emit
+    syntax: "#emit Expr"
+    description: "Evaluates the expression and outputs the result as script text."
+    deprecated: false
+
+  - name: expr
+    syntax: "#expr Expr"
+    description: "Evaluates the expression without producing output (for side effects)."
+    deprecated: false
+
+  - name: insert
+    syntax: "#insert Expr"
+    description: "Inserts the result of the expression at the current position."
+    deprecated: false
+
+  - name: append
+    syntax: "#append Expr"
+    description: "Appends the result of the expression to the current line."
+    deprecated: false
+
+  - name: if
+    syntax: "#if Expr"
+    description: >
+      Conditionally includes the following lines until <code>#else</code>
+      or <code>#endif</code> based on whether Expr is non-zero/non-empty.
+    deprecated: false
+
+  - name: elif
+    syntax: "#elif Expr"
+    description: "Else-if branch for a preceding #if or #elif."
+    deprecated: false
+
+  - name: else
+    syntax: "#else"
+    description: "Else branch for a preceding #if or #elif."
+    deprecated: false
+
+  - name: endif
+    syntax: "#endif"
+    description: "Closes a conditional block opened by #if, #ifdef, #ifndef, #ifexist, or #ifnexist."
+    deprecated: false
+
+  - name: ifdef
+    syntax: "#ifdef Name"
+    description: "True if the identifier is defined (regardless of value)."
+    deprecated: false
+
+  - name: ifndef
+    syntax: "#ifndef Name"
+    description: "True if the identifier is NOT defined."
+    deprecated: false
+
+  - name: ifexist
+    syntax: "#ifexist Filename"
+    description: "True if the specified file exists on disk."
+    deprecated: false
+
+  - name: ifnexist
+    syntax: "#ifnexist Filename"
+    description: "True if the specified file does NOT exist on disk."
+    deprecated: false
+
+  - name: for
+    syntax: "#for {Var = Start; Cond; Incr} Body"
+    description: >
+      Compile-time loop. Repeats the body while Cond is non-zero.
+      Variables are ISPP identifiers.
+    deprecated: false
+
+  - name: sub
+    syntax: "#sub Name"
+    description: "Begins a subroutine definition. Ended by #endsub."
+    deprecated: false
+
+  - name: endsub
+    syntax: "#endsub"
+    description: "Ends a subroutine definition started with #sub."
+    deprecated: false
+
+  - name: pragma
+    syntax: "#pragma option|parseroption|verboselevel ..."
+    description: >
+      Sets compiler options. Common uses:
+      <code>#pragma option -v+</code> (verbose), <code>#pragma warning enable|disable id</code>.
+    deprecated: false
+
+  - name: error
+    syntax: "#error Message"
+    description: "Triggers a compile-time error with the given message string."
+    deprecated: false
+
+predefined_variables:
+  - name: __COUNTER__
+    type: int
+    description: "Auto-incrementing counter; increments each time it is used."
+
+  - name: __LINE__
+    type: int
+    description: "The current line number in the current file."
+
+  - name: __FILENAME__
+    type: str
+    description: "The filename portion of the current include file path."
+
+  - name: __PATHFILENAME__
+    type: str
+    description: "The full path of the current include file."
+
+  - name: __DIR__
+    type: str
+    description: "The directory portion of the current include file path."
+
+  - name: __INCLUDE__
+    type: str
+    description: "The current include path (multiple paths separated by semicolons)."
+
+  - name: __WIN32__
+    type: void
+    description: "Always defined. Can be used with #ifdef to detect ISPP environment."
+
+  - name: ISPP_INVOKED
+    type: void
+    description: "Always defined when ISPP is active."
+
+  - name: ISCC_INVOKED
+    type: void
+    description: "Defined when compilation uses the console-mode compiler (ISCC.exe)."
+
+  - name: PREPROCVER
+    type: int
+    description: "32-bit packed version number of the Inno Setup preprocessor."
+
+  - name: Ver
+    type: int
+    description: "Alias for PREPROCVER."
+
+  - name: WINDOWS
+    type: void
+    description: "Always defined."
+
+  - name: UNICODE
+    type: void
+    description: "Always defined (ISPP is Unicode-only)."
+
+  - name: CompilerPath
+    type: str
+    description: "The directory where the Inno Setup compiler (ISCC.exe) is located."
+
+  - name: SourcePath
+    type: str
+    description: "The directory containing the root script file."
+
+  - name: SysPath
+    type: str
+    description: "The system directory appropriate to the compiler type."
+
+  - name: NewLine
+    type: str
+    description: "The newline character sequence."
+
+  - name: Tab
+    type: str
+    description: "The tab character."
+
+builtin_functions:
+  - name: GetFileVersion
+    signature: "GetFileVersion(Filename: str): str"
+    description: "Returns the file version of an executable or DLL as a dotted string, e.g. <code>1.2.3.4</code>."
+
+  - name: GetStringFileInfo
+    signature: "GetStringFileInfo(Filename: str, Key: str): str"
+    description: "Returns a string from the version info of a file. Common keys: <code>FileVersion</code>, <code>ProductVersion</code>, <code>CompanyName</code>."
+
+  - name: FileExists
+    signature: "FileExists(Filename: str): int"
+    description: "Returns 1 if the file exists, 0 otherwise."
+
+  - name: DirExists
+    signature: "DirExists(Path: str): int"
+    description: "Returns 1 if the directory exists, 0 otherwise."
+
+  - name: Defined
+    signature: "Defined(Ident): int"
+    description: "Returns 1 if the identifier is defined, 0 otherwise."
+
+  - name: TypeOf
+    signature: "TypeOf(Ident): int"
+    description: "Returns the type of an identifier: 0=void, 1=int, 2=str."
+
+  - name: Int
+    signature: "Int(Value): int"
+    description: "Converts a value to integer."
+
+  - name: Str
+    signature: "Str(Value): str"
+    description: "Converts a value to string."
+
+  - name: GetEnv
+    signature: "GetEnv(Name: str): str"
+    description: "Returns the value of an environment variable."
+
+  - name: LowerCase
+    signature: "LowerCase(S: str): str"
+    description: "Returns the string converted to lower case."
+
+  - name: UpperCase
+    signature: "UpperCase(S: str): str"
+    description: "Returns the string converted to upper case."
+
+  - name: Len
+    signature: "Len(S: str): int"
+    description: "Returns the length of the string."
+
+  - name: Copy
+    signature: "Copy(S: str, Index: int, Count: int): str"
+    description: "Returns a substring. Index is 1-based."
+
+  - name: Pos
+    signature: "Pos(Substr: str, S: str): int"
+    description: "Returns the 1-based position of Substr in S, or 0 if not found."
+
+  - name: AddBackslash
+    signature: "AddBackslash(S: str): str"
+    description: "Adds a trailing backslash to S if not already present."
+
+  - name: RemoveBackslash
+    signature: "RemoveBackslash(S: str): str"
+    description: "Removes a trailing backslash from S if present."
+
+  - name: SetupSetting
+    signature: "SetupSetting(Name: str): str"
+    description: "Returns the value of a [Setup] section directive by name."
+
+  - name: SetSetupSetting
+    signature: "SetSetupSetting(Name: str, Value: str)"
+    description: "Sets a [Setup] section directive at compile time."
+
+  - name: ReadReg
+    signature: "ReadReg(Root: int, Key: str, Name: str): str"
+    description: "Reads a registry value at compile time."
+
+  - name: ReadIni
+    signature: "ReadIni(Filename: str, Section: str, Key: str, Default: str): str"
+    description: "Reads a value from an INI file at compile time."

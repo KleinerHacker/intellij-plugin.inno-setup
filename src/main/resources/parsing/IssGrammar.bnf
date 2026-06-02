@@ -1,0 +1,70 @@
+{
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.IssParser"
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Iss"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.psi.impl"
+
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTokenType"
+
+  tokens=[
+    COMMENT     = "regexp:;[^\r\n]*"
+    LBRACKET    = "["
+    RBRACKET    = "]"
+    LBRACE      = "{"
+    RBRACE      = "}"
+    EQ          = "="
+    COLON       = ":"
+    SEMICOLON   = ";"
+    HASH        = "#"
+    CRLF        = "regexp:\r?\n"
+    NUMBER      = "regexp:[0-9]+"
+    IDENTIFIER  = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
+    STRING      = "regexp:\"[^\"]*\""
+    VALUE_CHAR  = "regexp:[^\r\n]"
+  ]
+}
+
+issFile ::= item*
+
+private item ::= section
+               | preprocessorDirective
+               | comment
+               | CRLF
+
+section ::= sectionHeader CRLF entry*
+
+sectionHeader ::= LBRACKET sectionName RBRACKET
+sectionName   ::= IDENTIFIER
+
+private entry ::= directiveEntry
+                | parameterEntry
+                | comment
+                | CRLF
+
+// [Setup]-style: Key=Value
+directiveEntry ::= directiveKey EQ paramValue CRLF
+directiveKey   ::= IDENTIFIER
+
+// [Files]-style: Key: Value; Key: Value
+parameterEntry ::= paramPair (SEMICOLON paramPair)* CRLF
+paramPair      ::= paramKey COLON paramValue {
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.psi.impl.IssParamPairMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssParamPairEx"
+}
+paramKey       ::= IDENTIFIER
+
+paramValue     ::= (constant | STRING | NUMBER | IDENTIFIER | VALUE_CHAR)*
+
+// {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
+constant     ::= LBRACE constantBody RBRACE
+constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)*
+
+private comment ::= COMMENT
+
+// #define, #include, ...
+preprocessorDirective ::= HASH IDENTIFIER paramValue? CRLF

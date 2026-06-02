@@ -5,6 +5,7 @@ sections:
   # ---------------------------------------------------------------------------
   - name: Setup
     type: directive
+    required: true
     deprecated: false
     description: "Defines compiler settings and installer behaviour. Every script must contain this section. <b>AppName</b> and <b>AppVersion</b> are the only required directives."
     attributes:
@@ -417,11 +418,15 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: iscustom
+              description: "Marks this installation type as the user-customisable type. Only one type with this flag is allowed per script. When selected, the user can manually choose which components to install."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: "Behavioural flags. <code>iscustom</code>: marks this type as the user-customisable type (only one allowed per script)."
+        description: "Behavioural flags controlling the installation type behaviour."
         array: true
 
   # ---------------------------------------------------------------------------
@@ -471,11 +476,35 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: fixed
+              description: "The component is always installed and cannot be deselected by the user."
+              deprecated: false
+              conflicts: []
+            - name: checkablealone
+              description: "Allows the component to be checked even when its parent component is unchecked."
+              deprecated: false
+              conflicts: []
+            - name: exclusive
+              description: "Only one component in the group with this flag can be selected at a time (radio-button behaviour)."
+              deprecated: false
+              conflicts: []
+            - name: restart
+              description: "The installer will prompt the user to restart the computer if this component is installed."
+              deprecated: false
+              conflicts: []
+            - name: dontinheritcheck
+              description: "Prevents the component from inheriting its checked state from its parent component."
+              deprecated: false
+              conflicts: []
+            - name: disablenouninstallwarning
+              description: "Suppresses the warning shown when the user deselects a previously installed component."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: "Behavioural flags: <code>fixed</code>, <code>checkablealone</code>, <code>exclusive</code>, <code>restart</code>, <code>dontinheritcheck</code>, <code>disablenouninstallwarning</code>."
+        description: "Behavioural flags controlling component selection and installation behaviour."
         array: true
 
       # Common parameters
@@ -544,11 +573,35 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: checkablealone
+              description: "Allows this task to be checked even when its parent task is unchecked."
+              deprecated: false
+              conflicts: []
+            - name: checkedonce
+              description: "The task is checked by default only on the first install. On reinstalls it retains the previously chosen state."
+              deprecated: false
+              conflicts: []
+            - name: dontinheritcheck
+              description: "Prevents this task from inheriting its checked state from its parent task."
+              deprecated: false
+              conflicts: []
+            - name: exclusive
+              description: "Only one task in the group with this flag can be selected at a time (radio-button behaviour)."
+              deprecated: false
+              conflicts: []
+            - name: restart
+              description: "The installer will prompt the user to restart the computer if this task is selected."
+              deprecated: false
+              conflicts: []
+            - name: unchecked
+              description: "The task is unchecked by default."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: "Behavioural flags: <code>checkablealone</code>, <code>checkedonce</code>, <code>dontinheritcheck</code>, <code>exclusive</code>, <code>restart</code>, <code>unchecked</code>."
+        description: "Behavioural flags controlling task selection behaviour."
         array: true
 
       # Common parameters
@@ -608,11 +661,39 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: deleteafterinstall
+              description: "Deletes the directory after the installation is complete. Useful for temporary directories created during install."
+              deprecated: false
+              conflicts: []
+            - name: setntfscompression
+              description: "Sets NTFS compression on the directory."
+              deprecated: false
+              conflicts:
+                - flag: unsetntfscompression
+                  severity: error
+            - name: uninsalwaysuninstall
+              description: "Always removes this directory on uninstall, even if it is not empty."
+              deprecated: false
+              conflicts:
+                - flag: uninsneveruninstall
+                  severity: error
+            - name: uninsneveruninstall
+              description: "Never removes this directory on uninstall."
+              deprecated: false
+              conflicts:
+                - flag: uninsalwaysuninstall
+                  severity: error
+            - name: unsetntfscompression
+              description: "Removes NTFS compression from the directory."
+              deprecated: false
+              conflicts:
+                - flag: setntfscompression
+                  severity: error
         required: false
         deprecated: false
-        description: "Behavioural flags: <code>deleteafterinstall</code>, <code>setntfscompression</code>, <code>uninsalwaysuninstall</code>, <code>uninsneveruninstall</code>, <code>unsetntfscompression</code>."
+        description: "Behavioural flags controlling directory creation and removal."
         array: true
 
       # Common parameters
@@ -834,17 +915,113 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: 32bit
+              description: "Treats the file as a 32-bit resource. On 64-bit Windows, file-system and registry redirections apply. Mutually exclusive with <code>64bit</code>."
+              deprecated: false
+              conflicts:
+                - flag: 64bit
+                  severity: error
+            - name: 64bit
+              description: "Treats the file as a 64-bit resource. On 32-bit Windows this flag is silently ignored. Mutually exclusive with <code>32bit</code>."
+              deprecated: false
+              conflicts:
+                - flag: 32bit
+                  severity: error
+            - name: comparetimestamp
+              description: "Installs the file only if it is newer (by timestamp) than the existing file on disk."
+              deprecated: false
+              conflicts:
+                - flag: ignoreversion
+                  severity: warning
+            - name: confirmoverwrite
+              description: "Always asks the user for confirmation before overwriting an existing file."
+              deprecated: false
+              conflicts:
+                - flag: ignoreversion
+                  severity: warning
+            - name: deleteafterinstall
+              description: "Deletes the file after installation completes. Useful for temporary files. Cannot be combined with <code>restartreplace</code> or <code>sharedfile</code>."
+              deprecated: false
+              conflicts:
+                - flag: restartreplace
+                  severity: error
+                - flag: sharedfile
+                  severity: error
+            - name: dontcopy
+              description: "Prevents the file from being copied to disk. The file is still compressed into the installer and can be extracted via <code>[Code]</code>."
+              deprecated: false
+              conflicts: []
+            - name: download
+              description: "Downloads the file from a URL at install time instead of embedding it. Requires the URL to be specified in <code>Source</code>."
+              deprecated: false
+              conflicts: []
+            - name: external
+              description: "The file is not embedded in the installer but must be present alongside it. Use <code>ExternalSize</code> to specify its size."
+              deprecated: false
+              conflicts: []
+            - name: extractarchive
+              description: "Extracts the contents of an archive (zip, 7z, etc.) instead of copying the archive file itself."
+              deprecated: false
+              conflicts: []
+            - name: ignoreversion
+              description: "Does not compare version numbers; always installs the file regardless of the version on disk."
+              deprecated: false
+              conflicts:
+                - flag: comparetimestamp
+                  severity: warning
+                - flag: confirmoverwrite
+                  severity: warning
+            - name: isreadme
+              description: "Marks this file as the README. The installer may offer to open it after installation."
+              deprecated: false
+              conflicts: []
+            - name: nocompression
+              description: "Stores this file uncompressed in the installer, even if compression is enabled globally."
+              deprecated: false
+              conflicts: []
+            - name: onlyifdoesntexist
+              description: "Only installs the file if it does not already exist on the target machine."
+              deprecated: false
+              conflicts:
+                - flag: ignoreversion
+                  severity: warning
+            - name: recursesubdirs
+              description: "When <code>Source</code> contains a wildcard, also searches subdirectories recursively."
+              deprecated: false
+              conflicts: []
+            - name: createallsubdirs
+              description: "Creates all subdirectories found when using <code>recursesubdirs</code>, even if they are empty."
+              deprecated: false
+              conflicts: []
+            - name: regserver
+              description: "Registers the file as a COM server by calling <code>DllRegisterServer</code>."
+              deprecated: false
+              conflicts:
+                - flag: regtypelib
+                  severity: warning
+            - name: regtypelib
+              description: "Registers the file as a type library."
+              deprecated: false
+              conflicts:
+                - flag: regserver
+                  severity: warning
+            - name: restartreplace
+              description: "If the file is in use, schedules it to be replaced on the next system restart."
+              deprecated: false
+              conflicts:
+                - flag: deleteafterinstall
+                  severity: error
+            - name: sharedfile
+              description: "Registers the file as a shared file. The file is only removed on uninstall when no other application references it."
+              deprecated: false
+              conflicts:
+                - flag: deleteafterinstall
+                  severity: error
         required: false
         deprecated: false
-        description: >
-          Behavioural flags (space-separated): <code>32bit</code>, <code>64bit</code>, <code>comparetimestamp</code>,
-          <code>confirmoverwrite</code>, <code>deleteafterinstall</code>, <code>dontcopy</code>, <code>download</code>,
-          <code>external</code>, <code>extractarchive</code>, <code>ignoreversion</code>, <code>isreadme</code>,
-          <code>nocompression</code>, <code>onlyifdoesntexist</code>, <code>recursesubdirs</code>,
-          <code>createallsubdirs</code>, <code>regserver</code>, <code>regtypelib</code>, <code>restartreplace</code>,
-          <code>sharedfile</code>.
+        description: "Behavioural flags controlling how each file is installed."
         array: true
 
       # Common parameters
@@ -1021,11 +1198,35 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: runminimized
+              description: "Launches the target application minimised. Mutually exclusive with <code>runmaximized</code>."
+              deprecated: false
+              conflicts:
+                - flag: runmaximized
+                  severity: error
+            - name: runmaximized
+              description: "Launches the target application maximised. Mutually exclusive with <code>runminimized</code>."
+              deprecated: false
+              conflicts:
+                - flag: runminimized
+                  severity: error
+            - name: closeonexit
+              description: "Closes the shortcut's target application when the user logs off."
+              deprecated: false
+              conflicts: []
+            - name: createonlyiffileexists
+              description: "Only creates the shortcut if the target file actually exists on the machine."
+              deprecated: false
+              conflicts: []
+            - name: preventpinning
+              description: "Prevents the shortcut from being pinned to the Windows 7+ taskbar or Start Menu."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: "Behavioural flags: <code>runminimized</code>, <code>runmaximized</code>, <code>closeonexit</code>, <code>createonlyiffileexists</code>, <code>preventpinning</code>."
+        description: "Behavioural flags controlling shortcut creation and launch behaviour."
         array: true
 
       # Common parameters
@@ -1166,15 +1367,77 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: createvalueifdoesntexist
+              description: "Only writes the value if it does not already exist in the registry."
+              deprecated: false
+              conflicts:
+                - flag: deletevalue
+                  severity: error
+                - flag: deletekey
+                  severity: error
+            - name: deletekey
+              description: "Deletes the entire registry key and all its subkeys and values before creating it."
+              deprecated: false
+              conflicts:
+                - flag: deletevalue
+                  severity: warning
+                - flag: createvalueifdoesntexist
+                  severity: error
+            - name: deletevalue
+              description: "Deletes the specified registry value."
+              deprecated: false
+              conflicts:
+                - flag: deletekey
+                  severity: warning
+            - name: dontcreatekey
+              description: "Does not create the registry key if it does not exist. Silently skips the entry."
+              deprecated: false
+              conflicts:
+                - flag: deletekey
+                  severity: warning
+            - name: noerror
+              description: "Suppresses errors if the operation fails (e.g. the key does not exist)."
+              deprecated: false
+              conflicts: []
+            - name: preservestringtype
+              description: "When overwriting an existing string value, preserves its original type (REG_SZ vs REG_EXPAND_SZ)."
+              deprecated: false
+              conflicts: []
+            - name: uninsclearvalue
+              description: "Sets the value to an empty string on uninstall instead of deleting it."
+              deprecated: false
+              conflicts:
+                - flag: uninsdeletevalue
+                  severity: warning
+                - flag: uninsdeletekey
+                  severity: warning
+            - name: uninsdeletekey
+              description: "Deletes the entire registry key on uninstall."
+              deprecated: false
+              conflicts:
+                - flag: uninsdeletekeyifempty
+                  severity: warning
+                - flag: uninsclearvalue
+                  severity: warning
+            - name: uninsdeletekeyifempty
+              description: "Deletes the registry key on uninstall only if it contains no values or subkeys."
+              deprecated: false
+              conflicts:
+                - flag: uninsdeletekey
+                  severity: warning
+            - name: uninsdeletevalue
+              description: "Deletes the registry value on uninstall."
+              deprecated: false
+              conflicts:
+                - flag: uninsclearvalue
+                  severity: warning
+                - flag: uninsdeletekey
+                  severity: warning
         required: false
         deprecated: false
-        description: >
-          Behavioural flags: <code>createvalueifdoesntexist</code>, <code>deletekey</code>, <code>deletevalue</code>,
-          <code>dontcreatekey</code>, <code>noerror</code>, <code>preservestringtype</code>,
-          <code>uninsclearvalue</code>, <code>uninsdeletekey</code>, <code>uninsdeletekeyifempty</code>,
-          <code>uninsdeletevalue</code>.
+        description: "Behavioural flags controlling registry key and value handling."
         array: true
 
       # Common parameters
@@ -1333,15 +1596,75 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: postinstall
+              description: "Shows a checkbox on the final wizard page letting the user choose whether to run this entry after installation."
+              deprecated: false
+              conflicts: []
+            - name: shellexec
+              description: "Uses the Windows shell to open the file instead of executing it directly. Required for non-executable files."
+              deprecated: false
+              conflicts: []
+            - name: nowait
+              description: "Does not wait for the process to finish before proceeding. Mutually exclusive with <code>waituntilterminated</code> and <code>waituntilidle</code>."
+              deprecated: false
+              conflicts:
+                - flag: waituntilterminated
+                  severity: error
+                - flag: waituntilidle
+                  severity: error
+            - name: runhidden
+              description: "Runs the process with a hidden window. Has no effect when combined with <code>shellexec</code>."
+              deprecated: false
+              conflicts:
+                - flag: shellexec
+                  severity: warning
+            - name: skipifsilent
+              description: "Skips this entry when the installer is run silently. Mutually exclusive with <code>skipifnotsilent</code>."
+              deprecated: false
+              conflicts:
+                - flag: skipifnotsilent
+                  severity: error
+            - name: skipifnotsilent
+              description: "Skips this entry when the installer is run non-silently. Mutually exclusive with <code>skipifsilent</code>."
+              deprecated: false
+              conflicts:
+                - flag: skipifsilent
+                  severity: error
+            - name: unchecked
+              description: "The checkbox added by <code>postinstall</code> is unchecked by default."
+              deprecated: false
+              conflicts: []
+            - name: waituntilterminated
+              description: "Waits until the process terminates before proceeding. This is the default behaviour. Mutually exclusive with <code>nowait</code> and <code>waituntilidle</code>."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: error
+                - flag: waituntilidle
+                  severity: error
+            - name: waituntilidle
+              description: "Waits until the process is idle (no input pending) before proceeding. Mutually exclusive with <code>nowait</code> and <code>waituntilterminated</code>."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: error
+                - flag: waituntilterminated
+                  severity: error
+            - name: logoutput
+              description: "Captures the process output and writes it to the setup log. Combining with <code>nowait</code> means output may be incomplete."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: warning
+            - name: runasoriginaluser
+              description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: >
-          Behavioural flags: <code>postinstall</code>, <code>shellexec</code>, <code>nowait</code>,
-          <code>runhidden</code>, <code>skipifsilent</code>, <code>skipifnotsilent</code>,
-          <code>unchecked</code>, <code>waituntilterminated</code>, <code>waituntilidle</code>,
-          <code>logoutput</code>, <code>runasoriginaluser</code>.
+        description: "Behavioural flags controlling how and when the program is executed."
         array: true
 
       # Common parameters
@@ -1500,15 +1823,75 @@ sections:
 
       - name: Flags
         type:
-          kind: native
-          dataType: string
+          kind: flags
+          flags:
+            - name: postinstall
+              description: "Shows a checkbox on the final wizard page letting the user choose whether to run this entry after uninstallation."
+              deprecated: false
+              conflicts: []
+            - name: shellexec
+              description: "Uses the Windows shell to open the file instead of executing it directly. Required for non-executable files."
+              deprecated: false
+              conflicts: []
+            - name: nowait
+              description: "Does not wait for the process to finish before proceeding. Mutually exclusive with <code>waituntilterminated</code> and <code>waituntilidle</code>."
+              deprecated: false
+              conflicts:
+                - flag: waituntilterminated
+                  severity: error
+                - flag: waituntilidle
+                  severity: error
+            - name: runhidden
+              description: "Runs the process with a hidden window. Has no effect when combined with <code>shellexec</code>."
+              deprecated: false
+              conflicts:
+                - flag: shellexec
+                  severity: warning
+            - name: skipifsilent
+              description: "Skips this entry when the uninstaller is run silently. Mutually exclusive with <code>skipifnotsilent</code>."
+              deprecated: false
+              conflicts:
+                - flag: skipifnotsilent
+                  severity: error
+            - name: skipifnotsilent
+              description: "Skips this entry when the uninstaller is run non-silently. Mutually exclusive with <code>skipifsilent</code>."
+              deprecated: false
+              conflicts:
+                - flag: skipifsilent
+                  severity: error
+            - name: unchecked
+              description: "The checkbox added by <code>postinstall</code> is unchecked by default."
+              deprecated: false
+              conflicts: []
+            - name: waituntilterminated
+              description: "Waits until the process terminates before proceeding. This is the default behaviour. Mutually exclusive with <code>nowait</code> and <code>waituntilidle</code>."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: error
+                - flag: waituntilidle
+                  severity: error
+            - name: waituntilidle
+              description: "Waits until the process is idle (no input pending) before proceeding. Mutually exclusive with <code>nowait</code> and <code>waituntilterminated</code>."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: error
+                - flag: waituntilterminated
+                  severity: error
+            - name: logoutput
+              description: "Captures the process output and writes it to the uninstall log. Combining with <code>nowait</code> means output may be incomplete."
+              deprecated: false
+              conflicts:
+                - flag: nowait
+                  severity: warning
+            - name: runasoriginaluser
+              description: "Runs the process as the user who launched the uninstaller, not as the elevated user."
+              deprecated: false
+              conflicts: []
         required: false
         deprecated: false
-        description: >
-          Behavioural flags: <code>postinstall</code>, <code>shellexec</code>, <code>nowait</code>,
-          <code>runhidden</code>, <code>skipifsilent</code>, <code>skipifnotsilent</code>,
-          <code>unchecked</code>, <code>waituntilterminated</code>, <code>waituntilidle</code>,
-          <code>logoutput</code>, <code>runasoriginaluser</code>.
+        description: "Behavioural flags controlling how and when the program is executed during uninstallation."
         array: true
 
       # Common parameters
