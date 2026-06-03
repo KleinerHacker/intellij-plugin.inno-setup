@@ -57,7 +57,7 @@ class IssAnnotator : Annotator {
                 else
                     "This section appears after [Code], which must be the last section"
                 holder.newAnnotation(HighlightSeverity.ERROR, msg)
-                    .range(section.sectionHeader.sectionName.textRange)
+                    .range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange)
                     .create()
             }
         }
@@ -88,7 +88,7 @@ class IssAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required directive(s) missing: " + missing.joinToString(", ")
-            ).range(section.sectionHeader.sectionName.textRange).create()
+            ).range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange).create()
         }
     }
 

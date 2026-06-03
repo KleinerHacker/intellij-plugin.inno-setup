@@ -22,7 +22,7 @@ NUMBER     = [0-9]+
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 STRING     = \"[^\"]*\"
-COMMENT    = ";"[^\r\n]*
+COMMENT    = (";" | "//")[^\r\n]*
 VALUE_CHAR = [^\r\n{};:=\"()\t ]
 
 %state VALUE
@@ -39,7 +39,6 @@ VALUE_CHAR = [^\r\n{};:=\"()\t ]
     {IDENTIFIER} { return IssTypes.IDENTIFIER; }
     "="          { yybegin(VALUE); return IssTypes.EQ; }
     ":"          { yybegin(VALUE); return IssTypes.COLON; }
-    ";"          { return IssTypes.SEMICOLON; }
     {NEWLINE}    { return IssTypes.CRLF; }
     {WHITESPACE} { return TokenType.WHITE_SPACE; }
     [^]          { return TokenType.BAD_CHARACTER; }

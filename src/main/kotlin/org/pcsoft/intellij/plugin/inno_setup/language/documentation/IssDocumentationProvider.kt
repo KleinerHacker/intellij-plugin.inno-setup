@@ -24,9 +24,17 @@ class IssDocumentationProvider : AbstractDocumentationProvider() {
     ): PsiElement? {
         val el = contextElement ?: return null
         if (el.node?.elementType != IssTypes.IDENTIFIER) return null
-        val paramValue = el.parent as? IssParamValue ?: return null
-        val pair = paramValue.containingParamPair() ?: return null
-        return if (pair.keyText().equals("Flags", ignoreCase = true)) el else null
+        return when (val parent = el.parent) {
+            is IssSectionName  -> parent
+            is IssDirectiveKey -> parent
+            is IssParamKey     -> parent
+            is IssConstantBody -> parent.parent          // → IssConstant
+            is IssParamValue   -> {
+                val pair = parent.containingParamPair() ?: return null
+                if (pair.keyText().equals("Flags", ignoreCase = true)) el else null
+            }
+            else -> null
+        }
     }
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {

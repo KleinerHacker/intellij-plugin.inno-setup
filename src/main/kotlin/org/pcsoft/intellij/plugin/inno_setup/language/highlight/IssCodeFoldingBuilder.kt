@@ -31,7 +31,12 @@ class IssCodeFoldingBuilder : FoldingBuilderEx() {
 
     private fun sectionFold(section: IssSection): FoldingDescriptor? {
         val foldStart = section.sectionHeader.textRange.endOffset
-        val foldEnd   = section.textRange.endOffset
+        val lastMeaningful = section.children.lastOrNull {
+            it is IssDirectiveEntry
+            || it is IssParameterEntry
+            || it.node?.elementType == IssTypes.COMMENT
+        }
+        val foldEnd = lastMeaningful?.textRange?.endOffset ?: return null
         if (foldStart >= foldEnd) return null
         return FoldingDescriptor(section.node, TextRange(foldStart, foldEnd))
     }

@@ -24,7 +24,7 @@ fun IssFile.firstSection(): IssSection? = sections().firstOrNull()
 
 fun IssFile.definedConstants(): List<Pair<String, String?>> =
     PsiTreeUtil.getChildrenOfTypeAsList(this, IssPreprocessorDirective::class.java)
-        .filter { d -> d.identifier.text.equals("define", ignoreCase = true) }
+        .filter { d -> d.identifier?.text?.equals("define", ignoreCase = true) == true }
         .mapNotNull { directive ->
             val value = directive.paramValue ?: return@mapNotNull null
             // paramValue text: "<Name> [Value]"
@@ -37,7 +37,7 @@ fun IssFile.definedConstants(): List<Pair<String, String?>> =
 
 // ── IssSection ───────────────────────────────────────────────────────────────
 
-fun IssSection.nameText(): String = sectionHeader.sectionName.text
+fun IssSection.nameText(): String = sectionHeader.sectionName?.text.orEmpty()
 
 fun IssSection.allParamPairs(): List<IssParamPair> =
     parameterEntryList.flatMap { it.paramPairList }
@@ -92,7 +92,7 @@ private fun String.stripIssPrefix(): String =
 
 // ── IssParamPair ──────────────────────────────────────────────────────────────
 
-fun IssParamPair.valueText(): String = paramValue.text.trim()
+fun IssParamPair.valueText(): String = paramValue?.text?.trim().orEmpty()
 
 fun IssParamPair.valueUnquoted(): String = valueText().removeSurrounding("\"")
 
@@ -100,7 +100,7 @@ fun IssParamPair.valueUnquoted(): String = valueText().removeSurrounding("\"")
 
 fun IssDirectiveEntry.keyText(): String = directiveKey.text.trim()
 
-fun IssDirectiveEntry.valueText(): String = paramValue.text.trim()
+fun IssDirectiveEntry.valueText(): String = paramValue?.text?.trim().orEmpty()
 
 // ── IssParamValue ─────────────────────────────────────────────────────────────
 

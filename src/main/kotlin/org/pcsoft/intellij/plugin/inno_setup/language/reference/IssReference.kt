@@ -17,7 +17,7 @@ class IssReference(element: PsiElement, private val targetSection: String)
         val name = element.text.removeSurrounding("\"")
         return file.findSections(targetSection)
             .flatMap { it.nameDeclarations() }
-            .firstOrNull { it.valueUnquoted() == name }
+            .firstOrNull { it.valueUnquoted().equals(name, ignoreCase = true) }
             ?.paramValue
     }
 

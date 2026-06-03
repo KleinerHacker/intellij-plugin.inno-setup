@@ -12,7 +12,7 @@
   tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTokenType"
 
   tokens=[
-    COMMENT     = "regexp:;[^\r\n]*"
+    COMMENT     = "regexp:(;|//)[^\r\n]*"
     LBRACKET    = "["
     RBRACKET    = "]"
     LBRACE      = "{"
@@ -38,9 +38,21 @@ private item ::= section
                | comment
                | CRLF
 
-section ::= sectionHeader CRLF entry*
+// Stops recovery at the next line boundary, section header, or preprocessor directive.
+// Only used where the first token AFTER a successful parse is always CRLF/LBRACKET/HASH
+// (i.e. sectionHeader, preprocessorDirective).  Must NOT be applied to directiveEntry or
+// parameterEntry because Grammar-Kit calls eatMore even on success, and an IDENTIFIER
+// starting the next valid entry would be consumed as an error token.
+private recover_line ::= !( CRLF | LBRACKET | HASH )
 
-sectionHeader ::= LBRACKET sectionName RBRACKET
+section ::= sectionHeader CRLF? entry* {
+  pin=1
+}
+
+sectionHeader ::= LBRACKET sectionName RBRACKET {
+  pin=1
+  recoverWhile="recover_line"
+}
 sectionName   ::= IDENTIFIER
 
 private entry ::= directiveEntry
@@ -49,12 +61,19 @@ private entry ::= directiveEntry
                 | CRLF
 
 // [Setup]-style: Key=Value
-directiveEntry ::= directiveKey EQ paramValue CRLF
+// pin=2 commits after "Key ="; no recoverWhile to avoid consuming the next entry.
+directiveEntry ::= directiveKey EQ paramValue CRLF? {
+  pin=2
+}
 directiveKey   ::= IDENTIFIER
 
 // [Files]-style: Key: Value; Key: Value
-parameterEntry ::= paramPair (SEMICOLON paramPair)* CRLF
+// pin=1 commits after first paramPair; no recoverWhile (same reason as directiveEntry).
+parameterEntry ::= paramPair (SEMICOLON paramPair)* CRLF? {
+  pin=1
+}
 paramPair      ::= paramKey COLON paramValue {
+  pin=2
   mixin="org.pcsoft.intellij.plugin.inno_setup.language.psi.impl.IssParamPairMixinImpl"
   implements="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssParamPairEx"
 }
@@ -69,4 +88,9 @@ constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)*
 private comment ::= COMMENT
 
 // #define, #include, ...
-preprocessorDirective ::= HASH IDENTIFIER paramValue? CRLF
+// pin=1 commits after "#"; recoverWhile is safe here because after a successful
+// preprocessorDirective the next token is always CRLF.
+preprocessorDirective ::= HASH IDENTIFIER paramValue? CRLF? {
+  pin=1
+  recoverWhile="recover_line"
+}
