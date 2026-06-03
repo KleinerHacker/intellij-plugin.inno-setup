@@ -76,6 +76,20 @@
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCommenter"/>
+
+        <!-- Color settings page -->
+        <colorSettingsPage
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssColorSettingsPage"/>
     </extensions>
+
+    <actions>
+        <action id="Iss.NewFile"
+                class="org.pcsoft.intellij.plugin.inno_setup.action.IssCreateFileAction"
+                text="Inno Setup Script"
+                description="Create new Inno Setup Script file"
+                icon="/icons/inno-setup-script-icon@16.png">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+    </actions>
 
 </idea-plugin>
