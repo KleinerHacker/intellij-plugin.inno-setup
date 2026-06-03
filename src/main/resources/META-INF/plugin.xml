@@ -73,6 +73,10 @@
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.documentation.IssDocumentationProvider"/>
+
+        <!-- Commenter (Ctrl+/) -->
+        <lang.commenter language="ISS"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.IssCommenter"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">
