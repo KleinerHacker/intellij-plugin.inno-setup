@@ -1,8 +1,8 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.lexer;
+package org.pcsoft.intellij.plugin.inno_setup.language.parsing;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTypes;
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes;
 import com.intellij.psi.TokenType;
 
 %%

@@ -159,14 +159,14 @@ tasks {
     register<GenerateParserTask>("generateIssParser") {
         sourceFile.set(file("$parsingRoot/IssGrammar.bnf"))
         targetRootOutputDir.set(file(generatedRoot))
-        pathToParser.set("$languagePackage/parser/IssParser.java")
-        pathToPsiRoot.set("$languagePackage/psi")
+        pathToParser.set("$languagePackage/parsing/parser/IssParser.java")
+        pathToPsiRoot.set("$languagePackage/parsing/psi")
         purgeOldFiles.set(true)
     }
 
     register<GenerateLexerTask>("generateIssLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IssLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$languagePackage/lexer"))
+        targetOutputDir.set(file("$generatedRoot/$languagePackage/parsing"))
         purgeOldFiles.set(true)
     }
 

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
-import org.pcsoft.intellij.plugin.inno_setup.types.IssConstantCategory
+import org.pcsoft.intellij.plugin.inno_setup.types.IssConstantCategorySpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssConstantSpec
 
 class IssConstantServiceTest {
@@ -34,7 +34,7 @@ class IssConstantServiceTest {
     fun `app constant exists in directory category`() {
         val app = spec.constants.find { it.name == "app" }
         assertNotNull("app constant must exist", app)
-        assertEquals(IssConstantCategory.DIRECTORY, app!!.category)
+        assertEquals(IssConstantCategorySpec.DIRECTORY, app!!.category)
         assertFalse("app must not be deprecated", app.deprecated)
     }
 
@@ -42,7 +42,7 @@ class IssConstantServiceTest {
     fun `autopf constant exists in auto category`() {
         val autopf = spec.constants.find { it.name == "autopf" }
         assertNotNull("autopf constant must exist", autopf)
-        assertEquals(IssConstantCategory.AUTO, autopf!!.category)
+        assertEquals(IssConstantCategorySpec.AUTO, autopf!!.category)
     }
 
     @Test

@@ -8,15 +8,15 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.*
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssDirectiveKey
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssParamKey
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssDirectiveKey
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamKey
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagType
-import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeType
-import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceType
+import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceTypeSpec
 
 class IssCompletionContributor : CompletionContributor() {
     init {
@@ -122,9 +122,9 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
         specSection.attributes.forEach { attr ->
             val duplicate = attr.name.lowercase() in usedKeys
             val typeHint = when (val t = attr.type) {
-                is IssNativeType    -> t.dataType
-                is IssReferenceType -> "→ ${t.section}"
-                is IssFlagType      -> "flags"
+                is IssNativeTypeSpec    -> t.dataType
+                is IssReferenceTypeSpec -> "→ ${t.section}"
+                is IssFlagTypeSpec      -> "flags"
             }
             val tail = buildString {
                 if (attr.required)   append(" required")

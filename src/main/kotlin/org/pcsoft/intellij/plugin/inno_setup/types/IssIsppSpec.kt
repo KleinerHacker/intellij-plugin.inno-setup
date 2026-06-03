@@ -2,27 +2,27 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class IssIsppDirective(
+data class IssIsppDirectiveSpec(
     val name: String,
     val syntax: String,
     val description: String,
     val deprecated: Boolean = false
 )
 
-data class IssIsppVariable(
+data class IssIsppVariableSpec(
     val name: String,
     val type: String,
     val description: String
 )
 
-data class IssIsppFunction(
+data class IssIsppFunctionSpec(
     val name: String,
     val signature: String,
     val description: String
 )
 
 data class IssIsppSpec(
-    val directives: List<IssIsppDirective>,
-    @field:JsonProperty("predefined_variables") val predefinedVariables: List<IssIsppVariable>,
-    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IssIsppFunction>
+    val directives: List<IssIsppDirectiveSpec>,
+    @field:JsonProperty("predefined_variables") val predefinedVariables: List<IssIsppVariableSpec>,
+    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IssIsppFunctionSpec>
 )

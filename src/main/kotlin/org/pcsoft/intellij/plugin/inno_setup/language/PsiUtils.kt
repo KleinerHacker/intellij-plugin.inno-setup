@@ -4,10 +4,10 @@ import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssSection as SpecSection
+import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
 
 // ── IssFile ──────────────────────────────────────────────────────────────────
 
@@ -52,10 +52,10 @@ fun IssSection.nameDeclarations(): List<IssParamPair> = findParamPairs("Name")
 
 fun IssSection.firstParamPair(): IssParamPair? = allParamPairs().firstOrNull()
 
-fun IssSection.specSection(spec: InnoSetupSpec): SpecSection? =
+fun IssSection.specSection(spec: InnoSetupSpec): IssSectionSpec? =
     spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
 
-fun IssSection.specSection(): SpecSection? =
+fun IssSection.specSection(): IssSectionSpec? =
     service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
 
 fun IssSection.isParameterSection(): Boolean = specSection()?.type == "parameter"

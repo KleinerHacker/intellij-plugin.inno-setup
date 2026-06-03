@@ -1,15 +1,15 @@
 {
-  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.IssParser"
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.parser.IssParser"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="Iss"
   psiImplClassSuffix="Impl"
-  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.psi"
-  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.psi.impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl"
 
-  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTypes"
-  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssElementType"
-  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssTokenType"
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTokenType"
 
   tokens=[
     COMMENT     = "regexp:(;|//)[^\r\n]*"
@@ -74,8 +74,8 @@ parameterEntry ::= paramPair (SEMICOLON paramPair)* CRLF? {
 }
 paramPair      ::= paramKey COLON paramValue {
   pin=2
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.psi.impl.IssParamPairMixinImpl"
-  implements="org.pcsoft.intellij.plugin.inno_setup.language.psi.IssParamPairEx"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssParamPairMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamPairEx"
 }
 paramKey       ::= IDENTIFIER
 

@@ -5,11 +5,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
-import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagSeverity
-import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagType
-import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeType
-import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceType
+import org.pcsoft.intellij.plugin.inno_setup.types.*
 
 class IssSpecServiceTest {
 
@@ -97,8 +93,8 @@ class IssSpecServiceTest {
     fun `Types attribute in Components is reference to Types section with array`() {
         val components = spec.sections.find { it.name == "Components" }!!
         val attr = components.attributes.find { it.name == "Types" }!!
-        assertTrue("Types must be a reference type", attr.type is IssReferenceType)
-        assertEquals("Types", (attr.type as IssReferenceType).section)
+        assertTrue("Types must be a reference type", attr.type is IssReferenceTypeSpec)
+        assertEquals("Types", (attr.type as IssReferenceTypeSpec).section)
         assertTrue("Types must be array", attr.array)
     }
 
@@ -106,8 +102,8 @@ class IssSpecServiceTest {
     fun `AppName in Setup is native string type`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
         val attr = setup.attributes.find { it.name == "AppName" }!!
-        assertTrue("AppName must be native type", attr.type is IssNativeType)
-        assertEquals("string", (attr.type as IssNativeType).dataType)
+        assertTrue("AppName must be native type", attr.type is IssNativeTypeSpec)
+        assertEquals("string", (attr.type as IssNativeTypeSpec).dataType)
     }
 
     @Test
@@ -141,8 +137,8 @@ class IssSpecServiceTest {
     fun `Flags attribute in Files is flag type`() {
         val files = spec.sections.find { it.name == "Files" }!!
         val flags = files.attributes.find { it.name == "Flags" }!!
-        assertTrue("Flags must be IssFlagType", flags.type is IssFlagType)
-        val flagType = flags.type as IssFlagType
+        assertTrue("Flags must be IssFlagTypeSpec", flags.type is IssFlagTypeSpec)
+        val flagType = flags.type as IssFlagTypeSpec
         assertTrue("Must have at least one flag", flagType.flags.isNotEmpty())
     }
 
@@ -153,15 +149,15 @@ class IssSpecServiceTest {
             val section = spec.sections.find { it.name == sectionName }!!
             val flagsAttr = section.attributes.find { it.name == "Flags" }
             assertNotNull("Section '$sectionName' must have a Flags attribute", flagsAttr)
-            assertTrue("Flags in '$sectionName' must be IssFlagType", flagsAttr!!.type is IssFlagType)
+            assertTrue("Flags in '$sectionName' must be IssFlagTypeSpec", flagsAttr!!.type is IssFlagTypeSpec)
         }
     }
 
     @Test
     fun `all flags in all sections have non-blank names and descriptions`() {
         spec.sections.flatMap { it.attributes }
-            .filter { it.type is IssFlagType }
-            .flatMap { (it.type as IssFlagType).flags }
+            .filter { it.type is IssFlagTypeSpec }
+            .flatMap { (it.type as IssFlagTypeSpec).flags }
             .forEach { flag ->
                 assertFalse("Flag name must not be blank", flag.name.isBlank())
                 assertFalse("Flag '${flag.name}' description must not be blank", flag.description.isBlank())
@@ -171,38 +167,38 @@ class IssSpecServiceTest {
     @Test
     fun `32bit and 64bit flags in Files have error conflict with each other`() {
         val files = spec.sections.find { it.name == "Files" }!!
-        val flagType = files.attributes.find { it.name == "Flags" }!!.type as IssFlagType
+        val flagType = files.attributes.find { it.name == "Flags" }!!.type as IssFlagTypeSpec
         val flag32 = flagType.flags.find { it.name == "32bit" }!!
         assertTrue(
             "32bit must have error-conflict with 64bit",
-            flag32.conflicts.any { it.flag == "64bit" && it.severity == IssFlagSeverity.ERROR }
+            flag32.conflicts.any { it.flag == "64bit" && it.severity == IssFlagSeveritySpec.ERROR }
         )
         val flag64 = flagType.flags.find { it.name == "64bit" }!!
         assertTrue(
             "64bit must have error-conflict with 32bit",
-            flag64.conflicts.any { it.flag == "32bit" && it.severity == IssFlagSeverity.ERROR }
+            flag64.conflicts.any { it.flag == "32bit" && it.severity == IssFlagSeveritySpec.ERROR }
         )
     }
 
     @Test
     fun `runminimized and runmaximized in Icons have error conflict`() {
         val icons = spec.sections.find { it.name == "Icons" }!!
-        val flagType = icons.attributes.find { it.name == "Flags" }!!.type as IssFlagType
+        val flagType = icons.attributes.find { it.name == "Flags" }!!.type as IssFlagTypeSpec
         val runMin = flagType.flags.find { it.name == "runminimized" }!!
         assertTrue(
             "runminimized must have error-conflict with runmaximized",
-            runMin.conflicts.any { it.flag == "runmaximized" && it.severity == IssFlagSeverity.ERROR }
+            runMin.conflicts.any { it.flag == "runmaximized" && it.severity == IssFlagSeveritySpec.ERROR }
         )
     }
 
     @Test
     fun `nowait and waituntilterminated in Run have error conflict`() {
         val run = spec.sections.find { it.name == "Run" }!!
-        val flagType = run.attributes.find { it.name == "Flags" }!!.type as IssFlagType
+        val flagType = run.attributes.find { it.name == "Flags" }!!.type as IssFlagTypeSpec
         val nowait = flagType.flags.find { it.name == "nowait" }!!
         assertTrue(
             "nowait must have error-conflict with waituntilterminated",
-            nowait.conflicts.any { it.flag == "waituntilterminated" && it.severity == IssFlagSeverity.ERROR }
+            nowait.conflicts.any { it.flag == "waituntilterminated" && it.severity == IssFlagSeveritySpec.ERROR }
         )
     }
 }

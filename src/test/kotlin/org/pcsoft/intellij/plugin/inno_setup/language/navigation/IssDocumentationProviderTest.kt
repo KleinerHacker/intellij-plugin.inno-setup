@@ -1,8 +1,7 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.documentation
+package org.pcsoft.intellij.plugin.inno_setup.language.navigation
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssDocumentationProvider
 
 class IssDocumentationProviderTest : BasePlatformTestCase() {
 
@@ -28,24 +27,6 @@ class IssDocumentationProviderTest : BasePlatformTestCase() {
         assertNotNull("Expected doc for directive key", doc)
         assertTrue(doc!!.contains("AppName"))
     }
-
-//    fun testParamKeyDoc() {
-//        val doc = docFor("[Files]\nSourc<caret>e: \"app.exe\"; DestDir: \"{app}\"\n")
-//        assertNotNull("Expected doc for param key", doc)
-//        assertTrue(doc!!.contains("Source"))
-//    }
-//
-//    fun testConstantDoc() {
-//        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{a<caret>pp}\"\n")
-//        assertNotNull("Expected doc for constant", doc)
-//        assertTrue(doc!!.contains("app"))
-//    }
-//
-//    fun testFlagDoc() {
-//        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: ignoreversi<caret>on\n")
-//        assertNotNull("Expected doc for flag", doc)
-//        assertTrue(doc!!.contains("ignoreversion"))
-//    }
 
     fun testValueContextReturnsNull() {
         val doc = docFor("[Setup]\nAppName=MyA<caret>pp\n")

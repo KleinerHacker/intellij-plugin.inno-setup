@@ -24,31 +24,31 @@
 
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.IssParserDefinition"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssParserDefinition"/>
 
         <!-- Syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.highlight.IssHighlighterFactory"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssHighlighterFactory"/>
 
         <!-- Semantic annotator -->
         <annotator language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.highlight.IssAnnotator"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssAnnotator"/>
 
         <!-- Error filter for [Code] and ISPP -->
         <highlightErrorFilter
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.highlight.IssErrorFilter"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssErrorFilter"/>
 
         <!-- Find Usages -->
         <lang.findUsagesProvider language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.usage.IssFindUsagesProvider"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssFindUsagesProvider"/>
 
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.reference.IssReferenceContributor"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssReferenceContributor"/>
 
         <!-- Typed handler (auto-popup after '[' and '{') -->
         <typedHandler
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.completion.IssTypedHandler"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssTypedHandler"/>
 
         <!-- Completion contributor -->
         <completion.contributor language="ISS"
@@ -56,27 +56,27 @@
 
         <!-- Brace matching: [], {}, () -->
         <lang.braceMatcher language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.quote.IssBraceMatcher"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssBraceMatcher"/>
 
         <!-- Quote handler: " -->
         <typedHandler
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.quote.IssQuoteHandler"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssQuoteHandler"/>
 
         <!-- Code folding -->
         <lang.foldingBuilder language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.highlight.IssCodeFoldingBuilder"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCodeFoldingBuilder"/>
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.structure.IssStructureViewFactory"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssStructureViewFactory"/>
 
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.documentation.IssDocumentationProvider"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssDocumentationProvider"/>
 
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.IssCommenter"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCommenter"/>
     </extensions>
 
     <extensions defaultExtensionNs="org.jetbrains.kotlin">

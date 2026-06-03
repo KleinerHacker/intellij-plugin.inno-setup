@@ -1,4 +1,4 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.highlight
+package org.pcsoft.intellij.plugin.inno_setup.language.parsing
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType

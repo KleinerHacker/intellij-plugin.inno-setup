@@ -1,7 +1,7 @@
-package org.pcsoft.intellij.plugin.inno_setup.language
+package org.pcsoft.intellij.plugin.inno_setup.language.editor
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCommenter
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 
 class IssCommenterTest : BasePlatformTestCase() {
 
