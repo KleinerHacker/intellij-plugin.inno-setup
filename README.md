@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="512"/>
+  <img src="docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="256"/>
 </p>
 
 # Inno Setup – JetBrains Plugin
