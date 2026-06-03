@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="512"/>
+</p>
+
 # Inno Setup – JetBrains Plugin
 
 A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php) scripts (`.iss`) to the entire IntelliJ platform family.
