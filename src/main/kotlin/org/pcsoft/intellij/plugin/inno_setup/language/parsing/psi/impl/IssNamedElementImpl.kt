@@ -12,11 +12,9 @@ abstract class IssNamedElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), 
 
     override fun getName(): String? =
         node.findChildByType(IssTypes.IDENTIFIER)?.text
-            ?: node.findChildByType(IssTypes.STRING)?.text?.trim('"')
 
     override fun setName(name: String): PsiElement {
         val id = node.findChildByType(IssTypes.IDENTIFIER)
-            ?: node.findChildByType(IssTypes.STRING)
             ?: return this
         val newEl = com.intellij.psi.PsiFileFactory.getInstance(project)
             .createFileFromText("dummy.iss", IssFileType.INSTANCE, "[Tasks]\nName: $name\n") as IssFile
@@ -27,5 +25,4 @@ abstract class IssNamedElementImpl(node: ASTNode) : ASTWrapperPsiElement(node), 
 
     override fun getNameIdentifier(): PsiElement? =
         node.findChildByType(IssTypes.IDENTIFIER)?.psi
-            ?: node.findChildByType(IssTypes.STRING)?.psi
 }

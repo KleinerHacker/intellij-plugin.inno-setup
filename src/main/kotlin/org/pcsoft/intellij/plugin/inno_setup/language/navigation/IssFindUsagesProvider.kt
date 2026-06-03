@@ -17,7 +17,7 @@ class IssFindUsagesProvider : FindUsagesProvider {
         IssLexerAdapter(),
         TokenSet.create(IssTypes.IDENTIFIER),
         TokenSet.create(IssTypes.COMMENT),
-        TokenSet.create(IssTypes.STRING),
+        TokenSet.create(IssTypes.STRING_PART),
     )
 
     override fun canFindUsagesFor(element: PsiElement): Boolean = element is IssNamedElement

@@ -25,10 +25,7 @@ class IssAnnotator : Annotator {
             is IssParameterEntry        -> annotateParameterEntry(element, holder, spec)
             is IssParamKey              -> annotateParamKey(element, holder, spec)
             is IssDirectiveKey          -> annotateDirectiveKey(element, holder, spec)
-            is IssParamValue            -> {
-                annotateParamValue(element, holder, spec)
-                annotateStringConstants(element, holder)
-            }
+            is IssParamValue            -> annotateParamValue(element, holder, spec)
             is IssConstant              -> annotateConstant(element, holder)
             is IssPreprocessorDirective -> annotatePreprocessorDirective(element, holder)
         }
@@ -250,29 +247,6 @@ class IssAnnotator : Annotator {
                 .create()
         } else {
             highlight(constant.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
-        }
-    }
-
-    private fun annotateStringConstants(value: IssParamValue, holder: AnnotationHolder) {
-        if (value.isInCodeSection()) return
-        value.node.getChildren(TokenSet.create(IssTypes.STRING)).forEach { strNode ->
-            val raw   = strNode.text
-            val inner = raw.drop(1).dropLast(1)
-            var pos = 0
-            while (pos < inner.length) {
-                val open  = inner.indexOf('{', pos)
-                if (open < 0) break
-                val close = inner.indexOf('}', open)
-                if (close < 0) break
-                val absoluteStart = strNode.textRange.startOffset + 1 + open
-                val absoluteEnd   = strNode.textRange.startOffset + 1 + close + 1
-                highlight(
-                    TextRange(absoluteStart, absoluteEnd),
-                    IssAnnotatorHighlighting.REFERENCE,
-                    holder
-                )
-                pos = close + 1
-            }
         }
     }
 

@@ -21,11 +21,12 @@ IDENTIFIER = {ALPHA}{IDENT_CHAR}*
 NUMBER     = [0-9]+
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
-STRING     = \"[^\"]*\"
 COMMENT    = (";" | "//")[^\r\n]*
 VALUE_CHAR = [^\r\n{};:=\"()\t ]
 
 %state VALUE
+%state IN_STRING
+%state IN_STRING_CONSTANT
 
 %%
 
@@ -45,16 +46,37 @@ VALUE_CHAR = [^\r\n{};:=\"()\t ]
 }
 
 <VALUE> {
-    {STRING}      { return IssTypes.STRING; }
     "{"           { return IssTypes.LBRACE; }
     "}"           { return IssTypes.RBRACE; }
     "("           { return IssTypes.LPAREN; }
     ")"           { return IssTypes.RPAREN; }
+    "\""          { yybegin(IN_STRING); return IssTypes.QUOTE; }
     {NUMBER}      { return IssTypes.NUMBER; }
     ":"           { return IssTypes.COLON; }
     "#"           { return IssTypes.HASH; }
     "="           { return IssTypes.EQ; }
     ";"           { yybegin(YYINITIAL); return IssTypes.SEMICOLON; }
+    {NEWLINE}     { yybegin(YYINITIAL); return IssTypes.CRLF; }
+    {WHITESPACE}  { return TokenType.WHITE_SPACE; }
+    {IDENTIFIER}  { return IssTypes.IDENTIFIER; }
+    {VALUE_CHAR}+ { return IssTypes.VALUE_CHAR; }
+    [^]           { return TokenType.BAD_CHARACTER; }
+}
+
+<IN_STRING> {
+    "{"           { yybegin(IN_STRING_CONSTANT); return IssTypes.LBRACE; }
+    "\""          { yybegin(VALUE); return IssTypes.QUOTE; }
+    {NEWLINE}     { yybegin(YYINITIAL); return IssTypes.CRLF; }
+    [^\"{\r\n]+   { return IssTypes.STRING_PART; }
+    [^]           { return TokenType.BAD_CHARACTER; }
+}
+
+<IN_STRING_CONSTANT> {
+    "}"           { yybegin(IN_STRING); return IssTypes.RBRACE; }
+    {NUMBER}      { return IssTypes.NUMBER; }
+    ":"           { return IssTypes.COLON; }
+    "#"           { return IssTypes.HASH; }
+    "="           { return IssTypes.EQ; }
     {NEWLINE}     { yybegin(YYINITIAL); return IssTypes.CRLF; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {IDENTIFIER}  { return IssTypes.IDENTIFIER; }

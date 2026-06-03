@@ -16,9 +16,10 @@ class IssTokenHighlighter : SyntaxHighlighterBase() {
     companion object {
         // IssTypes has both PSI element types and token types — use the token types for highlighting
         private val ATTRIBUTES: Map<IElementType, TextAttributesKey> = hashMapOf<IElementType, TextAttributesKey>().also { m ->
-            m[IssTypes.COMMENT]   = IssSyntaxHighlighting.COMMENT
-            m[IssTypes.STRING]    = IssSyntaxHighlighting.STRING
-            m[IssTypes.NUMBER]    = IssSyntaxHighlighting.NUMBER
+            m[IssTypes.COMMENT]      = IssSyntaxHighlighting.COMMENT
+            m[IssTypes.QUOTE]        = IssSyntaxHighlighting.STRING
+            m[IssTypes.STRING_PART]  = IssSyntaxHighlighting.STRING
+            m[IssTypes.NUMBER]       = IssSyntaxHighlighting.NUMBER
             m[IssTypes.LBRACKET]  = IssSyntaxHighlighting.BRACKET
             m[IssTypes.RBRACKET]  = IssSyntaxHighlighting.BRACKET
             m[IssTypes.LBRACE]    = IssSyntaxHighlighting.BRACE

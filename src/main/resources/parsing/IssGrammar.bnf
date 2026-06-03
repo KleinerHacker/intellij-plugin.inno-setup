@@ -26,7 +26,8 @@
     CRLF        = "regexp:\r?\n"
     NUMBER      = "regexp:[0-9]+"
     IDENTIFIER  = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
-    STRING      = "regexp:\"[^\"]*\""
+    QUOTE       = "\""
+    STRING_PART = "regexp:[^\"{\r\n]+"
     VALUE_CHAR  = "regexp:[^\r\n]"
   ]
 }
@@ -79,7 +80,10 @@ paramPair      ::= paramKey COLON paramValue {
 }
 paramKey       ::= IDENTIFIER
 
-paramValue     ::= (constant | STRING | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)*
+paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)*
+
+// "..." with optional embedded {constants}
+quotedString   ::= QUOTE (STRING_PART | constant)* QUOTE
 
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE

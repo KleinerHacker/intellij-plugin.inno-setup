@@ -16,28 +16,50 @@ class IssQuoteHandler : TypedHandlerDelegate() {
     ): Result {
         if (file !is IssFile || c != '"') return Result.CONTINUE
 
-        val offset = editor.caretModel.offset
-        val text   = editor.document.charsSequence
+        val offset  = editor.caretModel.offset
+        val text    = editor.document.charsSequence
+        val editorEx = editor as EditorEx
 
-        // Skip over an existing closing quote instead of inserting a new one
+        // Skip over an existing closing quote instead of inserting a new one.
+        // A QUOTE token is closing when the preceding token is QUOTE (empty string),
+        // STRING_PART (content), or RBRACE (end of embedded constant).
         if (offset < text.length && text[offset] == '"') {
-            val iterator = (editor as EditorEx).highlighter.createIterator(offset)
-            if (!iterator.atEnd()
-                && iterator.tokenType == IssTypes.STRING
-                && offset == iterator.end - 1) {
-                editor.caretModel.moveToOffset(offset + 1)
-                return Result.STOP
+            val iter = editorEx.highlighter.createIterator(offset)
+            if (!iter.atEnd() && iter.tokenType == IssTypes.QUOTE && offset > 0) {
+                val prev = editorEx.highlighter.createIterator(offset - 1)
+                if (!prev.atEnd()) {
+                    val pt = prev.tokenType
+                    if (pt == IssTypes.QUOTE || pt == IssTypes.STRING_PART || pt == IssTypes.RBRACE) {
+                        editor.caretModel.moveToOffset(offset + 1)
+                        return Result.STOP
+                    }
+                }
             }
         }
 
-        // Don't auto-close when the cursor is already inside a string literal
+        // Don't auto-close when the cursor is already inside a string literal.
         if (offset > 0) {
-            val iterator = (editor as EditorEx).highlighter.createIterator(offset - 1)
-            if (!iterator.atEnd()
-                && iterator.tokenType == IssTypes.STRING
-                && offset > iterator.start
-                && offset < iterator.end) {
-                return Result.CONTINUE
+            val iter = editorEx.highlighter.createIterator(offset - 1)
+            if (!iter.atEnd()) {
+                when (iter.tokenType) {
+                    IssTypes.STRING_PART, IssTypes.RBRACE -> return Result.CONTINUE
+                    IssTypes.QUOTE -> {
+                        // Only suppress auto-close if this is an *opening* QUOTE, i.e. the token
+                        // before it is not another string-content token (which would make it closing).
+                        val pos = iter.start
+                        if (pos > 0) {
+                            val pp = editorEx.highlighter.createIterator(pos - 1)
+                            if (!pp.atEnd()) {
+                                val ppt = pp.tokenType
+                                if (ppt != IssTypes.QUOTE && ppt != IssTypes.STRING_PART && ppt != IssTypes.RBRACE) {
+                                    return Result.CONTINUE
+                                }
+                            }
+                        } else {
+                            return Result.CONTINUE
+                        }
+                    }
+                }
             }
         }
 
