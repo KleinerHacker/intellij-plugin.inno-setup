@@ -50,9 +50,9 @@ class IssCodeFoldingBuilder : FoldingBuilderEx() {
         if (hiddenPairs.isEmpty()) return null
 
         val foldStart = shownPairs.maxOf { it.textRange.endOffset }
-        val crlfStart = entry.node.lastChildNode
+        val crlfStart = (entry.node.lastChildNode
             ?.takeIf { it.elementType == IssTypes.CRLF }
-            ?.startOffset ?: entry.textRange.endOffset
+            ?.startOffset ?: entry.textRange.endOffset)
         if (foldStart >= crlfStart) return null
 
         return FoldingDescriptor(entry.node, TextRange(foldStart, crlfStart))
