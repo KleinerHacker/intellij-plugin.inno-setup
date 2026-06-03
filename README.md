@@ -1,117 +1,153 @@
-# Inno-setup
+# Inno Setup – JetBrains Plugin
 
-[![Twitter Follow](https://img.shields.io/badge/follow-%40JBPlatform-1DA1F2?logo=twitter)](https://twitter.com/JBPlatform)
-[![Developers Forum](https://img.shields.io/badge/JetBrains%20Platform-Join-blue)][jb:forum]
+A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php) scripts (`.iss`) to the entire IntelliJ platform family.
 
-## Plugin structure
+---
 
-A generated project contains the following content structure:
+## About
+
+[Inno Setup](https://jrsoftware.org/isinfo.php) is a widely-used, free Windows installer builder by Jordan Russell and Martijn Laan (first released 1997). Its scripts (`.iss`) describe the full installer — files, registry keys, shortcuts, and optional Pascal scripting — but until now had no dedicated editor support inside JetBrains IDEs.
+
+This plugin closes that gap. The goal is a complete editing experience for `.iss` files: correct highlighting, context-aware completion, inline documentation, and validated references, regardless of which JetBrains IDE you are using.
+
+### Features
+
+| Feature | Description |
+|---|---|
+| **Syntax highlighting** | Sections, directives, parameters, constants (`{app}`, `{autopf}`, …), and Pascal code blocks are coloured distinctly |
+| **Code completion** | Section names, directive keys, parameter keys, and known flag values are suggested as you type |
+| **Inline documentation** | Hover over any directive or parameter to read its description without leaving the IDE |
+| **Reference resolution** | Navigate between `Name:` declarations and their usages in `Tasks:`, `Components:`, and `Types:` parameters |
+| **Structure view** | Bird's-eye overview of all sections and their entries |
+| **Constant validation** | Built-in constants are recognised and validated, including those embedded inside quoted strings |
+| **Brace / quote matching** | Auto-closes `{`, `[`, and `"` |
+| **Code folding** | Sections and long parameter entries fold independently |
+
+### IDE Compatibility
+
+The plugin targets `com.intellij.modules.lang` — available in every full IntelliJ-platform IDE — and bundles its own runtime dependencies, so it has no hidden requirements on the host IDE.
+
+Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **WebStorm**, **GoLand**, **RubyMine**, **DataGrip**, and all other IntelliJ-platform IDEs.
+
+---
+
+## Getting Started (Development)
+
+### Prerequisites
+
+| Tool | Version |
+|---|---|
+| JDK | 21 or later |
+| IntelliJ IDEA | 2024.1 or later (for IDE-assisted development) |
+| Gradle | Provided via Gradle Wrapper — no installation needed |
+
+### Build
+
+```bash
+# Clone the repository
+git clone https://github.com/KleinerHacker/inno-setup.git
+cd inno-setup
+
+# Generate parser and lexer, then compile
+./gradlew compileKotlin
+
+# Run all tests
+./gradlew test
+
+# Build the distributable plugin ZIP
+./gradlew buildPlugin
+# → build/distributions/inno-setup-<version>.zip
+```
+
+### Run in a sandboxed IDE
+
+```bash
+./gradlew runIde
+```
+
+This launches a fresh IntelliJ IDEA instance with the plugin loaded, isolated from your regular IDE installation. Open or create any `.iss` file to try the plugin live.
+
+### Run / Debug from IntelliJ IDEA
+
+Preconfigured run configurations are included in `.run/`:
+
+| Configuration | What it does |
+|---|---|
+| **Run Plugin** | Launches `:runIde` — opens a sandbox IDE with the plugin |
+| **Run Tests** | Runs `:test` |
+| **Run Verifications** | Runs `:verifyPlugin` to check compatibility |
+
+### Project Structure
 
 ```
 .
-├── .run/                   Predefined Run/Debug Configurations
-├── build/                  Output build directory
-├── gradle
-│   ├── wrapper/            Gradle Wrapper
-│   ├── libs.versions.toml  Version catalog
-├── src                     Plugin sources
-│   ├── main
-│   │   ├── kotlin/         Kotlin production sources
-│   │   └── resources/      Resources - plugin.xml, icons, messages
-├── .gitignore              Git ignoring rules
-├── build.gradle.kts        Gradle build configuration
-├── gradle.properties       Gradle configuration properties
-├── gradlew                 *nix Gradle Wrapper script
-├── gradlew.bat             Windows Gradle Wrapper script
-├── README.md               README
-└── settings.gradle.kts     Gradle project settings
+├── src/
+│   ├── main/
+│   │   ├── kotlin/          Plugin sources (Kotlin)
+│   │   └── resources/
+│   │       ├── META-INF/    plugin.xml, optional config files
+│   │       ├── parsing/     Grammar (.bnf) and lexer (.flex) sources
+│   │       └── spec/        Inno Setup spec data (YAML)
+│   └── test/
+│       ├── kotlin/          Unit and integration tests
+│       └── resources/       Test scripts and expected PSI trees
+├── build/parsing/gen/       Generated parser, lexer, and PSI classes (auto-generated)
+├── docs/                    MkDocs documentation site
+├── build.gradle.kts
+└── settings.gradle.kts
 ```
 
-In addition to the configuration files, the most crucial part is the `src` directory, which contains our implementation
-and the manifest for our plugin – [plugin.xml][file:plugin.xml].
+> **Note:** The files under `build/parsing/gen/` are generated automatically before compilation via `./gradlew generateIssParser generateIssLexer`. Never edit them by hand — they are overwritten on every build.
 
-> [!NOTE]
-> To use Java in your plugin, create the `/src/main/java` directory.
+---
 
-## Plugin configuration file
+## Manual Installation
 
-The plugin configuration file is a [plugin.xml][file:plugin.xml] file located in the `src/main/resources/META-INF`
-directory.
-It provides general information about the plugin, its dependencies, extensions, and listeners.
+The plugin is **not yet available on the JetBrains Marketplace**. Install it manually from the built ZIP:
 
-You can read more about this file in the [Plugin Configuration File][docs:plugin.xml] section of our documentation.
+### Step 1 — Build the plugin ZIP
 
-If you're still not quite sure what this is all about, read [Introduction to IntelliJ Platform][docs:intro].
+```bash
+./gradlew buildPlugin
+```
 
-## Predefined Run/Debug configurations
+The output is written to `build/distributions/inno-setup-<version>.zip`.
 
-Within the default project structure, there is a `.run` directory provided containing predefined *Run/Debug
-configurations* that expose corresponding Gradle tasks:
+### Step 2 — Install in your IDE
 
-| Configuration name | Description                                                                                                                                                                         |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Run Plugin         | Runs [`:runIde`][gh:intellij-platform-gradle-plugin-runIde] IntelliJ Platform Gradle Plugin task. Use the *Debug* icon for plugin debugging.                                        |
-| Run Tests          | Runs [`:test`][gradle:lifecycle-tasks] Gradle task.                                                                                                                                 |
-| Run Verifications  | Runs [`:verifyPlugin`][gh:intellij-platform-gradle-plugin-verifyPlugin] IntelliJ Platform Gradle Plugin task to check the plugin compatibility against the specified IntelliJ IDEs. |
+1. Open your JetBrains IDE and go to **Settings / Preferences → Plugins**
+2. Click the **⚙ gear icon** in the top-right corner of the Plugins panel
+3. Choose **Install Plugin from Disk…**
+4. Navigate to `build/distributions/` and select the `.zip` file
+5. Click **OK**, then **Restart IDE** when prompted
 
-> [!NOTE]
-> You can find the logs from the running task in the `idea.log` tab.
+After the restart, any file with the `.iss` extension will be handled by the plugin automatically.
 
-## Publishing the plugin
+---
 
-> [!TIP]
-> Make sure to follow all guidelines listed in [Publishing a Plugin][docs:publishing] to follow all recommended and
-> required steps.
+## Documentation
 
-Releasing a plugin to [JetBrains Marketplace](https://plugins.jetbrains.com) is a straightforward operation that uses
-the `publishPlugin` Gradle task provided by
-the [intellij-platform-gradle-plugin][gh:intellij-platform-gradle-plugin-docs].
+Full documentation — including a complete reference for every Inno Setup section and its parameters — is available at the project's MkDocs site:
 
-You can also upload the plugin to the [JetBrains Plugin Repository](https://plugins.jetbrains.com/plugin/upload)
-manually via UI.
+```bash
+# Install dependencies (once)
+cd docs
+pip install mkdocs mkdocs-material
 
-## Useful links
+# Serve locally
+mkdocs serve
+```
 
-- [IntelliJ Platform SDK Plugin SDK][docs]
-- [IntelliJ Platform Gradle Plugin Documentation][gh:intellij-platform-gradle-plugin-docs]
-- [IntelliJ Platform Explorer][jb:ipe]
-- [JetBrains Marketplace Quality Guidelines][jb:quality-guidelines]
-- [IntelliJ Platform UI Guidelines][jb:ui-guidelines]
-- [JetBrains Marketplace Paid Plugins][jb:paid-plugins]
-- [IntelliJ SDK Code Samples][gh:code-samples]
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
-[docs]: https://plugins.jetbrains.com/docs/intellij
+---
 
-[docs:intro]: https://plugins.jetbrains.com/docs/intellij/intellij-platform.html?from=IJPluginTemplate
+## Contributing
 
-[docs:plugin.xml]: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html?from=IJPluginTemplate
+Bug reports and pull requests are welcome. Please open an issue first to discuss larger changes.
 
-[docs:publishing]: https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate
+---
 
-[file:plugin.xml]: ./src/main/resources/META-INF/plugin.xml
+## License
 
-[gh:code-samples]: https://github.com/JetBrains/intellij-sdk-code-samples
-
-[gh:intellij-platform-gradle-plugin]: https://github.com/JetBrains/intellij-platform-gradle-plugin
-
-[gh:intellij-platform-gradle-plugin-docs]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
-
-[gh:intellij-platform-gradle-plugin-runIde]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html#runIde
-
-[gh:intellij-platform-gradle-plugin-verifyPlugin]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html#verifyPlugin
-
-[gradle:lifecycle-tasks]: https://docs.gradle.org/current/userguide/java_plugin.html#lifecycle_tasks
-
-[jb:github]: https://github.com/JetBrains/.github/blob/main/profile/README.md
-
-[jb:forum]: https://platform.jetbrains.com/
-
-[jb:quality-guidelines]: https://plugins.jetbrains.com/docs/marketplace/quality-guidelines.html
-
-[jb:paid-plugins]: https://plugins.jetbrains.com/docs/marketplace/paid-plugins-marketplace.html
-
-[jb:quality-guidelines]: https://plugins.jetbrains.com/docs/marketplace/quality-guidelines.html
-
-[jb:ipe]: https://jb.gg/ipe
-
-[jb:ui-guidelines]: https://jetbrains.github.io/ui
+See [LICENSE](LICENSE) for details.

@@ -1,3 +1,5 @@
+#define demo test
+
 ; -- Example1.iss --
 ; Demonstrates copying 3 files and creating an icon.
 

@@ -1,4 +1,12 @@
 FILE
+  IssPreprocessorDirectiveImpl(PREPROCESSOR_DIRECTIVE)
+    PsiElement(#)('#')
+    PsiElement(IDENTIFIER)('define')
+    IssParamValueImpl(PARAM_VALUE)
+      PsiElement(IDENTIFIER)('demo')
+      PsiElement(IDENTIFIER)('test')
+    PsiElement(CRLF)('\n')
+  PsiElement(CRLF)('\n')
   PsiComment(COMMENT)('; -- Example1.iss --')
   PsiElement(CRLF)('\n')
   PsiComment(COMMENT)('; Demonstrates copying 3 files and creating an icon.')
@@ -208,3 +216,4 @@ FILE
               PsiElement(})('}')
             PsiElement(STRING_PART)('\MyProg.exe')
             PsiElement(")('"')
+      PsiElement(CRLF)('\n')

@@ -1,5 +1,5 @@
-site_name: Inno Setup – IntelliJ Plugin
-site_description: IntelliJ IDEA plugin providing language support for Inno Setup scripts (.iss)
+site_name: Inno Setup – JetBrains Plugin
+site_description: JetBrains plugin providing language support for Inno Setup scripts (.iss) in all IntelliJ-platform IDEs
 site_author: PCSoft
 
 docs_dir: docs
@@ -16,7 +16,7 @@ markdown_extensions:
 
 theme:
   name: material
-  language: de
+  language: en
   logo: assets/images/inno-setup-icon.png
   features:
     - navigation.sections
