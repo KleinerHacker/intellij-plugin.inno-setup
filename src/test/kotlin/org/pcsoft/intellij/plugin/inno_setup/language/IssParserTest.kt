@@ -14,7 +14,7 @@ class IssParserTest : BasePlatformTestCase() {
         val errors = PsiTreeUtil.collectElementsOfType(myFixture.file, PsiErrorElement::class.java)
         assertTrue(
             "Expected no parse errors but found:\n" +
-                errors.joinToString("\n") { "  '${it.errorDescription}' at offset ${it.textOffset}: '${it.text}'" },
+                    errors.joinToString("\n") { "  '${it.errorDescription}' at offset ${it.textOffset}: '${it.text}'" },
             errors.isEmpty()
         )
     }

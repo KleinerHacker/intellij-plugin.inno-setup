@@ -22,7 +22,7 @@ NUMBER     = [0-9]+
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 COMMENT    = (";" | "//")[^\r\n]*
-VALUE_CHAR = [^\r\n{};:=\"()\t ]
+VALUE_CHAR = [^\r\n{};:=\"()#\t ]
 
 %state VALUE
 %state IN_STRING

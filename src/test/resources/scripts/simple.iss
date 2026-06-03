@@ -18,7 +18,7 @@ Compression=lzma2
 
 [Files]
 Source: "MyProg.exe"; DestDir: "{app}"
-Source: "MyProg.chm"; DestDir: "{app}"
+Source: "MyProg.chm"; DestDir: "{#demo}"
 Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Icons]

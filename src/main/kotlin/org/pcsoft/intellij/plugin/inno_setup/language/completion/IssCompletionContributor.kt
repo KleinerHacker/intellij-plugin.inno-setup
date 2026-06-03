@@ -12,6 +12,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssDirectiveKe
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamKey
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
@@ -46,6 +47,11 @@ class IssCompletionContributor : CompletionContributor() {
                 .afterLeaf(PlatformPatterns.psiElement(IssTypes.HASH))
                 .withParent(IssPreprocessorDirective::class.java),
             IssIsppDirectiveProvider
+        )
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            IsppVariableAfterHashProvider
         )
     }
 }
@@ -145,6 +151,42 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
                 }
             result.addElement(
                 PrioritizedLookupElement.withPriority(element, if (duplicate) -10.0 else 0.0)
+            )
+        }
+    }
+}
+
+private object IsppVariableAfterHashProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val offset = parameters.offset
+        val chars  = parameters.editor.document.charsSequence
+        val lookBack = minOf(offset, 100)
+        val prefix   = chars.subSequence(offset - lookBack, offset).toString()
+        val braceIdx = prefix.lastIndexOf('{')
+        if (braceIdx < 0) return
+        val afterBrace = prefix.substring(braceIdx + 1)
+        if (!afterBrace.startsWith('#')) return
+        val typedName = afterBrace.substring(1)
+
+        val file = parameters.originalFile as? IssFile ?: return
+        val adjusted = result.withPrefixMatcher(typedName)
+
+        file.definedConstants().forEach { (name, value) ->
+            adjusted.addElement(
+                LookupElementBuilder.create(name)
+                    .withTypeText(value?.let { "= $it" } ?: "define")
+                    .withIcon(IssIcons.Variable)
+                    .withInsertHandler { ctx, _ ->
+                        val tail = ctx.tailOffset
+                        val doc  = ctx.document.charsSequence
+                        if (tail >= doc.length || doc[tail] != '}')
+                            ctx.document.insertString(tail, "}")
+                        ctx.editor.caretModel.moveToOffset(tail + 1)
+                    }
             )
         }
     }

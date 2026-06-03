@@ -247,6 +247,12 @@ class IssAnnotator : Annotator {
                 .create()
         } else {
             highlight(constant.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
+            if (isIspp) {
+                val hashNode = body.node.findChildByType(IssTypes.HASH)
+                if (hashNode != null) {
+                    highlight(hashNode.textRange, IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD, holder)
+                }
+            }
         }
     }
 

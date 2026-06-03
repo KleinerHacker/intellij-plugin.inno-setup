@@ -9,6 +9,7 @@ import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssLexerAdapter
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssNamedElement
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
 
 class IssFindUsagesProvider : FindUsagesProvider {
@@ -20,11 +21,13 @@ class IssFindUsagesProvider : FindUsagesProvider {
         TokenSet.create(IssTypes.STRING_PART),
     )
 
-    override fun canFindUsagesFor(element: PsiElement): Boolean = element is IssNamedElement
+    override fun canFindUsagesFor(element: PsiElement): Boolean =
+        element is IssNamedElement || element is IssPreprocessorDirectiveEx
 
     override fun getHelpId(element: PsiElement): String? = null
 
     override fun getType(element: PsiElement): String = when (element) {
+        is IssPreprocessorDirectiveEx -> "ISPP define"
         is IssParamValue -> "ISS named item"
         else -> ""
     }

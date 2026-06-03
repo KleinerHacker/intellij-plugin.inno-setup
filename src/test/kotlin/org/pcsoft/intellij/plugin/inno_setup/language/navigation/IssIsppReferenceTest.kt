@@ -1,0 +1,100 @@
+package org.pcsoft.intellij.plugin.inno_setup.language.navigation
+
+import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
+
+class IssIsppReferenceTest : BasePlatformTestCase() {
+
+    private fun setup(content: String): IssFile {
+        myFixture.configureByText(IssFileType.INSTANCE, content)
+        return myFixture.file as IssFile
+    }
+
+    private fun findIsppIdentifier(file: IssFile): PsiElement? =
+        PsiTreeUtil.findChildrenOfType(file, IssConstantBody::class.java)
+            .firstOrNull { it.text.startsWith("#") }
+            ?.node?.findChildByType(IssTypes.IDENTIFIER)?.psi
+
+    private fun findDefine(file: IssFile, name: String): IssPreprocessorDirective? =
+        PsiTreeUtil.findChildrenOfType(file, IssPreprocessorDirective::class.java)
+            .firstOrNull { (it as? IssPreprocessorDirectiveEx)?.getDefineName() == name }
+
+    // ── resolve ──────────────────────────────────────────────────────────────
+
+    fun testIsppConstantResolvesToDefine() {
+        val file = setup("#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#AppVersion}\"\n")
+        val id = findIsppIdentifier(file)
+        assertNotNull("Expected ISPP identifier for {#AppVersion}", id)
+
+        val ref = IssIsppConstantReference(id!!, "AppVersion")
+        val resolved = ref.resolve()
+
+        assertNotNull("Expected {#AppVersion} to resolve to #define directive", resolved)
+        assertInstanceOf(resolved, IssPreprocessorDirective::class.java)
+        assertEquals("AppVersion", (resolved as IssPreprocessorDirectiveEx).getDefineName())
+    }
+
+    fun testUnknownIsppConstantDoesNotResolve() {
+        val file = setup("[Files]\nSource: \"app.exe\"; DestDir: \"{#Unknown}\"\n")
+        val id = findIsppIdentifier(file)
+        assertNotNull("Expected ISPP identifier for {#Unknown}", id)
+
+        val ref = IssIsppConstantReference(id!!, "Unknown")
+        assertNull("Unknown ISPP constant should not resolve", ref.resolve())
+    }
+
+    // ── isReferenceTo ────────────────────────────────────────────────────────
+
+    fun testIsReferenceToDirective() {
+        val file = setup("#define MyVar \"value\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
+        val id = findIsppIdentifier(file)!!
+        val directive = findDefine(file, "MyVar")
+        assertNotNull("Expected #define MyVar directive", directive)
+
+        val ref = IssIsppConstantReference(id, "MyVar")
+        assertTrue("isReferenceTo should return true for the directive element",
+            ref.isReferenceTo(directive!!))
+    }
+
+    fun testIsReferenceToNameIdentifier() {
+        // IntelliJ passes the name identifier (child of paramValue, grandchild of directive)
+        // to isReferenceTo() during Highlight Usages — must also return true.
+        val file = setup("#define MyVar \"value\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
+        val id = findIsppIdentifier(file)!!
+        val directive = findDefine(file, "MyVar")
+        val nameId = (directive as? IssPreprocessorDirectiveEx)?.getNameIdentifier()
+        assertNotNull("Expected name identifier on #define MyVar", nameId)
+
+        val ref = IssIsppConstantReference(id, "MyVar")
+        assertTrue("isReferenceTo should return true when IntelliJ passes the name identifier",
+            ref.isReferenceTo(nameId!!))
+    }
+
+    fun testIsReferenceToWrongNameReturnsFalse() {
+        val file = setup("#define MyVar \"value\"\n#define Other \"x\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
+        val id = findIsppIdentifier(file)!!
+        val otherDirective = findDefine(file, "Other")
+        assertNotNull("Expected #define Other directive", otherDirective)
+
+        val ref = IssIsppConstantReference(id, "MyVar")
+        assertFalse("isReferenceTo should return false for a different directive",
+            ref.isReferenceTo(otherDirective!!))
+    }
+
+    // ── define name extraction ───────────────────────────────────────────────
+
+    fun testDefineNameExtracted() {
+        val file = setup("#define MyConst \"hello\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        val directives = PsiTreeUtil.findChildrenOfType(file, IssPreprocessorDirective::class.java)
+        val define = directives.firstOrNull { (it as? IssPreprocessorDirectiveEx)?.isDefine() == true }
+        assertNotNull("Expected #define directive", define)
+        assertEquals("MyConst", (define as IssPreprocessorDirectiveEx).getDefineName())
+    }
+}

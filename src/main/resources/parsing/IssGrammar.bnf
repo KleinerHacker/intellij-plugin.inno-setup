@@ -97,4 +97,6 @@ private comment ::= COMMENT
 preprocessorDirective ::= HASH IDENTIFIER paramValue? CRLF? {
   pin=1
   recoverWhile="recover_line"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssPreprocessorDirectiveMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx"
 }

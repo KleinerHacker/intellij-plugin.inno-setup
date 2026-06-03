@@ -57,4 +57,25 @@ class IssCompletionTest : BasePlatformTestCase() {
         assertNotNull("Expected parameter key suggestions mid-word", variants)
         assertTrue("Expected 'Source' in suggestions", "Source" in variants!!)
     }
+
+    // ── ISPP variable completion ──────────────────────────────────────────────────
+
+    fun testIsppVariableCompletionAfterHash() {
+        myFixture.configureByText(IssFileType.INSTANCE,
+            "#define AppVersion \"1.0\"\n#define OutputDir \"out\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#<caret>}\"\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected ISPP variable suggestions after {#", variants)
+        assertTrue("Expected 'AppVersion' in suggestions", "AppVersion" in variants!!)
+        assertTrue("Expected 'OutputDir' in suggestions", "OutputDir" in variants)
+    }
+
+    fun testIsppVariableShownInBracePopup() {
+        myFixture.configureByText(IssFileType.INSTANCE,
+            "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{<caret>\"\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected constant suggestions after {", variants)
+        assertTrue("Expected '#AppVersion' in { popup", "#AppVersion" in variants!!)
+    }
 }
