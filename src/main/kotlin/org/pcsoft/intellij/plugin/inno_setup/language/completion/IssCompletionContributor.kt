@@ -26,16 +26,13 @@ class IssCompletionContributor : CompletionContributor() {
                 .afterLeaf(PlatformPatterns.psiElement(IssTypes.LBRACKET)),
             SectionNameProvider
         )
+        // Attribute key completion for all IDENTIFIER positions in ISS files.
+        // The provider itself decides whether the cursor is in a key position
+        // (IssParamKey, IssDirectiveKey, or an orphaned token on an empty line).
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement(IssTypes.IDENTIFIER)
-                .withParent(IssParamKey::class.java),
-            AttributeKeyProvider
-        )
-        extend(
-            CompletionType.BASIC,
-            PlatformPatterns.psiElement(IssTypes.IDENTIFIER)
-                .withParent(IssDirectiveKey::class.java),
+                .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             AttributeKeyProvider
         )
         extend(
@@ -91,8 +88,25 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
         result: CompletionResultSet
     ) {
         if (parameters.position.isInCodeSection()) return
-        val position    = parameters.position
-        val psiSection  = position.containingSection() ?: return
+        val position = parameters.position
+
+        // Only suggest attribute keys in key positions:
+        //  • parent is IssParamKey / IssDirectiveKey → user is editing an existing key
+        //  • not inside any entry at all → user is on an empty / partial line
+        // Anything else (inside a value) is skipped.
+        val inKeyPosition = position.parent is IssParamKey
+            || position.parent is IssDirectiveKey
+            || (position.containingParameterEntry() == null
+                && position.containingDirectiveEntry() == null)
+        if (!inKeyPosition) return
+
+        // When typing on an empty line the dummy IDENTIFIER lands outside the
+        // section (the entry* loop exits before consuming it). Fall back to the
+        // element at the same offset in the original file, which IS inside the
+        // section (it's a CRLF consumed by the entry* loop).
+        val psiSection = position.containingSection()
+            ?: parameters.originalPosition?.containingSection()
+            ?: return
         val sectionName = psiSection.nameText()
 
         val specSections = service<IssSpecService>().spec.sections
