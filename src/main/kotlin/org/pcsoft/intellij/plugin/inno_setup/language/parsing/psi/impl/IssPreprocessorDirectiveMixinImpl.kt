@@ -57,6 +57,11 @@ abstract class IssPreprocessorDirectiveMixinImpl(node: ASTNode)
         return if (hasTypePrefix()) ids[1].text else ids[0].text
     }
 
+    override fun getDefineTypeIdentifier(): PsiElement? {
+        if (!isDefine() || !hasTypePrefix()) return null
+        return paramValueIdentifiers().firstOrNull()?.psi
+    }
+
     // ── PsiNameIdentifierOwner ────────────────────────────────────────────────
 
     override fun getName() = getDefineName()

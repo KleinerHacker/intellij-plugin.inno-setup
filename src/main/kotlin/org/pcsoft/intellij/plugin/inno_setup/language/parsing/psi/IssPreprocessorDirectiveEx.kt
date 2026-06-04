@@ -1,5 +1,6 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 
 interface IssPreprocessorDirectiveEx : PsiNameIdentifierOwner {
@@ -7,4 +8,6 @@ interface IssPreprocessorDirectiveEx : PsiNameIdentifierOwner {
     fun getDefineName(): String?
     /** Returns the type keyword ("int", "str", "float") for typed defines, null otherwise. */
     fun getDefineTypeName(): String?
+    /** Returns the type qualifier element (`int`/`str`/`float`/…) for typed defines, null otherwise. */
+    fun getDefineTypeIdentifier(): PsiElement?
 }

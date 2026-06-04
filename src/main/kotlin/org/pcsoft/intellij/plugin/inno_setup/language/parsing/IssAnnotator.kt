@@ -246,14 +246,16 @@ class IssAnnotator : Annotator {
                 .range(constant.textRange)
                 .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
+        } else if (isIspp) {
+            // Color "#Name" of {#Name} blue; the name additionally italic. Braces stay neutral.
+            body.node.findChildByType(IssTypes.HASH)?.let {
+                highlight(it.textRange, IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+            }
+            body.node.findChildByType(IssTypes.IDENTIFIER)?.let {
+                highlight(it.textRange, IssAnnotatorHighlighting.ISPP_REFERENCE_NAME, holder)
+            }
         } else {
             highlight(constant.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
-            if (isIspp) {
-                val hashNode = body.node.findChildByType(IssTypes.HASH)
-                if (hashNode != null) {
-                    highlight(hashNode.textRange, IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD, holder)
-                }
-            }
         }
     }
 
@@ -261,12 +263,23 @@ class IssAnnotator : Annotator {
         val hash    = directive.node.findChildByType(IssTypes.HASH) ?: return
         val keyword = directive.node.findChildByType(IssTypes.IDENTIFIER) ?: return
         val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
-        highlight(keywordRange, IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD, holder)
+        highlight(keywordRange, IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+
+        val ex = directive as? IssPreprocessorDirectiveEx ?: return
+
+        // For a #define: the type qualifier gets keyword styling, the name is always italic.
+        if (ex.isDefine()) {
+            ex.getDefineTypeIdentifier()?.let {
+                highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_TYPE, holder)
+            }
+            ex.getNameIdentifier()?.let {
+                highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_NAME, holder)
+            }
+        }
 
         // Validate the value of typed defines: #define int/str/float Name Value
         // The ISS lexer in YYINITIAL does not produce NUMBER or QUOTE tokens, so we read
         // the value from the raw source line via extractDefineValueFromLine.
-        val ex = directive as? IssPreprocessorDirectiveEx ?: return
         val typeName = ex.getDefineTypeName() ?: return
         val name     = ex.getDefineName()     ?: return
 

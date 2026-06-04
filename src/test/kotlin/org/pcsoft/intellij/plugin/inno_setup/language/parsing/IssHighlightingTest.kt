@@ -20,28 +20,29 @@ class IssHighlightingTest : BasePlatformTestCase() {
 
     // ── ISPP constant ({#Name}) ───────────────────────────────────────────────
 
-    fun testKnownIsppConstantHighlightedAsReference() {
+    fun testKnownIsppConstantNameHighlightedAsIsppReferenceName() {
         val text = "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#AppVersion}\"\n"
         val all = highlights(text)
+        val nameOffset = text.indexOf("{#AppVersion}") + 2  // offset of 'AppVersion' inside {#AppVersion}
         val hit = all.firstOrNull { info ->
-            info.forcedTextAttributesKey == IssAnnotatorHighlighting.REFERENCE &&
-            text.substring(info.startOffset, info.endOffset) == "{#AppVersion}"
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.ISPP_REFERENCE_NAME &&
+            info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
         }
         assertNotNull(
-            "Known {#AppVersion} must be highlighted with REFERENCE attribute (CLASS_REFERENCE color)", hit
+            "The name of a known {#Name} must be highlighted with ISPP_REFERENCE_NAME (blue + italic)", hit
         )
     }
 
-    fun testKnownIsppConstantHashHighlightedAsKeyword() {
+    fun testKnownIsppConstantHashHighlightedAsDirective() {
         val text = "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#AppVersion}\"\n"
         val all = highlights(text)
         val hashOffset = text.indexOf("{#AppVersion}") + 1  // offset of '#' inside {#AppVersion}
         val hit = all.firstOrNull { info ->
-            info.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD &&
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE &&
             info.startOffset == hashOffset && info.endOffset == hashOffset + 1
         }
         assertNotNull(
-            "The '#' inside a known {#Name} must be highlighted with PREPROCESSOR_KEYWORD (KEYWORD color)", hit
+            "The '#' inside a known {#Name} must be highlighted with PREPROCESSOR_DIRECTIVE (extension blue)", hit
         )
     }
 
@@ -62,13 +63,52 @@ class IssHighlightingTest : BasePlatformTestCase() {
     fun testPreprocessorDefineKeywordHighlighted() {
         val text = "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
         val all = highlights(text)
-        // Annotator highlights from '#' through the directive keyword as PREPROCESSOR_KEYWORD
+        // Annotator highlights from '#' through the directive keyword as PREPROCESSOR_DIRECTIVE
         val hit = all.firstOrNull { info ->
-            info.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD &&
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE &&
             text.substring(info.startOffset, info.endOffset) == "#define"
         }
         assertNotNull(
-            "'#define' must be highlighted with PREPROCESSOR_KEYWORD (KEYWORD color)", hit
+            "'#define' must be highlighted with PREPROCESSOR_DIRECTIVE (extension blue)", hit
+        )
+    }
+
+    fun testDefineNameHighlightedAsDefineName() {
+        val text = "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val nameOffset = text.indexOf("AppVersion")
+        val hit = all.firstOrNull { info ->
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.DEFINE_NAME &&
+            info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
+        }
+        assertNotNull(
+            "The name of a #define must be highlighted with DEFINE_NAME (italic)", hit
+        )
+    }
+
+    fun testFunctionDefineNameHighlightedAsDefineName() {
+        val text = "#define Max(a, b) a > b ? a : b\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val nameOffset = text.indexOf("Max")
+        val hit = all.firstOrNull { info ->
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.DEFINE_NAME &&
+            info.startOffset == nameOffset && info.endOffset == nameOffset + "Max".length
+        }
+        assertNotNull(
+            "The name of a function-like #define (Max) must be highlighted with DEFINE_NAME (italic)", hit
+        )
+    }
+
+    fun testTypedDefineTypeHighlightedAsDefineType() {
+        val text = "#define int BuildNumber 42\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val typeOffset = text.indexOf("int")
+        val hit = all.firstOrNull { info ->
+            info.forcedTextAttributesKey == IssAnnotatorHighlighting.DEFINE_TYPE &&
+            info.startOffset == typeOffset && info.endOffset == typeOffset + "int".length
+        }
+        assertNotNull(
+            "The type qualifier 'int' of a typed #define must be highlighted with DEFINE_TYPE (keyword)", hit
         )
     }
 

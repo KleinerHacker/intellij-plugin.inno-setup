@@ -22,8 +22,11 @@ class IssColorSettingsPage : ColorSettingsPage {
         AttributesDescriptor("Parameter key",                      IssAnnotatorHighlighting.PARAM_KEY),
         AttributesDescriptor("References//Constant reference",     IssAnnotatorHighlighting.REFERENCE),
         AttributesDescriptor("References//Flag",                   IssAnnotatorHighlighting.FLAG),
+        AttributesDescriptor("References//ISPP define reference",  IssAnnotatorHighlighting.ISPP_REFERENCE_NAME),
         AttributesDescriptor("References//Unknown reference",      IssAnnotatorHighlighting.UNKNOWN_REFERENCE),
-        AttributesDescriptor("Preprocessor keyword",               IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD),
+        AttributesDescriptor("Preprocessor//Directive",            IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
+        AttributesDescriptor("Preprocessor//Define name",          IssAnnotatorHighlighting.DEFINE_NAME),
+        AttributesDescriptor("Preprocessor//Define type",          IssAnnotatorHighlighting.DEFINE_TYPE),
         AttributesDescriptor("Deprecated",                         IssAnnotatorHighlighting.DEPRECATED),
     )
 
@@ -35,11 +38,17 @@ class IssColorSettingsPage : ColorSettingsPage {
 
     override fun getDemoText() = """
         ; Inno Setup Script - demo
-        <pp>#define</pp> AppVersion "1.0"
+        <pp>#define</pp> <dname>AppVersion</dname> "1.0"
+        <pp>#define</pp> <dtype>int</dtype> <dname>BuildNumber</dname> 42
+        <pp>#define</pp> <dtype>str</dtype> <dname>Company</dname> "ACME"
+        <pp>#define</pp> <dtype>float</dtype> <dname>Ratio</dname> 1.5
+        <pp>#define</pp> <dname>Max</dname>(a, b) a > b ? a : b
+        <pp>#include</pp> "common.iss"
 
         [<sectionName>Setup</sectionName>]
         <paramKey>AppName</paramKey>=MyApplication
-        <paramKey>AppVersion</paramKey>={#AppVersion}
+        <paramKey>AppVersion</paramKey>={<pp>#</pp><ppref>AppVersion</ppref>}
+        <paramKey>VersionInfoVersion</paramKey>={<pp>#</pp><ppref>BuildNumber</ppref>}
         <paramKey>DefaultDirName</paramKey>=<ref>{autopf}</ref>\MyApp
 
         [<sectionName>Files</sectionName>]
@@ -54,6 +63,9 @@ class IssColorSettingsPage : ColorSettingsPage {
         "paramKey"    to IssAnnotatorHighlighting.PARAM_KEY,
         "ref"         to IssAnnotatorHighlighting.REFERENCE,
         "flag"        to IssAnnotatorHighlighting.FLAG,
-        "pp"          to IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD,
+        "pp"          to IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE,
+        "dname"       to IssAnnotatorHighlighting.DEFINE_NAME,
+        "dtype"       to IssAnnotatorHighlighting.DEFINE_TYPE,
+        "ppref"       to IssAnnotatorHighlighting.ISPP_REFERENCE_NAME,
     )
 }

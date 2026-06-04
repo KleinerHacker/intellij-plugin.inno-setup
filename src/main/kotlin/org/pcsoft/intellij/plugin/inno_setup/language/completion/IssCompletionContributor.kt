@@ -15,6 +15,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssPreprocessorDirectiveMixinImpl
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
@@ -55,6 +56,13 @@ class IssCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             IsppVariableAfterHashProvider
+        )
+        // Type qualifier completion in the first slot after "#define" (int/str/float/…).
+        // Self-guards on the current line text, so a broad pattern is fine here.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            IsppDefineTypeProvider
         )
         // Cross-section reference completion: Tasks: <name>, Components: <name>, etc.
         // ReferenceBasedCompletionContributor does not fire for ISS because the reference
@@ -228,6 +236,38 @@ private object SectionReferenceValueProvider : CompletionProvider<CompletionPara
             .flatMap { it.nameDeclarations() }
             .mapNotNull { it.valueUnquoted().ifEmpty { null } }
             .forEach { name -> result.addElement(LookupElementBuilder.create(name)) }
+    }
+}
+
+private object IsppDefineTypeProvider : CompletionProvider<CompletionParameters>() {
+    // Matches the line up to the caret when the cursor sits in the first token slot
+    // after "#define" (the optional type qualifier). Group 1 is the partially-typed word.
+    private val LINE_PATTERN = Regex("^\\s*#\\s*define\\s+([A-Za-z0-9_.\\-]*)$")
+
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val offset    = parameters.offset
+        val doc       = parameters.editor.document
+        val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
+        val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
+        val typed = LINE_PATTERN.find(linePrefix)?.groupValues?.get(1) ?: return
+
+        val adjusted = result.withPrefixMatcher(typed)
+        // Reuse the exact set recognized by validation/highlighting so they never drift apart.
+        IssPreprocessorDirectiveMixinImpl.TYPE_KEYWORDS.forEach { keyword ->
+            adjusted.addElement(
+                LookupElementBuilder.create(keyword)
+                    .withTypeText("type")
+                    .withIcon(IssIcons.Constant)
+                    .withInsertHandler { ctx, _ ->
+                        ctx.document.insertString(ctx.tailOffset, " ")
+                        ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
+                    }
+            )
+        }
     }
 }
 

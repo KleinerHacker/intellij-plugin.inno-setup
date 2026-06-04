@@ -209,9 +209,9 @@ class IssAnnotatorTest : BasePlatformTestCase() {
             configureByText(IssFileType.INSTANCE, text); file.text
         }
         val all = myFixture.doHighlighting()
-        val hit = all.any { it.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD &&
+        val hit = all.any { it.forcedTextAttributesKey == IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE &&
             fileText.substring(it.startOffset, it.endOffset) == "#include" }
-        assertTrue("'#include' directive must be highlighted with PREPROCESSOR_KEYWORD", hit)
+        assertTrue("'#include' directive must be highlighted with PREPROCESSOR_DIRECTIVE", hit)
     }
 
     // ── Reference type value ──────────────────────────────────────────────────
