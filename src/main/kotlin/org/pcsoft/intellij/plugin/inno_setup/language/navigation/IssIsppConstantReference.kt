@@ -8,7 +8,6 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssConstant
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx
@@ -40,10 +39,12 @@ class IssIsppConstantReference(constantBody: IssConstantBody, private val name: 
 
     override fun handleElementRename(newElementName: String): PsiElement {
         val oldId = element.node.findChildByType(IssTypes.IDENTIFIER)?.psi ?: return element
+        // Use a #define dummy so the parser starts in YYINITIAL and produces an IDENTIFIER node.
+        // A bare {#name} file would not parse in YYINITIAL context and would return null.
         val dummy = PsiFileFactory.getInstance(element.project)
-            .createFileFromText("dummy.iss", IssFileType.INSTANCE, "{#$newElementName}")
-        val newId = PsiTreeUtil.findChildOfType(dummy, IssConstant::class.java)
-            ?.constantBody?.node?.findChildByType(IssTypes.IDENTIFIER)?.psi ?: return element
+            .createFileFromText("dummy.iss", IssFileType.INSTANCE, "#define $newElementName\n")
+        val newId = PsiTreeUtil.findChildOfType(dummy, IssPreprocessorDirective::class.java)
+            ?.paramValue?.node?.findChildByType(IssTypes.IDENTIFIER)?.psi ?: return element
         oldId.replace(newId)
         return element
     }

@@ -94,4 +94,28 @@ class IssIsppReferenceTest : BasePlatformTestCase() {
         assertNotNull("Expected #define directive", define)
         assertEquals("MyConst", (define as IssPreprocessorDirectiveEx).getDefineName())
     }
+
+    // ── rename ───────────────────────────────────────────────────────────────
+
+    fun testRenameDefineUpdatesConstantReference() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define App<caret>Version \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#AppVersion}\"\n"
+        )
+        myFixture.renameElementAtCaret("NewVersion")
+        myFixture.checkResult(
+            "#define NewVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#NewVersion}\"\n"
+        )
+    }
+
+    fun testRenameDefineUpdatesMultipleReferences() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define App<caret>Name \"MyApp\"\n[Setup]\nAppName={#AppName}\nAppPublisher={#AppName}\n"
+        )
+        myFixture.renameElementAtCaret("ProductName")
+        myFixture.checkResult(
+            "#define ProductName \"MyApp\"\n[Setup]\nAppName={#ProductName}\nAppPublisher={#ProductName}\n"
+        )
+    }
 }

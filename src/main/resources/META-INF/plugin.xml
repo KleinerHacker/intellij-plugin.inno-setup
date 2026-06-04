@@ -41,6 +41,13 @@
         <lang.findUsagesProvider language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssFindUsagesProvider"/>
 
+        <!-- Refactoring: inline rename for #define constants -->
+        <lang.refactoringSupport language="ISS"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssRefactoringSupportProvider"/>
+
+        <!-- Rename: find {#Name} references when renaming a #define -->
+        <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssIsppReferencesSearcher"/>
+
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
             implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssReferenceContributor"/>
