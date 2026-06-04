@@ -9,6 +9,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.*
+import org.pcsoft.intellij.plugin.inno_setup.language.extractDefineValueFromLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
@@ -261,6 +262,43 @@ class IssAnnotator : Annotator {
         val keyword = directive.node.findChildByType(IssTypes.IDENTIFIER) ?: return
         val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
         highlight(keywordRange, IssAnnotatorHighlighting.PREPROCESSOR_KEYWORD, holder)
+
+        // Validate the value of typed defines: #define int/str/float Name Value
+        // The ISS lexer in YYINITIAL does not produce NUMBER or QUOTE tokens, so we read
+        // the value from the raw source line via extractDefineValueFromLine.
+        val ex = directive as? IssPreprocessorDirectiveEx ?: return
+        val typeName = ex.getDefineTypeName() ?: return
+        val name     = ex.getDefineName()     ?: return
+
+        val fileText = directive.containingFile.text
+        val rawVal   = extractDefineValueFromLine(fileText, directive.textOffset, typeName, name)
+            ?: return  // no value — nothing to validate
+
+        val valid = when (typeName.lowercase()) {
+            "int", "integer" -> rawVal.matches(Regex("-?[0-9]+"))
+            "float", "double" -> rawVal.matches(Regex("-?[0-9]*\\.?[0-9]+([eE][+-]?[0-9]+)?"))
+            "str", "string", "any" -> true
+            else -> true
+        }
+        if (!valid) {
+            // Locate the value text in the source line so the squiggle is precise.
+            val lineStart = fileText.lastIndexOf('\n', directive.textOffset).let { if (it < 0) 0 else it + 1 }
+            val valOffset = fileText.indexOf(rawVal, directive.textOffset)
+            val errorRange = if (valOffset in lineStart until directive.textRange.endOffset)
+                TextRange(valOffset, valOffset + rawVal.length)
+            else
+                directive.textRange
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Type '$typeName' requires a ${typeDescription(typeName)} value, got: '$rawVal'"
+            ).range(errorRange).create()
+        }
+    }
+
+    private fun typeDescription(typeName: String) = when (typeName.lowercase()) {
+        "int", "integer"   -> "integer"
+        "float", "double"  -> "numeric"
+        else               -> typeName
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
