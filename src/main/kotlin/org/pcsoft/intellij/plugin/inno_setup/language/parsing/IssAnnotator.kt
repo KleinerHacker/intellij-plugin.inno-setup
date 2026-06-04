@@ -9,7 +9,6 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.*
-import org.pcsoft.intellij.plugin.inno_setup.language.extractDefineValueFromLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
@@ -20,15 +19,14 @@ class IssAnnotator : Annotator {
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val spec = service<IssSpecService>().spec
         when (element) {
-            is IssFile                  -> annotateFile(element, holder, spec)
-            is IssSectionName           -> annotateSectionName(element, holder, spec)
-            is IssSection               -> annotateSection(element, holder, spec)
-            is IssParameterEntry        -> annotateParameterEntry(element, holder, spec)
-            is IssParamKey              -> annotateParamKey(element, holder, spec)
-            is IssDirectiveKey          -> annotateDirectiveKey(element, holder, spec)
-            is IssParamValue            -> annotateParamValue(element, holder, spec)
-            is IssConstant              -> annotateConstant(element, holder)
-            is IssPreprocessorDirective -> annotatePreprocessorDirective(element, holder)
+            is IssFile           -> annotateFile(element, holder, spec)
+            is IssSectionName    -> annotateSectionName(element, holder, spec)
+            is IssSection        -> annotateSection(element, holder, spec)
+            is IssParameterEntry -> annotateParameterEntry(element, holder, spec)
+            is IssParamKey       -> annotateParamKey(element, holder, spec)
+            is IssDirectiveKey   -> annotateDirectiveKey(element, holder, spec)
+            is IssParamValue     -> annotateParamValue(element, holder, spec)
+            is IssConstant       -> annotateConstant(element, holder)
         }
     }
 
@@ -247,7 +245,6 @@ class IssAnnotator : Annotator {
                 .textAttributes(IssAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         } else if (isIspp) {
-            // Color "#Name" of {#Name} blue; the name additionally italic. Braces stay neutral.
             body.node.findChildByType(IssTypes.HASH)?.let {
                 highlight(it.textRange, IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
             }
@@ -257,61 +254,6 @@ class IssAnnotator : Annotator {
         } else {
             highlight(constant.textRange, IssAnnotatorHighlighting.REFERENCE, holder)
         }
-    }
-
-    private fun annotatePreprocessorDirective(directive: IssPreprocessorDirective, holder: AnnotationHolder) {
-        val hash    = directive.node.findChildByType(IssTypes.HASH) ?: return
-        val keyword = directive.node.findChildByType(IssTypes.IDENTIFIER) ?: return
-        val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
-        highlight(keywordRange, IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
-
-        val ex = directive as? IssPreprocessorDirectiveEx ?: return
-
-        // For a #define: the type qualifier gets keyword styling, the name is always italic.
-        if (ex.isDefine()) {
-            ex.getDefineTypeIdentifier()?.let {
-                highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_TYPE, holder)
-            }
-            ex.getNameIdentifier()?.let {
-                highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_NAME, holder)
-            }
-        }
-
-        // Validate the value of typed defines: #define int/str/float Name Value
-        // The ISS lexer in YYINITIAL does not produce NUMBER or QUOTE tokens, so we read
-        // the value from the raw source line via extractDefineValueFromLine.
-        val typeName = ex.getDefineTypeName() ?: return
-        val name     = ex.getDefineName()     ?: return
-
-        val fileText = directive.containingFile.text
-        val rawVal   = extractDefineValueFromLine(fileText, directive.textOffset, typeName, name)
-            ?: return  // no value — nothing to validate
-
-        val valid = when (typeName.lowercase()) {
-            "int", "integer" -> rawVal.matches(Regex("-?[0-9]+"))
-            "float", "double" -> rawVal.matches(Regex("-?[0-9]*\\.?[0-9]+([eE][+-]?[0-9]+)?"))
-            "str", "string", "any" -> true
-            else -> true
-        }
-        if (!valid) {
-            // Locate the value text in the source line so the squiggle is precise.
-            val lineStart = fileText.lastIndexOf('\n', directive.textOffset).let { if (it < 0) 0 else it + 1 }
-            val valOffset = fileText.indexOf(rawVal, directive.textOffset)
-            val errorRange = if (valOffset in lineStart until directive.textRange.endOffset)
-                TextRange(valOffset, valOffset + rawVal.length)
-            else
-                directive.textRange
-            holder.newAnnotation(
-                HighlightSeverity.ERROR,
-                "Type '$typeName' requires a ${typeDescription(typeName)} value, got: '$rawVal'"
-            ).range(errorRange).create()
-        }
-    }
-
-    private fun typeDescription(typeName: String) = when (typeName.lowercase()) {
-        "int", "integer"   -> "integer"
-        "float", "double"  -> "numeric"
-        else               -> typeName
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =

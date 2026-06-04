@@ -33,7 +33,7 @@
         <annotator language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssAnnotator"/>
 
-        <!-- Error filter for [Code] and ISPP -->
+        <!-- Error filter for [Code] -->
         <highlightErrorFilter
             implementation="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssErrorFilter"/>
 
@@ -41,12 +41,45 @@
         <lang.findUsagesProvider language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssFindUsagesProvider"/>
 
-        <!-- Refactoring: inline rename for #define constants -->
+        <!-- Refactoring: inline rename for section Name: values -->
         <lang.refactoringSupport language="ISS"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssRefactoringSupportProvider"/>
 
-        <!-- Rename: find {#Name} references when renaming a #define -->
-        <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssIsppReferencesSearcher"/>
+        <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
+
+        <!-- ═══════════════════════════════ ISPP Language ═══════════════════════════════ -->
+
+        <!-- ISPP parser (injected language for #define, #include, etc.) -->
+        <lang.parserDefinition language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppParserDefinition"/>
+
+        <!-- ISPP syntax highlighting -->
+        <lang.syntaxHighlighterFactory language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppHighlighterFactory"/>
+
+        <!-- ISPP semantic annotator -->
+        <annotator language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppAnnotator"/>
+
+        <!-- ISPP completion (directive keywords, type qualifiers) -->
+        <completion.contributor language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.IsppCompletionContributor"/>
+
+        <!-- ISPP Find Usages -->
+        <lang.findUsagesProvider language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppFindUsagesProvider"/>
+
+        <!-- ISPP Refactoring: inline rename for #define constants -->
+        <lang.refactoringSupport language="ISPP"
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppRefactoringSupportProvider"/>
+
+        <!-- ISPP injector: injects ISPP language into IssIsppLine elements -->
+        <multiHostInjector
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.injection.IsppInjector"/>
+
+        <!-- Rename: find {#Name} references in ISS when renaming an ISPP #define -->
+        <referencesSearch
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppReferencesSearcher"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
         <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssSectionReferencesSearcher"/>

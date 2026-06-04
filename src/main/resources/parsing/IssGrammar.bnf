@@ -12,30 +12,31 @@
   tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTokenType"
 
   tokens=[
-    COMMENT     = "regexp:(;|//)[^\r\n]*"
-    LBRACKET    = "["
-    RBRACKET    = "]"
-    LBRACE      = "{"
-    RBRACE      = "}"
-    LPAREN      = "("
-    RPAREN      = ")"
-    EQ          = "="
-    COLON       = ":"
-    SEMICOLON   = ";"
-    HASH        = "#"
-    CRLF        = "regexp:\r?\n"
-    NUMBER      = "regexp:[0-9]+"
-    IDENTIFIER  = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
-    QUOTE       = "\""
-    STRING_PART = "regexp:[^\"{\r\n]+"
-    VALUE_CHAR  = "regexp:[^\r\n]"
+    COMMENT          = "regexp:(;|//)[^\r\n]*"
+    LBRACKET         = "["
+    RBRACKET         = "]"
+    LBRACE           = "{"
+    RBRACE           = "}"
+    LPAREN           = "("
+    RPAREN           = ")"
+    EQ               = "="
+    COLON            = ":"
+    SEMICOLON        = ";"
+    HASH             = "#"
+    PREPROCESSOR_LINE= "regexp:#[^\r\n]*"
+    CRLF             = "regexp:\r?\n"
+    NUMBER           = "regexp:[0-9]+"
+    IDENTIFIER       = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
+    QUOTE            = "\""
+    STRING_PART      = "regexp:[^\"{\r\n]+"
+    VALUE_CHAR       = "regexp:[^\r\n]"
   ]
 }
 
 issFile ::= item*
 
 private item ::= section
-               | preprocessorDirective
+               | isppLine
                | comment
                | CRLF
 
@@ -95,12 +96,9 @@ constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
 
 private comment ::= COMMENT
 
-// #define, #include, ...
-// pin=1 commits after "#"; recoverWhile is safe here because after a successful
-// preprocessorDirective the next token is always CRLF.
-preprocessorDirective ::= HASH IDENTIFIER paramValue? CRLF? {
-  pin=1
-  recoverWhile="recover_line"
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssPreprocessorDirectiveMixinImpl"
-  implements="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx"
+// Preprocessor line: the entire #... line is captured as a single opaque token.
+// The ISPP language is injected into this element by IsppInjector.
+isppLine ::= PREPROCESSOR_LINE {
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssIsppLineMixinImpl"
+  implements="com.intellij.psi.PsiLanguageInjectionHost"
 }

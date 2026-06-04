@@ -1,13 +1,16 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parsing
 
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssIsppLine
 
 /**
  * Tests for all supported forms of #define, covering:
@@ -18,31 +21,32 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocesso
  *   - completion (name appears in {#} popup)
  *   - rename (name + all {#Name} usages updated)
  *   - annotator type validation for typed defines
- *
- * Supported forms
- *   1. #define Name                  (name only)
- *   2. #define Name Value            (simple value)
- *   3. #define Name "Quoted String"  (quoted value)
- *   4. #define Name Multi Word Val   (multi-word value)
- *   5. #define Name(a,b) body        (function-like macro)
- *   6. #define Name()                (macro, no params, no body)
- *   7. #define int  Name 42          (typed: integer)
- *   8. #define str  Name "hello"     (typed: string)
- *   9. #define float Name 3.14       (typed: float)
  */
 class IssPreprocessorDefineTest : BasePlatformTestCase() {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 
     private fun setup(content: String): IssFile {
-        myFixture.configureByText(IssFileType.INSTANCE, content)
-        return myFixture.file as IssFile
+        val file = myFixture.configureByText(IssFileType.INSTANCE, content)
+        if (file is IssFile) return file
+        return InjectedLanguageManager
+            .getInstance(project).getTopLevelFile(file) as IssFile
     }
 
-    private fun IssFile.firstDefine(): IssPreprocessorDirectiveEx? =
-        PsiTreeUtil.findChildrenOfType(this, IssPreprocessorDirective::class.java)
-            .firstOrNull { (it as? IssPreprocessorDirectiveEx)?.isDefine() == true }
-            ?.let { it as? IssPreprocessorDirectiveEx }
+    private fun IssFile.firstDefine(): IsppDirectiveEx? {
+        val mgr = InjectedLanguageManager.getInstance(project)
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, IssIsppLine::class.java)
+            .flatMap { line ->
+                val dirs = mutableListOf<IsppDirective>()
+                mgr.enumerate(line) { injectedPsi, _ ->
+                    if (injectedPsi is IsppFile)
+                        dirs.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java))
+                }
+                dirs
+            }
+            .firstOrNull { (it as? IsppDirectiveEx)?.isDefine() == true }
+            ?.let { it as? IsppDirectiveEx }
+    }
 
     // ═══════════════════════════════════════════════════════════════════════════
     // 1.  Name extraction — getDefineName()
@@ -188,8 +192,15 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
 
     private fun resolveAt(content: String): String? {
         myFixture.configureByText(IssFileType.INSTANCE, content)
-        val ref = myFixture.file.findReferenceAt(myFixture.caretOffset) ?: return null
-        return (ref.resolve() as? IssPreprocessorDirectiveEx)?.getDefineName()
+        // The caret is in {#Name} context (not in a preprocessor line), so
+        // myFixture.file should be the IssFile here.
+        val issFile = run {
+            val f = myFixture.file
+            if (f is IssFile) f
+            else InjectedLanguageManager.getInstance(project).getTopLevelFile(f) as IssFile
+        }
+        val ref = issFile.findReferenceAt(myFixture.caretOffset) ?: return null
+        return (ref.resolve() as? IsppDirectiveEx)?.getDefineName()
     }
 
     fun testSimpleDefineResolvesFromReference() {

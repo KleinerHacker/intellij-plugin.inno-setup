@@ -31,18 +31,18 @@ VALUE_CHAR = [^\r\n{};:=\"()#\t ]
 %%
 
 <YYINITIAL> {
-    {COMMENT}    { return IssTypes.COMMENT; }
-    "["          { return IssTypes.LBRACKET; }
-    "]"          { return IssTypes.RBRACKET; }
-    "("          { return IssTypes.LPAREN; }
-    ")"          { return IssTypes.RPAREN; }
-    "#"          { return IssTypes.HASH; }
-    {IDENTIFIER} { return IssTypes.IDENTIFIER; }
-    "="          { yybegin(VALUE); return IssTypes.EQ; }
-    ":"          { yybegin(VALUE); return IssTypes.COLON; }
-    {NEWLINE}    { return IssTypes.CRLF; }
-    {WHITESPACE} { return TokenType.WHITE_SPACE; }
-    [^]          { return TokenType.BAD_CHARACTER; }
+    {COMMENT}           { return IssTypes.COMMENT; }
+    "["                 { return IssTypes.LBRACKET; }
+    "]"                 { return IssTypes.RBRACKET; }
+    "("                 { return IssTypes.LPAREN; }
+    ")"                 { return IssTypes.RPAREN; }
+    "#" [^\r\n]*        { return IssTypes.PREPROCESSOR_LINE; }
+    {IDENTIFIER}        { return IssTypes.IDENTIFIER; }
+    "="                 { yybegin(VALUE); return IssTypes.EQ; }
+    ":"                 { yybegin(VALUE); return IssTypes.COLON; }
+    {NEWLINE}           { return IssTypes.CRLF; }
+    {WHITESPACE}        { return TokenType.WHITE_SPACE; }
+    [^]                 { return TokenType.BAD_CHARACTER; }
 }
 
 <VALUE> {

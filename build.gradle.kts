@@ -18,6 +18,7 @@ val parsingRoot = "src/main/resources/parsing"
 
 val rootPackage = "org/pcsoft/intellij/plugin/inno_setup"
 val languagePackage = "$rootPackage/language"
+val isppLanguagePackage = "$languagePackage/ispp"
 
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
@@ -166,16 +167,30 @@ tasks {
         purgeOldFiles.set(true)
     }
 
+    register<GenerateParserTask>("generateIsppParser") {
+        sourceFile.set(file("$parsingRoot/IsppGrammar.bnf"))
+        targetRootOutputDir.set(file(generatedRoot))
+        pathToParser.set("$isppLanguagePackage/parsing/parser/IsppParser.java")
+        pathToPsiRoot.set("$isppLanguagePackage/parsing/psi")
+        purgeOldFiles.set(true)
+    }
+
+    register<GenerateLexerTask>("generateIsppLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsppLexer.flex"))
+        targetOutputDir.set(file("$generatedRoot/$isppLanguagePackage/parsing"))
+        purgeOldFiles.set(true)
+    }
+
     sourceSets.main {
         java.srcDir(generatedRoot)
     }
 
     compileJava {
-        dependsOn("generateIssParser", "generateIssLexer")
+        dependsOn("generateIssParser", "generateIssLexer", "generateIsppParser", "generateIsppLexer")
     }
 
     compileKotlin {
-        dependsOn("generateIssParser", "generateIssLexer")
+        dependsOn("generateIssParser", "generateIssLexer", "generateIsppParser", "generateIsppLexer")
     }
 //endregion
 }

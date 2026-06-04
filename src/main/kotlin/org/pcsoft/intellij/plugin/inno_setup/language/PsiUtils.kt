@@ -1,9 +1,13 @@
 package org.pcsoft.intellij.plugin.inno_setup.language
 
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
@@ -22,20 +26,28 @@ fun IssFile.findSections(name: String): List<IssSection> =
 
 fun IssFile.firstSection(): IssSection? = sections().firstOrNull()
 
-fun IssFile.definedConstants(): List<Pair<String, String?>> {
-    val fileText = text
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IssPreprocessorDirective::class.java)
-        .filter { d -> d.identifier?.text?.equals("define", ignoreCase = true) == true }
-        .mapNotNull { directive ->
-            val ex = directive as? IssPreprocessorDirectiveEx ?: return@mapNotNull null
-            val name = ex.getDefineName()?.ifEmpty { null } ?: return@mapNotNull null
-            // The ISS lexer in YYINITIAL only produces IDENTIFIER tokens, not NUMBER or QUOTE.
-            // So #define values that contain numbers or quoted strings are not captured by paramValue
-            // tokens. We read the value from the raw source line instead.
-            val rawVal = extractDefineValueFromLine(fileText, directive.textOffset, ex.getDefineTypeName(), name)
-            name to rawVal
+fun IssFile.isppDirectives(): List<IsppDirective> {
+    val mgr = InjectedLanguageManager.getInstance(project)
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IssIsppLine::class.java)
+        .flatMap { line ->
+            val result = mutableListOf<IsppDirective>()
+            mgr.enumerate(line) { injectedPsi, _ ->
+                if (injectedPsi is IsppFile) {
+                    result.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java))
+                }
+            }
+            result
         }
 }
+
+fun IssFile.definedConstants(): List<Pair<String, String?>> =
+    isppDirectives()
+        .filter { (it as? IsppDirectiveEx)?.isDefine() == true }
+        .mapNotNull { directive ->
+            val ex = directive as? IsppDirectiveEx ?: return@mapNotNull null
+            val name = ex.getDefineName()?.ifEmpty { null } ?: return@mapNotNull null
+            name to ex.getDefineValue()
+        }
 
 // ── IssSection ───────────────────────────────────────────────────────────────
 
@@ -133,36 +145,3 @@ fun PsiElement.containingDirectiveEntry(): IssDirectiveEntry? =
 fun PsiElement.isInCodeSection(): Boolean =
     containingSection()?.nameText()?.equals("Code", ignoreCase = true) == true
 
-/**
- * Extracts the value part of a `#define [type] name value` directive from the raw line text.
- *
- * The ISS lexer in YYINITIAL only produces IDENTIFIER tokens, so NUMBER and QUOTE tokens are
- * not emitted there — paramValue cannot capture numeric or quoted values directly.
- * Reading from the source line avoids this limitation.
- */
-internal fun extractDefineValueFromLine(
-    fileText: String,
-    directiveOffset: Int,
-    typeName: String?,
-    name: String,
-): String? {
-    val lineStart = fileText.lastIndexOf('\n', directiveOffset).let { if (it < 0) 0 else it + 1 }
-    val lineEnd   = fileText.indexOf('\n', directiveOffset).let { if (it < 0) fileText.length else it }
-    val lineText  = fileText.substring(lineStart, lineEnd).trim()
-
-    // Strip "#define"
-    val afterDefine = lineText.removePrefix("#").trimStart().let { rest ->
-        if (rest.startsWith("define", ignoreCase = true)) rest.substring("define".length).trimStart()
-        else return null
-    }
-    // Skip optional type qualifier
-    val afterType = if (typeName != null) afterDefine.removePrefix(typeName).trimStart() else afterDefine
-    // Skip name
-    val afterName = afterType.removePrefix(name).trimStart()
-
-    return when {
-        afterName.startsWith('(') -> null   // function-like macro body
-        afterName.isEmpty()       -> null
-        else -> afterName.removeSurrounding("\"").ifEmpty { null }
-    }
-}
