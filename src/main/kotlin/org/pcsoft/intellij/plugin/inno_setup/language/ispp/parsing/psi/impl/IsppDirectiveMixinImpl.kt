@@ -5,7 +5,9 @@ import com.intellij.lang.ASTNode
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
@@ -13,56 +15,93 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
 abstract class IsppDirectiveMixinImpl(node: ASTNode)
     : ASTWrapperPsiElement(node), IsppDirectiveEx {
 
-    companion object {
-        val TYPE_KEYWORDS = setOf("int", "integer", "str", "string", "float", "double", "any")
-    }
-
     private fun valueIdentifiers(): Array<ASTNode> =
         (this as IsppDirective).value
             ?.node?.getChildren(TokenSet.create(IsppTypes.IDENTIFIER))
             ?: emptyArray()
 
-    private fun hasTypePrefix(): Boolean {
-        val ids = valueIdentifiers()
-        return ids.size >= 2 && ids[0].text.lowercase() in TYPE_KEYWORDS
+    private fun nameNode(): ASTNode? = valueIdentifiers().firstOrNull()
+
+    /** Raw text of the value node that follows the name identifier (no trimming, quotes kept). */
+    private fun rawAfterName(): String? {
+        val value = (this as IsppDirective).value ?: return null
+        val name  = nameNode() ?: return null
+        val start = name.startOffset - value.textRange.startOffset + name.textLength
+        return value.text.substring(start)
     }
 
     override fun isDefine(): Boolean =
         (this as IsppDirective).identifier?.text?.equals("define", ignoreCase = true) == true
 
-    override fun getDefineTypeName(): String? {
-        if (!isDefine()) return null
-        val ids = valueIdentifiers()
-        if (ids.size < 2) return null
-        val first = ids[0].text
-        return if (first.lowercase() in TYPE_KEYWORDS) first else null
-    }
-
     override fun getDefineName(): String? {
         if (!isDefine()) return null
-        val ids = valueIdentifiers()
-        if (ids.isEmpty()) return null
-        return if (hasTypePrefix()) ids[1].text else ids[0].text
+        return nameNode()?.text
     }
 
-    override fun getDefineTypeIdentifier(): PsiElement? {
-        if (!isDefine() || !hasTypePrefix()) return null
-        return valueIdentifiers().firstOrNull()?.psi
+    override fun isFunctionMacro(): Boolean {
+        if (!isDefine()) return false
+        // The parameter list opens immediately after the name, with no whitespace in between.
+        return rawAfterName()?.startsWith("(") == true
     }
 
     override fun getDefineValue(): String? {
         if (!isDefine()) return null
-        val valueNode = (this as IsppDirective).value ?: return null
-        val ids = valueIdentifiers()
-        val nameNode = (if (hasTypePrefix()) ids.getOrNull(1) else ids.getOrNull(0))
-            ?: return null
+        val after = rawAfterName() ?: return null
+        if (after.startsWith("(")) return null  // function-like macro: no simple constant value
+        val expr = after.trim()
+        if (expr.isEmpty()) return null
+        return expr.removeSurrounding("\"").ifEmpty { null }
+    }
 
-        val nameEndInValue = nameNode.startOffset - valueNode.textRange.startOffset + nameNode.textLength
-        val rawAfterName = valueNode.text.substring(nameEndInValue).trimStart()
+    override fun getMacroBody(): String? {
+        if (!isFunctionMacro()) return null
+        val after = rawAfterName() ?: return null
+        val close = matchingParen(after) ?: return null
+        return after.substring(close + 1).trim().ifEmpty { null }
+    }
 
-        if (rawAfterName.isEmpty()) return null
-        if (rawAfterName.startsWith('(')) return null  // function-like macro
-        return rawAfterName.removeSurrounding("\"").ifEmpty { null }
+    /** Index of the `)` matching the `(` at index 0, or `null` if unbalanced. */
+    private fun matchingParen(text: String): Int? {
+        var depth = 0
+        for (i in text.indices) {
+            when (text[i]) {
+                '(' -> depth++
+                ')' -> { depth--; if (depth == 0) return i }
+            }
+        }
+        return null
+    }
+
+    /** The names declared as macro parameters (e.g. `a`, `b` in `name(a,b)`) — these are local, not references. */
+    private fun macroParameterNames(): Set<String> {
+        if (!isFunctionMacro()) return emptySet()
+        val after = rawAfterName() ?: return emptySet()
+        val close = matchingParen(after) ?: return emptySet()
+        return after.substring(1, close)        // text between '(' and ')'
+            .split(',')
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .toSet()
+    }
+
+    /** The identifier tokens in the value that act as references to other #defines (free text). */
+    private fun expressionReferenceIdentifiers(): List<ASTNode> {
+        if (!isDefine()) return emptyList()
+        val name = nameNode() ?: return emptyList()
+        val params = macroParameterNames()
+        return valueIdentifiers()
+            .filter { it !== name }          // not the define's own name
+            .filter { it.text !in params }   // not a macro parameter (declaration or use)
+    }
+
+    override fun getReferences(): Array<PsiReference> {
+        val ids = expressionReferenceIdentifiers()
+        if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
+        val directive = this as IsppDirective
+        val base = directive.textRange.startOffset
+        return ids.map { id ->
+            IsppExpressionReference(directive, id.startOffset - base, id.text)
+        }.toTypedArray()
     }
 
     // ── PsiNameIdentifierOwner ────────────────────────────────────────────────
@@ -85,9 +124,7 @@ abstract class IsppDirectiveMixinImpl(node: ASTNode)
 
     override fun getNameIdentifier(): PsiElement? {
         if (!isDefine()) return null
-        val ids = valueIdentifiers()
-        if (ids.isEmpty()) return null
-        return if (hasTypePrefix()) ids[1].psi else ids[0].psi
+        return nameNode()?.psi
     }
 
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()

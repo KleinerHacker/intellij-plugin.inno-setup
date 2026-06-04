@@ -26,7 +26,6 @@ class IssColorSettingsPage : ColorSettingsPage {
         AttributesDescriptor("References//Unknown reference",      IssAnnotatorHighlighting.UNKNOWN_REFERENCE),
         AttributesDescriptor("Preprocessor//Directive",            IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
         AttributesDescriptor("Preprocessor//Define name",          IssAnnotatorHighlighting.DEFINE_NAME),
-        AttributesDescriptor("Preprocessor//Define type",          IssAnnotatorHighlighting.DEFINE_TYPE),
         AttributesDescriptor("Deprecated",                         IssAnnotatorHighlighting.DEPRECATED),
     )
 
@@ -39,9 +38,8 @@ class IssColorSettingsPage : ColorSettingsPage {
     override fun getDemoText() = """
         ; Inno Setup Script - demo
         <pp>#define</pp> <dname>AppVersion</dname> "1.0"
-        <pp>#define</pp> <dtype>int</dtype> <dname>BuildNumber</dname> 42
-        <pp>#define</pp> <dtype>str</dtype> <dname>Company</dname> "ACME"
-        <pp>#define</pp> <dtype>float</dtype> <dname>Ratio</dname> 1.5
+        <pp>#define</pp> <dname>BuildNumber</dname> 42
+        <pp>#define</pp> <dname>NextBuild</dname> BuildNumber + 1
         <pp>#define</pp> <dname>Max</dname>(a, b) a > b ? a : b
         <pp>#include</pp> "common.iss"
 
@@ -65,7 +63,6 @@ class IssColorSettingsPage : ColorSettingsPage {
         "flag"        to IssAnnotatorHighlighting.FLAG,
         "pp"          to IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE,
         "dname"       to IssAnnotatorHighlighting.DEFINE_NAME,
-        "dtype"       to IssAnnotatorHighlighting.DEFINE_TYPE,
         "ppref"       to IssAnnotatorHighlighting.ISPP_REFERENCE_NAME,
     )
 }

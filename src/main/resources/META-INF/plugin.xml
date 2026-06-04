@@ -5,16 +5,13 @@
     <description><![CDATA[
         Inno Setup plugin for all JetBrains IDEs, providing support for the Inno Setup scripting language.
         ]]></description>
+    <version>1.0.0</version>
+    <vendor>KleinerHacker alias Pfeiffer C Soft</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="plugin-kotlin.xml">org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Services -->
-        <applicationService serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService"/>
-        <applicationService serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService"/>
-        <applicationService serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService"/>
-
         <!-- File type -->
         <fileType name="Inno Setup Script"
                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.IssFileType"
@@ -61,7 +58,7 @@
         <annotator language="ISPP"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppAnnotator"/>
 
-        <!-- ISPP completion (directive keywords, type qualifiers) -->
+        <!-- ISPP completion (directive keywords, #define expression references) -->
         <completion.contributor language="ISPP"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.IsppCompletionContributor"/>
 

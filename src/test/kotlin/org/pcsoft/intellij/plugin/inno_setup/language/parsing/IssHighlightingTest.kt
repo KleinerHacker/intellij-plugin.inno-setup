@@ -99,19 +99,6 @@ class IssHighlightingTest : BasePlatformTestCase() {
         )
     }
 
-    fun testTypedDefineTypeHighlightedAsDefineType() {
-        val text = "#define int BuildNumber 42\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
-        val all = highlights(text)
-        val typeOffset = text.indexOf("int")
-        val hit = all.firstOrNull { info ->
-            info.forcedTextAttributesKey == IssAnnotatorHighlighting.DEFINE_TYPE &&
-            info.startOffset == typeOffset && info.endOffset == typeOffset + "int".length
-        }
-        assertNotNull(
-            "The type qualifier 'int' of a typed #define must be highlighted with DEFINE_TYPE (keyword)", hit
-        )
-    }
-
     // ── Section name ──────────────────────────────────────────────────────────
 
     fun testKnownSectionNameHighlightedAsSectionName() {

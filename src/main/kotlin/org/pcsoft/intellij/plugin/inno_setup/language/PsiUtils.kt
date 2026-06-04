@@ -40,6 +40,26 @@ fun IssFile.isppDirectives(): List<IsppDirective> {
         }
 }
 
+/**
+ * All ISPP directives paired with the host-file offset of the line they live on.
+ * Because each `#define` line is injected as its own fragment, the host offset (the start of the
+ * containing [IssIsppLine], a direct child of this file) is the authority for declaration order.
+ */
+fun IssFile.isppDirectivesWithHostOffset(): List<Pair<IsppDirective, Int>> {
+    val mgr = InjectedLanguageManager.getInstance(project)
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IssIsppLine::class.java)
+        .flatMap { line ->
+            val result = mutableListOf<Pair<IsppDirective, Int>>()
+            mgr.enumerate(line) { injectedPsi, _ ->
+                if (injectedPsi is IsppFile) {
+                    PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java)
+                        .forEach { result.add(it to line.textRange.startOffset) }
+                }
+            }
+            result
+        }
+}
+
 fun IssFile.definedConstants(): List<Pair<String, String?>> =
     isppDirectives()
         .filter { (it as? IsppDirectiveEx)?.isDefine() == true }

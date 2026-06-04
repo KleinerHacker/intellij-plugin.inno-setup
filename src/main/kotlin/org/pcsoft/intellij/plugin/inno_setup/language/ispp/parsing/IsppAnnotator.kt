@@ -26,41 +26,17 @@ class IsppAnnotator : Annotator {
         val ex = directive as? IsppDirectiveEx ?: return
         if (!ex.isDefine()) return
 
-        ex.getDefineTypeIdentifier()?.let {
-            highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_TYPE, holder)
-        }
         ex.getNameIdentifier()?.let {
             highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_NAME, holder)
         }
 
-        // Validate typed define values
-        val typeName = ex.getDefineTypeName() ?: return
-        val rawVal   = ex.getDefineValue()    ?: return
-        val valid = when (typeName.lowercase()) {
-            "int", "integer"        -> rawVal.matches(Regex("-?[0-9]+"))
-            "float", "double"       -> rawVal.matches(Regex("-?[0-9]*\\.?[0-9]+([eE][+-]?[0-9]+)?"))
-            "str", "string", "any"  -> true
-            else                    -> true
-        }
-        if (!valid) {
-            val fileText   = directive.containingFile.text
-            val valOffset  = fileText.indexOf(rawVal, directive.textOffset)
-            val errorRange = if (valOffset >= directive.textOffset &&
-                                 valOffset < directive.textRange.endOffset)
-                TextRange(valOffset, valOffset + rawVal.length)
-            else
-                directive.textRange
+        // A function-like macro (#define Name(a,b) …) must have an expression body.
+        if (ex.isFunctionMacro() && ex.getMacroBody() == null) {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
-                "Type '$typeName' requires a ${typeDescription(typeName)} value, got: '$rawVal'"
-            ).range(errorRange).create()
+                "Function-like macro '${ex.getDefineName().orEmpty()}' requires an expression"
+            ).range(directive.textRange).create()
         }
-    }
-
-    private fun typeDescription(t: String) = when (t.lowercase()) {
-        "int", "integer"  -> "integer"
-        "float", "double" -> "numeric"
-        else -> t
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =

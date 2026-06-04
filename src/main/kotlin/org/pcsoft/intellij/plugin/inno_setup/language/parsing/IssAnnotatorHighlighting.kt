@@ -22,9 +22,6 @@ object IssAnnotatorHighlighting {
     /** The defined name in a `#define` declaration — always italic. */
     val DEFINE_NAME: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_DEFINE_NAME")
-    /** The optional type qualifier (`int`/`str`/`float`/…) in a typed `#define` — keyword styling. */
-    val DEFINE_TYPE: TextAttributesKey =
-        TextAttributesKey.createTextAttributesKey("ISS_DEFINE_TYPE", DefaultLanguageHighlighterColors.KEYWORD)
 
     val UNKNOWN_REFERENCE: TextAttributesKey    = CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES
     val DEPRECATED: TextAttributesKey           = CodeInsightColors.DEPRECATED_ATTRIBUTES

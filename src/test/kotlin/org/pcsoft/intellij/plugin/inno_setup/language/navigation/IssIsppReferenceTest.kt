@@ -1,6 +1,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.navigation
 
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
@@ -129,6 +130,65 @@ class IssIsppReferenceTest : BasePlatformTestCase() {
         myFixture.renameElementAtCaret("ProductName")
         myFixture.checkResult(
             "#define ProductName \"MyApp\"\n[Setup]\nAppName={#ProductName}\nAppPublisher={#ProductName}\n"
+        )
+    }
+
+    // ── #define expression references (free text → other #define) ─────────────
+
+    fun testExpressionReferenceResolvesToEarlierDefine() {
+        val file = setup("#define Base 10\n#define Total Base\n")
+        val total = findDefine(file, "Total")!!
+        val ref = total.references.firstOrNull { it.canonicalText == "Base" }
+        assertNotNull("Expected an expression reference 'Base' on #define Total", ref)
+        assertEquals("Base", (ref!!.resolve() as? IsppDirectiveEx)?.getDefineName())
+    }
+
+    fun testForwardExpressionReferenceDoesNotResolve() {
+        // Base is defined *after* Total → must not resolve (declaration order enforced).
+        val file = setup("#define Total Base\n#define Base 10\n")
+        val total = findDefine(file, "Total")!!
+        val ref = total.references.firstOrNull { it.canonicalText == "Base" }
+        assertNotNull("Expected an expression reference 'Base' on #define Total", ref)
+        assertNull("A forward reference must not resolve", ref!!.resolve())
+    }
+
+    fun testNumbersAndStringsAreNotExpressionReferences() {
+        val file = setup("#define B 1 + \"x\"\n")
+        val b = findDefine(file, "B")!!
+        assertTrue("Numbers and strings must not create references", b.references.isEmpty())
+    }
+
+    fun testMacroParametersAreNotExpressionReferences() {
+        val file = setup("#define Max(a, b) a > b ? a : b\n")
+        val max = findDefine(file, "Max")!!
+        val texts = max.references.map { it.canonicalText }
+        assertEquals("Macro parameters must not create references", emptyList<String>(), texts)
+    }
+
+    fun testMacroBodyReferencesOtherDefineButNotParams() {
+        val file = setup("#define K 5\n#define F(x) x + K\n")
+        val f = findDefine(file, "F")!!
+        val texts = f.references.map { it.canonicalText }.toSet()
+        assertEquals("Only the real define 'K' is a reference, not the parameter 'x'", setOf("K"), texts)
+        assertEquals("K", (f.references.first().resolve() as? IsppDirectiveEx)?.getDefineName())
+    }
+
+    fun testReferencesSearchFindsExpressionUsage() {
+        val file = setup("#define A 1\n#define B A + 2\n")
+        val a = findDefine(file, "A")!!
+        val refs = ReferencesSearch.search(a).findAll()
+        assertTrue("Find Usages must include the expression usage of A inside B",
+            refs.any { it.canonicalText == "A" })
+    }
+
+    fun testRenameDefineUpdatesExpressionReference() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define A<caret> 1\n#define B A + 2\n[Setup]\nX={#B}\n"
+        )
+        myFixture.renameElementAtCaret("C")
+        myFixture.checkResult(
+            "#define C 1\n#define B C + 2\n[Setup]\nX={#B}\n"
         )
     }
 }

@@ -15,12 +15,11 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssIsppLine
 /**
  * Tests for all supported forms of #define, covering:
  *   - name extraction  (getDefineName)
- *   - type extraction  (getDefineTypeName)
  *   - value extraction (definedConstants)
  *   - reference resolution & annotator (no "Unknown constant" error)
- *   - completion (name appears in {#} popup)
+ *   - completion (name appears in {#} popup; preceding defines in expressions)
  *   - rename (name + all {#Name} usages updated)
- *   - annotator type validation for typed defines
+ *   - annotator validation: function-like macros require an expression
  */
 class IssPreprocessorDefineTest : BasePlatformTestCase() {
 
@@ -82,48 +81,9 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
         assertEquals("Counter", file.firstDefine()?.getDefineName())
     }
 
-    fun testGetDefineNameTypedInt() {
-        val file = setup("#define int MyInt 42\n")
-        assertEquals("MyInt", file.firstDefine()?.getDefineName())
-    }
-
-    fun testGetDefineNameTypedStr() {
-        val file = setup("#define str MyStr \"hello\"\n")
-        assertEquals("MyStr", file.firstDefine()?.getDefineName())
-    }
-
-    fun testGetDefineNameTypedFloat() {
-        val file = setup("#define float MyPi 3.14\n")
-        assertEquals("MyPi", file.firstDefine()?.getDefineName())
-    }
-
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 2.  Type extraction — getDefineTypeName()
-    // ═══════════════════════════════════════════════════════════════════════════
-
-    fun testGetDefineTypeNameSimple() {
-        val file = setup("#define MyConst 42\n")
-        assertNull("Simple define must not have a type", file.firstDefine()?.getDefineTypeName())
-    }
-
-    fun testGetDefineTypeNameMacro() {
-        val file = setup("#define Max(a,b) body\n")
-        assertNull("Function-like macro must not have a type", file.firstDefine()?.getDefineTypeName())
-    }
-
-    fun testGetDefineTypeNameInt() {
-        val file = setup("#define int MyInt 0\n")
-        assertEquals("int", file.firstDefine()?.getDefineTypeName())
-    }
-
-    fun testGetDefineTypeNameStr() {
-        val file = setup("#define str MyStr \"x\"\n")
-        assertEquals("str", file.firstDefine()?.getDefineTypeName())
-    }
-
-    fun testGetDefineTypeNameFloat() {
-        val file = setup("#define float MyFloat 1.0\n")
-        assertEquals("float", file.firstDefine()?.getDefineTypeName())
+    fun testGetDefineNameFunctionMacroSingleParam() {
+        val file = setup("#define Square(x) x * x\n")
+        assertEquals("Square", file.firstDefine()?.getDefineName())
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -171,19 +131,19 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
         assertNull(pair.second)
     }
 
-    fun testValueTypedIntExtracted() {
-        val file = setup("#define int MyInt 42\n")
+    fun testValueIntegerExpression() {
+        val file = setup("#define MyInt 42\n")
         assertEquals("42", file.constantValue("MyInt"))
     }
 
-    fun testValueTypedStrExtracted() {
-        val file = setup("#define str MyStr \"hello\"\n")
-        assertEquals("hello", file.constantValue("MyStr"))
+    fun testValueArithmeticExpression() {
+        val file = setup("#define MyCalc 10 + 5 * 2\n")
+        assertEquals("10 + 5 * 2", file.constantValue("MyCalc"))
     }
 
-    fun testValueTypedFloatExtracted() {
-        val file = setup("#define float MyFloat 3.14\n")
-        assertEquals("3.14", file.constantValue("MyFloat"))
+    fun testValueReferenceExpression() {
+        val file = setup("#define Base 10\n#define Total Base + 5\n")
+        assertEquals("Base + 5", file.constantValue("Total"))
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -213,13 +173,13 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
         assertEquals("Max", name)
     }
 
-    fun testTypedIntDefineResolvesFromReference() {
-        val name = resolveAt("#define int MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyI<caret>nt}\"\n")
+    fun testIntDefineResolvesFromReference() {
+        val name = resolveAt("#define MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyI<caret>nt}\"\n")
         assertEquals("MyInt", name)
     }
 
-    fun testTypedStrDefineResolvesFromReference() {
-        val name = resolveAt("#define str MyStr \"hi\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MySt<caret>r}\"\n")
+    fun testStrDefineResolvesFromReference() {
+        val name = resolveAt("#define MyStr \"hi\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MySt<caret>r}\"\n")
         assertEquals("MyStr", name)
     }
 
@@ -245,9 +205,9 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
             "#define Max(a,b) body\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Max}\"\n"))
     }
 
-    fun testTypedIntDefineNoAnnotatorError() {
+    fun testExpressionDefineNoAnnotatorError() {
         assertFalse(hasUnknownConstantError(
-            "#define int MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyInt}\"\n"))
+            "#define MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyInt}\"\n"))
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -271,13 +231,24 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
         assertTrue("Macro name must appear in {#} completion", "Min" in variants)
     }
 
-    fun testTypedDefineAppearsInCompletion() {
+    fun testExpressionDefineAppearsInCompletion() {
         myFixture.configureByText(IssFileType.INSTANCE,
-            "#define int MyVersion 1\n#define str MyTitle \"T\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n")
+            "#define MyVersion 1\n#define MyTitle \"T\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n")
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
-        assertTrue("Typed int define must appear in {#} completion", "MyVersion" in variants)
-        assertTrue("Typed str define must appear in {#} completion", "MyTitle" in variants)
+        assertTrue("Integer define must appear in {#} completion", "MyVersion" in variants)
+        assertTrue("String define must appear in {#} completion", "MyTitle" in variants)
+    }
+
+    fun testExpressionCompletionOffersOnlyPrecedingDefines() {
+        myFixture.configureByText(IssFileType.INSTANCE,
+            "#define Alpha 1\n#define Beta 2\n#define Gamma <caret>\n#define Delta 4\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertTrue("Preceding define Alpha must be offered", "Alpha" in variants)
+        assertTrue("Preceding define Beta must be offered", "Beta" in variants)
+        assertFalse("The current define Gamma must not be offered", "Gamma" in variants)
+        assertFalse("A later define Delta must not be offered", "Delta" in variants)
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -300,68 +271,48 @@ class IssPreprocessorDefineTest : BasePlatformTestCase() {
             "#define Biggest(a,b) ((a)>(b)?(a):(b))\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Biggest}\"\n")
     }
 
-    fun testRenameTypedIntDefine() {
+    fun testRenameIntDefine() {
         myFixture.configureByText(IssFileType.INSTANCE,
-            "#define int MyI<caret>nt 42\n[Setup]\nAppVersion={#MyInt}\n")
+            "#define MyI<caret>nt 42\n[Setup]\nAppVersion={#MyInt}\n")
         myFixture.renameElementAtCaret("MyNumber")
         myFixture.checkResult(
-            "#define int MyNumber 42\n[Setup]\nAppVersion={#MyNumber}\n")
+            "#define MyNumber 42\n[Setup]\nAppVersion={#MyNumber}\n")
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
-    // 8.  Annotator — type validation for typed defines
+    // 8.  Annotator — function-like macros require an expression
     // ═══════════════════════════════════════════════════════════════════════════
 
-    private fun hasTypeError(content: String): Boolean {
+    private fun hasExpressionRequiredError(content: String): Boolean {
         myFixture.configureByText(IssFileType.INSTANCE, content)
         return myFixture.doHighlighting().any {
             it.severity == HighlightSeverity.ERROR &&
-            it.description?.contains("requires", ignoreCase = true) == true
+            it.description?.contains("requires an expression", ignoreCase = true) == true
         }
     }
 
-    fun testTypedIntValidValueNoError() {
-        assertFalse("Valid integer value must produce no type error",
-            hasTypeError("#define int MyConst 42\n"))
+    fun testPlainDefineWithoutValueNoError() {
+        assertFalse("A plain define without a value is allowed",
+            hasExpressionRequiredError("#define MyConst\n"))
     }
 
-    fun testTypedIntNegativeValueNoError() {
-        assertFalse("Negative integer must produce no type error",
-            hasTypeError("#define int MyConst -7\n"))
+    fun testPlainDefineWithValueNoError() {
+        assertFalse("A plain define with a value is allowed",
+            hasExpressionRequiredError("#define MyConst 42\n"))
     }
 
-    fun testTypedIntInvalidValueProducesError() {
-        assertTrue("Non-integer value for 'int' define must produce type ERROR",
-            hasTypeError("#define int MyConst hello\n"))
+    fun testFunctionMacroWithBodyNoError() {
+        assertFalse("A function-like macro with an expression is valid",
+            hasExpressionRequiredError("#define Max(a,b) a > b ? a : b\n"))
     }
 
-    fun testTypedIntFloatValueProducesError() {
-        assertTrue("Float value for 'int' define must produce type ERROR",
-            hasTypeError("#define int MyConst 3.14\n"))
+    fun testFunctionMacroWithoutBodyProducesError() {
+        assertTrue("A function-like macro without an expression must produce an ERROR",
+            hasExpressionRequiredError("#define Empty()\n"))
     }
 
-    fun testTypedFloatValidValueNoError() {
-        assertFalse("Valid float value must produce no type error",
-            hasTypeError("#define float MyConst 3.14\n"))
-    }
-
-    fun testTypedFloatIntegerValueNoError() {
-        assertFalse("Integer is also a valid float",
-            hasTypeError("#define float MyConst 42\n"))
-    }
-
-    fun testTypedFloatInvalidValueProducesError() {
-        assertTrue("Non-numeric value for 'float' define must produce type ERROR",
-            hasTypeError("#define float MyConst hello\n"))
-    }
-
-    fun testTypedStrAnyValueNoError() {
-        assertFalse("String type accepts any value",
-            hasTypeError("#define str MyConst anything goes here\n"))
-    }
-
-    fun testTypedStrNoValueNoError() {
-        assertFalse("Typed define without a value must not produce type error",
-            hasTypeError("#define int MyConst\n"))
+    fun testFunctionMacroWithoutBodyWithParamsProducesError() {
+        assertTrue("A function-like macro with params but no expression must produce an ERROR",
+            hasExpressionRequiredError("#define Broken(a, b)\n"))
     }
 }

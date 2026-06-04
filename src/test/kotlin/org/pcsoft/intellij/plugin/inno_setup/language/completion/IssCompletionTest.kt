@@ -79,36 +79,4 @@ class IssCompletionTest : BasePlatformTestCase() {
         assertTrue("Expected '#AppVersion' in { popup", "#AppVersion" in variants!!)
     }
 
-    // ── #define datatype completion ───────────────────────────────────────────
-
-    fun testDefineTypeCompletionAfterDefine() {
-        myFixture.configureByText(IssFileType.INSTANCE, "#define <caret>\n")
-        myFixture.completeBasic()
-        val variants = myFixture.lookupElementStrings
-        assertNotNull("Expected datatype suggestions after '#define '", variants)
-        assertTrue("Expected 'int' after #define", "int" in variants!!)
-        assertTrue("Expected 'str' after #define", "str" in variants)
-        assertTrue("Expected 'float' after #define", "float" in variants)
-    }
-
-    fun testDefineTypeCompletionMidWord() {
-        myFixture.configureByText(IssFileType.INSTANCE, "#define i<caret>\n")
-        myFixture.completeBasic()
-        val variants = myFixture.lookupElementStrings
-        assertNotNull("Expected datatype suggestions for '#define i'", variants)
-        assertTrue("Expected 'int' for prefix 'i'", "int" in variants!!)
-        assertTrue("Expected 'integer' for prefix 'i'", "integer" in variants)
-        assertFalse("Did not expect 'str' for prefix 'i'", "str" in variants)
-    }
-
-    fun testNoDefineTypeCompletionAtNamePosition() {
-        // After a complete first token + space the cursor is at the NAME slot — no type suggestions.
-        myFixture.configureByText(IssFileType.INSTANCE, "#define int <caret>\n")
-        myFixture.completeBasic()
-        val variants = myFixture.lookupElementStrings
-        assertTrue(
-            "Type keywords must not be suggested at the #define name position",
-            variants == null || ("str" !in variants && "float" !in variants)
-        )
-    }
 }
