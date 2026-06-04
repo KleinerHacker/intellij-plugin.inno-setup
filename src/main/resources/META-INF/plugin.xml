@@ -48,6 +48,9 @@
         <!-- Rename: find {#Name} references when renaming a #define -->
         <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssIsppReferencesSearcher"/>
 
+        <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
+        <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssSectionReferencesSearcher"/>
+
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
             implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssReferenceContributor"/>

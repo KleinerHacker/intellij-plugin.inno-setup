@@ -5,11 +5,14 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import com.intellij.patterns.PlatformPatterns
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssDirectiveKey
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamKey
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamPairEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
@@ -52,6 +55,16 @@ class IssCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             IsppVariableAfterHashProvider
+        )
+        // Cross-section reference completion: Tasks: <name>, Components: <name>, etc.
+        // ReferenceBasedCompletionContributor does not fire for ISS because the reference
+        // lives on IssParamValue (parent), not the leaf IDENTIFIER. This provider reads
+        // IssReference.getVariants() explicitly for any reference-typed param value.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(IssTypes.IDENTIFIER)
+                .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            SectionReferenceValueProvider
         )
     }
 }
@@ -189,6 +202,32 @@ private object IsppVariableAfterHashProvider : CompletionProvider<CompletionPara
                     }
             )
         }
+    }
+}
+
+private object SectionReferenceValueProvider : CompletionProvider<CompletionParameters>() {
+    private val KEY_TO_SECTION = mapOf(
+        "tasks" to "Tasks",
+        "components" to "Components",
+        "types" to "Types",
+        "languages" to "Languages",
+    )
+
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val position = parameters.position
+        if (position.isInCodeSection()) return
+        val paramValue = PsiTreeUtil.getParentOfType(position, IssParamValue::class.java) ?: return
+        val pair = paramValue.containingParamPair() as? IssParamPairEx ?: return
+        val targetSection = KEY_TO_SECTION[pair.keyText().lowercase()] ?: return
+        val file = paramValue.issFile() ?: return
+        file.findSections(targetSection)
+            .flatMap { it.nameDeclarations() }
+            .mapNotNull { it.valueUnquoted().ifEmpty { null } }
+            .forEach { name -> result.addElement(LookupElementBuilder.create(name)) }
     }
 }
 
