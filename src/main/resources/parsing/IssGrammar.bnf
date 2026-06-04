@@ -80,14 +80,18 @@ paramPair      ::= paramKey COLON paramValue {
 }
 paramKey       ::= IDENTIFIER
 
-paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)*
+paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)* {
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssParamValueMixinImpl"
+}
 
 // "..." with optional embedded {constants}
 quotedString   ::= QUOTE (STRING_PART | constant)* QUOTE
 
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE
-constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)*
+constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.impl.IssConstantBodyMixinImpl"
+}
 
 private comment ::= COMMENT
 

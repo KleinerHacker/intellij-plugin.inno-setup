@@ -8,13 +8,15 @@ import org.pcsoft.intellij.plugin.inno_setup.language.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.nameDeclarations
 import org.pcsoft.intellij.plugin.inno_setup.language.valueUnquoted
+import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssParamValue
 
-class IssReference(element: PsiElement, private val targetSection: String)
-    : PsiReferenceBase<PsiElement>(element, TextRange(0, element.textLength)) {
+// Anchor is IssParamValue; range points to the specific identifier token within it.
+class IssReference(paramValue: IssParamValue, range: TextRange, private val targetSection: String)
+    : PsiReferenceBase<IssParamValue>(paramValue, range) {
 
     override fun resolve(): PsiElement? {
         val file = element.issFile() ?: return null
-        val name = element.text.removeSurrounding("\"")
+        val name = element.text.substring(rangeInElement.startOffset, rangeInElement.endOffset)
         return file.findSections(targetSection)
             .flatMap { it.nameDeclarations() }
             .firstOrNull { it.valueUnquoted().equals(name, ignoreCase = true) }
