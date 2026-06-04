@@ -8,9 +8,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
  * Numbers and strings inside a #define expression must be highlighted like everywhere else in the
  * script: number literals in the NUMBER color, quoted strings in the STRING color.
  */
-class IsppSyntaxHighlightingTest : BasePlatformTestCase() {
+class IsppTokenHighlighterTest : BasePlatformTestCase() {
 
-    private val highlighter = IsppSyntaxHighlighting()
+    private val highlighter = IsppTokenHighlighter()
 
     fun testNumberLiteralUsesNumberColor() {
         assertTrue(

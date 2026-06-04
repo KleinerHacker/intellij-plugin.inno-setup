@@ -7,5 +7,5 @@ import com.intellij.openapi.vfs.VirtualFile
 
 class IsppHighlighterFactory : SyntaxHighlighterFactory() {
     override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter =
-        IsppSyntaxHighlighting()
+        IsppTokenHighlighter()
 }
