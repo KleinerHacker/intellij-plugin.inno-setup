@@ -18,7 +18,7 @@ import com.intellij.psi.TokenType;
 ALPHA      = [A-Za-z_]
 IDENT_CHAR = [A-Za-z0-9_.\-]
 IDENTIFIER = {ALPHA}{IDENT_CHAR}*
-NUMBER     = [0-9]+
+NUMBER     = [0-9]+(\.[0-9]+)*
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 VALUE_CHAR = [^\r\n{};:=\"()#\t ]

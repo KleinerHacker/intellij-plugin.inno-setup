@@ -31,7 +31,7 @@ FILE
         PsiElement(IDENTIFIER)('AppVersion')
       PsiElement(=)('=')
       IssParamValueImpl(PARAM_VALUE)
-        PsiElement(VALUE_CHAR)('1.5')
+        PsiElement(NUMBER)('1.5')
       PsiElement(CRLF)('\n')
     IssDirectiveEntryImpl(DIRECTIVE_ENTRY)
       IssDirectiveKeyImpl(DIRECTIVE_KEY)
