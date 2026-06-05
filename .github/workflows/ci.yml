@@ -19,7 +19,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: '21'
           cache: gradle
 
@@ -41,7 +41,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: '21'
           cache: gradle
 
@@ -71,7 +71,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: zulu
           java-version: '21'
           cache: gradle
 
