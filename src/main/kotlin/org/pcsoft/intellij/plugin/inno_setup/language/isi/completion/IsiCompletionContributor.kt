@@ -106,12 +106,15 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
                 && position.containingDirectiveEntry() == null)
         if (!inKeyPosition) return
 
-        // When typing on an empty line the dummy IDENTIFIER lands outside the
-        // section (the entry* loop exits before consuming it). Fall back to the
-        // element at the same offset in the original file, which IS inside the
-        // section (it's a CRLF consumed by the entry* loop).
+        // When typing on an empty line, or after a dangling ';' on a parameter
+        // line, the dummy IDENTIFIER lands outside the section (the entry* loop
+        // exits before consuming it). Fall back to the element at the same offset
+        // in the original file, and finally to an offset-based section lookup,
+        // which works even when the trailing tokens are outside any section.
+        val originalFile = parameters.originalFile as? IssFile
         val psiSection = position.containingSection()
             ?: parameters.originalPosition?.containingSection()
+            ?: originalFile?.sectionAtOffset(parameters.offset)
             ?: return
         val sectionName = psiSection.nameText()
 
@@ -120,10 +123,18 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
             it.name.equals(sectionName, ignoreCase = true)
         } ?: return
 
-        val usedKeys = (
-                psiSection.allParamPairs().map { it.keyText().lowercase() } +
-                        psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }
-                ).toSet()
+        // Directive keys are unique per section; parameter keys are unique per
+        // line (entry). So for parameter sections, only the keys already present
+        // on the current line count as duplicates — not the whole section.
+        val usedKeys = if (specSection.type == "directive") {
+            psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }.toSet()
+        } else {
+            val document = parameters.editor.document
+            val entry = position.containingParameterEntry()
+                ?: parameters.originalPosition?.containingParameterEntry()
+                ?: psiSection.parameterEntryOnLineOf(parameters.offset, document)
+            entry?.paramPairList?.map { it.keyText().lowercase() }?.toSet().orEmpty()
+        }
 
         specSection.attributes.forEach { attr ->
             val duplicate = attr.name.lowercase() in usedKeys

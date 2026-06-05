@@ -23,6 +23,13 @@ fun IssFile.findSections(name: String): List<IsiSection> =
 
 fun IssFile.firstSection(): IsiSection? = sections().firstOrNull()
 
+// The section a caret offset logically belongs to. Unlike containingSection(),
+// this still works when trailing/incomplete tokens (e.g. after a dangling ';')
+// fell outside the section's PSI range: it returns the last section that starts
+// at or before the offset.
+fun IssFile.sectionAtOffset(offset: Int): IsiSection? =
+    sections().lastOrNull { it.textRange.startOffset <= offset }
+
 // ── IssFile (ISPP-Brücke) ──────────────────────────────────────────────────────
 
 fun IssFile.isppDirectives(): List<IsppDirective> {

@@ -1,6 +1,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isi
 
 import com.intellij.openapi.components.service
+import com.intellij.openapi.editor.Document
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
@@ -33,6 +34,17 @@ fun IsiSection.specSection(): IssSectionSpec? =
     service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
 
 fun IsiSection.isParameterSection(): Boolean = specSection()?.type == "parameter"
+
+// The parameter entry sharing the caret's line. Used when the caret sits after a
+// dangling ';' whose incomplete pair fell outside the entry/section PSI, so the
+// keys already present on the line can still be detected.
+fun IsiSection.parameterEntryOnLineOf(offset: Int, document: Document): IsiParameterEntry? {
+    val line = document.getLineNumber(offset)
+    return parameterEntryList.lastOrNull {
+        it.textRange.startOffset <= offset &&
+                document.getLineNumber(it.textRange.startOffset) == line
+    }
+}
 
 // ── IsiParameterEntry ─────────────────────────────────────────────────────────
 

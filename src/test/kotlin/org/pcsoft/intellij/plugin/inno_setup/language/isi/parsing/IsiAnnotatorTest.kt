@@ -224,6 +224,43 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         )
     }
 
+    // ── Param value — string type is intentionally not numeric-validated ──────
+
+    fun testNumericValueForStringDirectiveProducesNoTypeError() {
+        // AppVersion is a string directive; "1.0" is numeric but a perfectly valid
+        // version string. It must NOT be flagged as a type error (no false positive).
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        val all = highlights(text)
+        val typeErrors = all.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Expected type", ignoreCase = true) == true
+        }
+        assertTrue("Numeric value '1.0' for string directive AppVersion must not produce a type ERROR", typeErrors.isEmpty())
+    }
+
+    fun testNumericValueForStringParameterProducesNoTypeError() {
+        // Description is a string parameter; a bare number must not be flagged.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: 123\n"
+        val all = highlights(text)
+        val typeErrors = all.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Expected type", ignoreCase = true) == true
+        }
+        assertTrue("Numeric value '123' for string parameter Description must not produce a type ERROR", typeErrors.isEmpty())
+    }
+
+    fun testStringValueForIntegerParameterProducesError() {
+        // The "vice versa" direction: a non-numeric string in an integer field IS flagged.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: \"Core\"; ExtraDiskSpaceRequired: \"lots\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Expected type", ignoreCase = true) == true &&
+                    it.description?.contains("integer", ignoreCase = true) == true
+        }
+        assertTrue("String value '\"lots\"' for integer ExtraDiskSpaceRequired must produce a type ERROR", hit)
+    }
+
     // ── Constant: known builtin ───────────────────────────────────────────────
 
     fun testKnownBuiltinConstantHighlightedAsReference() {

@@ -1,9 +1,19 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 
+import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.ui.JBColor
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 
 class IsiCompletionTest : BasePlatformTestCase() {
+
+    /** Foreground color the completion popup would render for the given key, or null if absent. */
+    private fun foregroundOf(name: String): java.awt.Color? =
+        myFixture.lookupElements?.firstOrNull { element ->
+            LookupElementPresentation().also { element.renderElement(it) }.itemText == name
+        }?.let { element ->
+            LookupElementPresentation().also { element.renderElement(it) }.itemTextForeground
+        }
 
     // ── Section name completion ───────────────────────────────────────────────
 
@@ -56,6 +66,33 @@ class IsiCompletionTest : BasePlatformTestCase() {
         val variants = myFixture.lookupElementStrings
         assertNotNull("Expected parameter key suggestions mid-word", variants)
         assertTrue("Expected 'Source' in suggestions", "Source" in variants!!)
+    }
+
+    fun testParamKeyCompletionAfterSemicolon() {
+        // Caret after a "; " separator on a [Files] line — must still offer keys
+        myFixture.configureByText(IssFileType.INSTANCE, "[Files]\nSource: \"app.exe\"; <caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected parameter key suggestions after ';'", variants)
+        assertTrue("Expected 'DestDir' in suggestions after ';'", "DestDir" in variants!!)
+    }
+
+    fun testParamKeyDuplicateIsPerLineNotPerSection() {
+        // DestDir is used on the FIRST line; on the second line it must NOT be
+        // flagged as a duplicate (red), because parameter keys are per-line.
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"\nSource: \"b.exe\"; <caret>\n"
+        )
+        myFixture.completeBasic()
+        assertEquals(
+            "DestDir used only on another line must not be marked as duplicate",
+            JBColor.foreground(), foregroundOf("DestDir")
+        )
+        assertEquals(
+            "Source used on the current line must be marked as duplicate (red)",
+            JBColor.RED, foregroundOf("Source")
+        )
     }
 
     // ── ISPP variable completion ──────────────────────────────────────────────────
