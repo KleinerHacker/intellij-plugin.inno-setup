@@ -1,10 +1,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.editor
 
 import com.intellij.codeInsight.AutoPopupController
+import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 
 class IsiTypedHandler : TypedHandlerDelegate() {
@@ -17,6 +17,7 @@ class IsiTypedHandler : TypedHandlerDelegate() {
                 AutoPopupController.getInstance(project).scheduleAutoPopup(editor)
                 Result.STOP
             }
+
             '#' -> {
                 val offset = editor.caretModel.offset
                 if (offset > 0 && editor.document.charsSequence[offset - 1] == '{') {
@@ -26,6 +27,7 @@ class IsiTypedHandler : TypedHandlerDelegate() {
                     Result.CONTINUE
                 }
             }
+
             else -> Result.CONTINUE
         }
     }

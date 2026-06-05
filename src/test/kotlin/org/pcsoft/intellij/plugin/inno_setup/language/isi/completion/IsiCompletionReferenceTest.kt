@@ -15,7 +15,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     // ── Tasks cross-reference completion ─────────────────────────────────────
 
     fun testTasksCompletionShowsAllTaskNames() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -26,7 +27,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Files]
             Source: "app.exe"; DestDir: "{app}"; Tasks: <caret>
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings
         assertNotNull("Expected a completion popup for Tasks: parameter", variants)
@@ -35,7 +37,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     }
 
     fun testTasksCompletionDoesNotShowComponentNames() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -50,7 +53,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Files]
             Source: "app.exe"; DestDir: "{app}"; Tasks: <caret>
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
         assertTrue("Tasks: completion must show task names", "maintask" in variants)
@@ -61,7 +65,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     // ── Components cross-reference completion ─────────────────────────────────
 
     fun testComponentsCompletionShowsAllComponentNames() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -72,7 +77,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Files]
             Source: "app.exe"; DestDir: "{app}"; Components: <caret>
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings
         assertNotNull("Expected a completion popup for Components: parameter", variants)
@@ -83,7 +89,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     // ── Types cross-reference completion ─────────────────────────────────────
 
     fun testTypesCompletionShowsAllTypeNames() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -94,7 +101,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Components]
             Name: core; Description: "Core"; Types: <caret>
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings
         assertNotNull("Expected a completion popup for Types: parameter", variants)
@@ -105,7 +113,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     // ── Languages cross-reference completion ──────────────────────────────────
 
     fun testLanguagesCompletionShowsAllLanguageNames() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -116,7 +125,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Tasks]
             Name: mytask; Description: "Task"; Languages: <caret>
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings
         assertNotNull("Expected a completion popup for Languages: parameter", variants)
@@ -127,7 +137,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
     // ── Non-reference keys must not get cross-ref completion ──────────────────
 
     fun testSourceParamDoesNotGetCrossRefCompletion() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -138,7 +149,8 @@ class IsiCompletionReferenceTest : BasePlatformTestCase() {
 
             [Files]
             Source: ma<caret>; DestDir: "{app}"
-        """.trimIndent())
+        """.trimIndent()
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
         assertFalse(

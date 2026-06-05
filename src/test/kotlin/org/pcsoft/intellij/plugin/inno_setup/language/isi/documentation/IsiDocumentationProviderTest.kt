@@ -10,7 +10,7 @@ class IsiDocumentationProviderTest : BasePlatformTestCase() {
 
     private fun docFor(content: String): String? {
         myFixture.configureByText(IssFileType.INSTANCE, content)
-        val ctx    = myFixture.file.findElementAt(myFixture.caretOffset)
+        val ctx = myFixture.file.findElementAt(myFixture.caretOffset)
         val target = provider.getCustomDocumentationElement(
             myFixture.editor, myFixture.file, ctx, myFixture.caretOffset
         ) ?: ctx ?: return null

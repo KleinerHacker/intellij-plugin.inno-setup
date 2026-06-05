@@ -34,8 +34,8 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
         val foldStart = section.sectionHeader.textRange.endOffset
         val lastMeaningful = section.children.lastOrNull {
             it is IsiDirectiveEntry
-            || it is IsiParameterEntry
-            || it.node?.elementType == IsiTypes.COMMENT
+                    || it is IsiParameterEntry
+                    || it.node?.elementType == IsiTypes.COMMENT
         }
         val foldEnd = lastMeaningful?.textRange?.endOffset ?: return null
         if (foldStart >= foldEnd) return null
@@ -46,7 +46,7 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
         val pairs = entry.paramPairList
         if (pairs.size <= 1) return null
 
-        val shownPairs  = resolveShownPairs(entry, pairs)
+        val shownPairs = resolveShownPairs(entry, pairs)
         val hiddenPairs = pairs - shownPairs.toSet()
         if (hiddenPairs.isEmpty()) return null
 
@@ -80,9 +80,9 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
     }
 
     override fun getPlaceholderText(node: ASTNode): String = when (node.psi) {
-        is IsiSection        -> ""
+        is IsiSection -> ""
         is IsiParameterEntry -> "; ..."
-        else                 -> "..."
+        else -> "..."
     }
 
     override fun isCollapsedByDefault(node: ASTNode): Boolean =

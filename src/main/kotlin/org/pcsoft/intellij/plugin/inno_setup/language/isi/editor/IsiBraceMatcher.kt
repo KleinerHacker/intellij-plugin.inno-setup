@@ -17,8 +17,8 @@ class IsiBraceMatcher : PairedBraceMatcher {
     companion object {
         val PAIRS: Array<BracePair> = arrayOf(
             BracePair(IsiTypes.LBRACKET, IsiTypes.RBRACKET, true),
-            BracePair(IsiTypes.LBRACE,   IsiTypes.RBRACE,   false),
-            BracePair(IsiTypes.LPAREN,   IsiTypes.RPAREN,   false),
+            BracePair(IsiTypes.LBRACE, IsiTypes.RBRACE, false),
+            BracePair(IsiTypes.LPAREN, IsiTypes.RPAREN, false),
         )
     }
 }

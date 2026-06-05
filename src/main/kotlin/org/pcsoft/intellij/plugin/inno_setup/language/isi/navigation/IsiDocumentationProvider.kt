@@ -23,14 +23,15 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         val el = contextElement ?: return null
         if (el.node?.elementType != IsiTypes.IDENTIFIER) return null
         return when (val parent = el.parent) {
-            is IsiSectionName  -> parent
+            is IsiSectionName -> parent
             is IsiDirectiveKey -> parent
-            is IsiParamKey     -> parent
+            is IsiParamKey -> parent
             is IsiConstantBody -> parent.parent          // → IsiConstant
-            is IsiParamValue   -> {
+            is IsiParamValue -> {
                 val pair = parent.containingParamPair() ?: return null
                 if (pair.keyText().equals("Flags", ignoreCase = true)) el else null
             }
+
             else -> null
         }
     }
@@ -38,10 +39,10 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         val spec = service<IssSpecService>().spec
         return when (element) {
-            is IsiSectionName  -> generateSectionDoc(element, spec)
-            is IsiParamKey     -> generateAttrDoc(element.containingSection(), element.text, spec)
+            is IsiSectionName -> generateSectionDoc(element, spec)
+            is IsiParamKey -> generateAttrDoc(element.containingSection(), element.text, spec)
             is IsiDirectiveKey -> generateAttrDoc(element.containingSection(), element.text, spec)
-            is IsiConstant     -> generateConstantDoc(element)
+            is IsiConstant -> generateConstantDoc(element)
             else -> {
                 if (element.node?.elementType == IsiTypes.IDENTIFIER) {
                     val pair = (element.parent as? IsiParamValue)?.containingParamPair()
@@ -59,7 +60,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>[${sec.name}]</b> · ${sec.type}")
-            if (sec.required)   append(" · <b>required</b>")
+            if (sec.required) append(" · <b>required</b>")
             if (sec.deprecated) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
@@ -73,15 +74,15 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         val attr = specSec.attributes.firstOrNull { it.name.equals(keyText, ignoreCase = true) }
             ?: return null
         val typeStr = when (val t = attr.type) {
-            is IssNativeTypeSpec    -> t.dataType
+            is IssNativeTypeSpec -> t.dataType
             is IssReferenceTypeSpec -> "→ ${t.section}"
-            is IssFlagTypeSpec      -> "flags"
+            is IssFlagTypeSpec -> "flags"
         }
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>${attr.name}</b> · $typeStr")
-            if (attr.required)   append(" · <b>required</b>")
-            if (attr.array)      append("[]")
+            if (attr.required) append(" · <b>required</b>")
+            if (attr.array) append("[]")
             if (attr.deprecated) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
@@ -91,11 +92,11 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
     }
 
     private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: InnoSetupSpec): String? {
-        val specSec  = pair.containingSection()?.specSection(spec) ?: return null
-        val attr     = specSec.attributes.firstOrNull { it.name.equals("Flags", ignoreCase = true) }
+        val specSec = pair.containingSection()?.specSection(spec) ?: return null
+        val attr = specSec.attributes.firstOrNull { it.name.equals("Flags", ignoreCase = true) }
             ?: return null
         val flagType = attr.type as? IssFlagTypeSpec ?: return null
-        val flag     = flagType.flags.firstOrNull { it.name.equals(flagName, ignoreCase = true) }
+        val flag = flagType.flags.firstOrNull { it.name.equals(flagName, ignoreCase = true) }
             ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -123,7 +124,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             ?.substringBefore(':')?.substringBefore('|')?.trim()?.trimStart('#')
             ?: return null
         val builtins = service<IssConstantService>().spec.constants
-        val const    = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
+        val const = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>{${const.name}}</b> · ${const.category.name.lowercase().replace('_', ' ')}")

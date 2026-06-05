@@ -1,8 +1,11 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
+.md-button .md-button--primary }
 
-The `[UninstallRun]` section works exactly like `[Run]`, but its entries are executed at the *start* of uninstallation rather than after installation. Use it to stop services, kill running processes, or clean up state that cannot be handled by simply deleting files and registry keys. Entries run sequentially in the order they appear.
+The `[UninstallRun]` section works exactly like `[Run]`, but its entries are executed at the *start* of uninstallation
+rather than after installation. Use it to stop services, kill running processes, or clean up state that cannot be
+handled by simply deleting files and registry keys. Entries run sequentially in the order they appear.
 
 ---
 
@@ -74,7 +77,8 @@ Name of a Pascal procedure in `[Code]` called for each line of output (requires 
 
 `string` · **Multiple values**
 
-Behavioural flags: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`, `waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
+Behavioural flags: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`,
+`waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
 
 ---
 
@@ -106,7 +110,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

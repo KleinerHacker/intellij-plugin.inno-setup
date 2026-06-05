@@ -6,8 +6,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
-import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import com.intellij.util.ProcessingContext
+import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
@@ -21,10 +21,10 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
         result: CompletionResultSet
     ) {
         val offset = parameters.offset
-        val chars  = parameters.editor.document.charsSequence
+        val chars = parameters.editor.document.charsSequence
         if (offset == 0 || chars[offset - 1] != '{') return
 
-        val file     = parameters.originalFile as? IssFile ?: return
+        val file = parameters.originalFile as? IssFile ?: return
         val builtins = service<IssConstantService>().spec.constants
         val userDefs = file.definedConstants()
 

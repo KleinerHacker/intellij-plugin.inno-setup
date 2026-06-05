@@ -1,8 +1,11 @@
 # [UninstallDelete]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){
+.md-button .md-button--primary }
 
-The `[UninstallDelete]` section lists files and directories that Inno Setup removes during uninstallation, in addition to the files it originally tracked. Use it to clean up generated files, caches, log files, or user-data directories that were created at runtime and therefore never listed in `[Files]`.
+The `[UninstallDelete]` section lists files and directories that Inno Setup removes during uninstallation, in addition
+to the files it originally tracked. Use it to clean up generated files, caches, log files, or user-data directories that
+were created at runtime and therefore never listed in `[Files]`.
 
 ---
 
@@ -10,7 +13,8 @@ The `[UninstallDelete]` section lists files and directories that Inno Setup remo
 
 `string` · **Required**
 
-What to delete: `files` (matching files only), `filesandordirs` (files and all subdirectories), `dirifempty` (the directory only if it contains no files).
+What to delete: `files` (matching files only), `filesandordirs` (files and all subdirectories), `dirifempty` (the
+directory only if it contains no files).
 
 ---
 
@@ -50,7 +54,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

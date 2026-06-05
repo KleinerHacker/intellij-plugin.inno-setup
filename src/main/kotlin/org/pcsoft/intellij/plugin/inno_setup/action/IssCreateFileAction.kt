@@ -24,8 +24,8 @@ class IssCreateFileAction : DumbAwareAction(
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
-        val view    = e.getData(LangDataKeys.IDE_VIEW) ?: return
-        val dir     = view.orChooseDirectory ?: return
+        val view = e.getData(LangDataKeys.IDE_VIEW) ?: return
+        val dir = view.orChooseDirectory ?: return
 
         val dialog = IssCreateFileDialog(project)
         if (!dialog.showAndGet()) return

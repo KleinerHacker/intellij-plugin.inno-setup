@@ -43,8 +43,10 @@ class IsiStructureViewTest : BasePlatformTestCase() {
         val entries = (filesSection as IssStructureViewElement).children
         assertEquals("Files section must expose its single parameter entry", 1, entries.size)
         assertTrue((entries[0] as IssStructureViewElement).value is IsiParameterEntry)
-        assertTrue("Entry display name should reference the source",
-            entries[0].presentation.presentableText!!.contains("app.exe"))
+        assertTrue(
+            "Entry display name should reference the source",
+            entries[0].presentation.presentableText!!.contains("app.exe")
+        )
     }
 
     fun testDirectiveSectionHasNoChildren() {

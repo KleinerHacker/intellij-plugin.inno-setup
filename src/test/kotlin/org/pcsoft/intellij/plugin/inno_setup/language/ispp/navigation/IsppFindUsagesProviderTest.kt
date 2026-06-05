@@ -5,10 +5,10 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 
 /**
  * Tests for [IsppFindUsagesProvider] — find-usages is only enabled for `#define`
@@ -52,8 +52,10 @@ class IsppFindUsagesProviderTest : BasePlatformTestCase() {
 
     fun testCannotFindUsagesForUnrelatedElement() {
         val file = setup("#define MyVar \"x\"\n")
-        assertFalse("find-usages must be disabled for a non-directive element",
-            provider.canFindUsagesFor(file))
+        assertFalse(
+            "find-usages must be disabled for a non-directive element",
+            provider.canFindUsagesFor(file)
+        )
     }
 
     fun testDescriptiveNameAndType() {

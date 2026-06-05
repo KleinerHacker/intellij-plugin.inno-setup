@@ -1,6 +1,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.action
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -24,13 +25,15 @@ class IssCreateFileActionTest {
     fun `template contains the three sections in order`() {
         val text = template()
         val setupIdx = text.indexOf("[Setup]")
-        val langIdx  = text.indexOf("[Languages]")
+        val langIdx = text.indexOf("[Languages]")
         val filesIdx = text.indexOf("[Files]")
         assertTrue("[Setup] must be present", setupIdx >= 0)
         assertTrue("[Languages] must be present", langIdx >= 0)
         assertTrue("[Files] must be present", filesIdx >= 0)
-        assertTrue("Sections must appear in order [Setup] < [Languages] < [Files]",
-            setupIdx < langIdx && langIdx < filesIdx)
+        assertTrue(
+            "Sections must appear in order [Setup] < [Languages] < [Files]",
+            setupIdx < langIdx && langIdx < filesIdx
+        )
     }
 
     @Test

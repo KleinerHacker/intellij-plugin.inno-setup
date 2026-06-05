@@ -1,8 +1,11 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=registrysection){
+.md-button .md-button--primary }
 
-The `[Registry]` section creates, modifies, or deletes Windows registry keys and values during installation. It supports all major registry value types and gives fine-grained control over what happens to registry data on uninstall via flags such as `uninsdeletekey` and `uninsdeletekeyifempty`. Both 32-bit and 64-bit registry views can be targeted explicitly.
+The `[Registry]` section creates, modifies, or deletes Windows registry keys and values during installation. It supports
+all major registry value types and gives fine-grained control over what happens to registry data on uninstall via flags
+such as `uninsdeletekey` and `uninsdeletekeyifempty`. Both 32-bit and 64-bit registry views can be targeted explicitly.
 
 ---
 
@@ -10,7 +13,8 @@ The `[Registry]` section creates, modifies, or deletes Windows registry keys and
 
 `string` · **Required**
 
-Registry root hive: `HKCU`, `HKLM`, `HKCR`, `HKU`, `HKCC`, or `HKA` (auto, depending on install mode). Append `32` or `64` to force a specific registry view, e.g. `HKLM64`.
+Registry root hive: `HKCU`, `HKLM`, `HKCR`, `HKU`, `HKCC`, or `HKA` (auto, depending on install mode). Append `32` or
+`64` to force a specific registry view, e.g. `HKLM64`.
 
 ---
 
@@ -58,7 +62,8 @@ ACL permissions to set on the key: `full`, `modify`, `read`.
 
 `string` · **Multiple values**
 
-Behavioural flags: `createvalueifdoesntexist`, `deletekey`, `deletevalue`, `dontcreatekey`, `noerror`, `preservestringtype`, `uninsclearvalue`, `uninsdeletekey`, `uninsdeletekeyifempty`, `uninsdeletevalue`.
+Behavioural flags: `createvalueifdoesntexist`, `deletekey`, `deletevalue`, `dontcreatekey`, `noerror`,
+`preservestringtype`, `uninsclearvalue`, `uninsdeletekey`, `uninsdeletekeyifempty`, `uninsdeletevalue`.
 
 ---
 
@@ -90,7 +95,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

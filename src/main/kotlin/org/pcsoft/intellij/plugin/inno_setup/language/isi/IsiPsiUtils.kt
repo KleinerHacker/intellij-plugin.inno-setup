@@ -4,12 +4,7 @@ import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec

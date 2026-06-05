@@ -4,8 +4,11 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.pcsoft.intellij.plugin.inno_setup.language.*
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.findSection
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.sections
 
 class IsiParserTest : BasePlatformTestCase() {
 
@@ -26,7 +29,7 @@ class IsiParserTest : BasePlatformTestCase() {
         val errors = PsiTreeUtil.collectElementsOfType(file, PsiErrorElement::class.java)
         assertTrue(
             "Expected no parse errors but found:\n" +
-                errors.joinToString("\n") { "  '${it.errorDescription}' at offset ${it.textOffset}: '${it.text}'" },
+                    errors.joinToString("\n") { "  '${it.errorDescription}' at offset ${it.textOffset}: '${it.text}'" },
             errors.isEmpty()
         )
     }

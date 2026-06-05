@@ -11,22 +11,22 @@ import javax.swing.Icon
 class IsiColorSettingsPage : ColorSettingsPage {
 
     private val DESCRIPTORS = arrayOf(
-        AttributesDescriptor("Comment",                            IsiSyntaxHighlighting.COMMENT),
-        AttributesDescriptor("String",                             IsiSyntaxHighlighting.STRING),
-        AttributesDescriptor("Number",                             IsiSyntaxHighlighting.NUMBER),
+        AttributesDescriptor("Comment", IsiSyntaxHighlighting.COMMENT),
+        AttributesDescriptor("String", IsiSyntaxHighlighting.STRING),
+        AttributesDescriptor("Number", IsiSyntaxHighlighting.NUMBER),
         AttributesDescriptor("Brackets and braces//Brackets [ ]", IsiSyntaxHighlighting.BRACKET),
-        AttributesDescriptor("Brackets and braces//Braces { }",   IsiSyntaxHighlighting.BRACE),
-        AttributesDescriptor("Operation sign",                     IsiSyntaxHighlighting.OPERATION_SIGN),
-        AttributesDescriptor("Keyword",                            IsiSyntaxHighlighting.KEYWORD),
-        AttributesDescriptor("Section name",                       IsiAnnotatorHighlighting.SECTION_NAME),
-        AttributesDescriptor("Parameter key",                      IsiAnnotatorHighlighting.PARAM_KEY),
-        AttributesDescriptor("References//Constant reference",     IsiAnnotatorHighlighting.REFERENCE),
-        AttributesDescriptor("References//Flag",                   IsiAnnotatorHighlighting.FLAG),
-        AttributesDescriptor("References//ISPP define reference",  IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME),
-        AttributesDescriptor("References//Unknown reference",      IsiAnnotatorHighlighting.UNKNOWN_REFERENCE),
-        AttributesDescriptor("Preprocessor//Directive",            IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
-        AttributesDescriptor("Preprocessor//Define name",          IsiAnnotatorHighlighting.DEFINE_NAME),
-        AttributesDescriptor("Deprecated",                         IsiAnnotatorHighlighting.DEPRECATED),
+        AttributesDescriptor("Brackets and braces//Braces { }", IsiSyntaxHighlighting.BRACE),
+        AttributesDescriptor("Operation sign", IsiSyntaxHighlighting.OPERATION_SIGN),
+        AttributesDescriptor("Keyword", IsiSyntaxHighlighting.KEYWORD),
+        AttributesDescriptor("Section name", IsiAnnotatorHighlighting.SECTION_NAME),
+        AttributesDescriptor("Parameter key", IsiAnnotatorHighlighting.PARAM_KEY),
+        AttributesDescriptor("References//Constant reference", IsiAnnotatorHighlighting.REFERENCE),
+        AttributesDescriptor("References//Flag", IsiAnnotatorHighlighting.FLAG),
+        AttributesDescriptor("References//ISPP define reference", IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME),
+        AttributesDescriptor("References//Unknown reference", IsiAnnotatorHighlighting.UNKNOWN_REFERENCE),
+        AttributesDescriptor("Preprocessor//Directive", IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
+        AttributesDescriptor("Preprocessor//Define name", IsiAnnotatorHighlighting.DEFINE_NAME),
+        AttributesDescriptor("Deprecated", IsiAnnotatorHighlighting.DEPRECATED),
     )
 
     override fun getDisplayName() = "Inno Setup"
@@ -58,11 +58,11 @@ class IsiColorSettingsPage : ColorSettingsPage {
 
     override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey> = mapOf(
         "sectionName" to IsiAnnotatorHighlighting.SECTION_NAME,
-        "paramKey"    to IsiAnnotatorHighlighting.PARAM_KEY,
-        "ref"         to IsiAnnotatorHighlighting.REFERENCE,
-        "flag"        to IsiAnnotatorHighlighting.FLAG,
-        "pp"          to IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE,
-        "dname"       to IsiAnnotatorHighlighting.DEFINE_NAME,
-        "ppref"       to IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME,
+        "paramKey" to IsiAnnotatorHighlighting.PARAM_KEY,
+        "ref" to IsiAnnotatorHighlighting.REFERENCE,
+        "flag" to IsiAnnotatorHighlighting.FLAG,
+        "pp" to IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE,
+        "dname" to IsiAnnotatorHighlighting.DEFINE_NAME,
+        "ppref" to IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME,
     )
 }

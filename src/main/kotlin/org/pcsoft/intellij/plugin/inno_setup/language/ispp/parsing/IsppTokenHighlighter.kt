@@ -15,10 +15,11 @@ class IsppTokenHighlighter : SyntaxHighlighterBase() {
 
     companion object {
         // IsppTypes has both PSI element types and token types — use the token types for highlighting
-        private val ATTRIBUTES: Map<IElementType, TextAttributesKey> = hashMapOf<IElementType, TextAttributesKey>().also { m ->
-            m[IsppTypes.QUOTE]       = IsppSyntaxHighlighting.STRING
-            m[IsppTypes.STRING_PART] = IsppSyntaxHighlighting.STRING
-            m[IsppTypes.NUMBER]      = IsppSyntaxHighlighting.NUMBER
-        }
+        private val ATTRIBUTES: Map<IElementType, TextAttributesKey> =
+            hashMapOf<IElementType, TextAttributesKey>().also { m ->
+                m[IsppTypes.QUOTE] = IsppSyntaxHighlighting.STRING
+                m[IsppTypes.STRING_PART] = IsppSyntaxHighlighting.STRING
+                m[IsppTypes.NUMBER] = IsppSyntaxHighlighting.NUMBER
+            }
     }
 }

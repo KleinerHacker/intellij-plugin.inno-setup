@@ -12,8 +12,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirec
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
 
-abstract class IsppDirectiveMixinImpl(node: ASTNode)
-    : ASTWrapperPsiElement(node), IsppDirectiveEx {
+abstract class IsppDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsppDirectiveEx {
 
     private fun valueIdentifiers(): Array<ASTNode> =
         (this as IsppDirective).value
@@ -25,7 +24,7 @@ abstract class IsppDirectiveMixinImpl(node: ASTNode)
     /** Raw text of the value node that follows the name identifier (no trimming, quotes kept). */
     private fun rawAfterName(): String? {
         val value = (this as IsppDirective).value ?: return null
-        val name  = nameNode() ?: return null
+        val name = nameNode() ?: return null
         val start = name.startOffset - value.textRange.startOffset + name.textLength
         return value.text.substring(start)
     }
@@ -66,7 +65,9 @@ abstract class IsppDirectiveMixinImpl(node: ASTNode)
         for (i in text.indices) {
             when (text[i]) {
                 '(' -> depth++
-                ')' -> { depth--; if (depth == 0) return i }
+                ')' -> {
+                    depth--; if (depth == 0) return i
+                }
             }
         }
         return null
@@ -112,7 +113,7 @@ abstract class IsppDirectiveMixinImpl(node: ASTNode)
         val oldId = getNameIdentifier() ?: return this
         val injManager = InjectedLanguageManager.getInstance(project)
         val hostRange = injManager.injectedToHost(oldId, oldId.textRange)
-        val hostFile  = injManager.getTopLevelFile(containingFile)
+        val hostFile = injManager.getTopLevelFile(containingFile)
         val docManager = PsiDocumentManager.getInstance(project)
         val doc = docManager.getDocument(hostFile) ?: return this
         // Commit pending PSI→document operations so the document is no longer locked.

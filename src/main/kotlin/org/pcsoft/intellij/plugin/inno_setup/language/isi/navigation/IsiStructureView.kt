@@ -8,9 +8,13 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.*
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.displayName
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.isParameterSection
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
+import org.pcsoft.intellij.plugin.inno_setup.language.sections
 import javax.swing.Icon
 
 class IsiStructureViewFactory : PsiStructureViewFactory {
@@ -23,9 +27,8 @@ class IsiStructureViewFactory : PsiStructureViewFactory {
     }
 }
 
-class IssStructureViewModel(file: IssFile)
-    : StructureViewModelBase(file, IssStructureViewElement(file)),
-      StructureViewModel.ElementInfoProvider {
+class IssStructureViewModel(file: IssFile) : StructureViewModelBase(file, IssStructureViewElement(file)),
+    StructureViewModel.ElementInfoProvider {
 
     override fun getSuitableClasses(): Array<Class<*>> =
         arrayOf(IsiSection::class.java, IsiParameterEntry::class.java)
@@ -41,17 +44,18 @@ class IssStructureViewElement(private val element: PsiElement) : StructureViewTr
     override fun getValue(): Any = element
 
     override fun getPresentation(): ItemPresentation = when (element) {
-        is IssFile           -> SimpleItemPresentation(element.name, IssIcons.ScriptFile)
-        is IsiSection        -> SimpleItemPresentation(element.nameText(), IssIcons.Section)
+        is IssFile -> SimpleItemPresentation(element.name, IssIcons.ScriptFile)
+        is IsiSection -> SimpleItemPresentation(element.nameText(), IssIcons.Section)
         is IsiParameterEntry -> SimpleItemPresentation(element.displayName(), IssIcons.ParameterEntry)
-        else                 -> SimpleItemPresentation(element.text ?: "", null)
+        else -> SimpleItemPresentation(element.text ?: "", null)
     }
 
     override fun getChildren(): Array<TreeElement> = when (element) {
-        is IssFile    -> element.sections().map { IssStructureViewElement(it) }.toTypedArray()
+        is IssFile -> element.sections().map { IssStructureViewElement(it) }.toTypedArray()
         is IsiSection -> if (element.isParameterSection())
             element.parameterEntryList.map { IssStructureViewElement(it) }.toTypedArray<TreeElement>()
         else emptyArray()
+
         else -> emptyArray()
     }
 

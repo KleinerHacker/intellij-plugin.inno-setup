@@ -3,11 +3,16 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 import com.fasterxml.jackson.annotation.JsonProperty
 
 enum class IssConstantCategorySpec {
-    @JsonProperty("directory") DIRECTORY,
-    @JsonProperty("shell_folder") SHELL_FOLDER,
-    @JsonProperty("auto") AUTO,
-    @JsonProperty("special") SPECIAL,
-    @JsonProperty("parameterized") PARAMETERIZED
+    @JsonProperty("directory")
+    DIRECTORY,
+    @JsonProperty("shell_folder")
+    SHELL_FOLDER,
+    @JsonProperty("auto")
+    AUTO,
+    @JsonProperty("special")
+    SPECIAL,
+    @JsonProperty("parameterized")
+    PARAMETERIZED
 }
 
 data class IssBuiltinConstantSpec(

@@ -19,7 +19,7 @@ class IsiParserDefinition : ParserDefinition {
     companion object {
         val FILE = IFileElementType(IssLanguage)
         val COMMENTS = TokenSet.create(IsiTypes.COMMENT)
-        val STRINGS  = TokenSet.create(IsiTypes.QUOTE, IsiTypes.STRING_PART)
+        val STRINGS = TokenSet.create(IsiTypes.QUOTE, IsiTypes.STRING_PART)
     }
 
     override fun createLexer(project: Project?): Lexer = IsiLexerAdapter()

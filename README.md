@@ -4,34 +4,41 @@
 
 # Inno Setup – JetBrains Plugin
 
-A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php) scripts (`.iss`) to the entire IntelliJ platform family.
+A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php)
+scripts (`.iss`) to the entire IntelliJ platform family.
 
 ---
 
 ## About
 
-[Inno Setup](https://jrsoftware.org/isinfo.php) is a widely-used, free Windows installer builder by Jordan Russell and Martijn Laan (first released 1997). Its scripts (`.iss`) describe the full installer — files, registry keys, shortcuts, and optional Pascal scripting — but until now had no dedicated editor support inside JetBrains IDEs.
+[Inno Setup](https://jrsoftware.org/isinfo.php) is a widely-used, free Windows installer builder by Jordan Russell and
+Martijn Laan (first released 1997). Its scripts (`.iss`) describe the full installer — files, registry keys, shortcuts,
+and optional Pascal scripting — but until now had no dedicated editor support inside JetBrains IDEs.
 
-This plugin closes that gap. The goal is a complete editing experience for `.iss` files: correct highlighting, context-aware completion, inline documentation, and validated references, regardless of which JetBrains IDE you are using.
+This plugin closes that gap. The goal is a complete editing experience for `.iss` files: correct highlighting,
+context-aware completion, inline documentation, and validated references, regardless of which JetBrains IDE you are
+using.
 
 ### Features
 
-| Feature | Description |
-|---|---|
-| **Syntax highlighting** | Sections, directives, parameters, constants (`{app}`, `{autopf}`, …), and Pascal code blocks are coloured distinctly |
-| **Code completion** | Section names, directive keys, parameter keys, and known flag values are suggested as you type |
-| **Inline documentation** | Hover over any directive or parameter to read its description without leaving the IDE |
-| **Reference resolution** | Navigate between `Name:` declarations and their usages in `Tasks:`, `Components:`, and `Types:` parameters |
-| **Structure view** | Bird's-eye overview of all sections and their entries |
-| **Constant validation** | Built-in constants are recognised and validated, including those embedded inside quoted strings |
-| **Brace / quote matching** | Auto-closes `{`, `[`, and `"` |
-| **Code folding** | Sections and long parameter entries fold independently |
+| Feature                    | Description                                                                                                          |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------|
+| **Syntax highlighting**    | Sections, directives, parameters, constants (`{app}`, `{autopf}`, …), and Pascal code blocks are coloured distinctly |
+| **Code completion**        | Section names, directive keys, parameter keys, and known flag values are suggested as you type                       |
+| **Inline documentation**   | Hover over any directive or parameter to read its description without leaving the IDE                                |
+| **Reference resolution**   | Navigate between `Name:` declarations and their usages in `Tasks:`, `Components:`, and `Types:` parameters           |
+| **Structure view**         | Bird's-eye overview of all sections and their entries                                                                |
+| **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                      |
+| **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                        |
+| **Code folding**           | Sections and long parameter entries fold independently                                                               |
 
 ### IDE Compatibility
 
-The plugin targets `com.intellij.modules.lang` — available in every full IntelliJ-platform IDE — and bundles its own runtime dependencies, so it has no hidden requirements on the host IDE.
+The plugin targets `com.intellij.modules.lang` — available in every full IntelliJ-platform IDE — and bundles its own
+runtime dependencies, so it has no hidden requirements on the host IDE.
 
-Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **WebStorm**, **GoLand**, **RubyMine**, **DataGrip**, and all other IntelliJ-platform IDEs.
+Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **WebStorm**, **GoLand**, **RubyMine**, *
+*DataGrip**, and all other IntelliJ-platform IDEs.
 
 ---
 
@@ -39,11 +46,11 @@ Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **W
 
 ### Prerequisites
 
-| Tool | Version |
-|---|---|
-| JDK | 21 or later |
-| IntelliJ IDEA | 2024.1 or later (for IDE-assisted development) |
-| Gradle | Provided via Gradle Wrapper — no installation needed |
+| Tool          | Version                                              |
+|---------------|------------------------------------------------------|
+| JDK           | 21 or later                                          |
+| IntelliJ IDEA | 2024.1 or later (for IDE-assisted development)       |
+| Gradle        | Provided via Gradle Wrapper — no installation needed |
 
 ### Build
 
@@ -69,17 +76,18 @@ cd inno-setup
 ./gradlew runIde
 ```
 
-This launches a fresh IntelliJ IDEA instance with the plugin loaded, isolated from your regular IDE installation. Open or create any `.iss` file to try the plugin live.
+This launches a fresh IntelliJ IDEA instance with the plugin loaded, isolated from your regular IDE installation. Open
+or create any `.iss` file to try the plugin live.
 
 ### Run / Debug from IntelliJ IDEA
 
 Preconfigured run configurations are included in `.run/`:
 
-| Configuration | What it does |
-|---|---|
-| **Run Plugin** | Launches `:runIde` — opens a sandbox IDE with the plugin |
-| **Run Tests** | Runs `:test` |
-| **Run Verifications** | Runs `:verifyPlugin` to check compatibility |
+| Configuration         | What it does                                             |
+|-----------------------|----------------------------------------------------------|
+| **Run Plugin**        | Launches `:runIde` — opens a sandbox IDE with the plugin |
+| **Run Tests**         | Runs `:test`                                             |
+| **Run Verifications** | Runs `:verifyPlugin` to check compatibility              |
 
 ### Project Structure
 
@@ -101,7 +109,8 @@ Preconfigured run configurations are included in `.run/`:
 └── settings.gradle.kts
 ```
 
-> **Note:** The files under `build/parsing/gen/` are generated automatically before compilation via `./gradlew generateIssParser generateIssLexer`. Never edit them by hand — they are overwritten on every build.
+> **Note:** The files under `build/parsing/gen/` are generated automatically before compilation via
+`./gradlew generateIssParser generateIssLexer`. Never edit them by hand — they are overwritten on every build.
 
 ---
 
@@ -131,7 +140,8 @@ After the restart, any file with the `.iss` extension will be handled by the plu
 
 ## Documentation
 
-Full documentation — including a complete reference for every Inno Setup section and its parameters — is available at the project's MkDocs site:
+Full documentation — including a complete reference for every Inno Setup section and its parameters — is available at
+the project's MkDocs site:
 
 ```bash
 # Install dependencies (once)

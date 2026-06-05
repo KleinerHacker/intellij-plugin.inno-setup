@@ -8,11 +8,11 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
-import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 
 class IsppCompletionContributor : CompletionContributor() {
@@ -65,23 +65,23 @@ private object IsppDefineExpressionProvider : CompletionProvider<CompletionParam
     // There is already a complete name (with optional parameter list) followed by whitespace,
     // i.e. the caret sits in the expression part.
     private val EXPR_PREFIX = Regex("^#\\s*define\\s+[A-Za-z0-9_.\\-]+(?:\\([^)]*\\))?\\s+.*$")
-    private val WORD_TAIL   = Regex("[A-Za-z0-9_.\\-]*$")
+    private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
 
     override fun addCompletions(
         params: CompletionParameters,
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        val offset    = params.offset
-        val doc       = params.editor.document
+        val offset = params.offset
+        val doc = params.editor.document
         val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
         val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
         if (!EXPR_PREFIX.matches(linePrefix)) return
 
         val position = params.position
-        val injMgr   = InjectedLanguageManager.getInstance(position.project)
+        val injMgr = InjectedLanguageManager.getInstance(position.project)
         val hostFile = injMgr.getTopLevelFile(position.containingFile) as? IssFile ?: return
-        val host     = injMgr.getInjectionHost(position) ?: return
+        val host = injMgr.getInjectionHost(position) ?: return
         val lineOffset = host.textRange.startOffset
 
         val precedingNames = hostFile.isppDirectivesWithHostOffset()
@@ -89,7 +89,7 @@ private object IsppDefineExpressionProvider : CompletionProvider<CompletionParam
             .mapNotNull { (it.first as? IsppDirectiveEx)?.getDefineName()?.ifEmpty { null } }
             .distinct()
 
-        val typed    = WORD_TAIL.find(linePrefix)?.value ?: ""
+        val typed = WORD_TAIL.find(linePrefix)?.value ?: ""
         val adjusted = result.withPrefixMatcher(typed)
         precedingNames.forEach { name ->
             adjusted.addElement(

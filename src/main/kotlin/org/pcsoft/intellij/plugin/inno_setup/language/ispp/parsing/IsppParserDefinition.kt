@@ -17,8 +17,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
 
 class IsppParserDefinition : ParserDefinition {
     companion object {
-        val FILE     = IFileElementType(IsppLanguage)
-        val STRINGS  = TokenSet.create(IsppTypes.QUOTE, IsppTypes.STRING_PART)
+        val FILE = IFileElementType(IsppLanguage)
+        val STRINGS = TokenSet.create(IsppTypes.QUOTE, IsppTypes.STRING_PART)
     }
 
     override fun createLexer(project: Project?): Lexer = IsppLexerAdapter()

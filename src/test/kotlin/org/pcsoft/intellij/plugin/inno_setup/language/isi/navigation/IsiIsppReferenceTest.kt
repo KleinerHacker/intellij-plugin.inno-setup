@@ -6,11 +6,11 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstantBody
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 
 class IsiIsppReferenceTest : BasePlatformTestCase() {
 
@@ -73,8 +73,10 @@ class IsiIsppReferenceTest : BasePlatformTestCase() {
         assertNotNull("Expected #define MyVar directive", directive)
 
         val ref = IsiIsppConstantReference(body, "MyVar")
-        assertTrue("isReferenceTo should return true for the directive element",
-            ref.isReferenceTo(directive!!))
+        assertTrue(
+            "isReferenceTo should return true for the directive element",
+            ref.isReferenceTo(directive!!)
+        )
     }
 
     fun testIsReferenceToNameIdentifier() {
@@ -85,19 +87,24 @@ class IsiIsppReferenceTest : BasePlatformTestCase() {
         assertNotNull("Expected name identifier on #define MyVar", nameId)
 
         val ref = IsiIsppConstantReference(body, "MyVar")
-        assertTrue("isReferenceTo should return true when IntelliJ passes the name identifier",
-            ref.isReferenceTo(nameId!!))
+        assertTrue(
+            "isReferenceTo should return true when IntelliJ passes the name identifier",
+            ref.isReferenceTo(nameId!!)
+        )
     }
 
     fun testIsReferenceToWrongNameReturnsFalse() {
-        val file = setup("#define MyVar \"value\"\n#define Other \"x\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
+        val file =
+            setup("#define MyVar \"value\"\n#define Other \"x\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
         val body = findIsppConstantBody(file)!!
         val otherDirective = findDefine(file, "Other")
         assertNotNull("Expected #define Other directive", otherDirective)
 
         val ref = IsiIsppConstantReference(body, "MyVar")
-        assertFalse("isReferenceTo should return false for a different directive",
-            ref.isReferenceTo(otherDirective!!))
+        assertFalse(
+            "isReferenceTo should return false for a different directive",
+            ref.isReferenceTo(otherDirective!!)
+        )
     }
 
     // ── define name extraction ───────────────────────────────────────────────
@@ -177,7 +184,8 @@ class IsiIsppReferenceTest : BasePlatformTestCase() {
         val file = setup("#define A 1\n#define B A + 2\n")
         val a = findDefine(file, "A")!!
         val refs = ReferencesSearch.search(a).findAll()
-        assertTrue("Find Usages must include the expression usage of A inside B",
+        assertTrue(
+            "Find Usages must include the expression usage of A inside B",
             refs.any { it.canonicalText == "A" })
     }
 

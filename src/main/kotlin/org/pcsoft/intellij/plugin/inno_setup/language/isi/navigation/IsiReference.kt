@@ -9,16 +9,16 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.findSections
-import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameDeclarations
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.valueUnquoted
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.valueUnquoted
+import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 
 // Anchor is IsiParamValue; range points to the specific identifier token within it.
-class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targetSection: String)
-    : PsiReferenceBase<IsiParamValue>(paramValue, range) {
+class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targetSection: String) :
+    PsiReferenceBase<IsiParamValue>(paramValue, range) {
 
     override fun resolve(): PsiElement? {
         val file = element.issFile() ?: return null

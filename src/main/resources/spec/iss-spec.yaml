@@ -423,7 +423,7 @@ sections:
             - name: iscustom
               description: "Marks this installation type as the user-customisable type. Only one type with this flag is allowed per script. When selected, the user can manually choose which components to install."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling the installation type behaviour."
@@ -481,27 +481,27 @@ sections:
             - name: fixed
               description: "The component is always installed and cannot be deselected by the user."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: checkablealone
               description: "Allows the component to be checked even when its parent component is unchecked."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: exclusive
               description: "Only one component in the group with this flag can be selected at a time (radio-button behaviour)."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: restart
               description: "The installer will prompt the user to restart the computer if this component is installed."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: dontinheritcheck
               description: "Prevents the component from inheriting its checked state from its parent component."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: disablenouninstallwarning
               description: "Suppresses the warning shown when the user deselects a previously installed component."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling component selection and installation behaviour."
@@ -578,27 +578,27 @@ sections:
             - name: checkablealone
               description: "Allows this task to be checked even when its parent task is unchecked."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: checkedonce
               description: "The task is checked by default only on the first install. On reinstalls it retains the previously chosen state."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: dontinheritcheck
               description: "Prevents this task from inheriting its checked state from its parent task."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: exclusive
               description: "Only one task in the group with this flag can be selected at a time (radio-button behaviour)."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: restart
               description: "The installer will prompt the user to restart the computer if this task is selected."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: unchecked
               description: "The task is unchecked by default."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling task selection behaviour."
@@ -666,7 +666,7 @@ sections:
             - name: deleteafterinstall
               description: "Deletes the directory after the installation is complete. Useful for temporary directories created during install."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: setntfscompression
               description: "Sets NTFS compression on the directory."
               deprecated: false
@@ -952,19 +952,19 @@ sections:
             - name: dontcopy
               description: "Prevents the file from being copied to disk. The file is still compressed into the installer and can be extracted via <code>[Code]</code>."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: download
               description: "Downloads the file from a URL at install time instead of embedding it. Requires the URL to be specified in <code>Source</code>."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: external
               description: "The file is not embedded in the installer but must be present alongside it. Use <code>ExternalSize</code> to specify its size."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: extractarchive
               description: "Extracts the contents of an archive (zip, 7z, etc.) instead of copying the archive file itself."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: ignoreversion
               description: "Does not compare version numbers; always installs the file regardless of the version on disk."
               deprecated: false
@@ -976,11 +976,11 @@ sections:
             - name: isreadme
               description: "Marks this file as the README. The installer may offer to open it after installation."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: nocompression
               description: "Stores this file uncompressed in the installer, even if compression is enabled globally."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: onlyifdoesntexist
               description: "Only installs the file if it does not already exist on the target machine."
               deprecated: false
@@ -990,11 +990,11 @@ sections:
             - name: recursesubdirs
               description: "When <code>Source</code> contains a wildcard, also searches subdirectories recursively."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: createallsubdirs
               description: "Creates all subdirectories found when using <code>recursesubdirs</code>, even if they are empty."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: regserver
               description: "Registers the file as a COM server by calling <code>DllRegisterServer</code>."
               deprecated: false
@@ -1215,15 +1215,15 @@ sections:
             - name: closeonexit
               description: "Closes the shortcut's target application when the user logs off."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: createonlyiffileexists
               description: "Only creates the shortcut if the target file actually exists on the machine."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: preventpinning
               description: "Prevents the shortcut from being pinned to the Windows 7+ taskbar or Start Menu."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling shortcut creation and launch behaviour."
@@ -1400,11 +1400,11 @@ sections:
             - name: noerror
               description: "Suppresses errors if the operation fails (e.g. the key does not exist)."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: preservestringtype
               description: "When overwriting an existing string value, preserves its original type (REG_SZ vs REG_EXPAND_SZ)."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: uninsclearvalue
               description: "Sets the value to an empty string on uninstall instead of deleting it."
               deprecated: false
@@ -1601,11 +1601,11 @@ sections:
             - name: postinstall
               description: "Shows a checkbox on the final wizard page letting the user choose whether to run this entry after installation."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: shellexec
               description: "Uses the Windows shell to open the file instead of executing it directly. Required for non-executable files."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: nowait
               description: "Does not wait for the process to finish before proceeding. Mutually exclusive with <code>waituntilterminated</code> and <code>waituntilidle</code>."
               deprecated: false
@@ -1635,7 +1635,7 @@ sections:
             - name: unchecked
               description: "The checkbox added by <code>postinstall</code> is unchecked by default."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: waituntilterminated
               description: "Waits until the process terminates before proceeding. This is the default behaviour. Mutually exclusive with <code>nowait</code> and <code>waituntilidle</code>."
               deprecated: false
@@ -1661,7 +1661,7 @@ sections:
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling how and when the program is executed."
@@ -1828,11 +1828,11 @@ sections:
             - name: postinstall
               description: "Shows a checkbox on the final wizard page letting the user choose whether to run this entry after uninstallation."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: shellexec
               description: "Uses the Windows shell to open the file instead of executing it directly. Required for non-executable files."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: nowait
               description: "Does not wait for the process to finish before proceeding. Mutually exclusive with <code>waituntilterminated</code> and <code>waituntilidle</code>."
               deprecated: false
@@ -1862,7 +1862,7 @@ sections:
             - name: unchecked
               description: "The checkbox added by <code>postinstall</code> is unchecked by default."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
             - name: waituntilterminated
               description: "Waits until the process terminates before proceeding. This is the default behaviour. Mutually exclusive with <code>nowait</code> and <code>waituntilidle</code>."
               deprecated: false
@@ -1888,7 +1888,7 @@ sections:
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the uninstaller, not as the elevated user."
               deprecated: false
-              conflicts: []
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling how and when the program is executed during uninstallation."
@@ -2165,4 +2165,4 @@ sections:
     type: code
     deprecated: false
     description: "Contains Pascal Script (RemObjects Pascal Script) for runtime customisation of the installer. Unlike other sections, this section does not use Key=Value or Key: Value syntax — it contains free-form Pascal source code compiled and executed by the installer at runtime."
-    attributes: []
+    attributes: [ ]

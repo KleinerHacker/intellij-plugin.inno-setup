@@ -29,7 +29,11 @@ class IsppTokenHighlighterTest : BasePlatformTestCase() {
     }
 
     /** Asserts that the substring [part] of [text] is lexed as a single token coloured with [color]. */
-    private fun assertHighlighted(text: String, part: String, color: com.intellij.openapi.editor.colors.TextAttributesKey) {
+    private fun assertHighlighted(
+        text: String,
+        part: String,
+        color: com.intellij.openapi.editor.colors.TextAttributesKey
+    ) {
         val token = lex(text).firstOrNull { it.second == part }
         assertNotNull("'$part' in `$text` must be a single token", token)
         assertTrue(

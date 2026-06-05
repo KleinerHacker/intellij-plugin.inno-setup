@@ -1,8 +1,12 @@
 # [Tasks]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=taskssection){
+.md-button .md-button--primary }
 
-The `[Tasks]` section defines optional actions the user can enable or disable on the *Select Additional Tasks* wizard page — things like creating a desktop shortcut or adding a context menu entry. Tasks appear as checkboxes or, when marked `exclusive`, as radio buttons within a group. Entries in other sections are linked to tasks via their `Tasks` parameter.
+The `[Tasks]` section defines optional actions the user can enable or disable on the *Select Additional Tasks* wizard
+page — things like creating a desktop shortcut or adding a context menu entry. Tasks appear as checkboxes or, when
+marked `exclusive`, as radio buttons within a group. Entries in other sections are linked to tasks via their `Tasks`
+parameter.
 
 ---
 
@@ -50,7 +54,8 @@ Behavioural flags: `checkablealone`, `checkedonce`, `dontinheritcheck`, `exclusi
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

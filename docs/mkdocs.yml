@@ -28,19 +28,19 @@ theme:
 nav:
   - Home: index.md
   - Sections:
-    - Setup: sections/setup.md
-    - Types: sections/types.md
-    - Components: sections/components.md
-    - Tasks: sections/tasks.md
-    - Dirs: sections/dirs.md
-    - Files: sections/files.md
-    - Icons: sections/icons.md
-    - Registry: sections/registry.md
-    - Run: sections/run.md
-    - UninstallRun: sections/uninstall-run.md
-    - Languages: sections/languages.md
-    - InstallDelete: sections/install-delete.md
-    - UninstallDelete: sections/uninstall-delete.md
-    - Code: sections/code.md
+      - Setup: sections/setup.md
+      - Types: sections/types.md
+      - Components: sections/components.md
+      - Tasks: sections/tasks.md
+      - Dirs: sections/dirs.md
+      - Files: sections/files.md
+      - Icons: sections/icons.md
+      - Registry: sections/registry.md
+      - Run: sections/run.md
+      - UninstallRun: sections/uninstall-run.md
+      - Languages: sections/languages.md
+      - InstallDelete: sections/install-delete.md
+      - UninstallDelete: sections/uninstall-delete.md
+      - Code: sections/code.md
   - API Docs: dokka/html/index.html
   - Licences: licences/index.html

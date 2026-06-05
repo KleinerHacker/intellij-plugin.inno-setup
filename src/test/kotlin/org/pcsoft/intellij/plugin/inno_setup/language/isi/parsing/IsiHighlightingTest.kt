@@ -26,7 +26,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val nameOffset = text.indexOf("{#AppVersion}") + 2  // offset of 'AppVersion' inside {#AppVersion}
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME &&
-            info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
+                    info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
         }
         assertNotNull(
             "The name of a known {#Name} must be highlighted with ISPP_REFERENCE_NAME (blue + italic)", hit
@@ -39,7 +39,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val hashOffset = text.indexOf("{#AppVersion}") + 1  // offset of '#' inside {#AppVersion}
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE &&
-            info.startOffset == hashOffset && info.endOffset == hashOffset + 1
+                    info.startOffset == hashOffset && info.endOffset == hashOffset + 1
         }
         assertNotNull(
             "The '#' inside a known {#Name} must be highlighted with PREPROCESSOR_DIRECTIVE (extension blue)", hit
@@ -51,7 +51,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val all = highlights(text)
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNKNOWN_REFERENCE &&
-            text.substring(info.startOffset, info.endOffset) == "{#Unknown}"
+                    text.substring(info.startOffset, info.endOffset) == "{#Unknown}"
         }
         assertNotNull(
             "Unknown {#Unknown} must be highlighted with UNKNOWN_REFERENCE attribute (wrong-reference color)", hit
@@ -66,7 +66,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         // Annotator highlights from '#' through the directive keyword as PREPROCESSOR_DIRECTIVE
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE &&
-            text.substring(info.startOffset, info.endOffset) == "#define"
+                    text.substring(info.startOffset, info.endOffset) == "#define"
         }
         assertNotNull(
             "'#define' must be highlighted with PREPROCESSOR_DIRECTIVE (extension blue)", hit
@@ -79,7 +79,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val nameOffset = text.indexOf("AppVersion")
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.DEFINE_NAME &&
-            info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
+                    info.startOffset == nameOffset && info.endOffset == nameOffset + "AppVersion".length
         }
         assertNotNull(
             "The name of a #define must be highlighted with DEFINE_NAME (italic)", hit
@@ -92,7 +92,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val nameOffset = text.indexOf("Max")
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.DEFINE_NAME &&
-            info.startOffset == nameOffset && info.endOffset == nameOffset + "Max".length
+                    info.startOffset == nameOffset && info.endOffset == nameOffset + "Max".length
         }
         assertNotNull(
             "The name of a function-like #define (Max) must be highlighted with DEFINE_NAME (italic)", hit
@@ -106,7 +106,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val all = highlights(text)
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.SECTION_NAME &&
-            text.substring(info.startOffset, info.endOffset) == "Setup"
+                    text.substring(info.startOffset, info.endOffset) == "Setup"
         }
         assertNotNull(
             "Known section name 'Setup' must be highlighted with SECTION_NAME attribute (CLASS_NAME color)", hit
@@ -118,7 +118,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val all = highlights(text)
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNKNOWN_REFERENCE &&
-            text.substring(info.startOffset, info.endOffset) == "UnknownSection"
+                    text.substring(info.startOffset, info.endOffset) == "UnknownSection"
         }
         assertNotNull(
             "Unknown section name must be highlighted with UNKNOWN_REFERENCE attribute", hit
@@ -143,8 +143,8 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val taskOffset = text.lastIndexOf("maintask")
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.REFERENCE &&
-            info.startOffset == taskOffset &&
-            info.endOffset == taskOffset + "maintask".length
+                    info.startOffset == taskOffset &&
+                    info.endOffset == taskOffset + "maintask".length
         }
         assertNotNull(
             "Task name 'maintask' in Tasks: parameter must be highlighted with REFERENCE attribute", hit
@@ -167,8 +167,8 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val offset = text.lastIndexOf("maincomp")
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.REFERENCE &&
-            info.startOffset == offset &&
-            info.endOffset == offset + "maincomp".length
+                    info.startOffset == offset &&
+                    info.endOffset == offset + "maincomp".length
         }
         assertNotNull(
             "Component name in Components: parameter must be highlighted with REFERENCE attribute", hit
@@ -182,7 +182,7 @@ class IsiHighlightingTest : BasePlatformTestCase() {
         val all = highlights(text)
         val hit = all.firstOrNull { info ->
             info.forcedTextAttributesKey == IsiAnnotatorHighlighting.PARAM_KEY &&
-            text.substring(info.startOffset, info.endOffset) == "AppName"
+                    text.substring(info.startOffset, info.endOffset) == "AppName"
         }
         assertNotNull(
             "Known directive key 'AppName' must be highlighted with PARAM_KEY attribute", hit

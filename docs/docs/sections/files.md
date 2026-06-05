@@ -1,8 +1,12 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){
+.md-button .md-button--primary }
 
-The `[Files]` section is where you declare every file your installer should copy to the target machine. It supports wildcards, recursive directory trees, font installation, .NET GAC registration, file integrity hashing, and even downloading files from the internet at install time. Directories needed by the listed files are created automatically — no `[Dirs]` entries required.
+The `[Files]` section is where you declare every file your installer should copy to the target machine. It supports
+wildcards, recursive directory trees, font installation, .NET GAC registration, file integrity hashing, and even
+downloading files from the internet at install time. Directories needed by the listed files are created automatically —
+no `[Dirs]` entries required.
 
 ---
 
@@ -42,7 +46,8 @@ Comma-separated list of filename patterns to exclude when using wildcards, e.g. 
 
 `integer`
 
-Size in bytes of an external file (used with the `external` flag) for accurate disk-space calculation on the wizard page.
+Size in bytes of an external file (used with the `external` flag) for accurate disk-space calculation on the wizard
+page.
 
 ---
 
@@ -82,7 +87,8 @@ Registry font name used when installing a font file, e.g. `My Font (TrueType)`. 
 
 `string`
 
-Expected SHA-256 hash of the source file. Inno Setup verifies the hash at compile time to catch accidental file corruption.
+Expected SHA-256 hash of the source file. Inno Setup verifies the hash at compile time to catch accidental file
+corruption.
 
 ---
 
@@ -130,7 +136,9 @@ HTTP Basic Auth password for authenticated file downloads (requires the `downloa
 
 `string` · **Multiple values**
 
-Behavioural flags: `32bit`, `64bit`, `comparetimestamp`, `confirmoverwrite`, `deleteafterinstall`, `dontcopy`, `download`, `external`, `extractarchive`, `ignoreversion`, `isreadme`, `nocompression`, `onlyifdoesntexist`, `recursesubdirs`, `createallsubdirs`, `regserver`, `regtypelib`, `restartreplace`, `sharedfile`.
+Behavioural flags: `32bit`, `64bit`, `comparetimestamp`, `confirmoverwrite`, `deleteafterinstall`, `dontcopy`,
+`download`, `external`, `extractarchive`, `ignoreversion`, `isreadme`, `nocompression`, `onlyifdoesntexist`,
+`recursesubdirs`, `createallsubdirs`, `regserver`, `regtypelib`, `restartreplace`, `sharedfile`.
 
 ---
 
@@ -162,7 +170,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

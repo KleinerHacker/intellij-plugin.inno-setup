@@ -19,8 +19,8 @@ class IsiQuoteHandler : TypedHandlerDelegate() {
     ): Result {
         if (file !is IssFile || c != '"') return Result.CONTINUE
 
-        val offset  = editor.caretModel.offset
-        val text    = editor.document.charsSequence
+        val offset = editor.caretModel.offset
+        val text = editor.document.charsSequence
         val editorEx = editor as EditorEx
 
         // Skip over an existing closing quote instead of inserting a new one.

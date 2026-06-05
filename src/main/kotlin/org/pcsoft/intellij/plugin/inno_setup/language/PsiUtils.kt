@@ -3,12 +3,12 @@ package org.pcsoft.intellij.plugin.inno_setup.language
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 
 // ── IssFile (Sektionen) ────────────────────────────────────────────────────────
 

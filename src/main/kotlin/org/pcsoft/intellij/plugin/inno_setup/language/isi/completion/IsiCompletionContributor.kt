@@ -3,19 +3,14 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
-import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
+import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveKey
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamKey
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPairEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
-import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec
@@ -67,7 +62,7 @@ private object SectionNameProvider : CompletionProvider<CompletionParameters>() 
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        val file         = parameters.originalFile as? IssFile ?: return
+        val file = parameters.originalFile as? IssFile ?: return
         val specSections = service<IssSpecService>().spec.sections
 
         val existingNames = file.sections()
@@ -106,8 +101,8 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
         //  • not inside any entry at all → user is on an empty / partial line
         // Anything else (inside a value) is skipped.
         val inKeyPosition = position.parent is IsiParamKey
-            || position.parent is IsiDirectiveKey
-            || (position.containingParameterEntry() == null
+                || position.parent is IsiDirectiveKey
+                || (position.containingParameterEntry() == null
                 && position.containingDirectiveEntry() == null)
         if (!inKeyPosition) return
 
@@ -121,26 +116,26 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
         val sectionName = psiSection.nameText()
 
         val specSections = service<IssSpecService>().spec.sections
-        val specSection  = specSections.firstOrNull {
+        val specSection = specSections.firstOrNull {
             it.name.equals(sectionName, ignoreCase = true)
         } ?: return
 
         val usedKeys = (
-            psiSection.allParamPairs().map { it.keyText().lowercase() } +
-            psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }
-        ).toSet()
+                psiSection.allParamPairs().map { it.keyText().lowercase() } +
+                        psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }
+                ).toSet()
 
         specSection.attributes.forEach { attr ->
             val duplicate = attr.name.lowercase() in usedKeys
             val typeHint = when (val t = attr.type) {
-                is IssNativeTypeSpec    -> t.dataType
+                is IssNativeTypeSpec -> t.dataType
                 is IssReferenceTypeSpec -> "→ ${t.section}"
-                is IssFlagTypeSpec      -> "flags"
+                is IssFlagTypeSpec -> "flags"
             }
             val tail = buildString {
-                if (attr.required)   append(" required")
+                if (attr.required) append(" required")
                 if (attr.deprecated) append(" deprecated")
-                if (attr.array)      append("[]")
+                if (attr.array) append("[]")
             }
             val separator = if (specSection.type == "directive") "=" else ": "
 
@@ -168,9 +163,9 @@ private object IsppVariableAfterHashProvider : CompletionProvider<CompletionPara
         result: CompletionResultSet
     ) {
         val offset = parameters.offset
-        val chars  = parameters.editor.document.charsSequence
+        val chars = parameters.editor.document.charsSequence
         val lookBack = minOf(offset, 100)
-        val prefix   = chars.subSequence(offset - lookBack, offset).toString()
+        val prefix = chars.subSequence(offset - lookBack, offset).toString()
         val braceIdx = prefix.lastIndexOf('{')
         if (braceIdx < 0) return
         val afterBrace = prefix.substring(braceIdx + 1)
@@ -187,7 +182,7 @@ private object IsppVariableAfterHashProvider : CompletionProvider<CompletionPara
                     .withIcon(IssIcons.Variable)
                     .withInsertHandler { ctx, _ ->
                         val tail = ctx.tailOffset
-                        val doc  = ctx.document.charsSequence
+                        val doc = ctx.document.charsSequence
                         if (tail >= doc.length || doc[tail] != '}')
                             ctx.document.insertString(tail, "}")
                         ctx.editor.caretModel.moveToOffset(tail + 1)

@@ -1,8 +1,11 @@
 # [Icons]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=iconssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=iconssection){
+.md-button .md-button--primary }
 
-The `[Icons]` section creates Windows shortcuts during installation — in the Start Menu, on the Desktop, or anywhere else. Each entry creates exactly one shortcut. The target can be an executable, a document, a folder, or a URL. Use the `Tasks` parameter to make shortcuts optional, letting the user decide on the *Select Additional Tasks* wizard page.
+The `[Icons]` section creates Windows shortcuts during installation — in the Start Menu, on the Desktop, or anywhere
+else. Each entry creates exactly one shortcut. The target can be an executable, a document, a folder, or a URL. Use the
+`Tasks` parameter to make shortcuts optional, letting the user decide on the *Select Additional Tasks* wizard page.
 
 ---
 
@@ -122,7 +125,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

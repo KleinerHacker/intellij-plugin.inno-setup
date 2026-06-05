@@ -12,8 +12,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPa
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
 
-abstract class IsiParamPairMixinImpl(node: ASTNode)
-    : ASTWrapperPsiElement(node), IsiParamPairEx, PsiNameIdentifierOwner {
+abstract class IsiParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsiParamPairEx,
+    PsiNameIdentifierOwner {
 
     private val REFERENCE_KEYS = setOf("tasks", "components", "types", "languages")
 

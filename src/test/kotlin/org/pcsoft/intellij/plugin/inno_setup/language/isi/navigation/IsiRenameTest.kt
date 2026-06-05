@@ -70,7 +70,8 @@ class IsiRenameTest : BasePlatformTestCase() {
             """.trimIndent()
         )
         myFixture.renameElementAtCaret("newtask")
-        myFixture.checkResult("""
+        myFixture.checkResult(
+            """
                 [Setup]
                 AppName=Test
                 AppVersion=1.0
@@ -100,7 +101,8 @@ class IsiRenameTest : BasePlatformTestCase() {
             """.trimIndent()
         )
         myFixture.renameElementAtCaret("renamed")
-        myFixture.checkResult("""
+        myFixture.checkResult(
+            """
                 [Setup]
                 AppName=Test
                 AppVersion=1.0
@@ -132,7 +134,8 @@ class IsiRenameTest : BasePlatformTestCase() {
             """.trimIndent()
         )
         myFixture.renameElementAtCaret("renamed")
-        myFixture.checkResult("""
+        myFixture.checkResult(
+            """
                 [Setup]
                 AppName=Test
                 AppVersion=1.0
@@ -163,7 +166,8 @@ class IsiRenameTest : BasePlatformTestCase() {
             """.trimIndent()
         )
         myFixture.renameElementAtCaret("corecomp")
-        myFixture.checkResult("""
+        myFixture.checkResult(
+            """
                 [Setup]
                 AppName=Test
                 AppVersion=1.0

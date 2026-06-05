@@ -1,8 +1,12 @@
 # [Dirs]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=dirssection){
+.md-button .md-button--primary }
 
-The `[Dirs]` section creates additional directories on the target machine during installation. In most cases you do not need this section at all — directories required by files listed in `[Files]` are created automatically. Use `[Dirs]` when you need to create an empty directory structure, set specific NTFS attributes, or configure ACL permissions on a directory.
+The `[Dirs]` section creates additional directories on the target machine during installation. In most cases you do not
+need this section at all — directories required by files listed in `[Files]` are created automatically. Use `[Dirs]`
+when you need to create an empty directory structure, set specific NTFS attributes, or configure ACL permissions on a
+directory.
 
 ---
 
@@ -26,7 +30,8 @@ File-system attributes to set on the directory: `readonly`, `hidden`, `system`, 
 
 `string` · **Multiple values**
 
-ACL permissions to grant on the directory, e.g. `users-modify`, `everyone-readexec`. Avoid setting ACLs on top-level system directories such as `{sys}` or `{commonpf}`.
+ACL permissions to grant on the directory, e.g. `users-modify`, `everyone-readexec`. Avoid setting ACLs on top-level
+system directories such as `{sys}` or `{commonpf}`.
 
 ---
 
@@ -34,7 +39,8 @@ ACL permissions to grant on the directory, e.g. `users-modify`, `everyone-readex
 
 `string` · **Multiple values**
 
-Behavioural flags: `deleteafterinstall`, `setntfscompression`, `uninsalwaysuninstall`, `uninsneveruninstall`, `unsetntfscompression`.
+Behavioural flags: `deleteafterinstall`, `setntfscompression`, `uninsalwaysuninstall`, `uninsneveruninstall`,
+`unsetntfscompression`.
 
 ---
 
@@ -66,7 +72,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

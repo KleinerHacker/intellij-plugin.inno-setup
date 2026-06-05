@@ -1,8 +1,12 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
+.md-button--primary }
 
-The `[Run]` section lists programs or files that Inno Setup executes after a successful installation, just before the final wizard page is shown. Entries run sequentially in the order they appear. You can launch executables silently in the background, open documents with their associated application, or present the user with optional post-install actions (like *Launch MyApp*) via checkboxes on the completion page.
+The `[Run]` section lists programs or files that Inno Setup executes after a successful installation, just before the
+final wizard page is shown. Entries run sequentially in the order they appear. You can launch executables silently in
+the background, open documents with their associated application, or present the user with optional post-install
+actions (like *Launch MyApp*) via checkboxes on the completion page.
 
 ---
 
@@ -10,7 +14,8 @@ The `[Run]` section lists programs or files that Inno Setup executes after a suc
 
 `string` · **Required**
 
-Path to the executable, document, or folder to launch. Use the `shellexec` flag to open non-executable files with their associated application.
+Path to the executable, document, or folder to launch. Use the `shellexec` flag to open non-executable files with their
+associated application.
 
 ---
 
@@ -74,7 +79,8 @@ Name of a Pascal procedure in `[Code]` called for each line of output (requires 
 
 `string` · **Multiple values**
 
-Behavioural flags: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`, `waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
+Behavioural flags: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`,
+`waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
 
 ---
 
@@ -106,7 +112,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

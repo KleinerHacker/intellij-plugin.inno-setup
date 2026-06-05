@@ -32,14 +32,16 @@ class IsiErrorFilterTest : BasePlatformTestCase() {
         // no additional errors leak out to the file level.
         val errors = errorsIn("[Setup]\nAppName=x\nAppVersion=1\n\n[Code\n")
         assertTrue("Expected a parse error from the unclosed [Code header", errors.isNotEmpty())
-        assertTrue("Errors inside the [Code] section must be suppressed",
+        assertTrue(
+            "Errors inside the [Code] section must be suppressed",
             errors.all { !filter.shouldHighlightErrorElement(it) })
     }
 
     fun testErrorInNormalSectionIsHighlighted() {
         val errors = errorsIn("[Setup]\nAppName=x\nAppVersion=1\n\n[Files\nSource: \"a.exe\"\n")
         assertTrue("Expected a parse error from the unclosed [Files header", errors.isNotEmpty())
-        assertTrue("Errors in a normal section must be highlighted",
+        assertTrue(
+            "Errors in a normal section must be highlighted",
             errors.all { filter.shouldHighlightErrorElement(it) })
     }
 }

@@ -13,8 +13,8 @@ import javax.swing.JComponent
 
 class IssCreateFileDialog(project: Project) : DialogWrapper(project) {
 
-    private val fileNameField   = JBTextField()
-    private val appNameField    = JBTextField()
+    private val fileNameField = JBTextField()
+    private val appNameField = JBTextField()
     private val appVersionField = JBTextField("1.0")
 
     private val languageList = CheckBoxList<IssScriptLanguage>().apply {
@@ -23,8 +23,8 @@ class IssCreateFileDialog(project: Project) : DialogWrapper(project) {
         }
     }
 
-    val fileName:   String get() = fileNameField.text.trim()
-    val appName:    String get() = appNameField.text.trim()
+    val fileName: String get() = fileNameField.text.trim()
+    val appName: String get() = appNameField.text.trim()
     val appVersion: String get() = appVersionField.text.trim()
     val selectedLanguages: List<IssScriptLanguage>
         get() = IssScriptLanguage.entries.filter { languageList.isItemSelected(it) }
@@ -35,8 +35,8 @@ class IssCreateFileDialog(project: Project) : DialogWrapper(project) {
     }
 
     override fun createCenterPanel(): JComponent = panel {
-        row("File name:")   { cell(fileNameField).focused().align(Align.FILL) }
-        row("App name:")    { cell(appNameField).align(Align.FILL) }
+        row("File name:") { cell(fileNameField).focused().align(Align.FILL) }
+        row("App name:") { cell(appNameField).align(Align.FILL) }
         row("App version:") { cell(appVersionField).align(Align.FILL) }
         row("Languages:") {
             cell(JBScrollPane(languageList)).align(Align.FILL)
@@ -44,11 +44,11 @@ class IssCreateFileDialog(project: Project) : DialogWrapper(project) {
     }.also { it.minimumSize = Dimension(500, 300) }
 
     override fun doValidate(): ValidationInfo? = when {
-        fileName.isEmpty()          -> ValidationInfo("File name must not be empty", fileNameField)
-        appName.isEmpty()           -> ValidationInfo("App name must not be empty", appNameField)
-        appVersion.isEmpty()        -> ValidationInfo("App version must not be empty", appVersionField)
+        fileName.isEmpty() -> ValidationInfo("File name must not be empty", fileNameField)
+        appName.isEmpty() -> ValidationInfo("App name must not be empty", appNameField)
+        appVersion.isEmpty() -> ValidationInfo("App version must not be empty", appVersionField)
         selectedLanguages.isEmpty() -> ValidationInfo("At least one language must be selected", languageList)
-        else                        -> null
+        else -> null
     }
 
     override fun getPreferredFocusedComponent() = fileNameField

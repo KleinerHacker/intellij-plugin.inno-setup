@@ -7,10 +7,10 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 
 /**
  * Tests for all supported forms of #define, covering:
@@ -191,23 +191,32 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
         myFixture.configureByText(IssFileType.INSTANCE, content)
         return myFixture.doHighlighting().any {
             it.severity == HighlightSeverity.ERROR &&
-            it.description?.contains("Unknown constant", ignoreCase = true) == true
+                    it.description?.contains("Unknown constant", ignoreCase = true) == true
         }
     }
 
     fun testSimpleDefineNoAnnotatorError() {
-        assertFalse(hasUnknownConstantError(
-            "#define AppName MyApp\n[Files]\nSource: \"a.exe\"; DestDir: \"{#AppName}\"\n"))
+        assertFalse(
+            hasUnknownConstantError(
+                "#define AppName MyApp\n[Files]\nSource: \"a.exe\"; DestDir: \"{#AppName}\"\n"
+            )
+        )
     }
 
     fun testMacroNoAnnotatorError() {
-        assertFalse(hasUnknownConstantError(
-            "#define Max(a,b) body\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Max}\"\n"))
+        assertFalse(
+            hasUnknownConstantError(
+                "#define Max(a,b) body\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Max}\"\n"
+            )
+        )
     }
 
     fun testExpressionDefineNoAnnotatorError() {
-        assertFalse(hasUnknownConstantError(
-            "#define MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyInt}\"\n"))
+        assertFalse(
+            hasUnknownConstantError(
+                "#define MyInt 42\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyInt}\"\n"
+            )
+        )
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -215,16 +224,22 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
     // ═══════════════════════════════════════════════════════════════════════════
 
     fun testSimpleDefineAppearsInCompletion() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define AppVersion \"1.0\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define AppVersion \"1.0\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n"
+        )
         myFixture.completeBasic()
-        assertTrue("Simple define must appear in {#} completion",
-            "AppVersion" in (myFixture.lookupElementStrings ?: emptyList()))
+        assertTrue(
+            "Simple define must appear in {#} completion",
+            "AppVersion" in (myFixture.lookupElementStrings ?: emptyList())
+        )
     }
 
     fun testMacroAppearsInCompletion() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define Max(a,b) body\n#define Min(a,b) body\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define Max(a,b) body\n#define Min(a,b) body\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n"
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
         assertTrue("Macro name must appear in {#} completion", "Max" in variants)
@@ -232,8 +247,10 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
     }
 
     fun testExpressionDefineAppearsInCompletion() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define MyVersion 1\n#define MyTitle \"T\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define MyVersion 1\n#define MyTitle \"T\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#<caret>}\"\n"
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
         assertTrue("Integer define must appear in {#} completion", "MyVersion" in variants)
@@ -241,8 +258,10 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
     }
 
     fun testExpressionCompletionOffersOnlyPrecedingDefines() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define Alpha 1\n#define Beta 2\n#define Gamma <caret>\n#define Delta 4\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define Alpha 1\n#define Beta 2\n#define Gamma <caret>\n#define Delta 4\n"
+        )
         myFixture.completeBasic()
         val variants = myFixture.lookupElementStrings ?: emptyList()
         assertTrue("Preceding define Alpha must be offered", "Alpha" in variants)
@@ -256,27 +275,36 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
     // ═══════════════════════════════════════════════════════════════════════════
 
     fun testRenameSimpleDefine() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define App<caret>Name \"MyApp\"\n[Setup]\nAppName={#AppName}\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define App<caret>Name \"MyApp\"\n[Setup]\nAppName={#AppName}\n"
+        )
         myFixture.renameElementAtCaret("ProductName")
         myFixture.checkResult(
-            "#define ProductName \"MyApp\"\n[Setup]\nAppName={#ProductName}\n")
+            "#define ProductName \"MyApp\"\n[Setup]\nAppName={#ProductName}\n"
+        )
     }
 
     fun testRenameMacroUpdatesDeclarationAndReferences() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define Ma<caret>x(a,b) ((a)>(b)?(a):(b))\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Max}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define Ma<caret>x(a,b) ((a)>(b)?(a):(b))\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Max}\"\n"
+        )
         myFixture.renameElementAtCaret("Biggest")
         myFixture.checkResult(
-            "#define Biggest(a,b) ((a)>(b)?(a):(b))\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Biggest}\"\n")
+            "#define Biggest(a,b) ((a)>(b)?(a):(b))\n[Files]\nSource: \"a.exe\"; DestDir: \"{#Biggest}\"\n"
+        )
     }
 
     fun testRenameIntDefine() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define MyI<caret>nt 42\n[Setup]\nAppVersion={#MyInt}\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define MyI<caret>nt 42\n[Setup]\nAppVersion={#MyInt}\n"
+        )
         myFixture.renameElementAtCaret("MyNumber")
         myFixture.checkResult(
-            "#define MyNumber 42\n[Setup]\nAppVersion={#MyNumber}\n")
+            "#define MyNumber 42\n[Setup]\nAppVersion={#MyNumber}\n"
+        )
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -287,32 +315,42 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
         myFixture.configureByText(IssFileType.INSTANCE, content)
         return myFixture.doHighlighting().any {
             it.severity == HighlightSeverity.ERROR &&
-            it.description?.contains("requires an expression", ignoreCase = true) == true
+                    it.description?.contains("requires an expression", ignoreCase = true) == true
         }
     }
 
     fun testPlainDefineWithoutValueNoError() {
-        assertFalse("A plain define without a value is allowed",
-            hasExpressionRequiredError("#define MyConst\n"))
+        assertFalse(
+            "A plain define without a value is allowed",
+            hasExpressionRequiredError("#define MyConst\n")
+        )
     }
 
     fun testPlainDefineWithValueNoError() {
-        assertFalse("A plain define with a value is allowed",
-            hasExpressionRequiredError("#define MyConst 42\n"))
+        assertFalse(
+            "A plain define with a value is allowed",
+            hasExpressionRequiredError("#define MyConst 42\n")
+        )
     }
 
     fun testFunctionMacroWithBodyNoError() {
-        assertFalse("A function-like macro with an expression is valid",
-            hasExpressionRequiredError("#define Max(a,b) a > b ? a : b\n"))
+        assertFalse(
+            "A function-like macro with an expression is valid",
+            hasExpressionRequiredError("#define Max(a,b) a > b ? a : b\n")
+        )
     }
 
     fun testFunctionMacroWithoutBodyProducesError() {
-        assertTrue("A function-like macro without an expression must produce an ERROR",
-            hasExpressionRequiredError("#define Empty()\n"))
+        assertTrue(
+            "A function-like macro without an expression must produce an ERROR",
+            hasExpressionRequiredError("#define Empty()\n")
+        )
     }
 
     fun testFunctionMacroWithoutBodyWithParamsProducesError() {
-        assertTrue("A function-like macro with params but no expression must produce an ERROR",
-            hasExpressionRequiredError("#define Broken(a, b)\n"))
+        assertTrue(
+            "A function-like macro with params but no expression must produce an ERROR",
+            hasExpressionRequiredError("#define Broken(a, b)\n")
+        )
     }
 }

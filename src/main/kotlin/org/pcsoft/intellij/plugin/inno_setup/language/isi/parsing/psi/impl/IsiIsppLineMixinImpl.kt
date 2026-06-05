@@ -9,8 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 
-abstract class IsiIsppLineMixinImpl(node: ASTNode)
-    : ASTWrapperPsiElement(node), PsiLanguageInjectionHost {
+abstract class IsiIsppLineMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), PsiLanguageInjectionHost {
 
     override fun isValidHost(): Boolean = true
 

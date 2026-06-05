@@ -1,8 +1,12 @@
 # [Setup]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=setupsection){
+.md-button .md-button--primary }
 
-The `[Setup]` section is the backbone of every Inno Setup script. It uses a simple `Directive=Value` format and controls everything from the application metadata shown in Windows' Add/Remove Programs to the compression algorithm, wizard appearance, and privilege requirements. Only `AppName` and `AppVersion` are strictly required — all other directives have sensible defaults.
+The `[Setup]` section is the backbone of every Inno Setup script. It uses a simple `Directive=Value` format and controls
+everything from the application metadata shown in Windows' Add/Remove Programs to the compression algorithm, wizard
+appearance, and privilege requirements. Only `AppName` and `AppVersion` are strictly required — all other directives
+have sensible defaults.
 
 ---
 
@@ -12,7 +16,8 @@ The `[Setup]` section is the backbone of every Inno Setup script. It uses a simp
 
 `string` · **Required**
 
-The full display name of the application. Shown throughout the installation wizard and in the Windows Add/Remove Programs list.
+The full display name of the application. Shown throughout the installation wizard and in the Windows Add/Remove
+Programs list.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_appname)
 
@@ -22,7 +27,8 @@ The full display name of the application. Shown throughout the installation wiza
 
 `string` · **Required**
 
-The version string of the application, e.g. `1.0` or `2.3.1`. Displayed in Add/Remove Programs and used for upgrade detection logic.
+The version string of the application, e.g. `1.0` or `2.3.1`. Displayed in Add/Remove Programs and used for upgrade
+detection logic.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_appversion)
 
@@ -74,7 +80,8 @@ Updates or download URL shown in Add/Remove Programs.
 
 `string`
 
-Compression algorithm used to pack the installer's payload. Valid values: `lzma2/ultra64` (default, best ratio), `bzip2`, `deflate`, `none`.
+Compression algorithm used to pack the installer's payload. Valid values: `lzma2/ultra64` (default, best ratio),
+`bzip2`, `deflate`, `none`.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_compression)
 
@@ -136,7 +143,8 @@ Password used to encrypt the installer's files. The installer will prompt the us
 
 `string`
 
-Default installation directory shown on the Select Destination page, e.g. `{autopf}\MyApp`. Supports all Inno Setup directory constants.
+Default installation directory shown on the Select Destination page, e.g. `{autopf}\MyApp`. Supports all Inno Setup
+directory constants.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_defaultdirname)
 
@@ -180,7 +188,8 @@ Allows the user to override the required privilege level. Values: `commandline`,
 
 `string`
 
-Minimum Windows version required to run the installer, e.g. `6.1` for Windows 7. Use `0` to effectively disable installation.
+Minimum Windows version required to run the installer, e.g. `6.1` for Windows 7. Use `0` to effectively disable
+installation.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_minversion)
 
@@ -212,7 +221,8 @@ Space-separated list of architectures for which the installer runs in 64-bit mod
 
 `string`
 
-A mutex name the installer checks before starting. If the mutex exists, the user is warned that the application is already running.
+A mutex name the installer checks before starting. If the mutex exists, the user is warned that the application is
+already running.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_appmutex)
 
@@ -294,7 +304,8 @@ Path to an EXE, DLL, or ICO used as the icon in Add/Remove Programs, e.g. `{app}
 
 `boolean`
 
-Controls whether the uninstall registry key is created under `HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall`. Defaults to `yes`.
+Controls whether the uninstall registry key is created under `HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall`.
+Defaults to `yes`.
 
 [:octicons-link-external-16: Reference](https://jrsoftware.org/ishelp/index.php?topic=setup_createuninstallregkey)
 

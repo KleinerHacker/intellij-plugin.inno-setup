@@ -6,11 +6,11 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
 
 /**
  * End-to-end tests for both reference types:
@@ -66,8 +66,10 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
     }
 
     fun testIsppRefResolvesToDefineDirective() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define AppVersion \"1.0\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#App<caret>Version}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define AppVersion \"1.0\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#App<caret>Version}\"\n"
+        )
         val resolved = issFile().findReferenceAt(myFixture.caretOffset)?.resolve()
         assertNotNull("Reference should resolve to the #define directive", resolved)
         assertInstanceOf(resolved, IsppDirective::class.java)
@@ -75,16 +77,20 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
     }
 
     fun testIsppRefUnknownResolvesToNull() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "[Files]\nSource: \"a.exe\"; DestDir: \"{#Unkno<caret>wn}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{#Unkno<caret>wn}\"\n"
+        )
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("Reference object should still exist for an unknown ISPP name", ref)
         assertNull("Unknown ISPP constant should resolve to null", ref!!.resolve())
     }
 
     fun testIsppRefIsReferenceToDirective() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define MyVar \"value\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define MyVar \"value\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n"
+        )
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("Reference must exist at caret", ref)
         val directive = findDefine("MyVar")
@@ -93,8 +99,10 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
     }
 
     fun testIsppRefIsReferenceToNameIdentifier() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define MyVar \"value\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define MyVar \"value\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n"
+        )
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("Reference must exist at caret", ref)
         val directive = findDefine("MyVar")
@@ -104,8 +112,10 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
     }
 
     fun testIsppRefIsReferenceToWrongDirective() {
-        myFixture.configureByText(IssFileType.INSTANCE,
-            "#define MyVar \"v\"\n#define Other \"x\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n")
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define MyVar \"v\"\n#define Other \"x\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#MyV<caret>ar}\"\n"
+        )
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("Reference must exist at caret", ref)
         val other = findDefine("Other")
@@ -146,12 +156,15 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
         myFixture.configureByText(IssFileType.INSTANCE, SECTION_REF_SCRIPT)
         val resolved = issFile().findReferenceAt(myFixture.caretOffset)?.resolve()
         assertNotNull(resolved)
-        assertTrue("Resolved element text should contain 'maintask'",
-            resolved!!.text.contains("maintask", ignoreCase = true))
+        assertTrue(
+            "Resolved element text should contain 'maintask'",
+            resolved!!.text.contains("maintask", ignoreCase = true)
+        )
     }
 
     fun testSectionRefUnknownResolvesToNull() {
-        myFixture.configureByText(IssFileType.INSTANCE, """
+        myFixture.configureByText(
+            IssFileType.INSTANCE, """
             [Setup]
             AppName=TestApp
             AppVersion=1.0
@@ -162,23 +175,27 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
             [Files]
             Source: "app.exe"; DestDir: "{app}"; Tasks: unkno<caret>wn
 
-        """.trimIndent())
+        """.trimIndent()
+        )
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("A reference object should exist even for unknown name", ref)
         assertNull("Unknown Tasks name should resolve to null", ref!!.resolve())
     }
 
     fun testSectionRefNotCreatedForNonRefKey() {
-        val r = ref("""
+        val r = ref(
+            """
             [Files]
             Source: "app<caret>.exe"; DestDir: "{app}"
 
-        """.trimIndent())
+        """.trimIndent()
+        )
         assertNull("Source: value should not produce a cross-section reference", r)
     }
 
     fun testSectionRefComponentsKey() {
-        val r = ref("""
+        val r = ref(
+            """
             [Setup]
             AppName=Test
             AppVersion=1.0
@@ -189,7 +206,8 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
             [Files]
             Source: "app.exe"; DestDir: "{app}"; Components: main<caret>comp
 
-        """.trimIndent())
+        """.trimIndent()
+        )
         assertNotNull("findReferenceAt should return a reference for Components: <name>", r)
     }
 

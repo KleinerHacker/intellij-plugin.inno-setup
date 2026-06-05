@@ -5,9 +5,9 @@ import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiLanguageInjectionHost
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppLanguage
 
 class IsppInjector : MultiHostInjector {
 
@@ -16,8 +16,10 @@ class IsppInjector : MultiHostInjector {
         val lineNode = context.node.findChildByType(IsiTypes.PREPROCESSOR_LINE) ?: return
         val startInHost = lineNode.startOffset - context.textRange.startOffset
         registrar.startInjecting(IsppLanguage)
-            .addPlace(null, null, context as PsiLanguageInjectionHost,
-                TextRange(startInHost, startInHost + lineNode.textLength))
+            .addPlace(
+                null, null, context as PsiLanguageInjectionHost,
+                TextRange(startInHost, startInHost + lineNode.textLength)
+            )
             .doneInjecting()
     }
 

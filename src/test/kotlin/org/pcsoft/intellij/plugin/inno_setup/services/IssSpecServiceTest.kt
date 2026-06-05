@@ -144,7 +144,8 @@ class IssSpecServiceTest {
 
     @Test
     fun `all sections with Flags attribute use flag type`() {
-        val sectionsWithFlags = listOf("Types", "Components", "Tasks", "Dirs", "Files", "Icons", "Registry", "Run", "UninstallRun")
+        val sectionsWithFlags =
+            listOf("Types", "Components", "Tasks", "Dirs", "Files", "Icons", "Registry", "Run", "UninstallRun")
         sectionsWithFlags.forEach { sectionName ->
             val section = spec.sections.find { it.name == sectionName }!!
             val flagsAttr = section.attributes.find { it.name == "Flags" }

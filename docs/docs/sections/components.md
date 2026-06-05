@@ -1,8 +1,12 @@
 # [Components]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=componentssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=componentssection){
+.md-button .md-button--primary }
 
-The `[Components]` section defines the selectable features shown on the wizard's Select Components page. Components can be organised into a parent/child hierarchy using backslash notation, e.g. `extra\plugins`. Entries in `[Files]`, `[Icons]`, and other sections are linked to components via their `Components` parameter, so only the files belonging to selected components are installed.
+The `[Components]` section defines the selectable features shown on the wizard's Select Components page. Components can
+be organised into a parent/child hierarchy using backslash notation, e.g. `extra\plugins`. Entries in `[Files]`,
+`[Icons]`, and other sections are linked to components via their `Components` parameter, so only the files belonging to
+selected components are installed.
 
 ---
 
@@ -34,7 +38,8 @@ Space-separated list of installation type names (from `[Types]`) that include th
 
 `integer`
 
-Additional disk space in bytes that this component requires beyond the files it installs. Displayed on the Select Components page.
+Additional disk space in bytes that this component requires beyond the files it installs. Displayed on the Select
+Components page.
 
 ---
 
@@ -50,7 +55,8 @@ Behavioural flags: `fixed`, `checkablealone`, `exclusive`, `restart`, `dontinher
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 

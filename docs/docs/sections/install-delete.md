@@ -1,8 +1,11 @@
 # [InstallDelete]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){
+.md-button .md-button--primary }
 
-The `[InstallDelete]` section lists files and directories that Inno Setup removes at the *beginning* of installation, before any new files are copied. This is useful for cleaning up stale files or old directory structures left behind by previous versions of the application that the new installer no longer tracks.
+The `[InstallDelete]` section lists files and directories that Inno Setup removes at the *beginning* of installation,
+before any new files are copied. This is useful for cleaning up stale files or old directory structures left behind by
+previous versions of the application that the new installer no longer tracks.
 
 ---
 
@@ -10,7 +13,8 @@ The `[InstallDelete]` section lists files and directories that Inno Setup remove
 
 `string` · **Required**
 
-What to delete: `files` (matching files only), `filesandordirs` (files and all subdirectories), `dirifempty` (the directory only if it contains no files).
+What to delete: `files` (matching files only), `filesandordirs` (files and all subdirectories), `dirifempty` (the
+directory only if it contains no files).
 
 ---
 
@@ -50,7 +54,8 @@ Limits this entry to the specified languages.
 
 `string`
 
-Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns `True`.
+Name of a Pascal function in `[Code]` that returns `Boolean`. The entry is processed only when the function returns
+`True`.
 
 ---
 
