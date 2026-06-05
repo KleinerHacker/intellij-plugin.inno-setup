@@ -44,7 +44,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build plugin
-        run: ./gradlew buildPlugin --stacktrace
+        run: ./gradlew buildPlugin -Pversion=${{ github.ref_name }} --stacktrace
 
       - name: Create GitHub Release
         env:
