@@ -20,6 +20,7 @@ val parsingRoot = "src/main/resources/parsing"
 val rootPackage = "org/pcsoft/intellij/plugin/inno_setup"
 val languagePackage = "$rootPackage/language"
 val isppLanguagePackage = "$languagePackage/ispp"
+val isiLanguagePackage = "$languagePackage/isi"
 
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
@@ -166,17 +167,17 @@ tasks {
 // Pre-create output directories so Grammar-Kit's lazy Provider<Directory> properties resolve
 // during Gradle 9 strict task validation.
 
-    register<GenerateParserTask>("generateIssParser") {
-        sourceFile.set(file("$parsingRoot/IssGrammar.bnf"))
+    register<GenerateParserTask>("generateIsiParser") {
+        sourceFile.set(file("$parsingRoot/IsiGrammar.bnf"))
         targetRootOutputDir.set(file(generatedRoot))
-        pathToParser.set("$languagePackage/parsing/parser/IssParser.java")
-        pathToPsiRoot.set("$languagePackage/parsing/psi")
+        pathToParser.set("$isiLanguagePackage/parsing/parser/IsiParser.java")
+        pathToPsiRoot.set("$isiLanguagePackage/parsing/psi")
         purgeOldFiles.set(true)
     }
 
-    register<GenerateLexerTask>("generateIssLexer") {
-        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IssLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$languagePackage/parsing"))
+    register<GenerateLexerTask>("generateIsiLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsiLexer.flex"))
+        targetOutputDir.set(file("$generatedRoot/$isiLanguagePackage/parsing"))
         purgeOldFiles.set(true)
     }
 
@@ -194,16 +195,35 @@ tasks {
         purgeOldFiles.set(true)
     }
 
+    // Aggregator tasks: generate all lexers / all parsers as a single unit, plus an umbrella.
+    register("generateLexers") {
+        group = "grammar-kit"
+        description = "Generate all JFlex lexers (ISI + ISPP)"
+        dependsOn("generateIsiLexer", "generateIsppLexer")
+    }
+
+    register("generateParsers") {
+        group = "grammar-kit"
+        description = "Generate all Grammar-Kit parsers/PSI (ISI + ISPP)"
+        dependsOn("generateIsiParser", "generateIsppParser")
+    }
+
+    register("generateSources") {
+        group = "grammar-kit"
+        description = "Generate all lexers and parsers"
+        dependsOn("generateLexers", "generateParsers")
+    }
+
     sourceSets.main {
         java.srcDir(generatedRoot)
     }
 
     compileJava {
-        dependsOn("generateIssParser", "generateIssLexer", "generateIsppParser", "generateIsppLexer")
+        dependsOn("generateSources")
     }
 
     compileKotlin {
-        dependsOn("generateIssParser", "generateIssLexer", "generateIsppParser", "generateIsppLexer")
+        dependsOn("generateSources")
     }
 //endregion
 }

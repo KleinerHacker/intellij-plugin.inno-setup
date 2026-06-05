@@ -8,7 +8,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssIsppLine
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 
 /**
  * Tests for [IsppFindUsagesProvider] — find-usages is only enabled for `#define`
@@ -27,7 +27,7 @@ class IsppFindUsagesProviderTest : BasePlatformTestCase() {
     /** All ISPP directives across injected preprocessor lines. */
     private fun directives(file: IssFile): List<IsppDirective> {
         val mgr = InjectedLanguageManager.getInstance(file.project)
-        return PsiTreeUtil.getChildrenOfTypeAsList(file, IssIsppLine::class.java)
+        return PsiTreeUtil.getChildrenOfTypeAsList(file, IsiIsppLine::class.java)
             .flatMap { line ->
                 val dirs = mutableListOf<IsppDirective>()
                 mgr.enumerate(line) { injectedPsi, _ ->

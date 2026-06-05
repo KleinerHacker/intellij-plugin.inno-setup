@@ -1,34 +1,33 @@
 package org.pcsoft.intellij.plugin.inno_setup.language
 
 import com.intellij.lang.injection.InjectedLanguageManager
-import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
-import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.*
-import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
 
-// ── IssFile ──────────────────────────────────────────────────────────────────
+// ── IssFile (Sektionen) ────────────────────────────────────────────────────────
 
-fun IssFile.sections(): List<IssSection> =
-    PsiTreeUtil.getChildrenOfTypeAsList(this, IssSection::class.java)
+fun IssFile.sections(): List<IsiSection> =
+    PsiTreeUtil.getChildrenOfTypeAsList(this, IsiSection::class.java)
 
-fun IssFile.findSection(name: String): IssSection? =
+fun IssFile.findSection(name: String): IsiSection? =
     sections().firstOrNull { it.nameText().equals(name, ignoreCase = true) }
 
-fun IssFile.findSections(name: String): List<IssSection> =
+fun IssFile.findSections(name: String): List<IsiSection> =
     sections().filter { it.nameText().equals(name, ignoreCase = true) }
 
-fun IssFile.firstSection(): IssSection? = sections().firstOrNull()
+fun IssFile.firstSection(): IsiSection? = sections().firstOrNull()
+
+// ── IssFile (ISPP-Brücke) ──────────────────────────────────────────────────────
 
 fun IssFile.isppDirectives(): List<IsppDirective> {
     val mgr = InjectedLanguageManager.getInstance(project)
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IssIsppLine::class.java)
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
         .flatMap { line ->
             val result = mutableListOf<IsppDirective>()
             mgr.enumerate(line) { injectedPsi, _ ->
@@ -43,11 +42,11 @@ fun IssFile.isppDirectives(): List<IsppDirective> {
 /**
  * All ISPP directives paired with the host-file offset of the line they live on.
  * Because each `#define` line is injected as its own fragment, the host offset (the start of the
- * containing [IssIsppLine], a direct child of this file) is the authority for declaration order.
+ * containing [IsiIsppLine], a direct child of this file) is the authority for declaration order.
  */
 fun IssFile.isppDirectivesWithHostOffset(): List<Pair<IsppDirective, Int>> {
     val mgr = InjectedLanguageManager.getInstance(project)
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IssIsppLine::class.java)
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
         .flatMap { line ->
             val result = mutableListOf<Pair<IsppDirective, Int>>()
             mgr.enumerate(line) { injectedPsi, _ ->
@@ -69,99 +68,6 @@ fun IssFile.definedConstants(): List<Pair<String, String?>> =
             name to ex.getDefineValue()
         }
 
-// ── IssSection ───────────────────────────────────────────────────────────────
-
-fun IssSection.nameText(): String = sectionHeader.sectionName?.text.orEmpty()
-
-fun IssSection.allParamPairs(): List<IssParamPair> =
-    parameterEntryList.flatMap { it.paramPairList }
-
-fun IssSection.findParamPairs(key: String): List<IssParamPair> =
-    allParamPairs().filter { it.keyText().equals(key, ignoreCase = true) }
-
-fun IssSection.findParamPair(key: String): IssParamPair? =
-    findParamPairs(key).firstOrNull()
-
-fun IssSection.nameDeclarations(): List<IssParamPair> = findParamPairs("Name")
-
-fun IssSection.firstParamPair(): IssParamPair? = allParamPairs().firstOrNull()
-
-fun IssSection.specSection(spec: InnoSetupSpec): IssSectionSpec? =
-    spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
-
-fun IssSection.specSection(): IssSectionSpec? =
-    service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
-
-fun IssSection.isParameterSection(): Boolean = specSection()?.type == "parameter"
-
-// ── IssParameterEntry ─────────────────────────────────────────────────────────
-
-fun IssParameterEntry.firstParamPair(): IssParamPair? = paramPairList.firstOrNull()
-
-fun IssParameterEntry.displayName(): String {
-    val pairs = paramPairList
-    if (pairs.isEmpty()) return "…"
-
-    val root = pairs.firstOrNull { it.keyText().equals("root", ignoreCase = true) }
-    if (root != null) {
-        val subkey = pairs.firstOrNull { it.keyText().equals("subkey", ignoreCase = true) }
-        val rootText = root.valueUnquoted().trim()
-        return if (subkey != null) "$rootText\\${subkey.valueUnquoted().trim()}" else rootText
-    }
-
-    for (key in listOf("name", "source", "filename")) {
-        val value = pairs.firstOrNull { it.keyText().equals(key, ignoreCase = true) }
-            ?.valueUnquoted()?.trim() ?: continue
-        if (value.isNotEmpty()) return value.stripIssPrefix()
-    }
-
-    return pairs.first().valueUnquoted().trim().stripIssPrefix().ifEmpty { "…" }
-}
-
-private fun String.stripIssPrefix(): String =
-    if (startsWith("{")) {
-        val end = indexOf('}')
-        if (end > 0 && getOrNull(end + 1) == '\\') substring(end + 2) else this
-    } else this
-
-// ── IssParamPair ──────────────────────────────────────────────────────────────
-
-fun IssParamPair.valueText(): String = paramValue?.text?.trim().orEmpty()
-
-fun IssParamPair.valueUnquoted(): String = valueText().removeSurrounding("\"")
-
-// ── IssDirectiveEntry ─────────────────────────────────────────────────────────
-
-fun IssDirectiveEntry.keyText(): String = directiveKey.text.trim()
-
-fun IssDirectiveEntry.valueText(): String = paramValue?.text?.trim().orEmpty()
-
-// ── IssParamValue ─────────────────────────────────────────────────────────────
-
-fun IssParamValue.identifiers(): List<PsiElement> =
-    node.getChildren(TokenSet.create(IssTypes.IDENTIFIER)).map { it.psi }
-
-fun IssParamValue.singleText(): String = text.trim().removeSurrounding("\"")
-
-fun IssParamValue.valueTokens(): List<String> =
-    text.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
-
-// ── PsiElement (allgemein) ────────────────────────────────────────────────────
+// ── PsiElement (Host) ──────────────────────────────────────────────────────────
 
 fun PsiElement.issFile(): IssFile? = containingFile as? IssFile
-
-fun PsiElement.containingSection(): IssSection? =
-    PsiTreeUtil.getParentOfType(this, IssSection::class.java)
-
-fun PsiElement.containingParamPair(): IssParamPair? =
-    PsiTreeUtil.getParentOfType(this, IssParamPair::class.java)
-
-fun PsiElement.containingParameterEntry(): IssParameterEntry? =
-    PsiTreeUtil.getParentOfType(this, IssParameterEntry::class.java)
-
-fun PsiElement.containingDirectiveEntry(): IssDirectiveEntry? =
-    PsiTreeUtil.getParentOfType(this, IssDirectiveEntry::class.java)
-
-fun PsiElement.isInCodeSection(): Boolean =
-    containingSection()?.nameText()?.equals("Code", ignoreCase = true) == true
-

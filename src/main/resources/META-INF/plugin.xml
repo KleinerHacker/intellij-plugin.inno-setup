@@ -20,27 +20,27 @@
 
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssParserDefinition"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiParserDefinition"/>
 
         <!-- Syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssHighlighterFactory"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiHighlighterFactory"/>
 
         <!-- Semantic annotator -->
         <annotator language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssAnnotator"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotator"/>
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssErrorFilter"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiErrorFilter"/>
 
         <!-- Find Usages -->
         <lang.findUsagesProvider language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssFindUsagesProvider"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiFindUsagesProvider"/>
 
         <!-- Refactoring: inline rename for section Name: values -->
         <lang.refactoringSupport language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssRefactoringSupportProvider"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiRefactoringSupportProvider"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
 
@@ -70,7 +70,7 @@
         <lang.refactoringSupport language="ISPP"
             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppRefactoringSupportProvider"/>
 
-        <!-- ISPP injector: injects ISPP language into IssIsppLine elements -->
+        <!-- ISPP injector: injects ISPP language into IsiIsppLine elements -->
         <multiHostInjector
             implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.injection.IsppInjector"/>
 
@@ -79,47 +79,47 @@
             implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppReferencesSearcher"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
-        <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssSectionReferencesSearcher"/>
+        <referencesSearch implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiSectionReferencesSearcher"/>
 
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssReferenceContributor"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiReferenceContributor"/>
 
         <!-- Typed handler (auto-popup after '[' and '{') -->
         <typedHandler
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssTypedHandler"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiTypedHandler"/>
 
         <!-- Completion contributor -->
         <completion.contributor language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.completion.IssCompletionContributor"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.IsiCompletionContributor"/>
 
         <!-- Brace matching: [], {}, () -->
         <lang.braceMatcher language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssBraceMatcher"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiBraceMatcher"/>
 
         <!-- Quote handler: " -->
         <typedHandler
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssQuoteHandler"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiQuoteHandler"/>
 
         <!-- Code folding -->
         <lang.foldingBuilder language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCodeFoldingBuilder"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiCodeFoldingBuilder"/>
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssStructureViewFactory"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureViewFactory"/>
 
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.navigation.IssDocumentationProvider"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiDocumentationProvider"/>
 
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"
-            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.editor.IssCommenter"/>
+            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiCommenter"/>
 
         <!-- Color settings page -->
         <colorSettingsPage
-            implementation="org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssColorSettingsPage"/>
+            implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiColorSettingsPage"/>
 
         <!-- Default colors for ISPP preprocessor highlighting (dark/light) -->
         <additionalTextAttributes scheme="Default" file="colorSchemes/IssDefault.xml"/>

@@ -8,7 +8,7 @@ import com.intellij.util.Processor
 import com.intellij.util.QueryExecutor
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectives
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 
 // When an IsppDirective (#define) is renamed, this searcher finds all references so they are
@@ -28,7 +28,7 @@ class IsppReferencesSearcher : QueryExecutor<PsiReference, ReferencesSearch.Sear
             .getTopLevelFile(element.containingFile) as? IssFile ?: return true
 
         // {#Name} references in the host ISS file.
-        for (body in PsiTreeUtil.findChildrenOfType(hostFile, IssConstantBody::class.java)) {
+        for (body in PsiTreeUtil.findChildrenOfType(hostFile, IsiConstantBody::class.java)) {
             for (ref in body.references) {
                 if (ref.isReferenceTo(element) && !consumer.process(ref)) return false
             }

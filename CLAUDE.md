@@ -8,23 +8,30 @@ Inno Setup-Dokumentation: https://jrsoftware.org/ishelp/
 ```
 ./gradlew runIde          # Plugin starten
 ./gradlew check           # Tests + Verifikation
-./gradlew generateIssLexer / generateIssParser   # nach BNF/Flex-Änderungen ausführen
+./gradlew generateSources # alle Lexer + Parser neu generieren (nach BNF/Flex-Änderungen)
+./gradlew generateLexers / generateParsers   # nur Lexer bzw. nur Parser generieren
 ```
 
 **Wichtig:** `build/parsing/gen/` niemals manuell bearbeiten — wird von GrammarKit generiert.
+
+## Namensräume
+
+- **`Iss…`** — gemeinsam genutzte Klassen des Skripts (Host-`IssFile`/`IssLanguage`/`IssFileType`, Icons, `action/`, `services/`, `types/`, `PsiUtils`-Brücke).
+- **`Ispp…`** — Präprozessor-Parsing (`language/ispp/**`).
+- **`Isi…`** (Inno Setup INI) — Section-Parsing und der gesamte Rest (`language/isi/**`); spiegelt strukturell `language/ispp/**`.
 
 ## Projektstruktur
 
 | Pfad | Inhalt |
 |---|---|
-| `src/main/resources/parsing/IssGrammar.bnf` | GrammarKit-Grammatik (Parser + PSI-Klassen) |
-| `src/main/resources/parsing/IssLexer.flex` | JFlex-Lexer mit Zuständen (`YYINITIAL`, `VALUE`, `IN_STRING`, `IN_STRING_CONSTANT`) |
+| `src/main/resources/parsing/IsiGrammar.bnf` | GrammarKit-Grammatik der Sections (Parser + `Isi…`-PSI) |
+| `src/main/resources/parsing/IsiLexer.flex` | JFlex-Lexer mit Zuständen (`YYINITIAL`, `VALUE`, `IN_STRING`, `IN_STRING_CONSTANT`) |
+| `src/main/resources/parsing/IsppGrammar.bnf` / `IsppLexer.flex` | GrammarKit-Grammatik + Lexer des Präprozessors |
 | `src/main/resources/spec/` | YAML-Specs für Sections, Attribute, Flags, Konstanten, ISPP-Direktiven |
-| `src/main/kotlin/…/language/` | PSI-Utilities, File/Language-Definitionen |
-| `src/main/kotlin/…/language/parsing/psi/impl/` | Handgeschriebene Mixins (z. B. `IssParamPairMixinImpl`, `IssPreprocessorDirectiveMixinImpl`) |
-| `src/main/kotlin/…/language/navigation/` | Referenzen, Find Usages, Go to Declaration |
-| `src/main/kotlin/…/language/completion/` | Code-Completion-Provider |
-| `src/main/kotlin/…/language/parsing/` | Annotator, Highlighting |
+| `src/main/kotlin/…/language/` | Host (`IssFile`/`IssLanguage`/`IssFileType`) + geteilte `PsiUtils`-Brücke |
+| `src/main/kotlin/…/language/isi/` | Section-Parsing: `IsiPsiUtils` + `parsing/`, `navigation/`, `completion/`, `editor/` |
+| `src/main/kotlin/…/language/isi/parsing/psi/impl/` | Handgeschriebene Mixins (z. B. `IsiParamPairMixinImpl`, `IsiIsppLineMixinImpl`) |
+| `src/main/kotlin/…/language/ispp/` | Präprozessor: spiegelt strukturell `language/isi/` (`IsppDirectiveMixinImpl` usw.) |
 | `src/main/kotlin/…/services/` | Spec-Services (Singleton, lazy-loaded) |
 
 ## ISS-Skriptformat (Kurzreferenz)

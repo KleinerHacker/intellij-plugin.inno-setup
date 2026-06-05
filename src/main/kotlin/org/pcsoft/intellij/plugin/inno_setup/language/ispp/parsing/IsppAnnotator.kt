@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElement
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
-import org.pcsoft.intellij.plugin.inno_setup.language.parsing.IssAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotatorHighlighting
 
 class IsppAnnotator : Annotator {
 
@@ -21,13 +21,13 @@ class IsppAnnotator : Annotator {
         val hash    = directive.node.findChildByType(IsppTypes.HASH) ?: return
         val keyword = directive.node.findChildByType(IsppTypes.IDENTIFIER) ?: return
         highlight(TextRange(hash.startOffset, keyword.textRange.endOffset),
-            IssAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+            IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
 
         val ex = directive as? IsppDirectiveEx ?: return
         if (!ex.isDefine()) return
 
         ex.getNameIdentifier()?.let {
-            highlight(it.textRange, IssAnnotatorHighlighting.DEFINE_NAME, holder)
+            highlight(it.textRange, IsiAnnotatorHighlighting.DEFINE_NAME, holder)
         }
 
         // A function-like macro (#define Name(a,b) …) must have an expression body.
