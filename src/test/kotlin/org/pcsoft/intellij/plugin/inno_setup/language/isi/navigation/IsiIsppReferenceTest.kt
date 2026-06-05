@@ -95,7 +95,7 @@ class IsiIsppReferenceTest : BasePlatformTestCase() {
         val file = setup("#define MyVar \"value\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{#MyVar}\"\n")
         val body = findIsppConstantBody(file)!!
         val directive = findDefine(file, "MyVar")
-        val nameId = (directive as? IsppDirectiveEx)?.getNameIdentifier()
+        val nameId = (directive as? IsppDirectiveEx)?.nameIdentifier
         assertNotNull("Expected name identifier on #define MyVar", nameId)
 
         val ref = IsiIsppConstantReference(body, "MyVar")

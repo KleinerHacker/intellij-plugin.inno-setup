@@ -40,7 +40,7 @@ class IsppAnnotator : Annotator {
         val ex = directive as? IsppDirectiveEx ?: return
         if (!ex.isDefine()) return
 
-        ex.getNameIdentifier()?.let {
+        ex.nameIdentifier?.let {
             highlight(it.textRange, IsiAnnotatorHighlighting.DEFINE_NAME, holder)
         }
 

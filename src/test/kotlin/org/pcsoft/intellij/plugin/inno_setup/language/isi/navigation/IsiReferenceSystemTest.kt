@@ -118,7 +118,7 @@ class IsiReferenceSystemTest : BasePlatformTestCase() {
         val ref = issFile().findReferenceAt(myFixture.caretOffset)
         assertNotNull("Reference must exist at caret", ref)
         val directive = findDefine("MyVar")
-        val nameId = (directive as? IsppDirectiveEx)?.getNameIdentifier()
+        val nameId = (directive as? IsppDirectiveEx)?.nameIdentifier
         assertNotNull("Expected nameIdentifier on #define MyVar", nameId)
         assertTrue("isReferenceTo(nameIdentifier) must be true for Highlight Usages", ref!!.isReferenceTo(nameId!!))
     }
