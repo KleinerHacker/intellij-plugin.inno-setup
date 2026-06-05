@@ -244,6 +244,7 @@ class IsiAnnotator : Annotator {
                     ).range(value.textRange).create()
                 }
             }
+
             "integer" -> if (!text.matches(Regex("-?[0-9]+"))) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,

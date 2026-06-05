@@ -16,6 +16,7 @@ to create, which shortcuts to add, and how the installation wizard should behave
 parameters, and an integrated Pascal scripting engine for full runtime customisation.
 
 !!! tip "Official Inno Setup Resources"
+
 - :octicons-home-16: [Homepage](https://jrsoftware.org/isinfo.php)
 - :octicons-book-16: [Documentation](https://jrsoftware.org/ishelp/)
 - :octicons-download-16: [Download](https://jrsoftware.org/isdl.php)

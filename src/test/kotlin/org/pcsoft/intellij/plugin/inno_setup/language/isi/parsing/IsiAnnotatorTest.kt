@@ -247,7 +247,10 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
             it.severity == HighlightSeverity.ERROR &&
                     it.description?.contains("Expected type", ignoreCase = true) == true
         }
-        assertTrue("Numeric value '1.0' for string directive AppVersion must not produce a type ERROR", typeErrors.isEmpty())
+        assertTrue(
+            "Numeric value '1.0' for string directive AppVersion must not produce a type ERROR",
+            typeErrors.isEmpty()
+        )
     }
 
     fun testNumericValueForStringParameterProducesNoTypeError() {
@@ -258,7 +261,10 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
             it.severity == HighlightSeverity.ERROR &&
                     it.description?.contains("Expected type", ignoreCase = true) == true
         }
-        assertTrue("Numeric value '123' for string parameter Description must not produce a type ERROR", typeErrors.isEmpty())
+        assertTrue(
+            "Numeric value '123' for string parameter Description must not produce a type ERROR",
+            typeErrors.isEmpty()
+        )
     }
 
     fun testStringValueForIntegerParameterProducesError() {

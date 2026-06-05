@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 enum class IssFlagSeveritySpec {
     @JsonProperty("warning")
     WARNING,
+
     @JsonProperty("error")
     ERROR
 }

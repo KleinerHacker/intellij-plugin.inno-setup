@@ -140,7 +140,8 @@ After the restart, any file with the `.iss` extension will be handled by the plu
 
 ## Documentation
 
-[Full documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/) — including a complete reference for every Inno Setup section and its parameters — is available at
+[Full documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/) — including a complete reference for
+every Inno Setup section and its parameters — is available at
 the project's MkDocs site, hosted on GitHub Pages.
 
 To run the documentation site locally:
@@ -162,7 +163,9 @@ Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 ## Contributing
 
-[Bug reports](https://github.com/KleinerHacker/intellij-plugin.inno-setup/issues) and [pull requests](https://github.com/KleinerHacker/intellij-plugin.inno-setup/pulls) are welcome. Please open an issue first to discuss larger changes.
+[Bug reports](https://github.com/KleinerHacker/intellij-plugin.inno-setup/issues)
+and [pull requests](https://github.com/KleinerHacker/intellij-plugin.inno-setup/pulls) are welcome. Please open an issue
+first to discuss larger changes.
 
 ---
 

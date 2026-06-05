@@ -17,12 +17,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
 enum class IssConstantCategorySpec {
     @JsonProperty("directory")
     DIRECTORY,
+
     @JsonProperty("shell_folder")
     SHELL_FOLDER,
+
     @JsonProperty("auto")
     AUTO,
+
     @JsonProperty("special")
     SPECIAL,
+
     @JsonProperty("parameterized")
     PARAMETERIZED
 }

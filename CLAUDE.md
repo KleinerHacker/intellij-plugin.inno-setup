@@ -24,17 +24,17 @@ Inno Setup-Dokumentation: https://jrsoftware.org/ishelp/
 
 ## Projektstruktur
 
-| Pfad                                                            | Inhalt                                                                            |
-|-----------------------------------------------------------------|-----------------------------------------------------------------------------------|
-| `src/main/resources/parsing/IsiGrammar.bnf`                     | GrammarKit-Grammatik der Sections (Parser + `Isi…`-PSI)                           |
+| Pfad                                                            | Inhalt                                                                              |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| `src/main/resources/parsing/IsiGrammar.bnf`                     | GrammarKit-Grammatik der Sections (Parser + `Isi…`-PSI)                             |
 | `src/main/resources/parsing/IsiLexer.flex`                      | JFlex-Lexer mit Zuständen (`YYINITIAL`, `VALUE`, `IN_STRING`, `IN_STRING_CONSTANT`) |
-| `src/main/resources/parsing/IsppGrammar.bnf` / `IsppLexer.flex` | GrammarKit-Grammatik + Lexer des Präprozessors                                    |
-| `src/main/resources/spec/`                                      | YAML-Specs für Sections, Attribute, Flags, Konstanten, ISPP-Direktiven            |
-| `src/main/kotlin/…/language/`                                   | Host (`IssFile`/`IssLanguage`/`IssFileType`) + geteilte `PsiUtils`-Brücke         |
-| `src/main/kotlin/…/language/isi/`                               | Section-Parsing: `PsiUtils` + `parsing/`, `navigation/`, `completion/`, `editor/` |
-| `src/main/kotlin/…/language/isi/parsing/psi/impl/`              | Handgeschriebene Mixins (z. B. `IsiParamPairMixinImpl`, `IsiIsppLineMixinImpl`)   |
-| `src/main/kotlin/…/language/ispp/`                              | Präprozessor: spiegelt strukturell `language/isi/` (`IsppDirectiveMixinImpl` usw.) |
-| `src/main/kotlin/…/services/`                                   | Spec-Services (Singleton, lazy-loaded)                                            |
+| `src/main/resources/parsing/IsppGrammar.bnf` / `IsppLexer.flex` | GrammarKit-Grammatik + Lexer des Präprozessors                                      |
+| `src/main/resources/spec/`                                      | YAML-Specs für Sections, Attribute, Flags, Konstanten, ISPP-Direktiven              |
+| `src/main/kotlin/…/language/`                                   | Host (`IssFile`/`IssLanguage`/`IssFileType`) + geteilte `PsiUtils`-Brücke           |
+| `src/main/kotlin/…/language/isi/`                               | Section-Parsing: `PsiUtils` + `parsing/`, `navigation/`, `completion/`, `editor/`   |
+| `src/main/kotlin/…/language/isi/parsing/psi/impl/`              | Handgeschriebene Mixins (z. B. `IsiParamPairMixinImpl`, `IsiIsppLineMixinImpl`)     |
+| `src/main/kotlin/…/language/ispp/`                              | Präprozessor: spiegelt strukturell `language/isi/` (`IsppDirectiveMixinImpl` usw.)  |
+| `src/main/kotlin/…/services/`                                   | Spec-Services (Singleton, lazy-loaded)                                              |
 
 ## ISS-Skriptformat (Kurzreferenz)
 
