@@ -6,9 +6,9 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.findSection
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.findSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.sections
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
 
 class IsiParserTest : BasePlatformTestCase() {
 

@@ -9,10 +9,10 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppLanguage
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
-import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 
 class IsppCompletionContributor : CompletionContributor() {

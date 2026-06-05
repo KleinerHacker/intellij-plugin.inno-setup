@@ -9,11 +9,10 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
-import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
-import org.pcsoft.intellij.plugin.inno_setup.language.sections
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.*

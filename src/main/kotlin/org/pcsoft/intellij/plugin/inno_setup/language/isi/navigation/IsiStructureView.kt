@@ -14,7 +14,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.isParameterSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
-import org.pcsoft.intellij.plugin.inno_setup.language.sections
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
 import javax.swing.Icon
 
 class IsiStructureViewFactory : PsiStructureViewFactory {

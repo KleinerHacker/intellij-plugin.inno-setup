@@ -10,8 +10,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectives
 
 // Anchor is IsiConstantBody (not the IDENTIFIER leaf) so that getReferences() on the
 // mixin element is the source of truth. TextRange skips the leading '#' character.

@@ -6,9 +6,9 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppFile
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 

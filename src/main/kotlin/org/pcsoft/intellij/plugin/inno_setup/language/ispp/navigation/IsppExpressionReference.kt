@@ -7,9 +7,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.isppDirectivesWithHostOffset
 
 /**
  * A free-text identifier inside a `#define` expression that refers to another `#define`.

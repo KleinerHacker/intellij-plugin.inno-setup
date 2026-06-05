@@ -9,7 +9,7 @@ import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
-import org.pcsoft.intellij.plugin.inno_setup.language.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
 

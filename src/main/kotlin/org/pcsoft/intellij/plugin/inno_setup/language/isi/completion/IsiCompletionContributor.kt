@@ -8,9 +8,11 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.*
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec

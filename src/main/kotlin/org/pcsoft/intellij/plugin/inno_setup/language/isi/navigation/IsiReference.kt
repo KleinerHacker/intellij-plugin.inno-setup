@@ -8,7 +8,7 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.findSections
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameDeclarations
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue

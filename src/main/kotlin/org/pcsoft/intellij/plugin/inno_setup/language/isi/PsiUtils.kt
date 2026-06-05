@@ -5,10 +5,31 @@ import com.intellij.openapi.editor.Document
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
+
+// ── IssFile (Sektionen) ────────────────────────────────────────────────────────
+
+fun IssFile.sections(): List<IsiSection> =
+    PsiTreeUtil.getChildrenOfTypeAsList(this, IsiSection::class.java)
+
+fun IssFile.findSection(name: String): IsiSection? =
+    sections().firstOrNull { it.nameText().equals(name, ignoreCase = true) }
+
+fun IssFile.findSections(name: String): List<IsiSection> =
+    sections().filter { it.nameText().equals(name, ignoreCase = true) }
+
+fun IssFile.firstSection(): IsiSection? = sections().firstOrNull()
+
+// The section a caret offset logically belongs to. Unlike containingSection(),
+// this still works when trailing/incomplete tokens (e.g. after a dangling ';')
+// fell outside the section's PSI range: it returns the last section that starts
+// at or before the offset.
+fun IssFile.sectionAtOffset(offset: Int): IsiSection? =
+    sections().lastOrNull { it.textRange.startOffset <= offset }
 
 // ── IsiSection ───────────────────────────────────────────────────────────────
 
