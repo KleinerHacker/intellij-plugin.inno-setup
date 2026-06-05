@@ -45,6 +45,11 @@ class IsiCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             IsppVariableAfterHashProvider
         )
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            BooleanValueProvider
+        )
         // Cross-section reference completion: Tasks: <name>, Components: <name>, etc.
         // ReferenceBasedCompletionContributor does not fire for ISS because the reference
         // lives on IsiParamValue (parent), not the leaf IDENTIFIER. This provider reads
@@ -200,6 +205,43 @@ private object IsppVariableAfterHashProvider : CompletionProvider<CompletionPara
                             ctx.document.insertString(tail, "}")
                         ctx.editor.caretModel.moveToOffset(tail + 1)
                     }
+            )
+        }
+    }
+}
+
+private object BooleanValueProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val position = parameters.position
+        if (position.isInCodeSection()) return
+        val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
+
+        val spec = service<IssSpecService>().spec
+        val attr = run {
+            val pair = paramValue.containingParamPair()
+            if (pair != null) {
+                val ss = pair.containingSection()?.specSection(spec) ?: return
+                ss.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
+            } else {
+                val dir = paramValue.containingDirectiveEntry() ?: return
+                val ss = dir.containingSection()?.specSection(spec) ?: return
+                ss.attributes.firstOrNull { it.name.equals(dir.keyText(), ignoreCase = true) }
+            }
+        } ?: return
+
+        val type = attr.type as? IssNativeTypeSpec ?: return
+        if (type.dataType.lowercase() != "boolean") return
+
+        listOf("yes", "no").forEach { value ->
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(value).withTypeText("boolean").withBoldness(true),
+                    20.0
+                )
             )
         }
     }

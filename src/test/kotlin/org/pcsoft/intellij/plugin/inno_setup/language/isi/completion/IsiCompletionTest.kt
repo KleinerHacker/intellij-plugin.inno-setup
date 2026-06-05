@@ -95,6 +95,37 @@ class IsiCompletionTest : BasePlatformTestCase() {
         )
     }
 
+    // ── Boolean value completion ──────────────────────────────────────────────────
+
+    fun testBooleanValueCompletionForDirective() {
+        // CloseApplications is a boolean directive → must offer yes/no
+        myFixture.configureByText(IssFileType.INSTANCE, "[Setup]\nCloseApplications=<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected boolean value suggestions for boolean directive", variants)
+        assertTrue("Expected 'yes' in boolean suggestions", "yes" in variants!!)
+        assertTrue("Expected 'no' in boolean suggestions", "no" in variants)
+    }
+
+    fun testBooleanValueCompletionForAnotherBooleanDirective() {
+        // AllowNoIcons is another boolean directive → must also offer yes/no
+        myFixture.configureByText(IssFileType.INSTANCE, "[Setup]\nAllowNoIcons=<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected boolean value suggestions for AllowNoIcons", variants)
+        assertTrue("Expected 'yes' for AllowNoIcons", "yes" in variants!!)
+        assertTrue("Expected 'no' for AllowNoIcons", "no" in variants)
+    }
+
+    fun testBooleanValueCompletionNotShownForStringDirective() {
+        // AppName is a string directive → must NOT get yes/no suggestions from BooleanValueProvider
+        myFixture.configureByText(IssFileType.INSTANCE, "[Setup]\nAppName=<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("'yes' must not appear in string directive completion", "yes" in variants)
+        assertFalse("'no' must not appear in string directive completion", "no" in variants)
+    }
+
     // ── ISPP variable completion ──────────────────────────────────────────────────
 
     fun testIsppVariableCompletionAfterHash() {
