@@ -219,16 +219,25 @@ class IsiAnnotator : Annotator {
 
     private fun annotateNativeValue(value: IsiParamValue, type: IssNativeTypeSpec, holder: AnnotationHolder) {
         val text = value.singleText()
-        val valid = when (type.dataType.lowercase()) {
-            "integer" -> text.matches(Regex("-?[0-9]+"))
-            "boolean" -> text.lowercase() in setOf("yes", "no")
-            else -> true
-        }
-        if (!valid) {
-            holder.newAnnotation(
-                HighlightSeverity.ERROR,
-                "Expected type '${type.dataType}', got: '$text'"
-            ).range(value.textRange).create()
+        when (type.dataType.lowercase()) {
+            "boolean" -> {
+                if (text.lowercase() in setOf("yes", "no")) {
+                    value.node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER)).forEach {
+                        highlight(it.textRange, IsiSyntaxHighlighting.KEYWORD, holder)
+                    }
+                } else {
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "Expected type '${type.dataType}', got: '$text'"
+                    ).range(value.textRange).create()
+                }
+            }
+            "integer" -> if (!text.matches(Regex("-?[0-9]+"))) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Expected type '${type.dataType}', got: '$text'"
+                ).range(value.textRange).create()
+            }
         }
     }
 

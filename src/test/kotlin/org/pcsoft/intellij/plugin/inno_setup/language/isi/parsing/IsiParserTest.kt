@@ -64,6 +64,31 @@ class IsiParserTest : BasePlatformTestCase() {
         assertEquals("Expected 3 parameter entries", 3, files.parameterEntryList.size)
     }
 
+    fun testTrailingSemicolonInParameterEntryNoParseError() {
+        // Inno Setup allows a trailing ';' at the end of a parameter line.
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Setup]\nAppName=Test\nAppVersion=1.0\n\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\";\n"
+        )
+        val errors = PsiTreeUtil.collectElementsOfType(issFile(), PsiErrorElement::class.java)
+        assertTrue(
+            "Trailing ';' in parameter entry must not produce a PSI parse error, but found:\n" +
+                    errors.joinToString("\n") { "  '${it.errorDescription}' at offset ${it.textOffset}" },
+            errors.isEmpty()
+        )
+    }
+
+    fun testTrailingSemicolonDoesNotAddExtraParamPair() {
+        // The trailing ';' must not appear as a phantom extra paramPair.
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Setup]\nAppName=Test\nAppVersion=1.0\n\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\";\n"
+        )
+        val files = issFile().findSection("Files") ?: error("No [Files] section")
+        val entry = files.parameterEntryList.first()
+        assertEquals("Trailing ';' must not create an extra param pair", 2, entry.paramPairList.size)
+    }
+
     fun testLastLineWithoutNewlineNoError() {
         myFixture.configureByText(IssFileType.INSTANCE, "[Setup]\nAppName=My Program")
         val errors = PsiTreeUtil.collectElementsOfType(issFile(), PsiErrorElement::class.java)

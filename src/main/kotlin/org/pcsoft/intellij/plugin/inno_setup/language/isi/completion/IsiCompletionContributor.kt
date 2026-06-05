@@ -1,8 +1,11 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 
 import com.intellij.codeInsight.completion.*
+import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.openapi.components.service
+import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
@@ -10,6 +13,7 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiSyntaxHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
@@ -84,8 +88,16 @@ private object SectionNameProvider : CompletionProvider<CompletionParameters>() 
                 .withTailText(if (specSection.deprecated) " (deprecated)" else "", true)
                 .withItemTextForeground(if (duplicate) JBColor.RED else JBColor.foreground())
                 .withInsertHandler { ctx, _ ->
-                    ctx.document.insertString(ctx.tailOffset, "]\n")
-                    ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
+                    val tail = ctx.tailOffset
+                    val chars = ctx.document.charsSequence
+                    // If ] is already there (e.g. auto-paired by the IDE), skip past it.
+                    if (tail < chars.length && chars[tail] == ']') {
+                        ctx.document.insertString(tail + 1, "\n")
+                        ctx.editor.caretModel.moveToOffset(tail + 2)
+                    } else {
+                        ctx.document.insertString(tail, "]\n")
+                        ctx.editor.caretModel.moveToOffset(tail + 2)
+                    }
                 }
             result.addElement(
                 PrioritizedLookupElement.withPriority(element, if (duplicate) -10.0 else 0.0)
@@ -238,12 +250,21 @@ private object BooleanValueProvider : CompletionProvider<CompletionParameters>()
 
         listOf("yes", "no").forEach { value ->
             result.addElement(
-                PrioritizedLookupElement.withPriority(
-                    LookupElementBuilder.create(value).withTypeText("boolean").withBoldness(true),
-                    20.0
-                )
+                PrioritizedLookupElement.withPriority(keywordLookupElement(value), 20.0)
             )
         }
+    }
+}
+
+private fun keywordLookupElement(value: String): LookupElement = object : LookupElement() {
+    override fun getLookupString() = value
+    override fun renderElement(presentation: LookupElementPresentation) {
+        presentation.itemText = value
+        presentation.isItemTextBold = true
+        presentation.typeText = "boolean"
+        val attrs = EditorColorsManager.getInstance().globalScheme
+            .getAttributes(IsiSyntaxHighlighting.KEYWORD)
+        presentation.itemTextForeground = attrs?.foregroundColor ?: JBColor.foreground()
     }
 }
 

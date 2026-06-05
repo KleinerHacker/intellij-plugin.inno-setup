@@ -71,7 +71,8 @@ directiveKey   ::= IDENTIFIER
 
 // [Files]-style: Key: Value; Key: Value
 // pin=1 commits after first paramPair; no recoverWhile (same reason as directiveEntry).
-parameterEntry ::= paramPair (SEMICOLON paramPair)* CRLF? {
+// SEMICOLON? allows a trailing semicolon at end of line (e.g. "Flags: x;")
+parameterEntry ::= paramPair (SEMICOLON paramPair)* SEMICOLON? CRLF? {
   pin=1
 }
 paramPair      ::= paramKey COLON paramValue {

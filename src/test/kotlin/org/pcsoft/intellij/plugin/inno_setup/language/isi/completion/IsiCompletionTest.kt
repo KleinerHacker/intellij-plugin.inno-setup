@@ -17,6 +17,30 @@ class IsiCompletionTest : BasePlatformTestCase() {
 
     // ── Section name completion ───────────────────────────────────────────────
 
+    fun testSectionNameInsertHandlerNoDoubledBracketWhenBracketAlreadyPresent() {
+        // The IDE often auto-pairs '[' with ']'. In that case the insert handler must
+        // skip past the existing ']' instead of inserting a second one.
+        myFixture.configureByText(IssFileType.INSTANCE, "[<caret>]")
+        myFixture.completeBasic()
+        assertNotNull("Expected completion popup with section names", myFixture.lookup)
+        myFixture.lookup!!.currentItem = myFixture.lookupElements!!.first { it.lookupString == "Setup" }
+        myFixture.type("\n")
+        val text = myFixture.editor.document.text
+        assertFalse("Insert handler must not produce a doubled ']'", "]]\n" in text || "]\n]" in text)
+        assertTrue("Result must start with '[Setup]\\n'", text.startsWith("[Setup]\n"))
+    }
+
+    fun testSectionNameInsertHandlerAddsBracketWhenAbsent() {
+        // When there is no ']' yet, the insert handler must add it.
+        myFixture.configureByText(IssFileType.INSTANCE, "[<caret>")
+        myFixture.completeBasic()
+        assertNotNull("Expected completion popup with section names", myFixture.lookup)
+        myFixture.lookup!!.currentItem = myFixture.lookupElements!!.first { it.lookupString == "Setup" }
+        myFixture.type("\n")
+        val text = myFixture.editor.document.text
+        assertTrue("Insert handler must add ']\\n' when not already present", text.startsWith("[Setup]\n"))
+    }
+
     fun testSectionNameCompletion() {
         myFixture.configureByText(IssFileType.INSTANCE, "[<caret>")
         myFixture.completeBasic()
