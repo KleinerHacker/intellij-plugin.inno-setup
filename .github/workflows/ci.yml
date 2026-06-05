@@ -23,6 +23,11 @@ jobs:
           java-version: '21'
           cache: gradle
 
+      - name: Fix Java SSL trust store
+        run: |
+          sudo apt-get install -y --no-install-recommends ca-certificates-java
+          sudo update-ca-certificates --fresh
+
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
@@ -44,6 +49,11 @@ jobs:
           distribution: zulu
           java-version: '21'
           cache: gradle
+
+      - name: Fix Java SSL trust store
+        run: |
+          sudo apt-get install -y --no-install-recommends ca-certificates-java
+          sudo update-ca-certificates --fresh
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
@@ -74,6 +84,11 @@ jobs:
           distribution: zulu
           java-version: '21'
           cache: gradle
+
+      - name: Fix Java SSL trust store
+        run: |
+          sudo apt-get install -y --no-install-recommends ca-certificates-java
+          sudo update-ca-certificates --fresh
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
