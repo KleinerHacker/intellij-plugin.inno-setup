@@ -161,12 +161,10 @@ tasks {
     //endregion
 
     //region Grammar-Kit
-// Pre-create output directories so Grammar-Kit's lazy Provider<Directory> properties resolve
-// during Gradle 9 strict task validation.
 
     register<GenerateParserTask>("generateIsiParser") {
-        sourceFile.set(file("$parsingRoot/IsiGrammar.bnf"))
-        targetRootOutputDir.set(file(generatedRoot))
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsiGrammar.bnf"))
+        targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
         pathToParser.set("$isiLanguagePackage/parsing/parser/IsiParser.java")
         pathToPsiRoot.set("$isiLanguagePackage/parsing/psi")
         purgeOldFiles.set(true)
@@ -179,8 +177,8 @@ tasks {
     }
 
     register<GenerateParserTask>("generateIsppParser") {
-        sourceFile.set(file("$parsingRoot/IsppGrammar.bnf"))
-        targetRootOutputDir.set(file(generatedRoot))
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsppGrammar.bnf"))
+        targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
         pathToParser.set("$isppLanguagePackage/parsing/parser/IsppParser.java")
         pathToPsiRoot.set("$isppLanguagePackage/parsing/psi")
         purgeOldFiles.set(true)
