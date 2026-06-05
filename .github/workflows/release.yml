@@ -55,7 +55,7 @@ jobs:
             gh release create "$TAG" build/distributions/*.zip \
               --title "$TAG" \
               --prerelease \
-              --no-latest
+              --latest=false
           else
             gh release create "$TAG" build/distributions/*.zip \
               --title "$TAG" \
