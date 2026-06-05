@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build plugin
+        run: ./gradlew buildPlugin --stacktrace
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then
+            gh release create "$TAG" build/distributions/*.zip \
+              --title "$TAG" \
+              --prerelease \
+              --no-latest
+          else
+            gh release create "$TAG" build/distributions/*.zip \
+              --title "$TAG" \
+              --latest
+          fi
