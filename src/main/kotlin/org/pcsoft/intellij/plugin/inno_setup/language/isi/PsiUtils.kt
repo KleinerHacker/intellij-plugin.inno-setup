@@ -34,8 +34,6 @@ fun IssFile.findSection(name: String): IsiSection? =
 fun IssFile.findSections(name: String): List<IsiSection> =
     sections().filter { it.nameText().equals(name, ignoreCase = true) }
 
-fun IssFile.firstSection(): IsiSection? = sections().firstOrNull()
-
 // The section a caret offset logically belongs to. Unlike containingSection(),
 // this still works when trailing/incomplete tokens (e.g. after a dangling ';')
 // fell outside the section's PSI range: it returns the last section that starts
@@ -53,12 +51,7 @@ fun IsiSection.allParamPairs(): List<IsiParamPair> =
 fun IsiSection.findParamPairs(key: String): List<IsiParamPair> =
     allParamPairs().filter { it.keyText().equals(key, ignoreCase = true) }
 
-fun IsiSection.findParamPair(key: String): IsiParamPair? =
-    findParamPairs(key).firstOrNull()
-
 fun IsiSection.nameDeclarations(): List<IsiParamPair> = findParamPairs("Name")
-
-fun IsiSection.firstParamPair(): IsiParamPair? = allParamPairs().firstOrNull()
 
 fun IsiSection.specSection(spec: InnoSetupSpec): IssSectionSpec? =
     spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
@@ -80,8 +73,6 @@ fun IsiSection.parameterEntryOnLineOf(offset: Int, document: Document): IsiParam
 }
 
 // ── IsiParameterEntry ─────────────────────────────────────────────────────────
-
-fun IsiParameterEntry.firstParamPair(): IsiParamPair? = paramPairList.firstOrNull()
 
 fun IsiParameterEntry.displayName(): String {
     val pairs = paramPairList
@@ -127,9 +118,6 @@ fun IsiParamValue.identifiers(): List<PsiElement> =
     node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER)).map { it.psi }
 
 fun IsiParamValue.singleText(): String = text.trim().removeSurrounding("\"")
-
-fun IsiParamValue.valueTokens(): List<String> =
-    text.trim().split(Regex("\\s+")).filter { it.isNotEmpty() }
 
 // ── PsiElement (Sections) ─────────────────────────────────────────────────────
 

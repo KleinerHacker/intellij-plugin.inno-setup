@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
+import com.intellij.psi.impl.DebugUtil
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
@@ -111,5 +112,11 @@ class IsiParserTest : BasePlatformTestCase() {
         myFixture.configureByText(IssFileType.INSTANCE, "// comment\n[Setup]\nAppName=Test\n")
         val errors = PsiTreeUtil.collectElementsOfType(issFile(), PsiErrorElement::class.java)
         assertTrue("// comment should be recognized without parse errors", errors.isEmpty())
+    }
+
+    fun testSimpleIssPsiTree() {
+        myFixture.configureByFile("scripts/simple.iss")
+        val actualTree = DebugUtil.psiToString(issFile(), false).trimEnd()
+        assertSameLinesWithFile("$testDataPath/scripts/simple.tree", actualTree)
     }
 }
