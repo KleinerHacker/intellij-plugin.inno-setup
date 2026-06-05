@@ -1,0 +1,46 @@
+site_name: Inno Setup – JetBrains Plugin
+site_description: JetBrains plugin providing language support for Inno Setup scripts (.iss) in all IntelliJ-platform IDEs
+site_author: PCSoft
+
+docs_dir: docs
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - toc:
+      toc_depth: 3
+#  - pymdownx.snippets
+#  - pymdownx.highlight
+
+theme:
+  name: material
+  language: en
+  logo: assets/images/inno-setup-icon.png
+  features:
+    - navigation.sections
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+
+nav:
+  - Home: index.md
+  - Sections:
+      - Setup: sections/setup.md
+      - Types: sections/types.md
+      - Components: sections/components.md
+      - Tasks: sections/tasks.md
+      - Dirs: sections/dirs.md
+      - Files: sections/files.md
+      - Icons: sections/icons.md
+      - Registry: sections/registry.md
+      - Run: sections/run.md
+      - UninstallRun: sections/uninstall-run.md
+      - Languages: sections/languages.md
+      - InstallDelete: sections/install-delete.md
+      - UninstallDelete: sections/uninstall-delete.md
+      - Code: sections/code.md
+  - API Docs: dokka/html/index.html
+  - Licences: licences/index.html

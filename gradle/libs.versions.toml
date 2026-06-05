@@ -1,0 +1,21 @@
+[versions]
+junit = "4.13.2"
+jackson = "2.17.2"
+kotlin = "2.2.20"
+changelog = "2.5.0"
+foojay-resolver = "1.0.0"
+intellij-platform = "2.16.0"
+idea = "2025.3.5"
+grammarkit = "2022.3.2"
+
+[libraries]
+junit = { module = "junit:junit", version.ref = "junit" }
+jackson-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
+foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "foojay-resolver" }
+intellij-platform-settings = { id = "org.jetbrains.intellij.platform.settings", version.ref = "intellij-platform" }
+grammarkit = { id = "org.jetbrains.grammarkit", version.ref = "grammarkit" }

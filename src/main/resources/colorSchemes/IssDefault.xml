@@ -1,0 +1,21 @@
+<scheme name="Default" version="142" parent_scheme="Default">
+    <attributes>
+        <!-- Kotlin-extension-style blue for ISPP preprocessor directives / references (light theme) -->
+        <option name="ISS_PREPROCESSOR_DIRECTIVE">
+            <value>
+                <option name="FOREGROUND" value="0000c0"/>
+            </value>
+        </option>
+        <option name="ISS_ISPP_REFERENCE_NAME">
+            <value>
+                <option name="FOREGROUND" value="0000c0"/>
+                <option name="FONT_TYPE" value="2"/>
+            </value>
+        </option>
+        <option name="ISS_DEFINE_NAME">
+            <value>
+                <option name="FONT_TYPE" value="2"/>
+            </value>
+        </option>
+    </attributes>
+</scheme>

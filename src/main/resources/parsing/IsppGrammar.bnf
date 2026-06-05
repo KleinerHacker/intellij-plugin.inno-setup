@@ -1,0 +1,57 @@
+{
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.parser.IsppParser"
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Ispp"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.impl"
+
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTokenType"
+
+  tokens=[
+    HASH        = "#"
+    IDENTIFIER  = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
+    NUMBER      = "regexp:[0-9]+(\.[0-9]+)*"
+    QUOTE       = "\""
+    STRING_PART = "regexp:[^\"{\r\n]+"
+    VALUE_CHAR  = "regexp:[^\r\n{};:=\"()#\t ]"
+    CRLF        = "regexp:\r?\n"
+    LPAREN      = "("
+    RPAREN      = ")"
+    LBRACE      = "{"
+    RBRACE      = "}"
+    EQ          = "="
+    COLON       = ":"
+    SEMICOLON   = ";"
+  ]
+}
+
+// Root: each injected fragment is one preprocessor line (#keyword rest...)
+isppFile ::= directive? CRLF?
+
+directive ::= HASH IDENTIFIER value? {
+  pin=1
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.impl.IsppDirectiveMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx"
+}
+
+value ::= valueToken+
+
+private valueToken ::= constant
+                     | quotedString
+                     | NUMBER
+                     | IDENTIFIER
+                     | VALUE_CHAR
+                     | LPAREN | RPAREN
+                     | EQ | COLON | SEMICOLON
+                     | HASH
+
+// "..." with optional embedded {constants}
+quotedString ::= QUOTE (STRING_PART | constant)* QUOTE
+
+// {app}, {#Name}, {reg:...}, etc. within ISPP values
+constant     ::= LBRACE constantBody RBRACE
+constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)*
