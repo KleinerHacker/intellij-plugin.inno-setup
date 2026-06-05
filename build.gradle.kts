@@ -22,6 +22,10 @@ val languagePackage = "$rootPackage/language"
 val isppLanguagePackage = "$languagePackage/ispp"
 val isiLanguagePackage = "$languagePackage/isi"
 
+intellijPlatform {
+    instrumentCode = false
+}
+
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
     testImplementation("junit:junit:4.13.2")
