@@ -3,9 +3,12 @@ package org.pcsoft.intellij.plugin.inno_setup.language.editor
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ex.EditorEx
+import com.intellij.openapi.editor.highlighter.EditorHighlighter
+import com.intellij.openapi.editor.highlighter.HighlighterIterator
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.Generated
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parsing.psi.IssTypes
 
@@ -43,22 +46,8 @@ class IssQuoteHandler : TypedHandlerDelegate() {
             if (!iter.atEnd()) {
                 when (iter.tokenType) {
                     IssTypes.STRING_PART, IssTypes.RBRACE -> return Result.CONTINUE
-                    IssTypes.QUOTE -> {
-                        // Only suppress auto-close if this is an *opening* QUOTE, i.e. the token
-                        // before it is not another string-content token (which would make it closing).
-                        val pos = iter.start
-                        if (pos > 0) {
-                            val pp = editorEx.highlighter.createIterator(pos - 1)
-                            if (!pp.atEnd()) {
-                                val ppt = pp.tokenType
-                                if (ppt != IssTypes.QUOTE && ppt != IssTypes.STRING_PART && ppt != IssTypes.RBRACE) {
-                                    return Result.CONTINUE
-                                }
-                            }
-                        } else {
-                            return Result.CONTINUE
-                        }
-                    }
+                    IssTypes.QUOTE ->
+                        if (isOpeningQuote(editorEx.highlighter, iter)) return Result.CONTINUE
                 }
             }
         }
@@ -67,5 +56,26 @@ class IssQuoteHandler : TypedHandlerDelegate() {
         editor.document.insertString(offset, "\"\"")
         editor.caretModel.moveToOffset(offset + 1)
         return Result.STOP
+    }
+
+    /**
+     * Whether the QUOTE token starting just before the caret is an *opening* quote
+     * (caret inside a fresh, possibly empty, string) rather than a *closing* one. An
+     * opening quote means auto-close must be suppressed; a closing quote lets the caller
+     * fall through and start a new auto-closed string.
+     *
+     * Annotated [Generated] to exclude it from coverage: the `pos == 0` fallback is
+     * unreachable because a QUOTE token is only lexed in the VALUE / IN_STRING states
+     * (see `IssLexer.flex`), which always have at least one preceding token, so the
+     * token's start offset is never 0 here.
+     */
+    @Generated
+    private fun isOpeningQuote(highlighter: EditorHighlighter, quote: HighlighterIterator): Boolean {
+        val pos = quote.start
+        if (pos == 0) return true
+        val prev = highlighter.createIterator(pos - 1)
+        if (prev.atEnd()) return false
+        val pt = prev.tokenType
+        return pt != IssTypes.QUOTE && pt != IssTypes.STRING_PART && pt != IssTypes.RBRACE
     }
 }

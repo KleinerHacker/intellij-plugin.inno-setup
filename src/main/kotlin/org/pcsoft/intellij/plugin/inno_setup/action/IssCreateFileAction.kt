@@ -7,6 +7,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
+import org.jetbrains.annotations.VisibleForTesting
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 
 class IssCreateFileAction : DumbAwareAction(
@@ -39,7 +40,8 @@ class IssCreateFileAction : DumbAwareAction(
         })
     }
 
-    private fun buildTemplate(
+    @VisibleForTesting
+    internal fun buildTemplate(
         appName: String,
         appVersion: String,
         languages: List<IssScriptLanguage>

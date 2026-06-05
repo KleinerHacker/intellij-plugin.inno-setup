@@ -9,6 +9,7 @@ plugins {
     id("org.jetbrains.grammarkit") version "2023.3.0.3"
     id("org.jetbrains.intellij.platform")  // version managed by settings plugin
     id("org.jetbrains.dokka") version "2.2.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
     id("com.github.jk1.dependency-license-report") version "2.5"
     id("app.cash.licensee") version "1.14.1" apply false
 }
@@ -34,6 +35,18 @@ dependencies {
 
         // Kotlin plugin needed for compilation of the optional K2-compatibility extension
         bundledPlugin("org.jetbrains.kotlin")
+    }
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                // Declarations annotated @Generated are intentionally uncoverable
+                // (defensive / provably-unreachable code).
+                annotatedBy("org.pcsoft.intellij.plugin.inno_setup.Generated")
+            }
+        }
     }
 }
 

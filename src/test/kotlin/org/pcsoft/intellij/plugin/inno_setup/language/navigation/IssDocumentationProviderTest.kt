@@ -28,6 +28,19 @@ class IssDocumentationProviderTest : BasePlatformTestCase() {
         assertTrue(doc!!.contains("AppName"))
     }
 
+    fun testFlagDoc() {
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: ignoreversi<caret>on\n")
+        assertNotNull("Expected doc for the ignoreversion flag", doc)
+        assertTrue(doc!!.contains("ignoreversion"))
+        assertTrue("Flag doc must declare it is a flag", doc.contains("flag"))
+    }
+
+    fun testConstantDoc() {
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{a<caret>pp}\"\n")
+        assertNotNull("Expected doc for the {app} constant", doc)
+        assertTrue(doc!!.contains("app"))
+    }
+
     fun testValueContextReturnsNull() {
         val doc = docFor("[Setup]\nAppName=MyA<caret>pp\n")
         assertNull("Value text should not produce docs", doc)
