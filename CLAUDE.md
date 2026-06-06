@@ -3,6 +3,10 @@
 IntelliJ-Plugin für Inno Setup `.iss`-Skriptdateien.
 Inno Setup-Dokumentation: https://jrsoftware.org/ishelp/
 
+> **Dokumentationsabdeckung:** Welche Teile der offiziellen Inno-Setup-Doku bereits im Plugin umgesetzt
+> sind und was noch fehlt, ist in [`DOC_STATUS.md`](DOC_STATUS.md) festgehalten. Diese Datei muss bei
+> neuen Inno-Setup-Releases oder nach Erweiterungen des Spec-YAMLs aktuell gehalten werden.
+
 ## Build
 
 ```
