@@ -16,7 +16,6 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.components.service
-import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -286,13 +285,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) {
-        val attrs = EditorColorsManager.getInstance().globalScheme.getAttributes(key)
-            ?: key.defaultAttributes
-            ?: return
+    private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(range)
-            .enforcedTextAttributes(attrs)
-            .create()
-    }
+            .range(range).textAttributes(key).create()
 }

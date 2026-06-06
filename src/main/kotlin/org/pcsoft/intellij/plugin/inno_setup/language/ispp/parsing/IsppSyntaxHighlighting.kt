@@ -12,10 +12,10 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing
 
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiSyntaxHighlighting
 
 object IsppSyntaxHighlighting {
-    val STRING: TextAttributesKey = IsiSyntaxHighlighting.STRING
-    val NUMBER: TextAttributesKey = IsiSyntaxHighlighting.NUMBER
+    val STRING: TextAttributesKey = DefaultLanguageHighlighterColors.STRING
+    val NUMBER: TextAttributesKey = DefaultLanguageHighlighterColors.NUMBER
 }

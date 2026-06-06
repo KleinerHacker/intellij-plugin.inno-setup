@@ -134,7 +134,9 @@
         <colorSettingsPage
                 implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiColorSettingsPage"/>
 
-
+        <!-- Default colors for ISPP preprocessor highlighting (dark/light) -->
+        <additionalTextAttributes scheme="Default" file="colorSchemes/IssDefault.xml"/>
+        <additionalTextAttributes scheme="Darcula" file="colorSchemes/IssDarcula.xml"/>
     </extensions>
 
     <actions>
