@@ -23,6 +23,10 @@ import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingParametersQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingSectionsQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.MoveCodeSectionLastQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
@@ -53,7 +57,9 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required section(s) missing: " + missing.joinToString(", ") { "[$it]" }
-            ).fileLevel().create()
+            ).fileLevel()
+                .withFix(AddMissingSectionsQuickFix(missing.toList(), spec))
+                .create()
         }
 
         val sections = file.sections()
@@ -65,9 +71,10 @@ class IsiAnnotator : Annotator {
                     "[Code] must be the last section in the script"
                 else
                     "This section appears after [Code], which must be the last section"
-                holder.newAnnotation(HighlightSeverity.ERROR, msg)
+                val builder = holder.newAnnotation(HighlightSeverity.ERROR, msg)
                     .range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange)
-                    .create()
+                if (isCode) builder.withFix(MoveCodeSectionLastQuickFix(file))
+                builder.create()
             }
         }
     }
@@ -97,7 +104,9 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required directive(s) missing: " + missing.joinToString(", ")
-            ).range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange).create()
+            ).range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange)
+                .withFix(AddMissingDirectivesQuickFix(section, missing.toList(), specSection))
+                .create()
         }
     }
 
@@ -117,7 +126,9 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required parameter(s) missing: " + missing.joinToString(", ")
-            ).range(TextRange(entry.textRange.startOffset, end)).create()
+            ).range(TextRange(entry.textRange.startOffset, end))
+                .withFix(AddMissingParametersQuickFix(entry, missing.toList(), specSection))
+                .create()
         }
     }
 
