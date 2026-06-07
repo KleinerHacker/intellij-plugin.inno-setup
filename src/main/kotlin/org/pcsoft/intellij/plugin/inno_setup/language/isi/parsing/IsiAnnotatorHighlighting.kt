@@ -39,4 +39,8 @@ object IsiAnnotatorHighlighting {
 
     val UNKNOWN_REFERENCE: TextAttributesKey = CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES
     val DEPRECATED: TextAttributesKey = CodeInsightColors.DEPRECATED_ATTRIBUTES
+
+    /** Unused elements (trailing semicolons, unused #define, empty sections) — gray, like Java's unused. */
+    val UNUSED: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_UNUSED", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
 }

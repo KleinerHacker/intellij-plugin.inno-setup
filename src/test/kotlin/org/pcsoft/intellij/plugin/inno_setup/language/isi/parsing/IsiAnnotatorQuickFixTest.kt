@@ -152,6 +152,51 @@ class IsiAnnotatorQuickFixTest : BasePlatformTestCase() {
         assertTrue("[Code] must be after [Registry]", codeIdx > registryIdx)
     }
 
+    // ── Fix 4: Remove trailing semicolon ─────────────────────────────────────
+
+    fun testRemoveTrailingSemicolon() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"<caret>;\n"
+        )
+        myFixture.launchAction(findIntention("Remove trailing semicolon"))
+        assertEquals(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n",
+            myFixture.file.text
+        )
+    }
+
+    fun testRemoveTrailingSemicolonPreservesInternalSemicolons() {
+        // Caret at trailing ';'; the internal '; DestDir' separator must survive.
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"<caret>;\n"
+        )
+        myFixture.launchAction(findIntention("Remove trailing semicolon"))
+        val result = myFixture.file.text
+        assertTrue("Internal semicolons between parameters must be preserved", result.contains("; DestDir"))
+        assertFalse("Trailing semicolon must be removed", result.trimEnd('\n').endsWith(";"))
+    }
+
+    // ── Fix 5: Remove empty section ───────────────────────────────────────────
+
+    fun testRemoveEmptySection() {
+        configure("[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[<caret>Registry]\n")
+        myFixture.launchAction(findIntention("Remove empty section"))
+        assertEquals("[Setup]\nAppName=MyApp\nAppVersion=1.0\n", myFixture.file.text)
+    }
+
+    fun testRemoveEmptySectionPreservesOtherSections() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[<caret>Registry]\n\n" +
+                    "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        )
+        myFixture.launchAction(findIntention("Remove empty section"))
+        val result = myFixture.file.text
+        assertTrue("[Files] section must be preserved after removing [Registry]", result.contains("[Files]"))
+        assertFalse("Empty [Registry] section must be removed", result.contains("[Registry]"))
+    }
+
     fun testMoveCodeSectionLastPreservesCodeContent() {
         // Use ISS comment lines as [Code] content — Pascal code cannot be parsed as ISS entries
         // and would corrupt the section structure, making the annotation unreachable.

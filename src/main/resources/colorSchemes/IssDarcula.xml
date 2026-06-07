@@ -29,5 +29,11 @@
                 <option name="FONT_TYPE" value="2"/>
             </value>
         </option>
+        <!-- Unused elements (trailing semicolons, unused #define, empty sections) — gray -->
+        <option name="ISS_UNUSED">
+            <value>
+                <option name="FOREGROUND" value="808080"/>
+            </value>
+        </option>
     </attributes>
 </scheme>

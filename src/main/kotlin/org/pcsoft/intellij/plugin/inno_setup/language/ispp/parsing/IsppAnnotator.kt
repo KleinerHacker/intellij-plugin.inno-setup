@@ -15,13 +15,19 @@ package org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstant
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.quickfix.RemoveUnusedDefineQuickFix
 
 class IsppAnnotator : Annotator {
 
@@ -50,7 +56,34 @@ class IsppAnnotator : Annotator {
                 HighlightSeverity.ERROR,
                 "Function-like macro '${ex.getDefineName().orEmpty()}' requires an expression"
             ).range(directive.textRange).create()
+            return
         }
+
+        val name = ex.getDefineName() ?: return
+        if (!isDefineUsed(directive, name)) {
+            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "#define '$name' is never used")
+                .range(directive.textRange)
+                .textAttributes(IsiAnnotatorHighlighting.UNUSED)
+                .withFix(RemoveUnusedDefineQuickFix(directive))
+                .create()
+        }
+    }
+
+    private fun isDefineUsed(directive: IsppDirective, name: String): Boolean {
+        val injMgr = InjectedLanguageManager.getInstance(directive.project)
+        val hostFile = injMgr.getTopLevelFile(directive.containingFile) as? IssFile ?: return true
+
+        // Check {#Name} references anywhere in the ISS host file.
+        val usedAsConstant = PsiTreeUtil.findChildrenOfType(hostFile, IsiConstant::class.java).any { constant ->
+            val body = constant.constantBody.text.trim()
+            body.startsWith("#") && body.trimStart('#').trim().equals(name, ignoreCase = true)
+        }
+        if (usedAsConstant) return true
+
+        // Check cross-references inside other #define expressions.
+        return hostFile.isppDirectives()
+            .filter { it !== directive }
+            .any { other -> other.references.any { ref -> ref.canonicalText.equals(name, ignoreCase = true) } }
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =

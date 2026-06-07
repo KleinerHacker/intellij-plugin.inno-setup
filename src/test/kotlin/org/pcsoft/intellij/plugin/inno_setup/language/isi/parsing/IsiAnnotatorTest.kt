@@ -305,6 +305,85 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         assertTrue("Unknown constant '{unknownconstant}' must produce 'Unknown constant' ERROR", hit)
     }
 
+    // ── Trailing semicolon ────────────────────────────────────────────────────
+
+    fun testTrailingSemicolonProducesWeakWarning() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\";\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("Trailing semicolon", ignoreCase = true) == true
+        }
+        assertTrue("Trailing ';' must produce a 'Trailing semicolon is optional' WEAK_WARNING", hit)
+    }
+
+    fun testTrailingSemicolonIsHighlightedAsUnused() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\";\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val semiOffset = fileText.lastIndexOf(";")
+        val hit = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == semiOffset
+        }
+        assertTrue("Trailing ';' must use the UNUSED text attribute", hit)
+    }
+
+    fun testNonTrailingSemicolonProducesNoUnusedWarning() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("Trailing semicolon", ignoreCase = true) == true
+        }
+        assertFalse("No trailing ';' must not produce a 'Trailing semicolon' warning", hit)
+    }
+
+    // ── Empty sections ────────────────────────────────────────────────────────
+
+    fun testEmptySectionProducesWeakWarning() {
+        val text = VALID_SETUP + "\n[Registry]\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("Empty section", ignoreCase = true) == true
+        }
+        assertTrue("Empty [Registry] section must produce an 'Empty section' WEAK_WARNING", hit)
+    }
+
+    fun testEmptySectionIsHighlightedAsUnused() {
+        val text = VALID_SETUP + "\n[Registry]\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val nameOffset = fileText.indexOf("Registry")
+        val hit = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == nameOffset
+        }
+        assertTrue("Empty section name must use the UNUSED text attribute", hit)
+    }
+
+    fun testNonEmptySectionProducesNoEmptySectionWarning() {
+        val text = VALID_SETUP + "\n[Registry]\nRoot: HKLM; Subkey: Software\\MyApp\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("Empty section", ignoreCase = true) == true
+        }
+        assertFalse("Non-empty [Registry] section must not produce an 'Empty section' warning", hit)
+    }
+
+    fun testCodeSectionIsNeverFlaggedAsEmpty() {
+        // [Code] is free-form Pascal — even a structurally empty [Code] must not warn.
+        val text = VALID_SETUP + "\n[Code]\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("Empty section", ignoreCase = true) == true
+        }
+        assertFalse("[Code] section must never produce an 'Empty section' warning", hit)
+    }
+
     // ── Preprocessor directive keyword ────────────────────────────────────────
 
     fun testPreprocessorIncludeKeywordHighlighted() {
