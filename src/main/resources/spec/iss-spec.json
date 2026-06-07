@@ -46,6 +46,12 @@
           "items": {
             "$ref": "#/definitions/attribute"
           }
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
         }
       },
       "additionalProperties": false
@@ -78,6 +84,12 @@
         },
         "array": {
           "type": "boolean"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
         }
       },
       "additionalProperties": false
