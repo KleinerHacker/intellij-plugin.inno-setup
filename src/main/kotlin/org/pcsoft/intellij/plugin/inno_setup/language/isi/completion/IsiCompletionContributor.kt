@@ -31,9 +31,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
-import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiFlagTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiNativeTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiReferenceTypeSpec
 
 class IsiCompletionContributor : CompletionContributor() {
     init {
@@ -199,9 +199,9 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
             val removed = minVersion != null && attr.until != null &&
                     IssSettingsService.compareIsVersions(attr.until, minVersion) <= 0
             val typeHint = when (val t = attr.type) {
-                is IssNativeTypeSpec -> t.dataType
-                is IssReferenceTypeSpec -> "→ ${t.section}"
-                is IssFlagTypeSpec -> "flags"
+                is IsiNativeTypeSpec -> t.dataType
+                is IsiReferenceTypeSpec -> "→ ${t.section}"
+                is IsiFlagTypeSpec -> "flags"
             }
             val tail = buildString {
                 if (attr.required) append(" required")
@@ -302,7 +302,7 @@ private object BooleanValueProvider : CompletionProvider<CompletionParameters>()
             }
         } ?: return
 
-        val type = attr.type as? IssNativeTypeSpec ?: return
+        val type = attr.type as? IsiNativeTypeSpec ?: return
         if (type.dataType.lowercase() != "boolean") return
 
         listOf("yes", "no").forEach { value ->

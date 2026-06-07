@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/ispp-spec",
+  "type": "object",
+  "required": [
+    "directives",
+    "predefined_variables",
+    "builtin_functions"
+  ],
+  "properties": {
+    "directives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/directive"
+      }
+    },
+    "predefined_variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/variable"
+      }
+    },
+    "builtin_functions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/function"
+      }
+    }
+  },
+  "definitions": {
+    "directive": {
+      "type": "object",
+      "required": [
+        "name",
+        "syntax",
+        "description",
+        "deprecated"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "syntax": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "variable": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "int",
+            "str",
+            "void"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "function": {
+      "type": "object",
+      "required": [
+        "name",
+        "signature",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -12,15 +12,15 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix
 
-import org.pcsoft.intellij.plugin.inno_setup.types.IssAttributeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssAttributeTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiAttributeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiAttributeTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiFlagTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiNativeTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiReferenceTypeSpec
 
 internal object IssDefaultValueGenerator {
 
-    fun defaultFor(attr: IssAttributeSpec): String =
+    fun defaultFor(attr: IsiAttributeSpec): String =
         nameOverride(attr.name) ?: typeDefault(attr.type)
 
     private fun nameOverride(name: String): String? = when (name.lowercase()) {
@@ -38,13 +38,13 @@ internal object IssDefaultValueGenerator {
         else           -> null
     }
 
-    private fun typeDefault(type: IssAttributeTypeSpec): String = when (type) {
-        is IssNativeTypeSpec    -> when (type.dataType.lowercase()) {
+    private fun typeDefault(type: IsiAttributeTypeSpec): String = when (type) {
+        is IsiNativeTypeSpec    -> when (type.dataType.lowercase()) {
             "integer" -> "0"
             "boolean" -> "yes"
             else      -> "MyValue"
         }
-        is IssReferenceTypeSpec -> "ref"
-        is IssFlagTypeSpec      -> type.flags.firstOrNull { !it.deprecated }?.name ?: "flag"
+        is IsiReferenceTypeSpec -> "ref"
+        is IsiFlagTypeSpec      -> type.flags.firstOrNull { !it.deprecated }?.name ?: "flag"
     }
 }

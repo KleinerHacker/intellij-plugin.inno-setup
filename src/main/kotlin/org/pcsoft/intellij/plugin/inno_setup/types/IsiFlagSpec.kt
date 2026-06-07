@@ -12,4 +12,16 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class InnoSetupSpec(val sections: List<IssSectionSpec>)
+data class IsiFlagConflictSpec(
+    val flag: String,
+    val severity: IsiFlagSeveritySpec
+)
+
+data class IsiFlagSpec(
+    val name: String,
+    val description: String,
+    val deprecated: Boolean,
+    val conflicts: List<IsiFlagConflictSpec> = emptyList(),
+    val since: String? = null,
+    val until: String? = null
+)

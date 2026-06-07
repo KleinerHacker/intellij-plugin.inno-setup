@@ -17,12 +17,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "kind")
 @JsonSubTypes(
-    JsonSubTypes.Type(value = IssNativeTypeSpec::class, name = "native"),
-    JsonSubTypes.Type(value = IssReferenceTypeSpec::class, name = "reference"),
-    JsonSubTypes.Type(value = IssFlagTypeSpec::class, name = "flags"),
+    JsonSubTypes.Type(value = IsiNativeTypeSpec::class, name = "native"),
+    JsonSubTypes.Type(value = IsiReferenceTypeSpec::class, name = "reference"),
+    JsonSubTypes.Type(value = IsiFlagTypeSpec::class, name = "flags"),
 )
-sealed class IssAttributeTypeSpec
+sealed class IsiAttributeTypeSpec
 
-data class IssNativeTypeSpec(val dataType: String) : IssAttributeTypeSpec()
-data class IssReferenceTypeSpec(val section: String) : IssAttributeTypeSpec()
-data class IssFlagTypeSpec(val flags: List<IssFlagSpec>) : IssAttributeTypeSpec()
+data class IsiNativeTypeSpec(val dataType: String) : IsiAttributeTypeSpec()
+data class IsiReferenceTypeSpec(val section: String) : IsiAttributeTypeSpec()
+data class IsiFlagTypeSpec(val flags: List<IsiFlagSpec>) : IsiAttributeTypeSpec()

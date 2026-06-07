@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/iss-spec",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isi-spec",
   "type": "object",
   "required": [
     "sections"

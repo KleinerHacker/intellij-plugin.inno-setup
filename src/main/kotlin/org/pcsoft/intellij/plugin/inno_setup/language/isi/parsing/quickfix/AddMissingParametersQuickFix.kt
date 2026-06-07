@@ -20,12 +20,12 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.SmartPointerManager
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
-import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
 
 class AddMissingParametersQuickFix(
     entry: IsiParameterEntry,
     private val missingNames: List<String>,
-    private val specSection: IssSectionSpec
+    private val specSection: IsiSectionSpec
 ) : IntentionAction {
 
     private val entryPointer =

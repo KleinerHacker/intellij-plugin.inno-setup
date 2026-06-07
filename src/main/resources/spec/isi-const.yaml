@@ -1,3 +1,4 @@
+# $schema: ./isi-const.json
 constants:
 
   # ── Directory Constants ────────────────────────────────────────────────────

@@ -12,16 +12,34 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class IssFlagConflictSpec(
-    val flag: String,
-    val severity: IssFlagSeveritySpec
-)
+import com.fasterxml.jackson.annotation.JsonProperty
 
-data class IssFlagSpec(
+enum class IsiConstantCategorySpec {
+    @JsonProperty("directory")
+    DIRECTORY,
+
+    @JsonProperty("shell_folder")
+    SHELL_FOLDER,
+
+    @JsonProperty("auto")
+    AUTO,
+
+    @JsonProperty("special")
+    SPECIAL,
+
+    @JsonProperty("parameterized")
+    PARAMETERIZED
+}
+
+data class IsiBuiltinConstantSpec(
     val name: String,
     val description: String,
     val deprecated: Boolean,
-    val conflicts: List<IssFlagConflictSpec> = emptyList(),
+    val category: IsiConstantCategorySpec = IsiConstantCategorySpec.SPECIAL,
+    val parameterized: Boolean = false,
+    val syntax: String? = null,
     val since: String? = null,
     val until: String? = null
 )
+
+data class IsiConstantSpec(val constants: List<IsiBuiltinConstantSpec>)

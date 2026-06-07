@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class IssFlagSeveritySpec {
+enum class IsiFlagSeveritySpec {
     @JsonProperty("warning")
     WARNING,
 

@@ -19,11 +19,11 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.findSection
-import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpec
 
 class AddMissingSectionsQuickFix(
     private val missingSectionNames: List<String>,
-    private val spec: InnoSetupSpec
+    private val spec: IsiSpec
 ) : IntentionAction {
 
     override fun getText(): String {

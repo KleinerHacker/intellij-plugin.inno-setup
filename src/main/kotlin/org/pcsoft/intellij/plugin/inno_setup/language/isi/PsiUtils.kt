@@ -20,8 +20,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.InnoSetupSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
 
 // ── IssFile (Sektionen) ────────────────────────────────────────────────────────
 
@@ -53,10 +53,10 @@ fun IsiSection.findParamPairs(key: String): List<IsiParamPair> =
 
 fun IsiSection.nameDeclarations(): List<IsiParamPair> = findParamPairs("Name")
 
-fun IsiSection.specSection(spec: InnoSetupSpec): IssSectionSpec? =
+fun IsiSection.specSection(spec: IsiSpec): IsiSectionSpec? =
     spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
 
-fun IsiSection.specSection(): IssSectionSpec? =
+fun IsiSection.specSection(): IsiSectionSpec? =
     service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
 
 fun IsiSection.isParameterSection(): Boolean = specSection()?.type == "parameter"

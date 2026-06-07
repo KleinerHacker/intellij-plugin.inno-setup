@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
 
-// Mirrors IssIsppReferencesSearcher for section cross-references.
+// Mirrors IsppReferencesSearcher for section cross-references.
 // IntelliJ's word-occurrence search calls getReferences() on the leaf IDENTIFIER, which
 // returns nothing — the reference lives on the parent IsiParamValue.  This executor
 // directly scans all IsiParamValue elements in the file so rename finds and updates

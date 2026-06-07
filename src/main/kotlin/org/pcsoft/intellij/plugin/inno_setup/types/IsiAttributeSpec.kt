@@ -12,9 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class IssAttributeSpec(
+data class IsiAttributeSpec(
     val name: String,
-    val type: IssAttributeTypeSpec,
+    val type: IsiAttributeTypeSpec,
     val required: Boolean,
     val deprecated: Boolean,
     val description: String,

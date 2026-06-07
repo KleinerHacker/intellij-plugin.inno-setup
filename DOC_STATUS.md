@@ -41,7 +41,7 @@
 ## [Setup] Section — Missing Attributes
 
 The spec covers **~48** attributes. The official docs list **~174** current (non-obsolete) attributes.
-Grouped below are the attributes **not yet in `iss-spec.yaml`**.
+Grouped below are the attributes **not yet in `isi-spec.yaml`**.
 
 ### Compiler / Build
 - `ASLRCompatible`, `DEPCompatible`, `TerminalServicesAware`
@@ -144,10 +144,10 @@ Declares public keys for `.issig` file-signature verification (used with `issigv
 
 ---
 
-## Constants (`iss-const.yaml`)
+## Constants (`isi-const.yaml`)
 
 Coverage appears **complete** for the constants documented at the time of last check (58 entries including
-deprecated). Notable items already marked deprecated/removed in `iss-const.yaml`:
+deprecated). Notable items already marked deprecated/removed in `isi-const.yaml`:
 - `{hwnd}` — removed in Inno Setup 6.4 ✅ annotated
 - `{pf}`, `{pf32}`, `{pf64}`, `{cf}`, `{cf32}`, `{cf64}`, `{fonts}`, `{sendto}` — deprecated ✅ annotated
 

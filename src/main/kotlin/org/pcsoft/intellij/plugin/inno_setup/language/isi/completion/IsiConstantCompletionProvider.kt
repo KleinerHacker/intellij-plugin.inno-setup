@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
-import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
+import org.pcsoft.intellij.plugin.inno_setup.services.IssPpService
 
 object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>() {
 
@@ -68,7 +68,7 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
             result.addElement(PrioritizedLookupElement.withPriority(element, 5.0))
         }
 
-        service<IssIsppService>().spec.predefinedVariables.forEach { v ->
+        service<IssPpService>().spec.predefinedVariables.forEach { v ->
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")

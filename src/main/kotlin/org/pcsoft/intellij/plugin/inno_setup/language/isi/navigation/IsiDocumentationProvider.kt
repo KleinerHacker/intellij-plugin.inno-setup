@@ -77,8 +77,8 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
-    private fun generateSectionDoc(name: IsiSectionName, spec: InnoSetupSpec): String? {
-        val sec: IssSectionSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
+    private fun generateSectionDoc(name: IsiSectionName, spec: IsiSpec): String? {
+        val sec: IsiSectionSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
             ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -93,14 +93,14 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
-    private fun generateAttrDoc(section: IsiSection?, keyText: String, spec: InnoSetupSpec): String? {
+    private fun generateAttrDoc(section: IsiSection?, keyText: String, spec: IsiSpec): String? {
         val specSec = section?.specSection(spec) ?: return null
         val attr = specSec.attributes.firstOrNull { it.name.equals(keyText, ignoreCase = true) }
             ?: return null
         val typeStr = when (val t = attr.type) {
-            is IssNativeTypeSpec -> t.dataType
-            is IssReferenceTypeSpec -> "→ ${t.section}"
-            is IssFlagTypeSpec -> "flags"
+            is IsiNativeTypeSpec -> t.dataType
+            is IsiReferenceTypeSpec -> "→ ${t.section}"
+            is IsiFlagTypeSpec -> "flags"
         }
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -116,11 +116,11 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
-    private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: InnoSetupSpec): String? {
+    private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: IsiSpec): String? {
         val specSec = pair.containingSection()?.specSection(spec) ?: return null
         val attr = specSec.attributes.firstOrNull { it.name.equals("Flags", ignoreCase = true) }
             ?: return null
-        val flagType = attr.type as? IssFlagTypeSpec ?: return null
+        val flagType = attr.type as? IsiFlagTypeSpec ?: return null
         val flag = flagType.flags.firstOrNull { it.name.equals(flagName, ignoreCase = true) }
             ?: return null
         return buildString {

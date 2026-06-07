@@ -17,14 +17,14 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
-import org.pcsoft.intellij.plugin.inno_setup.types.IssIsppSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsppSpec
 
-class IssIsppServiceTest {
+class IssPpServiceTest {
 
-    private val spec: IssIsppSpec by lazy {
+    private val spec: IsppSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
-        val stream = IssIsppServiceTest::class.java.getResourceAsStream("/spec/iss-ispp.yaml")
-            ?: error("iss-ispp.yaml not found in test classpath")
+        val stream = IssPpServiceTest::class.java.getResourceAsStream("/spec/ispp-spec.yaml")
+            ?: error("ispp-spec.yaml not found in test classpath")
         mapper.readValue(stream)
     }
 

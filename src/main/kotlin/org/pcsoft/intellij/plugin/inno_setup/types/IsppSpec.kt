@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class IssIsppDirectiveSpec(
+data class IsppDirectiveSpec(
     val name: String,
     val syntax: String,
     val description: String,
@@ -23,7 +23,7 @@ data class IssIsppDirectiveSpec(
     val until: String? = null
 )
 
-data class IssIsppVariableSpec(
+data class IsppVariableSpec(
     val name: String,
     val type: String,
     val description: String,
@@ -31,7 +31,7 @@ data class IssIsppVariableSpec(
     val until: String? = null
 )
 
-data class IssIsppFunctionSpec(
+data class IsppFunctionSpec(
     val name: String,
     val signature: String,
     val description: String,
@@ -39,8 +39,8 @@ data class IssIsppFunctionSpec(
     val until: String? = null
 )
 
-data class IssIsppSpec(
-    val directives: List<IssIsppDirectiveSpec>,
-    @field:JsonProperty("predefined_variables") val predefinedVariables: List<IssIsppVariableSpec>,
-    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IssIsppFunctionSpec>
+data class IsppSpec(
+    val directives: List<IsppDirectiveSpec>,
+    @field:JsonProperty("predefined_variables") val predefinedVariables: List<IsppVariableSpec>,
+    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IsppFunctionSpec>
 )
