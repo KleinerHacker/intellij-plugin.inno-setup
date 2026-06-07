@@ -39,6 +39,7 @@ class IsiColorSettingsPage : ColorSettingsPage {
         AttributesDescriptor("Preprocessor//Directive", IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
         AttributesDescriptor("Preprocessor//Define name", IsiAnnotatorHighlighting.DEFINE_NAME),
         AttributesDescriptor("Deprecated", IsiAnnotatorHighlighting.DEPRECATED),
+        AttributesDescriptor("Unused", IsiAnnotatorHighlighting.UNUSED),
     )
 
     override fun getDisplayName() = "Inno Setup"
@@ -62,7 +63,7 @@ class IsiColorSettingsPage : ColorSettingsPage {
         <paramKey>DefaultDirName</paramKey>=<ref>{autopf}</ref>\MyApp
 
         [<sectionName>Files</sectionName>]
-        <paramKey>Source</paramKey>: "MyProg.exe"; <paramKey>DestDir</paramKey>: "<ref>{app}</ref>"; <paramKey>Flags</paramKey>: <flag>ignoreversion</flag>
+        <paramKey>Source</paramKey>: "MyProg.exe"; <paramKey>DestDir</paramKey>: "<ref>{app}</ref>"; <paramKey>Flags</paramKey>: <flag>ignoreversion</flag><unused>;</unused>
 
         [<sectionName>Icons</sectionName>]
         <paramKey>Name</paramKey>: "<ref>{group}</ref>\My Program"; <paramKey>Filename</paramKey>: "<ref>{app}</ref>\MyProg.exe"
@@ -76,5 +77,6 @@ class IsiColorSettingsPage : ColorSettingsPage {
         "pp" to IsiAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE,
         "dname" to IsiAnnotatorHighlighting.DEFINE_NAME,
         "ppref" to IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME,
+        "unused" to IsiAnnotatorHighlighting.UNUSED,
     )
 }

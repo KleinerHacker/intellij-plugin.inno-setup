@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing
 
+import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 
@@ -42,5 +43,63 @@ class IsiAnnotatorIsppTest : BasePlatformTestCase() {
             it.severity.name == "ERROR" && it.description?.contains("Unknown constant") == true
         }
         assertTrue("Unknown ISPP constant {#Unknown} should produce an error", errors.isNotEmpty())
+    }
+
+    // ── Unused #define ────────────────────────────────────────────────────────
+
+    fun testUnusedDefineProducesWeakWarning() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define UnusedConst \"value\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("never used", ignoreCase = true) == true
+        }
+        assertTrue("Unused #define must produce a 'never used' WEAK_WARNING", hit)
+    }
+
+    fun testUnusedDefineIsHighlightedAsUnused() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define UnusedConst \"value\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.severity == HighlightSeverity.WEAK_WARNING
+        }
+        assertTrue("Unused #define must use the UNUSED text attribute", hit)
+    }
+
+    fun testUsedDefineViaConstantReferenceProducesNoUnusedWarning() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define AppVer \"1.0\"\n[Setup]\nAppName=Test\nAppVersion={#AppVer}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("never used", ignoreCase = true) == true
+        }
+        assertFalse("#define used via {#Name} must not produce a 'never used' warning", hit)
+    }
+
+    fun testUsedDefineViaCrossReferenceProducesNoUnusedWarning() {
+        // Base is used by Full's expression; Full is used via {#Full}.
+        // Neither must be flagged as unused.
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "#define Base \"1\"\n#define Full Base\n[Setup]\nAppName={#Full}\nAppVersion=1.0\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val baseWarnings = highlights.filter {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("'Base'", ignoreCase = true) == true &&
+                    it.description?.contains("never used", ignoreCase = true) == true
+        }
+        assertTrue("'Base' used in another #define expression must not be flagged as unused",
+            baseWarnings.isEmpty())
     }
 }

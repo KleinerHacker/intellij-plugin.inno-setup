@@ -23,6 +23,12 @@ import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingParametersQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingSectionsQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.MoveCodeSectionLastQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveEmptySectionQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveTrailingSemicolonQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
@@ -37,7 +43,10 @@ class IsiAnnotator : Annotator {
             is IssFile -> annotateFile(element, holder, spec)
             is IsiSectionName -> annotateSectionName(element, holder, spec)
             is IsiSection -> annotateSection(element, holder, spec)
-            is IsiParameterEntry -> annotateParameterEntry(element, holder, spec)
+            is IsiParameterEntry -> {
+                annotateParameterEntry(element, holder, spec)
+                annotateTrailingSemicolon(element, holder)
+            }
             is IsiParamKey -> annotateParamKey(element, holder, spec)
             is IsiDirectiveKey -> annotateDirectiveKey(element, holder, spec)
             is IsiParamValue -> annotateParamValue(element, holder, spec)
@@ -53,7 +62,9 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required section(s) missing: " + missing.joinToString(", ") { "[$it]" }
-            ).fileLevel().create()
+            ).fileLevel()
+                .withFix(AddMissingSectionsQuickFix(missing.toList(), spec))
+                .create()
         }
 
         val sections = file.sections()
@@ -65,9 +76,10 @@ class IsiAnnotator : Annotator {
                     "[Code] must be the last section in the script"
                 else
                     "This section appears after [Code], which must be the last section"
-                holder.newAnnotation(HighlightSeverity.ERROR, msg)
+                val builder = holder.newAnnotation(HighlightSeverity.ERROR, msg)
                     .range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange)
-                    .create()
+                if (isCode) builder.withFix(MoveCodeSectionLastQuickFix(file))
+                builder.create()
             }
         }
     }
@@ -87,6 +99,18 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateSection(section: IsiSection, holder: AnnotationHolder, spec: InnoSetupSpec) {
+        // [Code] is free-form Pascal — no ISI-level checks apply.
+        if (section.nameText().equals("Code", ignoreCase = true)) return
+
+        if (section.directiveEntryList.isEmpty() && section.parameterEntryList.isEmpty()) {
+            val range = section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange
+            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "Empty section — consider removing it")
+                .range(range)
+                .textAttributes(IsiAnnotatorHighlighting.UNUSED)
+                .withFix(RemoveEmptySectionQuickFix(section))
+                .create()
+        }
+
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "directive") return
 
@@ -97,7 +121,22 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required directive(s) missing: " + missing.joinToString(", ")
-            ).range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange).create()
+            ).range(section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange)
+                .withFix(AddMissingDirectivesQuickFix(section, missing.toList(), specSection))
+                .create()
+        }
+    }
+
+    private fun annotateTrailingSemicolon(entry: IsiParameterEntry, holder: AnnotationHolder) {
+        if (entry.isInCodeSection()) return
+        var node = entry.node.lastChildNode
+        if (node?.elementType == IsiTypes.CRLF) node = node.treePrev
+        if (node?.elementType == IsiTypes.SEMICOLON) {
+            holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "Trailing semicolon is optional")
+                .range(node.textRange)
+                .textAttributes(IsiAnnotatorHighlighting.UNUSED)
+                .withFix(RemoveTrailingSemicolonQuickFix(entry))
+                .create()
         }
     }
 
@@ -117,7 +156,9 @@ class IsiAnnotator : Annotator {
             holder.newAnnotation(
                 HighlightSeverity.ERROR,
                 "Required parameter(s) missing: " + missing.joinToString(", ")
-            ).range(TextRange(entry.textRange.startOffset, end)).create()
+            ).range(TextRange(entry.textRange.startOffset, end))
+                .withFix(AddMissingParametersQuickFix(entry, missing.toList(), specSection))
+                .create()
         }
     }
 
