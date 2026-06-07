@@ -57,4 +57,58 @@ class IsiDocumentationProviderTest : BasePlatformTestCase() {
         val doc = docFor("[Setup]\nAppName=MyA<caret>pp\n")
         assertNull("Value text should not produce docs", doc)
     }
+
+    // ── Version section in doc ────────────────────────────────────────────────
+
+    fun testDirectiveWithSinceShowsVersionSection() {
+        // ArchiveExtraction has since="6.5"
+        val doc = docFor("[Setup]\nAppName=Test\nAppVersion=1.0\nArchiveExtr<caret>action=full\n")
+        assertNotNull("Expected doc for ArchiveExtraction", doc)
+        assertTrue(
+            "Doc for ArchiveExtraction (since 6.5) must contain 'since' version info",
+            doc!!.contains("6.5")
+        )
+        assertTrue(
+            "Doc must mention 'Available since'",
+            doc.contains("Available since", ignoreCase = true)
+        )
+    }
+
+    fun testDirectiveWithoutVersionShowsNoVersionSection() {
+        // AppName has no since/until
+        val doc = docFor("[Setup]\nAppNa<caret>me=Test\n")
+        assertNotNull("Expected doc for AppName", doc)
+        assertFalse(
+            "Doc for AppName (no version) must not contain version section",
+            doc!!.contains("Available since", ignoreCase = true)
+        )
+        assertFalse(
+            "Doc for AppName must not contain 'Removed in'",
+            doc.contains("Removed in", ignoreCase = true)
+        )
+    }
+
+    fun testConstantRemovedInShowsUntilVersion() {
+        // {hwnd} has until="6.4"
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{hw<caret>nd}\"\n")
+        assertNotNull("Expected doc for {hwnd}", doc)
+        assertTrue(
+            "Doc for {hwnd} (until 6.4) must contain 'Removed in'",
+            doc!!.contains("Removed in", ignoreCase = true)
+        )
+        assertTrue(
+            "Doc for {hwnd} must mention version 6.4",
+            doc.contains("6.4")
+        )
+    }
+
+    fun testFlagWithSinceShowsVersionSection() {
+        // signcheck flag has since="6.4"
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: signche<caret>ck\n")
+        assertNotNull("Expected doc for signcheck flag", doc)
+        assertTrue(
+            "Doc for signcheck flag (since 6.4) must contain '6.4'",
+            doc!!.contains("6.4")
+        )
+    }
 }

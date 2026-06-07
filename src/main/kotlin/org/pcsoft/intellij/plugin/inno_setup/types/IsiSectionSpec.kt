@@ -12,14 +12,13 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class IssFlagConflictSpec(
-    val flag: String,
-    val severity: IssFlagSeveritySpec
-)
-
-data class IssFlagSpec(
+data class IsiSectionSpec(
     val name: String,
-    val description: String,
+    val type: String,
+    val required: Boolean = false,
     val deprecated: Boolean,
-    val conflicts: List<IssFlagConflictSpec> = emptyList()
+    val description: String,
+    val attributes: List<IsiAttributeSpec>,
+    val since: String? = null,
+    val until: String? = null
 )

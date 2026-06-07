@@ -5,11 +5,16 @@
  * You may obtain a copy of the License at:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, this software is distributed on an “AS IS” BASIS,
+ * Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.types
+package org.pcsoft.intellij.plugin.inno_setup.settings
 
-data class InnoSetupSpec(val sections: List<IssSectionSpec>)
+import com.intellij.openapi.components.BaseState
+
+class IssSettingsState : BaseState() {
+    var installationPath: String? by string()
+    var minInnoVersion: String? by string()
+}

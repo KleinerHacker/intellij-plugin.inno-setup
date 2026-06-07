@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.isppDirectivesWithHos
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
-import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
+import org.pcsoft.intellij.plugin.inno_setup.services.IssPpService
 
 class IsppCompletionContributor : CompletionContributor() {
     init {
@@ -52,7 +52,7 @@ private object IsppDirectiveKeywordProvider : CompletionProvider<CompletionParam
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        service<IssIsppService>().spec.directives
+        service<IssPpService>().spec.directives
             .distinctBy { it.name }
             .forEach { dir ->
                 result.addElement(

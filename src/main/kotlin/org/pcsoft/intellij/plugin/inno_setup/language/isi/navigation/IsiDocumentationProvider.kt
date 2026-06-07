@@ -26,6 +26,17 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
+private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
+    if (since == null && until == null) return
+    append(DocumentationMarkup.SECTIONS_START)
+    append(DocumentationMarkup.SECTION_HEADER_START)
+    append("Version")
+    append(DocumentationMarkup.SECTION_SEPARATOR)
+    since?.let { append("<p>Available since Inno Setup <b>$it</b></p>") }
+    until?.let { append("<p>Removed in Inno Setup <b>$it</b></p>") }
+    append(DocumentationMarkup.SECTIONS_END)
+}
+
 class IsiDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun getCustomDocumentationElement(
@@ -66,8 +77,8 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
-    private fun generateSectionDoc(name: IsiSectionName, spec: InnoSetupSpec): String? {
-        val sec: IssSectionSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
+    private fun generateSectionDoc(name: IsiSectionName, spec: IsiSpec): String? {
+        val sec: IsiSectionSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
             ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -77,18 +88,19 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${sec.description}</p>")
+            appendVersionSection(sec.since, sec.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
 
-    private fun generateAttrDoc(section: IsiSection?, keyText: String, spec: InnoSetupSpec): String? {
+    private fun generateAttrDoc(section: IsiSection?, keyText: String, spec: IsiSpec): String? {
         val specSec = section?.specSection(spec) ?: return null
         val attr = specSec.attributes.firstOrNull { it.name.equals(keyText, ignoreCase = true) }
             ?: return null
         val typeStr = when (val t = attr.type) {
-            is IssNativeTypeSpec -> t.dataType
-            is IssReferenceTypeSpec -> "→ ${t.section}"
-            is IssFlagTypeSpec -> "flags"
+            is IsiNativeTypeSpec -> t.dataType
+            is IsiReferenceTypeSpec -> "→ ${t.section}"
+            is IsiFlagTypeSpec -> "flags"
         }
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -99,15 +111,16 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${attr.description}</p>")
+            appendVersionSection(attr.since, attr.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
 
-    private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: InnoSetupSpec): String? {
+    private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: IsiSpec): String? {
         val specSec = pair.containingSection()?.specSection(spec) ?: return null
         val attr = specSec.attributes.firstOrNull { it.name.equals("Flags", ignoreCase = true) }
             ?: return null
-        val flagType = attr.type as? IssFlagTypeSpec ?: return null
+        val flagType = attr.type as? IsiFlagTypeSpec ?: return null
         val flag = flagType.flags.firstOrNull { it.name.equals(flagName, ignoreCase = true) }
             ?: return null
         return buildString {
@@ -127,6 +140,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
                 }
                 append(DocumentationMarkup.SECTIONS_END)
             }
+            appendVersionSection(flag.since, flag.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
@@ -139,7 +153,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         val const = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
-            append("<b>{${const.name}}</b> · ${const.category.name.lowercase().replace('_', ' ')}")
+            append("<b>{${const.name}}</b> · ${const.type.name.lowercase().replace('_', ' ')}")
             if (const.deprecated) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
@@ -147,6 +161,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             if (const.syntax != null) {
                 append("<p><b>Syntax:</b> <code>{${const.syntax}}</code></p>")
             }
+            appendVersionSection(const.since, const.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }

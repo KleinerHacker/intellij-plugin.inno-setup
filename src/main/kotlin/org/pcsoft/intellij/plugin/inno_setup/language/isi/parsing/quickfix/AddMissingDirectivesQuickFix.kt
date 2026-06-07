@@ -19,12 +19,12 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.SmartPointerManager
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
-import org.pcsoft.intellij.plugin.inno_setup.types.IssSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
 
 class AddMissingDirectivesQuickFix(
     section: IsiSection,
     private val missingNames: List<String>,
-    private val specSection: IssSectionSpec
+    private val specSection: IsiSectionSpec
 ) : IntentionAction {
 
     private val sectionPointer =

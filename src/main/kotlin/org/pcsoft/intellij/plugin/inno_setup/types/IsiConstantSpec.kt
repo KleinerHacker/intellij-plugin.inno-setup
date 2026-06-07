@@ -12,11 +12,34 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class IssSectionSpec(
+import com.fasterxml.jackson.annotation.JsonProperty
+
+enum class IsiConstantCategorySpec {
+    @JsonProperty("directory")
+    DIRECTORY,
+
+    @JsonProperty("shell_folder")
+    SHELL_FOLDER,
+
+    @JsonProperty("auto")
+    AUTO,
+
+    @JsonProperty("special")
+    SPECIAL,
+
+    @JsonProperty("parameterized")
+    PARAMETERIZED
+}
+
+data class IsiBuiltinConstantSpec(
     val name: String,
-    val type: String,
-    val required: Boolean = false,
-    val deprecated: Boolean,
     val description: String,
-    val attributes: List<IssAttributeSpec>
+    val deprecated: Boolean,
+    val type: IsiConstantCategorySpec = IsiConstantCategorySpec.SPECIAL,
+    val parameterized: Boolean = false,
+    val syntax: String? = null,
+    val since: String? = null,
+    val until: String? = null
 )
+
+data class IsiConstantSpec(val constants: List<IsiBuiltinConstantSpec>)

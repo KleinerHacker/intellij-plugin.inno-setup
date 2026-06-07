@@ -1,3 +1,4 @@
+# $schema: ./isi-spec.json
 sections:
 
   # ---------------------------------------------------------------------------
@@ -388,6 +389,156 @@ sections:
         deprecated: false
         description: "If <code>yes</code>, a log file is automatically created in the user's temp directory during installation."
         array: false
+
+      - name: CloseApplicationsFilterExcludes
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Comma-separated list of executable names excluded from automatic application-close checks, e.g. <code>MyHelper.exe</code>."
+        array: false
+        since: "6.4"
+
+      - name: EncryptionKeyDerivation
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Specifies the PBKDF2 iteration count used to derive the encryption key from the password. Higher values increase security at the cost of performance."
+        array: false
+        since: "6.4"
+
+      - name: ArchiveExtraction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Controls archive extraction capability. Values: <code>basic</code>, <code>enhanced/nopassword</code>, <code>enhanced</code>, <code>full</code>."
+        array: false
+        since: "6.5"
+
+      - name: UninstallLogging
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, a log file is automatically created during uninstallation."
+        array: false
+        since: "6.5"
+
+      - name: WizardImageOpacity
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Opacity (0–100) of the wizard image in modern style. Default: <code>100</code> (fully opaque)."
+        array: false
+        since: "6.6"
+
+      - name: WizardStyleFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard in light or default mode."
+        array: false
+        since: "6.6"
+
+      - name: WizardStyleFileDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard when the system is in dark mode (requires <code>WizardStyle=dynamic</code>)."
+        array: false
+        since: "6.6"
+
+      - name: WizardKeepAspectRatio
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the wizard window maintains its aspect ratio when resized. Default: <code>yes</code>."
+        array: false
+        since: "6.6"
+
+      - name: WizardBackColor
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Background colour of the wizard window in light or default mode, e.g. <code>$F0F0F0</code>."
+        array: false
+        since: "6.7"
+
+      - name: WizardBackColorDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Background colour of the wizard window in dark mode (requires <code>WizardStyle=dynamic</code>)."
+        array: false
+        since: "6.7"
+
+      - name: WizardBackImageFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to an image file displayed as the wizard background in light or default mode."
+        array: false
+        since: "6.7"
+
+      - name: WizardBackImageFileDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to an image file displayed as the wizard background in dark mode (requires <code>WizardStyle=dynamic</code>)."
+        array: false
+        since: "6.7"
+
+      - name: WizardBackImageOpacity
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Opacity (0–100) of the wizard background image. Default: <code>100</code>."
+        array: false
+        since: "6.7"
+
+      - name: RedirectionGuard
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, enables Windows' RedirectionGuard mitigation to prevent path-based privilege escalation."
+        array: false
+        since: "6.7"
+
+      - name: SetupArchitecture
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Architecture of the generated installer binary. Values: <code>x86</code> (default, 32-bit), <code>x64</code> (64-bit, removes MAX_PATH limit)."
+        array: false
+        since: "7.0"
 
   # ---------------------------------------------------------------------------
   # [Types] — parameter section
@@ -867,6 +1018,7 @@ sections:
         deprecated: false
         description: "Expected SHA-256 hash of the source file for integrity verification at compile time."
         array: false
+        since: "6.5"
 
       - name: ISSigAllowedKeys
         type:
@@ -876,6 +1028,7 @@ sections:
         deprecated: false
         description: "Comma-separated list of key identifiers from <code>[ISSigKeys]</code> used to verify the file's <code>.issig</code> signature."
         array: true
+        since: "6.5"
 
       - name: ExtractArchivePassword
         type:
@@ -885,6 +1038,7 @@ sections:
         deprecated: false
         description: "Password for an encrypted archive (used with <code>extractarchive</code> flag). Stored unencrypted in the installer."
         array: false
+        since: "6.5"
 
       - name: DownloadISSigSource
         type:
@@ -894,6 +1048,7 @@ sections:
         deprecated: false
         description: "URL of the <code>.issig</code> signature file for a downloaded file."
         array: false
+        since: "6.5"
 
       - name: DownloadUserName
         type:
@@ -903,6 +1058,7 @@ sections:
         deprecated: false
         description: "HTTP Basic Auth username for authenticated file downloads (used with <code>download</code> flag)."
         array: false
+        since: "6.5"
 
       - name: DownloadPassword
         type:
@@ -912,6 +1068,7 @@ sections:
         deprecated: false
         description: "HTTP Basic Auth password for authenticated file downloads (used with <code>download</code> flag)."
         array: false
+        since: "6.5"
 
       - name: Flags
         type:
@@ -957,6 +1114,7 @@ sections:
               description: "Downloads the file from a URL at install time instead of embedding it. Requires the URL to be specified in <code>Source</code>."
               deprecated: false
               conflicts: [ ]
+              since: "6.5"
             - name: external
               description: "The file is not embedded in the installer but must be present alongside it. Use <code>ExternalSize</code> to specify its size."
               deprecated: false
@@ -965,6 +1123,7 @@ sections:
               description: "Extracts the contents of an archive (zip, 7z, etc.) instead of copying the archive file itself."
               deprecated: false
               conflicts: [ ]
+              since: "6.5"
             - name: ignoreversion
               description: "Does not compare version numbers; always installs the file regardless of the version on disk."
               deprecated: false
@@ -1019,6 +1178,21 @@ sections:
               conflicts:
                 - flag: deleteafterinstall
                   severity: error
+            - name: signcheck
+              description: "Verifies the digital signature of the source file at compile time. Setup aborts if the file is not properly signed."
+              deprecated: false
+              conflicts: [ ]
+              since: "6.4"
+            - name: issigverify
+              description: "Verifies the file's <code>.issig</code> cryptographic signature at install time using the keys defined in <code>[ISSigKeys]</code>."
+              deprecated: false
+              conflicts: [ ]
+              since: "6.5"
+            - name: notimestamp
+              description: "Prevents the file's last-modified timestamp from being stored in the installer, enabling reproducible builds."
+              deprecated: false
+              conflicts: [ ]
+              since: "6.7"
         required: false
         deprecated: false
         description: "Behavioural flags controlling how each file is installed."
@@ -1195,6 +1369,7 @@ sections:
         deprecated: false
         description: "Windows 10+ COM CLSID for toast notification activation."
         array: false
+        since: "6.1"
 
       - name: Flags
         type:
@@ -1593,6 +1768,7 @@ sections:
         deprecated: false
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
+        since: "6.6"
 
       - name: Flags
         type:
@@ -1658,6 +1834,7 @@ sections:
               conflicts:
                 - flag: nowait
                   severity: warning
+              since: "6.6"
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges."
               deprecated: false
@@ -1820,6 +1997,7 @@ sections:
         deprecated: false
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
+        since: "6.6"
 
       - name: Flags
         type:
@@ -1885,6 +2063,7 @@ sections:
               conflicts:
                 - flag: nowait
                   severity: warning
+              since: "6.6"
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the uninstaller, not as the elevated user."
               deprecated: false
@@ -2156,6 +2335,79 @@ sections:
         required: false
         deprecated: false
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [ISSigKeys] — parameter section (IS 6.5+)
+  # ---------------------------------------------------------------------------
+  - name: ISSigKeys
+    type: parameter
+    deprecated: false
+    description: "Defines cryptographic public keys used to verify <code>.issig</code> file signatures (see <code>issigverify</code> flag in <code>[Files]</code>)."
+    since: "6.5"
+    attributes:
+
+      - name: Name
+        type:
+          kind: native
+          dataType: string
+        required: true
+        deprecated: false
+        description: "Identifier for this key entry, referenced by <code>ISSigAllowedKeys</code> in <code>[Files]</code>."
+        array: false
+
+      - name: Group
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Logical group name allowing multiple keys to share an identifier in <code>ISSigAllowedKeys</code>."
+        array: false
+
+      - name: KeyFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a key file containing public key data."
+        array: false
+
+      - name: PublicX
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hex-encoded X coordinate of the public EC key."
+        array: false
+
+      - name: PublicY
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hex-encoded Y coordinate of the public EC key."
+        array: false
+
+      - name: KeyID
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Optional compile-time key identifier embedded in the installer for key lookup."
+        array: false
+
+      - name: RuntimeID
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Optional runtime key identifier used by the installer at install time for key lookup."
         array: false
 
   # ---------------------------------------------------------------------------

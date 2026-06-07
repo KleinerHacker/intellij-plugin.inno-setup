@@ -17,15 +17,15 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
-import org.pcsoft.intellij.plugin.inno_setup.types.IssConstantCategorySpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IssConstantSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiConstantCategorySpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiConstantSpec
 
 class IssConstantServiceTest {
 
-    private val spec: IssConstantSpec by lazy {
+    private val spec: IsiConstantSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
-        val stream = IssConstantServiceTest::class.java.getResourceAsStream("/spec/iss-const.yaml")
-            ?: error("iss-const.yaml not found in test classpath")
+        val stream = IssConstantServiceTest::class.java.getResourceAsStream("/spec/isi-const.yaml")
+            ?: error("isi-const.yaml not found in test classpath")
         mapper.readValue(stream)
     }
 
@@ -46,7 +46,7 @@ class IssConstantServiceTest {
     fun `app constant exists in directory category`() {
         val app = spec.constants.find { it.name == "app" }
         assertNotNull("app constant must exist", app)
-        assertEquals(IssConstantCategorySpec.DIRECTORY, app!!.category)
+        assertEquals(IsiConstantCategorySpec.DIRECTORY, app!!.type)
         assertFalse("app must not be deprecated", app.deprecated)
     }
 
@@ -54,7 +54,7 @@ class IssConstantServiceTest {
     fun `autopf constant exists in auto category`() {
         val autopf = spec.constants.find { it.name == "autopf" }
         assertNotNull("autopf constant must exist", autopf)
-        assertEquals(IssConstantCategorySpec.AUTO, autopf!!.category)
+        assertEquals(IsiConstantCategorySpec.AUTO, autopf!!.type)
     }
 
     @Test

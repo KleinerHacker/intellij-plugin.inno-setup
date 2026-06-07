@@ -1,3 +1,4 @@
+# $schema: ./ispp-spec.json
 directives:
   - name: define
     syntax: "#define Name [Value]"

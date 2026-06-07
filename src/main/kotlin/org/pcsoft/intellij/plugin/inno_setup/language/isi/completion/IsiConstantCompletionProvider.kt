@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
-import org.pcsoft.intellij.plugin.inno_setup.services.IssIsppService
+import org.pcsoft.intellij.plugin.inno_setup.services.IssPpService
 
 object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>() {
 
@@ -44,7 +44,7 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
             val tail = if (const.parameterized) " (${const.syntax ?: "parameterized"})" else ""
             val element = LookupElementBuilder
                 .create(if (const.parameterized) "${const.name}:" else const.name)
-                .withTypeText(const.category.name.lowercase().replace('_', ' '))
+                .withTypeText(const.type.name.lowercase().replace('_', ' '))
                 .withTailText(tail, true)
                 .withIcon(IssIcons.Constant)
                 .withInsertHandler { ctx, _ ->
@@ -68,7 +68,7 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
             result.addElement(PrioritizedLookupElement.withPriority(element, 5.0))
         }
 
-        service<IssIsppService>().spec.predefinedVariables.forEach { v ->
+        service<IssPpService>().spec.predefinedVariables.forEach { v ->
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")

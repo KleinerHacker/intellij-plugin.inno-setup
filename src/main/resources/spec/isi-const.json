@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isi-const",
+  "type": "object",
+  "required": [
+    "constants"
+  ],
+  "properties": {
+    "constants": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/constant"
+      }
+    }
+  },
+  "definitions": {
+    "constant": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "deprecated",
+        "type"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "directory",
+            "shell_folder",
+            "auto",
+            "special",
+            "parameterized"
+          ]
+        },
+        "parameterized": {
+          "type": "boolean"
+        },
+        "syntax": {
+          "type": "string"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

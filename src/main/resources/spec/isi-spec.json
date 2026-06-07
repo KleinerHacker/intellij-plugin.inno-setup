@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/iss-spec",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isi-spec",
   "type": "object",
   "required": [
     "sections"
@@ -46,6 +46,12 @@
           "items": {
             "$ref": "#/definitions/attribute"
           }
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
         }
       },
       "additionalProperties": false
@@ -78,6 +84,12 @@
         },
         "array": {
           "type": "boolean"
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
         }
       },
       "additionalProperties": false
@@ -126,8 +138,62 @@
             }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "flags"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "flags"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/flagEntry"
+              }
+            }
+          },
+          "additionalProperties": false
         }
       ]
+    },
+    "flagEntry": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "deprecated"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

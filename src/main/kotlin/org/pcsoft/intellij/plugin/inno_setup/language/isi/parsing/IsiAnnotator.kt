@@ -33,6 +33,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
+import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
 class IsiAnnotator : Annotator {
@@ -54,7 +55,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
         val required = spec.sections.filter { it.required }.map { it.name.lowercase() }.toSet()
         val existing = file.sections().map { it.nameText().lowercase() }.toSet()
         val missing = required - existing
@@ -84,7 +85,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateSectionName(name: IsiSectionName, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateSectionName(name: IsiSectionName, holder: AnnotationHolder, spec: IsiSpec) {
         if (name.isInCodeSection()) return
         val section = name.parent?.parent as? IsiSection ?: return
         val specSection = section.specSection(spec)
@@ -98,7 +99,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateSection(section: IsiSection, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateSection(section: IsiSection, holder: AnnotationHolder, spec: IsiSpec) {
         // [Code] is free-form Pascal — no ISI-level checks apply.
         if (section.nameText().equals("Code", ignoreCase = true)) return
 
@@ -140,7 +141,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateParameterEntry(entry: IsiParameterEntry, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateParameterEntry(entry: IsiParameterEntry, holder: AnnotationHolder, spec: IsiSpec) {
         if (entry.isInCodeSection()) return
         val section = entry.containingSection() ?: return
         val specSection = section.specSection(spec) ?: return
@@ -162,7 +163,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateParamKey(key: IsiParamKey, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateParamKey(key: IsiParamKey, holder: AnnotationHolder, spec: IsiSpec) {
         if (key.isInCodeSection()) return
         val pair = key.parent as? IsiParamPair ?: return
         val section = pair.containingSection() ?: return
@@ -171,7 +172,7 @@ class IsiAnnotator : Annotator {
         annotateKey(key.textRange, attr, holder)
     }
 
-    private fun annotateDirectiveKey(key: IsiDirectiveKey, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateDirectiveKey(key: IsiDirectiveKey, holder: AnnotationHolder, spec: IsiSpec) {
         if (key.isInCodeSection()) return
         val entry = key.parent as? IsiDirectiveEntry ?: return
         val section = entry.containingSection() ?: return
@@ -180,7 +181,7 @@ class IsiAnnotator : Annotator {
         annotateKey(key.textRange, attr, holder)
     }
 
-    private fun annotateKey(range: TextRange, attr: IssAttributeSpec?, holder: AnnotationHolder) {
+    private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder) {
         when {
             attr == null ->
                 holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '${range}'")
@@ -194,18 +195,45 @@ class IsiAnnotator : Annotator {
                     .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
                     .create()
 
-            else ->
+            else -> {
+                annotateVersion(range, attr.name, attr.since, attr.until, holder)
                 highlight(range, IsiAnnotatorHighlighting.PARAM_KEY, holder)
+            }
         }
     }
 
-    private fun annotateParamValue(value: IsiParamValue, holder: AnnotationHolder, spec: InnoSetupSpec) {
+    private fun annotateVersion(
+        range: TextRange, name: String,
+        since: String?, until: String?,
+        holder: AnnotationHolder
+    ) {
+        val minVersion = IssSettingsService.getInstance().state.minInnoVersion ?: return
+        until?.let {
+            if (IssSettingsService.compareIsVersions(it, minVersion) <= 0) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "'$name' was removed in Inno Setup $it"
+                ).range(range).create()
+                return
+            }
+        }
+        since?.let {
+            if (IssSettingsService.compareIsVersions(it, minVersion) > 0) {
+                holder.newAnnotation(
+                    HighlightSeverity.WARNING,
+                    "'$name' requires Inno Setup $it or later (configured minimum: $minVersion)"
+                ).range(range).create()
+            }
+        }
+    }
+
+    private fun annotateParamValue(value: IsiParamValue, holder: AnnotationHolder, spec: IsiSpec) {
         if (value.isInCodeSection()) return
         val attr = resolveAttr(value, spec) ?: return
         when (val type = attr.type) {
-            is IssFlagTypeSpec -> annotateFlagValue(value, type, holder)
-            is IssNativeTypeSpec -> annotateNativeValue(value, type, holder)
-            is IssReferenceTypeSpec -> {
+            is IsiFlagTypeSpec -> annotateFlagValue(value, type, holder)
+            is IsiNativeTypeSpec -> annotateNativeValue(value, type, holder)
+            is IsiReferenceTypeSpec -> {
                 val pair = value.containingParamPair()
                 if (pair?.isReferenceParam() == true) {
                     value.identifiers().forEach {
@@ -216,7 +244,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun resolveAttr(value: IsiParamValue, spec: InnoSetupSpec): IssAttributeSpec? {
+    private fun resolveAttr(value: IsiParamValue, spec: IsiSpec): IsiAttributeSpec? {
         val pair = value.containingParamPair()
         if (pair != null) {
             val ss = pair.containingSection()?.specSection(spec) ?: return null
@@ -227,7 +255,7 @@ class IsiAnnotator : Annotator {
         return ss.attributes.firstOrNull { it.name.equals(dir.keyText(), ignoreCase = true) }
     }
 
-    private fun annotateFlagValue(value: IsiParamValue, flagType: IssFlagTypeSpec, holder: AnnotationHolder) {
+    private fun annotateFlagValue(value: IsiParamValue, flagType: IsiFlagTypeSpec, holder: AnnotationHolder) {
         val flagMap = flagType.flags.associateBy { it.name.lowercase() }
         val tokenNodes = value.node
             .getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
@@ -248,8 +276,10 @@ class IsiAnnotator : Annotator {
                         .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
                         .create()
 
-                else ->
+                else -> {
+                    annotateVersion(node.textRange, def.name, def.since, def.until, holder)
                     highlight(node.textRange, IsiAnnotatorHighlighting.FLAG, holder)
+                }
             }
         }
 
@@ -261,7 +291,7 @@ class IsiAnnotator : Annotator {
                 val key = if (name < conflict.flag) name to conflict.flag else conflict.flag to name
                 if (!seen.add(key)) return@conflict
 
-                val severity = if (conflict.severity == IssFlagSeveritySpec.ERROR)
+                val severity = if (conflict.severity == IsiFlagSeveritySpec.ERROR)
                     HighlightSeverity.ERROR else HighlightSeverity.WARNING
                 val msg = "Conflicting flags: '${node.text}' and '${other.text}'"
                 holder.newAnnotation(severity, msg).range(node.textRange).create()
@@ -270,7 +300,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateNativeValue(value: IsiParamValue, type: IssNativeTypeSpec, holder: AnnotationHolder) {
+    private fun annotateNativeValue(value: IsiParamValue, type: IsiNativeTypeSpec, holder: AnnotationHolder) {
         val text = value.singleText()
         when (type.dataType.lowercase()) {
             "boolean" -> {
@@ -322,6 +352,10 @@ class IsiAnnotator : Annotator {
                 highlight(it.textRange, IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME, holder)
             }
         } else {
+            val constSpec = builtins.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            if (constSpec != null) {
+                annotateVersion(constant.textRange, "{${constSpec.name}}", constSpec.since, constSpec.until, holder)
+            }
             highlight(constant.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
         }
     }
