@@ -137,6 +137,19 @@
         <!-- Default colors for ISPP preprocessor highlighting (dark/light) -->
         <additionalTextAttributes scheme="Default" file="colorSchemes/IssDefault.xml"/>
         <additionalTextAttributes scheme="Darcula" file="colorSchemes/IssDarcula.xml"/>
+
+        <!-- ═══════════════════════════════ Settings ═══════════════════════════════ -->
+
+        <!-- Persistent state storage for the Inno Setup installation path -->
+        <applicationService
+                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService"/>
+
+        <!-- Settings page under Build, Execution, Deployment > Inno Setup -->
+        <applicationConfigurable
+                parentId="build"
+                id="org.pcsoft.intellij.plugin.inno_setup.settings"
+                displayName="Inno Setup"
+                instance="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsConfigurable"/>
     </extensions>
 
     <actions>
