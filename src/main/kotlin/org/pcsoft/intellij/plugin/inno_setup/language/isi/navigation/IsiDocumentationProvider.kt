@@ -153,7 +153,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         val const = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
-            append("<b>{${const.name}}</b> · ${const.category.name.lowercase().replace('_', ' ')}")
+            append("<b>{${const.name}}</b> · ${const.type.name.lowercase().replace('_', ' ')}")
             if (const.deprecated) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)

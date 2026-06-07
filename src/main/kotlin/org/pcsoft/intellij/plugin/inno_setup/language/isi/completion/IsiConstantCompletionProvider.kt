@@ -44,7 +44,7 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
             val tail = if (const.parameterized) " (${const.syntax ?: "parameterized"})" else ""
             val element = LookupElementBuilder
                 .create(if (const.parameterized) "${const.name}:" else const.name)
-                .withTypeText(const.category.name.lowercase().replace('_', ' '))
+                .withTypeText(const.type.name.lowercase().replace('_', ' '))
                 .withTailText(tail, true)
                 .withIcon(IssIcons.Constant)
                 .withInsertHandler { ctx, _ ->

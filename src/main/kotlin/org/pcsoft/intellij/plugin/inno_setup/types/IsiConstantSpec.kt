@@ -35,7 +35,7 @@ data class IsiBuiltinConstantSpec(
     val name: String,
     val description: String,
     val deprecated: Boolean,
-    val category: IsiConstantCategorySpec = IsiConstantCategorySpec.SPECIAL,
+    val type: IsiConstantCategorySpec = IsiConstantCategorySpec.SPECIAL,
     val parameterized: Boolean = false,
     val syntax: String? = null,
     val since: String? = null,

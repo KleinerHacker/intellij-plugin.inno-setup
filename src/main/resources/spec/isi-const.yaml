@@ -10,12 +10,12 @@ constants:
       If <code>DefaultDirName</code> is <code>{autopf}\My Program</code>,
       this typically resolves to <code>C:\Program Files\My Program</code>.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: win
     description: "The system's Windows directory, e.g. <code>C:\\Windows</code>."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: sys
     description: >
@@ -23,7 +23,7 @@ constants:
       On 64-bit Windows in 32-bit install mode, this maps to <code>SysWOW64</code>.
       Use <code>{sysnative}</code> to access the real 64-bit System32.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: sysnative
     description: >
@@ -31,7 +31,7 @@ constants:
       (e.g. <code>C:\Windows\System32</code>), regardless of install mode.
       On 32-bit Windows, equivalent to <code>{sys}</code>.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: syswow64
     description: >
@@ -39,110 +39,110 @@ constants:
       (e.g. <code>C:\Windows\SysWOW64</code>).
       Should not be used when <code>{sys}</code> is sufficient.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: src
     description: >
       The directory in which the Setup files are located.
       When installing from CD-ROM, this is the root directory of the disc.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: sd
     description: >
       System Drive — the drive Windows is installed on, typically <code>C:</code>.
       Includes drive letter and colon, no trailing backslash.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commonpf
     description: >
       The Program Files directory. In 64-bit install mode maps to <code>{commonpf64}</code>;
       in 32-bit mode to <code>{commonpf32}</code>.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commonpf32
     description: "The system's 32-bit Program Files directory, e.g. <code>C:\\Program Files (x86)</code> on 64-bit Windows."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commonpf64
     description: >
       The system's 64-bit Program Files directory, e.g. <code>C:\Program Files</code>.
       Only meaningful on 64-bit Windows.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commoncf
     description: >
       The Common Files directory. In 64-bit install mode maps to <code>{commoncf64}</code>;
       in 32-bit mode to <code>{commoncf32}</code>.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commoncf32
     description: "The system's 32-bit Common Files directory."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commoncf64
     description: "The system's 64-bit Common Files directory. Only meaningful on 64-bit Windows."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: tmp
     description: >
       Temporary directory used internally by Setup or Uninstall.
       All files placed here are deleted automatically when the process finishes.
     deprecated: false
-    category: directory
+    type: directory
 
   - name: commonfonts
     description: "The Fonts directory — normally the <code>Fonts</code> subfolder of the Windows directory."
     deprecated: false
-    category: directory
+    type: directory
     since: "6.1"
 
   - name: dao
     description: "The DAO directory. Equivalent to <code>{commoncf}\\Microsoft Shared\\DAO</code>."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet11
     description: "The 32-bit .NET Framework version 1.1 install root directory."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet20
     description: "The .NET Framework version 2.0–3.5 install root directory (adapts to install mode)."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet2032
     description: "The 32-bit .NET Framework version 2.0–3.5 install root directory."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet2064
     description: "The 64-bit .NET Framework version 2.0–3.5 install root directory. Only valid on 64-bit Windows."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet40
     description: "The .NET Framework version 4.0 and later install root directory (adapts to install mode)."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet4032
     description: "The 32-bit .NET Framework version 4.0 and later install root directory."
     deprecated: false
-    category: directory
+    type: directory
 
   - name: dotnet4064
     description: "The 64-bit .NET Framework version 4.0 and later install root directory. Only valid on 64-bit Windows."
     deprecated: false
-    category: directory
+    type: directory
 
   # ── Shell Folder Constants ─────────────────────────────────────────────────
 
@@ -152,265 +152,265 @@ constants:
       <i>Select Start Menu Folder</i> page, e.g.
       <code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\My Program</code>.
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: localappdata
     description: "The path to the current user's local (non-roaming) Application Data folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userappdata
     description: "The path to the current user's roaming Application Data folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commonappdata
     description: "The path to the Application Data folder shared by all users, e.g. <code>C:\\ProgramData</code>."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: usercf
     description: "The current user's Common Files folder. Available on Windows 7 and later."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userdesktop
     description: "The path to the current user's Desktop folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commondesktop
     description: "The path to the Desktop folder shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userdocs
     description: "The path to the current user's My Documents folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commondocs
     description: "The path to the My Documents folder shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userfavorites
     description: "The path to the current user's Favorites folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userfonts
     description: "The current user's Fonts folder. Available on Windows 10 version 1803 and later."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
     since: "6.1"
 
   - name: userpf
     description: "The current user's Program Files folder. Available on Windows 7 and later."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userprograms
     description: "The path to the Programs folder on the current user's Start Menu."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commonprograms
     description: "The path to the Programs folder on the Start Menu shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: usersavedgames
     description: "The path to the current user's Saved Games folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: usersendto
     description: "The path to the current user's Send To folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userstartmenu
     description: "The path to the top level of the current user's Start Menu."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commonstartmenu
     description: "The path to the top level of the Start Menu shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: userstartup
     description: "The path to the Startup folder on the current user's Start Menu."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commonstartup
     description: "The path to the Startup folder on the Start Menu shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: usertemplates
     description: "The path to the current user's Templates folder."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   - name: commontemplates
     description: "The path to the Templates folder shared by all users."
     deprecated: false
-    category: shell_folder
+    type: shell_folder
 
   # ── Auto Constants ─────────────────────────────────────────────────────────
 
   - name: autoappdata
     description: "Resolves to <code>{commonappdata}</code> in admin install mode, <code>{userappdata}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autocf
     description: "Resolves to <code>{commoncf}</code> in admin install mode, <code>{usercf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autocf32
     description: "Resolves to <code>{commoncf32}</code> in admin install mode, <code>{usercf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autocf64
     description: "Resolves to <code>{commoncf64}</code> in admin install mode, <code>{usercf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autodesktop
     description: "Resolves to <code>{commondesktop}</code> in admin install mode, <code>{userdesktop}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autodocs
     description: "Resolves to <code>{commondocs}</code> in admin install mode, <code>{userdocs}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autofonts
     description: "Resolves to <code>{commonfonts}</code> in admin install mode, <code>{userfonts}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
     since: "6.1"
 
   - name: autopf
     description: "Resolves to <code>{commonpf}</code> in admin install mode, <code>{userpf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autopf32
     description: "Resolves to <code>{commonpf32}</code> in admin install mode, <code>{userpf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autopf64
     description: "Resolves to <code>{commonpf64}</code> in admin install mode, <code>{userpf}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autoprograms
     description: "Resolves to <code>{commonprograms}</code> in admin install mode, <code>{userprograms}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autostartmenu
     description: "Resolves to <code>{commonstartmenu}</code> in admin install mode, <code>{userstartmenu}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autostartup
     description: "Resolves to <code>{commonstartup}</code> in admin install mode, <code>{userstartup}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   - name: autotemplates
     description: "Resolves to <code>{commontemplates}</code> in admin install mode, <code>{usertemplates}</code> otherwise."
     deprecated: false
-    category: auto
+    type: auto
 
   # ── Special / Other Constants ──────────────────────────────────────────────
 
   - name: "\\"
     description: "A literal backslash character. Use this when a trailing backslash is needed after a path constant."
     deprecated: false
-    category: special
+    type: special
 
   - name: cmd
     description: "The full pathname of the system's command interpreter, e.g. <code>C:\\Windows\\System32\\cmd.exe</code>."
     deprecated: false
-    category: special
+    type: special
 
   - name: computername
     description: "The name of the computer on which Setup or Uninstall is running."
     deprecated: false
-    category: special
+    type: special
 
   - name: groupname
     description: >
       The folder name (without path) selected by the user on the
       <i>Select Start Menu Folder</i> page. Use <code>{group}</code> for the full path.
     deprecated: false
-    category: special
+    type: special
 
   - name: language
     description: "The internal name of the language selected by the user, as defined in the <code>[Languages]</code> section."
     deprecated: false
-    category: special
+    type: special
 
   - name: log
     description: "The full path of the Setup log file, or an empty string if logging is not enabled."
     deprecated: false
-    category: special
+    type: special
 
   - name: srcexe
     description: "The full pathname of the running Setup program file."
     deprecated: false
-    category: special
+    type: special
 
   - name: uninstallexe
     description: "The full pathname of the uninstall program extracted by Setup."
     deprecated: false
-    category: special
+    type: special
 
   - name: username
     description: "The name of the user who is running Setup or Uninstall."
     deprecated: false
-    category: special
+    type: special
 
   - name: wizardhwnd
     description: "The window handle (HWND) of the Setup wizard window as a decimal string. Useful for Win32 API calls from <code>[Code]</code>."
     deprecated: false
-    category: special
+    type: special
 
   - name: sysuserinfoname
     description: "The registered owner name of the Windows installation."
     deprecated: false
-    category: special
+    type: special
 
   - name: sysuserinfoorg
     description: "The registered organization name of the Windows installation."
     deprecated: false
-    category: special
+    type: special
 
   - name: userinfoname
     description: "The name entered by the user on the <i>User Information</i> wizard page."
     deprecated: false
-    category: special
+    type: special
 
   - name: userinfoorg
     description: "The organization entered by the user on the <i>User Information</i> wizard page."
     deprecated: false
-    category: special
+    type: special
 
   - name: userinfoserial
     description: "The serial number entered by the user on the <i>User Information</i> wizard page."
     deprecated: false
-    category: special
+    type: special
 
   # ── Parameterized Constants ────────────────────────────────────────────────
 
@@ -421,7 +421,7 @@ constants:
       <b>Syntax:</b> <code>{%EnvName|DefaultValue}</code><br>
       <b>Example:</b> <code>{%USERPROFILE|{userdocs}}</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "%EnvName|DefaultValue"
 
@@ -434,7 +434,7 @@ constants:
       to force a registry view.<br>
       <b>Example:</b> <code>{reg:HKLM\Software\MyApp,InstallPath|{app}}</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "reg:HKxx\\SubkeyName,ValueName|DefaultValue"
 
@@ -444,7 +444,7 @@ constants:
       <b>Syntax:</b> <code>{ini:Filename,Section,Key|DefaultValue}</code><br>
       <b>Example:</b> <code>{ini:{win}\MyApp.ini,Settings,DataDir|{app}}</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "ini:Filename,Section,Key|DefaultValue"
 
@@ -454,7 +454,7 @@ constants:
       <b>Syntax:</b> <code>{drive:Path}</code><br>
       <b>Example:</b> <code>{drive:{src}}</code> → <code>D:</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "drive:Path"
 
@@ -465,7 +465,7 @@ constants:
       <b>Syntax:</b> <code>{param:ParamName|DefaultValue}</code><br>
       <b>Example:</b> <code>{param:Server|localhost}</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "param:ParamName|DefaultValue"
 
@@ -477,7 +477,7 @@ constants:
       <code>{cm:MessageName,Arg1,Arg2,...}</code><br>
       <b>Example:</b> <code>{cm:LaunchProgram,My App}</code>
     deprecated: false
-    category: parameterized
+    type: parameterized
     parameterized: true
     syntax: "cm:MessageName[,Arguments]"
 
@@ -486,45 +486,45 @@ constants:
   - name: pf
     description: "Deprecated alias for <code>{commonpf}</code>. Use <code>{commonpf}</code> or <code>{autopf}</code> instead."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: pf32
     description: "Deprecated alias for <code>{commonpf32}</code>."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: pf64
     description: "Deprecated alias for <code>{commonpf64}</code>."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: cf
     description: "Deprecated alias for <code>{commoncf}</code>. Use <code>{commoncf}</code> or <code>{autocf}</code> instead."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: cf32
     description: "Deprecated alias for <code>{commoncf32}</code>."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: cf64
     description: "Deprecated alias for <code>{commoncf64}</code>."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: fonts
     description: "Deprecated alias for <code>{commonfonts}</code>."
     deprecated: true
-    category: directory
+    type: directory
 
   - name: sendto
     description: "Deprecated alias for <code>{usersendto}</code>."
     deprecated: true
-    category: shell_folder
+    type: shell_folder
 
   - name: hwnd
     description: "<b>Removed in Inno Setup 6.4.</b> Previously translated to the background window handle. No longer available."
     deprecated: true
-    category: special
+    type: special
     until: "6.4"

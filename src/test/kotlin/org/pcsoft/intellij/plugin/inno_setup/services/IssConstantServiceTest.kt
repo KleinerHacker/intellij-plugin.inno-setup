@@ -46,7 +46,7 @@ class IssConstantServiceTest {
     fun `app constant exists in directory category`() {
         val app = spec.constants.find { it.name == "app" }
         assertNotNull("app constant must exist", app)
-        assertEquals(IsiConstantCategorySpec.DIRECTORY, app!!.category)
+        assertEquals(IsiConstantCategorySpec.DIRECTORY, app!!.type)
         assertFalse("app must not be deprecated", app.deprecated)
     }
 
@@ -54,7 +54,7 @@ class IssConstantServiceTest {
     fun `autopf constant exists in auto category`() {
         val autopf = spec.constants.find { it.name == "autopf" }
         assertNotNull("autopf constant must exist", autopf)
-        assertEquals(IsiConstantCategorySpec.AUTO, autopf!!.category)
+        assertEquals(IsiConstantCategorySpec.AUTO, autopf!!.type)
     }
 
     @Test

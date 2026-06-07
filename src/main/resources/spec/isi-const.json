@@ -20,7 +20,7 @@
         "name",
         "description",
         "deprecated",
-        "category"
+        "type"
       ],
       "properties": {
         "name": {
@@ -32,7 +32,7 @@
         "deprecated": {
           "type": "boolean"
         },
-        "category": {
+        "type": {
           "type": "string",
           "enum": [
             "directory",

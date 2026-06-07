@@ -138,8 +138,62 @@
             }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "flags"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "flags"
+              ]
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/flagEntry"
+              }
+            }
+          },
+          "additionalProperties": false
         }
       ]
+    },
+    "flagEntry": {
+      "type": "object",
+      "required": [
+        "name",
+        "description",
+        "deprecated"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "since": {
+          "type": "string"
+        },
+        "until": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }
