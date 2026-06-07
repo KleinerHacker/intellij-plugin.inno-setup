@@ -70,6 +70,43 @@ class IssSettingsServiceTest {
         assertNull(IssSettingsService.detectVersionFromPath(tempDir.root.absolutePath))
     }
 
+    // ── compareIsVersions ─────────────────────────────────────────────────────────
+
+    @Test
+    fun `same versions are equal`() {
+        assertEquals(0, IssSettingsService.compareIsVersions("6.0", "6.0"))
+        assertEquals(0, IssSettingsService.compareIsVersions("7.0", "7.0"))
+    }
+
+    @Test
+    fun `lower minor version is less than higher`() {
+        assertTrue(IssSettingsService.compareIsVersions("6.0", "6.7") < 0)
+        assertTrue(IssSettingsService.compareIsVersions("6.4", "6.5") < 0)
+    }
+
+    @Test
+    fun `higher minor version is greater than lower`() {
+        assertTrue(IssSettingsService.compareIsVersions("6.7", "6.0") > 0)
+        assertTrue(IssSettingsService.compareIsVersions("6.5", "6.4") > 0)
+    }
+
+    @Test
+    fun `higher major version is greater regardless of minor`() {
+        assertTrue(IssSettingsService.compareIsVersions("7.0", "6.7") > 0)
+        assertTrue(IssSettingsService.compareIsVersions("7.0", "6.0") > 0)
+    }
+
+    @Test
+    fun `lower major version is less regardless of minor`() {
+        assertTrue(IssSettingsService.compareIsVersions("6.7", "7.0") < 0)
+    }
+
+    @Test
+    fun `single-component versions compare correctly`() {
+        assertTrue(IssSettingsService.compareIsVersions("6", "7") < 0)
+        assertEquals(0, IssSettingsService.compareIsVersions("6", "6"))
+    }
+
     // ── integration test against a real installation ──────────────────────────────
 
     @Test

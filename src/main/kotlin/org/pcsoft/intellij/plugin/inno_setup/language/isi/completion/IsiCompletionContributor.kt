@@ -30,6 +30,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
+import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.IssFlagTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssNativeTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IssReferenceTypeSpec
@@ -92,13 +93,28 @@ private object SectionNameProvider : CompletionProvider<CompletionParameters>() 
             .map { it.nameText().lowercase() }
             .toSet()
 
+        val minVersion = IssSettingsService.getInstance().state.minInnoVersion
         specSections.forEach { specSection ->
             val duplicate = specSection.name.lowercase() in existingNames
+            val tooNew = minVersion != null && specSection.since != null &&
+                    IssSettingsService.compareIsVersions(specSection.since, minVersion) > 0
+            val removed = minVersion != null && specSection.until != null &&
+                    IssSettingsService.compareIsVersions(specSection.until, minVersion) <= 0
+            val tailText = buildString {
+                if (specSection.deprecated) append(" (deprecated)")
+                if (removed) append(" [removed IS ${specSection.until}]")
+                else if (tooNew) append(" [IS ${specSection.since}+]")
+            }
             val element = LookupElementBuilder
                 .create(specSection.name)
                 .withTypeText(specSection.type)
-                .withTailText(if (specSection.deprecated) " (deprecated)" else "", true)
-                .withItemTextForeground(if (duplicate) JBColor.RED else JBColor.foreground())
+                .withTailText(tailText, true)
+                .withItemTextForeground(when {
+                    duplicate -> JBColor.RED
+                    removed -> JBColor.GRAY
+                    tooNew -> JBColor.ORANGE
+                    else -> JBColor.foreground()
+                })
                 .withInsertHandler { ctx, _ ->
                     val tail = ctx.tailOffset
                     val chars = ctx.document.charsSequence
@@ -112,7 +128,15 @@ private object SectionNameProvider : CompletionProvider<CompletionParameters>() 
                     }
                 }
             result.addElement(
-                PrioritizedLookupElement.withPriority(element, if (duplicate) -10.0 else 0.0)
+                PrioritizedLookupElement.withPriority(
+                    element,
+                    when {
+                        duplicate -> -10.0
+                        removed -> -20.0
+                        tooNew -> -5.0
+                        else -> 0.0
+                    }
+                )
             )
         }
     }
@@ -167,8 +191,13 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
             entry?.paramPairList?.map { it.keyText().lowercase() }?.toSet().orEmpty()
         }
 
+        val minVersion = IssSettingsService.getInstance().state.minInnoVersion
         specSection.attributes.forEach { attr ->
             val duplicate = attr.name.lowercase() in usedKeys
+            val tooNew = minVersion != null && attr.since != null &&
+                    IssSettingsService.compareIsVersions(attr.since, minVersion) > 0
+            val removed = minVersion != null && attr.until != null &&
+                    IssSettingsService.compareIsVersions(attr.until, minVersion) <= 0
             val typeHint = when (val t = attr.type) {
                 is IssNativeTypeSpec -> t.dataType
                 is IssReferenceTypeSpec -> "→ ${t.section}"
@@ -178,21 +207,37 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
                 if (attr.required) append(" required")
                 if (attr.deprecated) append(" deprecated")
                 if (attr.array) append("[]")
+                if (removed) append(" [removed IS ${attr.until}]")
+                else if (tooNew) append(" [IS ${attr.since}+]")
             }
             val separator = if (specSection.type == "directive") "=" else ": "
+            val foreground = when {
+                duplicate -> JBColor.RED
+                removed -> JBColor.GRAY
+                tooNew -> JBColor.ORANGE
+                else -> JBColor.foreground()
+            }
 
             val element = LookupElementBuilder
                 .create(attr.name)
                 .withTypeText(typeHint)
                 .withTailText(tail, true)
-                .withItemTextForeground(if (duplicate) JBColor.RED else JBColor.foreground())
+                .withItemTextForeground(foreground)
                 .withBoldness(attr.required)
                 .withInsertHandler { ctx, _ ->
                     ctx.document.insertString(ctx.tailOffset, separator)
                     ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
                 }
             result.addElement(
-                PrioritizedLookupElement.withPriority(element, if (duplicate) -10.0 else 0.0)
+                PrioritizedLookupElement.withPriority(
+                    element,
+                    when {
+                        duplicate -> -10.0
+                        removed -> -20.0
+                        tooNew -> -5.0
+                        else -> 0.0
+                    }
+                )
             )
         }
     }

@@ -101,6 +101,7 @@ constants:
     description: "The Fonts directory — normally the <code>Fonts</code> subfolder of the Windows directory."
     deprecated: false
     category: directory
+    since: "6.1"
 
   - name: dao
     description: "The DAO directory. Equivalent to <code>{commoncf}\\Microsoft Shared\\DAO</code>."
@@ -201,6 +202,7 @@ constants:
     description: "The current user's Fonts folder. Available on Windows 10 version 1803 and later."
     deprecated: false
     category: shell_folder
+    since: "6.1"
 
   - name: userpf
     description: "The current user's Program Files folder. Available on Windows 7 and later."
@@ -293,6 +295,7 @@ constants:
     description: "Resolves to <code>{commonfonts}</code> in admin install mode, <code>{userfonts}</code> otherwise."
     deprecated: false
     category: auto
+    since: "6.1"
 
   - name: autopf
     description: "Resolves to <code>{commonpf}</code> in admin install mode, <code>{userpf}</code> otherwise."
@@ -523,3 +526,4 @@ constants:
     description: "<b>Removed in Inno Setup 6.4.</b> Previously translated to the background window handle. No longer available."
     deprecated: true
     category: special
+    until: "6.4"

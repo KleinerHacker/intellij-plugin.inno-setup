@@ -18,5 +18,7 @@ data class IssAttributeSpec(
     val required: Boolean,
     val deprecated: Boolean,
     val description: String,
-    val array: Boolean
+    val array: Boolean,
+    val since: String? = null,
+    val until: String? = null
 )

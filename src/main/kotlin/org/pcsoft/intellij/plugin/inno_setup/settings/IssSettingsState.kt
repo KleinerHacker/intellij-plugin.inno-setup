@@ -16,4 +16,5 @@ import com.intellij.openapi.components.BaseState
 
 class IssSettingsState : BaseState() {
     var installationPath: String? by string()
+    var minInnoVersion: String? by string()
 }

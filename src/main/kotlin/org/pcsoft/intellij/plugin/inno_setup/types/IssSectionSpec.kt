@@ -18,5 +18,7 @@ data class IssSectionSpec(
     val required: Boolean = false,
     val deprecated: Boolean,
     val description: String,
-    val attributes: List<IssAttributeSpec>
+    val attributes: List<IssAttributeSpec>,
+    val since: String? = null,
+    val until: String? = null
 )

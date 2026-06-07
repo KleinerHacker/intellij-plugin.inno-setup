@@ -15,6 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 
 /**
  * Comprehensive tests for IsiAnnotator — one test per defined case.
@@ -29,6 +30,13 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
 
     // Minimal valid file that can be enriched per test
     private val VALID_SETUP = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+
+    private fun withMinVersion(version: String?, block: () -> Unit) {
+        val service = IssSettingsService.getInstance()
+        val prev = service.state.minInnoVersion
+        service.state.minInnoVersion = version
+        try { block() } finally { service.state.minInnoVersion = prev }
+    }
 
     // ── File level: required sections ─────────────────────────────────────────
 
@@ -400,6 +408,86 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
     }
 
     // ── Reference type value ──────────────────────────────────────────────────
+
+    // ── Version annotations ───────────────────────────────────────────────────
+
+    fun testDirectiveTooNewProducesWarning() {
+        // ArchiveExtraction has since="6.5"; targeting 6.0 → WARNING
+        withMinVersion("6.0") {
+            val text = VALID_SETUP + "ArchiveExtraction=full\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.WARNING &&
+                        it.description?.contains("requires Inno Setup", ignoreCase = true) == true
+            }
+            assertTrue("Directive 'ArchiveExtraction' (since 6.5) used with minVersion=6.0 must produce a WARNING", hit)
+        }
+    }
+
+    fun testDirectiveSatisfiesMinVersionProducesNoVersionWarning() {
+        // ArchiveExtraction has since="6.5"; targeting 6.5 → no version warning
+        withMinVersion("6.5") {
+            val text = VALID_SETUP + "ArchiveExtraction=full\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.WARNING &&
+                        it.description?.contains("requires Inno Setup", ignoreCase = true) == true
+            }
+            assertFalse("Directive 'ArchiveExtraction' (since 6.5) used with minVersion=6.5 must NOT produce a version WARNING", hit)
+        }
+    }
+
+    fun testFlagTooNewProducesWarning() {
+        // signcheck flag has since="6.4"; targeting 6.0 → WARNING
+        withMinVersion("6.0") {
+            val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: signcheck\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.WARNING &&
+                        it.description?.contains("requires Inno Setup", ignoreCase = true) == true
+            }
+            assertTrue("Flag 'signcheck' (since 6.4) used with minVersion=6.0 must produce a WARNING", hit)
+        }
+    }
+
+    fun testConstantRemovedProducesError() {
+        // {hwnd} has until="6.4"; targeting 6.4 → ERROR
+        withMinVersion("6.4") {
+            val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{hwnd}\"\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.ERROR &&
+                        it.description?.contains("removed in Inno Setup", ignoreCase = true) == true
+            }
+            assertTrue("Constant '{hwnd}' (until 6.4) used with minVersion=6.4 must produce a 'removed' ERROR", hit)
+        }
+    }
+
+    fun testConstantNotRemovedYetProducesNoRemovedError() {
+        // {hwnd} has until="6.4"; targeting 6.3 → no removed error (just deprecated)
+        withMinVersion("6.3") {
+            val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{hwnd}\"\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.ERROR &&
+                        it.description?.contains("removed in Inno Setup", ignoreCase = true) == true
+            }
+            assertFalse("Constant '{hwnd}' (until 6.4) used with minVersion=6.3 must NOT produce a 'removed' ERROR", hit)
+        }
+    }
+
+    fun testNoMinVersionConfiguredProducesNoVersionAnnotations() {
+        // Without configured minVersion no version warnings are emitted
+        withMinVersion(null) {
+            val text = VALID_SETUP + "ArchiveExtraction=full\n"
+            val all = highlights(text)
+            val hit = all.any {
+                (it.severity == HighlightSeverity.WARNING || it.severity == HighlightSeverity.ERROR) &&
+                        it.description?.contains("requires Inno Setup", ignoreCase = true) == true
+            }
+            assertFalse("No minVersion configured must not produce any version-related annotations", hit)
+        }
+    }
 
     fun testTypesReferenceValueHighlightedAsReference() {
         val text = VALID_SETUP +

@@ -33,6 +33,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
+import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
 class IsiAnnotator : Annotator {
@@ -194,8 +195,35 @@ class IsiAnnotator : Annotator {
                     .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
                     .create()
 
-            else ->
+            else -> {
+                annotateVersion(range, attr.name, attr.since, attr.until, holder)
                 highlight(range, IsiAnnotatorHighlighting.PARAM_KEY, holder)
+            }
+        }
+    }
+
+    private fun annotateVersion(
+        range: TextRange, name: String,
+        since: String?, until: String?,
+        holder: AnnotationHolder
+    ) {
+        val minVersion = IssSettingsService.getInstance().state.minInnoVersion ?: return
+        until?.let {
+            if (IssSettingsService.compareIsVersions(it, minVersion) <= 0) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "'$name' was removed in Inno Setup $it"
+                ).range(range).create()
+                return
+            }
+        }
+        since?.let {
+            if (IssSettingsService.compareIsVersions(it, minVersion) > 0) {
+                holder.newAnnotation(
+                    HighlightSeverity.WARNING,
+                    "'$name' requires Inno Setup $it or later (configured minimum: $minVersion)"
+                ).range(range).create()
+            }
         }
     }
 
@@ -248,8 +276,10 @@ class IsiAnnotator : Annotator {
                         .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
                         .create()
 
-                else ->
+                else -> {
+                    annotateVersion(node.textRange, def.name, def.since, def.until, holder)
                     highlight(node.textRange, IsiAnnotatorHighlighting.FLAG, holder)
+                }
             }
         }
 
@@ -322,6 +352,10 @@ class IsiAnnotator : Annotator {
                 highlight(it.textRange, IsiAnnotatorHighlighting.ISPP_REFERENCE_NAME, holder)
             }
         } else {
+            val constSpec = builtins.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            if (constSpec != null) {
+                annotateVersion(constant.textRange, "{${constSpec.name}}", constSpec.since, constSpec.until, holder)
+            }
             highlight(constant.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
         }
     }

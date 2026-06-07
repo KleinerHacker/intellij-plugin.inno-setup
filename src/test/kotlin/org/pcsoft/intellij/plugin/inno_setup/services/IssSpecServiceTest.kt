@@ -31,8 +31,8 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `all 14 sections are loaded`() {
-        assertEquals(14, spec.sections.size)
+    fun `all 15 sections are loaded`() {
+        assertEquals(15, spec.sections.size)
     }
 
     @Test
@@ -41,7 +41,7 @@ class IssSpecServiceTest {
         listOf(
             "Setup", "Types", "Components", "Tasks", "Dirs", "Files",
             "Icons", "Registry", "Run", "UninstallRun", "Languages",
-            "InstallDelete", "UninstallDelete", "Code"
+            "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
         ).forEach { assertTrue("Missing section: $it", it in names) }
     }
 

@@ -37,7 +37,9 @@ data class IssBuiltinConstantSpec(
     val deprecated: Boolean,
     val category: IssConstantCategorySpec = IssConstantCategorySpec.SPECIAL,
     val parameterized: Boolean = false,
-    val syntax: String? = null
+    val syntax: String? = null,
+    val since: String? = null,
+    val until: String? = null
 )
 
 data class IssConstantSpec(val constants: List<IssBuiltinConstantSpec>)

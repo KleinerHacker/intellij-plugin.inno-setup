@@ -18,19 +18,25 @@ data class IssIsppDirectiveSpec(
     val name: String,
     val syntax: String,
     val description: String,
-    val deprecated: Boolean = false
+    val deprecated: Boolean = false,
+    val since: String? = null,
+    val until: String? = null
 )
 
 data class IssIsppVariableSpec(
     val name: String,
     val type: String,
-    val description: String
+    val description: String,
+    val since: String? = null,
+    val until: String? = null
 )
 
 data class IssIsppFunctionSpec(
     val name: String,
     val signature: String,
-    val description: String
+    val description: String,
+    val since: String? = null,
+    val until: String? = null
 )
 
 data class IssIsppSpec(

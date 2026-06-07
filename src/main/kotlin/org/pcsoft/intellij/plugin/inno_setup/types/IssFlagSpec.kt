@@ -21,5 +21,7 @@ data class IssFlagSpec(
     val name: String,
     val description: String,
     val deprecated: Boolean,
-    val conflicts: List<IssFlagConflictSpec> = emptyList()
+    val conflicts: List<IssFlagConflictSpec> = emptyList(),
+    val since: String? = null,
+    val until: String? = null
 )

@@ -26,6 +26,17 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IssConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
+private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
+    if (since == null && until == null) return
+    append(DocumentationMarkup.SECTIONS_START)
+    append(DocumentationMarkup.SECTION_HEADER_START)
+    append("Version")
+    append(DocumentationMarkup.SECTION_SEPARATOR)
+    since?.let { append("<p>Available since Inno Setup <b>$it</b></p>") }
+    until?.let { append("<p>Removed in Inno Setup <b>$it</b></p>") }
+    append(DocumentationMarkup.SECTIONS_END)
+}
+
 class IsiDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun getCustomDocumentationElement(
@@ -77,6 +88,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${sec.description}</p>")
+            appendVersionSection(sec.since, sec.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
@@ -99,6 +111,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${attr.description}</p>")
+            appendVersionSection(attr.since, attr.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
@@ -127,6 +140,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
                 }
                 append(DocumentationMarkup.SECTIONS_END)
             }
+            appendVersionSection(flag.since, flag.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
@@ -147,6 +161,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             if (const.syntax != null) {
                 append("<p><b>Syntax:</b> <code>{${const.syntax}}</code></p>")
             }
+            appendVersionSection(const.since, const.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }
