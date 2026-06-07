@@ -16,6 +16,7 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.patterns.PlatformPatterns
@@ -23,6 +24,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
+import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiSyntaxHighlighting
@@ -76,6 +78,13 @@ class IsiCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             SectionReferenceValueProvider
+        )
+        // Built-in language suggestions for [Languages] Name and MessagesFile parameters.
+        // Registered for any element (not just IDENTIFIER) so it also fires inside quoted strings.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            LanguageSectionValueProvider
         )
     }
 }
@@ -348,6 +357,56 @@ private object SectionReferenceValueProvider : CompletionProvider<CompletionPara
             .flatMap { it.nameDeclarations() }
             .mapNotNull { it.valueUnquoted().ifEmpty { null } }
             .forEach { name -> result.addElement(LookupElementBuilder.create(name)) }
+    }
+}
+
+private object LanguageSectionValueProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val position = parameters.position
+        if (position.isInCodeSection()) return
+        val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
+        val pair = paramValue.containingParamPair() ?: return
+        val section = pair.containingSection() ?: return
+        if (!section.nameText().equals("Languages", ignoreCase = true)) return
+
+        // STRING_PART tokens inside IsiQuotedString don't get automatic prefix computation,
+        // so strip the dummy identifier manually to set the correct prefix.
+        val adjustedResult = if (PsiTreeUtil.getParentOfType(position, IsiQuotedString::class.java) != null) {
+            val tokenText = position.text
+            val dummyIdx = tokenText.indexOf(CompletionUtil.DUMMY_IDENTIFIER_TRIMMED)
+            val typed = if (dummyIdx >= 0) tokenText.substring(0, dummyIdx) else tokenText
+            result.withPrefixMatcher(typed)
+        } else result
+
+        val key = pair.keyText()
+        when {
+            key.equals("Name", ignoreCase = true) ->
+                IssScriptLanguage.entries.forEach { lang ->
+                    adjustedResult.addElement(
+                        PrioritizedLookupElement.withPriority(
+                            LookupElementBuilder.create(lang.issName)
+                                .withTypeText(lang.displayName)
+                                .withIcon(AllIcons.Nodes.ResourceBundle),
+                            10.0
+                        )
+                    )
+                }
+            key.equals("MessagesFile", ignoreCase = true) ->
+                IssScriptLanguage.entries.forEach { lang ->
+                    adjustedResult.addElement(
+                        PrioritizedLookupElement.withPriority(
+                            LookupElementBuilder.create(lang.messagesFile)
+                                .withTypeText(lang.displayName)
+                                .withIcon(AllIcons.Nodes.ResourceBundle),
+                            10.0
+                        )
+                    )
+                }
+        }
     }
 }
 

@@ -187,4 +187,57 @@ class IsiCompletionTest : BasePlatformTestCase() {
         assertTrue("Expected '#AppVersion' in { popup", "#AppVersion" in variants!!)
     }
 
+    // ── [Languages] built-in language completion ──────────────────────────────
+
+    fun testLanguageNameCompletionUnquoted() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: <caret>; MessagesFile: \"compiler:Default.isl\"\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected built-in language name suggestions for unquoted Name:", variants)
+        assertTrue("Expected 'english' in language name suggestions", "english" in variants!!)
+        assertTrue("Expected 'german' in language name suggestions", "german" in variants)
+    }
+
+    fun testLanguageNameCompletionQuoted() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"<caret>\"; MessagesFile: \"compiler:Default.isl\"\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected built-in language name suggestions inside quoted Name:", variants)
+        assertTrue("Expected 'english' in quoted language name suggestions", "english" in variants!!)
+        assertTrue("Expected 'german' in quoted language name suggestions", "german" in variants)
+    }
+
+    fun testLanguageMessagesFileCompletionQuoted() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"english\"; MessagesFile: \"<caret>\"\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected MessagesFile suggestions inside quoted MessagesFile:", variants)
+        assertTrue(
+            "Expected 'compiler:Default.isl' in MessagesFile suggestions",
+            "compiler:Default.isl" in variants!!
+        )
+    }
+
+    fun testLanguageNameNotShownOutsideLanguagesSection() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Files]\nSource: \"<caret>\"\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse(
+            "Language names must not appear as completions outside [Languages] section",
+            "english" in variants
+        )
+    }
+
 }
