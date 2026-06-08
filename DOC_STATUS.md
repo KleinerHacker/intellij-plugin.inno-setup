@@ -30,7 +30,7 @@
 | `[Languages]`   | parameter  | ✅     | All attributes covered                       |
 | `[Messages]`    | directive  | ❌     | Entirely missing from spec                   |
 | `[CustomMessages]`| directive| ❌     | Entirely missing from spec                   |
-| `[LangOptions]` | directive  | ❌     | Entirely missing from spec                   |
+| `[LangOptions]` | directive  | ✅     | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion |
 | `[InstallDelete]`| parameter | ✅     | All attributes covered                       |
 | `[UninstallDelete]`| parameter| ✅    | All attributes covered                       |
 | `[ISSigKeys]`   | parameter  | ❌     | Entirely missing (added ~IS 6.x)             |
@@ -132,11 +132,18 @@ Overrides installer message strings from `Default.isl`.
 Defines custom localizable strings usable via the `{cm:…}` constant.  
 **Format:** Same as `[Messages]` — free key/value.
 
-### `[LangOptions]` section
-Language-specific display settings (used inside `.isl` files and overridable in scripts).  
+### `[LangOptions]` section ✅
+Language-specific display settings (used inside `.isl` files and overridable in scripts). Implemented
+as a directive section in `isi-spec.yaml`.  
 **Attributes:** `LanguageName`, `LanguageID`, `LanguageCodePage`, `DialogFontName`, `DialogFontSize`,
 `DialogFontBaseScaleWidth`, `DialogFontBaseScaleHeight`, `WelcomeFontName`, `WelcomeFontSize`, `RightToLeft`  
-**Removed in 6.4:** `TitleFontName`, `TitleFontSize`, `CopyrightFontName`, `CopyrightFontSize`
+**Removed in 6.4:** `TitleFontName`, `TitleFontSize`, `CopyrightFontName`, `CopyrightFontSize` (marked `until: "6.4"`)  
+**Extras:** `LanguageID` offers a completion popup of Windows LCIDs (name + flag icon + greyed `$hex`
+id, from `IssWindowsLanguage`), and is validated against the full MSDN LCID set — a value that is
+neither `0` nor a recognised LCID is flagged as a warning. Integer directives also accept Pascal-hex
+(`$`-prefixed) values. An inlay hint shows the flag + locale name after `LanguageID=`; `[Languages]`
+`Name`/`MessagesFile` show the matching flag before the string (omitted when unknown). See
+`IsiLanguageInlayHintsProvider`.
 
 ### `[ISSigKeys]` section
 Declares public keys for `.issig` file-signature verification (used with `issigverify` flag in `[Files]`).  
@@ -172,6 +179,9 @@ All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#
 | Code completion — flags          | ✅     |                                              |
 | Code completion — constants      | ✅     |                                              |
 | Code completion — ISPP directives| ✅     |                                              |
+| Code completion — `[Languages]`  | ✅     | Built-in names + MessagesFile, with flag icons|
+| Code completion — `LanguageID`   | ✅     | Windows LCIDs: name + flag + greyed `$hex` id |
+| Inlay hints — language flags     | ✅     | Flag before `[Languages]` Name/MessagesFile; flag + locale name on `[LangOptions]` LanguageID|
 | Brace matching `[]`, `{}`, `()`  | ✅     |                                              |
 | Code folding                     | ✅     |                                              |
 | Structure view                   | ✅     |                                              |
@@ -182,4 +192,5 @@ All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#
 | Quote handler                    | ✅     |                                              |
 | ISPP language injection          | ✅     | Preprocessor lines injected into ISI         |
 | Semantic annotations / errors    | ✅     |                                              |
+| `[Languages]` Name/file mismatch | ✅     | Warns when Name ≠ built-in `compiler:` MessagesFile|
 | [Code] section Pascal support    | ❌     | No Pascal intellisense; treated as plain text|

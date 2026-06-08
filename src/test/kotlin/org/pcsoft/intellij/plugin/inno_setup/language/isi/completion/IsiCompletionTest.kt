@@ -13,8 +13,11 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 
 import com.intellij.codeInsight.lookup.LookupElementPresentation
+import com.intellij.icons.AllIcons
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.ui.JBColor
+import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
+import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 
 class IsiCompletionTest : BasePlatformTestCase() {
@@ -238,6 +241,98 @@ class IsiCompletionTest : BasePlatformTestCase() {
             "Language names must not appear as completions outside [Languages] section",
             "english" in variants
         )
+    }
+
+    /** Renders the lookup element for [name] and returns the icon the popup would show. */
+    private fun iconOf(name: String): javax.swing.Icon? =
+        myFixture.lookupElements?.firstOrNull { it.lookupString == name }
+            ?.let { LookupElementPresentation().also { p -> it.renderElement(p) }.icon }
+
+    fun testLanguageNameCompletionUsesPerLanguageFlagIcon() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: <caret>; MessagesFile: \"compiler:Default.isl\"\n"
+        )
+        myFixture.completeBasic()
+        val germanIcon = iconOf("german")
+        val frenchIcon = iconOf("french")
+        assertNotNull("German language suggestion must carry a flag icon", germanIcon)
+        assertNotNull("French language suggestion must carry a flag icon", frenchIcon)
+        assertEquals(
+            "German suggestion must use the German flag icon",
+            IssScriptLanguage.GERMAN.icon, germanIcon
+        )
+        assertFalse(
+            "Distinct languages must use distinct flag icons, not one shared generic icon",
+            germanIcon == frenchIcon
+        )
+    }
+
+    fun testLanguageMessagesFileCompletionUsesPerLanguageFlagIcon() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"english\"; MessagesFile: \"<caret>\"\n"
+        )
+        myFixture.completeBasic()
+        val germanIcon = iconOf("compiler:Languages\\German.isl")
+        assertNotNull("German MessagesFile suggestion must carry a flag icon", germanIcon)
+        assertEquals(
+            "German MessagesFile suggestion must use the German flag icon",
+            IssScriptLanguage.GERMAN.icon, germanIcon
+        )
+    }
+
+    // ── [LangOptions] LanguageID completion ───────────────────────────────────
+
+    /** Renders the lookup element whose inserted text equals [lookupString]. */
+    private fun presentationOf(lookupString: String): LookupElementPresentation? =
+        myFixture.lookupElements?.firstOrNull { it.lookupString == lookupString }
+            ?.let { LookupElementPresentation().also { p -> it.renderElement(p) } }
+
+    fun testLanguageIdCompletionShowsNameFlagAndHexId() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
+        myFixture.completeBasic()
+        val german = IssWindowsLanguage.entries.first { it.displayName == "German (Germany)" }
+        val p = presentationOf(german.id)
+        assertNotNull("Expected a LanguageID suggestion inserting ${german.id}", p)
+        assertEquals("Label must be the locale name", "German (Germany)", p!!.itemText)
+        assertEquals("Grey type text must be the hex id", german.id, p.typeText)
+        assertEquals("Icon must be the locale flag", german.icon, p.icon)
+    }
+
+    fun testLanguageIdCompletionInsertsHexId() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
+        myFixture.completeBasic()
+        val german = IssWindowsLanguage.entries.first { it.displayName == "German (Germany)" }
+        myFixture.lookup!!.currentItem = myFixture.lookupElements!!.first { it.lookupString == german.id }
+        myFixture.type("\n")
+        assertTrue(
+            "Selecting the German entry must insert its hex id ${german.id}",
+            myFixture.editor.document.text.contains("LanguageID=${german.id}")
+        )
+    }
+
+    fun testLanguageIdCompletionUsesGlobeFallbackForLocaleWithoutFlag() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
+        myFixture.completeBasic()
+        val arabic = IssWindowsLanguage.entries.first { it.displayName.startsWith("Arabic") }
+        val p = presentationOf(arabic.id)
+        assertNotNull("Expected a suggestion for ${arabic.displayName}", p)
+        assertEquals("Locale without a flag must use the globe fallback", AllIcons.General.Web, p!!.icon)
+    }
+
+    fun testLanguageIdCompletionNotOfferedForOtherKey() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nDialogFontName=<caret>\n")
+        myFixture.completeBasic()
+        val strings = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("LanguageID suggestions must not appear for DialogFontName", "\$0409" in strings)
+    }
+
+    fun testLanguageIdCompletionNotOfferedOutsideLangOptions() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[Setup]\nLanguageID=<caret>\n")
+        myFixture.completeBasic()
+        val strings = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("LanguageID suggestions must not appear outside [LangOptions]", "\$0409" in strings)
     }
 
 }

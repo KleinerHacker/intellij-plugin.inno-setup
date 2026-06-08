@@ -1,0 +1,27 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#ffffff"/>
+    <rect y="0" width="16" height="1.231" fill="#b22234"/>
+    <rect y="2.462" width="16" height="1.231" fill="#b22234"/>
+    <rect y="4.923" width="16" height="1.231" fill="#b22234"/>
+    <rect y="7.385" width="16" height="1.231" fill="#b22234"/>
+    <rect y="9.846" width="16" height="1.231" fill="#b22234"/>
+    <rect y="12.308" width="16" height="1.231" fill="#b22234"/>
+    <rect y="14.769" width="16" height="1.231" fill="#b22234"/>
+    <rect width="6.4" height="8.615" fill="#3c3b6e"/>
+    <g fill="#ffffff">
+        <circle cx="1.4" cy="1.5" r="0.45"/>
+        <circle cx="3.2" cy="1.5" r="0.45"/>
+        <circle cx="5.0" cy="1.5" r="0.45"/>
+        <circle cx="2.3" cy="3.0" r="0.45"/>
+        <circle cx="4.1" cy="3.0" r="0.45"/>
+        <circle cx="1.4" cy="4.5" r="0.45"/>
+        <circle cx="3.2" cy="4.5" r="0.45"/>
+        <circle cx="5.0" cy="4.5" r="0.45"/>
+        <circle cx="2.3" cy="6.0" r="0.45"/>
+        <circle cx="4.1" cy="6.0" r="0.45"/>
+        <circle cx="1.4" cy="7.5" r="0.45"/>
+        <circle cx="3.2" cy="7.5" r="0.45"/>
+        <circle cx="5.0" cy="7.5" r="0.45"/>
+    </g>
+</svg>

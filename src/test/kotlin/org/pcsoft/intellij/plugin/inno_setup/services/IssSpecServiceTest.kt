@@ -31,8 +31,8 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `all 15 sections are loaded`() {
-        assertEquals(15, spec.sections.size)
+    fun `all 16 sections are loaded`() {
+        assertEquals(16, spec.sections.size)
     }
 
     @Test
@@ -41,7 +41,7 @@ class IssSpecServiceTest {
         listOf(
             "Setup", "Types", "Components", "Tasks", "Dirs", "Files",
             "Icons", "Registry", "Run", "UninstallRun", "Languages",
-            "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
+            "LangOptions", "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
         ).forEach { assertTrue("Missing section: $it", it in names) }
     }
 
@@ -49,6 +49,38 @@ class IssSpecServiceTest {
     fun `Setup section is directive type`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
         assertEquals("directive", setup.type)
+    }
+
+    @Test
+    fun `LangOptions is a directive section with all expected attributes`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        assertEquals("directive", lang.type)
+        assertFalse("LangOptions section must not be deprecated", lang.deprecated)
+        val attrNames = lang.attributes.map { it.name }.toSet()
+        listOf(
+            "LanguageName", "LanguageID", "LanguageCodePage",
+            "DialogFontName", "DialogFontSize", "DialogFontBaseScaleWidth", "DialogFontBaseScaleHeight",
+            "WelcomeFontName", "WelcomeFontSize", "RightToLeft",
+            "TitleFontName", "TitleFontSize", "CopyrightFontName", "CopyrightFontSize"
+        ).forEach { assertTrue("LangOptions missing attribute: $it", it in attrNames) }
+    }
+
+    @Test
+    fun `LangOptions LanguageID is integer typed`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        val languageId = lang.attributes.find { it.name == "LanguageID" }!!
+        val type = languageId.type
+        assertTrue("LanguageID must be a native type", type is IsiNativeTypeSpec)
+        assertEquals("integer", (type as IsiNativeTypeSpec).dataType)
+    }
+
+    @Test
+    fun `LangOptions removed font directives carry until 6_4`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        listOf("TitleFontName", "TitleFontSize", "CopyrightFontName", "CopyrightFontSize").forEach { name ->
+            val attr = lang.attributes.find { it.name == name }!!
+            assertEquals("$name must be marked removed in 6.4", "6.4", attr.until)
+        }
     }
 
     @Test

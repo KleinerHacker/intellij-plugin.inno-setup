@@ -12,6 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.action
 
+import com.intellij.openapi.util.IconLoader
+import javax.swing.Icon
+
 enum class IssScriptLanguage(val displayName: String, val issName: String, val messagesFile: String) {
     ENGLISH("English", "english", "compiler:Default.isl"),
     BRAZILIAN_PORTUGUESE("Brazilian Portuguese", "brazilianportuguese", "compiler:Languages\\BrazilianPortuguese.isl"),
@@ -42,5 +45,28 @@ enum class IssScriptLanguage(val displayName: String, val issName: String, val m
     UKRAINIAN("Ukrainian", "ukrainian", "compiler:Languages\\Ukrainian.isl"),
     ;
 
+    /** Flag icon shown next to this language in the [Languages] completion popup. */
+    val icon: Icon
+        get() = IconLoader.getIcon("/icons/flags/$issName.svg", IssScriptLanguage::class.java)
+
     fun toIssEntry() = "Name: \"$issName\"; MessagesFile: \"$messagesFile\""
+
+    companion object {
+        /**
+         * Resolves the built-in language whose [messagesFile] matches [file].
+         * Comparison is case-insensitive and tolerant of `/` vs `\` separators.
+         * Returns `null` when [file] is not a built-in `compiler:` messages file.
+         */
+        fun fromMessagesFile(file: String): IssScriptLanguage? {
+            val normalized = file.normalizeMessagesFile()
+            return entries.firstOrNull { it.messagesFile.normalizeMessagesFile() == normalized }
+        }
+
+        private fun String.normalizeMessagesFile(): String =
+            trim().replace('\\', '/').lowercase()
+
+        /** The built-in language whose [issName] matches [name] (case-insensitive), or `null`. */
+        fun fromIssName(name: String): IssScriptLanguage? =
+            entries.firstOrNull { it.issName.equals(name.trim(), ignoreCase = true) }
+    }
 }

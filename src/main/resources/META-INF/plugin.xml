@@ -42,6 +42,10 @@
         <annotator language="ISS"
                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotator"/>
 
+        <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
+        <codeInsight.inlayProvider language="ISS"
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiLanguageInlayHintsProvider"/>
+
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
                 implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiErrorFilter"/>

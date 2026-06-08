@@ -16,7 +16,6 @@ import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.patterns.PlatformPatterns
@@ -25,6 +24,7 @@ import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
+import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiSyntaxHighlighting
@@ -85,6 +85,12 @@ class IsiCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             LanguageSectionValueProvider
+        )
+        // Windows language identifier suggestions for the [LangOptions] LanguageID directive.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            LanguageIdValueProvider
         )
     }
 }
@@ -390,7 +396,7 @@ private object LanguageSectionValueProvider : CompletionProvider<CompletionParam
                         PrioritizedLookupElement.withPriority(
                             LookupElementBuilder.create(lang.issName)
                                 .withTypeText(lang.displayName)
-                                .withIcon(AllIcons.Nodes.ResourceBundle),
+                                .withIcon(lang.icon),
                             10.0
                         )
                     )
@@ -401,11 +407,42 @@ private object LanguageSectionValueProvider : CompletionProvider<CompletionParam
                         PrioritizedLookupElement.withPriority(
                             LookupElementBuilder.create(lang.messagesFile)
                                 .withTypeText(lang.displayName)
-                                .withIcon(AllIcons.Nodes.ResourceBundle),
+                                .withIcon(lang.icon),
                             10.0
                         )
                     )
                 }
+        }
+    }
+}
+
+private object LanguageIdValueProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val position = parameters.position
+        if (position.isInCodeSection()) return
+        // [LangOptions] is a directive section (Key=Value), so the value hangs off an
+        // IsiDirectiveEntry rather than an IsiParamPair.
+        val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
+        val directive = paramValue.containingDirectiveEntry() ?: return
+        val section = directive.containingSection() ?: return
+        if (!section.nameText().equals("LangOptions", ignoreCase = true)) return
+        if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
+
+        IssWindowsLanguage.entries.forEach { lang ->
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(lang.id)        // inserts the "$0409" hex id
+                        .withLookupString(lang.displayName)     // also matchable by typing the language name
+                        .withPresentableText(lang.displayName)  // shown label, e.g. "English (United States)"
+                        .withTypeText(lang.id, true)            // greyed id on the right
+                        .withIcon(lang.icon),
+                    10.0
+                )
+            )
         }
     }
 }

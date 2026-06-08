@@ -489,6 +489,67 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         }
     }
 
+    // ── [Languages]: Name vs. built-in MessagesFile consistency ───────────────
+
+    private fun hasLanguageMismatchWarning(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.WARNING &&
+                    it.description?.contains("does not match the built-in messages file", ignoreCase = true) == true
+        }
+
+    fun testLanguageNameMismatchWithBuiltinProducesWarning() {
+        // English name but the German built-in messages file → inconsistent.
+        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Languages\\German.isl\"\n"
+        assertTrue(
+            "Mismatched Name/built-in MessagesFile must produce a consistency WARNING",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageNameMatchesBuiltinProducesNoWarning() {
+        val text = VALID_SETUP + "\n[Languages]\nName: \"german\"; MessagesFile: \"compiler:Languages\\German.isl\"\n"
+        assertFalse(
+            "Matching Name/built-in MessagesFile must not produce a consistency WARNING",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageDefaultIslEnglishMatchProducesNoWarning() {
+        // compiler:Default.isl is the English built-in.
+        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n"
+        assertFalse(
+            "English/compiler:Default.isl must not produce a consistency WARNING",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageDefaultIslMismatchProducesWarning() {
+        // compiler:Default.isl is English, so a non-english Name is inconsistent.
+        val text = VALID_SETUP + "\n[Languages]\nName: \"german\"; MessagesFile: \"compiler:Default.isl\"\n"
+        assertTrue(
+            "German name on compiler:Default.isl (English) must produce a consistency WARNING",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageCustomMessagesFileProducesNoWarning() {
+        // A non-built-in messages file is left untouched even when the name diverges.
+        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"MyCustom.isl\"\n"
+        assertFalse(
+            "Custom (non-built-in) MessagesFile must never produce a consistency WARNING",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageConsistencyCheckOnlyAppliesInLanguagesSection() {
+        // Same Name/MessagesFile pair outside [Languages] must not be checked.
+        val text = VALID_SETUP + "\n[Components]\nName: \"english\"; Description: \"compiler:Languages\\German.isl\"\n"
+        assertFalse(
+            "Consistency check must not fire outside the [Languages] section",
+            hasLanguageMismatchWarning(highlights(text))
+        )
+    }
+
     fun testTypesReferenceValueHighlightedAsReference() {
         val text = VALID_SETUP +
                 "\n[Types]\nName: full; Description: \"Full\"\n" +
@@ -503,5 +564,69 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
                     it.startOffset == offset
         }
         assertTrue("'full' in Types: parameter must be highlighted with REFERENCE attribute", hit)
+    }
+
+    // ── Pascal-hex integers ───────────────────────────────────────────────────
+
+    private fun hasTypeError(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Expected type", ignoreCase = true) == true
+        }
+
+    fun testHexIntegerValueAcceptedForIntegerParameter() {
+        // $1000 is a valid Pascal hex integer for the integer param ExtraDiskSpaceRequired.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: \"Core\"; ExtraDiskSpaceRequired: \$1000\n"
+        assertFalse(
+            "Pascal hex '\$1000' must be accepted for an integer parameter (no type error)",
+            hasTypeError(highlights(text))
+        )
+    }
+
+    fun testInvalidHexIntegerValueStillProducesError() {
+        // $GG is not valid hex → still a type error.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: \"Core\"; ExtraDiskSpaceRequired: \$GG\n"
+        assertTrue(
+            "Non-hex '\$GG' for an integer parameter must still produce a type ERROR",
+            hasTypeError(highlights(text))
+        )
+    }
+
+    // ── [LangOptions] LanguageID validation ───────────────────────────────────
+
+    private fun hasUnknownLcidWarning(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.WARNING &&
+                    it.description?.contains("Unknown Windows language identifier", ignoreCase = true) == true
+        }
+
+    fun testLangOptionsValidLanguageIdProducesNoWarning() {
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$0409\n"
+        val all = highlights(text)
+        assertFalse("Valid LCID \$0409 must not warn", hasUnknownLcidWarning(all))
+        assertFalse("Valid hex LCID must not be a type error", hasTypeError(all))
+    }
+
+    fun testLangOptionsZeroLanguageIdProducesNoWarning() {
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=0\n"
+        assertFalse("LanguageID=0 must be allowed without warning", hasUnknownLcidWarning(highlights(text)))
+    }
+
+    fun testLangOptionsUnknownLanguageIdProducesWarning() {
+        // $9999 is a well-formed hex integer but not an assigned LCID.
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$9999\n"
+        assertTrue(
+            "An unassigned LCID \$9999 must produce an 'Unknown Windows language identifier' WARNING",
+            hasUnknownLcidWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageIdWarningOnlyAppliesToLangOptions() {
+        // Same key name in a different section must not be LCID-validated.
+        val text = VALID_SETUP + "\n[Setup]\nLanguageID=\$9999\n"
+        assertFalse(
+            "LanguageID outside [LangOptions] must not be LCID-validated",
+            hasUnknownLcidWarning(highlights(text))
+        )
     }
 }

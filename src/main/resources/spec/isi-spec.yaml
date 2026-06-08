@@ -2174,6 +2174,145 @@ sections:
         array: false
 
   # ---------------------------------------------------------------------------
+  # [LangOptions] — directive section
+  # ---------------------------------------------------------------------------
+  - name: LangOptions
+    type: directive
+    deprecated: false
+    description: "Language-specific display settings (fonts, language ID/codepage, text direction). Primarily set inside <code>.isl</code> message files, but may be overridden per language in the script. Directives may be prefixed with a language name, e.g. <code>german.DialogFontName</code>."
+    attributes:
+
+      - name: LanguageName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "The native name of the language, displayed in the language selection dialog of a multilingual installer, e.g. <code>Deutsch</code>."
+        array: false
+
+      - name: LanguageID
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Numeric Windows language identifier used for automatic language detection, given in Pascal hexadecimal form, e.g. <code>$0409</code> (English &ndash; United States) or <code>$0407</code> (German &ndash; Germany)."
+        array: false
+
+      - name: LanguageCodePage
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "The code page used to convert the non-Unicode text in the message file. Set to <code>0</code> if the message file contains only Unicode/ASCII characters."
+        array: false
+
+      - name: DialogFontName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Font used for most text in the wizard. Defaults to 9&nbsp;pt Segoe UI when left empty."
+        array: false
+
+      - name: DialogFontSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Point size of the dialog font. Default: <code>9</code>."
+        array: false
+
+      - name: DialogFontBaseScaleWidth
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Base width, in pixels, used to scale dialog controls relative to the dialog font. Default: <code>7</code>."
+        array: false
+
+      - name: DialogFontBaseScaleHeight
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Base height, in pixels, used to scale dialog controls relative to the dialog font. Default: <code>15</code>."
+        array: false
+
+      - name: WelcomeFontName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Font used for the large heading on the Welcome and Setup Completed pages. Defaults to 14&nbsp;pt Segoe UI when left empty."
+        array: false
+
+      - name: WelcomeFontSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Point size of the welcome font. Default: <code>14</code>."
+        array: false
+
+      - name: RightToLeft
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Whether the language is written right-to-left. Set to <code>1</code> to enable, <code>0</code> (default) for left-to-right."
+        array: false
+
+      - name: TitleFontName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "(Removed in Inno Setup 6.4) Font formerly used for the application name on the background window."
+        array: false
+        until: "6.4"
+
+      - name: TitleFontSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "(Removed in Inno Setup 6.4) Point size of the former title font."
+        array: false
+        until: "6.4"
+
+      - name: CopyrightFontName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "(Removed in Inno Setup 6.4) Font formerly used for the <code>AppCopyright</code> text on the background window."
+        array: false
+        until: "6.4"
+
+      - name: CopyrightFontSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "(Removed in Inno Setup 6.4) Point size of the former copyright font."
+        array: false
+        until: "6.4"
+
+  # ---------------------------------------------------------------------------
   # [InstallDelete] — parameter section
   # ---------------------------------------------------------------------------
   - name: InstallDelete

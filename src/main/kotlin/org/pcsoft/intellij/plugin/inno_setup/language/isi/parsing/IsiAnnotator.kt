@@ -20,6 +20,8 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
+import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
@@ -47,12 +49,36 @@ class IsiAnnotator : Annotator {
             is IsiParameterEntry -> {
                 annotateParameterEntry(element, holder, spec)
                 annotateTrailingSemicolon(element, holder)
+                annotateLanguageConsistency(element, holder)
             }
             is IsiParamKey -> annotateParamKey(element, holder, spec)
             is IsiDirectiveKey -> annotateDirectiveKey(element, holder, spec)
             is IsiParamValue -> annotateParamValue(element, holder, spec)
             is IsiConstant -> annotateConstant(element, holder)
         }
+        if (element is IsiParamValue) annotateLanguageId(element, holder)
+    }
+
+    /**
+     * Warns when a `[LangOptions]` `LanguageID` is neither <code>0</code> nor a recognised Windows
+     * locale identifier ([IssWindowsLanguage.validIds]). Malformed (non-integer) values are left to
+     * the native integer type check, which reports them as errors.
+     */
+    private fun annotateLanguageId(value: IsiParamValue, holder: AnnotationHolder) {
+        if (value.isInCodeSection()) return
+        val directive = value.containingDirectiveEntry() ?: return
+        if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
+        if (directive.containingSection()?.nameText()?.equals("LangOptions", ignoreCase = true) != true) return
+
+        val text = value.singleText().trim()
+        if (text.isEmpty()) return
+        val numeric = IssWindowsLanguage.parseId(text) ?: return // malformed → handled as a type error
+        if (numeric == 0 || numeric in IssWindowsLanguage.validIds) return
+
+        holder.newAnnotation(
+            HighlightSeverity.WARNING,
+            "Unknown Windows language identifier '$text' — expected 0 or a valid LCID such as \$0409 (English – United States)"
+        ).range(value.textRange).create()
     }
 
     private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
@@ -138,6 +164,35 @@ class IsiAnnotator : Annotator {
                 .textAttributes(IsiAnnotatorHighlighting.UNUSED)
                 .withFix(RemoveTrailingSemicolonQuickFix(entry))
                 .create()
+        }
+    }
+
+    /**
+     * Flags inconsistencies in a [Languages] entry where the declared `Name` does not match the
+     * built-in language addressed through a `compiler:` `MessagesFile`. The check only applies when
+     * `MessagesFile` resolves to a built-in (via [IssScriptLanguage.fromMessagesFile]); custom
+     * messages files are left untouched.
+     */
+    private fun annotateLanguageConsistency(entry: IsiParameterEntry, holder: AnnotationHolder) {
+        if (entry.isInCodeSection()) return
+        val section = entry.containingSection() ?: return
+        if (!section.nameText().equals("Languages", ignoreCase = true)) return
+
+        val namePair = entry.paramPairList
+            .firstOrNull { it.keyText().equals("Name", ignoreCase = true) } ?: return
+        val filePair = entry.paramPairList
+            .firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) } ?: return
+
+        val builtin = IssScriptLanguage.fromMessagesFile(filePair.valueUnquoted()) ?: return
+        val nameValue = namePair.valueUnquoted().trim()
+        if (nameValue.isEmpty()) return
+
+        if (!nameValue.equals(builtin.issName, ignoreCase = true)) {
+            holder.newAnnotation(
+                HighlightSeverity.WARNING,
+                "Language name '$nameValue' does not match the built-in messages file " +
+                    "'${filePair.valueUnquoted()}' (expected '${builtin.issName}')"
+            ).range(namePair.paramValue?.textRange ?: namePair.textRange).create()
         }
     }
 
@@ -316,7 +371,8 @@ class IsiAnnotator : Annotator {
                 }
             }
 
-            "integer" -> if (!text.matches(Regex("-?[0-9]+"))) {
+            // Accept decimal (-?[0-9]+) or Pascal-style hexadecimal ($ followed by hex digits, e.g. $0409)
+            "integer" -> if (!text.matches(Regex("-?[0-9]+")) && !text.matches(Regex("\\\$[0-9A-Fa-f]+"))) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,
                     "Expected type '${type.dataType}', got: '$text'"
