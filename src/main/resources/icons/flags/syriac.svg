@@ -1,4 +1,11 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#a40e26"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">SY</text>
+    <rect width="16" height="16" fill="#ffffff"/>
+    <g stroke-width="1.1" fill="none">
+        <line x1="8" y1="8" x2="0" y2="0" stroke="#ce1126"/>
+        <line x1="8" y1="8" x2="16" y2="0" stroke="#1f4e9d"/>
+        <line x1="8" y1="8" x2="0" y2="16" stroke="#1f4e9d"/>
+        <line x1="8" y1="8" x2="16" y2="16" stroke="#ce1126"/>
+    </g>
+    <polygon points="8,5 8.7,7.3 11,7.3 9.15,8.7 9.85,11 8,9.6 6.15,11 6.85,8.7 5,7.3 7.3,7.3" fill="#e8a800"/>
 </svg>

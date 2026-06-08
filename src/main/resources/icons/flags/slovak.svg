@@ -1,4 +1,10 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#1f6feb"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">SL</text>
+    <rect width="16" height="16" fill="#ee1c25"/>
+    <rect width="16" height="10.667" fill="#0b4ea2"/>
+    <rect width="16" height="5.333" fill="#ffffff"/>
+    <rect x="2.5" y="4" width="4.5" height="6" rx="0.4" fill="#ee1c25"/>
+    <rect x="2.9" y="4.4" width="3.7" height="5.2" rx="0.3" fill="#ffffff"/>
+    <rect x="4.4" y="5" width="0.8" height="4" fill="#ee1c25"/>
+    <rect x="3.6" y="6.2" width="2.4" height="0.8" fill="#ee1c25"/>
 </svg>

@@ -1,4 +1,15 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#0a3069"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">MA</text>
+    <rect width="16" height="16" fill="#d20000"/>
+    <g stroke="#ffe600" stroke-width="1.4">
+        <line x1="8" y1="8" x2="8" y2="-1"/>
+        <line x1="8" y1="8" x2="8" y2="17"/>
+        <line x1="8" y1="8" x2="-1" y2="8"/>
+        <line x1="8" y1="8" x2="17" y2="8"/>
+        <line x1="8" y1="8" x2="-1" y2="-1"/>
+        <line x1="8" y1="8" x2="17" y2="-1"/>
+        <line x1="8" y1="8" x2="-1" y2="17"/>
+        <line x1="8" y1="8" x2="17" y2="17"/>
+    </g>
+    <circle cx="8" cy="8" r="2" fill="#ffe600"/>
 </svg>

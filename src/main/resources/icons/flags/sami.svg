@@ -1,4 +1,9 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#0550ae"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">SA</text>
+    <rect width="16" height="16" fill="#0036a8"/>
+    <rect width="4" height="16" fill="#d72828"/>
+    <rect x="4" width="3.5" height="16" fill="#007a3d"/>
+    <rect x="7.5" width="3.5" height="16" fill="#fecb00"/>
+    <circle cx="6" cy="8" r="3.4" fill="none" stroke-width="1.2" stroke="#d72828"/>
+    <path d="M6,4.6 a3.4,3.4 0 0,1 0,6.8" fill="none" stroke="#0036a8" stroke-width="1.2"/>
 </svg>

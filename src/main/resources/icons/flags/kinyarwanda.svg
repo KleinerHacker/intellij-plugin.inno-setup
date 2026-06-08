@@ -1,4 +1,7 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#6e7781"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">KI</text>
+    <rect width="16" height="16" fill="#20603d"/>
+    <rect width="16" height="10.667" fill="#fad201"/>
+    <rect width="16" height="6.4" fill="#00a1de"/>
+    <circle cx="12" cy="3.2" r="1.5" fill="#e5be01"/>
 </svg>

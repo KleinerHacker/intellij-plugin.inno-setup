@@ -1,4 +1,8 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <rect width="16" height="16" rx="3" fill="#2da44e"/>
-  <text x="8" y="11.5" font-family="Segoe UI, Arial, sans-serif" font-size="8" font-weight="700" fill="#ffffff" text-anchor="middle">IN</text>
+    <rect width="16" height="16" fill="#ffffff"/>
+    <rect width="8" height="16" fill="#ffcc00"/>
+    <polygon points="6,3 9,3 8.5,9 6.5,9" fill="#d2232a"/>
+    <rect x="5.4" y="9" width="5.2" height="1.4" fill="#d2232a"/>
+    <polygon points="11.5,2 11.8,2.9 12.7,2.9 11.95,3.5 12.25,4.4 11.5,3.8 10.75,4.4 11.05,3.5 10.3,2.9 11.2,2.9" fill="#003a79"/>
 </svg>
