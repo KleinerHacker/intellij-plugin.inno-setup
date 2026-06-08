@@ -1,12 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isi-spec",
+  "description": "Specification of all Inno Setup script sections, their attributes and flags used by the plugin for completion, validation and documentation.",
   "type": "object",
   "required": [
     "sections"
   ],
   "properties": {
     "sections": {
+      "description": "List of all script sections (e.g. [Setup], [Files], [Code]) supported by the plugin.",
       "type": "array",
       "items": {
         "$ref": "#/definitions/section"
@@ -15,6 +17,7 @@
   },
   "definitions": {
     "section": {
+      "description": "A single Inno Setup script section, identified by its header name and the kind of content it accepts.",
       "type": "object",
       "required": [
         "name",
@@ -25,9 +28,11 @@
       ],
       "properties": {
         "name": {
+          "description": "Section header name as written in the script without brackets (e.g. \"Setup\", \"Files\").",
           "type": "string"
         },
         "type": {
+          "description": "Structural kind of the section: \"directive\" for Key=Value sections, \"parameter\" for Key: Value parameter lists, or \"code\" for the Pascal [Code] section.",
           "type": "string",
           "enum": [
             "directive",
@@ -36,27 +41,38 @@
           ]
         },
         "deprecated": {
+          "description": "Whether this section is deprecated and should no longer be used in new scripts.",
           "type": "boolean"
         },
+        "required": {
+          "description": "Whether this section must be present in every valid Inno Setup script.",
+          "type": "boolean",
+          "default": false
+        },
         "description": {
+          "description": "Human-readable explanation of the section's purpose, shown in documentation and tooltips.",
           "type": "string"
         },
         "attributes": {
+          "description": "List of keys or parameters that may appear inside this section.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/attribute"
           }
         },
         "since": {
+          "description": "Inno Setup version in which this section was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup version up to which this section is supported; absent if still current.",
           "type": "string"
         }
       },
       "additionalProperties": false
     },
     "attribute": {
+      "description": "A single key (directive section) or parameter (parameter section) that can be set within a section.",
       "type": "object",
       "required": [
         "name",
@@ -68,35 +84,45 @@
       ],
       "properties": {
         "name": {
+          "description": "Name of the key or parameter as written in the script (e.g. \"AppName\", \"Source\").",
           "type": "string"
         },
         "type": {
+          "description": "Value type of the attribute, defining how its value is parsed and validated.",
           "$ref": "#/definitions/attributeType"
         },
         "required": {
+          "description": "Whether this attribute must be specified within its section.",
           "type": "boolean"
         },
         "deprecated": {
+          "description": "Whether this attribute is deprecated and should no longer be used in new scripts.",
           "type": "boolean"
         },
         "description": {
+          "description": "Human-readable explanation of the attribute's purpose, shown in documentation and tooltips.",
           "type": "string"
         },
         "array": {
+          "description": "Whether the attribute accepts multiple values, e.g. a space- or comma-separated list of flags.",
           "type": "boolean"
         },
         "since": {
+          "description": "Inno Setup version in which this attribute was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup version up to which this attribute is supported; absent if still current.",
           "type": "string"
         }
       },
       "additionalProperties": false
     },
     "attributeType": {
+      "description": "Discriminated union describing how an attribute's value is typed: a native primitive, a reference to another section, or a set of flags.",
       "oneOf": [
         {
+          "description": "A primitive value such as a string, boolean or integer.",
           "type": "object",
           "required": [
             "kind",
@@ -104,12 +130,14 @@
           ],
           "properties": {
             "kind": {
+              "description": "Discriminator selecting the native primitive value type.",
               "type": "string",
               "enum": [
                 "native"
               ]
             },
             "dataType": {
+              "description": "Concrete primitive data type expected for the attribute value.",
               "type": "string",
               "enum": [
                 "string",
@@ -121,6 +149,7 @@
           "additionalProperties": false
         },
         {
+          "description": "A value that references an entry defined in another section (e.g. a component or task name).",
           "type": "object",
           "required": [
             "kind",
@@ -128,18 +157,21 @@
           ],
           "properties": {
             "kind": {
+              "description": "Discriminator selecting the cross-section reference value type.",
               "type": "string",
               "enum": [
                 "reference"
               ]
             },
             "section": {
+              "description": "Name of the section whose entries this attribute value refers to (e.g. \"Components\", \"Tasks\").",
               "type": "string"
             }
           },
           "additionalProperties": false
         },
         {
+          "description": "A value made up of one or more predefined flag keywords.",
           "type": "object",
           "required": [
             "kind",
@@ -147,12 +179,14 @@
           ],
           "properties": {
             "kind": {
+              "description": "Discriminator selecting the flag-set value type.",
               "type": "string",
               "enum": [
                 "flags"
               ]
             },
             "flags": {
+              "description": "List of flag keywords that are valid for this attribute.",
               "type": "array",
               "items": {
                 "$ref": "#/definitions/flagEntry"
@@ -164,6 +198,7 @@
       ]
     },
     "flagEntry": {
+      "description": "A single flag keyword that may be used in a flags-typed attribute.",
       "type": "object",
       "required": [
         "name",
@@ -172,24 +207,31 @@
       ],
       "properties": {
         "name": {
+          "description": "Flag keyword as written in the script (e.g. \"ignoreversion\", \"recursesubdirs\").",
           "type": "string"
         },
         "description": {
+          "description": "Human-readable explanation of what the flag does, shown in documentation and tooltips.",
           "type": "string"
         },
         "deprecated": {
+          "description": "Whether this flag is deprecated and should no longer be used in new scripts.",
           "type": "boolean"
         },
         "conflicts": {
+          "description": "Names of other flags that cannot be combined with this flag.",
           "type": "array",
           "items": {
+            "description": "Name of a conflicting flag keyword.",
             "type": "string"
           }
         },
         "since": {
+          "description": "Inno Setup version in which this flag was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup version up to which this flag is supported; absent if still current.",
           "type": "string"
         }
       },

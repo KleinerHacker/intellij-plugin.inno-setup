@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://pcsoft.org/intellij/plugin/inno-setup/ispp-spec",
+  "description": "Specification of the Inno Setup Preprocessor (ISPP): its directives, predefined variables and built-in functions used by the plugin for completion, validation and documentation.",
   "type": "object",
   "required": [
     "directives",
@@ -9,18 +10,21 @@
   ],
   "properties": {
     "directives": {
+      "description": "List of all preprocessor directives (e.g. #define, #include, #if).",
       "type": "array",
       "items": {
         "$ref": "#/definitions/directive"
       }
     },
     "predefined_variables": {
+      "description": "List of variables predefined by the preprocessor and available without prior definition.",
       "type": "array",
       "items": {
         "$ref": "#/definitions/variable"
       }
     },
     "builtin_functions": {
+      "description": "List of functions provided by the preprocessor that can be called within expressions.",
       "type": "array",
       "items": {
         "$ref": "#/definitions/function"
@@ -29,6 +33,7 @@
   },
   "definitions": {
     "directive": {
+      "description": "A single preprocessor directive starting with '#' (e.g. #define, #include).",
       "type": "object",
       "required": [
         "name",
@@ -38,27 +43,34 @@
       ],
       "properties": {
         "name": {
+          "description": "Directive name without the leading '#' (e.g. \"define\", \"include\", \"if\").",
           "type": "string"
         },
         "syntax": {
+          "description": "Full usage syntax of the directive (e.g. \"#define <name> [<value>]\").",
           "type": "string"
         },
         "description": {
+          "description": "Human-readable explanation of what the directive does, shown in documentation and tooltips.",
           "type": "string"
         },
         "deprecated": {
+          "description": "Whether this directive is deprecated and should no longer be used in new scripts.",
           "type": "boolean"
         },
         "since": {
+          "description": "Inno Setup / ISPP version in which this directive was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup / ISPP version up to which this directive is supported; absent if still current.",
           "type": "string"
         }
       },
       "additionalProperties": false
     },
     "variable": {
+      "description": "A single variable predefined by the preprocessor.",
       "type": "object",
       "required": [
         "name",
@@ -67,9 +79,11 @@
       ],
       "properties": {
         "name": {
+          "description": "Variable name as referenced in the script (e.g. \"__FILE__\", \"__LINE__\").",
           "type": "string"
         },
         "type": {
+          "description": "Data type of the variable's value: \"int\" for integers, \"str\" for strings, or \"void\" for valueless macros.",
           "type": "string",
           "enum": [
             "int",
@@ -78,18 +92,22 @@
           ]
         },
         "description": {
+          "description": "Human-readable explanation of what the variable holds, shown in documentation and tooltips.",
           "type": "string"
         },
         "since": {
+          "description": "Inno Setup / ISPP version in which this variable was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup / ISPP version up to which this variable is supported; absent if still current.",
           "type": "string"
         }
       },
       "additionalProperties": false
     },
     "function": {
+      "description": "A single built-in preprocessor function callable within expressions.",
       "type": "object",
       "required": [
         "name",
@@ -98,18 +116,23 @@
       ],
       "properties": {
         "name": {
+          "description": "Function name as called in the script (e.g. \"GetEnv\", \"FileExists\").",
           "type": "string"
         },
         "signature": {
+          "description": "Full call signature including parameters and return type (e.g. \"GetEnv(Name: str): str\").",
           "type": "string"
         },
         "description": {
+          "description": "Human-readable explanation of what the function does, shown in documentation and tooltips.",
           "type": "string"
         },
         "since": {
+          "description": "Inno Setup / ISPP version in which this function was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup / ISPP version up to which this function is supported; absent if still current.",
           "type": "string"
         }
       },
