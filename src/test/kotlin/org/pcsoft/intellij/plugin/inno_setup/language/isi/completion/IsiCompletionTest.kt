@@ -14,10 +14,10 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.components.service
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import com.intellij.ui.JBColor
-import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
-import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 
 class IsiCompletionTest : BasePlatformTestCase() {
@@ -260,7 +260,7 @@ class IsiCompletionTest : BasePlatformTestCase() {
         assertNotNull("French language suggestion must carry a flag icon", frenchIcon)
         assertEquals(
             "German suggestion must use the German flag icon",
-            IssScriptLanguage.GERMAN.icon, germanIcon
+            service<IssLanguageService>().fromIssName("german")!!.icon, germanIcon
         )
         assertFalse(
             "Distinct languages must use distinct flag icons, not one shared generic icon",
@@ -278,7 +278,7 @@ class IsiCompletionTest : BasePlatformTestCase() {
         assertNotNull("German MessagesFile suggestion must carry a flag icon", germanIcon)
         assertEquals(
             "German MessagesFile suggestion must use the German flag icon",
-            IssScriptLanguage.GERMAN.icon, germanIcon
+            service<IssLanguageService>().fromIssName("german")!!.icon, germanIcon
         )
     }
 
@@ -292,7 +292,7 @@ class IsiCompletionTest : BasePlatformTestCase() {
     fun testLanguageIdCompletionShowsNameFlagAndHexId() {
         myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
         myFixture.completeBasic()
-        val german = IssWindowsLanguage.entries.first { it.displayName == "German (Germany)" }
+        val german = service<IssLanguageService>().entries.first { it.displayName == "German (Germany)" }
         val p = presentationOf(german.id)
         assertNotNull("Expected a LanguageID suggestion inserting ${german.id}", p)
         assertEquals("Label must be the locale name", "German (Germany)", p!!.itemText)
@@ -303,7 +303,7 @@ class IsiCompletionTest : BasePlatformTestCase() {
     fun testLanguageIdCompletionInsertsHexId() {
         myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
         myFixture.completeBasic()
-        val german = IssWindowsLanguage.entries.first { it.displayName == "German (Germany)" }
+        val german = service<IssLanguageService>().entries.first { it.displayName == "German (Germany)" }
         myFixture.lookup!!.currentItem = myFixture.lookupElements!!.first { it.lookupString == german.id }
         myFixture.type("\n")
         assertTrue(
@@ -312,13 +312,15 @@ class IsiCompletionTest : BasePlatformTestCase() {
         )
     }
 
-    fun testLanguageIdCompletionUsesGlobeFallbackForLocaleWithoutFlag() {
+    fun testLanguageIdCompletionLocalesCarryAFlag() {
+        // Every recognised locale now has a flag (generated where none existed before).
         myFixture.configureByText(IssFileType.INSTANCE, "[LangOptions]\nLanguageID=<caret>\n")
         myFixture.completeBasic()
-        val arabic = IssWindowsLanguage.entries.first { it.displayName.startsWith("Arabic") }
+        val arabic = service<IssLanguageService>().entries.first { it.displayName.startsWith("Arabic") }
         val p = presentationOf(arabic.id)
         assertNotNull("Expected a suggestion for ${arabic.displayName}", p)
-        assertEquals("Locale without a flag must use the globe fallback", AllIcons.General.Web, p!!.icon)
+        assertNotNull("Every locale must carry a flag icon", p!!.icon)
+        assertFalse("Arabic now has a generated flag, not the globe fallback", AllIcons.General.Web == p.icon)
     }
 
     fun testLanguageIdCompletionNotOfferedForOtherKey() {
@@ -333,6 +335,105 @@ class IsiCompletionTest : BasePlatformTestCase() {
         myFixture.completeBasic()
         val strings = myFixture.lookupElementStrings ?: emptyList()
         assertFalse("LanguageID suggestions must not appear outside [LangOptions]", "\$0409" in strings)
+    }
+
+    // ── [Messages] / [CustomMessages] key completion (i18n prefix + message ids) ──
+
+    fun testMessagesKeyCompletionOffersMessageIds() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[Messages]\n<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected message-id suggestions in [Messages]", variants)
+        assertTrue("Expected 'WelcomeLabel1' in [Messages] keys", "WelcomeLabel1" in variants!!)
+        assertTrue("Expected 'SetupAppTitle' in [Messages] keys", "SetupAppTitle" in variants)
+    }
+
+    fun testMessagesKeyCompletionOffersNoPrefixWithoutLanguagesSection() {
+        // The prefix references a [Languages] Name; with no [Languages] section, none is offered.
+        myFixture.configureByText(IssFileType.INSTANCE, "[Messages]\n<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertTrue("Message ids must still be offered", "WelcomeLabel1" in variants)
+        assertFalse("No language prefixes without a [Languages] section", "english" in variants)
+    }
+
+    fun testMessagesKeyPrefixUsesDeclaredLanguagesWhenPresent() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"en\"; MessagesFile: \"compiler:Default.isl\"\nName: \"de\"; " +
+                "MessagesFile: \"compiler:Languages\\German.isl\"\n[Messages]\n<caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected declared-language prefixes in [Messages]", variants)
+        assertTrue("Expected declared 'en' prefix", "en" in variants!!)
+        assertTrue("Expected declared 'de' prefix", "de" in variants)
+        assertFalse(
+            "Built-in languages must not be offered when the file declares its own",
+            "german" in variants
+        )
+    }
+
+    fun testMessagesKeyCompletionAfterPrefixOffersMessageIds() {
+        myFixture.configureByText(IssFileType.INSTANCE, "[Messages]\nenglish.Welcome<caret>\n")
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected message-id suggestions after a 'lang.' prefix", variants)
+        assertTrue("Expected 'WelcomeLabel1' after english. prefix", "WelcomeLabel1" in variants!!)
+    }
+
+    fun testMessagesPrefixInsertAddsDot() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n[Messages]\n<caret>\n"
+        )
+        myFixture.completeBasic()
+        myFixture.lookup!!.currentItem = myFixture.lookupElements!!.first { it.lookupString == "english" }
+        myFixture.type("\n")
+        assertTrue(
+            "Selecting a language prefix must insert 'english.'",
+            myFixture.editor.document.text.contains("english.")
+        )
+    }
+
+    fun testCustomMessagesKeyCompletionOffersPrefixButNoPredefinedIds() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n[CustomMessages]\n<caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected language-prefix suggestions in [CustomMessages]", variants)
+        assertTrue("Expected declared 'english' prefix in [CustomMessages]", "english" in variants!!)
+        assertFalse(
+            "[CustomMessages] has no predefined message ids",
+            "WelcomeLabel1" in variants
+        )
+    }
+
+    // ── {cm:…} custom-message value completion ────────────────────────────────
+
+    fun testCmCompletionOffersDeclaredCustomMessages() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[CustomMessages]\nGreeting=Hello\nFarewell=Bye\n[Setup]\nAppComments={cm:<caret>}\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected custom-message suggestions inside {cm:}", variants)
+        assertTrue("Expected 'Greeting' in {cm:} suggestions", "Greeting" in variants!!)
+        assertTrue("Expected 'Farewell' in {cm:} suggestions", "Farewell" in variants)
+    }
+
+    fun testCmCompletionStripsLanguagePrefixOfDeclaration() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[CustomMessages]\nenglish.LaunchProgram=Launch\n[Setup]\nAppComments={cm:<caret>}\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertTrue("Custom-message name must be offered without its lang. prefix", "LaunchProgram" in variants)
+        assertFalse("The prefixed form must not be offered", "english.LaunchProgram" in variants)
     }
 
 }

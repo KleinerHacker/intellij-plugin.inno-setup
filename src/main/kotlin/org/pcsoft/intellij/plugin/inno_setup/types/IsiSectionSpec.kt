@@ -19,6 +19,7 @@ data class IsiSectionSpec(
     val deprecated: Boolean,
     val description: String,
     val attributes: List<IsiAttributeSpec>,
+    val internationalization: Boolean = false,
     val since: String? = null,
     val until: String? = null
 )

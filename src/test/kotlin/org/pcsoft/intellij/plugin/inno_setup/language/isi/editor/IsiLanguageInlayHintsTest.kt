@@ -40,10 +40,12 @@ class IsiLanguageInlayHintsTest : BasePlatformTestCase() {
         assertTrue("A flag inlay must be placed before a known LanguageID value", expected in offsets)
     }
 
-    fun testLanguageIdUnknownLcidShowsNoInlay() {
-        // $0436 (Afrikaans) is a valid LCID but not curated → no mapping → omitted.
+    fun testLanguageIdCuratedLcidShowsInlay() {
+        // $0436 (Afrikaans) is a recognised LCID and now has a curated entry → inlay shown.
         val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$0436\n"
-        assertTrue("No inlay for an uncurated LanguageID", inlineInlayOffsets(text).isEmpty())
+        val offsets = inlineInlayOffsets(text)
+        val expected = myFixture.file.text.indexOf("\$0436")
+        assertTrue("A flag inlay must be placed before a recognised LanguageID value", expected in offsets)
     }
 
     fun testLanguageIdInvalidValueShowsNoInlay() {
@@ -51,19 +53,28 @@ class IsiLanguageInlayHintsTest : BasePlatformTestCase() {
         assertTrue("No inlay for an unassigned LanguageID", inlineInlayOffsets(text).isEmpty())
     }
 
-    fun testLanguagesNameAndMessagesFileShowFlagInlays() {
+    fun testLanguagesMessagesFileShowsFlagInlayButNameDoesNot() {
         val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n"
         val offsets = inlineInlayOffsets(text)
         val fileText = myFixture.file.text
-        assertTrue("Flag inlay before Name string", fileText.indexOf("\"english\"") in offsets)
+        assertFalse("Name no longer carries a flag inlay", fileText.indexOf("\"english\"") in offsets)
         assertTrue(
-            "Flag inlay before MessagesFile string",
+            "Flag inlay before MessagesFile string (from its LanguageID)",
             fileText.indexOf("\"compiler:Default.isl\"") in offsets
         )
     }
 
-    fun testLanguagesUnknownNameShowsNoInlay() {
+    fun testLanguagesUnknownMessagesFileShowsNoInlay() {
         val text = VALID_SETUP + "\n[Languages]\nName: \"klingon\"; MessagesFile: \"custom.isl\"\n"
-        assertTrue("No inlay for unknown language Name / non-built-in MessagesFile", inlineInlayOffsets(text).isEmpty())
+        assertTrue("No inlay for a non-resolvable MessagesFile", inlineInlayOffsets(text).isEmpty())
+    }
+
+    fun testMessagesLanguagePrefixShowsFlagInlay() {
+        val text = VALID_SETUP +
+                "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[Messages]\nenglish.WelcomeLabel1=Welcome\n"
+        val offsets = inlineInlayOffsets(text)
+        val keyOffset = myFixture.file.text.indexOf("english.WelcomeLabel1")
+        assertTrue("Flag inlay before the lang.-prefixed message key", keyOffset in offsets)
     }
 }

@@ -20,8 +20,7 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
-import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
-import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
@@ -49,7 +48,6 @@ class IsiAnnotator : Annotator {
             is IsiParameterEntry -> {
                 annotateParameterEntry(element, holder, spec)
                 annotateTrailingSemicolon(element, holder)
-                annotateLanguageConsistency(element, holder)
             }
             is IsiParamKey -> annotateParamKey(element, holder, spec)
             is IsiDirectiveKey -> annotateDirectiveKey(element, holder, spec)
@@ -61,7 +59,7 @@ class IsiAnnotator : Annotator {
 
     /**
      * Warns when a `[LangOptions]` `LanguageID` is neither <code>0</code> nor a recognised Windows
-     * locale identifier ([IssWindowsLanguage.validIds]). Malformed (non-integer) values are left to
+     * locale identifier ([IssLanguageService.validIds]). Malformed (non-integer) values are left to
      * the native integer type check, which reports them as errors.
      */
     private fun annotateLanguageId(value: IsiParamValue, holder: AnnotationHolder) {
@@ -72,8 +70,8 @@ class IsiAnnotator : Annotator {
 
         val text = value.singleText().trim()
         if (text.isEmpty()) return
-        val numeric = IssWindowsLanguage.parseId(text) ?: return // malformed → handled as a type error
-        if (numeric == 0 || numeric in IssWindowsLanguage.validIds) return
+        val numeric = IssLanguageService.parseId(text) ?: return // malformed → handled as a type error
+        if (numeric == 0 || numeric in service<IssLanguageService>().validIds) return
 
         holder.newAnnotation(
             HighlightSeverity.WARNING,
@@ -167,35 +165,6 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    /**
-     * Flags inconsistencies in a [Languages] entry where the declared `Name` does not match the
-     * built-in language addressed through a `compiler:` `MessagesFile`. The check only applies when
-     * `MessagesFile` resolves to a built-in (via [IssScriptLanguage.fromMessagesFile]); custom
-     * messages files are left untouched.
-     */
-    private fun annotateLanguageConsistency(entry: IsiParameterEntry, holder: AnnotationHolder) {
-        if (entry.isInCodeSection()) return
-        val section = entry.containingSection() ?: return
-        if (!section.nameText().equals("Languages", ignoreCase = true)) return
-
-        val namePair = entry.paramPairList
-            .firstOrNull { it.keyText().equals("Name", ignoreCase = true) } ?: return
-        val filePair = entry.paramPairList
-            .firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) } ?: return
-
-        val builtin = IssScriptLanguage.fromMessagesFile(filePair.valueUnquoted()) ?: return
-        val nameValue = namePair.valueUnquoted().trim()
-        if (nameValue.isEmpty()) return
-
-        if (!nameValue.equals(builtin.issName, ignoreCase = true)) {
-            holder.newAnnotation(
-                HighlightSeverity.WARNING,
-                "Language name '$nameValue' does not match the built-in messages file " +
-                    "'${filePair.valueUnquoted()}' (expected '${builtin.issName}')"
-            ).range(namePair.paramValue?.textRange ?: namePair.textRange).create()
-        }
-    }
-
     private fun annotateParameterEntry(entry: IsiParameterEntry, holder: AnnotationHolder, spec: IsiSpec) {
         if (entry.isInCodeSection()) return
         val section = entry.containingSection() ?: return
@@ -232,8 +201,49 @@ class IsiAnnotator : Annotator {
         val entry = key.parent as? IsiDirectiveEntry ?: return
         val section = entry.containingSection() ?: return
         val specSection = section.specSection(spec) ?: return
+
+        // Internationalized sections ([Messages], [CustomMessages]) allow a "lang." prefix and,
+        // for [CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
+        // never flag an unrecognized name as unknown (the predefined list is advisory only).
+        if (specSection.internationalization) {
+            val baseName = entry.keyText().substringAfterLast('.')
+            val attr = specSection.attributes.firstOrNull { it.name.equals(baseName, ignoreCase = true) }
+            if (attr != null) {
+                annotateKey(key.textRange, attr, holder)
+            } else {
+                highlight(key.textRange, IsiAnnotatorHighlighting.PARAM_KEY, holder)
+            }
+            annotateLanguagePrefix(key, entry, holder)
+            return
+        }
+
         val attr = specSection.attributes.firstOrNull { it.name.equals(entry.keyText(), ignoreCase = true) }
         annotateKey(key.textRange, attr, holder)
+    }
+
+    /**
+     * In an internationalized section, a `lang.` key prefix must match a `Name` declared in
+     * [Languages]. An unknown prefix is flagged in red over the prefix segment.
+     */
+    private fun annotateLanguagePrefix(key: IsiDirectiveKey, entry: IsiDirectiveEntry, holder: AnnotationHolder) {
+        val full = entry.keyText()
+        val dot = full.indexOf('.')
+        if (dot <= 0) return
+        val prefix = full.substring(0, dot)
+        val declared = key.issFile()?.findSections("Languages")
+            ?.flatMap { it.nameDeclarations() }
+            ?.map { it.valueUnquoted() }
+            ?: emptyList()
+        if (declared.none { it.equals(prefix, ignoreCase = true) }) {
+            val start = key.textRange.startOffset
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Unknown language prefix '$prefix' (no matching Name in [Languages])"
+            )
+                .range(TextRange(start, start + dot))
+                .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
     }
 
     private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder) {
@@ -413,6 +423,39 @@ class IsiAnnotator : Annotator {
                 annotateVersion(constant.textRange, "{${constSpec.name}}", constSpec.since, constSpec.until, holder)
             }
             highlight(constant.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
+            if (name.equals("cm", ignoreCase = true)) {
+                // Render the `cm` keyword italic (layers over the reference colour above).
+                body.node.findChildByType(IsiTypes.IDENTIFIER)?.let {
+                    highlight(it.textRange, IsiAnnotatorHighlighting.CUSTOM_MESSAGE_PREFIX, holder)
+                }
+                annotateCustomMessage(constant, body, holder)
+            }
+        }
+    }
+
+    /**
+     * Flags a `{cm:Name}` whose message name is not defined in any [CustomMessages] section. The
+     * red highlight covers only the name token, mirroring the unknown-flag/unknown-constant style.
+     */
+    private fun annotateCustomMessage(constant: IsiConstant, body: IsiConstantBody, holder: AnnotationHolder) {
+        val colon = body.node.findChildByType(IsiTypes.COLON) ?: return
+        val nameNode = body.node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
+            .firstOrNull { it.startOffset > colon.startOffset } ?: return
+        val msgName = nameNode.text
+        if (msgName.isEmpty()) return
+
+        val declared = constant.issFile()?.findSections("CustomMessages")
+            ?.flatMap { it.directiveEntryList }
+            ?.mapNotNull { (it as? IsiDirectiveEntryEx)?.customMessageName() }
+            ?: emptyList()
+        if (declared.none { it.equals(msgName, ignoreCase = true) }) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Unknown custom message: '$msgName' (not defined in [CustomMessages])"
+            )
+                .range(nameNode.textRange)
+                .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
         }
     }
 

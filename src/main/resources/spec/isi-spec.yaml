@@ -2313,6 +2313,2521 @@ sections:
         until: "6.4"
 
   # ---------------------------------------------------------------------------
+  # [Messages] — directive section
+  # ---------------------------------------------------------------------------
+  - name: Messages
+    type: directive
+    deprecated: false
+    description: "Overrides the built-in installer message strings (defined in <code>Default.isl</code> and the bundled <code>.isl</code> files). Each entry is <code>MessageName=Text</code> and may be prefixed with a language name to target a single language, e.g. <code>english.WelcomeLabel1</code>."
+    internationalization: true
+    attributes:
+
+      # *** Application titles ***
+      - name: SetupAppTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Window class title of the installer, e.g. Setup."
+        array: false
+
+      - name: SetupWindowTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Title bar caption of the installer window; %1 is replaced by the application name."
+        array: false
+
+      - name: UninstallAppTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Short title of the uninstaller, e.g. Uninstall."
+        array: false
+
+      - name: UninstallAppFullTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Full title bar caption of the uninstaller; %1 is the application name."
+        array: false
+
+      # *** Misc. common ***
+      - name: InformationTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of generic information dialog boxes."
+        array: false
+
+      - name: ConfirmTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of generic confirmation dialog boxes."
+        array: false
+
+      - name: ErrorTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of generic error dialog boxes."
+        array: false
+
+      # *** SetupLdr (setup loader) messages ***
+      - name: SetupLdrStartupMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt shown before installation begins; %1 is the application name."
+        array: false
+
+      - name: LdrCannotCreateTemp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the loader cannot create a temporary file."
+        array: false
+
+      - name: LdrCannotExecTemp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the loader cannot execute the extracted temporary file."
+        array: false
+
+      # *** Startup error messages ***
+      - name: HelpTextNote
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Note appended to the /HELP command-line help dialog."
+        array: false
+
+      - name: LastErrorMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Wraps a system error: %1 is the message text, %2 the error code."
+        array: false
+
+      - name: SetupFileMissing
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a required file is missing from the installation folder; %1 is the file name."
+        array: false
+
+      - name: SetupFileCorrupt
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the setup files are corrupted."
+        array: false
+
+      - name: SetupFileCorruptOrWrongVer
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when setup files are corrupted or incompatible with this version of Setup."
+        array: false
+
+      - name: InvalidParameter
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an invalid command-line parameter was passed; %1 is the parameter."
+        array: false
+
+      - name: SetupAlreadyRunning
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when another instance of Setup is already running."
+        array: false
+
+      - name: WindowsVersionNotSupported
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the Windows version is not supported by the application."
+        array: false
+
+      - name: WindowsServicePackRequired
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a required Windows edition or service pack is missing; %1/%2 give the requirement."
+        array: false
+
+      - name: NotOnThisPlatform
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the program cannot run on this Windows version; %1 is the required platform."
+        array: false
+
+      - name: OnlyOnThisPlatform
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the program can only run on a specific Windows version; %1 is that platform."
+        array: false
+
+      - name: OnlyOnTheseArchitectures
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the program requires a specific processor architecture; %1 lists the architectures."
+        array: false
+
+      - name: WinVersionTooLowError
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the installed Windows version is older than required; %1/%2 give the requirement."
+        array: false
+
+      - name: WinVersionTooHighError
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the installed Windows version is newer than supported; %1/%2 give the requirement."
+        array: false
+
+      - name: AdminPrivilegesRequired
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when administrator privileges are required to install."
+        array: false
+
+      - name: PowerUserPrivilegesRequired
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when administrator or Power User privileges are required to install."
+        array: false
+
+      - name: SetupAppRunningError
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the application is running and must be closed before installing; %1 is the application name."
+        array: false
+
+      - name: UninstallAppRunningError
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the application is running and must be closed before uninstalling; %1 is the application name."
+        array: false
+
+      # *** Startup questions ***
+      - name: PrivilegesRequiredOverrideTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the install-mode selection dialog."
+        array: false
+
+      - name: PrivilegesRequiredOverrideInstruction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Main instruction of the install-mode selection dialog."
+        array: false
+
+      - name: PrivilegesRequiredOverrideText1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body text variant of the install-mode dialog; %1 is the application name."
+        array: false
+
+      - name: PrivilegesRequiredOverrideText2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Alternate body text variant of the install-mode dialog; %1 is the application name."
+        array: false
+
+      - name: PrivilegesRequiredOverrideAllUsers
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for the all-users install option."
+        array: false
+
+      - name: PrivilegesRequiredOverrideAllUsersRecommended
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for the recommended all-users install option."
+        array: false
+
+      - name: PrivilegesRequiredOverrideCurrentUser
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for the current-user install option."
+        array: false
+
+      - name: PrivilegesRequiredOverrideCurrentUserRecommended
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label for the recommended current-user install option."
+        array: false
+
+      # *** Misc. errors ***
+      - name: ErrorCreatingDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a directory could not be created; %1 is the directory."
+        array: false
+
+      - name: ErrorTooManyFilesInDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a directory holds too many files to add another; %1 is the directory."
+        array: false
+
+      # *** Setup common messages ***
+      - name: ExitSetupTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the exit-setup confirmation dialog."
+        array: false
+
+      - name: ExitSetupMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the exit-setup confirmation dialog."
+        array: false
+
+      - name: AboutSetupMenuItem
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the About Setup menu item."
+        array: false
+
+      - name: AboutSetupTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the About Setup dialog."
+        array: false
+
+      - name: AboutSetupMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body text of the About Setup dialog; %1..%4 give version and date placeholders."
+        array: false
+
+      - name: AboutSetupNote
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Additional note shown in the About Setup dialog."
+        array: false
+
+      - name: TranslatorNote
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Translator credit shown in the About Setup dialog."
+        array: false
+
+      # *** Buttons ***
+      - name: ButtonBack
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Back button."
+        array: false
+
+      - name: ButtonNext
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Next button."
+        array: false
+
+      - name: ButtonInstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Install button."
+        array: false
+
+      - name: ButtonOK
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the OK button."
+        array: false
+
+      - name: ButtonCancel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Cancel button."
+        array: false
+
+      - name: ButtonYes
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Yes button."
+        array: false
+
+      - name: ButtonYesToAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Yes to All button."
+        array: false
+
+      - name: ButtonNo
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the No button."
+        array: false
+
+      - name: ButtonNoToAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the No to All button."
+        array: false
+
+      - name: ButtonFinish
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Finish button."
+        array: false
+
+      - name: ButtonBrowse
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Browse button."
+        array: false
+
+      - name: ButtonWizardBrowse
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Browse button on wizard pages."
+        array: false
+
+      - name: ButtonNewFolder
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Make New Folder button."
+        array: false
+
+      # *** Select Language dialog ***
+      - name: SelectLanguageTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the language selection dialog."
+        array: false
+
+      - name: SelectLanguageLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt text of the language selection dialog."
+        array: false
+
+      # *** Common wizard text ***
+      - name: ClickNext
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Standard hint telling the user to click Next or Cancel."
+        array: false
+
+      - name: BeveledLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Optional small text shown on the wizard window bevel."
+        array: false
+
+      - name: BrowseDialogTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the folder browse dialog."
+        array: false
+
+      - name: BrowseDialogLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt text of the folder browse dialog."
+        array: false
+
+      - name: NewFolderName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default name given to a folder created via Make New Folder."
+        array: false
+
+      # *** Welcome wizard page ***
+      - name: WelcomeLabel1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Large heading on the Welcome page; %1 is the application name."
+        array: false
+
+      - name: WelcomeLabel2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body text on the Welcome page; %1 is the application name."
+        array: false
+
+      # *** Password wizard page ***
+      - name: WizardPassword
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Password page."
+        array: false
+
+      - name: PasswordLabel1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the Password page."
+        array: false
+
+      - name: PasswordLabel3
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt above the password entry field."
+        array: false
+
+      - name: PasswordEditLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Accessible label of the password entry field."
+        array: false
+
+      - name: IncorrectPassword
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the entered password is incorrect."
+        array: false
+
+      # *** License Agreement wizard page ***
+      - name: WizardLicense
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the License Agreement page."
+        array: false
+
+      - name: LicenseLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the License Agreement page."
+        array: false
+
+      - name: LicenseLabel3
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction to read the license agreement."
+        array: false
+
+      - name: LicenseAccepted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the I accept the agreement radio button."
+        array: false
+
+      - name: LicenseNotAccepted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the I do not accept the agreement radio button."
+        array: false
+
+      # *** Information wizard pages ***
+      - name: WizardInfoBefore
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Information page shown before installation."
+        array: false
+
+      - name: InfoBeforeLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the before-installation Information page."
+        array: false
+
+      - name: InfoBeforeClickLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hint to continue from the before-installation Information page."
+        array: false
+
+      - name: WizardInfoAfter
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Information page shown after installation."
+        array: false
+
+      - name: InfoAfterLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the after-installation Information page."
+        array: false
+
+      - name: InfoAfterClickLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hint to continue from the after-installation Information page."
+        array: false
+
+      # *** User Information wizard page ***
+      - name: WizardUserInfo
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the User Information page."
+        array: false
+
+      - name: UserInfoDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the User Information page."
+        array: false
+
+      - name: UserInfoName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the user name field."
+        array: false
+
+      - name: UserInfoOrg
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the organization field."
+        array: false
+
+      - name: UserInfoSerial
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the serial number field."
+        array: false
+
+      - name: UserInfoNameRequired
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the user name field is left empty."
+        array: false
+
+      # *** Select Destination Location wizard page ***
+      - name: WizardSelectDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Select Destination Location page."
+        array: false
+
+      - name: SelectDirDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the destination location page; %1 is the application name."
+        array: false
+
+      - name: SelectDirLabel3
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction text above the destination folder field; %1 is the application name."
+        array: false
+
+      - name: SelectDirBrowseLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hint to continue or browse for a different destination folder."
+        array: false
+
+      - name: DiskSpaceGBLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Free-space requirement label in gigabytes; %1 is the amount."
+        array: false
+
+      - name: DiskSpaceMBLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Free-space requirement label in megabytes; %1 is the amount."
+        array: false
+
+      - name: CannotInstallToNetworkDrive
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when installation to a network drive is not allowed."
+        array: false
+
+      - name: CannotInstallToUNCPath
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when installation to a UNC path is not allowed."
+        array: false
+
+      - name: InvalidPath
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the entered path is invalid; must include a drive letter."
+        array: false
+
+      - name: InvalidDrive
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the selected drive or UNC share does not exist."
+        array: false
+
+      - name: DiskSpaceWarningTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the not-enough-disk-space warning."
+        array: false
+
+      - name: DiskSpaceWarning
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the not-enough-disk-space warning; %1 required, %2 available."
+        array: false
+
+      - name: DirNameTooLong
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the folder name or path is too long."
+        array: false
+
+      - name: InvalidDirName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the folder name is invalid."
+        array: false
+
+      - name: BadDirName32
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the folder name contains characters not allowed on this platform; %1 lists them."
+        array: false
+
+      - name: DirExistsTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the folder-already-exists confirmation."
+        array: false
+
+      - name: DirExists
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the folder-already-exists confirmation; %1 is the folder."
+        array: false
+
+      - name: DirDoesntExistTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the folder-does-not-exist confirmation."
+        array: false
+
+      - name: DirDoesntExist
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the folder-does-not-exist confirmation; %1 is the folder."
+        array: false
+
+      # *** Select Components wizard page ***
+      - name: WizardSelectComponents
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Select Components page."
+        array: false
+
+      - name: SelectComponentsDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the Select Components page."
+        array: false
+
+      - name: SelectComponentsLabel2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction text on the Select Components page."
+        array: false
+
+      - name: FullInstallation
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Full installation setup type."
+        array: false
+
+      - name: CompactInstallation
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Compact installation setup type."
+        array: false
+
+      - name: CustomInstallation
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Custom installation setup type."
+        array: false
+
+      - name: NoUninstallWarningTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the components-already-installed warning."
+        array: false
+
+      - name: NoUninstallWarning
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the components-already-installed warning; %1 lists the components."
+        array: false
+
+      - name: ComponentSize1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Component size label in kilobytes; %1 is the amount."
+        array: false
+
+      - name: ComponentSize2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Component size label in megabytes; %1 is the amount."
+        array: false
+
+      - name: ComponentsDiskSpaceGBLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Selected-components space requirement in gigabytes; %1 is the amount."
+        array: false
+
+      - name: ComponentsDiskSpaceMBLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Selected-components space requirement in megabytes; %1 is the amount."
+        array: false
+
+      # *** Select Additional Tasks wizard page ***
+      - name: WizardSelectTasks
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Select Additional Tasks page."
+        array: false
+
+      - name: SelectTasksDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the Select Additional Tasks page."
+        array: false
+
+      - name: SelectTasksLabel2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction text on the Select Additional Tasks page; %1 is the application name."
+        array: false
+
+      # *** Select Start Menu Folder wizard page ***
+      - name: WizardSelectProgramGroup
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Select Start Menu Folder page."
+        array: false
+
+      - name: SelectStartMenuFolderDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the Select Start Menu Folder page."
+        array: false
+
+      - name: SelectStartMenuFolderLabel3
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction text above the Start Menu folder field; %1 is the application name."
+        array: false
+
+      - name: SelectStartMenuFolderBrowseLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hint to continue or browse for a different Start Menu folder."
+        array: false
+
+      - name: MustEnterGroupName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when no Start Menu folder name was entered."
+        array: false
+
+      - name: GroupNameTooLong
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the Start Menu folder name or path is too long."
+        array: false
+
+      - name: InvalidGroupName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the Start Menu folder name is invalid."
+        array: false
+
+      - name: BadGroupName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the Start Menu folder name contains disallowed characters; %1 lists them."
+        array: false
+
+      - name: NoProgramGroupCheck2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Don't create a Start Menu folder checkbox."
+        array: false
+
+      # *** Ready to Install wizard page ***
+      - name: WizardReady
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Ready to Install page."
+        array: false
+
+      - name: ReadyLabel1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Heading on the Ready to Install page; %1 is the application name."
+        array: false
+
+      - name: ReadyLabel2a
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction to continue or review settings; %1 is the application name."
+        array: false
+
+      - name: ReadyLabel2b
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Instruction to continue installation; %1 is the application name."
+        array: false
+
+      - name: ReadyMemoUserInfo
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for user information."
+        array: false
+
+      - name: ReadyMemoDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for the destination location."
+        array: false
+
+      - name: ReadyMemoType
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for the setup type."
+        array: false
+
+      - name: ReadyMemoComponents
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for selected components."
+        array: false
+
+      - name: ReadyMemoGroup
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for the Start Menu folder."
+        array: false
+
+      - name: ReadyMemoTasks
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Ready-page memo heading for additional tasks."
+        array: false
+
+      # *** Download wizard page and messages ***
+      - name: DownloadingLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status label shown while files are downloading."
+        array: false
+
+      - name: ButtonStopDownload
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Stop download button."
+        array: false
+
+      - name: StopDownload
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Confirmation prompt when stopping a download."
+        array: false
+
+      - name: ErrorDownloadAborted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a download was aborted."
+        array: false
+
+      - name: ErrorDownloadFailed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a download failed; %1/%2 give details."
+        array: false
+
+      - name: ErrorDownloadSizeFailed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the downloaded size could not be determined; %1/%2 give details."
+        array: false
+
+      - name: ErrorFileHash1
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a file hash is malformed; %1 is the hash."
+        array: false
+
+      - name: ErrorFileHash2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a file hash does not match; %1 expected, %2 actual."
+        array: false
+
+      - name: ErrorProgress
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when reported progress is invalid; %1/%2 give details."
+        array: false
+
+      - name: ErrorFileSize
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a file size does not match; %1 expected, %2 actual."
+        array: false
+
+      # *** Extraction wizard page and messages ***
+      - name: ExtractingLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status label shown while archives are extracting."
+        array: false
+
+      - name: ButtonStopExtraction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the Stop extraction button."
+        array: false
+
+      - name: StopExtraction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Confirmation prompt when stopping extraction."
+        array: false
+
+      - name: ErrorExtractionAborted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when extraction was aborted."
+        array: false
+
+      - name: ErrorExtractionFailed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when extraction failed; %1/%2 give details."
+        array: false
+
+      # *** Archive extraction failures ***
+      - name: BadArchive
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an archive is corrupt or unreadable; %1 is the file."
+        array: false
+
+      - name: BadPassword
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an archive password is incorrect; %1 is the file."
+        array: false
+
+      # *** Preparing to Install wizard page ***
+      - name: WizardPreparing
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Preparing to Install page."
+        array: false
+
+      - name: PreparingDesc
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Description text on the Preparing to Install page; %1 is the application name."
+        array: false
+
+      - name: PreviousInstallNotCompleted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a previous install/uninstall must finish via restart; %1/%2 give details."
+        array: false
+
+      - name: CannotContinue
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when Setup cannot continue and must close."
+        array: false
+
+      - name: ApplicationsFound
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Lists applications using files that must be updated."
+        array: false
+
+      - name: ApplicationsFound2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Alternate text listing applications using files that must be updated."
+        array: false
+
+      - name: CloseApplications
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Automatically close the applications option."
+        array: false
+
+      - name: DontCloseApplications
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Do not close the applications option."
+        array: false
+
+      - name: ErrorCloseApplications
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when Setup could not automatically close all applications."
+        array: false
+
+      - name: PrepareToInstallNeedsRestart
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a restart is required before installation can continue."
+        array: false
+
+      # *** Installing wizard page ***
+      - name: WizardInstalling
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title of the Installing page."
+        array: false
+
+      - name: InstallingLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text on the Installing page; %1 is the application name."
+        array: false
+
+      # *** Setup Completed wizard page ***
+      - name: FinishedHeadingLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Heading on the Setup Completed page; %1 is the application name."
+        array: false
+
+      - name: FinishedLabelNoIcons
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Completion text when no icons were created; %1 is the application name."
+        array: false
+
+      - name: FinishedLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Completion text when icons were created; %1 is the application name."
+        array: false
+
+      - name: ClickFinish
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Hint to click Finish to exit Setup."
+        array: false
+
+      - name: FinishedRestartLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Completion text prompting a computer restart; %1 is the application name."
+        array: false
+
+      - name: FinishedRestartMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Restart-now confirmation prompt; %1 is the application name."
+        array: false
+
+      - name: ShowReadmeCheck
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the View the README file checkbox."
+        array: false
+
+      - name: YesRadio
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Yes, restart the computer now radio button."
+        array: false
+
+      - name: NoRadio
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the No, I will restart the computer later radio button."
+        array: false
+
+      - name: RunEntryExec
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Run-entry label for executing a program; %1 is the description."
+        array: false
+
+      - name: RunEntryShellExec
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Run-entry label for opening a document; %1 is the description."
+        array: false
+
+      # *** Setup Needs the Next Disk ***
+      - name: ChangeDiskTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the insert-next-disk dialog."
+        array: false
+
+      - name: SelectDiskLabel2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt to insert the next disk; %1 is the disk number."
+        array: false
+
+      - name: PathLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the disk path entry field."
+        array: false
+
+      - name: FileNotInDir2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a file could not be found in the selected location; %1 file, %2 location."
+        array: false
+
+      - name: SelectDirectoryLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt to specify the location of the next disk."
+        array: false
+
+      # *** Installation phase messages ***
+      - name: SetupAborted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when installation was aborted and not completed."
+        array: false
+
+      - name: AbortRetryIgnoreSelectAction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt asking the user to choose an abort/retry/ignore action."
+        array: false
+
+      - name: AbortRetryIgnoreRetry
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Try again retry option."
+        array: false
+
+      - name: AbortRetryIgnoreIgnore
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Ignore the error option."
+        array: false
+
+      - name: AbortRetryIgnoreCancel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Cancel installation option."
+        array: false
+
+      - name: RetryCancelSelectAction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt asking the user to choose a retry/cancel action."
+        array: false
+
+      - name: RetryCancelRetry
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Try again retry option."
+        array: false
+
+      - name: RetryCancelCancel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Cancel installation option."
+        array: false
+
+      # *** Installation status messages ***
+      - name: StatusClosingApplications
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while closing applications."
+        array: false
+
+      - name: StatusCreateDirs
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while creating directories."
+        array: false
+
+      - name: StatusExtractFiles
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while extracting files."
+        array: false
+
+      - name: StatusDownloadFiles
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while downloading files."
+        array: false
+
+      - name: StatusExtractArchives
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while extracting archives."
+        array: false
+
+      - name: StatusCreateIcons
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while creating shortcuts."
+        array: false
+
+      - name: StatusCreateIniEntries
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while creating INI entries."
+        array: false
+
+      - name: StatusCreateRegistryEntries
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while creating registry entries."
+        array: false
+
+      - name: StatusRegisterFiles
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while registering files."
+        array: false
+
+      - name: StatusSavingUninstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while saving uninstall information."
+        array: false
+
+      - name: StatusRunProgram
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while finishing the installation."
+        array: false
+
+      - name: StatusRestartingApplications
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while restarting applications."
+        array: false
+
+      - name: StatusRollback
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while rolling back changes."
+        array: false
+
+      # *** Misc. errors (runtime) ***
+      - name: ErrorInternal2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown for an internal error; %1 is the error detail."
+        array: false
+
+      - name: ErrorFunctionFailedNoCode
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a function failed; %1 is the function name."
+        array: false
+
+      - name: ErrorFunctionFailed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a function failed; %1 name, %2 code."
+        array: false
+
+      - name: ErrorFunctionFailedWithMessage
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a function failed; %1 name, %2 code, %3 message."
+        array: false
+
+      - name: ErrorExecutingProgram
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a program could not be executed; %1 is the file name."
+        array: false
+
+      # *** Registry errors ***
+      - name: ErrorRegOpenKey
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a registry key could not be opened; %1 root, %2 key."
+        array: false
+
+      - name: ErrorRegCreateKey
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a registry key could not be created; %1 root, %2 key."
+        array: false
+
+      - name: ErrorRegWriteKey
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when a registry key could not be written; %1 root, %2 key."
+        array: false
+
+      # *** INI errors ***
+      - name: ErrorIniEntry
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an INI entry could not be created; %1 is the file."
+        array: false
+
+      # *** File copying errors ***
+      - name: FileAbortRetryIgnoreSkipNotRecommended
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Skip this file (not recommended) option."
+        array: false
+
+      - name: FileAbortRetryIgnoreIgnoreNotRecommended
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Ignore the error (not recommended) option."
+        array: false
+
+      - name: SourceIsCorrupted
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the source file is corrupted."
+        array: false
+
+      - name: SourceDoesntExist
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the source file does not exist; %1 is the file."
+        array: false
+
+      - name: ExistingFileReadOnly2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an existing file is read-only and cannot be replaced."
+        array: false
+
+      - name: ExistingFileReadOnlyRetry
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Remove the read-only attribute and retry option."
+        array: false
+
+      - name: ExistingFileReadOnlyKeepExisting
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Keep the existing file option."
+        array: false
+
+      - name: ErrorReadingExistingDest
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an error occurred reading the existing destination file."
+        array: false
+
+      - name: FileExistsSelectAction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt asking what to do about an existing file."
+        array: false
+
+      - name: FileExists2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the file already exists."
+        array: false
+
+      - name: FileExistsOverwriteExisting
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Overwrite the existing file option."
+        array: false
+
+      - name: FileExistsKeepExisting
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Keep the existing file option."
+        array: false
+
+      - name: FileExistsOverwriteOrKeepAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Do this for the next conflicts checkbox."
+        array: false
+
+      - name: ExistingFileNewerSelectAction
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Prompt asking what to do about a newer existing file."
+        array: false
+
+      - name: ExistingFileNewer2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the existing file is newer than the one being installed."
+        array: false
+
+      - name: ExistingFileNewerOverwriteExisting
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Overwrite the newer file option."
+        array: false
+
+      - name: ExistingFileNewerKeepExisting
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Keep the newer file option."
+        array: false
+
+      - name: ExistingFileNewerOverwriteOrKeepAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label of the Do this for the next conflicts checkbox."
+        array: false
+
+      - name: ErrorChangingAttr
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when changing the attributes of an existing file failed."
+        array: false
+
+      - name: ErrorCreatingTemp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when creating a file in the destination directory failed."
+        array: false
+
+      - name: ErrorReadingSource
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when reading the source file failed."
+        array: false
+
+      - name: ErrorCopying
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when copying a file failed."
+        array: false
+
+      - name: ErrorReplacingExistingFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when replacing the existing file failed."
+        array: false
+
+      - name: ErrorRestartReplace
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when RestartReplace failed to replace a file."
+        array: false
+
+      - name: ErrorRenamingTemp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when renaming a temporary file in the destination directory failed."
+        array: false
+
+      - name: ErrorRegisterServer
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when registering a DLL/OCX failed; %1 is the module."
+        array: false
+
+      - name: ErrorRegSvr32Failed
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when RegSvr32 failed with a non-zero exit code; %1 is the code."
+        array: false
+
+      - name: ErrorRegisterTypeLib
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when registering a type library failed; %1 is the file."
+        array: false
+
+      # *** Uninstall display name markings ***
+      - name: UninstallDisplayNameMark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Format wrapping the uninstall display name with one marking; %1 name, %2 mark."
+        array: false
+
+      - name: UninstallDisplayNameMarks
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Format wrapping the uninstall display name with two markings; %1 name, %2/%3 marks."
+        array: false
+
+      - name: UninstallDisplayNameMark32Bit
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Marking text indicating a 32-bit installation."
+        array: false
+
+      - name: UninstallDisplayNameMark64Bit
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Marking text indicating a 64-bit installation."
+        array: false
+
+      - name: UninstallDisplayNameMarkAllUsers
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Marking text indicating an all-users installation."
+        array: false
+
+      - name: UninstallDisplayNameMarkCurrentUser
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Marking text indicating a current-user installation."
+        array: false
+
+      # *** Post-installation errors ***
+      - name: ErrorOpeningReadme
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the README file could not be opened."
+        array: false
+
+      - name: ErrorRestartingComputer
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when Setup could not restart the computer."
+        array: false
+
+      # *** Uninstaller messages ***
+      - name: UninstallNotFound
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the uninstall data file no longer exists; %1 is the file."
+        array: false
+
+      - name: UninstallOpenError
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the uninstall data file could not be opened; %1 is the file."
+        array: false
+
+      - name: UninstallUnsupportedVer
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the uninstall log is in an unrecognized format; %1 is the file."
+        array: false
+
+      - name: UninstallUnknownEntry
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when an unknown entry was encountered in the uninstall log; %1 is the entry."
+        array: false
+
+      - name: ConfirmUninstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Confirmation prompt before removing the application; %1 is the application name."
+        array: false
+
+      - name: UninstallOnlyOnWin64
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when this installation can only be uninstalled on 64-bit Windows."
+        array: false
+
+      - name: OnlyAdminCanUninstall
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when only an administrator can uninstall the application."
+        array: false
+
+      - name: UninstallStatusLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while removing the application; %1 is the application name."
+        array: false
+
+      - name: UninstalledAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the application was successfully removed; %1 is the application name."
+        array: false
+
+      - name: UninstalledMost
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the application was removed but some items remained; %1 is the application name."
+        array: false
+
+      - name: UninstalledAndNotAll
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown when the application was not fully removed; %1 is the application name."
+        array: false
+
+      - name: FileDoesntExist
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shown during uninstall when a file no longer exists; %1 is the file."
+        array: false
+
+      # *** Uninstall status messages ***
+      - name: ConfirmDeleteSharedFileTitle
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Caption of the shared-file deletion confirmation."
+        array: false
+
+      - name: ConfirmDeleteSharedFile2
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Body of the shared-file deletion confirmation; %1 is the file."
+        array: false
+
+      - name: SharedFileNameLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label showing the shared file name."
+        array: false
+
+      - name: SharedFileLocationLabel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Label showing the shared file location."
+        array: false
+
+      - name: WizardUninstalling
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Page title shown while uninstalling."
+        array: false
+
+      - name: StatusUninstalling
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Status text shown while uninstalling; %1 is the application name."
+        array: false
+
+      # *** Shutdown block reasons ***
+      - name: ShutdownBlockReasonInstallingApp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shutdown-block reason shown while installing; %1 is the application name."
+        array: false
+
+      - name: ShutdownBlockReasonUninstallingApp
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Shutdown-block reason shown while uninstalling; %1 is the application name."
+        array: false
+
+  # ---------------------------------------------------------------------------
+  # [CustomMessages] — directive section
+  # ---------------------------------------------------------------------------
+  - name: CustomMessages
+    type: directive
+    deprecated: false
+    description: "Defines custom, localizable message strings referenced elsewhere in the script via the <code>{cm:MessageName}</code> constant. Each entry is <code>MessageName=Text</code> and may be prefixed with a language name, e.g. <code>english.MyMessage</code>. There are no predefined message names &mdash; you choose your own."
+    internationalization: true
+    attributes: []
+
+  # ---------------------------------------------------------------------------
   # [InstallDelete] — parameter section
   # ---------------------------------------------------------------------------
   - name: InstallDelete

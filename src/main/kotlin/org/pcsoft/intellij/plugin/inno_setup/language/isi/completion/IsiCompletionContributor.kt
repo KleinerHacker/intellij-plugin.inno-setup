@@ -12,10 +12,12 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.completion
 
+import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.codeInsight.lookup.LookupElementPresentation
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.patterns.PlatformPatterns
@@ -23,14 +25,14 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
-import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
-import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiSyntaxHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
+import org.pcsoft.intellij.plugin.inno_setup.language.languageId
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiFlagTypeSpec
@@ -53,6 +55,21 @@ class IsiCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
             AttributeKeyProvider
+        )
+        // Key completion for internationalized sections ([Messages], [CustomMessages]):
+        // offers a language-prefix list (flag + name) plus the known message identifiers,
+        // and handles the embedded "lang." prefix.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
+                .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            MessagesKeyProvider
+        )
+        // Declared custom-message suggestions inside the {cm:…} constant.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
+            CustomMessageAfterCmProvider
         )
         extend(
             CompletionType.BASIC,
@@ -193,6 +210,11 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
             it.name.equals(sectionName, ignoreCase = true)
         } ?: return
 
+        // Sections that support a language prefix (e.g. [Messages], [CustomMessages]) are
+        // handled by MessagesKeyProvider, which also offers the language-prefix list and copes
+        // with the embedded "lang." prefix. Skip them here to avoid duplicate suggestions.
+        if (specSection.internationalization) return
+
         // Directive keys are unique per section; parameter keys are unique per
         // line (entry). So for parameter sections, only the keys already present
         // on the current line count as duplicates — not the whole section.
@@ -257,6 +279,181 @@ private object AttributeKeyProvider : CompletionProvider<CompletionParameters>()
         }
     }
 }
+
+/**
+ * Key completion for internationalized sections ([Messages], [CustomMessages], driven by the
+ * spec's `internationalization` flag). Offers, at a key position:
+ *  • a language-prefix list (flag icon + language name) that inserts `lang.` and re-opens the
+ *    popup, and
+ *  • the section's known message identifiers (empty for [CustomMessages]) that insert `name=`.
+ * When a `lang.` prefix is already typed, only the message identifiers are offered, matched
+ * against the text after the dot.
+ */
+private object MessagesKeyProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val position = parameters.position
+        if (position.isInCodeSection()) return
+
+        val inKeyPosition = position.parent is IsiDirectiveKey
+                || (position.containingParameterEntry() == null
+                && position.containingDirectiveEntry() == null)
+        if (!inKeyPosition) return
+
+        val originalFile = parameters.originalFile as? IssFile
+        val psiSection = position.containingSection()
+            ?: parameters.originalPosition?.containingSection()
+            ?: originalFile?.sectionAtOffset(parameters.offset)
+            ?: return
+        val specSection = service<IssSpecService>().spec.sections.firstOrNull {
+            it.name.equals(psiSection.nameText(), ignoreCase = true)
+        } ?: return
+        if (!specSection.internationalization) return
+
+        val file = originalFile ?: position.issFile() ?: return
+
+        // Typed text of the key so far (strip the dummy completion identifier).
+        val raw = position.text
+        val dummyIdx = raw.indexOf(CompletionUtil.DUMMY_IDENTIFIER_TRIMMED)
+        val typed = if (dummyIdx >= 0) raw.substring(0, dummyIdx) else raw
+        val dotIdx = typed.indexOf('.')
+
+        if (dotIdx >= 0) {
+            // A language prefix is already present — only complete message identifiers,
+            // matched against the part after the dot.
+            val afterDot = result.withPrefixMatcher(typed.substring(dotIdx + 1))
+            addMessageIdentifiers(specSection, afterDot)
+            return
+        }
+
+        // No dot yet: offer language prefixes (flag + name) and message identifiers.
+        languagePrefixSources(file).forEach { (name, displayName, icon) ->
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(name)
+                        .withTypeText(displayName)
+                        .withIcon(icon)
+                        .withInsertHandler { ctx, _ ->
+                            ctx.document.insertString(ctx.tailOffset, ".")
+                            ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
+                            AutoPopupController.getInstance(ctx.project).scheduleAutoPopup(ctx.editor)
+                        },
+                    20.0
+                )
+            )
+        }
+        addMessageIdentifiers(specSection, result)
+    }
+
+    private fun addMessageIdentifiers(
+        specSection: org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec,
+        result: CompletionResultSet
+    ) {
+        specSection.attributes.forEach { attr ->
+            val tail = buildString {
+                if (attr.deprecated) append(" deprecated")
+            }
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(attr.name)
+                        .withTypeText("message")
+                        .withTailText(tail, true)
+                        .withItemTextForeground(
+                            if (attr.deprecated) JBColor.GRAY else JBColor.foreground()
+                        )
+                        .withInsertHandler { ctx, _ ->
+                            ctx.document.insertString(ctx.tailOffset, "=")
+                            ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
+                        },
+                    0.0
+                )
+            )
+        }
+    }
+
+    /**
+     * Languages offered as a key prefix: the `Name` values declared in the file's [Languages]
+     * section (with the matching flag + display name), falling back to all built-in languages
+     * when the file declares none.
+     */
+    /**
+     * Prefix sources are the `Name` values declared in the file's [Languages] section; flag and
+     * English name are derived from each entry's MessagesFile → LanguageID (the single source of
+     * truth). No [Languages] section ⇒ no prefix suggestions.
+     */
+    private fun languagePrefixSources(file: IssFile): List<Triple<String, String, javax.swing.Icon>> =
+        file.findSections("Languages")
+            .flatMap { it.nameDeclarations() }
+            .mapNotNull { pair ->
+                val name = pair.valueUnquoted().ifEmpty { null } ?: return@mapNotNull null
+                val messagesFile = pair.containingParameterEntry()?.paramPairList
+                    ?.firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) }
+                    ?.valueUnquoted()
+                val lang = messagesFile
+                    ?.let { file.languageId(it) }
+                    ?.let { service<IssLanguageService>().fromId(it) }
+                Triple(name, lang?.displayName ?: name, lang?.icon ?: AllIcons.General.Web)
+            }
+            .distinctBy { it.first.lowercase() }
+}
+
+/**
+ * Completion of declared custom-message names inside the {cm:…} constant. Looks back from the
+ * caret for the nearest `{cm:` and offers the message names declared in the file's
+ * [CustomMessages] section(s).
+ */
+private object CustomMessageAfterCmProvider : CompletionProvider<CompletionParameters>() {
+    override fun addCompletions(
+        parameters: CompletionParameters,
+        context: ProcessingContext,
+        result: CompletionResultSet
+    ) {
+        val offset = parameters.offset
+        val chars = parameters.editor.document.charsSequence
+        val lookBack = minOf(offset, 100)
+        val prefix = chars.subSequence(offset - lookBack, offset).toString()
+        val braceIdx = prefix.lastIndexOf('{')
+        if (braceIdx < 0) return
+        val afterBrace = prefix.substring(braceIdx + 1)
+        if (!afterBrace.regionMatches(0, "cm:", 0, 3, ignoreCase = true)) return
+        val afterColon = afterBrace.substring(3)
+        // Past the name (into the printf-style arguments) — nothing to complete.
+        if (afterColon.contains(',')) return
+
+        val file = parameters.originalFile as? IssFile ?: return
+        val adjusted = result.withPrefixMatcher(afterColon)
+
+        customMessageNames(file).forEach { name ->
+            adjusted.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(name)
+                        .withTypeText("custom message")
+                        .withIcon(IssIcons.Constant)
+                        .withInsertHandler { ctx, _ ->
+                            val tail = ctx.tailOffset
+                            val doc = ctx.document.charsSequence
+                            if (tail >= doc.length || doc[tail] != '}')
+                                ctx.document.insertString(tail, "}")
+                            ctx.editor.caretModel.moveToOffset(tail + 1)
+                        },
+                    10.0
+                )
+            )
+        }
+    }
+}
+
+/** Distinct custom-message names declared in the file's [CustomMessages] section(s), with any
+ *  `lang.` prefix stripped. */
+private fun customMessageNames(file: IssFile): List<String> =
+    file.findSections("CustomMessages")
+        .flatMap { it.directiveEntryList }
+        .map { it.keyText().substringAfterLast('.') }
+        .filter { it.isNotEmpty() }
+        .distinct()
 
 private object IsppVariableAfterHashProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -388,13 +585,15 @@ private object LanguageSectionValueProvider : CompletionProvider<CompletionParam
             result.withPrefixMatcher(typed)
         } else result
 
+        val builtin = service<IssLanguageService>().builtinLanguages
         val key = pair.keyText()
         when {
             key.equals("Name", ignoreCase = true) ->
-                IssScriptLanguage.entries.forEach { lang ->
+                builtin.forEach { lang ->
+                    val issName = lang.issName ?: return@forEach
                     adjustedResult.addElement(
                         PrioritizedLookupElement.withPriority(
-                            LookupElementBuilder.create(lang.issName)
+                            LookupElementBuilder.create(issName)
                                 .withTypeText(lang.displayName)
                                 .withIcon(lang.icon),
                             10.0
@@ -402,10 +601,11 @@ private object LanguageSectionValueProvider : CompletionProvider<CompletionParam
                     )
                 }
             key.equals("MessagesFile", ignoreCase = true) ->
-                IssScriptLanguage.entries.forEach { lang ->
+                builtin.forEach { lang ->
+                    val messagesFile = lang.messagesFile ?: return@forEach
                     adjustedResult.addElement(
                         PrioritizedLookupElement.withPriority(
-                            LookupElementBuilder.create(lang.messagesFile)
+                            LookupElementBuilder.create(messagesFile)
                                 .withTypeText(lang.displayName)
                                 .withIcon(lang.icon),
                             10.0
@@ -432,15 +632,18 @@ private object LanguageIdValueProvider : CompletionProvider<CompletionParameters
         if (!section.nameText().equals("LangOptions", ignoreCase = true)) return
         if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
 
-        IssWindowsLanguage.entries.forEach { lang ->
+        service<IssLanguageService>().entries.forEach { lang ->
+            val tail = if (lang.builtin) "  Inno built-in" else ""
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create(lang.id)        // inserts the "$0409" hex id
                         .withLookupString(lang.displayName)     // also matchable by typing the language name
                         .withPresentableText(lang.displayName)  // shown label, e.g. "English (United States)"
+                        .withTailText(tail, true)               // mark Inno-bundled languages
                         .withTypeText(lang.id, true)            // greyed id on the right
                         .withIcon(lang.icon),
-                    10.0
+                    // Built-in languages are sorted to the top of the popup.
+                    if (lang.builtin) 20.0 else 10.0
                 )
             )
         }

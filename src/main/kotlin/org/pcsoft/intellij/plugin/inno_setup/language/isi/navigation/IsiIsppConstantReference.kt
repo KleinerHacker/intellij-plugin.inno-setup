@@ -33,9 +33,9 @@ class IsiIsppConstantReference(constantBody: IsiConstantBody, private val name: 
     override fun resolve(): PsiElement? {
         val issFile = element.containingFile as? IssFile ?: return null
         return issFile.isppDirectives()
-            .firstOrNull { d ->
-                (d as? IsppDirectiveEx)?.isDefine() == true &&
-                        (d as? IsppDirectiveEx)?.getDefineName() == name
+            .firstOrNull { x ->
+                (x as? IsppDirectiveEx)?.isDefine() == true &&
+                        x.getDefineName() == name
             }
     }
 

@@ -60,6 +60,11 @@
             "$ref": "#/definitions/attribute"
           }
         },
+        "internationalization": {
+          "description": "Whether keys in this section may carry a language prefix (e.g. \"en.MessageName\"); enables language-prefix completion. Applies to [Messages] and [CustomMessages]. Defaults to false.",
+          "type": "boolean",
+          "default": false
+        },
         "since": {
           "description": "Inno Setup version in which this section was introduced (e.g. \"6.0.0\").",
           "type": "string"

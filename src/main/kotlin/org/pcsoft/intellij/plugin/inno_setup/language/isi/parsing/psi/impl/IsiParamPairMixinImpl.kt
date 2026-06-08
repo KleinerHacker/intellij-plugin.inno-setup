@@ -22,6 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiQuotedString
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
 
 abstract class IsiParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsiParamPairEx,
@@ -46,20 +47,30 @@ abstract class IsiParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node)
 
     override fun setName(name: String): PsiElement {
         if (!isNameDeclaration()) return this
-        val paramValue = (this as IsiParamPair).paramValue ?: return this
-        val oldId = paramValue.node.findChildByType(IsiTypes.IDENTIFIER)?.psi ?: return this
-        // Use Tasks dummy in a known valid context to produce the target IDENTIFIER node.
+        val oldLeaf = nameLeaf() ?: return this
+        val quoted = oldLeaf.elementType == IsiTypes.STRING_PART
+        // Build the new leaf in a known-valid context (quoted vs. bare) so quotes are preserved.
+        val dummyValue = if (quoted) "\"$name\"" else name
         val dummy = PsiFileFactory.getInstance(project)
-            .createFileFromText("dummy.iss", IssFileType.INSTANCE, "[Tasks]\nName: $name\n")
-        val newId = PsiTreeUtil.findChildOfType(dummy, IsiParamValue::class.java)
-            ?.node?.findChildByType(IsiTypes.IDENTIFIER)?.psi ?: return this
-        oldId.replace(newId)
+            .createFileFromText("dummy.iss", IssFileType.INSTANCE, "[Tasks]\nName: $dummyValue\n")
+        val newLeaf = nameLeafOf(PsiTreeUtil.findChildOfType(dummy, IsiParamValue::class.java))?.psi ?: return this
+        oldLeaf.psi.replace(newLeaf)
         return this
     }
 
     override fun getNameIdentifier(): PsiElement? {
         if (!isNameDeclaration()) return null
-        return (this as IsiParamPair).paramValue?.node?.findChildByType(IsiTypes.IDENTIFIER)?.psi
+        return nameLeaf()?.psi
+    }
+
+    /** The leaf carrying the name text: the bare IDENTIFIER, or the STRING_PART inside `"…"`. */
+    private fun nameLeaf(): ASTNode? = nameLeafOf((this as IsiParamPair).paramValue)
+
+    private fun nameLeafOf(paramValue: IsiParamValue?): ASTNode? {
+        val node = paramValue?.node ?: return null
+        node.findChildByType(IsiTypes.IDENTIFIER)?.let { return it }
+        return PsiTreeUtil.findChildOfType(paramValue, IsiQuotedString::class.java)
+            ?.node?.findChildByType(IsiTypes.STRING_PART)
     }
 
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()

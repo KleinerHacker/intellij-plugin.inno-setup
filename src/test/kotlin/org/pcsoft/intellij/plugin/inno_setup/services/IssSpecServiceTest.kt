@@ -31,8 +31,8 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `all 16 sections are loaded`() {
-        assertEquals(16, spec.sections.size)
+    fun `all 18 sections are loaded`() {
+        assertEquals(18, spec.sections.size)
     }
 
     @Test
@@ -41,8 +41,22 @@ class IssSpecServiceTest {
         listOf(
             "Setup", "Types", "Components", "Tasks", "Dirs", "Files",
             "Icons", "Registry", "Run", "UninstallRun", "Languages",
-            "LangOptions", "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
+            "LangOptions", "Messages", "CustomMessages",
+            "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
         ).forEach { assertTrue("Missing section: $it", it in names) }
+    }
+
+    @Test
+    fun `Messages and CustomMessages are internationalized directive sections`() {
+        listOf("Messages", "CustomMessages").forEach { name ->
+            val section = spec.sections.find { it.name == name }!!
+            assertEquals("$name must be a directive section", "directive", section.type)
+            assertTrue("$name must be internationalized", section.internationalization)
+        }
+        val custom = spec.sections.find { it.name == "CustomMessages" }!!
+        assertTrue("CustomMessages must have no predefined attributes", custom.attributes.isEmpty())
+        val messages = spec.sections.find { it.name == "Messages" }!!
+        assertTrue("Messages must declare predefined identifiers", messages.attributes.isNotEmpty())
     }
 
     @Test

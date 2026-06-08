@@ -107,8 +107,7 @@ fun IsiParamPair.valueText(): String = paramValue?.text?.trim().orEmpty()
 fun IsiParamPair.valueUnquoted(): String = valueText().removeSurrounding("\"")
 
 // ── IsiDirectiveEntry ─────────────────────────────────────────────────────────
-
-fun IsiDirectiveEntry.keyText(): String = directiveKey.text.trim()
+// keyText() is provided as a member by IsiDirectiveEntryEx (the directiveEntry mixin).
 
 fun IsiDirectiveEntry.valueText(): String = paramValue?.text?.trim().orEmpty()
 

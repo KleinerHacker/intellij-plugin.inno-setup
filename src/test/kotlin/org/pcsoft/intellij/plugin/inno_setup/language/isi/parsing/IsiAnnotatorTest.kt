@@ -38,6 +38,39 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         try { block() } finally { service.state.minInnoVersion = prev }
     }
 
+    // ── {cm:…} italic + language prefix ───────────────────────────────────────
+
+    fun testCmKeywordIsItalic() {
+        val text = "[CustomMessages]\nGreeting=Hi\n[Setup]\nAppComments={cm:Greeting}\n"
+        myFixture.configureByText(IssFileType.INSTANCE, text)
+        val cmOffset = text.indexOf("cm:")
+        val italic = myFixture.doHighlighting().any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.CUSTOM_MESSAGE_PREFIX &&
+                    it.startOffset <= cmOffset && it.endOffset >= cmOffset + 2
+        }
+        assertTrue("The cm keyword in {cm:…} must be highlighted italic", italic)
+    }
+
+    fun testUnknownLanguagePrefixProducesError() {
+        val text = "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[Messages]\nde.WelcomeLabel1=Willkommen\n"
+        val hit = highlights(text).any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown language prefix", ignoreCase = true) == true
+        }
+        assertTrue("An undeclared lang. prefix must produce an ERROR", hit)
+    }
+
+    fun testKnownLanguagePrefixProducesNoError() {
+        val text = "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[Messages]\nenglish.WelcomeLabel1=Welcome\n"
+        val hit = highlights(text).any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown language prefix", ignoreCase = true) == true
+        }
+        assertFalse("A declared lang. prefix must not be flagged", hit)
+    }
+
     // ── File level: required sections ─────────────────────────────────────────
 
     fun testFileLevelErrorWhenSetupSectionMissing() {
@@ -487,67 +520,6 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
             }
             assertFalse("No minVersion configured must not produce any version-related annotations", hit)
         }
-    }
-
-    // ── [Languages]: Name vs. built-in MessagesFile consistency ───────────────
-
-    private fun hasLanguageMismatchWarning(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
-        all.any {
-            it.severity == HighlightSeverity.WARNING &&
-                    it.description?.contains("does not match the built-in messages file", ignoreCase = true) == true
-        }
-
-    fun testLanguageNameMismatchWithBuiltinProducesWarning() {
-        // English name but the German built-in messages file → inconsistent.
-        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Languages\\German.isl\"\n"
-        assertTrue(
-            "Mismatched Name/built-in MessagesFile must produce a consistency WARNING",
-            hasLanguageMismatchWarning(highlights(text))
-        )
-    }
-
-    fun testLanguageNameMatchesBuiltinProducesNoWarning() {
-        val text = VALID_SETUP + "\n[Languages]\nName: \"german\"; MessagesFile: \"compiler:Languages\\German.isl\"\n"
-        assertFalse(
-            "Matching Name/built-in MessagesFile must not produce a consistency WARNING",
-            hasLanguageMismatchWarning(highlights(text))
-        )
-    }
-
-    fun testLanguageDefaultIslEnglishMatchProducesNoWarning() {
-        // compiler:Default.isl is the English built-in.
-        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n"
-        assertFalse(
-            "English/compiler:Default.isl must not produce a consistency WARNING",
-            hasLanguageMismatchWarning(highlights(text))
-        )
-    }
-
-    fun testLanguageDefaultIslMismatchProducesWarning() {
-        // compiler:Default.isl is English, so a non-english Name is inconsistent.
-        val text = VALID_SETUP + "\n[Languages]\nName: \"german\"; MessagesFile: \"compiler:Default.isl\"\n"
-        assertTrue(
-            "German name on compiler:Default.isl (English) must produce a consistency WARNING",
-            hasLanguageMismatchWarning(highlights(text))
-        )
-    }
-
-    fun testLanguageCustomMessagesFileProducesNoWarning() {
-        // A non-built-in messages file is left untouched even when the name diverges.
-        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"MyCustom.isl\"\n"
-        assertFalse(
-            "Custom (non-built-in) MessagesFile must never produce a consistency WARNING",
-            hasLanguageMismatchWarning(highlights(text))
-        )
-    }
-
-    fun testLanguageConsistencyCheckOnlyAppliesInLanguagesSection() {
-        // Same Name/MessagesFile pair outside [Languages] must not be checked.
-        val text = VALID_SETUP + "\n[Components]\nName: \"english\"; Description: \"compiler:Languages\\German.isl\"\n"
-        assertFalse(
-            "Consistency check must not fire outside the [Languages] section",
-            hasLanguageMismatchWarning(highlights(text))
-        )
     }
 
     fun testTypesReferenceValueHighlightedAsReference() {

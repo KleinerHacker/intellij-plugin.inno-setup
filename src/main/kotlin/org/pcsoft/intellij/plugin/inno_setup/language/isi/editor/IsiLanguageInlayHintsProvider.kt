@@ -12,32 +12,31 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.isi.editor
 
-import com.intellij.codeInsight.hints.ChangeListener
-import com.intellij.codeInsight.hints.FactoryInlayHintsCollector
-import com.intellij.codeInsight.hints.ImmediateConfigurable
-import com.intellij.codeInsight.hints.InlayHintsCollector
-import com.intellij.codeInsight.hints.InlayHintsProvider
-import com.intellij.codeInsight.hints.InlayHintsSink
-import com.intellij.codeInsight.hints.NoSettings
-import com.intellij.codeInsight.hints.SettingsKey
+import com.intellij.codeInsight.hints.*
 import com.intellij.codeInsight.hints.presentation.InlayPresentation
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.util.IconUtil
-import org.pcsoft.intellij.plugin.inno_setup.action.IssScriptLanguage
-import org.pcsoft.intellij.plugin.inno_setup.action.IssWindowsLanguage
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPair
+import org.pcsoft.intellij.plugin.inno_setup.language.languageId
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import javax.swing.Icon
 import javax.swing.JPanel
 
 /**
- * Renders flag inlay hints:
+ * Renders flag inlay hints, all derived from the Windows language id (the single source of truth):
  *  - `[LangOptions]` `LanguageID` &mdash; flag + locale name after `=`, before the numeric id.
- *  - `[Languages]` `Name` / `MessagesFile` &mdash; the built-in language flag before the string.
+ *  - `[Languages]` `MessagesFile` &mdash; flag + locale name of the language declared in the
+ *    referenced `.isl` file (`LangOptions.LanguageID`).
+ *  - `[Messages]` / `[CustomMessages]` &mdash; the flag of the language a `lang.` key prefix refers
+ *    to, before the key.
  *
- * When the value does not map to a known language/locale, no hint is shown.
+ * When the value does not map to a known locale, no hint is shown.
  */
 @Suppress("UnstableApiUsage")
 class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
@@ -63,7 +62,10 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
 
         override fun collect(element: PsiElement, editor: Editor, sink: InlayHintsSink): Boolean {
             when (element) {
-                is IsiDirectiveEntry -> collectLanguageId(element, sink)
+                is IsiDirectiveEntry -> {
+                    collectLanguageId(element, sink)
+                    collectMessagesPrefixFlag(element, sink)
+                }
                 is IsiParamPair -> collectLanguagesFlag(element, sink)
             }
             return true
@@ -76,25 +78,50 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             if (entry.containingSection()?.nameText()?.equals("LangOptions", ignoreCase = true) != true) return
 
             val value = entry.paramValue ?: return
-            val numeric = IssWindowsLanguage.parseId(value.singleText().trim()) ?: return
-            val lang = IssWindowsLanguage.fromId(numeric) ?: return
+            val numeric = IssLanguageService.parseId(value.singleText().trim()) ?: return
+            val lang = service<IssLanguageService>().fromId(numeric) ?: return
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
         }
 
-        // [Languages] Name: "english" / MessagesFile: "compiler:Default.isl" → 🇬🇧 "english"
+        // [Languages] MessagesFile: "compiler:Languages\German.isl" → 🇩🇪 German (Germany)
+        // Flag + English name come from the LanguageID declared in the referenced .isl file.
         private fun collectLanguagesFlag(pair: IsiParamPair, sink: InlayHintsSink) {
             if (pair.isInCodeSection()) return
             if (pair.containingSection()?.nameText()?.equals("Languages", ignoreCase = true) != true) return
+            if (!pair.keyText().equals("MessagesFile", ignoreCase = true)) return
 
             val value = pair.paramValue ?: return
             val text = value.singleText().trim()
             if (text.isEmpty()) return
-            val icon = when {
-                pair.keyText().equals("Name", ignoreCase = true) -> IssScriptLanguage.fromIssName(text)?.icon
-                pair.keyText().equals("MessagesFile", ignoreCase = true) -> IssScriptLanguage.fromMessagesFile(text)?.icon
-                else -> null
-            } ?: return
-            addFlag(sink, value.textRange.startOffset, icon, null)
+            val ctx = pair.containingFile as? IssFile ?: return
+            val lcid = ctx.languageId(text) ?: return
+            val lang = service<IssLanguageService>().fromId(lcid) ?: return
+            addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
+        }
+
+        // [Messages]/[CustomMessages] english.WelcomeLabel1=… → 🇺🇸 before the key.
+        // The flag is that of the language the "lang." prefix refers to in [Languages].
+        private fun collectMessagesPrefixFlag(entry: IsiDirectiveEntry, sink: InlayHintsSink) {
+            if (entry.isInCodeSection()) return
+            val section = entry.containingSection() ?: return
+            if (section.specSection()?.internationalization != true) return
+            val key = entry.keyText()
+            val dot = key.indexOf('.')
+            if (dot <= 0) return
+            val ctx = entry.containingFile as? IssFile ?: return
+            val icon = languageFlagForPrefix(ctx, key.substring(0, dot)) ?: return
+            addFlag(sink, entry.directiveKey.textRange.startOffset, icon, null)
+        }
+
+        /** Flag of the [Languages] entry whose Name equals [prefix], via its MessagesFile LanguageID. */
+        private fun languageFlagForPrefix(file: IssFile, prefix: String): Icon? {
+            val namePair = file.findSections("Languages").flatMap { it.nameDeclarations() }
+                .firstOrNull { it.valueUnquoted().equals(prefix, ignoreCase = true) } ?: return null
+            val messagesFile = namePair.containingParameterEntry()?.paramPairList
+                ?.firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) }
+                ?.valueUnquoted() ?: return null
+            val lcid = file.languageId(messagesFile) ?: return null
+            return service<IssLanguageService>().fromId(lcid)?.icon
         }
 
         private fun addFlag(sink: InlayHintsSink, offset: Int, icon: Icon, label: String?) {

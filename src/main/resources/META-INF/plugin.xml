@@ -98,6 +98,14 @@
         <referencesSearch
                 implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiSectionReferencesSearcher"/>
 
+        <!-- Rename / Find Usages: find {cm:Name} references of a [CustomMessages] declaration -->
+        <referencesSearch
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiCustomMessageReferencesSearcher"/>
+
+        <!-- Rename / Find Usages: find lang. key prefixes referencing a [Languages] Name -->
+        <referencesSearch
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiLanguagePrefixReferencesSearcher"/>
+
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
                                   implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiReferenceContributor"/>

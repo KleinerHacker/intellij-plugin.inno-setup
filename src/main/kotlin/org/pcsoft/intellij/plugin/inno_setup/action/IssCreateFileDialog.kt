@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.action
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.ValidationInfo
@@ -20,6 +21,8 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
+import org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec
 import java.awt.Dimension
 import javax.swing.JComponent
 
@@ -29,17 +32,18 @@ class IssCreateFileDialog(project: Project) : DialogWrapper(project) {
     private val appNameField = JBTextField()
     private val appVersionField = JBTextField("1.0")
 
-    private val languageList = CheckBoxList<IssScriptLanguage>().apply {
-        IssScriptLanguage.entries.forEach { lang ->
-            addItem(lang, lang.displayName, lang == IssScriptLanguage.ENGLISH)
+    private val languages = service<IssLanguageService>().builtinLanguages
+    private val languageList = CheckBoxList<IslLanguageSpec>().apply {
+        languages.forEach { lang ->
+            addItem(lang, lang.displayName, lang.issName.equals("english", ignoreCase = true))
         }
     }
 
     val fileName: String get() = fileNameField.text.trim()
     val appName: String get() = appNameField.text.trim()
     val appVersion: String get() = appVersionField.text.trim()
-    val selectedLanguages: List<IssScriptLanguage>
-        get() = IssScriptLanguage.entries.filter { languageList.isItemSelected(it) }
+    val selectedLanguages: List<IslLanguageSpec>
+        get() = languages.filter { languageList.isItemSelected(it) }
 
     init {
         title = "New Inno Setup Script"

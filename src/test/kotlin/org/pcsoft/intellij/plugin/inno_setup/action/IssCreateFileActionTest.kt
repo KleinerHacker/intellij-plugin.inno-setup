@@ -15,22 +15,30 @@ package org.pcsoft.intellij.plugin.inno_setup.action
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec
 
 /**
  * Unit tests for the pure template-generation logic of [IssCreateFileAction].
  *
  * The action's `actionPerformed` is gated behind a modal dialog and cannot run
  * headless, so these tests exercise `buildTemplate` (exposed `@VisibleForTesting`)
- * and [IssScriptLanguage.toIssEntry] directly.
+ * and [IslLanguageSpec.toIssEntry] directly.
  */
 class IssCreateFileActionTest {
 
     private val action = IssCreateFileAction()
 
+    private val english = IslLanguageSpec(
+        "English (United States)", "\$0409", "united-states", true, "english", "compiler:Default.isl"
+    )
+    private val german = IslLanguageSpec(
+        "German (Germany)", "\$0407", "german", true, "german", "compiler:Languages\\German.isl"
+    )
+
     private fun template(
         appName: String = "My App",
         appVersion: String = "1.0",
-        languages: List<IssScriptLanguage> = listOf(IssScriptLanguage.ENGLISH)
+        languages: List<IslLanguageSpec> = listOf(english)
     ) = action.buildTemplate(appName, appVersion, languages)
 
     @Test
@@ -59,18 +67,18 @@ class IssCreateFileActionTest {
 
     @Test
     fun `single language produces exactly one matching entry`() {
-        val text = template(languages = listOf(IssScriptLanguage.ENGLISH))
+        val text = template(languages = listOf(english))
         val entries = text.lines().filter { it.startsWith("Name:") }
         assertEquals(1, entries.size)
-        assertEquals(IssScriptLanguage.ENGLISH.toIssEntry(), entries.single())
+        assertEquals(english.toIssEntry(), entries.single())
     }
 
     @Test
     fun `multiple languages produce one entry each, in order`() {
-        val text = template(languages = listOf(IssScriptLanguage.ENGLISH, IssScriptLanguage.GERMAN))
+        val text = template(languages = listOf(english, german))
         val entries = text.lines().filter { it.startsWith("Name:") }
         assertEquals(
-            listOf(IssScriptLanguage.ENGLISH.toIssEntry(), IssScriptLanguage.GERMAN.toIssEntry()),
+            listOf(english.toIssEntry(), german.toIssEntry()),
             entries
         )
     }
@@ -86,7 +94,7 @@ class IssCreateFileActionTest {
     fun `toIssEntry formats name and messages file`() {
         assertEquals(
             "Name: \"german\"; MessagesFile: \"compiler:Languages\\German.isl\"",
-            IssScriptLanguage.GERMAN.toIssEntry()
+            german.toIssEntry()
         )
     }
 }

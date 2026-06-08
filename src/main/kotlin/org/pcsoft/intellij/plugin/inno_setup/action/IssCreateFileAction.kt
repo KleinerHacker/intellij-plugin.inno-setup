@@ -21,6 +21,7 @@ import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
+import org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec
 
 class IssCreateFileAction : DumbAwareAction(
     "Inno Setup Script",
@@ -56,7 +57,7 @@ class IssCreateFileAction : DumbAwareAction(
     internal fun buildTemplate(
         appName: String,
         appVersion: String,
-        languages: List<IssScriptLanguage>
+        languages: List<IslLanguageSpec>
     ) = buildString {
         appendLine("[Setup]")
         appendLine("AppName=$appName")

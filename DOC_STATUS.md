@@ -2,7 +2,7 @@
 
 > **Reference version:** Inno Setup 7.0.1-beta  
 > **Docs URL:** https://jrsoftware.org/ishelp/  
-> **Last checked:** 2026-06-06  
+> **Last checked:** 2026-06-08  
 >
 > This file tracks which parts of the official Inno Setup documentation are implemented in the plugin's
 > spec files (`src/main/resources/spec/`) and language support. Update the "Last checked" date and the
@@ -28,8 +28,8 @@
 | `[Run]`         | parameter  | ✅     | All attributes + flags covered               |
 | `[UninstallRun]`| parameter  | ✅     | All attributes + flags covered               |
 | `[Languages]`   | parameter  | ✅     | All attributes covered                       |
-| `[Messages]`    | directive  | ❌     | Entirely missing from spec                   |
-| `[CustomMessages]`| directive| ❌     | Entirely missing from spec                   |
+| `[Messages]`    | directive  | ✅     | Full standard `Default.isl` message set; `lang.` prefix completion |
+| `[CustomMessages]`| directive| ✅     | No predefined names; `lang.` prefix completion + `{cm:}` reference/find-usages/rename |
 | `[LangOptions]` | directive  | ✅     | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion |
 | `[InstallDelete]`| parameter | ✅     | All attributes covered                       |
 | `[UninstallDelete]`| parameter| ✅    | All attributes covered                       |
@@ -123,14 +123,26 @@ Allows Setup to modify `.ini` files on the user's system.
 **Flags:** `createkeyifdoesntexist`, `uninsdeleteentry`, `uninsdeletesection`, `uninsdeletesectionifempty`  
 **Common params:** `Components`, `Tasks`, `Languages`, `Check`, `MinVersion`, `OnlyBelowVersion`
 
-### `[Messages]` section
+### `[Messages]` section ✅
 Overrides installer message strings from `Default.isl`.  
-**Format:** `MessageID=Text` or `lang.MessageID=Text` — free key/value, no fixed attribute list.  
-**Note:** Only needs lexer/syntax support; a full attribute spec is not meaningful here.
+**Format:** `MessageID=Text` or `lang.MessageID=Text`.  
+**Implemented:** directive section in `isi-spec.yaml` with `internationalization: true` and the full
+standard set of `Default.isl` message identifiers (~273) as known keys. Key completion offers a
+language-prefix list (flag icon + language name, from the file's `[Languages]` or the built-in
+languages) followed by the known message identifiers; after a `lang.` prefix only the message
+identifiers are completed. See `MessagesKeyProvider`.
 
-### `[CustomMessages]` section
+### `[CustomMessages]` section ✅
 Defines custom localizable strings usable via the `{cm:…}` constant.  
-**Format:** Same as `[Messages]` — free key/value.
+**Format:** Same as `[Messages]` — user-chosen key/value (no predefined names).  
+**Implemented:** directive section in `isi-spec.yaml` with `internationalization: true` and an empty
+attribute list (`internationalization` flag in the spec/schema/`IsiSectionSpec`). The same
+language-prefix completion applies. Each declaration is a renamable named element
+(`IsiDirectiveEntryMixinImpl`); `{cm:MessageName}` resolves to it (`IsiCustomMessageReference`,
+red-highlighted when unresolved), offers completion of declared names
+(`CustomMessageAfterCmProvider`), supports Find Usages, and Rename updates the declaration(s)
+— including other-language variants — and all `{cm:}` usages
+(`IsiCustomMessageReferencesSearcher`).
 
 ### `[LangOptions]` section ✅
 Language-specific display settings (used inside `.isl` files and overridable in scripts). Implemented
@@ -138,12 +150,18 @@ as a directive section in `isi-spec.yaml`.
 **Attributes:** `LanguageName`, `LanguageID`, `LanguageCodePage`, `DialogFontName`, `DialogFontSize`,
 `DialogFontBaseScaleWidth`, `DialogFontBaseScaleHeight`, `WelcomeFontName`, `WelcomeFontSize`, `RightToLeft`  
 **Removed in 6.4:** `TitleFontName`, `TitleFontSize`, `CopyrightFontName`, `CopyrightFontSize` (marked `until: "6.4"`)  
-**Extras:** `LanguageID` offers a completion popup of Windows LCIDs (name + flag icon + greyed `$hex`
-id, from `IssWindowsLanguage`), and is validated against the full MSDN LCID set — a value that is
-neither `0` nor a recognised LCID is flagged as a warning. Integer directives also accept Pascal-hex
-(`$`-prefixed) values. An inlay hint shows the flag + locale name after `LanguageID=`; `[Languages]`
-`Name`/`MessagesFile` show the matching flag before the string (omitted when unknown). See
-`IsiLanguageInlayHintsProvider`.
+**Extras:** all Windows locales live in `isl-code.yaml` (loaded by `IssWindowsLanguageService`); each
+carries an English name, a flag (reused or generated) and a `builtin` flag marking the Inno-bundled
+languages (which also provide `issName` + `messagesFile`). `LanguageID` completion lists every locale
+(name + flag + greyed `$hex` id), sorting built-in languages to the top with an "Inno built-in" marker;
+a value that is neither `0` nor a listed LCID is flagged as a warning. The `[Languages]` Name/MessagesFile
+completion is fed from the `builtin` languages. The Windows `LanguageID` is the single source of truth
+for a language's flag and English name: `IssLanguageIdService` resolves a `[Languages] MessagesFile`
+(bundled `compiler:` files from the Inno Setup directory, custom files from SourceDir) and reads its
+`[LangOptions] LanguageID`, falling back to the bundled `messagesFile → LCID` mapping when the file is
+unavailable. Inlays show flag + English name before `[Languages] MessagesFile`, and the referenced
+language's flag before a `lang.` message key. See `IsiLanguageInlayHintsProvider`. (The former
+Name↔MessagesFile consistency warning was removed.)
 
 ### `[ISSigKeys]` section
 Declares public keys for `.issig` file-signature verification (used with `issigverify` flag in `[Files]`).  
@@ -181,7 +199,11 @@ All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#
 | Code completion — ISPP directives| ✅     |                                              |
 | Code completion — `[Languages]`  | ✅     | Built-in names + MessagesFile, with flag icons|
 | Code completion — `LanguageID`   | ✅     | Windows LCIDs: name + flag + greyed `$hex` id |
-| Inlay hints — language flags     | ✅     | Flag before `[Languages]` Name/MessagesFile; flag + locale name on `[LangOptions]` LanguageID|
+| Code completion — message i18n prefix | ✅ | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only; flag + name from LanguageID) + message ids |
+| Code completion — `{cm:…}`       | ✅     | Declared custom-message names                 |
+| `{cm:…}` reference / find usages / rename | ✅ | Resolves to `[CustomMessages]`; red when unresolved; rename keeps language variants in sync; `cm` rendered italic |
+| `lang.` prefix reference / find usages / rename | ✅ | Prefix resolves to a `[Languages] Name`; red when undeclared; renaming the Name updates all prefixes |
+| Inlay hints — language flags     | ✅     | Flag + English name (from the LanguageID in the referenced `.isl`) before `[Languages] MessagesFile` and `[LangOptions] LanguageID`; flag of the referenced language before a `lang.` message key |
 | Brace matching `[]`, `{}`, `()`  | ✅     |                                              |
 | Code folding                     | ✅     |                                              |
 | Structure view                   | ✅     |                                              |
@@ -192,5 +214,4 @@ All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#
 | Quote handler                    | ✅     |                                              |
 | ISPP language injection          | ✅     | Preprocessor lines injected into ISI         |
 | Semantic annotations / errors    | ✅     |                                              |
-| `[Languages]` Name/file mismatch | ✅     | Warns when Name ≠ built-in `compiler:` MessagesFile|
 | [Code] section Pascal support    | ❌     | No Pascal intellisense; treated as plain text|

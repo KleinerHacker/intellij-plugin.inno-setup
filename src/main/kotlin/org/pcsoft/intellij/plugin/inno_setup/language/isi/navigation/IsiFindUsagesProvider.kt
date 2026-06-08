@@ -19,6 +19,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiLexerAdapter
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntryEx
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
 
@@ -32,12 +33,14 @@ class IsiFindUsagesProvider : FindUsagesProvider {
     )
 
     override fun canFindUsagesFor(element: PsiElement): Boolean =
-        element is IsiParamPairEx && element.isNameDeclaration()
+        (element is IsiParamPairEx && element.isNameDeclaration())
+                || (element is IsiDirectiveEntryEx && element.isCustomMessageDeclaration())
 
     override fun getHelpId(element: PsiElement): String? = null
 
     override fun getType(element: PsiElement): String = when {
         element is IsiParamPairEx && element.isNameDeclaration() -> "ISS named item"
+        element is IsiDirectiveEntryEx && element.isCustomMessageDeclaration() -> "ISS custom message"
         else -> ""
     }
 
