@@ -75,6 +75,12 @@ fun IsiSection.parameterEntryOnLineOf(offset: Int, document: Document): IsiParam
     }
 }
 
+val IsiSection.prevSection : IsiSection?
+    get() = PsiTreeUtil.getPrevSiblingOfType(this, IsiSection::class.java)
+
+val IsiSection.nextSection : IsiSection?
+    get() = PsiTreeUtil.getNextSiblingOfType(this, IsiSection::class.java)
+
 // ── IsiParameterEntry ─────────────────────────────────────────────────────────
 
 val IsiParameterEntry.displayName: String
@@ -116,13 +122,7 @@ val IsiParamPair.valueUnquoted: String
     get() = valueText.removeSurrounding("\"")
 
 val IsiParamPair.nextParam: IsiParamPair?
-    get() {
-        var next = nextSibling
-        while (next != null && next !is IsiParamPair) {
-            next = next.nextSibling
-        }
-        return next
-    }
+    get() = PsiTreeUtil.getNextSiblingOfType(this, IsiParamPair::class.java)
 
 // ── IsiDirectiveEntry ─────────────────────────────────────────────────────────
 // keyText() is provided as a member by IsiDirectiveEntryEx (the directiveEntry mixin).

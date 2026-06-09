@@ -58,6 +58,8 @@
         <lang.refactoringSupport language="ISS"
                                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiRefactoringSupportProvider"/>
 
+        <statementUpDownMover implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiSectionMover"/>
+
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
 
         <!-- ═══════════════════════════════ ISPP Language ═══════════════════════════════ -->
@@ -164,6 +166,10 @@
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
                 displayName="Inno Setup"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsConfigurable"/>
+
+        <!-- ═══════════════════════════════ Actions ═══════════════════════════════ -->
+
+        <!-- Intention Actions -->
 
         <intentionAction>
             <language>ISS</language>
