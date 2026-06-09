@@ -15,8 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion
 import com.intellij.codeInsight.completion.*
 import com.intellij.patterns.PlatformPatterns
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.IsppLanguage
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.providers.IsppDefineExpressionProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.providers.IsppDirectiveKeywordProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.provider.IsppDefineExpressionProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.provider.IsppDirectiveKeywordProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppTypes
 

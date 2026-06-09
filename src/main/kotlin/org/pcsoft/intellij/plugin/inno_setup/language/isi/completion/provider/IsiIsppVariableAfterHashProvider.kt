@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 
-object IsppVariableAfterHashProvider : CompletionProvider<CompletionParameters>() {
+object IsiIsppVariableAfterHashProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

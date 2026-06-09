@@ -33,7 +33,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.specSection
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiNativeTypeSpec
 
-object BooleanValueProvider : CompletionProvider<CompletionParameters>() {
+object IsiBooleanValueProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

@@ -36,7 +36,7 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsiFlagTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiNativeTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiReferenceTypeSpec
 
-object AttributeKeyProvider : CompletionProvider<CompletionParameters>() {
+object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

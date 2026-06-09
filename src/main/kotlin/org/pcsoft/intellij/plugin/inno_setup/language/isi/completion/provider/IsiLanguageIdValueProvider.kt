@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamValue
 import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 
-object LanguageIdValueProvider : CompletionProvider<CompletionParameters>() {
+object IsiLanguageIdValueProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

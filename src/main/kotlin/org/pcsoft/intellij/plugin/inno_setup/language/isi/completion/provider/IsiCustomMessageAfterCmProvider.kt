@@ -21,14 +21,13 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.findSections
-import kotlin.text.isNotEmpty
 
 /**
  * Completion of declared custom-message names inside the {cm:…} constant. Looks back from the
  * caret for the nearest `{cm:` and offers the message names declared in the file's
  * [CustomMessages] section(s).
  */
-object CustomMessageAfterCmProvider : CompletionProvider<CompletionParameters>() {
+object IsiCustomMessageAfterCmProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

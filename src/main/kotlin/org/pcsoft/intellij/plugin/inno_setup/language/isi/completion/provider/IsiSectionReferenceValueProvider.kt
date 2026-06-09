@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamVa
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.valueUnquoted
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 
-object SectionReferenceValueProvider : CompletionProvider<CompletionParameters>() {
+object IsiSectionReferenceValueProvider : CompletionProvider<CompletionParameters>() {
     private val KEY_TO_SECTION = mapOf(
         "tasks" to "Tasks",
         "components" to "Components",

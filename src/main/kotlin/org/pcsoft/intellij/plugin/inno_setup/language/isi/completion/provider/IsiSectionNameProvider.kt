@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService
 
-object SectionNameProvider : CompletionProvider<CompletionParameters>() {
+object IsiSectionNameProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

@@ -29,7 +29,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParamVa
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiQuotedString
 import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 
-object LanguageSectionValueProvider : CompletionProvider<CompletionParameters>() {
+object IsiLanguageSectionValueProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

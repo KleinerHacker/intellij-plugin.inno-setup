@@ -16,16 +16,16 @@ import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.AttributeKeyProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.BooleanValueProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.CustomMessageAfterCmProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiAttributeKeyProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiBooleanValueProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiCustomMessageAfterCmProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiConstantCompletionProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsppVariableAfterHashProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.LanguageIdValueProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.LanguageSectionValueProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.MessagesKeyProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.SectionNameProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.SectionReferenceValueProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiIsppVariableAfterHashProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiLanguageIdValueProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiLanguageSectionValueProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiMessagesKeyProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiSectionNameProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.provider.IsiSectionReferenceValueProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
 
 class IsiCompletionContributor : CompletionContributor() {
@@ -34,7 +34,7 @@ class IsiCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .afterLeaf(PlatformPatterns.psiElement(IsiTypes.LBRACKET)),
-            SectionNameProvider
+            IsiSectionNameProvider
         )
         // Attribute key completion for all IDENTIFIER positions in ISS files.
         // The provider itself decides whether the cursor is in a key position
@@ -43,7 +43,7 @@ class IsiCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            AttributeKeyProvider
+            IsiAttributeKeyProvider
         )
         // Key completion for internationalized sections ([Messages], [CustomMessages]):
         // offers a language-prefix list (flag + name) plus the known message identifiers,
@@ -52,13 +52,13 @@ class IsiCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            MessagesKeyProvider
+            IsiMessagesKeyProvider
         )
         // Declared custom-message suggestions inside the {cm:…} constant.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            CustomMessageAfterCmProvider
+            IsiCustomMessageAfterCmProvider
         )
         extend(
             CompletionType.BASIC,
@@ -68,12 +68,12 @@ class IsiCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            IsppVariableAfterHashProvider
+            IsiIsppVariableAfterHashProvider
         )
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            BooleanValueProvider
+            IsiBooleanValueProvider
         )
         // Cross-section reference completion: Tasks: <name>, Components: <name>, etc.
         // ReferenceBasedCompletionContributor does not fire for ISS because the reference
@@ -83,20 +83,20 @@ class IsiCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement(IsiTypes.IDENTIFIER)
                 .inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            SectionReferenceValueProvider
+            IsiSectionReferenceValueProvider
         )
         // Built-in language suggestions for [Languages] Name and MessagesFile parameters.
         // Registered for any element (not just IDENTIFIER) so it also fires inside quoted strings.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            LanguageSectionValueProvider
+            IsiLanguageSectionValueProvider
         )
         // Windows language identifier suggestions for the [LangOptions] LanguageID directive.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IssFile::class.java)),
-            LanguageIdValueProvider
+            IsiLanguageIdValueProvider
         )
     }
 }

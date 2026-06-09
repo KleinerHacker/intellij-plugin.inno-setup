@@ -50,7 +50,7 @@ import javax.swing.Icon
  * When a `lang.` prefix is already typed, only the message identifiers are offered, matched
  * against the text after the dot.
  */
-object MessagesKeyProvider : CompletionProvider<CompletionParameters>() {
+object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
