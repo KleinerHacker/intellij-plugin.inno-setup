@@ -61,11 +61,11 @@ class IsiStructureViewTest : BasePlatformTestCase() {
         )
     }
 
-    fun testDirectiveSectionHasNoChildren() {
+    fun testDirectiveSectionHasTwoChildren() {
         val file = issFile()
         val setupSection = IssStructureViewElement(file).children
             .first { (it as IssStructureViewElement).value.let { v -> v is IsiSection && v.nameTextEquals("Setup") } }
-        assertEquals(0, (setupSection as IssStructureViewElement).children.size)
+        assertEquals(2, (setupSection as IssStructureViewElement).children.size)
     }
 
     fun testModelLeafClassification() {
