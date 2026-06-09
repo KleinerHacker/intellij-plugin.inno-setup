@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 data class IsiFlagConflictSpec(
     val flag: String,
-    val severity: IsiFlagSeveritySpec
+    val type: IsiFlagType
 )
 
 data class IsiFlagSpec(

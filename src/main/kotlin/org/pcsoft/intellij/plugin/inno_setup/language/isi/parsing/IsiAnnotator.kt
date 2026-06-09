@@ -356,7 +356,7 @@ class IsiAnnotator : Annotator {
                 val otherName = conflict.flag.lowercase()
                 val other = tokenNodes[otherName] ?: return@conflict
 
-                if (conflict.severity == IsiFlagSeveritySpec.REDUNDANT) {
+                if (conflict.type == IsiFlagType.REDUNDANT) {
                     // Asymmetric: 'name' implicitly sets 'otherName' (or nullifies its effect),
                     // so the other flag is redundant. Only that flag is marked (grey, like unused).
                     if (!seen.add(name to otherName)) return@conflict
@@ -374,7 +374,7 @@ class IsiAnnotator : Annotator {
                 val key = if (name < otherName) name to otherName else otherName to name
                 if (!seen.add(key)) return@conflict
 
-                val severity = if (conflict.severity == IsiFlagSeveritySpec.ERROR)
+                val severity = if (conflict.type == IsiFlagType.FORBIDDEN)
                     HighlightSeverity.ERROR else HighlightSeverity.WARNING
                 val msg = "Conflicting flags: '${node.text}' and '${other.text}'"
                 holder.newAnnotation(severity, msg).range(node.textRange).create()

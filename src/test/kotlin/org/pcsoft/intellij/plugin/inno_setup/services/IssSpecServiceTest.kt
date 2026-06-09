@@ -230,12 +230,12 @@ class IssSpecServiceTest {
         val flag32 = flagType.flags.find { it.name == "32bit" }!!
         assertTrue(
             "32bit must have error-conflict with 64bit",
-            flag32.conflicts.any { it.flag == "64bit" && it.severity == IsiFlagSeveritySpec.ERROR }
+            flag32.conflicts.any { it.flag == "64bit" && it.type == IsiFlagType.FORBIDDEN }
         )
         val flag64 = flagType.flags.find { it.name == "64bit" }!!
         assertTrue(
             "64bit must have error-conflict with 32bit",
-            flag64.conflicts.any { it.flag == "32bit" && it.severity == IsiFlagSeveritySpec.ERROR }
+            flag64.conflicts.any { it.flag == "32bit" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 
@@ -246,7 +246,7 @@ class IssSpecServiceTest {
         val runMin = flagType.flags.find { it.name == "runminimized" }!!
         assertTrue(
             "runminimized must have error-conflict with runmaximized",
-            runMin.conflicts.any { it.flag == "runmaximized" && it.severity == IsiFlagSeveritySpec.ERROR }
+            runMin.conflicts.any { it.flag == "runmaximized" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 
@@ -257,7 +257,7 @@ class IssSpecServiceTest {
         val nowait = flagType.flags.find { it.name == "nowait" }!!
         assertTrue(
             "nowait must have error-conflict with waituntilterminated",
-            nowait.conflicts.any { it.flag == "waituntilterminated" && it.severity == IsiFlagSeveritySpec.ERROR }
+            nowait.conflicts.any { it.flag == "waituntilterminated" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 }

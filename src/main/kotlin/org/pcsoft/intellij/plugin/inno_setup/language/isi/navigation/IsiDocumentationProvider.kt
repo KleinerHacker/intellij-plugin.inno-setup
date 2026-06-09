@@ -141,7 +141,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
                 append("Conflicts")
                 append(DocumentationMarkup.SECTION_SEPARATOR)
                 flag.conflicts.forEach { c ->
-                    append("<p><code>${c.flag}</code> · ${c.severity.name.lowercase()}</p>")
+                    append("<p><code>${c.flag}</code> · ${c.type.name.lowercase()}</p>")
                 }
                 append(DocumentationMarkup.SECTIONS_END)
             }

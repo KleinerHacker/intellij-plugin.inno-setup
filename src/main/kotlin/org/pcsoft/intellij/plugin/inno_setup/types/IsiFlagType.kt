@@ -14,12 +14,12 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-enum class IsiFlagSeveritySpec {
-    @JsonProperty("warning")
-    WARNING,
+enum class IsiFlagType {
+    @JsonProperty("forbidden")
+    FORBIDDEN,
 
-    @JsonProperty("error")
-    ERROR,
+    @JsonProperty("ignored")
+    IGNORED,
 
     /** The flag is redundant because another flag in the same value implicitly sets it (or nullifies its effect). */
     @JsonProperty("redundant")

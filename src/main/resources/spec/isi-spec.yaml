@@ -1829,25 +1829,25 @@ sections:
               deprecated: false
               conflicts:
                 - flag: unsetntfscompression
-                  severity: error
+                  type: forbidden
             - name: uninsalwaysuninstall
               description: "Always removes this directory on uninstall, even if it is not empty."
               deprecated: false
               conflicts:
                 - flag: uninsneveruninstall
-                  severity: error
+                  type: forbidden
             - name: uninsneveruninstall
               description: "Never removes this directory on uninstall."
               deprecated: false
               conflicts:
                 - flag: uninsalwaysuninstall
-                  severity: error
+                  type: forbidden
             - name: unsetntfscompression
               description: "Removes NTFS compression from the directory."
               deprecated: false
               conflicts:
                 - flag: setntfscompression
-                  severity: error
+                  type: forbidden
         required: false
         deprecated: false
         description: "Behavioural flags controlling directory creation and removal."
@@ -2085,33 +2085,33 @@ sections:
               deprecated: false
               conflicts:
                 - flag: 64bit
-                  severity: error
+                  type: forbidden
             - name: 64bit
               description: "Treats the file as a 64-bit resource. On 32-bit Windows this flag is silently ignored. Mutually exclusive with <code>32bit</code>."
               deprecated: false
               conflicts:
                 - flag: 32bit
-                  severity: error
+                  type: forbidden
             - name: comparetimestamp
               description: "Installs the file only if it is newer (by timestamp) than the existing file on disk."
               deprecated: false
               conflicts:
                 - flag: ignoreversion
-                  severity: warning
+                  type: ignored
             - name: confirmoverwrite
               description: "Always asks the user for confirmation before overwriting an existing file."
               deprecated: false
               conflicts:
                 - flag: ignoreversion
-                  severity: warning
+                  type: ignored
             - name: deleteafterinstall
               description: "Deletes the file after installation completes. Useful for temporary files. Cannot be combined with <code>restartreplace</code> or <code>sharedfile</code>."
               deprecated: false
               conflicts:
                 - flag: restartreplace
-                  severity: error
+                  type: forbidden
                 - flag: sharedfile
-                  severity: error
+                  type: forbidden
             - name: dontcopy
               description: "Prevents the file from being copied to disk. The file is still compressed into the installer and can be extracted via <code>[Code]</code>."
               deprecated: false
@@ -2126,28 +2126,28 @@ sections:
               deprecated: false
               conflicts:
                 - flag: nocompression
-                  severity: redundant
+                  type: redundant
                 - flag: noencryption
-                  severity: redundant
+                  type: redundant
                 - flag: notimestamp
-                  severity: redundant
+                  type: redundant
                 - flag: touch
-                  severity: redundant
+                  type: redundant
             - name: extractarchive
               description: "Extracts the contents of an archive (zip, 7z, etc.) instead of copying the archive file itself."
               deprecated: false
               conflicts:
                 - flag: replacesameversion
-                  severity: redundant
+                  type: redundant
               since: "6.5"
             - name: ignoreversion
               description: "Does not compare version numbers; always installs the file regardless of the version on disk."
               deprecated: false
               conflicts:
                 - flag: comparetimestamp
-                  severity: warning
+                  type: ignored
                 - flag: confirmoverwrite
-                  severity: warning
+                  type: ignored
             - name: isreadme
               description: "Marks this file as the README. The installer may offer to open it after installation."
               deprecated: false
@@ -2161,7 +2161,7 @@ sections:
               deprecated: false
               conflicts:
                 - flag: ignoreversion
-                  severity: warning
+                  type: ignored
             - name: recursesubdirs
               description: "When <code>Source</code> contains a wildcard, also searches subdirectories recursively."
               deprecated: false
@@ -2175,25 +2175,25 @@ sections:
               deprecated: false
               conflicts:
                 - flag: regtypelib
-                  severity: warning
+                  type: ignored
             - name: regtypelib
               description: "Registers the file as a type library."
               deprecated: false
               conflicts:
                 - flag: regserver
-                  severity: warning
+                  type: ignored
             - name: restartreplace
               description: "If the file is in use, schedules it to be replaced on the next system restart."
               deprecated: false
               conflicts:
                 - flag: deleteafterinstall
-                  severity: error
+                  type: forbidden
             - name: sharedfile
               description: "Registers the file as a shared file. The file is only removed on uninstall when no other application references it."
               deprecated: false
               conflicts:
                 - flag: deleteafterinstall
-                  severity: error
+                  type: forbidden
             - name: signcheck
               description: "Verifies the digital signature of the source file at compile time. Setup aborts if the file is not properly signed."
               deprecated: false
@@ -2408,13 +2408,13 @@ sections:
               deprecated: false
               conflicts:
                 - flag: runmaximized
-                  severity: error
+                  type: forbidden
             - name: runmaximized
               description: "Launches the target application maximised. Mutually exclusive with <code>runminimized</code>."
               deprecated: false
               conflicts:
                 - flag: runminimized
-                  severity: error
+                  type: forbidden
             - name: closeonexit
               description: "Closes the shortcut's target application when the user logs off."
               deprecated: false
@@ -2577,29 +2577,29 @@ sections:
               deprecated: false
               conflicts:
                 - flag: deletevalue
-                  severity: error
+                  type: forbidden
                 - flag: deletekey
-                  severity: error
+                  type: forbidden
             - name: deletekey
               description: "Deletes the entire registry key and all its subkeys and values before creating it."
               deprecated: false
               conflicts:
                 - flag: deletevalue
-                  severity: warning
+                  type: ignored
                 - flag: createvalueifdoesntexist
-                  severity: error
+                  type: forbidden
             - name: deletevalue
               description: "Deletes the specified registry value."
               deprecated: false
               conflicts:
                 - flag: deletekey
-                  severity: warning
+                  type: ignored
             - name: dontcreatekey
               description: "Does not create the registry key if it does not exist. Silently skips the entry."
               deprecated: false
               conflicts:
                 - flag: deletekey
-                  severity: warning
+                  type: ignored
             - name: noerror
               description: "Suppresses errors if the operation fails (e.g. the key does not exist)."
               deprecated: false
@@ -2613,31 +2613,31 @@ sections:
               deprecated: false
               conflicts:
                 - flag: uninsdeletevalue
-                  severity: warning
+                  type: ignored
                 - flag: uninsdeletekey
-                  severity: warning
+                  type: ignored
             - name: uninsdeletekey
               description: "Deletes the entire registry key on uninstall."
               deprecated: false
               conflicts:
                 - flag: uninsdeletekeyifempty
-                  severity: warning
+                  type: ignored
                 - flag: uninsclearvalue
-                  severity: warning
+                  type: ignored
             - name: uninsdeletekeyifempty
               description: "Deletes the registry key on uninstall only if it contains no values or subkeys."
               deprecated: false
               conflicts:
                 - flag: uninsdeletekey
-                  severity: warning
+                  type: ignored
             - name: uninsdeletevalue
               description: "Deletes the registry value on uninstall."
               deprecated: false
               conflicts:
                 - flag: uninsclearvalue
-                  severity: warning
+                  type: ignored
                 - flag: uninsdeletekey
-                  severity: warning
+                  type: ignored
         required: false
         deprecated: false
         description: "Behavioural flags controlling registry key and value handling."
@@ -2815,27 +2815,27 @@ sections:
               deprecated: false
               conflicts:
                 - flag: waituntilterminated
-                  severity: error
+                  type: forbidden
                 - flag: waituntilidle
-                  severity: error
+                  type: forbidden
             - name: runhidden
               description: "Runs the process with a hidden window. Has no effect when combined with <code>shellexec</code>."
               deprecated: false
               conflicts:
                 - flag: shellexec
-                  severity: warning
+                  type: ignored
             - name: skipifsilent
               description: "Skips this entry when the installer is run silently. Mutually exclusive with <code>skipifnotsilent</code>."
               deprecated: false
               conflicts:
                 - flag: skipifnotsilent
-                  severity: error
+                  type: forbidden
             - name: skipifnotsilent
               description: "Skips this entry when the installer is run non-silently. Mutually exclusive with <code>skipifsilent</code>."
               deprecated: false
               conflicts:
                 - flag: skipifsilent
-                  severity: error
+                  type: forbidden
             - name: unchecked
               description: "The checkbox added by <code>postinstall</code> is unchecked by default."
               deprecated: false
@@ -2845,23 +2845,23 @@ sections:
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: error
+                  type: forbidden
                 - flag: waituntilidle
-                  severity: error
+                  type: forbidden
             - name: waituntilidle
               description: "Waits until the process is idle (no input pending) before proceeding. Mutually exclusive with <code>nowait</code> and <code>waituntilterminated</code>."
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: error
+                  type: forbidden
                 - flag: waituntilterminated
-                  severity: error
+                  type: forbidden
             - name: logoutput
               description: "Captures the process output and writes it to the setup log. Combining with <code>nowait</code> means output may be incomplete."
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: warning
+                  type: ignored
               since: "6.6"
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges."
@@ -3044,27 +3044,27 @@ sections:
               deprecated: false
               conflicts:
                 - flag: waituntilterminated
-                  severity: error
+                  type: forbidden
                 - flag: waituntilidle
-                  severity: error
+                  type: forbidden
             - name: runhidden
               description: "Runs the process with a hidden window. Has no effect when combined with <code>shellexec</code>."
               deprecated: false
               conflicts:
                 - flag: shellexec
-                  severity: warning
+                  type: ignored
             - name: skipifsilent
               description: "Skips this entry when the uninstaller is run silently. Mutually exclusive with <code>skipifnotsilent</code>."
               deprecated: false
               conflicts:
                 - flag: skipifnotsilent
-                  severity: error
+                  type: forbidden
             - name: skipifnotsilent
               description: "Skips this entry when the uninstaller is run non-silently. Mutually exclusive with <code>skipifsilent</code>."
               deprecated: false
               conflicts:
                 - flag: skipifsilent
-                  severity: error
+                  type: forbidden
             - name: unchecked
               description: "The checkbox added by <code>postinstall</code> is unchecked by default."
               deprecated: false
@@ -3074,23 +3074,23 @@ sections:
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: error
+                  type: forbidden
                 - flag: waituntilidle
-                  severity: error
+                  type: forbidden
             - name: waituntilidle
               description: "Waits until the process is idle (no input pending) before proceeding. Mutually exclusive with <code>nowait</code> and <code>waituntilterminated</code>."
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: error
+                  type: forbidden
                 - flag: waituntilterminated
-                  severity: error
+                  type: forbidden
             - name: logoutput
               description: "Captures the process output and writes it to the uninstall log. Combining with <code>nowait</code> means output may be incomplete."
               deprecated: false
               conflicts:
                 - flag: nowait
-                  severity: warning
+                  type: ignored
               since: "6.6"
             - name: runasoriginaluser
               description: "Runs the process as the user who launched the uninstaller, not as the elevated user."
