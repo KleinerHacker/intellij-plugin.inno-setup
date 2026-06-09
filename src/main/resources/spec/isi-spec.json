@@ -224,11 +224,30 @@
           "type": "boolean"
         },
         "conflicts": {
-          "description": "Names of other flags that cannot be combined with this flag.",
+          "description": "Other flags that cannot be combined with this flag, each with a severity.",
           "type": "array",
           "items": {
-            "description": "Name of a conflicting flag keyword.",
-            "type": "string"
+            "description": "A single conflicting flag together with how severe the conflict is.",
+            "type": "object",
+            "required": [
+              "flag",
+              "severity"
+            ],
+            "properties": {
+              "flag": {
+                "description": "Name of the conflicting flag keyword.",
+                "type": "string"
+              },
+              "severity": {
+                "description": "How severe the conflict is when both flags are used together.",
+                "type": "string",
+                "enum": [
+                  "warning",
+                  "error"
+                ]
+              }
+            },
+            "additionalProperties": false
           }
         },
         "since": {

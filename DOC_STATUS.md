@@ -16,7 +16,7 @@
 
 | Section         | Type       | Status | Notes                                        |
 |-----------------|------------|--------|----------------------------------------------|
-| `[Setup]`       | directive  | ⚠️     | ~48 of ~174 current attributes (see below)   |
+| `[Setup]`       | directive  | ✅     | All ~158 current attributes covered          |
 | `[Types]`       | parameter  | ✅     | All attributes + flags covered               |
 | `[Components]`  | parameter  | ✅     | All attributes + flags covered               |
 | `[Tasks]`       | parameter  | ✅     | All attributes + flags covered               |
@@ -38,74 +38,11 @@
 
 ---
 
-## [Setup] Section — Missing Attributes
+## [Setup] Section — Attribute Coverage
 
-The spec covers **~48** attributes. The official docs list **~174** current (non-obsolete) attributes.
-Grouped below are the attributes **not yet in `isi-spec.yaml`**.
-
-### Compiler / Build
-- `ASLRCompatible`, `DEPCompatible`, `TerminalServicesAware`
-- `CompressionThreads`, `InternalCompressLevel`, `SolidCompression`
-- `LZMAAlgorithm`, `LZMABlockSize`, `LZMADictionarySize`, `LZMAMatchFinder`, `LZMANumBlockThreads`, `LZMANumFastBytes`, `LZMAUseSeparateProcess`
-- `DiskSpanning`, `DiskSliceSize`, `DiskClusterSize`, `SlicesPerDisk`
-- `MergeDuplicateFiles`, `ReserveBytes`, `UseSetupLdr`
-- `Output` (boolean — enable/disable compiler output)
-- `OutputManifestFile`
-- `DisablePrecompiledFileVerifications`
-- `MissingMessagesWarning`, `NotRecognizedMessagesWarning`, `MissingRunOnceIdsWarning`, `UsedUserAreasWarning`
-
-### Signing
-- `Encryption` (boolean — pair with `EncryptionKey`)
-- `SignTool`, `SignToolMinimumTimeBetween`, `SignToolRetryCount`, `SignToolRetryDelay`, `SignToolRunMinimized`
-- `SignedUninstaller`, `SignedUninstallerDir`
-
-### Version Info (EXE properties)
-- `VersionInfoCompany`, `VersionInfoCopyright`, `VersionInfoDescription`
-- `VersionInfoOriginalFileName`, `VersionInfoProductName`
-- `VersionInfoProductVersion`, `VersionInfoProductTextVersion`
-- `VersionInfoVersion`, `VersionInfoTextVersion`
-
-### App Identity
-- `AppId`, `AppVerName`, `AppCopyright`, `AppComments`, `AppContact`
-- `AppModifyPath`, `AppReadmeFile`, `AppSupportPhone`
-
-### Privileges & Architecture
-- `Password`, `RedirectionGuard`, `SetupArchitecture`
-- `ArchiveExtraction`
-
-### Installation Behaviour
-- `AlwaysRestart`, `RestartApplications`, `RestartIfNeededByRun`
-- `CloseApplicationsFilter`, `CloseApplicationsFilterExcludes`
-- `ChangesAssociations`, `ChangesEnvironment`
-- `CreateAppDir`
-- `AllowCancelDuringInstall`, `AllowNetworkDrive`, `AllowRootDirectory`, `AllowUNCPath`
-- `ExtraDiskSpaceRequired`
-- `SetupMutex` (different from `AppMutex`)
-- `TouchDate`, `TouchTime`, `TimeStampRounding`, `TimeStampsInUTC`
-
-### Uninstall
-- `UninstallDisplaySize`, `UninstallFilesDir`, `UninstallLogMode`
-- `UninstallLogging`, `UninstallRestartComputer`, `UpdateUninstallLogAppName`
-
-### Wizard Pages & UI
-- `DisableFinishedPage`, `DisableReadyMemo`, `DisableStartupPrompt`
-- `EnableDirDoesntExistWarning`, `DirExistsWarning`
-- `AlwaysShowComponentsList`, `AlwaysShowDirOnReadyPage`, `AlwaysShowGroupOnReadyPage`
-- `AlwaysUsePersonalGroup`, `AppendDefaultDirName`, `AppendDefaultGroupName`
-- `ShowLanguageDialog`, `LanguageDetectionMethod`
-- `DefaultDialogFontName`
-- `UsePreviousLanguage`, `UsePreviousPrivileges`, `UsePreviousSetupType`, `UsePreviousTasks`, `UsePreviousUserInfo`
-- `DefaultUserInfoName`, `DefaultUserInfoOrg`, `DefaultUserInfoSerial`
-- `FlatComponentsList`, `ShowComponentSizes`, `ShowTasksTreeLines`
-
-### Cosmetic / Wizard Appearance
-- `WizardBackColor`, `WizardBackColorDynamicDark`
-- `WizardBackImageFile`, `WizardBackImageFileDynamicDark`, `WizardBackImageOpacity`
-- `WizardImageAlphaFormat`, `WizardImageBackColor`, `WizardImageBackColorDynamicDark`
-- `WizardImageFileDynamicDark`, `WizardImageOpacity`, `WizardImageStretch`
-- `WizardImageKeepAspectRatio`, `WizardSizePercent`
-- `WizardSmallImageBackColor`, `WizardSmallImageBackColorDynamicDark`, `WizardSmallImageFileDynamicDark`
-- `WizardStyleFile`, `WizardStyleFileDynamicDark`
+All current (non-obsolete) `[Setup]` directives from the official docs are now present in
+`isi-spec.yaml` (166 entries, incl. the legacy `EncryptionKey`/`EncryptionKeyDerivation` aliases).
+The obsolete directives below are intentionally skipped.
 
 ### Obsolete (intentionally skipped)
 🗑️ `AlwaysCreateUninstallIcon`, `BackColor`, `BackColor2`, `BackColorDirection`, `BackSolid`,

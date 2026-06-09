@@ -540,6 +540,1012 @@ sections:
         array: false
         since: "7.0"
 
+      # --- App identity ---
+      - name: AppId
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Unique identifier of the application, used as the uninstall registry key name and to match previous installations. Defaults to <code>AppName</code>. Use a GUID for guaranteed uniqueness, e.g. <code>{{F1C…}}</code>."
+        array: false
+
+      - name: AppVerName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Full application name including version, e.g. <code>My Program 1.5</code>, shown throughout the wizard. If omitted, it is derived from <code>AppName</code> and <code>AppVersion</code>."
+        array: false
+
+      - name: AppCopyright
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Copyright string displayed on the wizard window, e.g. <code>Copyright © 2025 My Company</code>."
+        array: false
+
+      - name: AppComments
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Comments text shown in the application's Add/Remove Programs support information."
+        array: false
+
+      - name: AppContact
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Contact information shown in the application's Add/Remove Programs support information."
+        array: false
+
+      - name: AppModifyPath
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Command line used for the <i>Modify</i> button in Add/Remove Programs, e.g. <code>{app}\\MyApp.exe /modify=1</code>."
+        array: false
+
+      - name: AppReadmeFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Path to a ReadMe file shown via the <i>Readme</i> button in Add/Remove Programs, e.g. <code>{app}\\README.TXT</code>."
+        array: false
+
+      - name: AppSupportPhone
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Support phone number shown in the application's Add/Remove Programs support information."
+        array: false
+
+      # --- Version info (compiled EXE properties) ---
+      - name: VersionInfoVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "File version number written into the compiled Setup EXE's version resource, e.g. <code>1.5.0.0</code>. Defaults to <code>AppVersion</code> if numeric."
+        array: false
+
+      - name: VersionInfoProductVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Product version number written into the version resource, e.g. <code>1.5.0.0</code>. Defaults to <code>VersionInfoVersion</code>."
+        array: false
+
+      - name: VersionInfoTextVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "File version text written into the version resource. Defaults to <code>VersionInfoVersion</code>."
+        array: false
+
+      - name: VersionInfoProductTextVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Product version text written into the version resource. Defaults to <code>VersionInfoProductVersion</code>."
+        array: false
+
+      - name: VersionInfoCompany
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Company name written into the compiled Setup EXE's version resource."
+        array: false
+
+      - name: VersionInfoDescription
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "File description written into the version resource. Defaults to <code>AppName Setup</code>."
+        array: false
+
+      - name: VersionInfoCopyright
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Legal copyright string written into the version resource."
+        array: false
+
+      - name: VersionInfoProductName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Product name written into the version resource. Defaults to <code>AppName</code>."
+        array: false
+
+      - name: VersionInfoOriginalFileName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Original filename written into the version resource of the compiled Setup EXE."
+        array: false
+
+      # --- Compiler / output ---
+      - name: Output
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, the compiler does not produce an output (Setup) file. Useful for syntax-only checks. Default: <code>yes</code>."
+        array: false
+
+      - name: OutputManifestFile
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "If set, the compiler writes a manifest text file listing all compiled files to this path (relative to <code>OutputDir</code>)."
+        array: false
+
+      - name: InternalCompressLevel
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Compression level for internal structures (not the files themselves). Values: <code>none</code>, <code>fast</code>, <code>normal</code> (default), <code>max</code>, <code>ultra</code>, <code>ultra64</code>."
+        array: false
+
+      - name: CompressionThreads
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Number of threads used by LZMA/LZMA2 compression, or <code>auto</code> (default) to use all logical processors."
+        array: false
+
+      - name: SolidCompression
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, all files are compressed as a single solid stream, improving the ratio at the cost of slower partial extraction. Default: <code>no</code>."
+        array: false
+
+      - name: MergeDuplicateFiles
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), identical source files are stored only once in the installer to reduce size."
+        array: false
+
+      - name: ReserveBytes
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of extra bytes reserved at the end of the compiled Setup EXE, e.g. for appending custom data. Default: <code>0</code>."
+        array: false
+
+      - name: UseSetupLdr
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), a setup loader (SETUP.EXE + SETUP.0/.bin) is used. If <code>no</code>, a single self-contained EXE is produced without a loader."
+        array: false
+
+      - name: DisablePrecompiledFileVerifications
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the compiler skips signature verification of precompiled bundled files. Default: <code>no</code>."
+        array: false
+
+      # --- LZMA tuning ---
+      - name: LZMAAlgorithm
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "LZMA/LZMA2 compression algorithm: <code>0</code> (fast) or <code>1</code> (normal, default for <code>max</code>/<code>ultra</code>)."
+        array: false
+
+      - name: LZMAMatchFinder
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "LZMA match finder. Values: <code>BT</code> (binary tree, default) or <code>HC</code> (hash chain, faster but lower ratio)."
+        array: false
+
+      - name: LZMANumFastBytes
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of fast bytes for the LZMA encoder (5–273). Higher values improve the ratio slightly at the cost of speed."
+        array: false
+
+      - name: LZMADictionarySize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "LZMA dictionary size in KB. Larger values improve the ratio but increase memory use during compression and decompression."
+        array: false
+
+      - name: LZMABlockSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "LZMA2 block size in KB used when multithreading is enabled."
+        array: false
+
+      - name: LZMANumBlockThreads
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of LZMA2 block threads used for parallel compression. Default: <code>1</code>."
+        array: false
+
+      - name: LZMAUseSeparateProcess
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Whether LZMA compression runs in a separate process to access more memory. Values: <code>yes</code>, <code>no</code> (default), <code>x86</code>."
+        array: false
+
+      # --- Disk spanning ---
+      - name: DiskSpanning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the installer is split into multiple disk-sized slices. Default: <code>no</code>."
+        array: false
+
+      - name: DiskSliceSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Maximum size in bytes of each disk slice when <code>DiskSpanning</code> is enabled, or <code>max</code> for the largest supported size."
+        array: false
+
+      - name: DiskClusterSize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Cluster size in bytes of the target disk media, used to optimise slice padding. Default: <code>512</code>."
+        array: false
+
+      - name: SlicesPerDisk
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of slices to place on each disk when disk spanning is enabled. Default: <code>1</code>."
+        array: false
+
+      # --- Encryption / signing ---
+      - name: Encryption
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, files are encrypted in the installer. Pair with <code>Password</code> (or <code>EncryptionKey</code>). Default: <code>no</code>."
+        array: false
+
+      - name: Password
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Password the user must enter to install. When <code>Encryption</code> is <code>yes</code>, it also encrypts the files."
+        array: false
+
+      - name: SignTool
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Name of a sign tool (defined via the compiler's <code>SignTool</code> setting) used to digitally sign the Setup EXE and uninstaller."
+        array: false
+
+      - name: SignToolMinimumTimeBetween
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Minimum number of milliseconds to wait between consecutive sign tool invocations, to respect timestamp server rate limits."
+        array: false
+
+      - name: SignToolRetryCount
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of times to retry signing if the sign tool fails. Default: <code>2</code>."
+        array: false
+
+      - name: SignToolRetryDelay
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Delay in milliseconds before retrying a failed sign tool invocation. Default: <code>500</code>."
+        array: false
+
+      - name: SignToolRunMinimized
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the sign tool process is run minimized. Default: <code>no</code>."
+        array: false
+
+      - name: SignedUninstaller
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the generated uninstaller is digitally signed using the configured <code>SignTool</code>. Default: <code>no</code>."
+        array: false
+
+      - name: SignedUninstallerDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Directory containing pre-signed uninstaller binaries to embed instead of signing during compilation."
+        array: false
+
+      # --- Compiler warnings ---
+      - name: MissingMessagesWarning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the compiler warns when a message is missing from a language file."
+        array: false
+
+      - name: NotRecognizedMessagesWarning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the compiler warns about unrecognised message identifiers in a language file."
+        array: false
+
+      - name: MissingRunOnceIdsWarning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the compiler warns about <code>[Run]</code>/<code>[UninstallRun]</code> entries that use the <code>runonce</code> flag without a <code>RunOnceId</code>."
+        array: false
+
+      - name: UsedUserAreasWarning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the compiler warns when the script writes to user areas while requiring administrative privileges."
+        array: false
+
+      # --- Compatibility flags ---
+      - name: ASLRCompatible
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as ASLR-compatible (Address Space Layout Randomization)."
+        array: false
+
+      - name: DEPCompatible
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as DEP-compatible (Data Execution Prevention)."
+        array: false
+
+      - name: TerminalServicesAware
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as Terminal Services aware."
+        array: false
+
+      # --- Installation behaviour ---
+      - name: CreateAppDir
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, no application directory is created and the Select Destination page is hidden; <code>{app}</code> resolves to <code>{src}</code>. Default: <code>yes</code>."
+        array: false
+
+      - name: AllowCancelDuringInstall
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, the Cancel button is disabled during the actual file-copy phase. Default: <code>yes</code>."
+        array: false
+
+      - name: AllowNetworkDrive
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, the user cannot select an installation directory on a network drive. Default: <code>yes</code>."
+        array: false
+
+      - name: AllowUNCPath
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, the user cannot enter a UNC path as the installation directory. Default: <code>yes</code>."
+        array: false
+
+      - name: AllowRootDirectory
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the user may select a drive's root directory as the installation directory. Default: <code>no</code>."
+        array: false
+
+      - name: ChangesAssociations
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the installer notifies the shell that file associations changed, so Explorer refreshes icons. Default: <code>no</code>."
+        array: false
+
+      - name: ChangesEnvironment
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the installer broadcasts an environment-change message so running programs pick up modified environment variables. Default: <code>no</code>."
+        array: false
+
+      - name: ExtraDiskSpaceRequired
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Additional bytes of free disk space (beyond the size of the installed files) required, shown on the Ready page."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Maximum Windows version (exclusive) on which the installer may run, e.g. <code>10.0</code>. Counterpart to <code>MinVersion</code>."
+        array: false
+
+      - name: SetupMutex
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Mutex name preventing multiple instances of this installer from running simultaneously. Differs from <code>AppMutex</code>, which checks for the application itself."
+        array: false
+
+      - name: AlwaysRestart
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the computer is always prompted to restart at the end of installation. Default: <code>no</code>."
+        array: false
+
+      - name: RestartApplications
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the installer uses Restart Manager to close and restart applications that lock files. Works with <code>CloseApplications</code>."
+        array: false
+
+      - name: RestartIfNeededByRun
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, a program launched from <code>[Run]</code> may request a reboot (exit code 3010), prompting the user to restart. Default: <code>no</code>."
+        array: false
+
+      - name: CloseApplicationsFilter
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Wildcard filter (default <code>*.exe,*.dll,*.chm</code>) selecting which files are checked when <code>CloseApplications</code> is enabled."
+        array: false
+
+      # --- Timestamps ---
+      - name: TouchDate
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Date applied to installed files that use the <code>touch</code> flag. Values: <code>current</code>, <code>none</code>, or a <code>yyyy-mm-dd</code> date."
+        array: false
+
+      - name: TouchTime
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Time applied to installed files that use the <code>touch</code> flag. Values: <code>current</code>, <code>none</code>, or an <code>hh:mm</code>/<code>hh:mm:ss</code> time."
+        array: false
+
+      - name: TimeStampRounding
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Number of seconds to which touched file timestamps are rounded. Default: <code>2</code>. Use <code>0</code> to disable rounding."
+        array: false
+
+      - name: TimeStampsInUTC
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, <code>TouchDate</code>/<code>TouchTime</code> values are interpreted as UTC instead of local time. Default: <code>no</code>."
+        array: false
+
+      # --- Wizard pages & UI ---
+      - name: DisableStartupPrompt
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the initial <i>This will install…</i> confirmation prompt is not shown. Default: <code>no</code>."
+        array: false
+
+      - name: DisableFinishedPage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the final <i>Setup Completed</i> page is not shown. Default: <code>no</code>."
+        array: false
+
+      - name: DisableReadyMemo
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the Ready to Install page omits the summary memo of selected options. Default: <code>no</code>."
+        array: false
+
+      - name: DirExistsWarning
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Controls the warning shown when the chosen directory already exists. Values: <code>auto</code> (default), <code>yes</code>, <code>no</code>."
+        array: false
+
+      - name: EnableDirDoesntExistWarning
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), a warning is shown when the chosen installation directory does not yet exist."
+        array: false
+
+      - name: AppendDefaultDirName
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, <code>DefaultDirName</code> is used verbatim instead of having the default folder name appended. Default: <code>yes</code>."
+        array: false
+
+      - name: AppendDefaultGroupName
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>no</code>, <code>DefaultGroupName</code> is used verbatim instead of having the default group name appended. Default: <code>yes</code>."
+        array: false
+
+      - name: AlwaysShowComponentsList
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the components list is always shown on the Select Components page even when only one type is defined."
+        array: false
+
+      - name: FlatComponentsList
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), child components are displayed in a flat list with indentation rather than an expandable tree."
+        array: false
+
+      - name: ShowComponentSizes
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the size of each component is displayed in the components list."
+        array: false
+
+      - name: ShowTasksTreeLines
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, tree lines connecting parent and child tasks are shown on the Select Additional Tasks page. Default: <code>no</code>."
+        array: false
+
+      - name: AlwaysShowDirOnReadyPage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the destination directory is always shown on the Ready to Install page, even when the Select Destination page was hidden. Default: <code>no</code>."
+        array: false
+
+      - name: AlwaysShowGroupOnReadyPage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the Start Menu folder is always shown on the Ready to Install page, even when its page was hidden. Default: <code>no</code>."
+        array: false
+
+      - name: AlwaysUsePersonalGroup
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, Start Menu shortcuts are always created in the current user's personal group rather than the common (all users) group. Default: <code>no</code>."
+        array: false
+
+      # --- Language selection ---
+      - name: ShowLanguageDialog
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Controls the Select Language dialog. Values: <code>yes</code> (default), <code>no</code>, <code>auto</code> (only show if the system language has no match)."
+        array: false
+
+      - name: LanguageDetectionMethod
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "How the default language is detected. Values: <code>uilanguage</code> (default), <code>locale</code>, <code>none</code>."
+        array: false
+
+      - name: DefaultDialogFontName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Fallback dialog font used when a language file does not specify <code>DialogFontName</code>. Default: <code>Segoe UI</code>."
+        array: false
+
+      # --- Default user info ---
+      - name: DefaultUserInfoName
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default value for the user name field on the User Information page. Defaults to the registered Windows owner name."
+        array: false
+
+      - name: DefaultUserInfoOrg
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default value for the organisation field on the User Information page. Defaults to the registered Windows organisation."
+        array: false
+
+      - name: DefaultUserInfoSerial
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Default value for the serial number field on the User Information page."
+        array: false
+
+      # --- Use-previous (reinstall) ---
+      - name: UsePreviousLanguage
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the language chosen during a previous installation is reused, skipping the Select Language dialog."
+        array: false
+
+      - name: UsePreviousPrivileges
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the privilege level used during a previous installation is reused when <code>PrivilegesRequiredOverridesAllowed</code> permits it."
+        array: false
+
+      - name: UsePreviousSetupType
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the setup type and component selection from a previous installation are pre-selected."
+        array: false
+
+      - name: UsePreviousTasks
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the tasks selected during a previous installation are pre-selected."
+        array: false
+
+      - name: UsePreviousUserInfo
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the name, organisation, and serial entered during a previous installation are pre-filled on the User Information page."
+        array: false
+
+      # --- Uninstall ---
+      - name: UninstallDisplaySize
+        type:
+          kind: native
+          dataType: integer
+        required: false
+        deprecated: false
+        description: "Estimated size in bytes shown for the application in Add/Remove Programs. If omitted, it is calculated automatically."
+        array: false
+
+      - name: UninstallFilesDir
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Directory where the uninstaller (<code>unins???.exe</code>) and its log are stored. Default: <code>{app}</code>."
+        array: false
+
+      - name: UninstallLogMode
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "How the uninstall log is written. Values: <code>append</code> (default), <code>new</code>, <code>overwrite</code>."
+        array: false
+
+      - name: UninstallRestartComputer
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code>, the user is always prompted to restart the computer after uninstallation. Default: <code>no</code>."
+        array: false
+
+      - name: UpdateUninstallLogAppName
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), reinstalling updates the application name stored in an existing uninstall log."
+        array: false
+
+      # --- Wizard image appearance ---
+      - name: WizardImageStretch
+        type:
+          kind: native
+          dataType: boolean
+        required: false
+        deprecated: false
+        description: "If <code>yes</code> (default), the wizard images are stretched to fit their area; if <code>no</code>, they are centred."
+        array: false
+
+      - name: WizardImageAlphaFormat
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "How the alpha channel of the wizard images is interpreted. Values: <code>none</code> (default), <code>defined</code>, <code>premultiplied</code>."
+        array: false
+
+      - name: WizardImageBackColor
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Background colour shown behind a non-stretched main wizard image, e.g. <code>$ffffff</code> or <code>clWhite</code>."
+        array: false
+
+      - name: WizardImageBackColorDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Dark-mode override for <code>WizardImageBackColor</code>, used when the system uses a dark theme."
+        array: false
+
+      - name: WizardImageFileDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Dark-mode override for <code>WizardImageFile</code>, displayed when the system uses a dark theme."
+        array: false
+
+      - name: WizardSmallImageBackColor
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Background colour shown behind a non-stretched small wizard image (top-right corner)."
+        array: false
+
+      - name: WizardSmallImageBackColorDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Dark-mode override for <code>WizardSmallImageBackColor</code>."
+        array: false
+
+      - name: WizardSmallImageFileDynamicDark
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Dark-mode override for <code>WizardSmallImageFile</code>, displayed when the system uses a dark theme."
+        array: false
+
+      - name: WizardSizePercent
+        type:
+          kind: native
+          dataType: string
+        required: false
+        deprecated: false
+        description: "Wizard window size as a percentage of its base size, either a single value or <code>width,height</code>, e.g. <code>120</code> or <code>150,140</code>. Range 100–150."
+        array: false
+
   # ---------------------------------------------------------------------------
   # [Types] — parameter section
   # ---------------------------------------------------------------------------
