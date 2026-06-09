@@ -40,7 +40,7 @@ class IsiLanguagePrefixReferencesSearcher : QueryExecutor<PsiReference, Referenc
         if (!pair.isNameDeclaration()) return true
 
         val element = pair as? PsiElement ?: return true
-        if (element.containingSection()?.nameText()?.equals("Languages", ignoreCase = true) != true) return true
+        if (element.containingSection?.nameText?.equals("Languages", ignoreCase = true) != true) return true
 
         val file = element.containingFile as? IssFile ?: return true
 

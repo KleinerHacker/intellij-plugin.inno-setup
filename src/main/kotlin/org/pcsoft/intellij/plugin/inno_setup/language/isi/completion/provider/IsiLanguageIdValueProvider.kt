@@ -34,13 +34,13 @@ object IsiLanguageIdValueProvider : CompletionProvider<CompletionParameters>() {
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        if (position.isInCodeSection()) return
+        if (position.isInCodeSection) return
         // [LangOptions] is a directive section (Key=Value), so the value hangs off an
         // IsiDirectiveEntry rather than an IsiParamPair.
         val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
-        val directive = paramValue.containingDirectiveEntry() ?: return
-        val section = directive.containingSection() ?: return
-        if (!section.nameText().equals("LangOptions", ignoreCase = true)) return
+        val directive = paramValue.containingDirectiveEntry ?: return
+        val section = directive.containingSection ?: return
+        if (!section.nameText.equals("LangOptions", ignoreCase = true)) return
         if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
 
         service<IssLanguageService>().entries.forEach { lang ->

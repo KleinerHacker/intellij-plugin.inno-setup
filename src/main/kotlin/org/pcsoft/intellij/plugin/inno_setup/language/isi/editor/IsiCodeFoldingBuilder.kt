@@ -76,7 +76,7 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
     private fun resolveShownPairs(
         entry: IsiParameterEntry, pairs: List<IsiParamPair>
     ): List<IsiParamPair> {
-        val sectionName = entry.containingSection()?.nameText() ?: return listOf(pairs.first())
+        val sectionName = entry.containingSection?.nameText ?: return listOf(pairs.first())
         val spec = service<IssSpecService>().spec
         val requiredKeys = spec.sections
             .firstOrNull { it.name.equals(sectionName, ignoreCase = true) }

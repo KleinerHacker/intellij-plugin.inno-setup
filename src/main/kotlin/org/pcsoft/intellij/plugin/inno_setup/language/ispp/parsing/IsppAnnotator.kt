@@ -81,7 +81,7 @@ class IsppAnnotator : Annotator {
         if (usedAsConstant) return true
 
         // Check cross-references inside other #define expressions.
-        return hostFile.isppDirectives()
+        return hostFile.isppDirectives
             .filter { it !== directive }
             .any { other -> other.references.any { ref -> ref.canonicalText.equals(name, ignoreCase = true) } }
     }

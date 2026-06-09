@@ -48,7 +48,7 @@ class IsppExpressionReference(
         val hostLine = injMgr.getInjectionHost(element) ?: return null
         val currentOffset = hostLine.textRange.startOffset
 
-        return issFile.isppDirectivesWithHostOffset()
+        return issFile.isppDirectivesWithHostOffset
             .filter { (d, offset) ->
                 offset < currentOffset &&
                         (d as? IsppDirectiveEx)?.isDefine() == true &&

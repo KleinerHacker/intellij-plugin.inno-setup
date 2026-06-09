@@ -65,12 +65,12 @@ class IsiAnnotator : Annotator {
      * the native integer type check, which reports them as errors.
      */
     private fun annotateLanguageId(value: IsiParamValue, holder: AnnotationHolder) {
-        if (value.isInCodeSection()) return
-        val directive = value.containingDirectiveEntry() ?: return
+        if (value.isInCodeSection) return
+        val directive = value.containingDirectiveEntry ?: return
         if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
-        if (directive.containingSection()?.nameText()?.equals("LangOptions", ignoreCase = true) != true) return
+        if (directive.containingSection?.nameText?.equals("LangOptions", ignoreCase = true) != true) return
 
-        val text = value.singleText().trim()
+        val text = value.singleText.trim()
         if (text.isEmpty()) return
         val numeric = IssLanguageService.parseId(text) ?: return // malformed → handled as a type error
         if (numeric == 0 || numeric in service<IssLanguageService>().validIds) return
@@ -83,7 +83,7 @@ class IsiAnnotator : Annotator {
 
     private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
         val required = spec.sections.filter { it.required }.map { it.name.lowercase() }.toSet()
-        val existing = file.sections().map { it.nameText().lowercase() }.toSet()
+        val existing = file.sections.map { it.nameText.lowercase() }.toSet()
         val missing = required - existing
         if (missing.isNotEmpty()) {
             holder.newAnnotation(
@@ -94,11 +94,11 @@ class IsiAnnotator : Annotator {
                 .create()
         }
 
-        val sections = file.sections()
-        val codeIdx = sections.indexOfFirst { it.nameText().equals("Code", ignoreCase = true) }
+        val sections = file.sections
+        val codeIdx = sections.indexOfFirst { it.nameText.equals("Code", ignoreCase = true) }
         if (codeIdx >= 0 && codeIdx < sections.size - 1) {
             sections.subList(codeIdx, sections.size).forEach { section ->
-                val isCode = section.nameText().equals("Code", ignoreCase = true)
+                val isCode = section.nameText.equals("Code", ignoreCase = true)
                 val msg = if (isCode)
                     "[Code] must be the last section in the script"
                 else
@@ -112,7 +112,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateSectionName(name: IsiSectionName, holder: AnnotationHolder, spec: IsiSpec) {
-        if (name.isInCodeSection()) return
+        if (name.isInCodeSection) return
         val section = name.parent?.parent as? IsiSection ?: return
         val specSection = section.specSection(spec)
         if (specSection == null) {
@@ -127,7 +127,7 @@ class IsiAnnotator : Annotator {
 
     private fun annotateSection(section: IsiSection, holder: AnnotationHolder, spec: IsiSpec) {
         // [Code] is free-form Pascal — no ISI-level checks apply.
-        if (section.nameText().equals("Code", ignoreCase = true)) return
+        if (section.nameText.equals("Code", ignoreCase = true)) return
 
         if (section.directiveEntryList.isEmpty() && section.parameterEntryList.isEmpty()) {
             val range = section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange
@@ -155,7 +155,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateTrailingSemicolon(entry: IsiParameterEntry, holder: AnnotationHolder) {
-        if (entry.isInCodeSection()) return
+        if (entry.isInCodeSection) return
         var node = entry.node.lastChildNode
         if (node?.elementType == IsiTypes.CRLF) node = node.treePrev
         if (node?.elementType == IsiTypes.SEMICOLON) {
@@ -168,8 +168,8 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParameterEntry(entry: IsiParameterEntry, holder: AnnotationHolder, spec: IsiSpec) {
-        if (entry.isInCodeSection()) return
-        val section = entry.containingSection() ?: return
+        if (entry.isInCodeSection) return
+        val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "parameter") return
 
@@ -190,18 +190,18 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParamKey(key: IsiParamKey, holder: AnnotationHolder, spec: IsiSpec) {
-        if (key.isInCodeSection()) return
+        if (key.isInCodeSection) return
         val pair = key.parent as? IsiParamPair ?: return
-        val section = pair.containingSection() ?: return
+        val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
         val attr = specSection.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
         annotateKey(key.textRange, attr, holder)
     }
 
     private fun annotateDirectiveKey(key: IsiDirectiveKey, holder: AnnotationHolder, spec: IsiSpec) {
-        if (key.isInCodeSection()) return
+        if (key.isInCodeSection) return
         val entry = key.parent as? IsiDirectiveEntry ?: return
-        val section = entry.containingSection() ?: return
+        val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
 
         // Internationalized sections ([Messages], [CustomMessages]) allow a "lang." prefix and,
@@ -232,9 +232,9 @@ class IsiAnnotator : Annotator {
         val dot = full.indexOf('.')
         if (dot <= 0) return
         val prefix = full.substring(0, dot)
-        val declared = key.issFile()?.findSections("Languages")
-            ?.flatMap { it.nameDeclarations() }
-            ?.map { it.valueUnquoted() }
+        val declared = key.issFile?.findSections("Languages")
+            ?.flatMap { it.nameDeclarations }
+            ?.map { it.valueUnquoted }
             ?: emptyList()
         if (declared.none { it.equals(prefix, ignoreCase = true) }) {
             val start = key.textRange.startOffset
@@ -295,15 +295,15 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParamValue(value: IsiParamValue, holder: AnnotationHolder, spec: IsiSpec) {
-        if (value.isInCodeSection()) return
+        if (value.isInCodeSection) return
         val attr = resolveAttr(value, spec) ?: return
         when (val type = attr.type) {
             is IsiFlagTypeSpec -> annotateFlagValue(value, type, holder)
             is IsiNativeTypeSpec -> annotateNativeValue(value, type, holder)
             is IsiReferenceTypeSpec -> {
-                val pair = value.containingParamPair()
+                val pair = value.containingParamPair
                 if (pair?.isReferenceParam() == true) {
-                    value.identifiers().forEach {
+                    value.identifiers.forEach {
                         highlight(it.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
                     }
                 }
@@ -312,13 +312,13 @@ class IsiAnnotator : Annotator {
     }
 
     private fun resolveAttr(value: IsiParamValue, spec: IsiSpec): IsiAttributeSpec? {
-        val pair = value.containingParamPair()
+        val pair = value.containingParamPair
         if (pair != null) {
-            val ss = pair.containingSection()?.specSection(spec) ?: return null
+            val ss = pair.containingSection?.specSection(spec) ?: return null
             return ss.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
         }
-        val dir = value.containingDirectiveEntry() ?: return null
-        val ss = dir.containingSection()?.specSection(spec) ?: return null
+        val dir = value.containingDirectiveEntry ?: return null
+        val ss = dir.containingSection?.specSection(spec) ?: return null
         return ss.attributes.firstOrNull { it.name.equals(dir.keyText(), ignoreCase = true) }
     }
 
@@ -404,7 +404,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateNativeValue(value: IsiParamValue, type: IsiNativeTypeSpec, holder: AnnotationHolder) {
-        val text = value.singleText()
+        val text = value.singleText
         when (type.dataType.lowercase()) {
             "boolean" -> {
                 if (text.lowercase() in setOf("yes", "no")) {
@@ -430,12 +430,12 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateConstant(constant: IsiConstant, holder: AnnotationHolder) {
-        if (constant.isInCodeSection()) return
+        if (constant.isInCodeSection) return
         val body = constant.constantBody
         val name = body.text.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins = service<IssConstantService>().spec.constants
-        val isppNames = constant.issFile()?.definedConstants()?.map { it.first } ?: emptyList()
+        val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
         val isIspp = body.text.trimStart().startsWith("#")
 
         val known = when {
@@ -482,7 +482,7 @@ class IsiAnnotator : Annotator {
         val msgName = nameNode.text
         if (msgName.isEmpty()) return
 
-        val declared = constant.issFile()?.findSections("CustomMessages")
+        val declared = constant.issFile?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
             ?.mapNotNull { (it as? IsiDirectiveEntryEx)?.customMessageName() }
             ?: emptyList()

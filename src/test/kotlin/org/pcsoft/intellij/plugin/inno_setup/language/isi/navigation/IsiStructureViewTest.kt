@@ -87,5 +87,5 @@ class IsiStructureViewTest : BasePlatformTestCase() {
     }
 
     private fun IsiSection.nameTextEquals(name: String): Boolean =
-        nameText().equals(name, ignoreCase = true)
+        nameText.equals(name, ignoreCase = true)
 }

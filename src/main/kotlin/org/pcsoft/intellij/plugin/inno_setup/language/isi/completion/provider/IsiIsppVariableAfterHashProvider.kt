@@ -40,7 +40,7 @@ object IsiIsppVariableAfterHashProvider : CompletionProvider<CompletionParameter
         val file = parameters.originalFile as? IssFile ?: return
         val adjusted = result.withPrefixMatcher(typedName)
 
-        file.definedConstants().forEach { (name, value) ->
+        file.definedConstants.forEach { (name, value) ->
             adjusted.addElement(
                 LookupElementBuilder.create(name)
                     .withTypeText(value?.let { "= $it" } ?: "define")

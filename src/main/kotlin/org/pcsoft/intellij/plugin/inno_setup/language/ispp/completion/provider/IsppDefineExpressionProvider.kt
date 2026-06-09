@@ -50,7 +50,7 @@ object IsppDefineExpressionProvider : CompletionProvider<CompletionParameters>()
         val host = injMgr.getInjectionHost(position) ?: return
         val lineOffset = host.textRange.startOffset
 
-        val precedingNames = hostFile.isppDirectivesWithHostOffset()
+        val precedingNames = hostFile.isppDirectivesWithHostOffset
             .filter { (d, off) -> off < lineOffset && (d as? IsppDirectiveEx)?.isDefine() == true }
             .mapNotNull { (it.first as? IsppDirectiveEx)?.getDefineName()?.ifEmpty { null } }
             .distinct()

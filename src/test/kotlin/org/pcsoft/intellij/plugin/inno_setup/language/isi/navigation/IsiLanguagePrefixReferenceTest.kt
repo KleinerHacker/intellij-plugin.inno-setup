@@ -133,7 +133,7 @@ class IsiLanguagePrefixReferenceTest : BasePlatformTestCase() {
             IssFileType.INSTANCE,
             LANGUAGES + "[Messages]\nenglish.WelcomeLabel1=Welcome\nenglish.ButtonNext=Next\n"
         ) as IssFile
-        val namePair = file.findSections("Languages").flatMap { it.nameDeclarations() }.first()
+        val namePair = file.findSections("Languages").flatMap { it.nameDeclarations }.first()
         val refs = ReferencesSearch.search(namePair).findAll()
         assertEquals("Both english. prefixes must be found", 2, refs.size)
     }

@@ -21,42 +21,44 @@ import org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.psi.IsppDirec
 
 // ── IssFile (ISPP-Brücke) ──────────────────────────────────────────────────────
 
-fun IssFile.isppDirectives(): List<IsppDirective> {
-    val mgr = InjectedLanguageManager.getInstance(project)
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
-        .flatMap { line ->
-            val result = mutableListOf<IsppDirective>()
-            mgr.enumerate(line) { injectedPsi, _ ->
-                if (injectedPsi is IsppFile) {
-                    result.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java))
+val IssFile.isppDirectives: List<IsppDirective>
+    get() {
+        val mgr = InjectedLanguageManager.getInstance(project)
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
+            .flatMap { line ->
+                val result = mutableListOf<IsppDirective>()
+                mgr.enumerate(line) { injectedPsi, _ ->
+                    if (injectedPsi is IsppFile) {
+                        result.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java))
+                    }
                 }
+                result
             }
-            result
-        }
-}
+    }
 
 /**
  * All ISPP directives paired with the host-file offset of the line they live on.
  * Because each `#define` line is injected as its own fragment, the host offset (the start of the
  * containing [IsiIsppLine], a direct child of this file) is the authority for declaration order.
  */
-fun IssFile.isppDirectivesWithHostOffset(): List<Pair<IsppDirective, Int>> {
-    val mgr = InjectedLanguageManager.getInstance(project)
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
-        .flatMap { line ->
-            val result = mutableListOf<Pair<IsppDirective, Int>>()
-            mgr.enumerate(line) { injectedPsi, _ ->
-                if (injectedPsi is IsppFile) {
-                    PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java)
-                        .forEach { result.add(it to line.textRange.startOffset) }
+val IssFile.isppDirectivesWithHostOffset: List<Pair<IsppDirective, Int>>
+    get() {
+        val mgr = InjectedLanguageManager.getInstance(project)
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, IsiIsppLine::class.java)
+            .flatMap { line ->
+                val result = mutableListOf<Pair<IsppDirective, Int>>()
+                mgr.enumerate(line) { injectedPsi, _ ->
+                    if (injectedPsi is IsppFile) {
+                        PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsppDirective::class.java)
+                            .forEach { result.add(it to line.textRange.startOffset) }
+                    }
                 }
+                result
             }
-            result
-        }
-}
+    }
 
-fun IssFile.definedConstants(): List<Pair<String, String?>> =
-    isppDirectives()
+val IssFile.definedConstants: List<Pair<String, String?>>
+    get() = isppDirectives
         .filter { (it as? IsppDirectiveEx)?.isDefine() == true }
         .mapNotNull { directive ->
             val ex = directive as? IsppDirectiveEx ?: return@mapNotNull null

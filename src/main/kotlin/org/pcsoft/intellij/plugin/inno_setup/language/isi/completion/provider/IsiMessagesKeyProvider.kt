@@ -57,24 +57,24 @@ object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        if (position.isInCodeSection()) return
+        if (position.isInCodeSection) return
 
         val inKeyPosition = position.parent is IsiDirectiveKey
-                || (position.containingParameterEntry() == null
-                && position.containingDirectiveEntry() == null)
+                || (position.containingParameterEntry == null
+                && position.containingDirectiveEntry == null)
         if (!inKeyPosition) return
 
         val originalFile = parameters.originalFile as? IssFile
-        val psiSection = position.containingSection()
-            ?: parameters.originalPosition?.containingSection()
+        val psiSection = position.containingSection
+            ?: parameters.originalPosition?.containingSection
             ?: originalFile?.sectionAtOffset(parameters.offset)
             ?: return
         val specSection = service<IssSpecService>().spec.sections.firstOrNull {
-            it.name.equals(psiSection.nameText(), ignoreCase = true)
+            it.name.equals(psiSection.nameText, ignoreCase = true)
         } ?: return
         if (!specSection.internationalization) return
 
-        val file = originalFile ?: position.issFile() ?: return
+        val file = originalFile ?: position.issFile ?: return
 
         // Typed text of the key so far (strip the dummy completion identifier).
         val raw = position.text
@@ -147,12 +147,12 @@ object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
      */
     private fun languagePrefixSources(file: IssFile): List<Triple<String, String, Icon>> =
         file.findSections("Languages")
-            .flatMap { it.nameDeclarations() }
+            .flatMap { it.nameDeclarations }
             .mapNotNull { pair ->
-                val name = pair.valueUnquoted().ifEmpty { null } ?: return@mapNotNull null
-                val messagesFile = pair.containingParameterEntry()?.paramPairList
+                val name = pair.valueUnquoted.ifEmpty { null } ?: return@mapNotNull null
+                val messagesFile = pair.containingParameterEntry?.paramPairList
                     ?.firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) }
-                    ?.valueUnquoted()
+                    ?.valueUnquoted
                 val lang = messagesFile
                     ?.let { file.languageId(it) }
                     ?.let { service<IssLanguageService>().fromId(it) }

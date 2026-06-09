@@ -35,8 +35,8 @@ object IsiSectionNameProvider : CompletionProvider<CompletionParameters>() {
         val file = parameters.originalFile as? IssFile ?: return
         val specSections = service<IssSpecService>().spec.sections
 
-        val existingNames = file.sections()
-            .map { it.nameText().lowercase() }
+        val existingNames = file.sections
+            .map { it.nameText.lowercase() }
             .toSet()
 
         val minVersion = IssSettingsService.getInstance().state.minInnoVersion

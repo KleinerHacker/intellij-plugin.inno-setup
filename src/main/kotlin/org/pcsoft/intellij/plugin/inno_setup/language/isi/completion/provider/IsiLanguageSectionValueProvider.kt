@@ -36,11 +36,11 @@ object IsiLanguageSectionValueProvider : CompletionProvider<CompletionParameters
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        if (position.isInCodeSection()) return
+        if (position.isInCodeSection) return
         val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
-        val pair = paramValue.containingParamPair() ?: return
-        val section = pair.containingSection() ?: return
-        if (!section.nameText().equals("Languages", ignoreCase = true)) return
+        val pair = paramValue.containingParamPair ?: return
+        val section = pair.containingSection ?: return
+        if (!section.nameText.equals("Languages", ignoreCase = true)) return
 
         // STRING_PART tokens inside IsiQuotedString don't get automatic prefix computation,
         // so strip the dummy identifier manually to set the correct prefix.

@@ -42,7 +42,7 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        if (parameters.position.isInCodeSection()) return
+        if (parameters.position.isInCodeSection) return
         val position = parameters.position
 
         // Only suggest attribute keys in key positions:
@@ -51,8 +51,8 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
         // Anything else (inside a value) is skipped.
         val inKeyPosition = position.parent is IsiParamKey
                 || position.parent is IsiDirectiveKey
-                || (position.containingParameterEntry() == null
-                && position.containingDirectiveEntry() == null)
+                || (position.containingParameterEntry == null
+                && position.containingDirectiveEntry == null)
         if (!inKeyPosition) return
 
         // When typing on an empty line, or after a dangling ';' on a parameter
@@ -61,11 +61,11 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
         // in the original file, and finally to an offset-based section lookup,
         // which works even when the trailing tokens are outside any section.
         val originalFile = parameters.originalFile as? IssFile
-        val psiSection = position.containingSection()
-            ?: parameters.originalPosition?.containingSection()
+        val psiSection = position.containingSection
+            ?: parameters.originalPosition?.containingSection
             ?: originalFile?.sectionAtOffset(parameters.offset)
             ?: return
-        val sectionName = psiSection.nameText()
+        val sectionName = psiSection.nameText
 
         val specSections = service<IssSpecService>().spec.sections
         val specSection = specSections.firstOrNull {
@@ -84,8 +84,8 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
             psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }.toSet()
         } else {
             val document = parameters.editor.document
-            val entry = position.containingParameterEntry()
-                ?: parameters.originalPosition?.containingParameterEntry()
+            val entry = position.containingParameterEntry
+                ?: parameters.originalPosition?.containingParameterEntry
                 ?: psiSection.parameterEntryOnLineOf(parameters.offset, document)
             entry?.paramPairList?.map { it.keyText().lowercase() }?.toSet().orEmpty()
         }

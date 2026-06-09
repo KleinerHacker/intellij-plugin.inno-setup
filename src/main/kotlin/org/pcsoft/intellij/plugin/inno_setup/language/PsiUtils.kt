@@ -25,7 +25,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 // ── PsiElement (Host) ──────────────────────────────────────────────────────────
 
-fun PsiElement.issFile(): IssFile? = containingFile as? IssFile
+val PsiElement.issFile: IssFile?
+    get() = containingFile as? IssFile
 
 // ── IssFile (Language) ──────────────────────────────────────────────────────────
 
@@ -53,16 +54,17 @@ fun IssFile?.languageId(messagesFile: String): Int? {
 private fun parseResolved(messagesFile: String, context: IssFile?): Int? =
     if (messagesFile.startsWith("compiler:", ignoreCase = true)) {
         val rel = messagesFile.substring("compiler:".length).replace('\\', '/')
-        innoDir()?.let { readDisk(File(it, rel)) }
+        innoDir?.let { readDisk(File(it, rel)) }
     } else {
         resolveProjectFile(messagesFile, context)?.let { readVfs(it) }
     }
 
-private fun innoDir(): String? {
-    val configured = IssSettingsService.getInstance().state.installationPath
-    if (!configured.isNullOrBlank() && File(configured).isDirectory) return configured
-    return COMMON_INNO_DIRS.firstOrNull { File(it).isDirectory }
-}
+private val innoDir: String?
+    get() {
+        val configured = IssSettingsService.getInstance().state.installationPath
+        if (!configured.isNullOrBlank() && File(configured).isDirectory) return configured
+        return COMMON_INNO_DIRS.firstOrNull { File(it).isDirectory }
+    }
 
 private fun resolveProjectFile(messagesFile: String, context: IssFile?): VirtualFile? {
     val scriptDir = context?.virtualFile?.parent ?: return null
@@ -75,7 +77,7 @@ private fun resolveProjectFile(messagesFile: String, context: IssFile?): Virtual
 private fun sourceDirOf(file: IssFile): String? {
     val dir = file.findSections("Setup").firstOrNull()
         ?.directiveEntryList?.firstOrNull { it.keyText().equals("SourceDir", ignoreCase = true) }
-        ?.valueText()?.trim()?.removeSurrounding("\"")?.trim()
+        ?.valueText?.trim()?.removeSurrounding("\"")?.trim()
     // Absolute SourceDir is not supported here; '.' / empty means the script directory.
     return dir?.takeIf { it.isNotEmpty() && it != "." && !it.contains(':') && !it.startsWith("\\") }
 }

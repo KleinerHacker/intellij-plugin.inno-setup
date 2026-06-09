@@ -41,14 +41,14 @@ object IsiSectionReferenceValueProvider : CompletionProvider<CompletionParameter
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        if (position.isInCodeSection()) return
+        if (position.isInCodeSection) return
         val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
-        val pair = paramValue.containingParamPair() as? IsiParamPairEx ?: return
+        val pair = paramValue.containingParamPair as? IsiParamPairEx ?: return
         val targetSection = KEY_TO_SECTION[pair.keyText().lowercase()] ?: return
-        val file = paramValue.issFile() ?: return
+        val file = paramValue.issFile ?: return
         file.findSections(targetSection)
-            .flatMap { it.nameDeclarations() }
-            .mapNotNull { it.valueUnquoted().ifEmpty { null } }
+            .flatMap { it.nameDeclarations }
+            .mapNotNull { it.valueUnquoted.ifEmpty { null } }
             .forEach { name -> result.addElement(LookupElementBuilder.create(name)) }
     }
 }

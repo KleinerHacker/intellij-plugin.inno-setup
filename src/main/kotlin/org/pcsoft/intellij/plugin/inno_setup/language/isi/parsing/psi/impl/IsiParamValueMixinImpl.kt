@@ -34,7 +34,7 @@ abstract class IsiParamValueMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node
     }
 
     override fun getReferences(): Array<PsiReference> {
-        val pair = containingParamPair() ?: return PsiReference.EMPTY_ARRAY
+        val pair = containingParamPair ?: return PsiReference.EMPTY_ARRAY
         val targetSection = REF_KEY_TO_SECTION[pair.keyText().lowercase()] ?: return PsiReference.EMPTY_ARRAY
         val paramValue = this as IsiParamValue
         return node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER))

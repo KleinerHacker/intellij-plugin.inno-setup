@@ -42,7 +42,7 @@ abstract class IsiDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiElement(
     override fun keyText(): String = (this as IsiDirectiveEntry).directiveKey.text.trim()
 
     override fun isCustomMessageDeclaration(): Boolean =
-        containingSection()?.nameText()?.equals("CustomMessages", ignoreCase = true) == true
+        containingSection?.nameText?.equals("CustomMessages", ignoreCase = true) == true
 
     override fun customMessageName(): String? {
         if (!isCustomMessageDeclaration()) return null
@@ -78,7 +78,7 @@ abstract class IsiDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiElement(
      * the matching `[Languages] Name`. The reference covers only the prefix segment of the key.
      */
     override fun getReferences(): Array<PsiReference> {
-        if (containingSection()?.specSection()?.internationalization != true) return PsiReference.EMPTY_ARRAY
+        if (containingSection?.specSection?.internationalization != true) return PsiReference.EMPTY_ARRAY
         val entry = this as IsiDirectiveEntry
         val keyNode = entry.directiveKey.node.findChildByType(IsiTypes.IDENTIFIER) ?: return PsiReference.EMPTY_ARRAY
         val dot = keyNode.text.indexOf('.')

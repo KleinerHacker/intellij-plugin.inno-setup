@@ -33,12 +33,12 @@ class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targ
     PsiReferenceBase<IsiParamValue>(paramValue, range) {
 
     override fun resolve(): PsiElement? {
-        val file = element.issFile() ?: return null
+        val file = element.issFile ?: return null
         val name = element.text.substring(rangeInElement.startOffset, rangeInElement.endOffset)
 
         return file.findSections(targetSection)
-            .flatMap { it.nameDeclarations() }
-            .firstOrNull { it.valueUnquoted().equals(name, ignoreCase = true) }
+            .flatMap { it.nameDeclarations }
+            .firstOrNull { it.valueUnquoted.equals(name, ignoreCase = true) }
             ?.paramValue
     }
 
@@ -67,11 +67,11 @@ class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targ
     }
 
     override fun getVariants(): Array<Any> {
-        val file = element.issFile() ?: return emptyArray()
+        val file = element.issFile ?: return emptyArray()
 
         return file.findSections(targetSection)
-            .flatMap { it.nameDeclarations() }
-            .mapNotNull { it.valueUnquoted().ifEmpty { null } }
+            .flatMap { it.nameDeclarations }
+            .mapNotNull { it.valueUnquoted.ifEmpty { null } }
             .map { LookupElementBuilder.create(it) }
             .toTypedArray()
     }

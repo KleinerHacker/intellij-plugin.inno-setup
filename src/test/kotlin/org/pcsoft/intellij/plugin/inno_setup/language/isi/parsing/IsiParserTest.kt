@@ -56,11 +56,11 @@ class IsiParserTest : BasePlatformTestCase() {
     fun testSimpleIssSectionCount() {
         myFixture.configureByFile("scripts/simple.iss")
         val file = issFile()
-        val sections = file.sections()
+        val sections = file.sections
         assertEquals("Expected 3 sections", 3, sections.size)
-        assertEquals("Setup", sections[0].nameText())
-        assertEquals("Files", sections[1].nameText())
-        assertEquals("Icons", sections[2].nameText())
+        assertEquals("Setup", sections[0].nameText)
+        assertEquals("Files", sections[1].nameText)
+        assertEquals("Icons", sections[2].nameText)
     }
 
     fun testSetupSectionDirectiveCount() {

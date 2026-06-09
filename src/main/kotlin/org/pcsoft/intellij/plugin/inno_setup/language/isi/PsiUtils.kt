@@ -25,25 +25,26 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
 
 // ── IssFile (Sektionen) ────────────────────────────────────────────────────────
 
-fun IssFile.sections(): List<IsiSection> =
-    PsiTreeUtil.getChildrenOfTypeAsList(this, IsiSection::class.java)
+val IssFile.sections: List<IsiSection>
+    get() = PsiTreeUtil.getChildrenOfTypeAsList(this, IsiSection::class.java)
 
 fun IssFile.findSection(name: String): IsiSection? =
-    sections().firstOrNull { it.nameText().equals(name, ignoreCase = true) }
+    sections.firstOrNull { it.nameText.equals(name, ignoreCase = true) }
 
 fun IssFile.findSections(name: String): List<IsiSection> =
-    sections().filter { it.nameText().equals(name, ignoreCase = true) }
+    sections.filter { it.nameText.equals(name, ignoreCase = true) }
 
 // The section a caret offset logically belongs to. Unlike containingSection(),
 // this still works when trailing/incomplete tokens (e.g. after a dangling ';')
 // fell outside the section's PSI range: it returns the last section that starts
 // at or before the offset.
 fun IssFile.sectionAtOffset(offset: Int): IsiSection? =
-    sections().lastOrNull { it.textRange.startOffset <= offset }
+    sections.lastOrNull { it.textRange.startOffset <= offset }
 
 // ── IsiSection ───────────────────────────────────────────────────────────────
 
-fun IsiSection.nameText(): String = sectionHeader.sectionName?.text.orEmpty()
+val IsiSection.nameText: String
+    get() = sectionHeader.sectionName?.text.orEmpty()
 
 fun IsiSection.allParamPairs(): List<IsiParamPair> =
     parameterEntryList.flatMap { it.paramPairList }
@@ -51,15 +52,17 @@ fun IsiSection.allParamPairs(): List<IsiParamPair> =
 fun IsiSection.findParamPairs(key: String): List<IsiParamPair> =
     allParamPairs().filter { it.keyText().equals(key, ignoreCase = true) }
 
-fun IsiSection.nameDeclarations(): List<IsiParamPair> = findParamPairs("Name")
+val IsiSection.nameDeclarations: List<IsiParamPair>
+    get() = findParamPairs("Name")
 
 fun IsiSection.specSection(spec: IsiSpec): IsiSectionSpec? =
-    spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
+    spec.sections.firstOrNull { it.name.equals(nameText, ignoreCase = true) }
 
-fun IsiSection.specSection(): IsiSectionSpec? =
-    service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText(), ignoreCase = true) }
+val IsiSection.specSection: IsiSectionSpec?
+    get() = service<IssSpecService>().spec.sections.firstOrNull { it.name.equals(nameText, ignoreCase = true) }
 
-fun IsiSection.isParameterSection(): Boolean = specSection()?.type == "parameter"
+val IsiSection.isParameterSection: Boolean
+    get() = specSection?.type == "parameter"
 
 // The parameter entry sharing the caret's line. Used when the caret sits after a
 // dangling ';' whose incomplete pair fell outside the entry/section PSI, so the
@@ -74,66 +77,71 @@ fun IsiSection.parameterEntryOnLineOf(offset: Int, document: Document): IsiParam
 
 // ── IsiParameterEntry ─────────────────────────────────────────────────────────
 
-fun IsiParameterEntry.displayName(): String {
-    val pairs = paramPairList
-    if (pairs.isEmpty())
-        return "…"
+val IsiParameterEntry.displayName: String
+    get() {
+        val pairs = paramPairList
+        if (pairs.isEmpty())
+            return "…"
 
-    val root = pairs.firstOrNull { it.keyText().equals("root", ignoreCase = true) }
-    if (root != null) {
-        val subkey = pairs.firstOrNull { it.keyText().equals("subkey", ignoreCase = true) }
-        val rootText = root.valueUnquoted().trim()
+        val root = pairs.firstOrNull { it.keyText().equals("root", ignoreCase = true) }
+        if (root != null) {
+            val subkey = pairs.firstOrNull { it.keyText().equals("subkey", ignoreCase = true) }
+            val rootText = root.valueUnquoted.trim()
 
-        return if (subkey != null) "$rootText\\${subkey.valueUnquoted().trim()}" else rootText
+            return if (subkey != null) "$rootText\\${subkey.valueUnquoted.trim()}" else rootText
+        }
+
+        for (key in listOf("name", "source", "filename")) {
+            val value = pairs.firstOrNull { it.keyText().equals(key, ignoreCase = true) }
+                ?.valueUnquoted?.trim() ?: continue
+            if (value.isNotEmpty())
+                return value.stripIssPrefix
+        }
+
+        return pairs.first().valueUnquoted.trim().stripIssPrefix.ifEmpty { "…" }
     }
 
-    for (key in listOf("name", "source", "filename")) {
-        val value = pairs.firstOrNull { it.keyText().equals(key, ignoreCase = true) }
-            ?.valueUnquoted()?.trim() ?: continue
-        if (value.isNotEmpty())
-            return value.stripIssPrefix()
-    }
-
-    return pairs.first().valueUnquoted().trim().stripIssPrefix().ifEmpty { "…" }
-}
-
-private fun String.stripIssPrefix(): String =
-    if (startsWith("{")) {
+private val String.stripIssPrefix: String
+    get() = if (startsWith("{")) {
         val end = indexOf('}')
         if (end > 0 && getOrNull(end + 1) == '\\') substring(end + 2) else this
     } else this
 
 // ── IsiParamPair ──────────────────────────────────────────────────────────────
 
-fun IsiParamPair.valueText(): String = paramValue?.text?.trim().orEmpty()
+val IsiParamPair.valueText: String
+    get() = paramValue?.text?.trim().orEmpty()
 
-fun IsiParamPair.valueUnquoted(): String = valueText().removeSurrounding("\"")
+val IsiParamPair.valueUnquoted: String
+    get() = valueText.removeSurrounding("\"")
 
 // ── IsiDirectiveEntry ─────────────────────────────────────────────────────────
 // keyText() is provided as a member by IsiDirectiveEntryEx (the directiveEntry mixin).
 
-fun IsiDirectiveEntry.valueText(): String = paramValue?.text?.trim().orEmpty()
+val IsiDirectiveEntry.valueText: String
+    get() = paramValue?.text?.trim().orEmpty()
 
 // ── IsiParamValue ─────────────────────────────────────────────────────────────
 
-fun IsiParamValue.identifiers(): List<PsiElement> =
-    node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER)).map { it.psi }
+val IsiParamValue.identifiers: List<PsiElement>
+    get() = node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER)).map { it.psi }
 
-fun IsiParamValue.singleText(): String = text.trim().removeSurrounding("\"")
+val IsiParamValue.singleText: String
+    get() = text.trim().removeSurrounding("\"")
 
 // ── PsiElement (Sections) ─────────────────────────────────────────────────────
 
-fun PsiElement.containingSection(): IsiSection? =
-    PsiTreeUtil.getParentOfType(this, IsiSection::class.java)
+val PsiElement.containingSection: IsiSection?
+    get() = PsiTreeUtil.getParentOfType(this, IsiSection::class.java)
 
-fun PsiElement.containingParamPair(): IsiParamPair? =
-    PsiTreeUtil.getParentOfType(this, IsiParamPair::class.java)
+val PsiElement.containingParamPair: IsiParamPair?
+    get() = PsiTreeUtil.getParentOfType(this, IsiParamPair::class.java)
 
-fun PsiElement.containingParameterEntry(): IsiParameterEntry? =
-    PsiTreeUtil.getParentOfType(this, IsiParameterEntry::class.java)
+val PsiElement.containingParameterEntry: IsiParameterEntry?
+    get() = PsiTreeUtil.getParentOfType(this, IsiParameterEntry::class.java)
 
-fun PsiElement.containingDirectiveEntry(): IsiDirectiveEntry? =
-    PsiTreeUtil.getParentOfType(this, IsiDirectiveEntry::class.java)
+val PsiElement.containingDirectiveEntry: IsiDirectiveEntry?
+    get() = PsiTreeUtil.getParentOfType(this, IsiDirectiveEntry::class.java)
 
-fun PsiElement.isInCodeSection(): Boolean =
-    containingSection()?.nameText()?.equals("Code", ignoreCase = true) == true
+val PsiElement.isInCodeSection: Boolean
+    get() = containingSection?.nameText?.equals("Code", ignoreCase = true) == true

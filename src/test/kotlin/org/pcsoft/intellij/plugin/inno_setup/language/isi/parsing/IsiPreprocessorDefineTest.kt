@@ -103,11 +103,11 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
     // ═══════════════════════════════════════════════════════════════════════════
 
     private fun IssFile.constantValue(name: String) =
-        definedConstants().firstOrNull { it.first == name }?.second
+        definedConstants.firstOrNull { it.first == name }?.second
 
     fun testValueNoneIsNull() {
         val file = setup("#define MyConst\n")
-        val pair = file.definedConstants().firstOrNull()
+        val pair = file.definedConstants.firstOrNull()
         assertNotNull("Entry must exist", pair)
         assertNull("Name-only define must have null value", pair!!.second)
     }
@@ -129,7 +129,7 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
 
     fun testValueMacroIsNull() {
         val file = setup("#define Max(a,b) ((a)>(b)?(a):(b))\n")
-        val pair = file.definedConstants().firstOrNull()
+        val pair = file.definedConstants.firstOrNull()
         assertNotNull("Macro entry must exist", pair)
         assertEquals("Macro name must be 'Max'", "Max", pair!!.first)
         assertNull("Function-like macro must have null value", pair.second)
@@ -137,7 +137,7 @@ class IsiPreprocessorDefineTest : BasePlatformTestCase() {
 
     fun testValueMacroNoParamsIsNull() {
         val file = setup("#define Counter() 0\n")
-        val pair = file.definedConstants().firstOrNull()
+        val pair = file.definedConstants.firstOrNull()
         assertNotNull(pair)
         assertEquals("Counter", pair!!.first)
         assertNull(pair.second)

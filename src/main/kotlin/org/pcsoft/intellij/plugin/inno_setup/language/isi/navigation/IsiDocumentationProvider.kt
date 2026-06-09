@@ -52,7 +52,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             is IsiParamKey -> parent
             is IsiConstantBody -> parent.parent          // → IsiConstant
             is IsiParamValue -> {
-                val pair = parent.containingParamPair() ?: return null
+                val pair = parent.containingParamPair ?: return null
                 if (pair.keyText().equals("Flags", ignoreCase = true)) el else null
             }
 
@@ -65,12 +65,12 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
 
         return when (element) {
             is IsiSectionName -> generateSectionDoc(element, spec)
-            is IsiParamKey -> generateAttrDoc(element.containingSection(), element.text, spec)
-            is IsiDirectiveKey -> generateAttrDoc(element.containingSection(), element.text, spec)
+            is IsiParamKey -> generateAttrDoc(element.containingSection, element.text, spec)
+            is IsiDirectiveKey -> generateAttrDoc(element.containingSection, element.text, spec)
             is IsiConstant -> generateConstantDoc(element)
             else -> {
                 if (element.node?.elementType == IsiTypes.IDENTIFIER) {
-                    val pair = (element.parent as? IsiParamValue)?.containingParamPair()
+                    val pair = (element.parent as? IsiParamValue)?.containingParamPair
                     if (pair?.keyText()?.equals("Flags", ignoreCase = true) == true)
                         return generateFlagDoc(element.text, pair, spec)
                 }
@@ -121,7 +121,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
     }
 
     private fun generateFlagDoc(flagName: String, pair: IsiParamPair, spec: IsiSpec): String? {
-        val specSec = pair.containingSection()?.specSection(spec) ?: return null
+        val specSec = pair.containingSection?.specSection(spec) ?: return null
         val attr = specSec.attributes.firstOrNull { it.name.equals("Flags", ignoreCase = true) }
             ?: return null
         val flagType = attr.type as? IsiFlagTypeSpec ?: return null

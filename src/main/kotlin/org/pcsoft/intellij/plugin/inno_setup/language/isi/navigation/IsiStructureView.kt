@@ -24,6 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.displayName
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.isParameterSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
@@ -57,16 +58,17 @@ class IssStructureViewElement(private val element: PsiElement) : StructureViewTr
 
     override fun getPresentation(): ItemPresentation = when (element) {
         is IssFile -> SimpleItemPresentation(element.name, IssIcons.ScriptFile)
-        is IsiSection -> SimpleItemPresentation(element.nameText(), IssIcons.Section)
-        is IsiParameterEntry -> SimpleItemPresentation(element.displayName(), IssIcons.ParameterEntry)
+        is IsiSection -> SimpleItemPresentation(element.nameText, IssIcons.Section)
+        is IsiParameterEntry -> SimpleItemPresentation(element.displayName, IssIcons.ParameterEntry)
+        is IsiDirectiveEntry -> SimpleItemPresentation(element.keyText(), IssIcons.ParameterEntry)
         else -> SimpleItemPresentation(element.text ?: "", null)
     }
 
     override fun getChildren(): Array<TreeElement> = when (element) {
-        is IssFile -> element.sections().map { IssStructureViewElement(it) }.toTypedArray()
-        is IsiSection -> if (element.isParameterSection())
+        is IssFile -> element.sections.map { IssStructureViewElement(it) }.toTypedArray()
+        is IsiSection -> if (element.isParameterSection)
             element.parameterEntryList.map { IssStructureViewElement(it) }.toTypedArray<TreeElement>()
-        else emptyArray()
+        else element.directiveEntryList.map { IssStructureViewElement(it) }.toTypedArray<TreeElement>()
 
         else -> emptyArray()
     }

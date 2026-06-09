@@ -40,18 +40,18 @@ object IsiBooleanValueProvider : CompletionProvider<CompletionParameters>() {
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        if (position.isInCodeSection()) return
+        if (position.isInCodeSection) return
         val paramValue = PsiTreeUtil.getParentOfType(position, IsiParamValue::class.java) ?: return
 
         val spec = service<IssSpecService>().spec
         val attr = run {
-            val pair = paramValue.containingParamPair()
+            val pair = paramValue.containingParamPair
             if (pair != null) {
-                val ss = pair.containingSection()?.specSection(spec) ?: return
+                val ss = pair.containingSection?.specSection(spec) ?: return
                 ss.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
             } else {
-                val dir = paramValue.containingDirectiveEntry() ?: return
-                val ss = dir.containingSection()?.specSection(spec) ?: return
+                val dir = paramValue.containingDirectiveEntry ?: return
+                val ss = dir.containingSection?.specSection(spec) ?: return
                 ss.attributes.firstOrNull { it.name.equals(dir.keyText(), ignoreCase = true) }
             }
         } ?: return

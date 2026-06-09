@@ -38,7 +38,7 @@ object IsiConstantCompletionProvider : CompletionProvider<CompletionParameters>(
 
         val file = parameters.originalFile as? IssFile ?: return
         val builtins = service<IssConstantService>().spec.constants
-        val userDefs = file.definedConstants()
+        val userDefs = file.definedConstants
 
         builtins.forEach { const ->
             val tail = if (const.parameterized) " (${const.syntax ?: "parameterized"})" else ""

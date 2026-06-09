@@ -73,12 +73,12 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
 
         // [LangOptions] LanguageID=$0409 → 🇺🇸 English (United States)
         private fun collectLanguageId(entry: IsiDirectiveEntry, sink: InlayHintsSink) {
-            if (entry.isInCodeSection()) return
+            if (entry.isInCodeSection) return
             if (!entry.keyText().equals("LanguageID", ignoreCase = true)) return
-            if (entry.containingSection()?.nameText()?.equals("LangOptions", ignoreCase = true) != true) return
+            if (entry.containingSection?.nameText?.equals("LangOptions", ignoreCase = true) != true) return
 
             val value = entry.paramValue ?: return
-            val numeric = IssLanguageService.parseId(value.singleText().trim()) ?: return
+            val numeric = IssLanguageService.parseId(value.singleText.trim()) ?: return
             val lang = service<IssLanguageService>().fromId(numeric) ?: return
 
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
@@ -87,12 +87,12 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
         // [Languages] MessagesFile: "compiler:Languages\German.isl" → 🇩🇪 German (Germany)
         // Flag + English name come from the LanguageID declared in the referenced .isl file.
         private fun collectLanguagesFlag(pair: IsiParamPair, sink: InlayHintsSink) {
-            if (pair.isInCodeSection()) return
-            if (pair.containingSection()?.nameText()?.equals("Languages", ignoreCase = true) != true) return
+            if (pair.isInCodeSection) return
+            if (pair.containingSection?.nameText?.equals("Languages", ignoreCase = true) != true) return
             if (!pair.keyText().equals("MessagesFile", ignoreCase = true)) return
 
             val value = pair.paramValue ?: return
-            val text = value.singleText().trim()
+            val text = value.singleText.trim()
             if (text.isEmpty()) return
 
             val ctx = pair.containingFile as? IssFile ?: return
@@ -105,10 +105,10 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
         // [Messages]/[CustomMessages] english.WelcomeLabel1=… → 🇺🇸 before the key.
         // The flag is that of the language the "lang." prefix refers to in [Languages].
         private fun collectMessagesPrefixFlag(entry: IsiDirectiveEntry, sink: InlayHintsSink) {
-            if (entry.isInCodeSection()) return
+            if (entry.isInCodeSection) return
 
-            val section = entry.containingSection() ?: return
-            if (section.specSection()?.internationalization != true) return
+            val section = entry.containingSection ?: return
+            if (section.specSection?.internationalization != true) return
 
             val key = entry.keyText()
             val dot = key.indexOf('.')
@@ -122,11 +122,11 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
 
         /** Flag of the [Languages] entry whose Name equals [prefix], via its MessagesFile LanguageID. */
         private fun languageFlagForPrefix(file: IssFile, prefix: String): Icon? {
-            val namePair = file.findSections("Languages").flatMap { it.nameDeclarations() }
-                .firstOrNull { it.valueUnquoted().equals(prefix, ignoreCase = true) } ?: return null
-            val messagesFile = namePair.containingParameterEntry()?.paramPairList
+            val namePair = file.findSections("Languages").flatMap { it.nameDeclarations }
+                .firstOrNull { it.valueUnquoted.equals(prefix, ignoreCase = true) } ?: return null
+            val messagesFile = namePair.containingParameterEntry?.paramPairList
                 ?.firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) }
-                ?.valueUnquoted() ?: return null
+                ?.valueUnquoted ?: return null
             val lcid = file.languageId(messagesFile) ?: return null
 
             return service<IssLanguageService>().fromId(lcid)?.icon

@@ -40,8 +40,8 @@ class IsiLanguagePrefixReference(entry: IsiDirectiveEntry, private val prefix: S
         val file = element.containingFile as? IssFile ?: return null
 
         return file.findSections("Languages")
-            .flatMap { it.nameDeclarations() }
-            .firstOrNull { it.valueUnquoted().equals(prefix, ignoreCase = true) }
+            .flatMap { it.nameDeclarations }
+            .firstOrNull { it.valueUnquoted.equals(prefix, ignoreCase = true) }
             ?.paramValue
     }
 
