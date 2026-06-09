@@ -45,6 +45,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
     ): PsiElement? {
         val el = contextElement ?: return null
         if (el.node?.elementType != IsiTypes.IDENTIFIER) return null
+
         return when (val parent = el.parent) {
             is IsiSectionName -> parent
             is IsiDirectiveKey -> parent
@@ -61,6 +62,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         val spec = service<IssSpecService>().spec
+
         return when (element) {
             is IsiSectionName -> generateSectionDoc(element, spec)
             is IsiParamKey -> generateAttrDoc(element.containingSection(), element.text, spec)
@@ -80,6 +82,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
     private fun generateSectionDoc(name: IsiSectionName, spec: IsiSpec): String? {
         val sec: IsiSectionSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
             ?: return null
+
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>[${sec.name}]</b> · ${sec.type}")
@@ -102,6 +105,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             is IsiReferenceTypeSpec -> "→ ${t.section}"
             is IsiFlagTypeSpec -> "flags"
         }
+
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>${attr.name}</b> · $typeStr")
@@ -123,6 +127,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
         val flagType = attr.type as? IsiFlagTypeSpec ?: return null
         val flag = flagType.flags.firstOrNull { it.name.equals(flagName, ignoreCase = true) }
             ?: return null
+
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>${flag.name}</b> · flag")
@@ -151,6 +156,7 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             ?: return null
         val builtins = service<IssConstantService>().spec.constants
         val const = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
+
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>{${const.name}}</b> · ${const.type.name.lowercase().replace('_', ' ')}")

@@ -50,8 +50,10 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
                     || it.node?.elementType == IsiTypes.COMMENT
         }
         val foldEnd = lastMeaningful?.textRange?.endOffset ?: return null
+
         if (foldStart >= foldEnd) return null
-        return FoldingDescriptor(section.node, TextRange(foldStart, foldEnd))
+
+        return FoldingDescriptor(section.node, TextRange(foldStart, foldEnd - 1))
     }
 
     private fun entryFold(entry: IsiParameterEntry): FoldingDescriptor? {

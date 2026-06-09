@@ -76,19 +76,22 @@ fun IsiSection.parameterEntryOnLineOf(offset: Int, document: Document): IsiParam
 
 fun IsiParameterEntry.displayName(): String {
     val pairs = paramPairList
-    if (pairs.isEmpty()) return "…"
+    if (pairs.isEmpty())
+        return "…"
 
     val root = pairs.firstOrNull { it.keyText().equals("root", ignoreCase = true) }
     if (root != null) {
         val subkey = pairs.firstOrNull { it.keyText().equals("subkey", ignoreCase = true) }
         val rootText = root.valueUnquoted().trim()
+
         return if (subkey != null) "$rootText\\${subkey.valueUnquoted().trim()}" else rootText
     }
 
     for (key in listOf("name", "source", "filename")) {
         val value = pairs.firstOrNull { it.keyText().equals(key, ignoreCase = true) }
             ?.valueUnquoted()?.trim() ?: continue
-        if (value.isNotEmpty()) return value.stripIssPrefix()
+        if (value.isNotEmpty())
+            return value.stripIssPrefix()
     }
 
     return pairs.first().valueUnquoted().trim().stripIssPrefix().ifEmpty { "…" }

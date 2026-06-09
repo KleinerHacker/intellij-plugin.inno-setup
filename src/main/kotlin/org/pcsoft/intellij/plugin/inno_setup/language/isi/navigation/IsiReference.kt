@@ -35,6 +35,7 @@ class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targ
     override fun resolve(): PsiElement? {
         val file = element.issFile() ?: return null
         val name = element.text.substring(rangeInElement.startOffset, rangeInElement.endOffset)
+
         return file.findSections(targetSection)
             .flatMap { it.nameDeclarations() }
             .firstOrNull { it.valueUnquoted().equals(name, ignoreCase = true) }
@@ -45,8 +46,10 @@ class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targ
         val resolved = resolve() ?: return false
         val mgr = element.manager
         if (mgr.areElementsEquivalent(resolved, element)) return true
+
         // element might be the IsiParamPair (the PsiNameIdentifierOwner) containing the resolved paramValue
         val resolvedPair = resolved.parent as? IsiParamPair
+
         return resolvedPair != null && mgr.areElementsEquivalent(resolvedPair, element)
     }
 
@@ -59,11 +62,13 @@ class IsiReference(paramValue: IsiParamValue, range: TextRange, private val targ
         val newId = PsiTreeUtil.findChildOfType(dummy, IsiParamValue::class.java)
             ?.node?.findChildByType(IsiTypes.IDENTIFIER)?.psi ?: return element
         idNode.psi.replace(newId)
+
         return element
     }
 
     override fun getVariants(): Array<Any> {
         val file = element.issFile() ?: return emptyArray()
+
         return file.findSections(targetSection)
             .flatMap { it.nameDeclarations() }
             .mapNotNull { it.valueUnquoted().ifEmpty { null } }

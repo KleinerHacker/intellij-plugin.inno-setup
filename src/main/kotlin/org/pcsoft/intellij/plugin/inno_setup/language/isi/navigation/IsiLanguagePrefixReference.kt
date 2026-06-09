@@ -38,6 +38,7 @@ class IsiLanguagePrefixReference(entry: IsiDirectiveEntry, private val prefix: S
 
     override fun resolve(): PsiElement? {
         val file = element.containingFile as? IssFile ?: return null
+
         return file.findSections("Languages")
             .flatMap { it.nameDeclarations() }
             .firstOrNull { it.valueUnquoted().equals(prefix, ignoreCase = true) }
@@ -48,7 +49,9 @@ class IsiLanguagePrefixReference(entry: IsiDirectiveEntry, private val prefix: S
         val resolved = resolve() ?: return false
         val mgr = element.manager
         if (mgr.areElementsEquivalent(resolved, element)) return true
+
         val resolvedPair = resolved.parent as? IsiParamPair
+
         return resolvedPair != null && mgr.areElementsEquivalent(resolvedPair, element)
     }
 
@@ -64,6 +67,7 @@ class IsiLanguagePrefixReference(entry: IsiDirectiveEntry, private val prefix: S
         val newId = PsiTreeUtil.findChildOfType(dummy, IsiDirectiveKey::class.java)
             ?.node?.findChildByType(IsiTypes.IDENTIFIER)?.psi ?: return element
         keyNode.psi.replace(newId)
+
         return element
     }
 }

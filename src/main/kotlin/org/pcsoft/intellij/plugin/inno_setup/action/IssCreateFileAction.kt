@@ -44,12 +44,13 @@ class IssCreateFileAction : DumbAwareAction(
         if (!dialog.showAndGet()) return
 
         WriteCommandAction.runWriteCommandAction(project, "Create Inno Setup Script", null, {
-            val psiFile = dir.createFile("${dialog.fileName}.iss")
-            VfsUtil.saveText(
-                psiFile.virtualFile,
-                buildTemplate(dialog.appName, dialog.appVersion, dialog.selectedLanguages)
-            )
-            FileEditorManager.getInstance(project).openFile(psiFile.virtualFile, true)
+            dir.createFile("${dialog.fileName}.iss").let {
+                VfsUtil.saveText(
+                    it.virtualFile,
+                    buildTemplate(dialog.appName, dialog.appVersion, dialog.selectedLanguages)
+                )
+                FileEditorManager.getInstance(project).openFile(it.virtualFile, true)
+            }
         })
     }
 

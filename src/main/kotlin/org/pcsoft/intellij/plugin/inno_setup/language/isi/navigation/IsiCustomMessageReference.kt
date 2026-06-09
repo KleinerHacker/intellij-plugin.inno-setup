@@ -71,6 +71,7 @@ class IsiCustomMessageReference(constantBody: IsiConstantBody, private val name:
             ?.node?.getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
             ?.lastOrNull()?.psi ?: return element
         oldId.replace(newId)
+
         return element
     }
 }

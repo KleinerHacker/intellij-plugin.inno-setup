@@ -62,7 +62,9 @@ class IsppExpressionReference(
         val resolved = resolve() ?: return false
         val mgr = element.manager
         if (mgr.areElementsEquivalent(resolved, element)) return true
+
         val nameId = (resolved as? PsiNameIdentifierOwner)?.nameIdentifier
+
         return nameId != null && mgr.areElementsEquivalent(nameId, element)
     }
 
@@ -78,6 +80,7 @@ class IsppExpressionReference(
         docManager.doPostponedOperationsAndUnblockDocument(doc)
         doc.replaceString(hostRange.startOffset, hostRange.endOffset, newElementName)
         docManager.commitDocument(doc)
+
         return element
     }
 }

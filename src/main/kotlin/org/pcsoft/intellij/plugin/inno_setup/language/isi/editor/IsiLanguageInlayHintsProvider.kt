@@ -80,6 +80,7 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             val value = entry.paramValue ?: return
             val numeric = IssLanguageService.parseId(value.singleText().trim()) ?: return
             val lang = service<IssLanguageService>().fromId(numeric) ?: return
+
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
         }
 
@@ -93,9 +94,11 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             val value = pair.paramValue ?: return
             val text = value.singleText().trim()
             if (text.isEmpty()) return
+
             val ctx = pair.containingFile as? IssFile ?: return
             val lcid = ctx.languageId(text) ?: return
             val lang = service<IssLanguageService>().fromId(lcid) ?: return
+
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
         }
 
@@ -103,13 +106,17 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
         // The flag is that of the language the "lang." prefix refers to in [Languages].
         private fun collectMessagesPrefixFlag(entry: IsiDirectiveEntry, sink: InlayHintsSink) {
             if (entry.isInCodeSection()) return
+
             val section = entry.containingSection() ?: return
             if (section.specSection()?.internationalization != true) return
+
             val key = entry.keyText()
             val dot = key.indexOf('.')
             if (dot <= 0) return
+
             val ctx = entry.containingFile as? IssFile ?: return
             val icon = languageFlagForPrefix(ctx, key.substring(0, dot)) ?: return
+
             addFlag(sink, entry.directiveKey.textRange.startOffset, icon, null)
         }
 
@@ -121,6 +128,7 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
                 ?.firstOrNull { it.keyText().equals("MessagesFile", ignoreCase = true) }
                 ?.valueUnquoted() ?: return null
             val lcid = file.languageId(messagesFile) ?: return null
+
             return service<IssLanguageService>().fromId(lcid)?.icon
         }
 
@@ -141,11 +149,13 @@ class IsiLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
         private fun centeredFlag(icon: Icon): InlayPresentation {
             val scaled = IconUtil.scale(icon, null, 0.7f)
             val top = ((editor.lineHeight - scaled.iconHeight) / 2).coerceAtLeast(0)
+
             return factory.inset(factory.icon(scaled), top = top)
         }
 
         private fun centeredText(text: String): InlayPresentation {
             val top = ((editor.lineHeight - factory.smallText(text).height) / 2).coerceAtLeast(0)
+
             return factory.inset(factory.smallText(text), top = top)
         }
     }

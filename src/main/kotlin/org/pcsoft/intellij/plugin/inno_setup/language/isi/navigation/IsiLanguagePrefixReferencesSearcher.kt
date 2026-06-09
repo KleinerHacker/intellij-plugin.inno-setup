@@ -38,8 +38,10 @@ class IsiLanguagePrefixReferencesSearcher : QueryExecutor<PsiReference, Referenc
     ): Boolean {
         val pair = queryParameters.elementToSearch as? IsiParamPairEx ?: return true
         if (!pair.isNameDeclaration()) return true
+
         val element = pair as? PsiElement ?: return true
         if (element.containingSection()?.nameText()?.equals("Languages", ignoreCase = true) != true) return true
+
         val file = element.containingFile as? IssFile ?: return true
 
         for (entry in PsiTreeUtil.findChildrenOfType(file, IsiDirectiveEntry::class.java)) {
@@ -49,6 +51,7 @@ class IsiLanguagePrefixReferencesSearcher : QueryExecutor<PsiReference, Referenc
                 }
             }
         }
+
         return true
     }
 }

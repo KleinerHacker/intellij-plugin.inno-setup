@@ -25,6 +25,7 @@ class IsppInjector : MultiHostInjector {
 
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
         if (context !is IsiIsppLine) return
+
         val lineNode = context.node.findChildByType(IsiTypes.PREPROCESSOR_LINE) ?: return
         val startInHost = lineNode.startOffset - context.textRange.startOffset
         registrar.startInjecting(IsppLanguage)

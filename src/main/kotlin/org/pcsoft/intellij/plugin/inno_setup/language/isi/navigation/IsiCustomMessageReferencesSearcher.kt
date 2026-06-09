@@ -38,6 +38,7 @@ class IsiCustomMessageReferencesSearcher : QueryExecutor<PsiReference, Reference
     ): Boolean {
         val entry = queryParameters.elementToSearch as? IsiDirectiveEntryEx ?: return true
         if (!entry.isCustomMessageDeclaration()) return true
+
         val file = (entry as? PsiElement)?.containingFile as? IssFile ?: return true
 
         for (body in PsiTreeUtil.findChildrenOfType(file, IsiConstantBody::class.java)) {
@@ -47,6 +48,7 @@ class IsiCustomMessageReferencesSearcher : QueryExecutor<PsiReference, Reference
                 }
             }
         }
+
         return true
     }
 }
