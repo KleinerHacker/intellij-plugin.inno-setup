@@ -82,14 +82,8 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
     plugins.withId("app.cash.licensee") {
         extensions.configure<app.cash.licensee.LicenseeExtension> {
             listOf(
-                "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC",
-                "Unlicense", "Zlib", "0BSD",
-                "MPL-2.0", "LGPL-2.1", "LGPL-3.0",
-                "CDDL-1.0", "CDDL-1.1", "EPL-1.0", "EPL-2.0",
-                "CC0-1.0",
+                "Apache-2.0",
             ).forEach(::allow)
-
-            allowUrl("https://opensource.org/license/mit")
         }
     }
 }
