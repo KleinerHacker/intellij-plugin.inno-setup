@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.action
+package org.pcsoft.intellij.plugin.inno_setup.action.menu
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project

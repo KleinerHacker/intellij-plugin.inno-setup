@@ -115,6 +115,15 @@ val IsiParamPair.valueText: String
 val IsiParamPair.valueUnquoted: String
     get() = valueText.removeSurrounding("\"")
 
+val IsiParamPair.nextParam: IsiParamPair?
+    get() {
+        var next = nextSibling
+        while (next != null && next !is IsiParamPair) {
+            next = next.nextSibling
+        }
+        return next
+    }
+
 // ── IsiDirectiveEntry ─────────────────────────────────────────────────────────
 // keyText() is provided as a member by IsiDirectiveEntryEx (the directiveEntry mixin).
 

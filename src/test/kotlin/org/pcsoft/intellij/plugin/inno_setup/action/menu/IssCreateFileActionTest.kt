@@ -10,10 +10,9 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.action
+package org.pcsoft.intellij.plugin.inno_setup.action.menu
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Test
 import org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec
 
@@ -22,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec
  *
  * The action's `actionPerformed` is gated behind a modal dialog and cannot run
  * headless, so these tests exercise `buildTemplate` (exposed `@VisibleForTesting`)
- * and [IslLanguageSpec.toIssEntry] directly.
+ * and [org.pcsoft.intellij.plugin.inno_setup.types.IslLanguageSpec.toIssEntry] directly.
  */
 class IssCreateFileActionTest {
 
@@ -47,10 +46,10 @@ class IssCreateFileActionTest {
         val setupIdx = text.indexOf("[Setup]")
         val langIdx = text.indexOf("[Languages]")
         val filesIdx = text.indexOf("[Files]")
-        assertTrue("[Setup] must be present", setupIdx >= 0)
-        assertTrue("[Languages] must be present", langIdx >= 0)
-        assertTrue("[Files] must be present", filesIdx >= 0)
-        assertTrue(
+        Assert.assertTrue("[Setup] must be present", setupIdx >= 0)
+        Assert.assertTrue("[Languages] must be present", langIdx >= 0)
+        Assert.assertTrue("[Files] must be present", filesIdx >= 0)
+        Assert.assertTrue(
             "Sections must appear in order [Setup] < [Languages] < [Files]",
             setupIdx < langIdx && langIdx < filesIdx
         )
@@ -59,25 +58,25 @@ class IssCreateFileActionTest {
     @Test
     fun `setup section carries the provided app name and version`() {
         val text = template(appName = "Acme Tool", appVersion = "2.5")
-        assertTrue(text.contains("AppName=Acme Tool"))
-        assertTrue(text.contains("AppVersion=2.5"))
-        assertTrue(text.contains("DefaultDirName={autopf}\\Acme Tool"))
-        assertTrue(text.contains("DefaultGroupName=Acme Tool"))
+        Assert.assertTrue(text.contains("AppName=Acme Tool"))
+        Assert.assertTrue(text.contains("AppVersion=2.5"))
+        Assert.assertTrue(text.contains("DefaultDirName={autopf}\\Acme Tool"))
+        Assert.assertTrue(text.contains("DefaultGroupName=Acme Tool"))
     }
 
     @Test
     fun `single language produces exactly one matching entry`() {
         val text = template(languages = listOf(english))
         val entries = text.lines().filter { it.startsWith("Name:") }
-        assertEquals(1, entries.size)
-        assertEquals(english.toIssEntry(), entries.single())
+        Assert.assertEquals(1, entries.size)
+        Assert.assertEquals(english.toIssEntry(), entries.single())
     }
 
     @Test
     fun `multiple languages produce one entry each, in order`() {
         val text = template(languages = listOf(english, german))
         val entries = text.lines().filter { it.startsWith("Name:") }
-        assertEquals(
+        Assert.assertEquals(
             listOf(english.toIssEntry(), german.toIssEntry()),
             entries
         )
@@ -86,13 +85,13 @@ class IssCreateFileActionTest {
     @Test
     fun `empty language list keeps the header but emits no entries`() {
         val text = template(languages = emptyList())
-        assertTrue("[Languages] header must still be present", text.contains("[Languages]"))
-        assertTrue("No language entries expected", text.lines().none { it.startsWith("Name:") })
+        Assert.assertTrue("[Languages] header must still be present", text.contains("[Languages]"))
+        Assert.assertTrue("No language entries expected", text.lines().none { it.startsWith("Name:") })
     }
 
     @Test
     fun `toIssEntry formats name and messages file`() {
-        assertEquals(
+        Assert.assertEquals(
             "Name: \"german\"; MessagesFile: \"compiler:Languages\\German.isl\"",
             german.toIssEntry()
         )

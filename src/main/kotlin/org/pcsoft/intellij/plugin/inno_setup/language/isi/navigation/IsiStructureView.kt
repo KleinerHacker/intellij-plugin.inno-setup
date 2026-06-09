@@ -44,12 +44,12 @@ class IssStructureViewModel(file: IssFile) : StructureViewModelBase(file, IssStr
     StructureViewModel.ElementInfoProvider {
 
     override fun getSuitableClasses(): Array<Class<*>> =
-        arrayOf(IsiSection::class.java, IsiParameterEntry::class.java)
+        arrayOf(IsiSection::class.java, IsiParameterEntry::class.java, IsiDirectiveEntry::class.java)
 
     override fun isAlwaysShowsPlus(element: StructureViewTreeElement): Boolean = false
 
     override fun isAlwaysLeaf(element: StructureViewTreeElement): Boolean =
-        element.value is IsiParameterEntry
+        element.value is IsiParameterEntry || element.value is IsiDirectiveEntry
 }
 
 class IssStructureViewElement(private val element: PsiElement) : StructureViewTreeElement {

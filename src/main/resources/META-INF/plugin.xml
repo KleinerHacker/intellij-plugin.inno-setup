@@ -134,6 +134,8 @@
         <lang.psiStructureViewFactory language="ISS"
                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureViewFactory"/>
 
+        <navbar implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureAwareNavbar"/>
+
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
                                     implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiDocumentationProvider"/>
@@ -162,11 +164,16 @@
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
                 displayName="Inno Setup"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsConfigurable"/>
+
+        <intentionAction>
+            <language>ISS</language>
+            <className>org.pcsoft.intellij.plugin.inno_setup.action.intention.IssFlipIntentionAction</className>
+        </intentionAction>
     </extensions>
 
     <actions>
         <action id="Iss.NewFile"
-                class="org.pcsoft.intellij.plugin.inno_setup.action.IssCreateFileAction"
+                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IssCreateFileAction"
                 text="Inno Setup Script"
                 description="Create new Inno Setup Script file"
                 icon="/icons/inno-setup-script-icon@16.png">
