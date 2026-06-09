@@ -197,6 +197,31 @@ class IsiAnnotatorQuickFixTest : BasePlatformTestCase() {
         assertFalse("Empty [Registry] section must be removed", result.contains("[Registry]"))
     }
 
+    // ── Fix 6: Remove redundant flag ──────────────────────────────────────────
+
+    fun testRemoveRedundantFlag() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompress<caret>ion\n"
+        )
+        myFixture.launchAction(findIntention("Remove redundant flag"))
+        assertEquals(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external\n",
+            myFixture.file.text
+        )
+    }
+
+    fun testRemoveRedundantFlagPreservesImplyingFlag() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompress<caret>ion\n"
+        )
+        myFixture.launchAction(findIntention("Remove redundant flag"))
+        val result = myFixture.file.text
+        assertTrue("The implying flag 'external' must be preserved", result.contains("Flags: external"))
+        assertFalse("The redundant flag 'nocompression' must be removed", result.contains("nocompression"))
+    }
+
     fun testMoveCodeSectionLastPreservesCodeContent() {
         // Use ISS comment lines as [Code] content — Pascal code cannot be parsed as ISS entries
         // and would corrupt the section structure, making the annotation unreachable.

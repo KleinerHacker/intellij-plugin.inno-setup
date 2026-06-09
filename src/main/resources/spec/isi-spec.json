@@ -239,11 +239,12 @@
                 "type": "string"
               },
               "severity": {
-                "description": "How severe the conflict is when both flags are used together.",
+                "description": "How severe the conflict is when both flags are used together. \"redundant\" marks the named flag as superfluous because the declaring flag already implies it (or nullifies its effect).",
                 "type": "string",
                 "enum": [
                   "warning",
-                  "error"
+                  "error",
+                  "redundant"
                 ]
               }
             },

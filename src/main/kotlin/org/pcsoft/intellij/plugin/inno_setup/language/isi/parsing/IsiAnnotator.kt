@@ -29,6 +29,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMi
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingSectionsQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.MoveCodeSectionLastQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveEmptySectionQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveRedundantFlagQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveTrailingSemicolonQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
@@ -352,8 +353,25 @@ class IsiAnnotator : Annotator {
         tokenNodes.forEach { (name, node) ->
             val def = flagMap[name] ?: return@forEach
             def.conflicts.forEach conflict@{ conflict ->
-                val other = tokenNodes[conflict.flag.lowercase()] ?: return@conflict
-                val key = if (name < conflict.flag) name to conflict.flag else conflict.flag to name
+                val otherName = conflict.flag.lowercase()
+                val other = tokenNodes[otherName] ?: return@conflict
+
+                if (conflict.severity == IsiFlagSeveritySpec.REDUNDANT) {
+                    // Asymmetric: 'name' implicitly sets 'otherName' (or nullifies its effect),
+                    // so the other flag is redundant. Only that flag is marked (grey, like unused).
+                    if (!seen.add(name to otherName)) return@conflict
+                    holder.newAnnotation(
+                        HighlightSeverity.WEAK_WARNING,
+                        "Flag '${other.text}' is redundant — already implied by '${node.text}'"
+                    )
+                        .range(other.textRange)
+                        .textAttributes(IsiAnnotatorHighlighting.UNUSED)
+                        .withFix(RemoveRedundantFlagQuickFix(value, other.text))
+                        .create()
+                    return@conflict
+                }
+
+                val key = if (name < otherName) name to otherName else otherName to name
                 if (!seen.add(key)) return@conflict
 
                 val severity = if (conflict.severity == IsiFlagSeveritySpec.ERROR)

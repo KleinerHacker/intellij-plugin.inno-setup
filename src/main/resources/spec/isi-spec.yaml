@@ -2124,11 +2124,21 @@ sections:
             - name: external
               description: "The file is not embedded in the installer but must be present alongside it. Use <code>ExternalSize</code> to specify its size."
               deprecated: false
-              conflicts: [ ]
+              conflicts:
+                - flag: nocompression
+                  severity: redundant
+                - flag: noencryption
+                  severity: redundant
+                - flag: notimestamp
+                  severity: redundant
+                - flag: touch
+                  severity: redundant
             - name: extractarchive
               description: "Extracts the contents of an archive (zip, 7z, etc.) instead of copying the archive file itself."
               deprecated: false
-              conflicts: [ ]
+              conflicts:
+                - flag: replacesameversion
+                  severity: redundant
               since: "6.5"
             - name: ignoreversion
               description: "Does not compare version numbers; always installs the file regardless of the version on disk."
@@ -2199,6 +2209,18 @@ sections:
               deprecated: false
               conflicts: [ ]
               since: "6.7"
+            - name: noencryption
+              description: "Stores this file unencrypted in the installer, even if encryption is enabled globally via <code>Encryption</code>."
+              deprecated: false
+              conflicts: [ ]
+            - name: touch
+              description: "Sets the file's date and time to the current date and time (or the value of <code>TouchDate</code>/<code>TouchTime</code>) at install time."
+              deprecated: false
+              conflicts: [ ]
+            - name: replacesameversion
+              description: "Replaces an existing file even when it has the same version number, overriding the default behaviour of skipping same-version files."
+              deprecated: false
+              conflicts: [ ]
         required: false
         deprecated: false
         description: "Behavioural flags controlling how each file is installed."

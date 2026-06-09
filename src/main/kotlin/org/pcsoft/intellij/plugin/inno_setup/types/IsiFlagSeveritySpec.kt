@@ -19,5 +19,9 @@ enum class IsiFlagSeveritySpec {
     WARNING,
 
     @JsonProperty("error")
-    ERROR
+    ERROR,
+
+    /** The flag is redundant because another flag in the same value implicitly sets it (or nullifies its effect). */
+    @JsonProperty("redundant")
+    REDUNDANT
 }

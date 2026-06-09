@@ -224,6 +224,73 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         )
     }
 
+    // ── Param value — redundant flags ─────────────────────────────────────────
+
+    fun testRedundantFlagProducesSingleWeakWarning() {
+        // 'external' makes 'nocompression' redundant (no effect when combined).
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val all = highlights(text)
+        val redundant = all.filter {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertEquals(
+            "A redundant flag must produce exactly one WEAK_WARNING (only on the implied flag)",
+            1, redundant.size
+        )
+    }
+
+    fun testRedundantFlagIsHighlightedAsUnused() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val redundantOffset = fileText.lastIndexOf("nocompression")
+        val hit = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == redundantOffset
+        }
+        assertTrue("The redundant flag 'nocompression' must use the UNUSED text attribute", hit)
+    }
+
+    fun testRedundantFlagOnlyMarksImpliedFlagNotTheImplyingOne() {
+        // The implying flag 'external' must stay a normal FLAG, not be greyed out.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val externalOffset = fileText.lastIndexOf("external")
+        val markedUnused = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == externalOffset
+        }
+        assertFalse("The implying flag 'external' must not be greyed out as UNUSED", markedUnused)
+    }
+
+    fun testExtractArchiveMakesReplaceSameVersionRedundant() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.zip\"; DestDir: \"{app}\"; Flags: extractarchive replacesameversion\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertTrue("'replacesameversion' must be flagged redundant when combined with 'extractarchive'", hit)
+    }
+
+    fun testFlagWithoutImplyingCounterpartProducesNoRedundantWarning() {
+        // 'nocompression' alone (no 'external') must not be flagged redundant.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: nocompression\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertFalse("'nocompression' without 'external' must not be flagged redundant", hit)
+    }
+
     // ── Param value — native type validation ──────────────────────────────────
 
     fun testInvalidBooleanValueProducesError() {
