@@ -222,6 +222,32 @@ class IsiAnnotatorQuickFixTest : BasePlatformTestCase() {
         assertFalse("The redundant flag 'nocompression' must be removed", result.contains("nocompression"))
     }
 
+    // ── Fix 7: Add required flags ─────────────────────────────────────────────
+
+    fun testAddRequiredFlags() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarc<caret>hive\n"
+        )
+        myFixture.launchAction(findIntention("Add required flag"))
+        assertEquals(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive external ignoreversion\n",
+            myFixture.file.text
+        )
+    }
+
+    fun testAddRequiredFlagsOnlyAddsMissing() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n" +
+                    "[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarc<caret>hive external\n"
+        )
+        myFixture.launchAction(findIntention("Add required flag"))
+        assertEquals(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive external ignoreversion\n",
+            myFixture.file.text
+        )
+    }
+
     fun testMoveCodeSectionLastPreservesCodeContent() {
         // Use ISS comment lines as [Code] content — Pascal code cannot be parsed as ISS entries
         // and would corrupt the section structure, making the annotation unreachable.

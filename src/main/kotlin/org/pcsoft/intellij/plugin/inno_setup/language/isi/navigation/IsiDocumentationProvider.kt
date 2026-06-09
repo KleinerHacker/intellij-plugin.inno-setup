@@ -135,13 +135,25 @@ class IsiDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${flag.description}</p>")
-            if (flag.conflicts.isNotEmpty()) {
+            val requires = flag.conflicts.filter { it.type == IsiFlagType.REQUIRES }
+            val conflicts = flag.conflicts.filter { it.type != IsiFlagType.REQUIRES }
+            if (conflicts.isNotEmpty()) {
                 append(DocumentationMarkup.SECTIONS_START)
                 append(DocumentationMarkup.SECTION_HEADER_START)
                 append("Conflicts")
                 append(DocumentationMarkup.SECTION_SEPARATOR)
-                flag.conflicts.forEach { c ->
+                conflicts.forEach { c ->
                     append("<p><code>${c.flag}</code> · ${c.type.name.lowercase()}</p>")
+                }
+                append(DocumentationMarkup.SECTIONS_END)
+            }
+            if (requires.isNotEmpty()) {
+                append(DocumentationMarkup.SECTIONS_START)
+                append(DocumentationMarkup.SECTION_HEADER_START)
+                append("Requires")
+                append(DocumentationMarkup.SECTION_SEPARATOR)
+                requires.forEach { c ->
+                    append("<p><code>${c.flag}</code></p>")
                 }
                 append(DocumentationMarkup.SECTIONS_END)
             }

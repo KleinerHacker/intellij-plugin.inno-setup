@@ -25,6 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingFlagsQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingParametersQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingSectionsQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.MoveCodeSectionLastQuickFix
@@ -353,6 +354,9 @@ class IsiAnnotator : Annotator {
         tokenNodes.forEach { (name, node) ->
             val def = flagMap[name] ?: return@forEach
             def.conflicts.forEach conflict@{ conflict ->
+                // 'requires' is a dependency, not a conflict — handled in its own pass below.
+                if (conflict.type == IsiFlagType.REQUIRES) return@conflict
+
                 val otherName = conflict.flag.lowercase()
                 val other = tokenNodes[otherName] ?: return@conflict
 
@@ -380,6 +384,22 @@ class IsiAnnotator : Annotator {
                 holder.newAnnotation(severity, msg).range(node.textRange).create()
                 holder.newAnnotation(severity, msg).range(other.textRange).create()
             }
+        }
+
+        // Required flags: a flag may mandate the presence of other flags in the same value.
+        tokenNodes.forEach { (name, node) ->
+            val def = flagMap[name] ?: return@forEach
+            val missing = def.conflicts
+                .filter { it.type == IsiFlagType.REQUIRES }
+                .map { it.flag }
+                .filter { tokenNodes[it.lowercase()] == null }
+            if (missing.isEmpty()) return@forEach
+
+            val msg = "Flag '${node.text}' requires ${missing.joinToString(", ") { "'$it'" }}"
+            holder.newAnnotation(HighlightSeverity.ERROR, msg)
+                .range(node.textRange)
+                .withFix(AddMissingFlagsQuickFix(value, missing))
+                .create()
         }
     }
 

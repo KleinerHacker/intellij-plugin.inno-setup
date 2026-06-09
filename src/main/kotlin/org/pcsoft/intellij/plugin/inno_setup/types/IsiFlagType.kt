@@ -23,5 +23,9 @@ enum class IsiFlagType {
 
     /** The flag is redundant because another flag in the same value implicitly sets it (or nullifies its effect). */
     @JsonProperty("redundant")
-    REDUNDANT
+    REDUNDANT,
+
+    /** The flag must be combined with the referenced flag; if that flag is missing it is an error. */
+    @JsonProperty("requires")
+    REQUIRES
 }

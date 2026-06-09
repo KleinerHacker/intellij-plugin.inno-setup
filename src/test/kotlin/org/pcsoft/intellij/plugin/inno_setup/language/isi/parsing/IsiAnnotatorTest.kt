@@ -210,18 +210,42 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
     }
 
     fun testConflictingFlagsWithWarningSeverityProducesTwoWarnings() {
-        // ignoreversion and comparetimestamp conflict at WARNING level
+        // createvalueifdoesntexist has no effect when deletevalue is also specified
+        // ('ignored' type) — conflict reported at WARNING level in [Registry].
         val text =
-            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: ignoreversion comparetimestamp\n"
+            VALID_SETUP + "\n[Registry]\nRoot: HKLM; Subkey: \"Software\\Test\"; Flags: createvalueifdoesntexist deletevalue\n"
         val all = highlights(text)
         val conflicts = all.filter {
             it.severity == HighlightSeverity.WARNING &&
                     it.description?.contains("Conflicting flags", ignoreCase = true) == true
         }
         assertEquals(
-            "Conflicting flags 'ignoreversion'/'comparetimestamp' must produce exactly 2 WARNING annotations",
+            "Conflicting flags 'createvalueifdoesntexist'/'deletevalue' must produce exactly 2 WARNING annotations",
             2, conflicts.size
         )
+    }
+
+    // ── Param value — required flags ──────────────────────────────────────────
+
+    fun testRequiredFlagMissingProducesError() {
+        // extractarchive requires external and ignoreversion.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive\n"
+        val errors = highlights(text).filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("requires", ignoreCase = true) == true
+        }
+        assertEquals("A flag missing its required flags must produce exactly one ERROR", 1, errors.size)
+    }
+
+    fun testRequiredFlagsPresentProducesNoError() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive external ignoreversion\n"
+        val errors = highlights(text).filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("requires", ignoreCase = true) == true
+        }
+        assertEquals("When all required flags are present there must be no requires ERROR", 0, errors.size)
     }
 
     // ── Param value — redundant flags ─────────────────────────────────────────
