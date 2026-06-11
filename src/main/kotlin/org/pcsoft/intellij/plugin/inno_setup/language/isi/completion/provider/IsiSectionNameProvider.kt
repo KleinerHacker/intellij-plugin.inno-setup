@@ -21,6 +21,8 @@ import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.allowedInLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
@@ -33,7 +35,9 @@ object IsiSectionNameProvider : CompletionProvider<CompletionParameters>() {
         result: CompletionResultSet
     ) {
         val file = parameters.originalFile as? IssFile ?: return
+        // In .isl language files only the language-file sections are offered.
         val specSections = service<IssSpecService>().spec.sections
+            .filter { file !is IslFile || it.allowedInLanguageFile }
 
         val existingNames = file.sections
             .map { it.nameText.lowercase() }

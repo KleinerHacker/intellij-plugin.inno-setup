@@ -12,6 +12,15 @@
 
 ---
 
+## File types
+
+| Extension | Status | Notes                                                                                  |
+|-----------|--------|----------------------------------------------------------------------------------------|
+| `.iss`    | ✅     | Inno Setup script (`IssFileType`). Full parsing/tooling.                                |
+| `.isl`    | ✅     | Inno Setup language file (`IslFileType`, `language/isl/**`). Same ISS language/parser; only `[LangOptions]`, `[Messages]`, `[CustomMessages]` allowed (`languageFile: true` in `isi-spec.yaml`), enforced by `IslAnnotator`. No required `[Setup]`. |
+
+---
+
 ## Sections
 
 | Section         | Type       | Status | Notes                                        |

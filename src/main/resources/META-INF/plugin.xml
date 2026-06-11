@@ -30,6 +30,12 @@
                   language="ISS"
                   extensions="iss"/>
 
+        <!-- Language (translation) file type; same ISS language, restricted set of sections -->
+        <fileType name="Inno Setup Language"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFileType"
+                  language="ISS"
+                  extensions="isl"/>
+
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiParserDefinition"/>
@@ -41,6 +47,9 @@
         <!-- Semantic annotator -->
         <annotator language="ISS"
                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotator"/>
+        <!-- ISL-only: restrict sections in .isl language files -->
+        <annotator language="ISS"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.parsing.IslAnnotator"/>
 
         <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
         <codeInsight.inlayProvider language="ISS"

@@ -22,6 +22,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
@@ -82,6 +83,10 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
+        // .isl language files have no required sections and no [Code] — those .iss-only rules don't
+        // apply. The ISL-specific section restriction lives in language/isl/parsing/IslAnnotator.
+        if (file is IslFile) return
+
         val required = spec.sections.filter { it.required }.map { it.name.lowercase() }.toSet()
         val existing = file.sections.map { it.nameText.lowercase() }.toSet()
         val missing = required - existing

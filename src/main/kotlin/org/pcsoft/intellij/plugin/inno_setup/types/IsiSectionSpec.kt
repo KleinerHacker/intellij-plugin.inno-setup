@@ -20,6 +20,9 @@ data class IsiSectionSpec(
     val description: String,
     val attributes: List<IsiAttributeSpec>,
     val internationalization: Boolean = false,
+    // Whether this section is permitted in Inno Setup language files (.isl). Only [LangOptions],
+    // [Messages] and [CustomMessages] are; every other section is flagged there. See language/isl.
+    val languageFile: Boolean = false,
     val since: String? = null,
     val until: String? = null
 )

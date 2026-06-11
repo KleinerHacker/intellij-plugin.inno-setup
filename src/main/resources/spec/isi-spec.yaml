@@ -3257,6 +3257,7 @@ sections:
   - name: LangOptions
     type: directive
     deprecated: false
+    languageFile: true
     description: "Language-specific display settings (fonts, language ID/codepage, text direction). Primarily set inside <code>.isl</code> message files, but may be overridden per language in the script. Directives may be prefixed with a language name, e.g. <code>german.DialogFontName</code>."
     attributes:
 
@@ -3396,6 +3397,7 @@ sections:
   - name: Messages
     type: directive
     deprecated: false
+    languageFile: true
     description: "Overrides the built-in installer message strings (defined in <code>Default.isl</code> and the bundled <code>.isl</code> files). Each entry is <code>MessageName=Text</code> and may be prefixed with a language name to target a single language, e.g. <code>english.WelcomeLabel1</code>."
     internationalization: true
     attributes:
@@ -5901,6 +5903,7 @@ sections:
   - name: CustomMessages
     type: directive
     deprecated: false
+    languageFile: true
     description: "Defines custom, localizable message strings referenced elsewhere in the script via the <code>{cm:MessageName}</code> constant. Each entry is <code>MessageName=Text</code> and may be prefixed with a language name, e.g. <code>english.MyMessage</code>. There are no predefined message names &mdash; you choose your own."
     internationalization: true
     attributes: []
