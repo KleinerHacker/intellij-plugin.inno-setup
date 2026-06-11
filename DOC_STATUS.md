@@ -47,7 +47,7 @@
 | `[LangOptions]` | directive  | ✅     | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion |
 | `[InstallDelete]`| parameter | ✅     | All attributes covered                       |
 | `[UninstallDelete]`| parameter| ✅    | All attributes covered                       |
-| `[ISSigKeys]`   | parameter  | ❌     | Entirely missing (added ~IS 6.x)             |
+| `[ISSigKeys]`   | parameter  | ✅     | All attributes covered (IS 6.5+)             |
 | `[Code]`        | code       | ✅     | Treated as injected Pascal, no spec needed   |
 
 ---
@@ -114,8 +114,9 @@ unavailable. Inlays show flag + English name before `[Languages] MessagesFile`, 
 language's flag before a `lang.` message key. See `IsiLanguageInlayHintsProvider`. (The former
 Name↔MessagesFile consistency warning was removed.)
 
-### `[ISSigKeys]` section
+### `[ISSigKeys]` section ✅
 Declares public keys for `.issig` file-signature verification (used with `issigverify` flag in `[Files]`).  
+**Implemented:** parameter section in `isi-spec.yaml` (`since: "6.5"`).
 **Attributes:** `Name` (req), `KeyFile`, `PublicX`, `PublicY`, `KeyID`, `Group`, `RuntimeID`
 
 ---

@@ -27,20 +27,33 @@ theme:
 
 nav:
   - Home: index.md
-  - Sections:
-      - Setup: sections/setup.md
-      - Types: sections/types.md
-      - Components: sections/components.md
-      - Tasks: sections/tasks.md
-      - Dirs: sections/dirs.md
-      - Files: sections/files.md
-      - Icons: sections/icons.md
-      - Registry: sections/registry.md
-      - Run: sections/run.md
-      - UninstallRun: sections/uninstall-run.md
-      - Languages: sections/languages.md
-      - InstallDelete: sections/install-delete.md
-      - UninstallDelete: sections/uninstall-delete.md
-      - Code: sections/code.md
+  - Inno Setup Script:
+    - Script Files: script-files.md
+    - Sections:
+        - Setup: sections/setup.md
+        - Types: sections/types.md
+        - Components: sections/components.md
+        - Tasks: sections/tasks.md
+        - Dirs: sections/dirs.md
+        - Files: sections/files.md
+        - Icons: sections/icons.md
+        - INI: sections/ini.md
+        - Registry: sections/registry.md
+        - Run: sections/run.md
+        - UninstallRun: sections/uninstall-run.md
+        - Languages: sections/languages.md
+        - LangOptions: sections/langoptions.md
+        - Messages: sections/messages.md
+        - CustomMessages: sections/custom-messages.md
+        - InstallDelete: sections/install-delete.md
+        - UninstallDelete: sections/uninstall-delete.md
+        - ISSigKeys: sections/issigkeys.md
+        - Code: sections/code.md
+  - Inno Setup Language:
+      - Language Files: language-files.md
+      - Sections:
+          - LangOptions: sections/langoptions.md
+          - Messages: sections/messages.md
+          - CustomMessages: sections/custom-messages.md
   - API Docs: dokka/html/index.html
   - Licences: licences/index.html
