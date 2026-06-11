@@ -35,12 +35,16 @@ class IsiStructureViewFactory : PsiStructureViewFactory {
         val issFile = psiFile as? IssFile ?: return null
         return object : TreeBasedStructureViewBuilder() {
             override fun createStructureViewModel(editor: Editor?): StructureViewModel =
-                IssStructureViewModel(issFile)
+                IssStructureViewModel(issFile, editor)
         }
     }
 }
 
-class IssStructureViewModel(file: IssFile) : StructureViewModelBase(file, IssStructureViewElement(file)),
+// The editor must be forwarded to StructureViewModelBase: getCurrentEditorElement() (and with it
+// the structure-aware navigation bar's getLeafElement()) returns null when the model has no editor,
+// which is why the navbar showed only the file and no [Section]/parameter member.
+class IssStructureViewModel(file: IssFile, editor: Editor? = null) :
+    StructureViewModelBase(file, editor, IssStructureViewElement(file)),
     StructureViewModel.ElementInfoProvider {
 
     override fun getSuitableClasses(): Array<Class<*>> =

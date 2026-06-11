@@ -24,15 +24,48 @@ import org.pcsoft.intellij.plugin.inno_setup.language.isi.prevSection
 class IsiSectionMover : StatementUpDownMover() {
     override fun checkAvailable(editor: Editor, file: PsiFile, info: MoveInfo, down: Boolean): Boolean {
         val offset = editor.caretModel.offset
-        val elementAt = file.findElementAt(offset) ?: return false
-        val section = PsiTreeUtil.getTopmostParentOfType(elementAt, IsiSection::class.java) ?: return false
+        val elementAt = file.findElementAt(offset) ?: file.findElementAt(offset - 1) ?: return false
+        val section = PsiTreeUtil.getParentOfType(elementAt, IsiSection::class.java) ?: return false
 
-        if ((!down && section.prevSibling == null) || (down && section.nextSibling == null))
+        // Only move whole sections when the caret is on the section header line itself (e.g. on
+        // "[Setup]"). Anywhere else inside the section the generic line mover should keep working,
+        // so parameter lines can still be shuffled one at a time.
+        val document = editor.document
+        val headerLine = document.getLineNumber(section.sectionHeader.textRange.startOffset)
+        if (document.getLineNumber(offset) != headerLine)
             return false
 
-        info.toMove = LineRange(section)
-        (if (down) section.nextSection else section.prevSection)?.let { info.toMove2 = LineRange(it) }
+        // Don't reindent — ISS sections are flush-left and have no formatter-driven indentation.
+        info.indentTarget = false
+        info.indentSource = false
+
+        val target = if (down) section.nextSection else section.prevSection
+        if (target == null) {
+            // Caret sits in a section, but there is no neighbouring section in the requested
+            // direction. Claim the move and prohibit it so the generic line mover does not kick
+            // in and shuffle a single line out of the section.
+            info.toMove = section.lineRange(editor)
+            info.prohibitMove()
+            return true
+        }
+
+        info.toMove = section.lineRange(editor)
+        info.toMove2 = target.lineRange(editor)
 
         return true
+    }
+
+    // A section's PSI range absorbs the trailing CR/LF of the blank lines that follow it
+    // (`entry ::= … | CRLF`), so its end offset usually points at the *start* of the next
+    // section's line. Feeding that straight into LineRange(PsiElement) would count one line too
+    // many and overlap the neighbour, which makes the platform reject the move ("Cannot perform
+    // move"). Resolve the last line from endOffset - 1 instead.
+    private fun IsiSection.lineRange(editor: Editor): LineRange {
+        val document = editor.document
+        val range = textRange
+        val startLine = document.getLineNumber(range.startOffset)
+        val lastOffset = (range.endOffset - 1).coerceAtLeast(range.startOffset)
+        val endLine = document.getLineNumber(lastOffset)
+        return LineRange(startLine, endLine + 1)
     }
 }

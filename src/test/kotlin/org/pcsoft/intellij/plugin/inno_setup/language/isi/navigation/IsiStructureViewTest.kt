@@ -86,6 +86,31 @@ class IsiStructureViewTest : BasePlatformTestCase() {
         assertNull(IsiStructureViewFactory().getStructureViewBuilder(txt))
     }
 
+    /**
+     * The structure-aware navigation bar resolves the current member via
+     * [IssStructureViewModel.getCurrentEditorElement], which only works when the editor is
+     * forwarded into the model. With a caret inside a parameter the model must report that
+     * parameter entry — otherwise the navbar stays at file level.
+     */
+    fun testCurrentEditorElementResolvesParameterAtCaret() {
+        myFixture.configureByText(
+            IssFileType.INSTANCE,
+            "[Setup]\nAppName=My App\n\n[Files]\nSource: \"app.<caret>exe\"; DestDir: \"{app}\"\n"
+        )
+        val file = myFixture.file as IssFile
+        val model = IssStructureViewModel(file, myFixture.editor)
+        assertTrue(
+            "Caret in [Files] entry must resolve to that parameter entry",
+            model.currentEditorElement is IsiParameterEntry
+        )
+    }
+
+    fun testCurrentEditorElementIsNullWithoutEditor() {
+        val file = issFile()
+        // Regression guard: the no-editor model (used outside an editor) cannot report a member.
+        assertNull(IssStructureViewModel(file).currentEditorElement)
+    }
+
     private fun IsiSection.nameTextEquals(name: String): Boolean =
         nameText.equals(name, ignoreCase = true)
 }

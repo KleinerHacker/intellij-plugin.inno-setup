@@ -213,10 +213,26 @@ tasks {
         dependsOn("generateIsiParser", "generateIsppParser")
     }
 
+    // Wipes the whole generated tree before a full regeneration. Catches stale files left
+    // behind by renamed/removed grammar packages (purgeOldFiles only cleans a task's *current*
+    // output package, not folders that are no longer generated at all).
+    register<Delete>("cleanGeneratedSources") {
+        group = "grammar-kit"
+        description = "Delete all generated lexer/parser sources (incl. stale renamed packages)"
+        delete(generatedRoot)
+    }
+
     register("generateSources") {
         group = "grammar-kit"
-        description = "Generate all lexers and parsers"
-        dependsOn("generateLexers", "generateParsers")
+        description = "Generate all lexers and parsers (from a clean slate)"
+        dependsOn("cleanGeneratedSources", "generateLexers", "generateParsers")
+    }
+
+    // When a full regeneration is requested, every generator must run *after* the wipe.
+    // Routine compiles depend on the generators directly (see below), so the wipe is not in
+    // their graph and incremental up-to-date checks keep working.
+    listOf("generateIsiParser", "generateIsiLexer", "generateIsppParser", "generateIsppLexer").forEach { taskName ->
+        named(taskName) { mustRunAfter("cleanGeneratedSources") }
     }
 
     sourceSets.main {
@@ -224,11 +240,11 @@ tasks {
     }
 
     compileJava {
-        dependsOn("generateSources")
+        dependsOn("generateLexers", "generateParsers")
     }
 
     compileKotlin {
-        dependsOn("generateSources")
+        dependsOn("generateLexers", "generateParsers")
     }
 //endregion
 }
