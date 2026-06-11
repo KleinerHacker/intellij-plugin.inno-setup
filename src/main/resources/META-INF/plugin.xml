@@ -194,6 +194,13 @@
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
+        <action id="Isl.NewFile"
+                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IslCreateFileAction"
+                text="Inno Setup Language"
+                description="Create new Inno Setup language file"
+                icon="/icons/inno-setup-script-icon@16.png">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
+        </action>
     </actions>
 
 </idea-plugin>
