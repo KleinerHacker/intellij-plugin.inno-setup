@@ -2,7 +2,66 @@
 
 # Inno-setup Changelog
 
-## [Unreleased]
+## [0.4.1]
+
+### Added
+
+- **Inno Setup language file support**: Added `.isl` file type support reusing the ISS parser and editor
+  infrastructure with ISL-specific section validation.
+- **ISL file creation**: Added "New Inno Setup Language File" actions and dialogs for filename, language name, and
+  Windows language ID.
+- **Language-aware sections**: Added support for `[LangOptions]`, `[Messages]`, and `[CustomMessages]` in language
+  files and scripts, including file-type-scoped required/deprecated metadata.
+- **Custom message references**: Added completion, reference resolution, unresolved-reference highlighting, find usages,
+  and rename refactoring for `{cm:MessageName}` references.
+- **Language prefix references**: Added completion, navigation, find usages, rename, and unresolved-prefix validation for
+  localized message keys such as `german.WelcomeLabel1`.
+- **Windows language metadata**: Added Windows LCID data, built-in Inno Setup language metadata, language flag icons, and
+  `LanguageID` completion/validation.
+- **Language inlay hints**: Added language flag and English-name inlays for `[Languages] MessagesFile`,
+  `[LangOptions] LanguageID`, and localized message prefixes.
+- **Built-in language completion**: Added `[Languages]` `Name` and `MessagesFile` completion for bundled Inno Setup
+  languages, with quoted and unquoted value support.
+- **Quick fixes**: Added quick fixes for missing sections, missing directives, missing parameters, missing required
+  flags, redundant flags, unused `#define`s, empty sections, trailing semicolons, and moving `[Code]` to the end.
+- **Version-aware specs**: Added `since`/`until` metadata for sections, attributes, flags, directives, and constants, and
+  introduced annotations based on the configured minimum Inno Setup version.
+- **Plugin settings**: Added settings for configuring the local Inno Setup installation path and version-related
+  services.
+- **Editor actions**: Added an intention to flip semicolon-separated parameter entries and a section mover for script
+  sections.
+- **Structure/navigation improvements**: Added a structure-aware navigation bar model and expanded section/navigation
+  tests.
+- **Documentation coverage tracking**: Added `DOC_STATUS.md` to track official Inno Setup documentation coverage.
+- **Docs site updates**: Added MkDocs pages for script files, language files, `[INI]`, `[ISSigKeys]`, `[LangOptions]`,
+  `[Messages]`, and `[CustomMessages]`, and updated navigation and landing-page content.
+
+### Changed
+
+- **Spec model naming**: Renamed spec types and resources from `Iss*` to `Isi*` where they describe shared ISS/ISL
+  script syntax.
+- **Spec target model**: Changed `required` and `deprecated` metadata to file-type-scoped targets so rules can apply to
+  `.iss`, `.isl`, both, or neither.
+- **Constant metadata**: Refactored constant categories from `category` to `type`.
+- **Setup coverage**: Expanded `[Setup]` spec coverage to all known current parameters.
+- **Flag validation**: Improved handling for missing, redundant, conflicting, and version-gated flags.
+- **Schema documentation**: Added descriptions to JSON schema definitions for ISI, ISPP, and constants to improve
+  generated documentation and tooltips.
+- **Language icons**: Replaced/expanded language flag assets as SVGs with copyright headers.
+- **Build tasks**: Improved lexer/parser generation tasks and cleanup of stale generated sources.
+- **Licence generation**: Optimized licence report handling.
+
+### Fixed
+
+- **ISL preprocessor handling**: Preprocessor directives are now always marked as errors in `.isl` files with the
+  message `Preprocessor directives are not allowed in Inno Setup language (.isl) files`.
+- **ISL completion**: Disabled ISPP directive suggestions after `#` in `.isl` files.
+- **Structure view**: Fixed structure view behavior and expanded regression coverage.
+- **Color scheme regression**: Reverted removal of bundled color schemes so explicit theme coloring remains available.
+- **Parser/test regressions**: Fixed test failures and added broader parser, PSI tree, completion, annotator, navigation,
+  quick-fix, and file-action coverage.
+
+## [0.4.0]
 
 ### Added
 
