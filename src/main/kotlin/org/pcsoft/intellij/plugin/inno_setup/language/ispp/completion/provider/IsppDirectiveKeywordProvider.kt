@@ -16,9 +16,11 @@ import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.IssIcons
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
 import org.pcsoft.intellij.plugin.inno_setup.services.IssPpService
 
 object IsppDirectiveKeywordProvider : CompletionProvider<CompletionParameters>() {
@@ -27,6 +29,10 @@ object IsppDirectiveKeywordProvider : CompletionProvider<CompletionParameters>()
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
+        val hostFile = InjectedLanguageManager.getInstance(params.position.project)
+            .getTopLevelFile(params.position.containingFile)
+        if (hostFile is IslFile) return
+
         service<IssPpService>().spec.directives
             .distinctBy { it.name }
             .forEach { dir ->

@@ -40,6 +40,12 @@ class IslAnnotatorTest : BasePlatformTestCase() {
                     it.description?.contains("Required section", ignoreCase = true) == true
         }
 
+    private fun preprocessorNotAllowedError(highlights: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description == "Preprocessor directives are not allowed in Inno Setup language (.isl) files"
+        }
+
     fun testLangOptionsIsAllowed() {
         assertFalse(notAllowedError("[LangOptions]\nLanguageName=English\n"))
     }
@@ -58,6 +64,21 @@ class IslAnnotatorTest : BasePlatformTestCase() {
 
     fun testFilesSectionIsNotAllowed() {
         assertTrue(notAllowedError("[Files]\nSource: \"a.txt\"; DestDir: \"{app}\"\n"))
+    }
+
+    fun testIslPreprocessorDefineIsNotAllowed() {
+        val h = islHighlights("#define AppName \"Test\"\n[LangOptions]\nLanguageName=English\nLanguageID=\$0409\n")
+        assertTrue("ISL files must reject preprocessor directives", preprocessorNotAllowedError(h))
+    }
+
+    fun testIslPreprocessorIncludeIsNotAllowedAfterSection() {
+        val h = islHighlights("[LangOptions]\nLanguageName=English\nLanguageID=\$0409\n#include \"common.iss\"\n")
+        assertTrue("ISL files must reject preprocessor directives after sections", preprocessorNotAllowedError(h))
+    }
+
+    fun testIssPreprocessorDirectiveIsStillAllowed() {
+        val h = issHighlights("#define AppName \"Test\"\n[Setup]\nAppName={#AppName}\nAppVersion=1.0\n")
+        assertFalse("ISL-only preprocessor error must not apply to .iss scripts", preprocessorNotAllowedError(h))
     }
 
     private fun errorContaining(

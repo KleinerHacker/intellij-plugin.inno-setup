@@ -18,6 +18,7 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiIsppLine
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSectionName
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.specSection
@@ -34,8 +35,23 @@ class IslAnnotator : Annotator {
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (!element.isInLanguageFile) return
-        if (element !is IsiSectionName) return
+        when (element) {
+            is IsiIsppLine -> annotatePreprocessorLine(element, holder)
+            is IsiSectionName -> annotateSectionName(element, holder)
+        }
+    }
 
+    private fun annotatePreprocessorLine(line: IsiIsppLine, holder: AnnotationHolder) {
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "Preprocessor directives are not allowed in Inno Setup language (.isl) files"
+        )
+            .range(line.textRange)
+            .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
+            .create()
+    }
+
+    private fun annotateSectionName(element: IsiSectionName, holder: AnnotationHolder) {
         val section = element.parent?.parent as? IsiSection ?: return
         val spec = service<IssSpecService>().spec
         val specSection = section.specSection(spec) ?: return // unknown section → handled by IsiAnnotator

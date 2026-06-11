@@ -13,8 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion
 
 import com.intellij.codeInsight.lookup.Lookup
+import com.intellij.openapi.fileTypes.FileType
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFileType
 
 /**
  * Tests for the directive-keyword completion contributed by
@@ -23,8 +25,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFileType
  */
 class IsppDirectiveCompletionTest : BasePlatformTestCase() {
 
-    private fun directiveLookup(content: String): List<String> {
-        myFixture.configureByText(IssFileType.INSTANCE, content)
+    private fun directiveLookup(content: String, fileType: FileType = IssFileType.INSTANCE): List<String> {
+        myFixture.configureByText(fileType, content)
         myFixture.completeBasic()
         return myFixture.lookupElementStrings ?: emptyList()
     }
@@ -38,6 +40,15 @@ class IsppDirectiveCompletionTest : BasePlatformTestCase() {
     fun testEachDirectiveIsSuggestedOnce() {
         val variants = directiveLookup("#<caret>\n")
         assertEquals("'define' must be offered exactly once", 1, variants.count { it == "define" })
+    }
+
+    fun testDirectivesAreNotSuggestedInIslFiles() {
+        val variants = directiveLookup(
+            "#<caret>\n[LangOptions]\nLanguageName=English\nLanguageID=\$0409\n",
+            IslFileType.INSTANCE
+        )
+        assertFalse("ISL files must not suggest 'define' preprocessor directive, was: $variants", "define" in variants)
+        assertFalse("ISL files must not suggest 'include' preprocessor directive, was: $variants", "include" in variants)
     }
 
     fun testDirectiveCompletionInsertsTrailingSpace() {
