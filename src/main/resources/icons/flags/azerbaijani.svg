@@ -1,0 +1,9 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#509e2f"/>
+    <rect width="16" height="10.667" fill="#ef3340"/>
+    <rect width="16" height="5.333" fill="#0092bc"/>
+    <circle cx="7.2" cy="8" r="2.2" fill="#ffffff"/>
+    <circle cx="8" cy="8" r="1.8" fill="#ef3340"/>
+    <polygon points="9.6,6.7 9.9,7.6 10.85,7.6 10.08,8.18 10.37,9.1 9.6,8.53 8.83,9.1 9.12,8.18 8.35,7.6 9.3,7.6" fill="#ffffff"/>
+</svg>

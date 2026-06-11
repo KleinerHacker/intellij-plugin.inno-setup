@@ -82,14 +82,8 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
     plugins.withId("app.cash.licensee") {
         extensions.configure<app.cash.licensee.LicenseeExtension> {
             listOf(
-                "Apache-2.0", "MIT", "BSD-2-Clause", "BSD-3-Clause", "ISC",
-                "Unlicense", "Zlib", "0BSD",
-                "MPL-2.0", "LGPL-2.1", "LGPL-3.0",
-                "CDDL-1.0", "CDDL-1.1", "EPL-1.0", "EPL-2.0",
-                "CC0-1.0",
+                "Apache-2.0",
             ).forEach(::allow)
-
-            allowUrl("https://opensource.org/license/mit")
         }
     }
 }
@@ -219,10 +213,26 @@ tasks {
         dependsOn("generateIsiParser", "generateIsppParser")
     }
 
+    // Wipes the whole generated tree before a full regeneration. Catches stale files left
+    // behind by renamed/removed grammar packages (purgeOldFiles only cleans a task's *current*
+    // output package, not folders that are no longer generated at all).
+    register<Delete>("cleanGeneratedSources") {
+        group = "grammar-kit"
+        description = "Delete all generated lexer/parser sources (incl. stale renamed packages)"
+        delete(generatedRoot)
+    }
+
     register("generateSources") {
         group = "grammar-kit"
-        description = "Generate all lexers and parsers"
-        dependsOn("generateLexers", "generateParsers")
+        description = "Generate all lexers and parsers (from a clean slate)"
+        dependsOn("cleanGeneratedSources", "generateLexers", "generateParsers")
+    }
+
+    // When a full regeneration is requested, every generator must run *after* the wipe.
+    // Routine compiles depend on the generators directly (see below), so the wipe is not in
+    // their graph and incremental up-to-date checks keep working.
+    listOf("generateIsiParser", "generateIsiLexer", "generateIsppParser", "generateIsppLexer").forEach { taskName ->
+        named(taskName) { mustRunAfter("cleanGeneratedSources") }
     }
 
     sourceSets.main {
@@ -230,11 +240,11 @@ tasks {
     }
 
     compileJava {
-        dependsOn("generateSources")
+        dependsOn("generateLexers", "generateParsers")
     }
 
     compileKotlin {
-        dependsOn("generateSources")
+        dependsOn("generateLexers", "generateParsers")
     }
 //endregion
 }

@@ -47,7 +47,7 @@ class IsppReferencesSearcher : QueryExecutor<PsiReference, ReferencesSearch.Sear
         }
 
         // Free-text references inside other #define expressions.
-        for (directive in hostFile.isppDirectives()) {
+        for (directive in hostFile.isppDirectives) {
             for (ref in directive.references) {
                 if (ref.isReferenceTo(element) && !consumer.process(ref)) return false
             }

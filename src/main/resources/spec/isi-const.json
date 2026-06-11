@@ -1,12 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isi-const",
+  "description": "Specification of all Inno Setup constants (e.g. {app}, {win}, {reg:...}) used by the plugin for completion, validation and documentation.",
   "type": "object",
   "required": [
     "constants"
   ],
   "properties": {
     "constants": {
+      "description": "List of all constants that can be used inside an Inno Setup script.",
       "type": "array",
       "items": {
         "$ref": "#/definitions/constant"
@@ -14,7 +16,20 @@
     }
   },
   "definitions": {
+    "fileTargets": {
+      "description": "Set of file types a rule applies to: \"iss\" (script) and/or \"isl\" (language file).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "iss",
+          "isl"
+        ]
+      }
+    },
     "constant": {
+      "description": "A single Inno Setup constant that expands to a path or value at install time.",
       "type": "object",
       "required": [
         "name",
@@ -24,15 +39,19 @@
       ],
       "properties": {
         "name": {
+          "description": "Constant name as written in the script without braces (e.g. \"app\", \"win\", \"sys\").",
           "type": "string"
         },
         "description": {
+          "description": "Human-readable explanation of what the constant expands to, shown in documentation and tooltips.",
           "type": "string"
         },
         "deprecated": {
-          "type": "boolean"
+          "description": "File types in which this constant is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "type": {
+          "description": "Category of the constant: \"directory\"/\"shell_folder\" for path constants, \"auto\" for context-dependent (user/common) constants, \"special\" for non-path constants, or \"parameterized\" for constants taking an argument.",
           "type": "string",
           "enum": [
             "directory",
@@ -43,15 +62,19 @@
           ]
         },
         "parameterized": {
+          "description": "Whether the constant takes an inline parameter (e.g. {reg:...}, {param:...}).",
           "type": "boolean"
         },
         "syntax": {
+          "description": "Full usage syntax of the constant including any parameters (e.g. \"{reg:HKxx\\\\SubkeyName,ValueName|DefaultValue}\").",
           "type": "string"
         },
         "since": {
+          "description": "Inno Setup version in which this constant was introduced (e.g. \"6.0.0\").",
           "type": "string"
         },
         "until": {
+          "description": "Inno Setup version up to which this constant is supported; absent if still current.",
           "type": "string"
         }
       },

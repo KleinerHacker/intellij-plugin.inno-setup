@@ -24,6 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.displayName
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.isParameterSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiSection
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
@@ -34,21 +35,25 @@ class IsiStructureViewFactory : PsiStructureViewFactory {
         val issFile = psiFile as? IssFile ?: return null
         return object : TreeBasedStructureViewBuilder() {
             override fun createStructureViewModel(editor: Editor?): StructureViewModel =
-                IssStructureViewModel(issFile)
+                IssStructureViewModel(issFile, editor)
         }
     }
 }
 
-class IssStructureViewModel(file: IssFile) : StructureViewModelBase(file, IssStructureViewElement(file)),
+// The editor must be forwarded to StructureViewModelBase: getCurrentEditorElement() (and with it
+// the structure-aware navigation bar's getLeafElement()) returns null when the model has no editor,
+// which is why the navbar showed only the file and no [Section]/parameter member.
+class IssStructureViewModel(file: IssFile, editor: Editor? = null) :
+    StructureViewModelBase(file, editor, IssStructureViewElement(file)),
     StructureViewModel.ElementInfoProvider {
 
     override fun getSuitableClasses(): Array<Class<*>> =
-        arrayOf(IsiSection::class.java, IsiParameterEntry::class.java)
+        arrayOf(IsiSection::class.java, IsiParameterEntry::class.java, IsiDirectiveEntry::class.java)
 
     override fun isAlwaysShowsPlus(element: StructureViewTreeElement): Boolean = false
 
     override fun isAlwaysLeaf(element: StructureViewTreeElement): Boolean =
-        element.value is IsiParameterEntry
+        element.value is IsiParameterEntry || element.value is IsiDirectiveEntry
 }
 
 class IssStructureViewElement(private val element: PsiElement) : StructureViewTreeElement {
@@ -57,16 +62,17 @@ class IssStructureViewElement(private val element: PsiElement) : StructureViewTr
 
     override fun getPresentation(): ItemPresentation = when (element) {
         is IssFile -> SimpleItemPresentation(element.name, IssIcons.ScriptFile)
-        is IsiSection -> SimpleItemPresentation(element.nameText(), IssIcons.Section)
-        is IsiParameterEntry -> SimpleItemPresentation(element.displayName(), IssIcons.ParameterEntry)
+        is IsiSection -> SimpleItemPresentation(element.nameText, IssIcons.Section)
+        is IsiParameterEntry -> SimpleItemPresentation(element.displayName, IssIcons.ParameterEntry)
+        is IsiDirectiveEntry -> SimpleItemPresentation(element.keyText(), IssIcons.ParameterEntry)
         else -> SimpleItemPresentation(element.text ?: "", null)
     }
 
     override fun getChildren(): Array<TreeElement> = when (element) {
-        is IssFile -> element.sections().map { IssStructureViewElement(it) }.toTypedArray()
-        is IsiSection -> if (element.isParameterSection())
+        is IssFile -> element.sections.map { IssStructureViewElement(it) }.toTypedArray()
+        is IsiSection -> if (element.isParameterSection)
             element.parameterEntryList.map { IssStructureViewElement(it) }.toTypedArray<TreeElement>()
-        else emptyArray()
+        else element.directiveEntryList.map { IssStructureViewElement(it) }.toTypedArray<TreeElement>()
 
         else -> emptyArray()
     }

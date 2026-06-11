@@ -15,6 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.editor
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
@@ -50,8 +52,10 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
                     || it.node?.elementType == IsiTypes.COMMENT
         }
         val foldEnd = lastMeaningful?.textRange?.endOffset ?: return null
+
         if (foldStart >= foldEnd) return null
-        return FoldingDescriptor(section.node, TextRange(foldStart, foldEnd))
+
+        return FoldingDescriptor(section.node, TextRange(foldStart, foldEnd - 1))
     }
 
     private fun entryFold(entry: IsiParameterEntry): FoldingDescriptor? {
@@ -74,12 +78,12 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
     private fun resolveShownPairs(
         entry: IsiParameterEntry, pairs: List<IsiParamPair>
     ): List<IsiParamPair> {
-        val sectionName = entry.containingSection()?.nameText() ?: return listOf(pairs.first())
+        val sectionName = entry.containingSection?.nameText ?: return listOf(pairs.first())
         val spec = service<IssSpecService>().spec
         val requiredKeys = spec.sections
             .firstOrNull { it.name.equals(sectionName, ignoreCase = true) }
             ?.attributes
-            ?.filter { it.required }
+            ?.filter { it.required.appliesTo(entry.specTarget) }
             ?.map { it.name.lowercase() }
             ?.toSet()
             .orEmpty()

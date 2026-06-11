@@ -19,7 +19,9 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.findSection
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
 class AddMissingSectionsQuickFix(
     private val missingSectionNames: List<String>,
@@ -49,7 +51,7 @@ class AddMissingSectionsQuickFix(
             for (sectionSpec in spec.sections.filter { s ->
                 missingSectionNames.any { it.equals(s.name, ignoreCase = true) }
             }) {
-                val requiredAttrs = sectionSpec.attributes.filter { it.required }
+                val requiredAttrs = sectionSpec.attributes.filter { it.required.appliesTo(file.specTarget) }
                 append("\n[${sectionSpec.name}]\n")
                 when (sectionSpec.type) {
                     "directive" -> requiredAttrs.forEach { attr ->

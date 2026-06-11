@@ -14,7 +14,10 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.impl
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiReference
+import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiCustomMessageReference
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiIsppConstantReference
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
@@ -23,10 +26,28 @@ abstract class IsiConstantBodyMixinImpl(node: ASTNode) : ASTWrapperPsiElement(no
 
     override fun getReferences(): Array<PsiReference> {
         val bodyText = text ?: return PsiReference.EMPTY_ARRAY
-        if (!bodyText.startsWith("#")) return PsiReference.EMPTY_ARRAY
-        val nameNode = node.findChildByType(IsiTypes.IDENTIFIER) ?: return PsiReference.EMPTY_ARRAY
-        val name = nameNode.text
-        if (name.isEmpty()) return PsiReference.EMPTY_ARRAY
-        return arrayOf(IsiIsppConstantReference(this as IsiConstantBody, name))
+
+        // {#Name} — ISPP define reference.
+        if (bodyText.startsWith("#")) {
+            val nameNode = node.findChildByType(IsiTypes.IDENTIFIER) ?: return PsiReference.EMPTY_ARRAY
+            val name = nameNode.text
+            if (name.isEmpty()) return PsiReference.EMPTY_ARRAY
+            return arrayOf(IsiIsppConstantReference(this as IsiConstantBody, name))
+        }
+
+        // {cm:Name} — custom-message reference. The name is the first IDENTIFIER after the colon.
+        if (bodyText.regionMatches(0, "cm:", 0, 3, ignoreCase = true)) {
+            val colon = node.findChildByType(IsiTypes.COLON) ?: return PsiReference.EMPTY_ARRAY
+            val nameNode = node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
+                .firstOrNull { it.startOffset > colon.startOffset } ?: return PsiReference.EMPTY_ARRAY
+            val name = nameNode.text
+            if (name.isEmpty()) return PsiReference.EMPTY_ARRAY
+            val start = nameNode.startOffset - node.startOffset
+            return arrayOf(
+                IsiCustomMessageReference(this as IsiConstantBody, name, TextRange(start, start + name.length))
+            )
+        }
+
+        return PsiReference.EMPTY_ARRAY
     }
 }

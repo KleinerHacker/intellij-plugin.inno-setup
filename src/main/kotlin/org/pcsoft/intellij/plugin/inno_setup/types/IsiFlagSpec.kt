@@ -14,13 +14,13 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 data class IsiFlagConflictSpec(
     val flag: String,
-    val severity: IsiFlagSeveritySpec
+    val type: IsiFlagType
 )
 
 data class IsiFlagSpec(
     val name: String,
     val description: String,
-    val deprecated: Boolean,
+    val deprecated: Set<IsiSpecTarget> = emptySet(),
     val conflicts: List<IsiFlagConflictSpec> = emptyList(),
     val since: String? = null,
     val until: String? = null

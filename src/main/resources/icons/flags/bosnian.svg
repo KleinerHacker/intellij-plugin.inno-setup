@@ -1,0 +1,10 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#002395"/>
+    <polygon points="4,0 13,0 4,16" fill="#fecb00"/>
+    <g fill="#ffffff">
+        <polygon points="5,1.5 5.35,2.4 6.3,2.4 5.5,3 5.8,3.9 5,3.3 4.2,3.9 4.5,3 3.7,2.4 4.65,2.4"/>
+        <polygon points="3,5 3.35,5.9 4.3,5.9 3.5,6.5 3.8,7.4 3,6.8 2.2,7.4 2.5,6.5 1.7,5.9 2.65,5.9"/>
+        <polygon points="2,10 2.35,10.9 3.3,10.9 2.5,11.5 2.8,12.4 2,11.8 1.2,12.4 1.5,11.5 0.7,10.9 1.65,10.9"/>
+    </g>
+</svg>

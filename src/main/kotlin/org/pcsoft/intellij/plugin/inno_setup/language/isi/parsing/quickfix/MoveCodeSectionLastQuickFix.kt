@@ -33,8 +33,8 @@ class MoveCodeSectionLastQuickFix(file: IssFile) : IntentionAction {
 
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean {
         val issFile = filePointer.element ?: return false
-        val sections = issFile.sections()
-        val codeIdx = sections.indexOfFirst { it.nameText().equals("Code", ignoreCase = true) }
+        val sections = issFile.sections
+        val codeIdx = sections.indexOfFirst { it.nameText.equals("Code", ignoreCase = true) }
         return codeIdx >= 0 && codeIdx < sections.size - 1
     }
 
@@ -43,8 +43,8 @@ class MoveCodeSectionLastQuickFix(file: IssFile) : IntentionAction {
         val document = PsiDocumentManager.getInstance(project).getDocument(issFile) ?: return
         PsiDocumentManager.getInstance(project).commitDocument(document)
 
-        val codeSection = issFile.sections()
-            .firstOrNull { it.nameText().equals("Code", ignoreCase = true) } ?: return
+        val codeSection = issFile.sections
+            .firstOrNull { it.nameText.equals("Code", ignoreCase = true) } ?: return
 
         val fullText = document.text
         val codeStart = codeSection.textRange.startOffset

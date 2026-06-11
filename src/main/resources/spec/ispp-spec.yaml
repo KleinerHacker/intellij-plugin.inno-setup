@@ -3,127 +3,104 @@ directives:
   - name: define
     syntax: "#define Name [Value]"
     description: "Defines a macro variable. Without value, defines it as void (empty)."
-    deprecated: false
-
+    deprecated: []
   - name: undef
     syntax: "#undef Name"
     description: "Undefines a previously defined identifier."
-    deprecated: false
-
+    deprecated: []
   - name: dim
     syntax: "#dim Name[Size]"
     description: "Declares an array variable of the given size."
-    deprecated: false
-
+    deprecated: []
   - name: redim
     syntax: "#redim Name[NewSize]"
     description: "Resizes an existing array."
-    deprecated: false
-
+    deprecated: []
   - name: include
     syntax: "#include Filename"
     description: >
       Includes another script file. Use <code>compiler:filename</code> to search
       in the compiler directory.
       <b>Example:</b> <code>#include "common.iss"</code>
-    deprecated: false
-
+    deprecated: []
   - name: file
     syntax: "#file Filename"
     description: "Similar to #include but for binary/raw file inclusion."
-    deprecated: false
-
+    deprecated: []
   - name: emit
     syntax: "#emit Expr"
     description: "Evaluates the expression and outputs the result as script text."
-    deprecated: false
-
+    deprecated: []
   - name: expr
     syntax: "#expr Expr"
     description: "Evaluates the expression without producing output (for side effects)."
-    deprecated: false
-
+    deprecated: []
   - name: insert
     syntax: "#insert Expr"
     description: "Inserts the result of the expression at the current position."
-    deprecated: false
-
+    deprecated: []
   - name: append
     syntax: "#append Expr"
     description: "Appends the result of the expression to the current line."
-    deprecated: false
-
+    deprecated: []
   - name: if
     syntax: "#if Expr"
     description: >
       Conditionally includes the following lines until <code>#else</code>
       or <code>#endif</code> based on whether Expr is non-zero/non-empty.
-    deprecated: false
-
+    deprecated: []
   - name: elif
     syntax: "#elif Expr"
     description: "Else-if branch for a preceding #if or #elif."
-    deprecated: false
-
+    deprecated: []
   - name: else
     syntax: "#else"
     description: "Else branch for a preceding #if or #elif."
-    deprecated: false
-
+    deprecated: []
   - name: endif
     syntax: "#endif"
     description: "Closes a conditional block opened by #if, #ifdef, #ifndef, #ifexist, or #ifnexist."
-    deprecated: false
-
+    deprecated: []
   - name: ifdef
     syntax: "#ifdef Name"
     description: "True if the identifier is defined (regardless of value)."
-    deprecated: false
-
+    deprecated: []
   - name: ifndef
     syntax: "#ifndef Name"
     description: "True if the identifier is NOT defined."
-    deprecated: false
-
+    deprecated: []
   - name: ifexist
     syntax: "#ifexist Filename"
     description: "True if the specified file exists on disk."
-    deprecated: false
-
+    deprecated: []
   - name: ifnexist
     syntax: "#ifnexist Filename"
     description: "True if the specified file does NOT exist on disk."
-    deprecated: false
-
+    deprecated: []
   - name: for
     syntax: "#for {Var = Start; Cond; Incr} Body"
     description: >
       Compile-time loop. Repeats the body while Cond is non-zero.
       Variables are ISPP identifiers.
-    deprecated: false
-
+    deprecated: []
   - name: sub
     syntax: "#sub Name"
     description: "Begins a subroutine definition. Ended by #endsub."
-    deprecated: false
-
+    deprecated: []
   - name: endsub
     syntax: "#endsub"
     description: "Ends a subroutine definition started with #sub."
-    deprecated: false
-
+    deprecated: []
   - name: pragma
     syntax: "#pragma option|parseroption|verboselevel ..."
     description: >
       Sets compiler options. Common uses:
       <code>#pragma option -v+</code> (verbose), <code>#pragma warning enable|disable id</code>.
-    deprecated: false
-
+    deprecated: []
   - name: error
     syntax: "#error Message"
     description: "Triggers a compile-time error with the given message string."
-    deprecated: false
-
+    deprecated: []
 predefined_variables:
   - name: __COUNTER__
     type: int

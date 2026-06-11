@@ -1,0 +1,12 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#00afca"/>
+    <circle cx="8" cy="7" r="2.4" fill="#fec50c"/>
+    <g stroke="#fec50c" stroke-width="0.7">
+        <line x1="8" y1="7" x2="8" y2="2.5"/>
+        <line x1="8" y1="7" x2="12.5" y2="7"/>
+        <line x1="8" y1="7" x2="3.5" y2="7"/>
+        <line x1="8" y1="7" x2="11.2" y2="3.8"/>
+        <line x1="8" y1="7" x2="4.8" y2="3.8"/>
+    </g>
+</svg>

@@ -20,14 +20,18 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingFlagsQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingParametersQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingSectionsQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.MoveCodeSectionLastQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveEmptySectionQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveRedundantFlagQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.RemoveTrailingSemicolonQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.ispp.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.language.issFile
@@ -53,11 +57,36 @@ class IsiAnnotator : Annotator {
             is IsiParamValue -> annotateParamValue(element, holder, spec)
             is IsiConstant -> annotateConstant(element, holder)
         }
+        if (element is IsiParamValue) annotateLanguageId(element, holder)
+    }
+
+    /**
+     * Warns when a `[LangOptions]` `LanguageID` is neither <code>0</code> nor a recognised Windows
+     * locale identifier ([IssLanguageService.validIds]). Malformed (non-integer) values are left to
+     * the native integer type check, which reports them as errors.
+     */
+    private fun annotateLanguageId(value: IsiParamValue, holder: AnnotationHolder) {
+        if (value.isInCodeSection) return
+        val directive = value.containingDirectiveEntry ?: return
+        if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
+        if (directive.containingSection?.nameText?.equals("LangOptions", ignoreCase = true) != true) return
+
+        val text = value.singleText.trim()
+        if (text.isEmpty()) return
+        val numeric = IssLanguageService.parseId(text) ?: return // malformed → handled as a type error
+        if (numeric == 0 || numeric in service<IssLanguageService>().validIds) return
+
+        holder.newAnnotation(
+            HighlightSeverity.WARNING,
+            "Unknown Windows language identifier '$text' — expected 0 or a valid LCID such as \$0409 (English – United States)"
+        ).range(value.textRange).create()
     }
 
     private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
-        val required = spec.sections.filter { it.required }.map { it.name.lowercase() }.toSet()
-        val existing = file.sections().map { it.nameText().lowercase() }.toSet()
+        // Required sections are file-type specific: [Setup] in scripts, [LangOptions] in .isl files.
+        val target = file.specTarget
+        val required = spec.sections.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
+        val existing = file.sections.map { it.nameText.lowercase() }.toSet()
         val missing = required - existing
         if (missing.isNotEmpty()) {
             holder.newAnnotation(
@@ -68,11 +97,11 @@ class IsiAnnotator : Annotator {
                 .create()
         }
 
-        val sections = file.sections()
-        val codeIdx = sections.indexOfFirst { it.nameText().equals("Code", ignoreCase = true) }
+        val sections = file.sections
+        val codeIdx = sections.indexOfFirst { it.nameText.equals("Code", ignoreCase = true) }
         if (codeIdx >= 0 && codeIdx < sections.size - 1) {
             sections.subList(codeIdx, sections.size).forEach { section ->
-                val isCode = section.nameText().equals("Code", ignoreCase = true)
+                val isCode = section.nameText.equals("Code", ignoreCase = true)
                 val msg = if (isCode)
                     "[Code] must be the last section in the script"
                 else
@@ -86,7 +115,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateSectionName(name: IsiSectionName, holder: AnnotationHolder, spec: IsiSpec) {
-        if (name.isInCodeSection()) return
+        if (name.isInCodeSection) return
         val section = name.parent?.parent as? IsiSection ?: return
         val specSection = section.specSection(spec)
         if (specSection == null) {
@@ -101,7 +130,7 @@ class IsiAnnotator : Annotator {
 
     private fun annotateSection(section: IsiSection, holder: AnnotationHolder, spec: IsiSpec) {
         // [Code] is free-form Pascal — no ISI-level checks apply.
-        if (section.nameText().equals("Code", ignoreCase = true)) return
+        if (section.nameText.equals("Code", ignoreCase = true)) return
 
         if (section.directiveEntryList.isEmpty() && section.parameterEntryList.isEmpty()) {
             val range = section.sectionHeader.sectionName?.textRange ?: section.sectionHeader.textRange
@@ -115,7 +144,8 @@ class IsiAnnotator : Annotator {
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "directive") return
 
-        val required = specSection.attributes.filter { it.required }.map { it.name.lowercase() }.toSet()
+        val target = section.specTarget
+        val required = specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val present = section.directiveEntryList.map { it.keyText().lowercase() }.toSet()
         val missing = required - present
         if (missing.isNotEmpty()) {
@@ -129,7 +159,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateTrailingSemicolon(entry: IsiParameterEntry, holder: AnnotationHolder) {
-        if (entry.isInCodeSection()) return
+        if (entry.isInCodeSection) return
         var node = entry.node.lastChildNode
         if (node?.elementType == IsiTypes.CRLF) node = node.treePrev
         if (node?.elementType == IsiTypes.SEMICOLON) {
@@ -142,12 +172,13 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParameterEntry(entry: IsiParameterEntry, holder: AnnotationHolder, spec: IsiSpec) {
-        if (entry.isInCodeSection()) return
-        val section = entry.containingSection() ?: return
+        if (entry.isInCodeSection) return
+        val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "parameter") return
 
-        val required = specSection.attributes.filter { it.required }.map { it.name.lowercase() }.toSet()
+        val target = section.specTarget
+        val required = specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val present = entry.paramPairList.map { it.keyText().lowercase() }.toSet()
         val missing = required - present
         if (missing.isNotEmpty()) {
@@ -164,24 +195,65 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParamKey(key: IsiParamKey, holder: AnnotationHolder, spec: IsiSpec) {
-        if (key.isInCodeSection()) return
+        if (key.isInCodeSection) return
         val pair = key.parent as? IsiParamPair ?: return
-        val section = pair.containingSection() ?: return
+        val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
         val attr = specSection.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder)
+        annotateKey(key.textRange, attr, holder, key.specTarget)
     }
 
     private fun annotateDirectiveKey(key: IsiDirectiveKey, holder: AnnotationHolder, spec: IsiSpec) {
-        if (key.isInCodeSection()) return
+        if (key.isInCodeSection) return
         val entry = key.parent as? IsiDirectiveEntry ?: return
-        val section = entry.containingSection() ?: return
+        val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
+
+        // Internationalized sections ([Messages], [CustomMessages]) allow a "lang." prefix and,
+        // for [CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
+        // never flag an unrecognized name as unknown (the predefined list is advisory only).
+        if (specSection.internationalization) {
+            val baseName = entry.keyText().substringAfterLast('.')
+            val attr = specSection.attributes.firstOrNull { it.name.equals(baseName, ignoreCase = true) }
+            if (attr != null) {
+                annotateKey(key.textRange, attr, holder, key.specTarget)
+            } else {
+                highlight(key.textRange, IsiAnnotatorHighlighting.PARAM_KEY, holder)
+            }
+            annotateLanguagePrefix(key, entry, holder)
+            return
+        }
+
         val attr = specSection.attributes.firstOrNull { it.name.equals(entry.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder)
+        annotateKey(key.textRange, attr, holder, key.specTarget)
     }
 
-    private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder) {
+    /**
+     * In an internationalized section, a `lang.` key prefix must match a `Name` declared in
+     * [Languages]. An unknown prefix is flagged in red over the prefix segment.
+     */
+    private fun annotateLanguagePrefix(key: IsiDirectiveKey, entry: IsiDirectiveEntry, holder: AnnotationHolder) {
+        val full = entry.keyText()
+        val dot = full.indexOf('.')
+        if (dot <= 0) return
+        val prefix = full.substring(0, dot)
+        val declared = key.issFile?.findSections("Languages")
+            ?.flatMap { it.nameDeclarations }
+            ?.map { it.valueUnquoted }
+            ?: emptyList()
+        if (declared.none { it.equals(prefix, ignoreCase = true) }) {
+            val start = key.textRange.startOffset
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Unknown language prefix '$prefix' (no matching Name in [Languages])"
+            )
+                .range(TextRange(start, start + dot))
+                .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
+    }
+
+    private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder, target: IsiSpecTarget) {
         when {
             attr == null ->
                 holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '${range}'")
@@ -189,7 +261,7 @@ class IsiAnnotator : Annotator {
                     .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
 
-            attr.deprecated ->
+            attr.deprecated.appliesTo(target) ->
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(range)
                     .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
@@ -228,15 +300,15 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateParamValue(value: IsiParamValue, holder: AnnotationHolder, spec: IsiSpec) {
-        if (value.isInCodeSection()) return
+        if (value.isInCodeSection) return
         val attr = resolveAttr(value, spec) ?: return
         when (val type = attr.type) {
             is IsiFlagTypeSpec -> annotateFlagValue(value, type, holder)
             is IsiNativeTypeSpec -> annotateNativeValue(value, type, holder)
             is IsiReferenceTypeSpec -> {
-                val pair = value.containingParamPair()
+                val pair = value.containingParamPair
                 if (pair?.isReferenceParam() == true) {
-                    value.identifiers().forEach {
+                    value.identifiers.forEach {
                         highlight(it.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
                     }
                 }
@@ -245,17 +317,18 @@ class IsiAnnotator : Annotator {
     }
 
     private fun resolveAttr(value: IsiParamValue, spec: IsiSpec): IsiAttributeSpec? {
-        val pair = value.containingParamPair()
+        val pair = value.containingParamPair
         if (pair != null) {
-            val ss = pair.containingSection()?.specSection(spec) ?: return null
+            val ss = pair.containingSection?.specSection(spec) ?: return null
             return ss.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
         }
-        val dir = value.containingDirectiveEntry() ?: return null
-        val ss = dir.containingSection()?.specSection(spec) ?: return null
+        val dir = value.containingDirectiveEntry ?: return null
+        val ss = dir.containingSection?.specSection(spec) ?: return null
         return ss.attributes.firstOrNull { it.name.equals(dir.keyText(), ignoreCase = true) }
     }
 
     private fun annotateFlagValue(value: IsiParamValue, flagType: IsiFlagTypeSpec, holder: AnnotationHolder) {
+        val target = value.specTarget
         val flagMap = flagType.flags.associateBy { it.name.lowercase() }
         val tokenNodes = value.node
             .getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
@@ -270,7 +343,7 @@ class IsiAnnotator : Annotator {
                         .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
                         .create()
 
-                def.deprecated ->
+                def.deprecated.appliesTo(target) ->
                     holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                         .range(node.textRange)
                         .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
@@ -287,21 +360,57 @@ class IsiAnnotator : Annotator {
         tokenNodes.forEach { (name, node) ->
             val def = flagMap[name] ?: return@forEach
             def.conflicts.forEach conflict@{ conflict ->
-                val other = tokenNodes[conflict.flag.lowercase()] ?: return@conflict
-                val key = if (name < conflict.flag) name to conflict.flag else conflict.flag to name
+                // 'requires' is a dependency, not a conflict — handled in its own pass below.
+                if (conflict.type == IsiFlagType.REQUIRES) return@conflict
+
+                val otherName = conflict.flag.lowercase()
+                val other = tokenNodes[otherName] ?: return@conflict
+
+                if (conflict.type == IsiFlagType.REDUNDANT) {
+                    // Asymmetric: 'name' implicitly sets 'otherName' (or nullifies its effect),
+                    // so the other flag is redundant. Only that flag is marked (grey, like unused).
+                    if (!seen.add(name to otherName)) return@conflict
+                    holder.newAnnotation(
+                        HighlightSeverity.WEAK_WARNING,
+                        "Flag '${other.text}' is redundant — already implied by '${node.text}'"
+                    )
+                        .range(other.textRange)
+                        .textAttributes(IsiAnnotatorHighlighting.UNUSED)
+                        .withFix(RemoveRedundantFlagQuickFix(value, other.text))
+                        .create()
+                    return@conflict
+                }
+
+                val key = if (name < otherName) name to otherName else otherName to name
                 if (!seen.add(key)) return@conflict
 
-                val severity = if (conflict.severity == IsiFlagSeveritySpec.ERROR)
+                val severity = if (conflict.type == IsiFlagType.FORBIDDEN)
                     HighlightSeverity.ERROR else HighlightSeverity.WARNING
                 val msg = "Conflicting flags: '${node.text}' and '${other.text}'"
                 holder.newAnnotation(severity, msg).range(node.textRange).create()
                 holder.newAnnotation(severity, msg).range(other.textRange).create()
             }
         }
+
+        // Required flags: a flag may mandate the presence of other flags in the same value.
+        tokenNodes.forEach { (name, node) ->
+            val def = flagMap[name] ?: return@forEach
+            val missing = def.conflicts
+                .filter { it.type == IsiFlagType.REQUIRES }
+                .map { it.flag }
+                .filter { tokenNodes[it.lowercase()] == null }
+            if (missing.isEmpty()) return@forEach
+
+            val msg = "Flag '${node.text}' requires ${missing.joinToString(", ") { "'$it'" }}"
+            holder.newAnnotation(HighlightSeverity.ERROR, msg)
+                .range(node.textRange)
+                .withFix(AddMissingFlagsQuickFix(value, missing))
+                .create()
+        }
     }
 
     private fun annotateNativeValue(value: IsiParamValue, type: IsiNativeTypeSpec, holder: AnnotationHolder) {
-        val text = value.singleText()
+        val text = value.singleText
         when (type.dataType.lowercase()) {
             "boolean" -> {
                 if (text.lowercase() in setOf("yes", "no")) {
@@ -316,7 +425,8 @@ class IsiAnnotator : Annotator {
                 }
             }
 
-            "integer" -> if (!text.matches(Regex("-?[0-9]+"))) {
+            // Accept decimal (-?[0-9]+) or Pascal-style hexadecimal ($ followed by hex digits, e.g. $0409)
+            "integer" -> if (!text.matches(Regex("-?[0-9]+")) && !text.matches(Regex("\\\$[0-9A-Fa-f]+"))) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,
                     "Expected type '${type.dataType}', got: '$text'"
@@ -326,12 +436,12 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateConstant(constant: IsiConstant, holder: AnnotationHolder) {
-        if (constant.isInCodeSection()) return
+        if (constant.isInCodeSection) return
         val body = constant.constantBody
         val name = body.text.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins = service<IssConstantService>().spec.constants
-        val isppNames = constant.issFile()?.definedConstants()?.map { it.first } ?: emptyList()
+        val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
         val isIspp = body.text.trimStart().startsWith("#")
 
         val known = when {
@@ -357,6 +467,39 @@ class IsiAnnotator : Annotator {
                 annotateVersion(constant.textRange, "{${constSpec.name}}", constSpec.since, constSpec.until, holder)
             }
             highlight(constant.textRange, IsiAnnotatorHighlighting.REFERENCE, holder)
+            if (name.equals("cm", ignoreCase = true)) {
+                // Render the `cm` keyword italic (layers over the reference colour above).
+                body.node.findChildByType(IsiTypes.IDENTIFIER)?.let {
+                    highlight(it.textRange, IsiAnnotatorHighlighting.CUSTOM_MESSAGE_PREFIX, holder)
+                }
+                annotateCustomMessage(constant, body, holder)
+            }
+        }
+    }
+
+    /**
+     * Flags a `{cm:Name}` whose message name is not defined in any [CustomMessages] section. The
+     * red highlight covers only the name token, mirroring the unknown-flag/unknown-constant style.
+     */
+    private fun annotateCustomMessage(constant: IsiConstant, body: IsiConstantBody, holder: AnnotationHolder) {
+        val colon = body.node.findChildByType(IsiTypes.COLON) ?: return
+        val nameNode = body.node.getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
+            .firstOrNull { it.startOffset > colon.startOffset } ?: return
+        val msgName = nameNode.text
+        if (msgName.isEmpty()) return
+
+        val declared = constant.issFile?.findSections("CustomMessages")
+            ?.flatMap { it.directiveEntryList }
+            ?.mapNotNull { (it as? IsiDirectiveEntryEx)?.customMessageName() }
+            ?: emptyList()
+        if (declared.none { it.equals(msgName, ignoreCase = true) }) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Unknown custom message: '$msgName' (not defined in [CustomMessages])"
+            )
+                .range(nameNode.textRange)
+                .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
         }
     }
 

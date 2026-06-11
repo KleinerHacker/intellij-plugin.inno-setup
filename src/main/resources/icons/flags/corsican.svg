@@ -1,0 +1,6 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#ffffff"/>
+    <circle cx="8" cy="8.5" r="4" fill="#000000"/>
+    <rect x="4" y="6.2" width="8" height="1.4" fill="#ffffff"/>
+</svg>

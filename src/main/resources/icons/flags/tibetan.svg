@@ -1,0 +1,14 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#ffffff"/>
+    <g>
+        <polygon points="8,8 0,0 4,0" fill="#d80027"/>
+        <polygon points="8,8 4,0 8,0" fill="#00339a"/>
+        <polygon points="8,8 8,0 12,0" fill="#d80027"/>
+        <polygon points="8,8 12,0 16,0" fill="#00339a"/>
+        <polygon points="8,8 16,0 16,4" fill="#d80027"/>
+    </g>
+    <polygon points="8,9 2,16 14,16" fill="#ffffff"/>
+    <polygon points="8,10.5 4.5,15 11.5,15" fill="#cdd6e0"/>
+    <circle cx="8" cy="6.5" r="2.1" fill="#ffe927"/>
+</svg>

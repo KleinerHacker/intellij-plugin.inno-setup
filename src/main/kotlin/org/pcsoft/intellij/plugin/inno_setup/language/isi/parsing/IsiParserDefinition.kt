@@ -24,6 +24,8 @@ import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.IssLanguage
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.parser.IsiParser
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiTypes
 
@@ -40,5 +42,11 @@ class IsiParserDefinition : ParserDefinition {
     override fun getCommentTokens(): TokenSet = COMMENTS
     override fun getStringLiteralElements(): TokenSet = STRINGS
     override fun createElement(node: ASTNode): PsiElement = IsiTypes.Factory.createElement(node)!!
-    override fun createFile(viewProvider: FileViewProvider): PsiFile = IssFile(viewProvider)
+    // Central factory point: the .isl file type reuses this ISS parser but needs the IslFile PSI so
+    // the ISL tooling can tell language files apart from scripts.
+    override fun createFile(viewProvider: FileViewProvider): PsiFile =
+        if (viewProvider.fileType == IslFileType.INSTANCE || viewProvider.virtualFile.extension.equals("isl", ignoreCase = true))
+            IslFile(viewProvider)
+        else
+            IssFile(viewProvider)
 }

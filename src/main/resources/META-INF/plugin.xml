@@ -30,6 +30,12 @@
                   language="ISS"
                   extensions="iss"/>
 
+        <!-- Language (translation) file type; same ISS language, restricted set of sections -->
+        <fileType name="Inno Setup Language"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFileType"
+                  language="ISS"
+                  extensions="isl"/>
+
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiParserDefinition"/>
@@ -41,6 +47,13 @@
         <!-- Semantic annotator -->
         <annotator language="ISS"
                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotator"/>
+        <!-- ISL-only: restrict sections in .isl language files -->
+        <annotator language="ISS"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.parsing.IslAnnotator"/>
+
+        <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
+        <codeInsight.inlayProvider language="ISS"
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiLanguageInlayHintsProvider"/>
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
@@ -53,6 +66,8 @@
         <!-- Refactoring: inline rename for section Name: values -->
         <lang.refactoringSupport language="ISS"
                                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiRefactoringSupportProvider"/>
+
+        <statementUpDownMover implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiSectionMover"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
 
@@ -94,6 +109,14 @@
         <referencesSearch
                 implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiSectionReferencesSearcher"/>
 
+        <!-- Rename / Find Usages: find {cm:Name} references of a [CustomMessages] declaration -->
+        <referencesSearch
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiCustomMessageReferencesSearcher"/>
+
+        <!-- Rename / Find Usages: find lang. key prefixes referencing a [Languages] Name -->
+        <referencesSearch
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiLanguagePrefixReferencesSearcher"/>
+
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
                                   implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiReferenceContributor"/>
@@ -121,6 +144,8 @@
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="ISS"
                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureViewFactory"/>
+
+        <navbar implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureAwareNavbar"/>
 
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
@@ -150,15 +175,31 @@
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
                 displayName="Inno Setup"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsConfigurable"/>
+
+        <!-- ═══════════════════════════════ Actions ═══════════════════════════════ -->
+
+        <!-- Intention Actions -->
+
+        <intentionAction>
+            <language>ISS</language>
+            <className>org.pcsoft.intellij.plugin.inno_setup.action.intention.IssFlipIntentionAction</className>
+        </intentionAction>
     </extensions>
 
     <actions>
         <action id="Iss.NewFile"
-                class="org.pcsoft.intellij.plugin.inno_setup.action.IssCreateFileAction"
+                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IssCreateFileAction"
                 text="Inno Setup Script"
                 description="Create new Inno Setup Script file"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>
+        <action id="Isl.NewFile"
+                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IslCreateFileAction"
+                text="Inno Setup Language"
+                description="Create new Inno Setup language file"
+                icon="/icons/inno-setup-script-icon@16.png">
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
         </action>
     </actions>
 

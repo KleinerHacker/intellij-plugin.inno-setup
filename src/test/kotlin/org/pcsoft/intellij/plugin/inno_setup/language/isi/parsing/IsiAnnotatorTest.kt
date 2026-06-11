@@ -38,6 +38,39 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
         try { block() } finally { service.state.minInnoVersion = prev }
     }
 
+    // ── {cm:…} italic + language prefix ───────────────────────────────────────
+
+    fun testCmKeywordIsItalic() {
+        val text = "[CustomMessages]\nGreeting=Hi\n[Setup]\nAppComments={cm:Greeting}\n"
+        myFixture.configureByText(IssFileType.INSTANCE, text)
+        val cmOffset = text.indexOf("cm:")
+        val italic = myFixture.doHighlighting().any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.CUSTOM_MESSAGE_PREFIX &&
+                    it.startOffset <= cmOffset && it.endOffset >= cmOffset + 2
+        }
+        assertTrue("The cm keyword in {cm:…} must be highlighted italic", italic)
+    }
+
+    fun testUnknownLanguagePrefixProducesError() {
+        val text = "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[Messages]\nde.WelcomeLabel1=Willkommen\n"
+        val hit = highlights(text).any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown language prefix", ignoreCase = true) == true
+        }
+        assertTrue("An undeclared lang. prefix must produce an ERROR", hit)
+    }
+
+    fun testKnownLanguagePrefixProducesNoError() {
+        val text = "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[Messages]\nenglish.WelcomeLabel1=Welcome\n"
+        val hit = highlights(text).any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown language prefix", ignoreCase = true) == true
+        }
+        assertFalse("A declared lang. prefix must not be flagged", hit)
+    }
+
     // ── File level: required sections ─────────────────────────────────────────
 
     fun testFileLevelErrorWhenSetupSectionMissing() {
@@ -177,18 +210,109 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
     }
 
     fun testConflictingFlagsWithWarningSeverityProducesTwoWarnings() {
-        // ignoreversion and comparetimestamp conflict at WARNING level
+        // createvalueifdoesntexist has no effect when deletevalue is also specified
+        // ('ignored' type) — conflict reported at WARNING level in [Registry].
         val text =
-            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: ignoreversion comparetimestamp\n"
+            VALID_SETUP + "\n[Registry]\nRoot: HKLM; Subkey: \"Software\\Test\"; Flags: createvalueifdoesntexist deletevalue\n"
         val all = highlights(text)
         val conflicts = all.filter {
             it.severity == HighlightSeverity.WARNING &&
                     it.description?.contains("Conflicting flags", ignoreCase = true) == true
         }
         assertEquals(
-            "Conflicting flags 'ignoreversion'/'comparetimestamp' must produce exactly 2 WARNING annotations",
+            "Conflicting flags 'createvalueifdoesntexist'/'deletevalue' must produce exactly 2 WARNING annotations",
             2, conflicts.size
         )
+    }
+
+    // ── Param value — required flags ──────────────────────────────────────────
+
+    fun testRequiredFlagMissingProducesError() {
+        // extractarchive requires external and ignoreversion.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive\n"
+        val errors = highlights(text).filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("requires", ignoreCase = true) == true
+        }
+        assertEquals("A flag missing its required flags must produce exactly one ERROR", 1, errors.size)
+    }
+
+    fun testRequiredFlagsPresentProducesNoError() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive external ignoreversion\n"
+        val errors = highlights(text).filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("requires", ignoreCase = true) == true
+        }
+        assertEquals("When all required flags are present there must be no requires ERROR", 0, errors.size)
+    }
+
+    // ── Param value — redundant flags ─────────────────────────────────────────
+
+    fun testRedundantFlagProducesSingleWeakWarning() {
+        // 'external' makes 'nocompression' redundant (no effect when combined).
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val all = highlights(text)
+        val redundant = all.filter {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertEquals(
+            "A redundant flag must produce exactly one WEAK_WARNING (only on the implied flag)",
+            1, redundant.size
+        )
+    }
+
+    fun testRedundantFlagIsHighlightedAsUnused() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val redundantOffset = fileText.lastIndexOf("nocompression")
+        val hit = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == redundantOffset
+        }
+        assertTrue("The redundant flag 'nocompression' must use the UNUSED text attribute", hit)
+    }
+
+    fun testRedundantFlagOnlyMarksImpliedFlagNotTheImplyingOne() {
+        // The implying flag 'external' must stay a normal FLAG, not be greyed out.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: external nocompression\n"
+        val fileText = myFixture.run { configureByText(IssFileType.INSTANCE, text); file.text }
+        val all = myFixture.doHighlighting()
+        val externalOffset = fileText.lastIndexOf("external")
+        val markedUnused = all.any {
+            it.forcedTextAttributesKey == IsiAnnotatorHighlighting.UNUSED &&
+                    it.startOffset == externalOffset
+        }
+        assertFalse("The implying flag 'external' must not be greyed out as UNUSED", markedUnused)
+    }
+
+    fun testExtractArchiveMakesReplaceSameVersionRedundant() {
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.zip\"; DestDir: \"{app}\"; Flags: extractarchive replacesameversion\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertTrue("'replacesameversion' must be flagged redundant when combined with 'extractarchive'", hit)
+    }
+
+    fun testFlagWithoutImplyingCounterpartProducesNoRedundantWarning() {
+        // 'nocompression' alone (no 'external') must not be flagged redundant.
+        val text =
+            VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: nocompression\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains("redundant", ignoreCase = true) == true
+        }
+        assertFalse("'nocompression' without 'external' must not be flagged redundant", hit)
     }
 
     // ── Param value — native type validation ──────────────────────────────────
@@ -503,5 +627,69 @@ class IsiAnnotatorTest : BasePlatformTestCase() {
                     it.startOffset == offset
         }
         assertTrue("'full' in Types: parameter must be highlighted with REFERENCE attribute", hit)
+    }
+
+    // ── Pascal-hex integers ───────────────────────────────────────────────────
+
+    private fun hasTypeError(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Expected type", ignoreCase = true) == true
+        }
+
+    fun testHexIntegerValueAcceptedForIntegerParameter() {
+        // $1000 is a valid Pascal hex integer for the integer param ExtraDiskSpaceRequired.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: \"Core\"; ExtraDiskSpaceRequired: \$1000\n"
+        assertFalse(
+            "Pascal hex '\$1000' must be accepted for an integer parameter (no type error)",
+            hasTypeError(highlights(text))
+        )
+    }
+
+    fun testInvalidHexIntegerValueStillProducesError() {
+        // $GG is not valid hex → still a type error.
+        val text = VALID_SETUP + "\n[Components]\nName: core; Description: \"Core\"; ExtraDiskSpaceRequired: \$GG\n"
+        assertTrue(
+            "Non-hex '\$GG' for an integer parameter must still produce a type ERROR",
+            hasTypeError(highlights(text))
+        )
+    }
+
+    // ── [LangOptions] LanguageID validation ───────────────────────────────────
+
+    private fun hasUnknownLcidWarning(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.WARNING &&
+                    it.description?.contains("Unknown Windows language identifier", ignoreCase = true) == true
+        }
+
+    fun testLangOptionsValidLanguageIdProducesNoWarning() {
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$0409\n"
+        val all = highlights(text)
+        assertFalse("Valid LCID \$0409 must not warn", hasUnknownLcidWarning(all))
+        assertFalse("Valid hex LCID must not be a type error", hasTypeError(all))
+    }
+
+    fun testLangOptionsZeroLanguageIdProducesNoWarning() {
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=0\n"
+        assertFalse("LanguageID=0 must be allowed without warning", hasUnknownLcidWarning(highlights(text)))
+    }
+
+    fun testLangOptionsUnknownLanguageIdProducesWarning() {
+        // $9999 is a well-formed hex integer but not an assigned LCID.
+        val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$9999\n"
+        assertTrue(
+            "An unassigned LCID \$9999 must produce an 'Unknown Windows language identifier' WARNING",
+            hasUnknownLcidWarning(highlights(text))
+        )
+    }
+
+    fun testLanguageIdWarningOnlyAppliesToLangOptions() {
+        // Same key name in a different section must not be LCID-validated.
+        val text = VALID_SETUP + "\n[Setup]\nLanguageID=\$9999\n"
+        assertFalse(
+            "LanguageID outside [LangOptions] must not be LCID-validated",
+            hasUnknownLcidWarning(highlights(text))
+        )
     }
 }

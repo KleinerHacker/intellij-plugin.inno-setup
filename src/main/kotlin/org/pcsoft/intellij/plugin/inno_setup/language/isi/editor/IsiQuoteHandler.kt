@@ -67,6 +67,7 @@ class IsiQuoteHandler : TypedHandlerDelegate() {
         // Auto-insert the matching closing quote and place the cursor between them
         editor.document.insertString(offset, "\"\"")
         editor.caretModel.moveToOffset(offset + 1)
+
         return Result.STOP
     }
 
@@ -85,9 +86,12 @@ class IsiQuoteHandler : TypedHandlerDelegate() {
     private fun isOpeningQuote(highlighter: EditorHighlighter, quote: HighlighterIterator): Boolean {
         val pos = quote.start
         if (pos == 0) return true
+
         val prev = highlighter.createIterator(pos - 1)
         if (prev.atEnd()) return false
+
         val pt = prev.tokenType
+
         return pt != IsiTypes.QUOTE && pt != IsiTypes.STRING_PART && pt != IsiTypes.RBRACE
     }
 }

@@ -66,6 +66,8 @@ private entry ::= directiveEntry
 // pin=2 commits after "Key ="; no recoverWhile to avoid consuming the next entry.
 directiveEntry ::= directiveKey EQ paramValue CRLF? {
   pin=2
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.impl.IsiDirectiveEntryMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.IsiDirectiveEntryEx"
 }
 directiveKey   ::= IDENTIFIER
 

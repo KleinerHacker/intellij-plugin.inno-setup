@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://pcsoft.org/intellij/plugin/inno-setup/isl-code",
+  "description": "Windows language identifiers (MSDN [MS-LCID]) used by the plugin for the [LangOptions] LanguageID directive: completion suggestions, flag icons, English locale names, and validation. Languages bundled with Inno Setup are marked and additionally carry their Inno language name and messages file.",
+  "type": "object",
+  "required": [
+    "languages"
+  ],
+  "properties": {
+    "languages": {
+      "description": "All recognised Windows locales, each with an English name, its Pascal-hex LCID, a flag and whether it is bundled with Inno Setup.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/language"
+      }
+    }
+  },
+  "definitions": {
+    "language": {
+      "description": "A single recognised Windows locale.",
+      "type": "object",
+      "required": [
+        "displayName",
+        "id",
+        "builtin"
+      ],
+      "properties": {
+        "displayName": {
+          "description": "English name of the locale shown to the user, e.g. \"German (Germany)\".",
+          "type": "string"
+        },
+        "id": {
+          "description": "The Windows language identifier (LCID) in Pascal-hexadecimal form, inserted into the script, e.g. \"$0407\".",
+          "type": "string",
+          "pattern": "^\\$[0-9A-Fa-f]+$"
+        },
+        "flag": {
+          "description": "Base name (without extension) of the flag SVG under /icons/flags/, e.g. \"german\". Omitted when no flag exists; a neutral globe icon is then used.",
+          "type": "string"
+        },
+        "builtin": {
+          "description": "Whether this language is bundled with Inno Setup (a ready-to-use [Languages] entry). Built-in languages also provide issName and messagesFile.",
+          "type": "boolean"
+        },
+        "issName": {
+          "description": "The Inno Setup language name used as the [Languages] Name value, e.g. \"german\" (present only for built-in languages).",
+          "type": "string"
+        },
+        "messagesFile": {
+          "description": "Path to the bundled messages file used as the [Languages] MessagesFile value, e.g. \"compiler:Languages\\German.isl\" (present only for built-in languages).",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

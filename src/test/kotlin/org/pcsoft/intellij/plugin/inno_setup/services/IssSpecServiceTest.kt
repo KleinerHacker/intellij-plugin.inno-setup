@@ -31,8 +31,8 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `all 15 sections are loaded`() {
-        assertEquals(15, spec.sections.size)
+    fun `all 18 sections are loaded`() {
+        assertEquals(18, spec.sections.size)
     }
 
     @Test
@@ -41,14 +41,60 @@ class IssSpecServiceTest {
         listOf(
             "Setup", "Types", "Components", "Tasks", "Dirs", "Files",
             "Icons", "Registry", "Run", "UninstallRun", "Languages",
+            "LangOptions", "Messages", "CustomMessages",
             "InstallDelete", "UninstallDelete", "ISSigKeys", "Code"
         ).forEach { assertTrue("Missing section: $it", it in names) }
+    }
+
+    @Test
+    fun `Messages and CustomMessages are internationalized directive sections`() {
+        listOf("Messages", "CustomMessages").forEach { name ->
+            val section = spec.sections.find { it.name == name }!!
+            assertEquals("$name must be a directive section", "directive", section.type)
+            assertTrue("$name must be internationalized", section.internationalization)
+        }
+        val custom = spec.sections.find { it.name == "CustomMessages" }!!
+        assertTrue("CustomMessages must have no predefined attributes", custom.attributes.isEmpty())
+        val messages = spec.sections.find { it.name == "Messages" }!!
+        assertTrue("Messages must declare predefined identifiers", messages.attributes.isNotEmpty())
     }
 
     @Test
     fun `Setup section is directive type`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
         assertEquals("directive", setup.type)
+    }
+
+    @Test
+    fun `LangOptions is a directive section with all expected attributes`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        assertEquals("directive", lang.type)
+        assertTrue("LangOptions section must not be deprecated", lang.deprecated.isEmpty())
+        val attrNames = lang.attributes.map { it.name }.toSet()
+        listOf(
+            "LanguageName", "LanguageID", "LanguageCodePage",
+            "DialogFontName", "DialogFontSize", "DialogFontBaseScaleWidth", "DialogFontBaseScaleHeight",
+            "WelcomeFontName", "WelcomeFontSize", "RightToLeft",
+            "TitleFontName", "TitleFontSize", "CopyrightFontName", "CopyrightFontSize"
+        ).forEach { assertTrue("LangOptions missing attribute: $it", it in attrNames) }
+    }
+
+    @Test
+    fun `LangOptions LanguageID is integer typed`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        val languageId = lang.attributes.find { it.name == "LanguageID" }!!
+        val type = languageId.type
+        assertTrue("LanguageID must be a native type", type is IsiNativeTypeSpec)
+        assertEquals("integer", (type as IsiNativeTypeSpec).dataType)
+    }
+
+    @Test
+    fun `LangOptions removed font directives carry until 6_4`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        listOf("TitleFontName", "TitleFontSize", "CopyrightFontName", "CopyrightFontSize").forEach { name ->
+            val attr = lang.attributes.find { it.name == name }!!
+            assertEquals("$name must be marked removed in 6.4", "6.4", attr.until)
+        }
     }
 
     @Test
@@ -77,7 +123,7 @@ class IssSpecServiceTest {
         listOf("AppName", "AppVersion").forEach { attrName ->
             val attr = setup.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Setup", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -87,7 +133,7 @@ class IssSpecServiceTest {
         listOf("Source", "DestDir").forEach { attrName ->
             val attr = files.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Files", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -97,7 +143,7 @@ class IssSpecServiceTest {
         listOf("Root", "Subkey").forEach { attrName ->
             val attr = registry.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Registry", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -133,15 +179,31 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `Setup section is required`() {
+    fun `Setup section is required in iss`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
-        assertTrue("Setup must be required", setup.required)
+        assertTrue("Setup must be required in scripts", setup.required.appliesTo(IsiSpecTarget.ISS))
+        assertFalse("Setup is not required in language files", setup.required.appliesTo(IsiSpecTarget.ISL))
     }
 
     @Test
-    fun `all other sections are not required`() {
+    fun `only Setup is required in iss`() {
         spec.sections.filter { it.name != "Setup" }.forEach { section ->
-            assertFalse("Section '${section.name}' must not be required", section.required)
+            assertFalse(
+                "Section '${section.name}' must not be required in scripts",
+                section.required.appliesTo(IsiSpecTarget.ISS)
+            )
+        }
+    }
+
+    @Test
+    fun `LangOptions and its language identity attributes are required in isl only`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        assertTrue("LangOptions must be required in .isl", lang.required.appliesTo(IsiSpecTarget.ISL))
+        assertFalse("LangOptions is not required in scripts", lang.required.appliesTo(IsiSpecTarget.ISS))
+        listOf("LanguageName", "LanguageID").forEach { name ->
+            val attr = lang.attributes.find { it.name == name }!!
+            assertTrue("$name must be required in .isl", attr.required.appliesTo(IsiSpecTarget.ISL))
+            assertFalse("$name is not required in scripts", attr.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -184,12 +246,12 @@ class IssSpecServiceTest {
         val flag32 = flagType.flags.find { it.name == "32bit" }!!
         assertTrue(
             "32bit must have error-conflict with 64bit",
-            flag32.conflicts.any { it.flag == "64bit" && it.severity == IsiFlagSeveritySpec.ERROR }
+            flag32.conflicts.any { it.flag == "64bit" && it.type == IsiFlagType.FORBIDDEN }
         )
         val flag64 = flagType.flags.find { it.name == "64bit" }!!
         assertTrue(
             "64bit must have error-conflict with 32bit",
-            flag64.conflicts.any { it.flag == "32bit" && it.severity == IsiFlagSeveritySpec.ERROR }
+            flag64.conflicts.any { it.flag == "32bit" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 
@@ -200,7 +262,7 @@ class IssSpecServiceTest {
         val runMin = flagType.flags.find { it.name == "runminimized" }!!
         assertTrue(
             "runminimized must have error-conflict with runmaximized",
-            runMin.conflicts.any { it.flag == "runmaximized" && it.severity == IsiFlagSeveritySpec.ERROR }
+            runMin.conflicts.any { it.flag == "runmaximized" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 
@@ -211,7 +273,7 @@ class IssSpecServiceTest {
         val nowait = flagType.flags.find { it.name == "nowait" }!!
         assertTrue(
             "nowait must have error-conflict with waituntilterminated",
-            nowait.conflicts.any { it.flag == "waituntilterminated" && it.severity == IsiFlagSeveritySpec.ERROR }
+            nowait.conflicts.any { it.flag == "waituntilterminated" && it.type == IsiFlagType.FORBIDDEN }
         )
     }
 }

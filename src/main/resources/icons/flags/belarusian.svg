@@ -1,0 +1,15 @@
+<!-- Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <rect width="16" height="16" fill="#c8313e"/>
+    <rect y="10.4" width="16" height="5.6" fill="#4aa657"/>
+    <rect width="3" height="16" fill="#ffffff"/>
+    <g fill="#c8313e">
+        <rect x="1.2" y="1.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="3.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="5.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="7.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="9.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="11.5" width="0.6" height="0.6"/>
+        <rect x="1.2" y="13.5" width="0.6" height="0.6"/>
+    </g>
+</svg>

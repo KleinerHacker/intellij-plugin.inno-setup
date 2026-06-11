@@ -1,0 +1,904 @@
+# $schema: ./isl-code.json
+# Windows language identifiers (MSDN [MS-LCID]) used for the [LangOptions] LanguageID
+# directive: completion, validation, flags and English locale names.
+# 'builtin: true' marks the languages bundled with Inno Setup; those also carry the
+# Inno language name (issName) and its messages file used in the [Languages] section.
+languages:
+  - displayName: "Arabic (Saudi Arabia)"
+    id: "$0401"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Bulgarian (Bulgaria)"
+    id: "$0402"
+    flag: "bulgarian"
+    builtin: false
+  - displayName: "Catalan (Catalan)"
+    id: "$0403"
+    flag: "catalan"
+    builtin: true
+    issName: "catalan"
+    messagesFile: "compiler:Languages\\Catalan.isl"
+  - displayName: "Chinese (Traditional, Taiwan)"
+    id: "$0404"
+    flag: "taiwan"
+    builtin: false
+  - displayName: "Czech (Czech Republic)"
+    id: "$0405"
+    flag: "czech"
+    builtin: true
+    issName: "czech"
+    messagesFile: "compiler:Languages\\Czech.isl"
+  - displayName: "Danish (Denmark)"
+    id: "$0406"
+    flag: "danish"
+    builtin: true
+    issName: "danish"
+    messagesFile: "compiler:Languages\\Danish.isl"
+  - displayName: "German (Germany)"
+    id: "$0407"
+    flag: "german"
+    builtin: true
+    issName: "german"
+    messagesFile: "compiler:Languages\\German.isl"
+  - displayName: "Greek (Greece)"
+    id: "$0408"
+    flag: "greek"
+    builtin: true
+    issName: "greek"
+    messagesFile: "compiler:Languages\\Greek.isl"
+  - displayName: "English (United States)"
+    id: "$0409"
+    flag: "united-states"
+    builtin: true
+    issName: "english"
+    messagesFile: "compiler:Default.isl"
+  - displayName: "Spanish (Spain, Traditional Sort)"
+    id: "$040A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Finnish (Finland)"
+    id: "$040B"
+    flag: "finnish"
+    builtin: true
+    issName: "finnish"
+    messagesFile: "compiler:Languages\\Finnish.isl"
+  - displayName: "French (France)"
+    id: "$040C"
+    flag: "french"
+    builtin: true
+    issName: "french"
+    messagesFile: "compiler:Languages\\French.isl"
+  - displayName: "Hebrew (Israel)"
+    id: "$040D"
+    flag: "hebrew"
+    builtin: true
+    issName: "hebrew"
+    messagesFile: "compiler:Languages\\Hebrew.isl"
+  - displayName: "Hungarian (Hungary)"
+    id: "$040E"
+    flag: "hungarian"
+    builtin: true
+    issName: "hungarian"
+    messagesFile: "compiler:Languages\\Hungarian.isl"
+  - displayName: "Icelandic (Iceland)"
+    id: "$040F"
+    flag: "icelandic"
+    builtin: true
+    issName: "icelandic"
+    messagesFile: "compiler:Languages\\Icelandic.isl"
+  - displayName: "Italian (Italy)"
+    id: "$0410"
+    flag: "italian"
+    builtin: true
+    issName: "italian"
+    messagesFile: "compiler:Languages\\Italian.isl"
+  - displayName: "Japanese (Japan)"
+    id: "$0411"
+    flag: "japanese"
+    builtin: true
+    issName: "japanese"
+    messagesFile: "compiler:Languages\\Japanese.isl"
+  - displayName: "Korean (Korea)"
+    id: "$0412"
+    flag: "korean"
+    builtin: true
+    issName: "korean"
+    messagesFile: "compiler:Languages\\Korean.isl"
+  - displayName: "Dutch (Netherlands)"
+    id: "$0413"
+    flag: "dutch"
+    builtin: true
+    issName: "dutch"
+    messagesFile: "compiler:Languages\\Dutch.isl"
+  - displayName: "Norwegian (Bokmål, Norway)"
+    id: "$0414"
+    flag: "norwegian"
+    builtin: true
+    issName: "norwegian"
+    messagesFile: "compiler:Languages\\Norwegian.isl"
+  - displayName: "Polish (Poland)"
+    id: "$0415"
+    flag: "polish"
+    builtin: true
+    issName: "polish"
+    messagesFile: "compiler:Languages\\Polish.isl"
+  - displayName: "Portuguese (Brazil)"
+    id: "$0416"
+    flag: "brazilianportuguese"
+    builtin: true
+    issName: "brazilianportuguese"
+    messagesFile: "compiler:Languages\\BrazilianPortuguese.isl"
+  - displayName: "Romansh (Switzerland)"
+    id: "$0417"
+    flag: "romansh"
+    builtin: false
+  - displayName: "Romanian (Romania)"
+    id: "$0418"
+    flag: "romanian"
+    builtin: false
+  - displayName: "Russian (Russia)"
+    id: "$0419"
+    flag: "russian"
+    builtin: true
+    issName: "russian"
+    messagesFile: "compiler:Languages\\Russian.isl"
+  - displayName: "Croatian (Croatia)"
+    id: "$041A"
+    flag: "croatian"
+    builtin: false
+  - displayName: "Slovak (Slovakia)"
+    id: "$041B"
+    flag: "slovak"
+    builtin: false
+  - displayName: "Albanian (Albania)"
+    id: "$041C"
+    flag: "albanian"
+    builtin: false
+  - displayName: "Swedish (Sweden)"
+    id: "$041D"
+    flag: "sweden"
+    builtin: false
+  - displayName: "Thai (Thailand)"
+    id: "$041E"
+    flag: "thai"
+    builtin: false
+  - displayName: "Turkish (Turkey)"
+    id: "$041F"
+    flag: "turkish"
+    builtin: true
+    issName: "turkish"
+    messagesFile: "compiler:Languages\\Turkish.isl"
+  - displayName: "Urdu (Islamic Republic of Pakistan)"
+    id: "$0420"
+    flag: "urdu"
+    builtin: false
+  - displayName: "Indonesian (Indonesia)"
+    id: "$0421"
+    flag: "indonesian"
+    builtin: false
+  - displayName: "Ukrainian (Ukraine)"
+    id: "$0422"
+    flag: "ukrainian"
+    builtin: true
+    issName: "ukrainian"
+    messagesFile: "compiler:Languages\\Ukrainian.isl"
+  - displayName: "Belarusian (Belarus)"
+    id: "$0423"
+    flag: "belarusian"
+    builtin: false
+  - displayName: "Slovenian (Slovenia)"
+    id: "$0424"
+    flag: "slovenian"
+    builtin: true
+    issName: "slovenian"
+    messagesFile: "compiler:Languages\\Slovenian.isl"
+  - displayName: "Estonian (Estonia)"
+    id: "$0425"
+    flag: "estonian"
+    builtin: false
+  - displayName: "Latvian (Latvia)"
+    id: "$0426"
+    flag: "latvian"
+    builtin: false
+  - displayName: "Lithuanian (Lithuania)"
+    id: "$0427"
+    flag: "lithuanian"
+    builtin: false
+  - displayName: "Tajik (Cyrillic, Tajikistan)"
+    id: "$0428"
+    flag: "tajik"
+    builtin: false
+  - displayName: "Persian (Iran)"
+    id: "$0429"
+    flag: "persian"
+    builtin: false
+  - displayName: "Vietnamese (Vietnam)"
+    id: "$042A"
+    flag: "vietnamese"
+    builtin: false
+  - displayName: "Armenian (Armenia)"
+    id: "$042B"
+    flag: "armenian"
+    builtin: false
+  - displayName: "Azerbaijani (Latin, Azerbaijan)"
+    id: "$042C"
+    flag: "azerbaijani"
+    builtin: false
+  - displayName: "Basque (Basque)"
+    id: "$042D"
+    flag: "basque"
+    builtin: false
+  - displayName: "Upper Sorbian (Germany)"
+    id: "$042E"
+    flag: "sorbian"
+    builtin: false
+  - displayName: "Macedonian (North Macedonia)"
+    id: "$042F"
+    flag: "macedonian"
+    builtin: false
+  - displayName: "Setswana (South Africa)"
+    id: "$0432"
+    flag: "setswana"
+    builtin: false
+  - displayName: "isiXhosa (South Africa)"
+    id: "$0434"
+    flag: "xhosa"
+    builtin: false
+  - displayName: "isiZulu (South Africa)"
+    id: "$0435"
+    flag: "zulu"
+    builtin: false
+  - displayName: "Afrikaans (South Africa)"
+    id: "$0436"
+    flag: "afrikaans"
+    builtin: false
+  - displayName: "Georgian (Georgia)"
+    id: "$0437"
+    flag: "georgian"
+    builtin: false
+  - displayName: "Faroese (Faroe Islands)"
+    id: "$0438"
+    flag: "faroese"
+    builtin: false
+  - displayName: "Hindi (India)"
+    id: "$0439"
+    flag: "hindi"
+    builtin: false
+  - displayName: "Maltese (Malta)"
+    id: "$043A"
+    flag: "maltese"
+    builtin: false
+  - displayName: "Sami (Northern, Norway)"
+    id: "$043B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Malay (Malaysia)"
+    id: "$043E"
+    flag: "malay"
+    builtin: false
+  - displayName: "Kazakh (Kazakhstan)"
+    id: "$043F"
+    flag: "kazakh"
+    builtin: false
+  - displayName: "Kyrgyz (Kyrgyzstan)"
+    id: "$0440"
+    flag: "kyrgyz"
+    builtin: false
+  - displayName: "Kiswahili (Kenya)"
+    id: "$0441"
+    flag: "swahili"
+    builtin: false
+  - displayName: "Turkmen (Turkmenistan)"
+    id: "$0442"
+    flag: "turkmen"
+    builtin: false
+  - displayName: "Uzbek (Latin, Uzbekistan)"
+    id: "$0443"
+    flag: "uzbek"
+    builtin: false
+  - displayName: "Tatar (Russia)"
+    id: "$0444"
+    flag: "tatar"
+    builtin: false
+  - displayName: "Bengali (India)"
+    id: "$0445"
+    flag: "bengali"
+    builtin: false
+  - displayName: "Punjabi (India)"
+    id: "$0446"
+    flag: "punjabi"
+    builtin: false
+  - displayName: "Gujarati (India)"
+    id: "$0447"
+    flag: "gujarati"
+    builtin: false
+  - displayName: "Odia (India)"
+    id: "$0448"
+    flag: "odia"
+    builtin: false
+  - displayName: "Tamil (India)"
+    id: "$0449"
+    flag: "tamil"
+    builtin: false
+  - displayName: "Telugu (India)"
+    id: "$044A"
+    flag: "telugu"
+    builtin: false
+  - displayName: "Kannada (India)"
+    id: "$044B"
+    flag: "kannada"
+    builtin: false
+  - displayName: "Malayalam (India)"
+    id: "$044C"
+    flag: "malayalam"
+    builtin: false
+  - displayName: "Assamese (India)"
+    id: "$044D"
+    flag: "assamese"
+    builtin: false
+  - displayName: "Marathi (India)"
+    id: "$044E"
+    flag: "marathi"
+    builtin: false
+  - displayName: "Sanskrit (India)"
+    id: "$044F"
+    flag: "sanskrit"
+    builtin: false
+  - displayName: "Mongolian (Cyrillic, Mongolia)"
+    id: "$0450"
+    flag: "mongolian"
+    builtin: false
+  - displayName: "Tibetan (PRC)"
+    id: "$0451"
+    flag: "tibetan"
+    builtin: false
+  - displayName: "Welsh (United Kingdom)"
+    id: "$0452"
+    flag: "welsh"
+    builtin: false
+  - displayName: "Khmer (Cambodia)"
+    id: "$0453"
+    flag: "khmer"
+    builtin: false
+  - displayName: "Lao (Laos)"
+    id: "$0454"
+    flag: "lao"
+    builtin: false
+  - displayName: "Burmese (Myanmar)"
+    id: "$0455"
+    flag: "burmese"
+    builtin: false
+  - displayName: "Galician (Galician)"
+    id: "$0456"
+    flag: "galician"
+    builtin: false
+  - displayName: "Konkani (India)"
+    id: "$0457"
+    flag: "konkani"
+    builtin: false
+  - displayName: "Syriac (Syria)"
+    id: "$045A"
+    flag: "syriac"
+    builtin: false
+  - displayName: "Sinhala (Sri Lanka)"
+    id: "$045B"
+    flag: "sinhala"
+    builtin: false
+  - displayName: "Inuktitut (Syllabics, Canada)"
+    id: "$045D"
+    flag: "inuktitut"
+    builtin: false
+  - displayName: "Amharic (Ethiopia)"
+    id: "$045E"
+    flag: "amharic"
+    builtin: false
+  - displayName: "Tamazight (Latin, Algeria)"
+    id: "$045F"
+    flag: "tamazight"
+    builtin: false
+  - displayName: "Nepali (Nepal)"
+    id: "$0461"
+    flag: "nepali"
+    builtin: false
+  - displayName: "Frisian (Netherlands)"
+    id: "$0462"
+    flag: "frisian"
+    builtin: false
+  - displayName: "Pashto (Afghanistan)"
+    id: "$0463"
+    flag: "pashto"
+    builtin: false
+  - displayName: "Filipino (Philippines)"
+    id: "$0464"
+    flag: "filipino"
+    builtin: false
+  - displayName: "Divehi (Maldives)"
+    id: "$0465"
+    flag: "divehi"
+    builtin: false
+  - displayName: "Hausa (Latin, Nigeria)"
+    id: "$0468"
+    flag: "hausa"
+    builtin: false
+  - displayName: "Yoruba (Nigeria)"
+    id: "$046A"
+    flag: "yoruba"
+    builtin: false
+  - displayName: "Quechua (Bolivia)"
+    id: "$046B"
+    flag: "quechua"
+    builtin: false
+  - displayName: "Sesotho sa Leboa (South Africa)"
+    id: "$046C"
+    flag: "sesotho"
+    builtin: false
+  - displayName: "Bashkir (Russia)"
+    id: "$046D"
+    flag: "bashkir"
+    builtin: false
+  - displayName: "Luxembourgish (Luxembourg)"
+    id: "$046E"
+    flag: "luxembourgish"
+    builtin: false
+  - displayName: "Greenlandic (Greenland)"
+    id: "$046F"
+    flag: "greenlandic"
+    builtin: false
+  - displayName: "Igbo (Nigeria)"
+    id: "$0470"
+    flag: "igbo"
+    builtin: false
+  - displayName: "Yi (PRC)"
+    id: "$0478"
+    flag: "yi"
+    builtin: false
+  - displayName: "Mapudungun (Chile)"
+    id: "$047A"
+    flag: "mapudungun"
+    builtin: false
+  - displayName: "Mohawk (Mohawk)"
+    id: "$047C"
+    flag: "mohawk"
+    builtin: false
+  - displayName: "Breton (France)"
+    id: "$047E"
+    flag: "french"
+    builtin: false
+  - displayName: "Maori (New Zealand)"
+    id: "$0481"
+    flag: "maori"
+    builtin: false
+  - displayName: "Occitan (France)"
+    id: "$0482"
+    flag: "french"
+    builtin: false
+  - displayName: "Corsican (France)"
+    id: "$0483"
+    flag: "corsican"
+    builtin: true
+    issName: "corsican"
+    messagesFile: "compiler:Languages\\Corsican.isl"
+  - displayName: "Alsatian (France)"
+    id: "$0484"
+    flag: "french"
+    builtin: false
+  - displayName: "Sakha (Russia)"
+    id: "$0485"
+    flag: "sakha"
+    builtin: false
+  - displayName: "K'iche' (Guatemala)"
+    id: "$0486"
+    flag: "kiche"
+    builtin: false
+  - displayName: "Kinyarwanda (Rwanda)"
+    id: "$0487"
+    flag: "kinyarwanda"
+    builtin: false
+  - displayName: "Wolof (Senegal)"
+    id: "$0488"
+    flag: "wolof"
+    builtin: false
+  - displayName: "Dari (Afghanistan)"
+    id: "$048C"
+    flag: "dari"
+    builtin: false
+  - displayName: "Scottish Gaelic (United Kingdom)"
+    id: "$0491"
+    flag: "scottishgaelic"
+    builtin: true
+    issName: "scottishgaelic"
+    messagesFile: "compiler:Languages\\ScottishGaelic.isl"
+  - displayName: "Arabic (Iraq)"
+    id: "$0801"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Chinese (Simplified, PRC)"
+    id: "$0804"
+    flag: "china"
+    builtin: false
+  - displayName: "German (Switzerland)"
+    id: "$0807"
+    flag: "german"
+    builtin: false
+  - displayName: "English (United Kingdom)"
+    id: "$0809"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Mexico)"
+    id: "$080A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "French (Belgium)"
+    id: "$080C"
+    flag: "french"
+    builtin: false
+  - displayName: "Italian (Switzerland)"
+    id: "$0810"
+    flag: "italian"
+    builtin: false
+  - displayName: "Dutch (Belgium)"
+    id: "$0813"
+    flag: "dutch"
+    builtin: false
+  - displayName: "Norwegian (Nynorsk, Norway)"
+    id: "$0814"
+    flag: "norwegian"
+    builtin: false
+  - displayName: "Portuguese (Portugal)"
+    id: "$0816"
+    flag: "portuguese"
+    builtin: true
+    issName: "portuguese"
+    messagesFile: "compiler:Languages\\Portuguese.isl"
+  - displayName: "Serbian (Latin, Serbia and Montenegro (Former))"
+    id: "$081A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Swedish (Finland)"
+    id: "$081D"
+    flag: "sweden"
+    builtin: false
+  - displayName: "Azerbaijani (Cyrillic, Azerbaijan)"
+    id: "$082C"
+    flag: "azerbaijani"
+    builtin: false
+  - displayName: "Lower Sorbian (Germany)"
+    id: "$082E"
+    flag: "sorbian"
+    builtin: false
+  - displayName: "Sami (Northern, Sweden)"
+    id: "$083B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Irish (Ireland)"
+    id: "$083C"
+    flag: "irish"
+    builtin: false
+  - displayName: "Malay (Brunei Darussalam)"
+    id: "$083E"
+    flag: "malay"
+    builtin: false
+  - displayName: "Uzbek (Cyrillic, Uzbekistan)"
+    id: "$0843"
+    flag: "uzbek"
+    builtin: false
+  - displayName: "Bengali (Bangladesh)"
+    id: "$0845"
+    flag: "bengali"
+    builtin: false
+  - displayName: "Mongolian (Traditional Mongolian, PRC)"
+    id: "$0850"
+    flag: "mongolian"
+    builtin: false
+  - displayName: "Inuktitut (Latin, Canada)"
+    id: "$085D"
+    flag: "inuktitut"
+    builtin: false
+  - displayName: "Quechua (Ecuador)"
+    id: "$086B"
+    flag: "quechua"
+    builtin: false
+  - displayName: "Arabic (Egypt)"
+    id: "$0C01"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Chinese (Traditional, Hong Kong SAR)"
+    id: "$0C04"
+    flag: "china"
+    builtin: false
+  - displayName: "German (Austria)"
+    id: "$0C07"
+    flag: "german"
+    builtin: false
+  - displayName: "English (Australia)"
+    id: "$0C09"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Spain)"
+    id: "$0C0A"
+    flag: "spanish"
+    builtin: true
+    issName: "spanish"
+    messagesFile: "compiler:Languages\\Spanish.isl"
+  - displayName: "French (Canada)"
+    id: "$0C0C"
+    flag: "french"
+    builtin: false
+  - displayName: "Serbian (Cyrillic, Serbia and Montenegro (Former))"
+    id: "$0C1A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Sami (Northern, Finland)"
+    id: "$0C3B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Quechua (Peru)"
+    id: "$0C6B"
+    flag: "quechua"
+    builtin: false
+  - displayName: "Arabic (Libya)"
+    id: "$1001"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Chinese (Simplified, Singapore)"
+    id: "$1004"
+    flag: "china"
+    builtin: false
+  - displayName: "German (Luxembourg)"
+    id: "$1007"
+    flag: "german"
+    builtin: false
+  - displayName: "English (Canada)"
+    id: "$1009"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Guatemala)"
+    id: "$100A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "French (Switzerland)"
+    id: "$100C"
+    flag: "french"
+    builtin: false
+  - displayName: "Croatian (Latin, Bosnia and Herzegovina)"
+    id: "$101A"
+    flag: "croatian"
+    builtin: false
+  - displayName: "Sami (Lule, Norway)"
+    id: "$103B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Algeria)"
+    id: "$1401"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Chinese (Traditional, Macao SAR)"
+    id: "$1404"
+    flag: "china"
+    builtin: false
+  - displayName: "German (Liechtenstein)"
+    id: "$1407"
+    flag: "german"
+    builtin: false
+  - displayName: "English (New Zealand)"
+    id: "$1409"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Costa Rica)"
+    id: "$140A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "French (Luxembourg)"
+    id: "$140C"
+    flag: "french"
+    builtin: false
+  - displayName: "Bosnian (Latin, Bosnia and Herzegovina)"
+    id: "$141A"
+    flag: "bosnian"
+    builtin: false
+  - displayName: "Sami (Lule, Sweden)"
+    id: "$143B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Morocco)"
+    id: "$1801"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Ireland)"
+    id: "$1809"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Panama)"
+    id: "$180A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "French (Monaco)"
+    id: "$180C"
+    flag: "french"
+    builtin: false
+  - displayName: "Serbian (Latin, Bosnia and Herzegovina)"
+    id: "$181A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Sami (Southern, Norway)"
+    id: "$183B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Tunisia)"
+    id: "$1C01"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (South Africa)"
+    id: "$1C09"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Dominican Republic)"
+    id: "$1C0A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Serbian (Cyrillic, Bosnia and Herzegovina)"
+    id: "$1C1A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Sami (Southern, Sweden)"
+    id: "$1C3B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Oman)"
+    id: "$2001"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Jamaica)"
+    id: "$2009"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Venezuela)"
+    id: "$200A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Bosnian (Cyrillic, Bosnia and Herzegovina)"
+    id: "$201A"
+    flag: "bosnian"
+    builtin: false
+  - displayName: "Sami (Skolt, Finland)"
+    id: "$203B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Yemen)"
+    id: "$2401"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Caribbean)"
+    id: "$2409"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Colombia)"
+    id: "$240A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Serbian (Latin, Serbia)"
+    id: "$241A"
+    flag: "serbian"
+    builtin: true
+    issName: "serbian"
+    messagesFile: "compiler:Languages\\Serbian.isl"
+  - displayName: "Sami (Inari, Finland)"
+    id: "$243B"
+    flag: "sami"
+    builtin: false
+  - displayName: "Arabic (Syria)"
+    id: "$2801"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Belize)"
+    id: "$2809"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Peru)"
+    id: "$280A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Serbian (Cyrillic, Serbia)"
+    id: "$281A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Arabic (Jordan)"
+    id: "$2C01"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Trinidad and Tobago)"
+    id: "$2C09"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Argentina)"
+    id: "$2C0A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Serbian (Latin, Montenegro)"
+    id: "$2C1A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Arabic (Lebanon)"
+    id: "$3001"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Zimbabwe)"
+    id: "$3009"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Ecuador)"
+    id: "$300A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Serbian (Cyrillic, Montenegro)"
+    id: "$301A"
+    flag: "serbian"
+    builtin: false
+  - displayName: "Arabic (Kuwait)"
+    id: "$3401"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (Philippines)"
+    id: "$3409"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Chile)"
+    id: "$340A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Arabic (U.A.E.)"
+    id: "$3801"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Spanish (Uruguay)"
+    id: "$380A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Arabic (Bahrain)"
+    id: "$3C01"
+    flag: "arabic"
+    builtin: false
+  - displayName: "Spanish (Paraguay)"
+    id: "$3C0A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Arabic (Qatar)"
+    id: "$4001"
+    flag: "arabic"
+    builtin: false
+  - displayName: "English (India)"
+    id: "$4009"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Bolivia)"
+    id: "$400A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "English (Malaysia)"
+    id: "$4409"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (El Salvador)"
+    id: "$440A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "English (Singapore)"
+    id: "$4809"
+    flag: "english"
+    builtin: false
+  - displayName: "Spanish (Honduras)"
+    id: "$480A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Spanish (Nicaragua)"
+    id: "$4C0A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Spanish (Puerto Rico)"
+    id: "$500A"
+    flag: "spanish"
+    builtin: false
+  - displayName: "Spanish (United States)"
+    id: "$540A"
+    flag: "spanish"
+    builtin: false

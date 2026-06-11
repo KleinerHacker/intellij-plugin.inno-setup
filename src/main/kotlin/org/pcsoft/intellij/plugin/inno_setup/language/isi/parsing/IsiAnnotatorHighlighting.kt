@@ -37,6 +37,13 @@ object IsiAnnotatorHighlighting {
     val DEFINE_NAME: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_DEFINE_NAME")
 
+    /**
+     * The `cm` keyword of a `{cm:…}` constant — italic (default attributes provided by the bundled
+     * color schemes, layered over the constant's reference colour).
+     */
+    val CUSTOM_MESSAGE_PREFIX: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_CM_PREFIX")
+
     val UNKNOWN_REFERENCE: TextAttributesKey = CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES
     val DEPRECATED: TextAttributesKey = CodeInsightColors.DEPRECATED_ATTRIBUTES
 

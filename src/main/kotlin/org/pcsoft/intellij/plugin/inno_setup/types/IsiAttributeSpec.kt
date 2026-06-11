@@ -15,8 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 data class IsiAttributeSpec(
     val name: String,
     val type: IsiAttributeTypeSpec,
-    val required: Boolean,
-    val deprecated: Boolean,
+    val required: Set<IsiSpecTarget> = emptySet(),
+    val deprecated: Set<IsiSpecTarget> = emptySet(),
     val description: String,
     val array: Boolean,
     val since: String? = null,
