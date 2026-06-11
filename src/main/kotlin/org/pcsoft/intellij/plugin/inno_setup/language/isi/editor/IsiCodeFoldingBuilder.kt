@@ -15,6 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.isi.editor
 import com.intellij.lang.ASTNode
 import com.intellij.lang.folding.FoldingBuilderEx
 import com.intellij.lang.folding.FoldingDescriptor
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
@@ -81,7 +83,7 @@ class IsiCodeFoldingBuilder : FoldingBuilderEx() {
         val requiredKeys = spec.sections
             .firstOrNull { it.name.equals(sectionName, ignoreCase = true) }
             ?.attributes
-            ?.filter { it.required }
+            ?.filter { it.required.appliesTo(entry.specTarget) }
             ?.map { it.name.lowercase() }
             ?.toSet()
             .orEmpty()

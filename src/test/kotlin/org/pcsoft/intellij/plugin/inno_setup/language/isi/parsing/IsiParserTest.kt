@@ -117,6 +117,6 @@ class IsiParserTest : BasePlatformTestCase() {
     fun testSimpleIssPsiTree() {
         myFixture.configureByFile("scripts/simple.iss")
         val actualTree = DebugUtil.psiToString(issFile(), false).trimEnd()
-        assertSameLinesWithFile("$testDataPath/scripts/simple.tree", actualTree)
+        assertSameLinesWithFile("$testDataPath/scripts/simple.iss.tree", actualTree)
     }
 }

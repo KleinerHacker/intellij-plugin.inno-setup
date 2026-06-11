@@ -21,6 +21,9 @@ import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.containingDirectiveEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.containingParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.containingSection
@@ -91,6 +94,7 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
         }
 
         val minVersion = IssSettingsService.getInstance().state.minInnoVersion
+        val target = originalFile?.specTarget ?: IsiSpecTarget.ISS
         specSection.attributes.forEach { attr ->
             val duplicate = attr.name.lowercase() in usedKeys
             val tooNew = minVersion != null && attr.since != null &&
@@ -103,8 +107,8 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
                 is IsiFlagTypeSpec -> "flags"
             }
             val tail = buildString {
-                if (attr.required) append(" required")
-                if (attr.deprecated) append(" deprecated")
+                if (attr.required.appliesTo(target)) append(" required")
+                if (attr.deprecated.appliesTo(target)) append(" deprecated")
                 if (attr.array) append("[]")
                 if (removed) append(" [removed IS ${attr.until}]")
                 else if (tooNew) append(" [IS ${attr.since}+]")
@@ -122,7 +126,7 @@ object IsiAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
                 .withTypeText(typeHint)
                 .withTailText(tail, true)
                 .withItemTextForeground(foreground)
-                .withBoldness(attr.required)
+                .withBoldness(attr.required.appliesTo(target))
                 .withInsertHandler { ctx, _ ->
                     ctx.document.insertString(ctx.tailOffset, separator)
                     ctx.editor.caretModel.moveToOffset(ctx.tailOffset)

@@ -17,7 +17,12 @@
 | Extension | Status | Notes                                                                                  |
 |-----------|--------|----------------------------------------------------------------------------------------|
 | `.iss`    | ✅     | Inno Setup script (`IssFileType`). Full parsing/tooling.                                |
-| `.isl`    | ✅     | Inno Setup language file (`IslFileType`, `language/isl/**`). Same ISS language/parser; only `[LangOptions]`, `[Messages]`, `[CustomMessages]` allowed (`languageFile: true` in `isi-spec.yaml`), enforced by `IslAnnotator`. No required `[Setup]`. |
+| `.isl`    | ✅     | Inno Setup language file (`IslFileType`, `language/isl/**`). Same ISS language/parser; only `[LangOptions]`, `[Messages]`, `[CustomMessages]` allowed (`languageFile: true` in `isi-spec.yaml`), enforced by `IslAnnotator`. `[Setup]` not required; instead `[LangOptions]` with `LanguageName` + `LanguageID` are required. |
+
+> **Spec model:** `required` and `deprecated` (in `isi-spec.yaml`, `isi-const.yaml`, `ispp-spec.yaml`)
+> are **file-type-scoped arrays** (`[iss]`, `[isl]`, `[iss, isl]` or `[]`), not booleans — a rule can
+> apply to scripts, language files, or both. Modelled as `Set<IsiSpecTarget>`; the matching JSON
+> schemas use the shared `fileTargets` definition.
 
 ---
 

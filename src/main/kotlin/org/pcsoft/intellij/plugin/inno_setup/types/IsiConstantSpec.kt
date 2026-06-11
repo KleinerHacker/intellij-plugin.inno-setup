@@ -34,7 +34,7 @@ enum class IsiConstantCategorySpec {
 data class IsiBuiltinConstantSpec(
     val name: String,
     val description: String,
-    val deprecated: Boolean,
+    val deprecated: Set<IsiSpecTarget> = emptySet(),
     val type: IsiConstantCategorySpec = IsiConstantCategorySpec.SPECIAL,
     val parameterized: Boolean = false,
     val syntax: String? = null,

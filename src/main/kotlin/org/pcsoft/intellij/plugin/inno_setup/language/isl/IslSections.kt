@@ -13,7 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.isl
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpecTarget
 
 /**
  * Central ISL section policy. The set of sections permitted in `.isl` files is data-driven via the
@@ -26,3 +29,15 @@ val IsiSectionSpec.allowedInLanguageFile: Boolean
 /** True when [element] belongs to an Inno Setup language file (`.isl`). */
 val PsiElement.isInLanguageFile: Boolean
     get() = containingFile is IslFile
+
+/** The spec target ([IsiSpecTarget.ISL] for `.isl`, otherwise [IsiSpecTarget.ISS]) of this file. */
+val PsiFile.specTarget: IsiSpecTarget
+    get() = when (this) {
+        is IslFile -> IsiSpecTarget.ISL
+        is IssFile -> IsiSpecTarget.ISS
+        else -> throw IllegalStateException()
+    }
+
+/** The spec target of the file containing this element. */
+val PsiElement.specTarget: IsiSpecTarget
+    get() = containingFile.specTarget

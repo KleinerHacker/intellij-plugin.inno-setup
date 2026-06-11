@@ -69,7 +69,7 @@ class IssSpecServiceTest {
     fun `LangOptions is a directive section with all expected attributes`() {
         val lang = spec.sections.find { it.name == "LangOptions" }!!
         assertEquals("directive", lang.type)
-        assertFalse("LangOptions section must not be deprecated", lang.deprecated)
+        assertTrue("LangOptions section must not be deprecated", lang.deprecated.isEmpty())
         val attrNames = lang.attributes.map { it.name }.toSet()
         listOf(
             "LanguageName", "LanguageID", "LanguageCodePage",
@@ -123,7 +123,7 @@ class IssSpecServiceTest {
         listOf("AppName", "AppVersion").forEach { attrName ->
             val attr = setup.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Setup", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -133,7 +133,7 @@ class IssSpecServiceTest {
         listOf("Source", "DestDir").forEach { attrName ->
             val attr = files.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Files", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -143,7 +143,7 @@ class IssSpecServiceTest {
         listOf("Root", "Subkey").forEach { attrName ->
             val attr = registry.attributes.find { it.name == attrName }
             assertNotNull("$attrName must exist in Registry", attr)
-            assertTrue("$attrName must be required", attr!!.required)
+            assertTrue("$attrName must be required", attr!!.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 
@@ -179,15 +179,31 @@ class IssSpecServiceTest {
     }
 
     @Test
-    fun `Setup section is required`() {
+    fun `Setup section is required in iss`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
-        assertTrue("Setup must be required", setup.required)
+        assertTrue("Setup must be required in scripts", setup.required.appliesTo(IsiSpecTarget.ISS))
+        assertFalse("Setup is not required in language files", setup.required.appliesTo(IsiSpecTarget.ISL))
     }
 
     @Test
-    fun `all other sections are not required`() {
+    fun `only Setup is required in iss`() {
         spec.sections.filter { it.name != "Setup" }.forEach { section ->
-            assertFalse("Section '${section.name}' must not be required", section.required)
+            assertFalse(
+                "Section '${section.name}' must not be required in scripts",
+                section.required.appliesTo(IsiSpecTarget.ISS)
+            )
+        }
+    }
+
+    @Test
+    fun `LangOptions and its language identity attributes are required in isl only`() {
+        val lang = spec.sections.find { it.name == "LangOptions" }!!
+        assertTrue("LangOptions must be required in .isl", lang.required.appliesTo(IsiSpecTarget.ISL))
+        assertFalse("LangOptions is not required in scripts", lang.required.appliesTo(IsiSpecTarget.ISS))
+        listOf("LanguageName", "LanguageID").forEach { name ->
+            val attr = lang.attributes.find { it.name == name }!!
+            assertTrue("$name must be required in .isl", attr.required.appliesTo(IsiSpecTarget.ISL))
+            assertFalse("$name is not required in scripts", attr.required.appliesTo(IsiSpecTarget.ISS))
         }
     }
 

@@ -18,7 +18,7 @@ data class IsppDirectiveSpec(
     val name: String,
     val syntax: String,
     val description: String,
-    val deprecated: Boolean = false,
+    val deprecated: Set<IsiSpecTarget> = emptySet(),
     val since: String? = null,
     val until: String? = null
 )

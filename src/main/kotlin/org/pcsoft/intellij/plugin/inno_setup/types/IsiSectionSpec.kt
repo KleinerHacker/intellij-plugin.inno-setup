@@ -15,8 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 data class IsiSectionSpec(
     val name: String,
     val type: String,
-    val required: Boolean = false,
-    val deprecated: Boolean,
+    val required: Set<IsiSpecTarget> = emptySet(),
+    val deprecated: Set<IsiSpecTarget> = emptySet(),
     val description: String,
     val attributes: List<IsiAttributeSpec>,
     val internationalization: Boolean = false,

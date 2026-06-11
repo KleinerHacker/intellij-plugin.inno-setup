@@ -23,6 +23,8 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
 import org.pcsoft.intellij.plugin.inno_setup.language.isl.allowedInLanguageFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.sections
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
@@ -35,6 +37,7 @@ object IsiSectionNameProvider : CompletionProvider<CompletionParameters>() {
         result: CompletionResultSet
     ) {
         val file = parameters.originalFile as? IssFile ?: return
+        val target = file.specTarget
         // In .isl language files only the language-file sections are offered.
         val specSections = service<IssSpecService>().spec.sections
             .filter { file !is IslFile || it.allowedInLanguageFile }
@@ -51,7 +54,7 @@ object IsiSectionNameProvider : CompletionProvider<CompletionParameters>() {
             val removed = minVersion != null && specSection.until != null &&
                     IssSettingsService.compareIsVersions(specSection.until, minVersion) <= 0
             val tailText = buildString {
-                if (specSection.deprecated) append(" (deprecated)")
+                if (specSection.deprecated.appliesTo(target)) append(" (deprecated)")
                 if (removed) append(" [removed IS ${specSection.until}]")
                 else if (tooNew) append(" [IS ${specSection.since}+]")
             }

@@ -32,6 +32,18 @@
     }
   },
   "definitions": {
+    "fileTargets": {
+      "description": "Set of file types a rule applies to: \"iss\" (script) and/or \"isl\" (language file).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "iss",
+          "isl"
+        ]
+      }
+    },
     "directive": {
       "description": "A single preprocessor directive starting with '#' (e.g. #define, #include).",
       "type": "object",
@@ -55,8 +67,8 @@
           "type": "string"
         },
         "deprecated": {
-          "description": "Whether this directive is deprecated and should no longer be used in new scripts.",
-          "type": "boolean"
+          "description": "File types in which this directive is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "since": {
           "description": "Inno Setup / ISPP version in which this directive was introduced (e.g. \"6.0.0\").",

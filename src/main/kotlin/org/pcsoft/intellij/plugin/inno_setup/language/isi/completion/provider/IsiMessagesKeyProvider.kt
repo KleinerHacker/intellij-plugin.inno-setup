@@ -38,7 +38,10 @@ import org.pcsoft.intellij.plugin.inno_setup.language.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.languageId
 import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.services.IssSpecService
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.types.IsiSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsiSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import javax.swing.Icon
 
 /**
@@ -86,7 +89,7 @@ object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
             // A language prefix is already present — only complete message identifiers,
             // matched against the part after the dot.
             val afterDot = result.withPrefixMatcher(typed.substring(dotIdx + 1))
-            addMessageIdentifiers(specSection, afterDot)
+            addMessageIdentifiers(specSection, afterDot, file.specTarget)
             return
         }
 
@@ -106,16 +109,17 @@ object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
                 )
             )
         }
-        addMessageIdentifiers(specSection, result)
+        addMessageIdentifiers(specSection, result, file.specTarget)
     }
 
     private fun addMessageIdentifiers(
         specSection: IsiSectionSpec,
-        result: CompletionResultSet
+        result: CompletionResultSet,
+        target: IsiSpecTarget
     ) {
         specSection.attributes.forEach { attr ->
             val tail = buildString {
-                if (attr.deprecated) append(" deprecated")
+                if (attr.deprecated.appliesTo(target)) append(" deprecated")
             }
             result.addElement(
                 PrioritizedLookupElement.withPriority(
@@ -123,7 +127,7 @@ object IsiMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
                         .withTypeText("message")
                         .withTailText(tail, true)
                         .withItemTextForeground(
-                            if (attr.deprecated) JBColor.GRAY else JBColor.foreground()
+                            if (attr.deprecated.appliesTo(target)) JBColor.GRAY else JBColor.foreground()
                         )
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, "=")

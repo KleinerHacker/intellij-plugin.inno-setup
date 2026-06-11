@@ -60,13 +60,58 @@ class IslAnnotatorTest : BasePlatformTestCase() {
         assertTrue(notAllowedError("[Files]\nSource: \"a.txt\"; DestDir: \"{app}\"\n"))
     }
 
-    fun testNoRequiredSetupInIslFile() {
-        // .isl files have no required sections — a missing [Setup] must not be reported.
-        assertFalse(missingSectionError(islHighlights("[Messages]\nWelcomeLabel1=Hi\n")))
+    private fun errorContaining(
+        highlights: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>,
+        needle: String
+    ) = highlights.any {
+        it.severity == HighlightSeverity.ERROR &&
+                it.description?.contains(needle, ignoreCase = true) == true
     }
 
+    // ── ISL required sections / directives ────────────────────────────────────
+
+    fun testIslSetupNotRequired() {
+        // [Setup] is a script-only requirement — never demanded in .isl.
+        assertFalse(errorContaining(islHighlights("[LangOptions]\nLanguageName=x\nLanguageID=\$0409\n"), "[setup]"))
+    }
+
+    fun testIslRequiresLangOptions() {
+        // .isl must contain [LangOptions]; its absence is a file-level error.
+        val h = islHighlights("[Messages]\nWelcomeLabel1=Hi\n")
+        assertTrue("Missing [LangOptions] must be reported in .isl", errorContaining(h, "[langoptions]"))
+        assertFalse("[Setup] must not be demanded in .isl", errorContaining(h, "[setup]"))
+    }
+
+    fun testIslLangOptionsRequiresLanguageNameAndId() {
+        val h = islHighlights("[LangOptions]\nLanguageCodePage=0\n")
+        assertTrue(
+            "LanguageName/LanguageID must be required directives in .isl",
+            errorContaining(h, "Required directive")
+        )
+    }
+
+    fun testIslCompleteLangOptionsHasNoRequiredErrors() {
+        val h = islHighlights("[LangOptions]\nLanguageName=English\nLanguageID=\$0409\n")
+        assertFalse("Complete [LangOptions] must not report missing section", errorContaining(h, "Required section"))
+        assertFalse("Complete [LangOptions] must not report missing directive", errorContaining(h, "Required directive"))
+    }
+
+    // ── Contrast: .iss keeps its own (different) requirements ──────────────────
+
     fun testRequiredSetupStillEnforcedInIssFile() {
-        // Contrast: the same content as a .iss script must still demand [Setup].
+        // The same content as a .iss script must still demand [Setup].
         assertTrue(missingSectionError(issHighlights("[Messages]\nWelcomeLabel1=Hi\n")))
+    }
+
+    fun testIssDoesNotRequireLangOptions() {
+        // A valid .iss script without [LangOptions] is fine.
+        val h = issHighlights("[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertFalse("LangOptions is not required in .iss", errorContaining(h, "[langoptions]"))
+    }
+
+    fun testIssLangOptionsWithoutIdentityHasNoRequiredDirectiveError() {
+        // LanguageName/LanguageID are required only in .isl, not in scripts.
+        val h = issHighlights("[Setup]\nAppName=Test\nAppVersion=1.0\n[LangOptions]\nLanguageCodePage=0\n")
+        assertFalse("LanguageName/LanguageID not required in .iss", errorContaining(h, "Required directive"))
     }
 }

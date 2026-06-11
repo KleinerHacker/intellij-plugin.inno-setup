@@ -16,6 +16,18 @@
     }
   },
   "definitions": {
+    "fileTargets": {
+      "description": "Set of file types a rule applies to: \"iss\" (script) and/or \"isl\" (language file).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "iss",
+          "isl"
+        ]
+      }
+    },
     "constant": {
       "description": "A single Inno Setup constant that expands to a path or value at install time.",
       "type": "object",
@@ -35,8 +47,8 @@
           "type": "string"
         },
         "deprecated": {
-          "description": "Whether this constant is deprecated and should no longer be used in new scripts.",
-          "type": "boolean"
+          "description": "File types in which this constant is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "type": {
           "description": "Category of the constant: \"directory\"/\"shell_folder\" for path constants, \"auto\" for context-dependent (user/common) constants, \"special\" for non-path constants, or \"parameterized\" for constants taking an argument.",

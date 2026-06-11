@@ -47,7 +47,7 @@ class IssConstantServiceTest {
         val app = spec.constants.find { it.name == "app" }
         assertNotNull("app constant must exist", app)
         assertEquals(IsiConstantCategorySpec.DIRECTORY, app!!.type)
-        assertFalse("app must not be deprecated", app.deprecated)
+        assertTrue("app must not be deprecated", app.deprecated.isEmpty())
     }
 
     @Test
@@ -69,7 +69,7 @@ class IssConstantServiceTest {
     fun `deprecated constants are marked`() {
         val pf = spec.constants.find { it.name == "pf" }
         assertNotNull("pf constant must exist", pf)
-        assertTrue("pf must be deprecated", pf!!.deprecated)
+        assertTrue("pf must be deprecated", pf!!.deprecated.isNotEmpty())
     }
 
     @Test

@@ -22,7 +22,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.services.IssLanguageService
 import org.pcsoft.intellij.plugin.inno_setup.language.IssFile
-import org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFile
+import org.pcsoft.intellij.plugin.inno_setup.language.isl.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.quickfix.AddMissingDirectivesQuickFix
@@ -83,11 +83,9 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateFile(file: IssFile, holder: AnnotationHolder, spec: IsiSpec) {
-        // .isl language files have no required sections and no [Code] — those .iss-only rules don't
-        // apply. The ISL-specific section restriction lives in language/isl/parsing/IslAnnotator.
-        if (file is IslFile) return
-
-        val required = spec.sections.filter { it.required }.map { it.name.lowercase() }.toSet()
+        // Required sections are file-type specific: [Setup] in scripts, [LangOptions] in .isl files.
+        val target = file.specTarget
+        val required = spec.sections.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val existing = file.sections.map { it.nameText.lowercase() }.toSet()
         val missing = required - existing
         if (missing.isNotEmpty()) {
@@ -146,7 +144,8 @@ class IsiAnnotator : Annotator {
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "directive") return
 
-        val required = specSection.attributes.filter { it.required }.map { it.name.lowercase() }.toSet()
+        val target = section.specTarget
+        val required = specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val present = section.directiveEntryList.map { it.keyText().lowercase() }.toSet()
         val missing = required - present
         if (missing.isNotEmpty()) {
@@ -178,7 +177,8 @@ class IsiAnnotator : Annotator {
         val specSection = section.specSection(spec) ?: return
         if (specSection.type != "parameter") return
 
-        val required = specSection.attributes.filter { it.required }.map { it.name.lowercase() }.toSet()
+        val target = section.specTarget
+        val required = specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val present = entry.paramPairList.map { it.keyText().lowercase() }.toSet()
         val missing = required - present
         if (missing.isNotEmpty()) {
@@ -200,7 +200,7 @@ class IsiAnnotator : Annotator {
         val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
         val attr = specSection.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder)
+        annotateKey(key.textRange, attr, holder, key.specTarget)
     }
 
     private fun annotateDirectiveKey(key: IsiDirectiveKey, holder: AnnotationHolder, spec: IsiSpec) {
@@ -216,7 +216,7 @@ class IsiAnnotator : Annotator {
             val baseName = entry.keyText().substringAfterLast('.')
             val attr = specSection.attributes.firstOrNull { it.name.equals(baseName, ignoreCase = true) }
             if (attr != null) {
-                annotateKey(key.textRange, attr, holder)
+                annotateKey(key.textRange, attr, holder, key.specTarget)
             } else {
                 highlight(key.textRange, IsiAnnotatorHighlighting.PARAM_KEY, holder)
             }
@@ -225,7 +225,7 @@ class IsiAnnotator : Annotator {
         }
 
         val attr = specSection.attributes.firstOrNull { it.name.equals(entry.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder)
+        annotateKey(key.textRange, attr, holder, key.specTarget)
     }
 
     /**
@@ -253,7 +253,7 @@ class IsiAnnotator : Annotator {
         }
     }
 
-    private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder) {
+    private fun annotateKey(range: TextRange, attr: IsiAttributeSpec?, holder: AnnotationHolder, target: IsiSpecTarget) {
         when {
             attr == null ->
                 holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '${range}'")
@@ -261,7 +261,7 @@ class IsiAnnotator : Annotator {
                     .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
 
-            attr.deprecated ->
+            attr.deprecated.appliesTo(target) ->
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .range(range)
                     .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)
@@ -328,6 +328,7 @@ class IsiAnnotator : Annotator {
     }
 
     private fun annotateFlagValue(value: IsiParamValue, flagType: IsiFlagTypeSpec, holder: AnnotationHolder) {
+        val target = value.specTarget
         val flagMap = flagType.flags.associateBy { it.name.lowercase() }
         val tokenNodes = value.node
             .getChildren(TokenSet.create(IsiTypes.IDENTIFIER))
@@ -342,7 +343,7 @@ class IsiAnnotator : Annotator {
                         .textAttributes(IsiAnnotatorHighlighting.UNKNOWN_REFERENCE)
                         .create()
 
-                def.deprecated ->
+                def.deprecated.appliesTo(target) ->
                     holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                         .range(node.textRange)
                         .textAttributes(IsiAnnotatorHighlighting.DEPRECATED)

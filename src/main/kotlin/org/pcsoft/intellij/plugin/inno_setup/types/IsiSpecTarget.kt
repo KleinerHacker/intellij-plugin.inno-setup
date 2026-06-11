@@ -12,16 +12,19 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
-data class IsiFlagConflictSpec(
-    val flag: String,
-    val type: IsiFlagType
-)
+import com.fasterxml.jackson.annotation.JsonProperty
 
-data class IsiFlagSpec(
-    val name: String,
-    val description: String,
-    val deprecated: Set<IsiSpecTarget> = emptySet(),
-    val conflicts: List<IsiFlagConflictSpec> = emptyList(),
-    val since: String? = null,
-    val until: String? = null
-)
+/**
+ * The file type a spec rule (`required` / `deprecated`) applies to. Modelled as a set in the spec so
+ * the same attribute can, e.g., be required only in language files (`.isl`) but not in scripts (`.iss`).
+ */
+enum class IsiSpecTarget {
+    @JsonProperty("iss")
+    ISS,
+
+    @JsonProperty("isl")
+    ISL,
+}
+
+/** Whether a spec rule's target set covers [target]. */
+fun Set<IsiSpecTarget>.appliesTo(target: IsiSpecTarget): Boolean = target in this

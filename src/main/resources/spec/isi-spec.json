@@ -16,6 +16,18 @@
     }
   },
   "definitions": {
+    "fileTargets": {
+      "description": "Set of file types a rule applies to: \"iss\" (script) and/or \"isl\" (language file).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "iss",
+          "isl"
+        ]
+      }
+    },
     "section": {
       "description": "A single Inno Setup script section, identified by its header name and the kind of content it accepts.",
       "type": "object",
@@ -41,13 +53,12 @@
           ]
         },
         "deprecated": {
-          "description": "Whether this section is deprecated and should no longer be used in new scripts.",
-          "type": "boolean"
+          "description": "File types in which this section is deprecated (e.g. [\"iss\", \"isl\"]). Empty/absent = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "required": {
-          "description": "Whether this section must be present in every valid Inno Setup script.",
-          "type": "boolean",
-          "default": false
+          "description": "File types in which this section must be present (e.g. [\"iss\"] for scripts, [\"isl\"] for language files). Empty/absent = optional.",
+          "$ref": "#/definitions/fileTargets"
         },
         "description": {
           "description": "Human-readable explanation of the section's purpose, shown in documentation and tooltips.",
@@ -62,6 +73,11 @@
         },
         "internationalization": {
           "description": "Whether keys in this section may carry a language prefix (e.g. \"en.MessageName\"); enables language-prefix completion. Applies to [Messages] and [CustomMessages]. Defaults to false.",
+          "type": "boolean",
+          "default": false
+        },
+        "languageFile": {
+          "description": "Whether this section is permitted in Inno Setup language files (.isl). Defaults to false.",
           "type": "boolean",
           "default": false
         },
@@ -97,12 +113,12 @@
           "$ref": "#/definitions/attributeType"
         },
         "required": {
-          "description": "Whether this attribute must be specified within its section.",
-          "type": "boolean"
+          "description": "File types in which this attribute must be specified within its section (e.g. [\"iss\"], [\"isl\"]). Empty = optional.",
+          "$ref": "#/definitions/fileTargets"
         },
         "deprecated": {
-          "description": "Whether this attribute is deprecated and should no longer be used in new scripts.",
-          "type": "boolean"
+          "description": "File types in which this attribute is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "description": {
           "description": "Human-readable explanation of the attribute's purpose, shown in documentation and tooltips.",
@@ -220,8 +236,8 @@
           "type": "string"
         },
         "deprecated": {
-          "description": "Whether this flag is deprecated and should no longer be used in new scripts.",
-          "type": "boolean"
+          "description": "File types in which this flag is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
+          "$ref": "#/definitions/fileTargets"
         },
         "conflicts": {
           "description": "Other flags that cannot be combined with this flag, each with a type.",

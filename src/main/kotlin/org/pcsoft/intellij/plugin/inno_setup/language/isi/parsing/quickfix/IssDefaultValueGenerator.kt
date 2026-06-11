@@ -45,6 +45,6 @@ internal object IssDefaultValueGenerator {
             else      -> "MyValue"
         }
         is IsiReferenceTypeSpec -> "ref"
-        is IsiFlagTypeSpec      -> type.flags.firstOrNull { !it.deprecated }?.name ?: "flag"
+        is IsiFlagTypeSpec      -> type.flags.firstOrNull { it.deprecated.isEmpty() }?.name ?: "flag"
     }
 }
