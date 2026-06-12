@@ -26,48 +26,49 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- File type -->
         <fileType name="Inno Setup Script"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.IssFileType"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
                   language="ISS"
                   extensions="iss"/>
 
         <!-- Language (translation) file type; same ISS language, restricted set of sections -->
         <fileType name="Inno Setup Language"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.IslFileType"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
                   language="ISS"
                   extensions="isl"/>
 
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionParserDefinition"/>
 
         <!-- Syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISS"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionHighlighterFactory"/>
 
         <!-- Semantic annotator -->
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotator"/>
         <!-- ISL-only: restrict sections in .isl language files -->
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isl.parsing.IslAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.parsing.IsLanguageAnnotator"/>
 
         <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
         <codeInsight.inlayProvider language="ISS"
-                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiLanguageInlayHintsProvider"/>
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionLanguageInlayHintsProvider"/>
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiErrorFilter"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionErrorFilter"/>
 
         <!-- Find Usages -->
         <lang.findUsagesProvider language="ISS"
-                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiFindUsagesProvider"/>
+                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.find.IsSectionFindUsagesProvider"/>
 
         <!-- Refactoring: inline rename for section Name: values -->
         <lang.refactoringSupport language="ISS"
-                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiRefactoringSupportProvider"/>
+                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.find.IsSectionRefactoringSupportProvider"/>
 
-        <statementUpDownMover implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiSectionMover"/>
+        <statementUpDownMover
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionMover"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
 
@@ -75,89 +76,89 @@
 
         <!-- ISPP parser (injected language for #define, #include, etc.) -->
         <lang.parserDefinition language="ISPP"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorParserDefinition"/>
 
         <!-- ISPP syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISPP"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorHighlighterFactory"/>
 
         <!-- ISPP semantic annotator -->
         <annotator language="ISPP"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.parsing.IsppAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorAnnotator"/>
 
         <!-- ISPP completion (directive keywords, #define expression references) -->
         <completion.contributor language="ISPP"
-                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.completion.IsppCompletionContributor"/>
+                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsPreprocessorCompletionContributor"/>
 
         <!-- ISPP Find Usages -->
         <lang.findUsagesProvider language="ISPP"
-                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppFindUsagesProvider"/>
+                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.find.IsPreprocessorFindUsagesProvider"/>
 
         <!-- ISPP Refactoring: inline rename for #define constants -->
         <lang.refactoringSupport language="ISPP"
-                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppRefactoringSupportProvider"/>
+                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.find.IsPreprocessorRefactoringSupportProvider"/>
 
-        <!-- ISPP injector: injects ISPP language into IsiIsppLine elements -->
+        <!-- ISPP injector: injects ISPP language into IsSectionPreprocessorLine elements -->
         <multiHostInjector
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.injection.IsppInjector"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.injection.IsPreprocessorInjector"/>
 
         <!-- Rename: find {#Name} references in ISS when renaming an ISPP #define -->
         <referencesSearch
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.ispp.navigation.IsppReferencesSearcher"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorReferencesSearcher"/>
 
         <!-- Rename: find Tasks:/Components:/etc. references when renaming a Name: value -->
         <referencesSearch
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiSectionReferencesSearcher"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionReferencesSearcher"/>
 
         <!-- Rename / Find Usages: find {cm:Name} references of a [CustomMessages] declaration -->
         <referencesSearch
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiCustomMessageReferencesSearcher"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionCustomMessageReferencesSearcher"/>
 
         <!-- Rename / Find Usages: find lang. key prefixes referencing a [Languages] Name -->
         <referencesSearch
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiLanguagePrefixReferencesSearcher"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionLanguagePrefixReferencesSearcher"/>
 
         <!-- Reference provider -->
         <psi.referenceContributor language="ISS"
-                                  implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiReferenceContributor"/>
+                                  implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionReferenceContributor"/>
 
         <!-- Typed handler (auto-popup after '[' and '{') -->
         <typedHandler
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiTypedHandler"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionTypedHandler"/>
 
         <!-- Completion contributor -->
         <completion.contributor language="ISS"
-                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.completion.IsiCompletionContributor"/>
+                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsSectionCompletionContributor"/>
 
         <!-- Brace matching: [], {}, () -->
         <lang.braceMatcher language="ISS"
-                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiBraceMatcher"/>
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsBraceMatcher"/>
 
         <!-- Quote handler: " -->
         <typedHandler
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiQuoteHandler"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsQuoteHandler"/>
 
         <!-- Code folding -->
         <lang.foldingBuilder language="ISS"
-                             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiCodeFoldingBuilder"/>
+                             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionCodeFoldingBuilder"/>
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="ISS"
-                                      implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureViewFactory"/>
+                                      implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewFactory"/>
 
-        <navbar implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiStructureAwareNavbar"/>
+        <navbar implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureAwareNavbar"/>
 
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
-                                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.navigation.IsiDocumentationProvider"/>
+                                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionDocumentationProvider"/>
 
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"
-                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.isi.editor.IsiCommenter"/>
+                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsCommenter"/>
 
         <!-- Color settings page -->
         <colorSettingsPage
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.isi.parsing.IsiColorSettingsPage"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionColorSettingsPage"/>
 
         <!-- Default colors for ISPP preprocessor highlighting (dark/light) -->
         <additionalTextAttributes scheme="Default" file="colorSchemes/IssDefault.xml"/>
@@ -167,14 +168,14 @@
 
         <!-- Persistent state storage for the Inno Setup installation path -->
         <applicationService
-                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsService"/>
+                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService"/>
 
         <!-- Settings page under Build, Execution, Deployment > Inno Setup -->
         <applicationConfigurable
                 parentId="build"
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
                 displayName="Inno Setup"
-                instance="org.pcsoft.intellij.plugin.inno_setup.settings.IssSettingsConfigurable"/>
+                instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsConfigurable"/>
 
         <!-- ═══════════════════════════════ Actions ═══════════════════════════════ -->
 
@@ -182,20 +183,22 @@
 
         <intentionAction>
             <language>ISS</language>
-            <className>org.pcsoft.intellij.plugin.inno_setup.action.intention.IssFlipIntentionAction</className>
+            <className>
+                org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsParameterFlipIntentionAction
+            </className>
         </intentionAction>
     </extensions>
 
     <actions>
         <action id="Iss.NewFile"
-                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IssCreateFileAction"
+                class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action.IsScriptCreateFileAction"
                 text="Inno Setup Script"
                 description="Create new Inno Setup Script file"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
         <action id="Isl.NewFile"
-                class="org.pcsoft.intellij.plugin.inno_setup.action.menu.IslCreateFileAction"
+                class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action.IsLanguageCreateFileAction"
                 text="Inno Setup Language"
                 description="Create new Inno Setup language file"
                 icon="/icons/inno-setup-script-icon@16.png">

@@ -31,8 +31,8 @@ val parsingRoot = "src/main/resources/parsing"
 
 val rootPackage = "org/pcsoft/intellij/plugin/inno_setup"
 val languagePackage = "$rootPackage/language"
-val isppLanguagePackage = "$languagePackage/ispp"
-val isiLanguagePackage = "$languagePackage/isi"
+val preprocessorPackage = "$languagePackage/parser/preprocessor"
+val sectionPackage = "$languagePackage/parser/section"
 
 intellijPlatform {
     instrumentCode = false
@@ -172,45 +172,45 @@ tasks {
 
     //region Grammar-Kit
 
-    register<GenerateParserTask>("generateIsiParser") {
-        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsiGrammar.bnf"))
+    register<GenerateParserTask>("generateIsSectionParser") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionGrammar.bnf"))
         targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
-        pathToParser.set("$isiLanguagePackage/parsing/parser/IsiParser.java")
-        pathToPsiRoot.set("$isiLanguagePackage/parsing/psi")
+        pathToParser.set("$sectionPackage/parsing/parser/IsSectionParser.java")
+        pathToPsiRoot.set("$sectionPackage/parsing/psi")
         purgeOldFiles.set(true)
     }
 
-    register<GenerateLexerTask>("generateIsiLexer") {
-        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsiLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$isiLanguagePackage/parsing"))
+    register<GenerateLexerTask>("generateIsSectionLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionLexer.flex"))
+        targetOutputDir.set(file("$generatedRoot/$sectionPackage/parsing"))
         purgeOldFiles.set(true)
     }
 
-    register<GenerateParserTask>("generateIsppParser") {
-        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsppGrammar.bnf"))
+    register<GenerateParserTask>("generateIsPreprocessorParser") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsPreprocessorGrammar.bnf"))
         targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
-        pathToParser.set("$isppLanguagePackage/parsing/parser/IsppParser.java")
-        pathToPsiRoot.set("$isppLanguagePackage/parsing/psi")
+        pathToParser.set("$preprocessorPackage/parsing/parser/IsPreprocessorParser.java")
+        pathToPsiRoot.set("$preprocessorPackage/parsing/psi")
         purgeOldFiles.set(true)
     }
 
-    register<GenerateLexerTask>("generateIsppLexer") {
-        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsppLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$isppLanguagePackage/parsing"))
+    register<GenerateLexerTask>("generateIsPreprocessorLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsPreprocessorLexer.flex"))
+        targetOutputDir.set(file("$generatedRoot/$preprocessorPackage/parsing"))
         purgeOldFiles.set(true)
     }
 
     // Aggregator tasks: generate all lexers / all parsers as a single unit, plus an umbrella.
     register("generateLexers") {
         group = "grammar-kit"
-        description = "Generate all JFlex lexers (ISI + ISPP)"
-        dependsOn("generateIsiLexer", "generateIsppLexer")
+        description = "Generate all JFlex lexers (Section + Preprocessor)"
+        dependsOn("generateIsSectionLexer", "generateIsPreprocessorLexer")
     }
 
     register("generateParsers") {
         group = "grammar-kit"
-        description = "Generate all Grammar-Kit parsers/PSI (ISI + ISPP)"
-        dependsOn("generateIsiParser", "generateIsppParser")
+        description = "Generate all Grammar-Kit parsers/PSI (Section + Preprocessor)"
+        dependsOn("generateIsSectionParser", "generateIsPreprocessorParser")
     }
 
     // Wipes the whole generated tree before a full regeneration. Catches stale files left
@@ -231,7 +231,12 @@ tasks {
     // When a full regeneration is requested, every generator must run *after* the wipe.
     // Routine compiles depend on the generators directly (see below), so the wipe is not in
     // their graph and incremental up-to-date checks keep working.
-    listOf("generateIsiParser", "generateIsiLexer", "generateIsppParser", "generateIsppLexer").forEach { taskName ->
+    listOf(
+        "generateIsSectionParser",
+        "generateIsSectionLexer",
+        "generateIsPreprocessorParser",
+        "generateIsPreprocessorLexer"
+    ).forEach { taskName ->
         named(taskName) { mustRunAfter("cleanGeneratedSources") }
     }
 

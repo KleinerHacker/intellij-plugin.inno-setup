@@ -27,7 +27,8 @@ can be combined as needed for the installer workflow.
 
 ## Script-Aware Editing
 
-The plugin uses its bundled Inno Setup spec to provide completion, validation, documentation popups, and section-specific
+The plugin uses its bundled Inno Setup spec to provide completion, validation, documentation popups, and
+section-specific
 parameter suggestions. Common parameters such as `Components`, `Tasks`, `Languages`, `Check`, `MinVersion`, and
 `OnlyBelowVersion` resolve to the relevant script concepts where applicable.
 

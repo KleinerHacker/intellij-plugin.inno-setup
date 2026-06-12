@@ -4,8 +4,8 @@
 .md-button .md-button--primary }
 
 !!! warning "Plugin support"
-    `[INI]` is tracked as missing in the current plugin spec. The section is listed here for documentation coverage, but
-    completion and validation support may be incomplete until the spec is implemented.
+`[INI]` is tracked as missing in the current plugin spec. The section is listed here for documentation coverage, but
+completion and validation support may be incomplete until the spec is implemented.
 
 The `[INI]` section creates or updates entries in `.ini` files on the user's system during installation. It is useful
 for legacy applications that still store settings in INI files instead of the registry or application data files.
