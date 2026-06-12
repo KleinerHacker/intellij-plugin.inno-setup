@@ -2,6 +2,13 @@
 
 # Inno-setup Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Restructured the language tooling into explicit `file_type/`, `parser/`, and `feature/` packages and
+  harmonized class names to the `Is`+role scheme (`IsScript`/`IsLanguage`/`IsSection`/`IsPreprocessor`).
+
 ## [0.4.1]
 
 ### Added
@@ -14,9 +21,11 @@
   files and scripts, including file-type-scoped required/deprecated metadata.
 - **Custom message references**: Added completion, reference resolution, unresolved-reference highlighting, find usages,
   and rename refactoring for `{cm:MessageName}` references.
-- **Language prefix references**: Added completion, navigation, find usages, rename, and unresolved-prefix validation for
+- **Language prefix references**: Added completion, navigation, find usages, rename, and unresolved-prefix validation
+  for
   localized message keys such as `german.WelcomeLabel1`.
-- **Windows language metadata**: Added Windows LCID data, built-in Inno Setup language metadata, language flag icons, and
+- **Windows language metadata**: Added Windows LCID data, built-in Inno Setup language metadata, language flag icons,
+  and
   `LanguageID` completion/validation.
 - **Language inlay hints**: Added language flag and English-name inlays for `[Languages] MessagesFile`,
   `[LangOptions] LanguageID`, and localized message prefixes.
@@ -24,7 +33,8 @@
   languages, with quoted and unquoted value support.
 - **Quick fixes**: Added quick fixes for missing sections, missing directives, missing parameters, missing required
   flags, redundant flags, unused `#define`s, empty sections, trailing semicolons, and moving `[Code]` to the end.
-- **Version-aware specs**: Added `since`/`until` metadata for sections, attributes, flags, directives, and constants, and
+- **Version-aware specs**: Added `since`/`until` metadata for sections, attributes, flags, directives, and constants,
+  and
   introduced annotations based on the configured minimum Inno Setup version.
 - **Plugin settings**: Added settings for configuring the local Inno Setup installation path and version-related
   services.
@@ -58,7 +68,8 @@
 - **ISL completion**: Disabled ISPP directive suggestions after `#` in `.isl` files.
 - **Structure view**: Fixed structure view behavior and expanded regression coverage.
 - **Color scheme regression**: Reverted removal of bundled color schemes so explicit theme coloring remains available.
-- **Parser/test regressions**: Fixed test failures and added broader parser, PSI tree, completion, annotator, navigation,
+- **Parser/test regressions**: Fixed test failures and added broader parser, PSI tree, completion, annotator,
+  navigation,
   quick-fix, and file-action coverage.
 
 ## [0.4.0]
