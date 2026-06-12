@@ -36,6 +36,9 @@
                   language="ISS"
                   extensions="isl"/>
 
+        <!-- ISL file icon: base icon + language-flag overlay (25 %, bottom-right) -->
+        <fileIconProvider implementation="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileIconProvider"/>
+
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionParserDefinition"/>

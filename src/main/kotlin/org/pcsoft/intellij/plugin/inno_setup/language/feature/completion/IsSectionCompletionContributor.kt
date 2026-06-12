@@ -86,6 +86,12 @@ class IsSectionCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionLanguageSectionValueProvider
         )
+        // Environment variable name completion inside {%…} constants.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
+            IsSectionEnvVarAfterPercentProvider
+        )
         // Windows language identifier suggestions for the \[LangOptions] LanguageID directive.
         extend(
             CompletionType.BASIC,

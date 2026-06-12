@@ -702,4 +702,154 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
             hasUnknownLcidWarning(highlights(text))
         )
     }
+
+    // ── MessagesFile validation ───────────────────────────────────────────────
+
+    private fun withInstallPath(path: String?, block: () -> Unit) {
+        val service = IsSettingsService.getInstance()
+        val prev = service.state.installationPath
+        service.state.installationPath = path
+        try {
+            block()
+        } finally {
+            service.state.installationPath = prev
+        }
+    }
+
+    fun testMessagesFileCompilerPrefixWithoutInstallPathProducesWarning() {
+        withInstallPath(null) {
+            val text = VALID_SETUP + "\n[Languages]\nName: english; MessagesFile: \"compiler:Default.isl\"\n"
+            val all = highlights(text)
+            val hit = all.any {
+                it.severity == HighlightSeverity.WARNING &&
+                        it.description?.contains("installation path not configured", ignoreCase = true) == true
+            }
+            assertTrue(
+                "compiler: prefix without configured installation path must produce a WARNING",
+                hit
+            )
+        }
+    }
+
+    fun testMessagesFileMissingAbsolutePathProducesError() {
+        val nonExistent = "/nonexistent_xzy_dir_9999/lang.isl"
+        val text = VALID_SETUP + "\n[Languages]\nName: english; MessagesFile: \"$nonExistent\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("not found", ignoreCase = true) == true
+        }
+        assertTrue("Absolute path to non-existent ISL must produce 'not found' ERROR", hit)
+    }
+
+    fun testMessagesFileWithUnresolvableIsppConstantProducesNoAnnotation() {
+        // {#UnknownDefine} cannot be resolved → should produce no annotation (not prematurely flagged)
+        val text = VALID_SETUP + "\n[Languages]\nName: english; MessagesFile: \"{#UnknownDefine}.isl\"\n"
+        val all = highlights(text)
+        val isl = all.filter {
+            (it.severity == HighlightSeverity.ERROR || it.severity == HighlightSeverity.WARNING) &&
+                    it.description?.contains("ISL", ignoreCase = true) == true
+        }
+        assertTrue("Unresolvable {#…} in MessagesFile must produce no ISL-related annotation", isl.isEmpty())
+    }
+
+    // ── {%ENV} constant validation ─────────────────────────────────────────────
+
+    fun testKnownEnvVarConstantProducesNoError() {
+        System.getenv("PATH") ?: return  // skip if not available
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{%PATH}\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("environment variable", ignoreCase = true) == true
+        }
+        assertFalse("Known env var {%PATH} must not produce an ERROR", hit)
+    }
+
+    fun testUnknownEnvVarWithoutDefaultProducesError() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{%GIBTSNICHT_XYZ_9999}\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown environment variable", ignoreCase = true) == true
+        }
+        assertTrue("Unknown env var without default must produce an 'Unknown environment variable' ERROR", hit)
+    }
+
+    fun testUnknownEnvVarWithDefaultProducesNoError() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{%GIBTSNICHT_XYZ_9999|fallback}\"\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("environment variable", ignoreCase = true) == true
+        }
+        assertFalse("Unknown env var with default must not produce an ERROR", hit)
+    }
+
+    // ── [CustomMessages] — free-form keys must not be flagged ─────────────────
+
+    fun testCustomMessagesUserKeyNotFlaggedUnknown() {
+        val text = VALID_SETUP + "\n[CustomMessages]\nCreateDesktopIcon=Create a &desktop icon\nLaunchProgram=Launch %1\n"
+        val all = highlights(text)
+        val unknown = all.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE
+        }
+        assertTrue(
+            "User-defined [CustomMessages] keys must not be flagged as UNKNOWN_REFERENCE: $unknown",
+            unknown.isEmpty()
+        )
+    }
+
+    fun testCustomMessagesLanguagePrefixedKeyNotFlaggedUnknown() {
+        // e.g. english.CreateDesktopIcon=... is valid in an internationalized section
+        val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +
+                "[CustomMessages]\nenglish.CreateDesktopIcon=Create a &desktop icon\n"
+        val all = highlights(text)
+        val unknown = all.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown", ignoreCase = true) == true &&
+                    it.description?.contains("CustomMessages", ignoreCase = true) != true  // exclude {cm:} errors
+        }
+        assertTrue(
+            "Language-prefixed [CustomMessages] key must not produce an UNKNOWN_REFERENCE ERROR: $unknown",
+            unknown.isEmpty()
+        )
+    }
+
+    // ── {cm:…} annotation and reference ──────────────────────────────────────
+
+    fun testCmReferenceToDefinedMessageProducesNoError() {
+        val text = VALID_SETUP + "\n[CustomMessages]\nGreeting=Hello\n" +
+                "[Setup]\nAppComments={cm:Greeting}\n"
+        val all = highlights(text)
+        val cmErrors = all.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown custom message", ignoreCase = true) == true
+        }
+        assertTrue("{cm:Greeting} pointing to a defined message must not produce an error", cmErrors.isEmpty())
+    }
+
+    fun testCmReferenceToUndefinedMessageProducesError() {
+        val text = VALID_SETUP + "\n[CustomMessages]\nGreeting=Hello\n" +
+                "[Setup]\nAppComments={cm:NonExistent}\n"
+        val all = highlights(text)
+        val hit = all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Unknown custom message", ignoreCase = true) == true
+        }
+        assertTrue("{cm:NonExistent} must produce an 'Unknown custom message' ERROR", hit)
+    }
+
+    fun testCmReferenceResolvesViaGetReferences() {
+        val text = VALID_SETUP + "\n[CustomMessages]\nMyMsg=Hello\n[Setup]\nAppComments={cm:MyMsg}\n"
+        myFixture.configureByText(IsScriptFileType.INSTANCE, text)
+        // Find the cm: constant body offset to place the caret on the message name
+        val fileText = myFixture.file.text
+        val msgNameOffset = fileText.indexOf("cm:MyMsg") + "cm:".length
+        val ref = myFixture.file.findReferenceAt(msgNameOffset)
+        assertNotNull("A PsiReference must exist on the message name in {cm:MyMsg}", ref)
+        val resolved = ref?.resolve()
+        assertNotNull("The {cm:MyMsg} reference must resolve to the [CustomMessages] declaration", resolved)
+    }
 }
