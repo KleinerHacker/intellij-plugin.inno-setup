@@ -55,7 +55,7 @@ object IsLanguageIconHelper {
         if (spec.flag == null) return null
 
         val flagIcon = spec.icon
-        val overlaySize = maxOf(4, (base.iconWidth * 0.25).roundToInt())
+        val overlaySize = maxOf(4, (base.iconWidth * 0.50).roundToInt())
         val scaled = IconUtil.scale(flagIcon, null, overlaySize.toFloat() / flagIcon.iconWidth)
         val layered = LayeredIcon(2)
         layered.setIcon(base, 0)

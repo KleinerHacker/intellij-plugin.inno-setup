@@ -55,5 +55,8 @@ nav:
           - LangOptions: sections/langoptions.md
           - Messages: sections/messages.md
           - CustomMessages: sections/custom-messages.md
+  - Settings:
+      - General: settings.md
+      - Build: settings-build.md
   - API Docs: dokka/html/index.html
   - Licences: licences/index.html

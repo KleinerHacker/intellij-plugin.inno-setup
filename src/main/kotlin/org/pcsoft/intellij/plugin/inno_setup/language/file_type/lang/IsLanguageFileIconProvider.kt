@@ -31,6 +31,6 @@ class IsLanguageFileIconProvider : FileIconProvider {
         if (file.extension?.equals("isl", ignoreCase = true) != true) return null
         project ?: return null
         val psiFile = PsiManager.getInstance(project).findFile(file) as? IsScriptFile ?: return null
-        return IsLanguageIconHelper.baseWithFlagOverlay(IsIcons.ScriptFile, psiFile)
+        return IsLanguageIconHelper.baseWithFlagOverlay(IsIcons.LanguageFile, psiFile)
     }
 }

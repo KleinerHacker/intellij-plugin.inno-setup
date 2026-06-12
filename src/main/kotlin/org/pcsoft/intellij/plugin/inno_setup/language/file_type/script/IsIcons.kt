@@ -21,10 +21,16 @@ import javax.swing.Icon
  */
 object IsIcons {
     /**
-     * Represents the PSI file for this Inno Setup language.
+     * Represents the PSI script file for this Inno Setup language.
      */
     @JvmField
     val ScriptFile: Icon = IconLoader.getIcon("/icons/inno-setup-script-icon@16.png", IsIcons::class.java)
+
+    /**
+     * Represents the PSI language file for this Inno Setup language.
+     */
+    @JvmField
+    val LanguageFile: Icon = IconLoader.getIcon("/icons/inno-setup-lang-icon@16.png", IsIcons::class.java)
 
     /**
      * Provides Inno Setup plugin behavior for the IntelliJ Platform.
