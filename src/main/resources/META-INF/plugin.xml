@@ -170,12 +170,26 @@
         <applicationService
                 serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService"/>
 
-        <!-- Settings page under Build, Execution, Deployment > Inno Setup -->
+        <!-- IDE-wide settings page under Build, Execution, Deployment > Inno Setup
+             (installation directory + version). -->
         <applicationConfigurable
                 parentId="build"
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
                 displayName="Inno Setup"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsConfigurable"/>
+
+        <!-- Project-specific build sub-page (Inno Setup > Build); stored in the project. -->
+        <projectConfigurable
+                parentId="org.pcsoft.intellij.plugin.inno_setup.settings"
+                id="org.pcsoft.intellij.plugin.inno_setup.settings.build"
+                displayName="Build"
+                instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsConfigurable"/>
+
+        <!-- ═══════════════════════════════ Build ═══════════════════════════════ -->
+
+        <!-- Compile .iss scripts with ISCC when the project is built -->
+        <projectTaskRunner
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.IsBuildProjectTaskRunner"/>
 
         <!-- ═══════════════════════════════ Actions ═══════════════════════════════ -->
 
@@ -203,6 +217,16 @@
                 description="Create new Inno Setup language file"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
+        </action>
+
+        <!-- Compile a single .iss script via ISCC from the context menu -->
+        <action id="Iss.BuildScript"
+                class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptBuildAction"
+                text="Build Script"
+                description="Compile this Inno Setup script with ISCC"
+                icon="AllIcons.Actions.Compile">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
 

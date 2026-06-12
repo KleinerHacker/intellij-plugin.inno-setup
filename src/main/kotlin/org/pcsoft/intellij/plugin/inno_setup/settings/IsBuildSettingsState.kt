@@ -13,19 +13,20 @@
 package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.components.BaseState
+import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 
 /**
- * IDE-wide persistent state for the plugin's Inno Setup configuration. Project-specific build
- * options live in [IsBuildSettingsState].
+ * Project-specific persistent state for the Inno Setup build integration. Unlike the IDE-wide
+ * installation path/version (see [IsSettingsState]), these settings differ per project.
  */
-class IsSettingsState : BaseState() {
+class IsBuildSettingsState : BaseState() {
     /**
-     * Installation directory that should contain `ISCC.exe` and `Compil32.exe`.
+     * Whether `.iss` scripts are compiled with ISCC when this project is built.
      */
-    var installationPath: String? by string()
+    var compileOnBuild: Boolean by property(true)
 
     /**
-     * Minimum Inno Setup version selected for version-aware validation, or `null` when unset.
+     * Where ISCC writes its output, persisted as the [IsBuildOutputMode] enum name.
      */
-    var minInnoVersion: String? by string()
+    var outputMode: String? by string(IsBuildOutputMode.DEFAULT.name)
 }

@@ -12,20 +12,21 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.settings
 
-import com.intellij.openapi.components.BaseState
+import com.intellij.openapi.components.*
+import com.intellij.openapi.project.Project
 
 /**
- * IDE-wide persistent state for the plugin's Inno Setup configuration. Project-specific build
- * options live in [IsBuildSettingsState].
+ * Project-level persistent settings service for the Inno Setup build integration.
  */
-class IsSettingsState : BaseState() {
-    /**
-     * Installation directory that should contain `ISCC.exe` and `Compil32.exe`.
-     */
-    var installationPath: String? by string()
+@State(name = "IssBuildSettings", storages = [Storage("inno-setup.xml")])
+@Service(Service.Level.PROJECT)
+class IsBuildSettingsService : SimplePersistentStateComponent<IsBuildSettingsState>(IsBuildSettingsState()) {
 
-    /**
-     * Minimum Inno Setup version selected for version-aware validation, or `null` when unset.
-     */
-    var minInnoVersion: String? by string()
+    companion object {
+        /**
+         * Returns the build-settings service for [project].
+         */
+        @JvmStatic
+        fun getInstance(project: Project): IsBuildSettingsService = project.service()
+    }
 }
