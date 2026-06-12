@@ -14,6 +14,9 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script
 
 import com.intellij.lang.Language
 
+/**
+ * Defines the IntelliJ language instance for this Inno Setup language.
+ */
 object IsScriptLanguage : Language("ISS") {
     private fun readResolve(): Any = IsScriptLanguage
 }

@@ -26,8 +26,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 // When an IsPreprocessorDirective (#define) is renamed, this searcher finds all references so they are
 // renamed too: both {#Name} references in the host ISS file and free-text references inside the
 // expressions of other #define directives.
+/**
+ * Searches project files for usages of the supported Inno Setup PSI target.
+ */
 class IsPreprocessorReferencesSearcher : QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
 
+    /**
+     * Processes the search request and reports matching references to the consumer.
+     */
     override fun execute(
         queryParameters: ReferencesSearch.SearchParameters,
         consumer: Processor<in PsiReference>,

@@ -14,8 +14,20 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.ps
 
 import com.intellij.psi.PsiElement
 
+/**
+ * Declares additional behavior mixed into generated PSI interfaces.
+ */
 interface IsSectionParamPairEx : PsiElement {
+    /**
+     * Returns the normalized key text represented by this PSI element.
+     */
     fun keyText(): String
+    /**
+     * Returns whether this PSI element declares a named entry.
+     */
     fun isNameDeclaration(): Boolean
+    /**
+     * Returns whether this PSI element value references another section entry.
+     */
     fun isReferenceParam(): Boolean
 }

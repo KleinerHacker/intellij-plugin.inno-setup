@@ -16,19 +16,37 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
 import javax.swing.Icon
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 object IsIcons {
+    /**
+     * Represents the PSI file for this Inno Setup language.
+     */
     @JvmField
     val ScriptFile: Icon = IconLoader.getIcon("/icons/inno-setup-script-icon@16.png", IsIcons::class.java)
 
+    /**
+     * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+     */
     @JvmField
     val Section: Icon = AllIcons.Nodes.Class
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     @JvmField
     val ParameterEntry: Icon = AllIcons.Nodes.Field
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     @JvmField
     val Constant: Icon = AllIcons.Nodes.Static
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     @JvmField
     val Variable: Icon = AllIcons.Nodes.Variable
 }

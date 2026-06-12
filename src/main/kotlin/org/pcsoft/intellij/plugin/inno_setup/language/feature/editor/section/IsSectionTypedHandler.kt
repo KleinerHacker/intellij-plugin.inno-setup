@@ -19,7 +19,13 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 class IsSectionTypedHandler : TypedHandlerDelegate() {
+    /**
+     * Handles typed-character behavior for the current editor context.
+     */
     override fun checkAutoPopup(
         charTyped: Char, project: Project, editor: Editor, file: PsiFile
     ): Result {

@@ -14,6 +14,9 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.Language
 
+/**
+ * Defines the IntelliJ language instance for this Inno Setup language.
+ */
 object IsPreprocessorLanguage : Language("ISPP") {
     private fun readResolve(): Any = IsPreprocessorLanguage
 }

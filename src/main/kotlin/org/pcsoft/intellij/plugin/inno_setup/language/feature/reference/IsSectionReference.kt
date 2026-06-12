@@ -29,9 +29,15 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.valueUnquoted
 
 // Anchor is IsSectionParamValue; range points to the specific identifier token within it.
+/**
+ * Represents a PSI reference used for navigation, rename, and find-usages support.
+ */
 class IsSectionReference(paramValue: IsSectionParamValue, range: TextRange, private val targetSection: String) :
     PsiReferenceBase<IsSectionParamValue>(paramValue, range) {
 
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
     override fun resolve(): PsiElement? {
         val file = element.issFile ?: return null
         val name = element.text.substring(rangeInElement.startOffset, rangeInElement.endOffset)
@@ -42,6 +48,9 @@ class IsSectionReference(paramValue: IsSectionParamValue, range: TextRange, priv
             ?.paramValue
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isReferenceTo(element: PsiElement): Boolean {
         val resolved = resolve() ?: return false
         val mgr = element.manager
@@ -53,6 +62,9 @@ class IsSectionReference(paramValue: IsSectionParamValue, range: TextRange, priv
         return resolvedPair != null && mgr.areElementsEquivalent(resolvedPair, element)
     }
 
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
     override fun handleElementRename(newElementName: String): PsiElement {
         val idNode = element.node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
             .firstOrNull { it.startOffset - element.textOffset == rangeInElement.startOffset }
@@ -66,6 +78,9 @@ class IsSectionReference(paramValue: IsSectionParamValue, range: TextRange, priv
         return element
     }
 
+    /**
+     * Returns completion variants available from this reference.
+     */
     override fun getVariants(): Array<Any> {
         val file = element.issFile ?: return emptyArray()
 

@@ -21,6 +21,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPrep
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 
+/**
+ * Registers completion providers for the relevant Inno Setup language context.
+ */
 class IsPreprocessorCompletionContributor : CompletionContributor() {
     init {
         // Directive keyword after #

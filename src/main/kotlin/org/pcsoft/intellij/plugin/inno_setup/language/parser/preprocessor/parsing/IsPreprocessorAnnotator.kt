@@ -29,8 +29,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsin
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
 
+/**
+ * Annotates Inno Setup PSI elements with validation and highlighting information.
+ */
 class IsPreprocessorAnnotator : Annotator {
 
+    /**
+     * Annotates the supplied PSI element when it matches this component's checks.
+     */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (element is IsPreprocessorDirective) annotateDirective(element, holder)
     }

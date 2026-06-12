@@ -22,6 +22,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionDefSpec
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class AddMissingParametersQuickFix(
     entry: IsSectionParameterEntry,
     private val missingNames: List<String>,
@@ -31,6 +34,9 @@ class AddMissingParametersQuickFix(
     private val entryPointer =
         SmartPointerManager.getInstance(entry.project).createSmartPsiElementPointer(entry)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String {
         val properNames = missingNames.mapNotNull { name ->
             specSection.attributes.firstOrNull { it.name.equals(name, ignoreCase = true) }?.name
@@ -38,11 +44,20 @@ class AddMissingParametersQuickFix(
         return "Add missing parameter(s): " + properNames.joinToString(", ")
     }
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Add missing required parameters"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean =
         entryPointer.element != null
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val entry = entryPointer.element ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(entry.containingFile) ?: return
@@ -60,5 +75,8 @@ class AddMissingParametersQuickFix(
         document.insertString(insertOffset, text)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 }

@@ -28,8 +28,20 @@ class IsLanguageFileType private constructor() : LanguageFileType(IsScriptLangua
         val INSTANCE = IsLanguageFileType()
     }
 
+    /**
+     * Returns the logical name exposed by this PSI element.
+     */
     override fun getName(): String = "Inno Setup Language"
+    /**
+     * Returns user-visible presentation text for this IntelliJ extension.
+     */
     override fun getDescription(): String = "Inno Setup language (translation) file"
+    /**
+     * Returns the default file extension for this file type.
+     */
     override fun getDefaultExtension(): String = "isl"
+    /**
+     * Returns the icon shown for this element or file type.
+     */
     override fun getIcon(): Icon = IsIcons.ScriptFile
 }

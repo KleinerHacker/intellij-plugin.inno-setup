@@ -26,6 +26,9 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 import java.awt.Dimension
 import javax.swing.JComponent
 
+/**
+ * Collects user input required to create a new Inno Setup file.
+ */
 class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
 
     private val fileNameField = JBTextField()
@@ -39,9 +42,21 @@ class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
         }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val fileName: String get() = fileNameField.text.trim()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val appName: String get() = appNameField.text.trim()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val appVersion: String get() = appVersionField.text.trim()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val selectedLanguages: List<IsLanguageDataSpec>
         get() = languages.filter { languageList.isItemSelected(it) }
 
@@ -50,6 +65,9 @@ class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
         init()
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun createCenterPanel(): JComponent = panel {
         row("File name:") { cell(fileNameField).focused().align(Align.FILL) }
         row("App name:") { cell(appNameField).align(Align.FILL) }
@@ -59,6 +77,9 @@ class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
         }.resizableRow()
     }.also { it.minimumSize = Dimension(500, 300) }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun doValidate(): ValidationInfo? = when {
         fileName.isEmpty() -> ValidationInfo("File name must not be empty", fileNameField)
         appName.isEmpty() -> ValidationInfo("App name must not be empty", appNameField)
@@ -67,5 +88,8 @@ class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
         else -> null
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getPreferredFocusedComponent() = fileNameField
 }

@@ -18,10 +18,19 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Maps lexer token types to editor text attributes.
+ */
 class IsSectionTokenHighlighter : SyntaxHighlighterBase() {
 
+    /**
+     * Creates the lexer used for syntax highlighting.
+     */
     override fun getHighlightingLexer(): Lexer = IsSectionLexerAdapter()
 
+    /**
+     * Returns text attributes for the supplied token type.
+     */
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> =
         pack(ATTRIBUTES[tokenType])
 

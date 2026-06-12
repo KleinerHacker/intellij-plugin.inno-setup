@@ -15,4 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsi
 import com.intellij.psi.tree.IElementType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
 
+/**
+ * Defines a PSI element type for this Inno Setup language.
+ */
 class IsPreprocessorElementType(debugName: String) : IElementType(debugName, IsPreprocessorLanguage)

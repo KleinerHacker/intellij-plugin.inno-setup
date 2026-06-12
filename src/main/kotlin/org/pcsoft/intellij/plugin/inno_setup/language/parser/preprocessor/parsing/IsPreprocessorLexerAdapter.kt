@@ -14,4 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsi
 
 import com.intellij.lexer.FlexAdapter
 
+/**
+ * Adapts the generated lexer to IntelliJ lexer APIs.
+ */
 class IsPreprocessorLexerAdapter : FlexAdapter(_IsPreprocessorLexer(null))

@@ -15,7 +15,16 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsi
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 
+/**
+ * Holds editor highlighting attributes for Inno Setup inspections.
+ */
 object IsPreprocessorSyntaxHighlighting {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val STRING: TextAttributesKey = DefaultLanguageHighlighterColors.STRING
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val NUMBER: TextAttributesKey = DefaultLanguageHighlighterColors.NUMBER
 }

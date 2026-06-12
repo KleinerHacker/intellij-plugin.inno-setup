@@ -14,10 +14,15 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
+/**
+ * Validation relationship type for a flag conflict entry.
+ */
 enum class IsSectionFlagType {
+    /** The referenced flag must not be combined with the current flag. */
     @JsonProperty("forbidden")
     FORBIDDEN,
 
+    /** The referenced flag is ignored when the current flag is present. */
     @JsonProperty("ignored")
     IGNORED,
 

@@ -22,18 +22,33 @@ import com.intellij.psi.SmartPointerManager
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class RemoveTrailingSemicolonQuickFix(entry: IsSectionParameterEntry) : IntentionAction {
 
     private val entryPointer =
         SmartPointerManager.getInstance(entry.project).createSmartPsiElementPointer(entry)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Remove trailing semicolon"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Remove trailing semicolon"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean =
         findSemicolon() != null
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val entry = entryPointer.element ?: return
         val semi = findSemicolon() ?: return
@@ -41,6 +56,9 @@ class RemoveTrailingSemicolonQuickFix(entry: IsSectionParameterEntry) : Intentio
         document.deleteString(semi.startOffset, semi.startOffset + semi.textLength)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 
     private fun findSemicolon(): ASTNode? {

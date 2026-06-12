@@ -29,7 +29,13 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
@@ -65,7 +71,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
             it.name.equals(sectionName, ignoreCase = true)
         } ?: return
 
-        // Sections that support a language prefix (e.g. [Messages], [CustomMessages]) are
+        // Sections that support a language prefix (e.g. \[Messages], \[CustomMessages]) are
         // handled by MessagesKeyProvider, which also offers the language-prefix list and copes
         // with the embedded "lang." prefix. Skip them here to avoid duplicate suggestions.
         if (specSection.internationalization) return

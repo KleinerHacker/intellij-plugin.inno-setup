@@ -20,6 +20,9 @@ import com.intellij.openapi.options.colors.ColorSettingsPage
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import javax.swing.Icon
 
+/**
+ * Exposes syntax-highlighting colors in the IntelliJ color settings UI.
+ */
 class IsSectionColorSettingsPage : ColorSettingsPage {
 
     private val DESCRIPTORS = arrayOf(
@@ -42,12 +45,30 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         AttributesDescriptor("Unused", IsSectionAnnotatorHighlighting.UNUSED),
     )
 
+    /**
+     * Returns user-visible presentation text for this IntelliJ extension.
+     */
     override fun getDisplayName() = "Inno Setup"
+    /**
+     * Returns the icon shown for this element or file type.
+     */
     override fun getIcon(): Icon = IsIcons.ScriptFile
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getHighlighter(): SyntaxHighlighter = IsSectionTokenHighlighter()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getAttributeDescriptors() = DESCRIPTORS
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getColorDescriptors(): Array<ColorDescriptor> = ColorDescriptor.EMPTY_ARRAY
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getDemoText() = """
         ; Inno Setup Script - demo
         <pp>#define</pp> <dname>AppVersion</dname> "1.0"
@@ -69,6 +90,9 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         <paramKey>Name</paramKey>: "<ref>{group}</ref>\My Program"; <paramKey>Filename</paramKey>: "<ref>{app}</ref>\MyProg.exe"
     """.trimIndent()
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey> = mapOf(
         "sectionName" to IsSectionAnnotatorHighlighting.SECTION_NAME,
         "paramKey" to IsSectionAnnotatorHighlighting.PARAM_KEY,

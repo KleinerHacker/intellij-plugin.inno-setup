@@ -25,12 +25,21 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
 
 // ── IsScriptFile (Sektionen) ────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsScriptFile.sections: List<IsSectionBlock>
     get() = PsiTreeUtil.getChildrenOfTypeAsList(this, IsSectionBlock::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsScriptFile.findSection(name: String): IsSectionBlock? =
     sections.firstOrNull { it.nameText.equals(name, ignoreCase = true) }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsScriptFile.findSections(name: String): List<IsSectionBlock> =
     sections.filter { it.nameText.equals(name, ignoreCase = true) }
 
@@ -38,36 +47,66 @@ fun IsScriptFile.findSections(name: String): List<IsSectionBlock> =
 // this still works when trailing/incomplete tokens (e.g. after a dangling ';')
 // fell outside the section's PSI range: it returns the last section that starts
 // at or before the offset.
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsScriptFile.sectionAtOffset(offset: Int): IsSectionBlock? =
     sections.lastOrNull { it.textRange.startOffset <= offset }
 
 // ── IsSectionBlock ───────────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.nameText: String
     get() = header.title?.text.orEmpty()
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsSectionBlock.allParamPairs(): List<IsSectionParamPair> =
     parameterEntryList.flatMap { it.paramPairList }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsSectionBlock.findParamPairs(key: String): List<IsSectionParamPair> =
     allParamPairs().filter { it.keyText().equals(key, ignoreCase = true) }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.nameDeclarations: List<IsSectionParamPair>
     get() = findParamPairs("Name")
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsSectionBlock.specSection(spec: IsSectionSpec): IsSectionDefSpec? =
     spec.sections.firstOrNull { it.name.equals(nameText, ignoreCase = true) }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.specSection: IsSectionDefSpec?
     get() = service<IsSpecService>().spec.sections.firstOrNull { it.name.equals(nameText, ignoreCase = true) }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.isParameterSection: Boolean
     get() = specSection?.type == "parameter"
 
 // The parameter entry sharing the caret's line. Used when the caret sits after a
 // dangling ';' whose incomplete pair fell outside the entry/section PSI, so the
 // keys already present on the line can still be detected.
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 fun IsSectionBlock.parameterEntryOnLineOf(offset: Int, document: Document): IsSectionParameterEntry? {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val line = document.getLineNumber(offset)
     return parameterEntryList.lastOrNull {
         it.textRange.startOffset <= offset &&
@@ -75,14 +114,23 @@ fun IsSectionBlock.parameterEntryOnLineOf(offset: Int, document: Document): IsSe
     }
 }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.prevSection: IsSectionBlock?
     get() = PsiTreeUtil.getPrevSiblingOfType(this, IsSectionBlock::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionBlock.nextSection: IsSectionBlock?
     get() = PsiTreeUtil.getNextSiblingOfType(this, IsSectionBlock::class.java)
 
 // ── IsSectionParameterEntry ─────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParameterEntry.displayName: String
     get() {
         val pairs = paramPairList
@@ -115,42 +163,75 @@ private val String.stripIssPrefix: String
 
 // ── IsSectionParamPair ──────────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParamPair.valueText: String
     get() = paramValue?.text?.trim().orEmpty()
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParamPair.valueUnquoted: String
     get() = valueText.removeSurrounding("\"")
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParamPair.nextParam: IsSectionParamPair?
     get() = PsiTreeUtil.getNextSiblingOfType(this, IsSectionParamPair::class.java)
 
 // ── IsSectionDirectiveEntry ─────────────────────────────────────────────────────────
 // keyText() is provided as a member by IsSectionDirectiveEntryEx (the directiveEntry mixin).
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionDirectiveEntry.valueText: String
     get() = paramValue?.text?.trim().orEmpty()
 
 // ── IsSectionParamValue ─────────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParamValue.identifiers: List<PsiElement>
     get() = node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER)).map { it.psi }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsSectionParamValue.singleText: String
     get() = text.trim().removeSurrounding("\"")
 
 // ── PsiElement (Sections) ─────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.containingSection: IsSectionBlock?
     get() = PsiTreeUtil.getParentOfType(this, IsSectionBlock::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.containingParamPair: IsSectionParamPair?
     get() = PsiTreeUtil.getParentOfType(this, IsSectionParamPair::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.containingParameterEntry: IsSectionParameterEntry?
     get() = PsiTreeUtil.getParentOfType(this, IsSectionParameterEntry::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.containingDirectiveEntry: IsSectionDirectiveEntry?
     get() = PsiTreeUtil.getParentOfType(this, IsSectionDirectiveEntry::class.java)
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.isInCodeSection: Boolean
     get() = containingSection?.nameText?.equals("Code", ignoreCase = true) == true

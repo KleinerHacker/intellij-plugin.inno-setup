@@ -19,6 +19,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provide
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Registers completion providers for the relevant Inno Setup language context.
+ */
 class IsSectionCompletionContributor : CompletionContributor() {
     init {
         extend(
@@ -36,7 +39,7 @@ class IsSectionCompletionContributor : CompletionContributor() {
                 .inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionAttributeKeyProvider
         )
-        // Key completion for internationalized sections ([Messages], [CustomMessages]):
+        // Key completion for internationalized sections (\[Messages], \[CustomMessages]):
         // offers a language-prefix list (flag + name) plus the known message identifiers,
         // and handles the embedded "lang." prefix.
         extend(
@@ -76,14 +79,14 @@ class IsSectionCompletionContributor : CompletionContributor() {
                 .inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionReferenceValueProvider
         )
-        // Built-in language suggestions for [Languages] Name and MessagesFile parameters.
+        // Built-in language suggestions for \[Languages] Name and MessagesFile parameters.
         // Registered for any element (not just IDENTIFIER) so it also fires inside quoted strings.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionLanguageSectionValueProvider
         )
-        // Windows language identifier suggestions for the [LangOptions] LanguageID directive.
+        // Windows language identifier suggestions for the \[LangOptions] LanguageID directive.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),

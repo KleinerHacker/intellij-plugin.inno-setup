@@ -16,6 +16,9 @@ import org.pcsoft.intellij.plugin.inno_setup.types.*
 
 internal object IsSectionDefaultValueGenerator {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     fun defaultFor(attr: IsSectionAttributeSpec): String =
         nameOverride(attr.name) ?: typeDefault(attr.type)
 

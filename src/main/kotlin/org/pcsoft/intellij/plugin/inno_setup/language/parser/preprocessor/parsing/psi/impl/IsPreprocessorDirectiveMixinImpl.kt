@@ -41,20 +41,32 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return value.text.substring(start)
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isDefine(): Boolean =
         (this as IsPreprocessorDirective).identifier?.text?.equals("define", ignoreCase = true) == true
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getDefineName(): String? {
         if (!isDefine()) return null
         return nameNode()?.text
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isFunctionMacro(): Boolean {
         if (!isDefine()) return false
         // The parameter list opens immediately after the name, with no whitespace in between.
         return rawAfterName()?.startsWith("(") == true
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getDefineValue(): String? {
         if (!isDefine()) return null
         val after = rawAfterName() ?: return null
@@ -64,6 +76,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return expr.removeSurrounding("\"").ifEmpty { null }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getMacroBody(): String? {
         if (!isFunctionMacro()) return null
         val after = rawAfterName() ?: return null
@@ -107,6 +122,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
     }
 
+    /**
+     * Returns references contributed by this PSI element.
+     */
     override fun getReferences(): Array<PsiReference> {
         val ids = expressionReferenceIdentifiers()
         if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
@@ -119,8 +137,14 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
 
     // ── PsiNameIdentifierOwner ────────────────────────────────────────────────
 
+    /**
+     * Returns the logical name exposed by this PSI element.
+     */
     override fun getName(): String? = getDefineName()
 
+    /**
+     * Renames this PSI element and returns the updated element.
+     */
     override fun setName(name: String): PsiElement {
         val oldId = getNameIdentifier() ?: return this
         val injManager = InjectedLanguageManager.getInstance(project)
@@ -135,10 +159,16 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return this
     }
 
+    /**
+     * Returns the PSI element that carries the renameable name.
+     */
     override fun getNameIdentifier(): PsiElement? {
         if (!isDefine()) return null
         return nameNode()?.psi
     }
 
+    /**
+     * Returns the editor offset used for navigation to this PSI element.
+     */
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()
 }

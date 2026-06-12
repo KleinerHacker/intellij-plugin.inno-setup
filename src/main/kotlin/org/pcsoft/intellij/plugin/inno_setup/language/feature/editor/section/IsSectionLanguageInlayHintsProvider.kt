@@ -30,10 +30,10 @@ import javax.swing.JPanel
 
 /**
  * Renders flag inlay hints, all derived from the Windows language id (the single source of truth):
- *  - `[LangOptions]` `LanguageID` &mdash; flag + locale name after `=`, before the numeric id.
- *  - `[Languages]` `MessagesFile` &mdash; flag + locale name of the language declared in the
+ *  - \[LangOptions] `LanguageID` &mdash; flag + locale name after `=`, before the numeric id.
+ *  - \[Languages] `MessagesFile` &mdash; flag + locale name of the language declared in the
  *    referenced `.isl` file (`LangOptions.LanguageID`).
- *  - `[Messages]` / `[CustomMessages]` &mdash; the flag of the language a `lang.` key prefix refers
+ *  - \[Messages] / \[CustomMessages] &mdash; the flag of the language a `lang.` key prefix refers
  *    to, before the key.
  *
  * When the value does not map to a known locale, no hint is shown.
@@ -41,18 +41,36 @@ import javax.swing.JPanel
 @Suppress("UnstableApiUsage")
 class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override val key: SettingsKey<NoSettings> = SettingsKey("inno.iss.language.flags")
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override val name: String = "Language flags"
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override val previewText: String =
         "[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n\n[LangOptions]\nLanguageID=\$0409"
 
+    /**
+     * Returns inlay-hint configuration or collection support.
+     */
     override fun createSettings(): NoSettings = NoSettings()
 
+    /**
+     * Returns inlay-hint configuration or collection support.
+     */
     override fun createConfigurable(settings: NoSettings): ImmediateConfigurable =
         object : ImmediateConfigurable {
             override fun createComponent(listener: ChangeListener): JPanel = JPanel()
         }
 
+    /**
+     * Returns inlay-hint configuration or collection support.
+     */
     override fun getCollectorFor(
         file: PsiFile,
         editor: Editor,
@@ -72,7 +90,7 @@ class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             return true
         }
 
-        // [LangOptions] LanguageID=$0409 → 🇺🇸 English (United States)
+        // \[LangOptions] LanguageID=$0409 → 🇺🇸 English (United States)
         private fun collectLanguageId(entry: IsSectionDirectiveEntry, sink: InlayHintsSink) {
             if (entry.isInCodeSection) return
             if (!entry.keyText().equals("LanguageID", ignoreCase = true)) return
@@ -85,7 +103,7 @@ class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
         }
 
-        // [Languages] MessagesFile: "compiler:Languages\German.isl" → 🇩🇪 German (Germany)
+        // \[Languages] MessagesFile: "compiler:Languages\German.isl" → 🇩🇪 German (Germany)
         // Flag + English name come from the LanguageID declared in the referenced .isl file.
         private fun collectLanguagesFlag(pair: IsSectionParamPair, sink: InlayHintsSink) {
             if (pair.isInCodeSection) return
@@ -103,8 +121,8 @@ class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             addFlag(sink, value.textRange.startOffset, lang.icon, lang.displayName)
         }
 
-        // [Messages]/[CustomMessages] english.WelcomeLabel1=… → 🇺🇸 before the key.
-        // The flag is that of the language the "lang." prefix refers to in [Languages].
+        // \[Messages]/\[CustomMessages] english.WelcomeLabel1=… → 🇺🇸 before the key.
+        // The flag is that of the language the "lang." prefix refers to in \[Languages].
         private fun collectMessagesPrefixFlag(entry: IsSectionDirectiveEntry, sink: InlayHintsSink) {
             if (entry.isInCodeSection) return
 
@@ -121,7 +139,7 @@ class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
             addFlag(sink, entry.directiveKey.textRange.startOffset, icon, null)
         }
 
-        /** Flag of the [Languages] entry whose Name equals [prefix], via its MessagesFile LanguageID. */
+        /** Flag of the \[Languages] entry whose Name equals [prefix], via its MessagesFile LanguageID. */
         private fun languageFlagForPrefix(file: IsScriptFile, prefix: String): Icon? {
             val namePair = file.findSections("Languages").flatMap { it.nameDeclarations }
                 .firstOrNull { it.valueUnquoted.equals(prefix, ignoreCase = true) } ?: return null

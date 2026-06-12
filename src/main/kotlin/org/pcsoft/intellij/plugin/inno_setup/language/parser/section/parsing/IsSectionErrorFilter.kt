@@ -19,7 +19,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 class IsSectionErrorFilter : HighlightErrorFilter() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun shouldHighlightErrorElement(element: PsiErrorElement): Boolean {
         val section = PsiTreeUtil.getParentOfType(element, IsSectionBlock::class.java)
         if (section != null && section.nameText.equals("Code", ignoreCase = true))

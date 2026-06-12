@@ -18,8 +18,14 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.intellij.openapi.components.Service
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
 
+/**
+ * Application-level service that loads the bundled Inno Setup section specification.
+ */
 @Service(Service.Level.APP)
 class IsSpecService {
+    /**
+     * Parsed section specification used for completion, validation, references, and documentation.
+     */
     val spec: IsSectionSpec by lazy {
         val mapper = YAMLMapper.builder()
             .addModule(kotlinModule())

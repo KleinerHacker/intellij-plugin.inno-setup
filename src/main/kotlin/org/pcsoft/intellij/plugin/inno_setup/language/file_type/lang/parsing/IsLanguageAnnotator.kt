@@ -33,6 +33,9 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
  */
 class IsLanguageAnnotator : Annotator {
 
+    /**
+     * Annotates the supplied PSI element when it matches this component's checks.
+     */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         if (!element.isInLanguageFile) return
         when (element) {

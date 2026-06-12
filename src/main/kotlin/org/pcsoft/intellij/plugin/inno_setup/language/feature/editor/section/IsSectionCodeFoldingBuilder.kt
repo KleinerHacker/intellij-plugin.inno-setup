@@ -27,8 +27,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
 
+    /**
+     * Returns code-folding metadata for Inno Setup sections.
+     */
     override fun buildFoldRegions(
         root: PsiElement, document: Document, quick: Boolean
     ): Array<FoldingDescriptor> {
@@ -95,12 +101,18 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
         return shownByRequired.ifEmpty { listOf(pairs.first()) }
     }
 
+    /**
+     * Returns code-folding metadata for Inno Setup sections.
+     */
     override fun getPlaceholderText(node: ASTNode): String = when (node.psi) {
         is IsSectionBlock -> ""
         is IsSectionParameterEntry -> "; ..."
         else -> "..."
     }
 
+    /**
+     * Returns code-folding metadata for Inno Setup sections.
+     */
     override fun isCollapsedByDefault(node: ASTNode): Boolean =
         node.elementType == IsSectionTypes.PARAMETER_ENTRY
 }

@@ -33,6 +33,9 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
     private val EXPR_PREFIX = Regex("^#\\s*define\\s+[A-Za-z0-9_.\\-]+(?:\\([^)]*\\))?\\s+.*$")
     private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
 
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         params: CompletionParameters,
         context: ProcessingContext,

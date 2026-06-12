@@ -21,14 +21,20 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nextSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.prevSection
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 class IsSectionMover : StatementUpDownMover() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun checkAvailable(editor: Editor, file: PsiFile, info: MoveInfo, down: Boolean): Boolean {
         val offset = editor.caretModel.offset
         val elementAt = file.findElementAt(offset) ?: file.findElementAt(offset - 1) ?: return false
         val section = PsiTreeUtil.getParentOfType(elementAt, IsSectionBlock::class.java) ?: return false
 
         // Only move whole sections when the caret is on the section header line itself (e.g. on
-        // "[Setup]"). Anywhere else inside the section the generic line mover should keep working,
+        // "\[Setup]"). Anywhere else inside the section the generic line mover should keep working,
         // so parameter lines can still be shuffled one at a time.
         val document = editor.document
         val headerLine = document.getLineNumber(section.header.textRange.startOffset)

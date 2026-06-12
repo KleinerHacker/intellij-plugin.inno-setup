@@ -23,7 +23,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageF
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsPreprocessorDirectiveKeywordProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         params: CompletionParameters,
         context: ProcessingContext,

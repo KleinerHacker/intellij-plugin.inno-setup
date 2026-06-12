@@ -24,6 +24,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 
 abstract class IsSectionConstantBodyMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node) {
 
+    /**
+     * Returns references contributed by this PSI element.
+     */
     override fun getReferences(): Array<PsiReference> {
         val bodyText = text ?: return PsiReference.EMPTY_ARRAY
 

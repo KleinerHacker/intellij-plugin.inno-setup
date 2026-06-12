@@ -24,8 +24,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 abstract class IsSectionPreprocessorLineMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node),
     PsiLanguageInjectionHost {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isValidHost(): Boolean = true
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun updateText(text: String): PsiLanguageInjectionHost {
         val factory = PsiFileFactory.getInstance(project)
         val newFile = factory.createFileFromText("d.iss", IsScriptFileType.INSTANCE, "$text\n")
@@ -33,6 +39,9 @@ abstract class IsSectionPreprocessorLineMixinImpl(node: ASTNode) : ASTWrapperPsi
         return replace(newLine) as? PsiLanguageInjectionHost ?: this
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun createLiteralTextEscaper(): LiteralTextEscaper<out PsiLanguageInjectionHost> =
         LiteralTextEscaper.createSimple(this as IsSectionPreprocessorLine)
 }

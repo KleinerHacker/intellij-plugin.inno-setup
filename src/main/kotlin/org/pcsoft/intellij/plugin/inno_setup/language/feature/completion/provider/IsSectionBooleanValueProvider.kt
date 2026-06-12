@@ -29,7 +29,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeTypeSpec
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionBooleanValueProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

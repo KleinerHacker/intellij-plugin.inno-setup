@@ -21,7 +21,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.definedConstants
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionPreprocessorVariableAfterHashProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

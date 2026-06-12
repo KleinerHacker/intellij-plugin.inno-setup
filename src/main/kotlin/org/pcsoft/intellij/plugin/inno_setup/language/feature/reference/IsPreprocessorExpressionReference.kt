@@ -42,6 +42,9 @@ class IsPreprocessorExpressionReference(
     /* soft = */ true,
 ) {
 
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
     override fun resolve(): PsiElement? {
         val injMgr = InjectedLanguageManager.getInstance(element.project)
         val issFile = injMgr.getTopLevelFile(element.containingFile) as? IsScriptFile ?: return null
@@ -58,6 +61,9 @@ class IsPreprocessorExpressionReference(
             ?.first
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isReferenceTo(element: PsiElement): Boolean {
         val resolved = resolve() ?: return false
         val mgr = element.manager
@@ -68,8 +74,14 @@ class IsPreprocessorExpressionReference(
         return nameId != null && mgr.areElementsEquivalent(nameId, element)
     }
 
+    /**
+     * Returns completion variants available from this reference.
+     */
     override fun getVariants(): Array<Any> = emptyArray()
 
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
     override fun handleElementRename(newElementName: String): PsiElement {
         val injMgr = InjectedLanguageManager.getInstance(element.project)
         val range = rangeInElement.shiftRight(element.textRange.startOffset) // injected coords

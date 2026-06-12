@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.ps
 import com.intellij.psi.PsiNameIdentifierOwner
 
 /**
- * Extra behaviour for `Key=Value` directive entries. A directive entry in the [CustomMessages]
+ * Extra behaviour for `Key=Value` directive entries. A directive entry in the \[CustomMessages]
  * section declares a custom message and acts as a renamable [PsiNameIdentifierOwner] whose name
  * is the message identifier (the part after any optional `lang.` prefix).
  */
@@ -23,7 +23,7 @@ interface IsSectionDirectiveEntryEx : PsiNameIdentifierOwner {
     /** Full key text including any `lang.` prefix, e.g. `english.LaunchProgram`. */
     fun keyText(): String
 
-    /** True when this entry sits in a [CustomMessages] section and therefore declares a custom message. */
+    /** True when this entry sits in a \[CustomMessages] section and therefore declares a custom message. */
     fun isCustomMessageDeclaration(): Boolean
 
     /** The message identifier with any `lang.` prefix stripped, or `null` when not a custom message. */

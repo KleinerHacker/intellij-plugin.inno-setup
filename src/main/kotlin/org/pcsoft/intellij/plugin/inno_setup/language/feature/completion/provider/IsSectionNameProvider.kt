@@ -30,7 +30,13 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionNameProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

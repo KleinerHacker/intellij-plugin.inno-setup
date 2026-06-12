@@ -32,26 +32,41 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.specSection
 
 /**
- * Mixin for `Key=Value` directive entries. In a [CustomMessages] section, the entry declares a
+ * Mixin for `Key=Value` directive entries. In a \[CustomMessages] section, the entry declares a
  * custom message: its name is the key with any `lang.` prefix stripped, and it is renamable.
- * Outside [CustomMessages] the [com.intellij.psi.PsiNameIdentifierOwner] hooks return `null`, so
+ * Outside \[CustomMessages] the [com.intellij.psi.PsiNameIdentifierOwner] hooks return `null`, so
  * ordinary directive entries are unaffected.
  */
 abstract class IsSectionDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsSectionDirectiveEntryEx {
 
+    /**
+     * Returns the normalized key text represented by this PSI element.
+     */
     override fun keyText(): String = (this as IsSectionDirectiveEntry).directiveKey.text.trim()
 
+    /**
+     * Returns whether this entry declares a custom message.
+     */
     override fun isCustomMessageDeclaration(): Boolean =
         containingSection?.nameText?.equals("CustomMessages", ignoreCase = true) == true
 
+    /**
+     * Returns the custom-message name declared by this entry, if any.
+     */
     override fun customMessageName(): String? {
         if (!isCustomMessageDeclaration()) return null
         return keyText().substringAfterLast('.').ifEmpty { null }
     }
 
-    // PsiNameIdentifierOwner — only meaningful for [CustomMessages] entries.
+    // PsiNameIdentifierOwner — only meaningful for \[CustomMessages] entries.
+    /**
+     * Returns the logical name exposed by this PSI element.
+     */
     override fun getName(): String? = customMessageName()
 
+    /**
+     * Returns the PSI element that carries the renameable name.
+     */
     override fun getNameIdentifier(): PsiElement? {
         if (!isCustomMessageDeclaration()) return null
         return (this as IsSectionDirectiveEntry).directiveKey.node.findChildByType(IsSectionTypes.IDENTIFIER)?.psi
@@ -74,8 +89,8 @@ abstract class IsSectionDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     }
 
     /**
-     * In an internationalized section ([Messages]/[CustomMessages]) a `lang.` key prefix references
-     * the matching `[Languages] Name`. The reference covers only the prefix segment of the key.
+     * In an internationalized section (\[Messages]/\[CustomMessages]) a `lang.` key prefix references
+     * the matching `\[Languages] Name`. The reference covers only the prefix segment of the key.
      */
     override fun getReferences(): Array<PsiReference> {
         if (containingSection?.specSection?.internationalization != true) return PsiReference.EMPTY_ARRAY
@@ -94,6 +109,9 @@ abstract class IsSectionDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         )
     }
 
+    /**
+     * Returns the editor offset used for navigation to this PSI element.
+     */
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()
 
     private fun renameKeyPart(entry: IsSectionDirectiveEntry, newName: String) {

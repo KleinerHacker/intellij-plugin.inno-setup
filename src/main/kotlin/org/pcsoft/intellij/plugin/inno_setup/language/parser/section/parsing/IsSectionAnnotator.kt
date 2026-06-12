@@ -33,8 +33,14 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
+/**
+ * Annotates Inno Setup PSI elements with validation and highlighting information.
+ */
 class IsSectionAnnotator : Annotator {
 
+    /**
+     * Annotates the supplied PSI element when it matches this component's checks.
+     */
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val spec = service<IsSpecService>().spec
         when (element) {
@@ -55,7 +61,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Warns when a `[LangOptions]` `LanguageID` is neither <code>0</code> nor a recognised Windows
+     * Warns when a \[LangOptions] `LanguageID` is neither <code>0</code> nor a recognised Windows
      * locale identifier ([IsLanguageDataService.validIds]). Malformed (non-integer) values are left to
      * the native integer type check, which reports them as errors.
      */
@@ -77,7 +83,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     private fun annotateFile(file: IsScriptFile, holder: AnnotationHolder, spec: IsSectionSpec) {
-        // Required sections are file-type specific: [Setup] in scripts, [LangOptions] in .isl files.
+        // Required sections are file-type specific: \[Setup] in scripts, \[LangOptions] in .isl files.
         val target = file.specTarget
         val required = spec.sections.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
         val existing = file.sections.map { it.nameText.lowercase() }.toSet()
@@ -123,7 +129,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     private fun annotateSection(section: IsSectionBlock, holder: AnnotationHolder, spec: IsSectionSpec) {
-        // [Code] is free-form Pascal — no ISI-level checks apply.
+        // \[Code] is free-form Pascal — no ISI-level checks apply.
         if (section.nameText.equals("Code", ignoreCase = true)) return
 
         if (section.directiveEntryList.isEmpty() && section.parameterEntryList.isEmpty()) {
@@ -205,8 +211,8 @@ class IsSectionAnnotator : Annotator {
         val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
 
-        // Internationalized sections ([Messages], [CustomMessages]) allow a "lang." prefix and,
-        // for [CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
+        // Internationalized sections (\[Messages], \[CustomMessages]) allow a "lang." prefix and,
+        // for \[CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
         // never flag an unrecognized name as unknown (the predefined list is advisory only).
         if (specSection.internationalization) {
             val baseName = entry.keyText().substringAfterLast('.')
@@ -226,7 +232,7 @@ class IsSectionAnnotator : Annotator {
 
     /**
      * In an internationalized section, a `lang.` key prefix must match a `Name` declared in
-     * [Languages]. An unknown prefix is flagged in red over the prefix segment.
+     * \[Languages]. An unknown prefix is flagged in red over the prefix segment.
      */
     private fun annotateLanguagePrefix(
         key: IsSectionDirectiveKey,
@@ -491,7 +497,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Flags a `{cm:Name}` whose message name is not defined in any [CustomMessages] section. The
+     * Flags a `{cm:Name}` whose message name is not defined in any \[CustomMessages] section. The
      * red highlight covers only the name token, mirroring the unknown-flag/unknown-constant style.
      */
     private fun annotateCustomMessage(

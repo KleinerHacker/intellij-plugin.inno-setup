@@ -24,10 +24,19 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
 import javax.swing.Icon
 
+/**
+ * Provides navigation bar presentation for Inno Setup structure elements.
+ */
 class IsStructureAwareNavbar : StructureAwareNavBarModelExtension() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override val language: Language
         get() = IsScriptLanguage
 
+    /**
+     * Returns presentation metadata used by IntelliJ navigation UI.
+     */
     override fun getPresentableText(obj: Any?): String? {
         return when (obj) {
             is IsScriptFile -> obj.name
@@ -38,6 +47,9 @@ class IsStructureAwareNavbar : StructureAwareNavBarModelExtension() {
         }
     }
 
+    /**
+     * Returns the icon shown for this element or file type.
+     */
     override fun getIcon(obj: Any?): Icon? = when (obj) {
         is IsSectionBlock -> IsIcons.Section
         is IsSectionDirectiveEntry -> IsIcons.ParameterEntry

@@ -27,7 +27,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionLanguageIdValueProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
@@ -35,7 +41,7 @@ object IsSectionLanguageIdValueProvider : CompletionProvider<CompletionParameter
     ) {
         val position = parameters.position
         if (position.isInCodeSection) return
-        // [LangOptions] is a directive section (Key=Value), so the value hangs off an
+        // \[LangOptions] is a directive section (Key=Value), so the value hangs off an
         // IsSectionDirectiveEntry rather than an IsSectionParamPair.
         val paramValue = PsiTreeUtil.getParentOfType(position, IsSectionParamValue::class.java) ?: return
         val directive = paramValue.containingDirectiveEntry ?: return

@@ -24,8 +24,14 @@ import javax.swing.JComponent
 import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
+/**
+ * Settings page that lets users configure the local Inno Setup installation and validation target.
+ */
 class IsSettingsConfigurable : SearchableConfigurable {
 
+    /**
+     * Version-list helpers used by the settings page and unit tests.
+     */
     companion object {
         private val VERSIONS_BY_MAJOR = mapOf(
             6 to listOf("6.0", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"),
@@ -34,16 +40,28 @@ class IsSettingsConfigurable : SearchableConfigurable {
         private val ALL_VERSIONS = VERSIONS_BY_MAJOR.values.flatten()
         private const val DEFAULT_LATEST = "6.7"
 
+        /**
+         * Returns the selectable minor versions for a detected major version.
+         */
         fun versionsForMajor(major: Int?): List<String> =
             if (major != null) VERSIONS_BY_MAJOR[major] ?: ALL_VERSIONS
             else ALL_VERSIONS
 
+        /**
+         * Returns the latest known minor version for a detected major version.
+         */
         fun latestForMajor(major: Int?): String =
             VERSIONS_BY_MAJOR[major]?.last() ?: DEFAULT_LATEST
 
+        /**
+         * Extracts the major version number from the text returned by the installation detector.
+         */
         fun extractMajorFromDetected(detectedVersion: String?): Int? =
             detectedVersion?.let { Regex("\\d+").find(it)?.value?.toIntOrNull() }
 
+        /**
+         * Extracts the major version number from a saved minimum-version restriction.
+         */
         fun extractMajorFromRestriction(restriction: String?): Int? =
             restriction?.let { Regex("^(\\d+)\\.").find(it)?.groupValues?.get(1)?.toIntOrNull() }
     }
@@ -55,9 +73,19 @@ class IsSettingsConfigurable : SearchableConfigurable {
     private var validationLabel: JBLabel? = null
     private var minVersionCombo: ComboBox<String>? = null
 
+    /**
+     * Returns the stable settings page id used by IntelliJ search.
+     */
     override fun getId() = "org.pcsoft.intellij.plugin.inno_setup.settings"
+
+    /**
+     * Returns the display name shown in the Settings tree.
+     */
     override fun getDisplayName() = "Inno Setup"
 
+    /**
+     * Builds the Swing component for the settings page.
+     */
     override fun createComponent(): JComponent {
         val picker = TextFieldWithBrowseButton()
         pathField = picker
@@ -99,16 +127,25 @@ class IsSettingsConfigurable : SearchableConfigurable {
         }
     }
 
+    /**
+     * Checks whether the current UI values differ from the persisted settings.
+     */
     override fun isModified(): Boolean {
         if (pathField?.text?.trim() != service.state.installationPath) return true
         return minVersionCombo?.selectedItem?.toString() != service.state.minInnoVersion
     }
 
+    /**
+     * Stores the current UI values in the persistent settings state.
+     */
     override fun apply() {
         service.state.installationPath = pathField?.text?.trim() ?: ""
         service.state.minInnoVersion = minVersionCombo?.selectedItem?.toString()
     }
 
+    /**
+     * Restores UI values from the persistent settings state.
+     */
     override fun reset() {
         val path = service.state.installationPath ?: ""
         pathField?.text = path
@@ -125,6 +162,9 @@ class IsSettingsConfigurable : SearchableConfigurable {
         }
     }
 
+    /**
+     * Releases Swing component references owned by this configurable.
+     */
     override fun disposeUIResources() {
         pathField = null
         versionLabel = null

@@ -15,12 +15,36 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 
+/**
+ * Holds editor highlighting attributes for Inno Setup inspections.
+ */
 object IsSectionSyntaxHighlighting {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val COMMENT: TextAttributesKey = DefaultLanguageHighlighterColors.LINE_COMMENT
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val STRING: TextAttributesKey = DefaultLanguageHighlighterColors.STRING
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val NUMBER: TextAttributesKey = DefaultLanguageHighlighterColors.NUMBER
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val BRACKET: TextAttributesKey = DefaultLanguageHighlighterColors.BRACKETS
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val BRACE: TextAttributesKey = DefaultLanguageHighlighterColors.BRACES
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val OPERATION_SIGN: TextAttributesKey = DefaultLanguageHighlighterColors.OPERATION_SIGN
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val KEYWORD: TextAttributesKey = DefaultLanguageHighlighterColors.KEYWORD
 }

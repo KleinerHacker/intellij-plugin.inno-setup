@@ -26,7 +26,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 // returns nothing — the reference lives on the parent IsSectionParamValue.  This executor
 // directly scans all IsSectionParamValue elements in the file so rename finds and updates
 // Tasks:/Components:/Types:/Languages: references when a Name: value is renamed.
+/**
+ * Searches project files for usages of the supported Inno Setup PSI target.
+ */
 class IsSectionReferencesSearcher : QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
+    /**
+     * Processes the search request and reports matching references to the consumer.
+     */
     override fun execute(
         queryParameters: ReferencesSearch.SearchParameters,
         consumer: Processor<in PsiReference>,

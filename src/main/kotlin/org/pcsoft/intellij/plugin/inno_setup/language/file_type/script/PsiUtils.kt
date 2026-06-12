@@ -25,6 +25,9 @@ import java.util.concurrent.ConcurrentHashMap
 
 // ── PsiElement (Host) ──────────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val PsiElement.issFile: IsScriptFile?
     get() = containingFile as? IsScriptFile
 
@@ -43,6 +46,9 @@ private val cache = ConcurrentHashMap<String, Cached>()
 
 /** Numeric LCID for [messagesFile] (already unquoted), or `null` when it cannot be determined. */
 fun IsScriptFile?.languageId(messagesFile: String): Int? {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val mf = messagesFile.trim().removeSurrounding("\"").trim()
     if (mf.isEmpty()) return null
     parseResolved(mf, this)?.let { return it }
@@ -67,14 +73,26 @@ private val innoDir: String?
     }
 
 private fun resolveProjectFile(messagesFile: String, context: IsScriptFile?): VirtualFile? {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val scriptDir = context?.virtualFile?.parent ?: return null
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val sourceDir = sourceDirOf(context)
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val base = sourceDir?.let { scriptDir.findFileByRelativePath(it) } ?: scriptDir
     return base.findFileByRelativePath(messagesFile.replace('\\', '/'))
 }
 
-/** The relative `[Setup] SourceDir`, or `null` for the default (the script's own directory). */
+/** The relative `\[Setup] SourceDir`, or `null` for the default (the script's own directory). */
 private fun sourceDirOf(file: IsScriptFile): String? {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val dir = file.findSections("Setup").firstOrNull()
         ?.directiveEntryList?.firstOrNull { it.keyText().equals("SourceDir", ignoreCase = true) }
         ?.valueText?.trim()?.removeSurrounding("\"")?.trim()
@@ -98,13 +116,19 @@ private fun readVfs(vf: VirtualFile): Int? {
 
 private inline fun cached(key: String, stamp: Long, compute: () -> Int?): Int? {
     cache[key]?.let { if (it.stamp == stamp) return it.id }
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val id = compute()
     cache[key] = Cached(stamp, id)
     return id
 }
 
-/** Scans a `.isl`/`.iss` text for the `LanguageID` value inside its `[LangOptions]` section. */
+/** Scans a `.isl`/`.iss` text for the `LanguageID` value inside its \[LangOptions] section. */
 private fun extractLanguageId(text: String): Int? {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     var inLangOptions = false
     for (raw in text.lineSequence()) {
         val line = raw.trim()

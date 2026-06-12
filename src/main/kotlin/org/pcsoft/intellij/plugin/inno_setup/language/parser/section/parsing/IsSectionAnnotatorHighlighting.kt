@@ -16,10 +16,25 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.CodeInsightColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 
+/**
+ * Holds editor highlighting attributes for Inno Setup inspections.
+ */
 object IsSectionAnnotatorHighlighting {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val SECTION_NAME: TextAttributesKey = DefaultLanguageHighlighterColors.CLASS_NAME
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val PARAM_KEY: TextAttributesKey = DefaultLanguageHighlighterColors.INSTANCE_FIELD
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val REFERENCE: TextAttributesKey = DefaultLanguageHighlighterColors.CLASS_REFERENCE
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val FLAG: TextAttributesKey = DefaultLanguageHighlighterColors.STATIC_FIELD
 
     // ISPP preprocessor — own keys (Kotlin "extension function" blue, italic name).
@@ -44,7 +59,13 @@ object IsSectionAnnotatorHighlighting {
     val CUSTOM_MESSAGE_PREFIX: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_CM_PREFIX")
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val UNKNOWN_REFERENCE: TextAttributesKey = CodeInsightColors.WRONG_REFERENCES_ATTRIBUTES
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val DEPRECATED: TextAttributesKey = CodeInsightColors.DEPRECATED_ATTRIBUTES
 
     /** Unused elements (trailing semicolons, unused #define, empty sections) — gray, like Java's unused. */

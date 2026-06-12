@@ -27,9 +27,15 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 
 // Anchor is IsSectionConstantBody (not the IDENTIFIER leaf) so that getReferences() on the
 // mixin element is the source of truth. TextRange skips the leading '#' character.
+/**
+ * Represents a PSI reference used for navigation, rename, and find-usages support.
+ */
 class IsSectionPreprocessorConstantReference(constantBody: IsSectionConstantBody, private val name: String) :
     PsiReferenceBase<IsSectionConstantBody>(constantBody, TextRange(1, 1 + name.length), true) {
 
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
     override fun resolve(): PsiElement? {
         val issFile = element.containingFile as? IsScriptFile ?: return null
         return issFile.isppDirectives
@@ -39,6 +45,9 @@ class IsSectionPreprocessorConstantReference(constantBody: IsSectionConstantBody
             }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isReferenceTo(element: PsiElement): Boolean {
         val resolved = resolve() ?: return false
         val mgr = element.manager
@@ -47,8 +56,14 @@ class IsSectionPreprocessorConstantReference(constantBody: IsSectionConstantBody
         return nameId != null && mgr.areElementsEquivalent(nameId, element)
     }
 
+    /**
+     * Returns completion variants available from this reference.
+     */
     override fun getVariants(): Array<Any> = emptyArray()
 
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
     override fun handleElementRename(newElementName: String): PsiElement {
         val oldId = element.node.findChildByType(IsSectionTypes.IDENTIFIER)?.psi ?: return element
         // Create a dummy ISS file with {#Name} in value context to get an IsSectionTypes.IDENTIFIER node.

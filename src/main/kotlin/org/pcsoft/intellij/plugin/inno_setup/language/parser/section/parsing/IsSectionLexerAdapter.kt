@@ -14,4 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 
 import com.intellij.lexer.FlexAdapter
 
+/**
+ * Adapts the generated lexer to IntelliJ lexer APIs.
+ */
 class IsSectionLexerAdapter : FlexAdapter(_IsSectionLexer(null))

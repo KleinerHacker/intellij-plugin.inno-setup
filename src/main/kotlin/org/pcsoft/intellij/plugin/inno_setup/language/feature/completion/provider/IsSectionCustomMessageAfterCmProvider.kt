@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSection
 /**
  * Completion of declared custom-message names inside the {cm:…} constant. Looks back from the
  * caret for the nearest `{cm:` and offers the message names declared in the file's
- * [CustomMessages] section(s).
+ * \[CustomMessages] section(s).
  */
 object IsSectionCustomMessageAfterCmProvider : CompletionProvider<CompletionParameters>() {
     override fun addCompletions(
@@ -67,7 +67,7 @@ object IsSectionCustomMessageAfterCmProvider : CompletionProvider<CompletionPara
         }
     }
 
-    /** Distinct custom-message names declared in the file's [CustomMessages] section(s), with any
+    /** Distinct custom-message names declared in the file's \[CustomMessages] section(s), with any
      *  `lang.` prefix stripped. */
     private fun customMessageNames(file: IsScriptFile): List<String> =
         file.findSections("CustomMessages")

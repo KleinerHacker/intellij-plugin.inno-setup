@@ -21,12 +21,15 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 
 /**
  * Provides the curated Windows language identifiers loaded from `isl-code.yaml` (the single source
- * of truth for the `[LangOptions]` `LanguageID` directive): completion entries, flag/name lookup by
+ * of truth for the \[LangOptions] `LanguageID` directive): completion entries, flag/name lookup by
  * LCID, and the recognised-LCID set used for validation.
  */
 @Service(Service.Level.APP)
 class IsLanguageDataService {
 
+    /**
+     * Parsed language-code specification loaded from `isl-code.yaml`.
+     */
     val spec: IsLanguageCodeSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
         val stream = IsLanguageDataService::class.java.getResourceAsStream("/spec/isl-code.yaml")
@@ -37,7 +40,7 @@ class IsLanguageDataService {
     /** All recognised locales offered as completion for `LanguageID`. */
     val entries: List<IsLanguageDataSpec> get() = spec.languages
 
-    /** The locales bundled with Inno Setup — the ready-to-use `[Languages]` entries. */
+    /** The locales bundled with Inno Setup — the ready-to-use \[Languages] entries. */
     val builtinLanguages: List<IsLanguageDataSpec> by lazy { spec.languages.filter { it.builtin } }
 
     /** All recognised numeric LCIDs used to validate a `LanguageID`. */
@@ -62,6 +65,9 @@ class IsLanguageDataService {
 
     private fun String.normalizeMessagesFile(): String = trim().replace('\\', '/').lowercase()
 
+    /**
+     * Stateless helpers for parsing Inno Setup language identifiers.
+     */
     companion object {
         /**
          * Parses a `LanguageID` value (Pascal hex `$XXXX` or decimal) to its numeric LCID, or `null`

@@ -26,21 +26,36 @@ abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement
 
     private val REFERENCE_KEYS = setOf("tasks", "components", "types", "languages")
 
+    /**
+     * Returns the normalized key text represented by this PSI element.
+     */
     override fun keyText(): String =
         node.findChildByType(IsSectionTypes.PARAM_KEY)?.psi?.text.orEmpty()
 
+    /**
+     * Returns whether this PSI element declares a named entry.
+     */
     override fun isNameDeclaration(): Boolean =
         keyText().equals("Name", ignoreCase = true)
 
+    /**
+     * Returns whether this PSI element value references another section entry.
+     */
     override fun isReferenceParam(): Boolean =
         keyText().lowercase() in REFERENCE_KEYS
 
     // PsiNameIdentifierOwner — only meaningful for Name: <value> pairs
+    /**
+     * Returns the logical name exposed by this PSI element.
+     */
     override fun getName(): String? {
         if (!isNameDeclaration()) return null
         return (this as IsSectionParamPair).paramValue?.text?.trim()?.removeSurrounding("\"")
     }
 
+    /**
+     * Renames this PSI element and returns the updated element.
+     */
     override fun setName(name: String): PsiElement {
         if (!isNameDeclaration()) return this
         val oldLeaf = nameLeaf() ?: return this
@@ -55,6 +70,9 @@ abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement
         return this
     }
 
+    /**
+     * Returns the PSI element that carries the renameable name.
+     */
     override fun getNameIdentifier(): PsiElement? {
         if (!isNameDeclaration()) return null
         return nameLeaf()?.psi
@@ -70,5 +88,8 @@ abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement
             ?.node?.findChildByType(IsSectionTypes.STRING_PART)
     }
 
+    /**
+     * Returns the editor offset used for navigation to this PSI element.
+     */
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()
 }

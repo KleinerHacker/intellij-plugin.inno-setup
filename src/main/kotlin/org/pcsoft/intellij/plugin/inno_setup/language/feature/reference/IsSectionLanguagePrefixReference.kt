@@ -28,14 +28,17 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.valueUnquoted
 
 /**
- * Reference from a `lang.` key prefix in an internationalized section ([Messages]/[CustomMessages])
- * to the matching `[Languages] Name` declaration. Anchored on the [IsSectionDirectiveEntry]; the range
+ * Reference from a `lang.` key prefix in an internationalized section (\[Messages]/\[CustomMessages])
+ * to the matching `\[Languages] Name` declaration. Anchored on the [IsSectionDirectiveEntry]; the range
  * covers only the prefix segment of the key token. Soft — the red highlight for an unknown prefix is
  * produced by the annotator.
  */
 class IsSectionLanguagePrefixReference(entry: IsSectionDirectiveEntry, private val prefix: String, range: TextRange) :
     PsiReferenceBase<IsSectionDirectiveEntry>(entry, range, true) {
 
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
     override fun resolve(): PsiElement? {
         val file = element.containingFile as? IsScriptFile ?: return null
 
@@ -45,6 +48,9 @@ class IsSectionLanguagePrefixReference(entry: IsSectionDirectiveEntry, private v
             ?.paramValue
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isReferenceTo(element: PsiElement): Boolean {
         val resolved = resolve() ?: return false
         val mgr = element.manager
@@ -55,8 +61,14 @@ class IsSectionLanguagePrefixReference(entry: IsSectionDirectiveEntry, private v
         return resolvedPair != null && mgr.areElementsEquivalent(resolvedPair, element)
     }
 
+    /**
+     * Returns completion variants available from this reference.
+     */
     override fun getVariants(): Array<Any> = emptyArray()
 
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
     override fun handleElementRename(newElementName: String): PsiElement {
         val keyNode = element.directiveKey.node.findChildByType(IsSectionTypes.IDENTIFIER) ?: return element
         val full = keyNode.text

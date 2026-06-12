@@ -22,6 +22,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class RemoveUnusedDefineQuickFix : IntentionAction {
 
     // Store only the define name — no PSI/VirtualFile references that could become stale
@@ -37,12 +40,24 @@ class RemoveUnusedDefineQuickFix : IntentionAction {
         this.defineName = defineName
     }
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Remove unused #define"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Remove unused #define"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean = defineName.isNotEmpty()
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         if (defineName.isEmpty()) return
 
@@ -81,6 +96,9 @@ class RemoveUnusedDefineQuickFix : IntentionAction {
         }
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 
     private fun matchesDefine(lineText: String, name: String): Boolean {

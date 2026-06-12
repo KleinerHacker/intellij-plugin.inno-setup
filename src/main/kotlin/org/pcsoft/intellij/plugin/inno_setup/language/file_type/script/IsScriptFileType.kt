@@ -15,14 +15,29 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script
 import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
+/**
+ * Defines the IntelliJ file type metadata for this Inno Setup language file.
+ */
 class IsScriptFileType : LanguageFileType(IsScriptLanguage) {
     companion object {
         @JvmField
         val INSTANCE = IsScriptFileType()
     }
 
+    /**
+     * Returns the logical name exposed by this PSI element.
+     */
     override fun getName() = "Inno Setup Script"
+    /**
+     * Returns user-visible presentation text for this IntelliJ extension.
+     */
     override fun getDescription() = "Inno Setup script file"
+    /**
+     * Returns the default file extension for this file type.
+     */
     override fun getDefaultExtension() = "iss"
+    /**
+     * Returns the icon shown for this element or file type.
+     */
     override fun getIcon(): Icon = IsIcons.ScriptFile
 }

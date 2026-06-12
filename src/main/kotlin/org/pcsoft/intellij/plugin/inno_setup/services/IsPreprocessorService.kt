@@ -18,8 +18,14 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.intellij.openapi.components.Service
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
 
+/**
+ * Application-level service that loads the bundled Inno Setup preprocessor specification.
+ */
 @Service(Service.Level.APP)
 class IsPreprocessorService {
+    /**
+     * Parsed ISPP specification used for preprocessor completion, validation, and documentation.
+     */
     val spec: IsPreprocessorSpec by lazy {
         val mapper = YAMLMapper.builder()
             .addModule(kotlinModule())

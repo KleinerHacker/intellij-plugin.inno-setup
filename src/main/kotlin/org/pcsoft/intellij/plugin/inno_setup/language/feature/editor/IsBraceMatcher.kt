@@ -18,12 +18,24 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Defines brace pairs and brace matching behavior for Inno Setup files.
+ */
 class IsBraceMatcher : PairedBraceMatcher {
 
+    /**
+     * Returns brace-matching metadata for the supplied editor context.
+     */
     override fun getPairs(): Array<BracePair> = PAIRS
 
+    /**
+     * Returns brace-matching metadata for the supplied editor context.
+     */
     override fun isPairedBracesAllowedBeforeType(lbraceType: IElementType, contextType: IElementType?): Boolean = true
 
+    /**
+     * Returns brace-matching metadata for the supplied editor context.
+     */
     override fun getCodeConstructStart(file: PsiFile, openingBraceOffset: Int): Int = openingBraceOffset
 
     companion object {

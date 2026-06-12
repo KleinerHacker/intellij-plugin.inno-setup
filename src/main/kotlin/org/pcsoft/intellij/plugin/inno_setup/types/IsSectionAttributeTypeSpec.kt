@@ -15,14 +15,39 @@ package org.pcsoft.intellij.plugin.inno_setup.types
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
+/**
+ * Base type for the value model of a section attribute.
+ *
+ * The concrete subtype is selected from the `kind` property in the bundled section specification.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "kind")
 @JsonSubTypes(
     JsonSubTypes.Type(value = IsSectionNativeTypeSpec::class, name = "native"),
     JsonSubTypes.Type(value = IsSectionReferenceTypeSpec::class, name = "reference"),
     JsonSubTypes.Type(value = IsSectionFlagTypeSpec::class, name = "flags"),
 )
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 sealed class IsSectionAttributeTypeSpec
 
+/**
+ * Native scalar value type such as `string`, `boolean`, or `path`.
+ *
+ * @property dataType Name of the native type used by validators and completion providers.
+ */
 data class IsSectionNativeTypeSpec(val dataType: String) : IsSectionAttributeTypeSpec()
+
+/**
+ * Value type that references a named entry in another section.
+ *
+ * @property section Target section whose `Name` declarations can be referenced.
+ */
 data class IsSectionReferenceTypeSpec(val section: String) : IsSectionAttributeTypeSpec()
+
+/**
+ * Value type consisting of whitespace-separated flags.
+ *
+ * @property flags Allowed flags and their validation metadata.
+ */
 data class IsSectionFlagTypeSpec(val flags: List<IsSectionFlagSpec>) : IsSectionAttributeTypeSpec()

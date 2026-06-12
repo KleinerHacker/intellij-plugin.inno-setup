@@ -23,6 +23,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 object IsSectionReferenceValueProvider : CompletionProvider<CompletionParameters>() {
     private val KEY_TO_SECTION = mapOf(
         "tasks" to "Tasks",
@@ -31,6 +34,9 @@ object IsSectionReferenceValueProvider : CompletionProvider<CompletionParameters
         "languages" to "Languages",
     )
 
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

@@ -27,17 +27,41 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPrep
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.parser.IsPreprocessorParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 
+/**
+ * Defines lexer, parser, PSI file, and token sets for this Inno Setup language.
+ */
 class IsPreprocessorParserDefinition : ParserDefinition {
     companion object {
         val FILE = IFileElementType(IsPreprocessorLanguage)
         val STRINGS = TokenSet.create(IsPreprocessorTypes.QUOTE, IsPreprocessorTypes.STRING_PART)
     }
 
+    /**
+     * Creates the lexer used by the parser definition.
+     */
     override fun createLexer(project: Project?): Lexer = IsPreprocessorLexerAdapter()
+    /**
+     * Creates the parser used by the parser definition.
+     */
     override fun createParser(project: Project?): PsiParser = IsPreprocessorParser()
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getFileNodeType(): IFileElementType = FILE
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getCommentTokens(): TokenSet = TokenSet.EMPTY
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getStringLiteralElements(): TokenSet = STRINGS
+    /**
+     * Creates a PSI element for the supplied AST node.
+     */
     override fun createElement(node: ASTNode): PsiElement = IsPreprocessorTypes.Factory.createElement(node)!!
+    /**
+     * Creates the PSI file instance for the supplied view provider.
+     */
     override fun createFile(viewProvider: FileViewProvider): PsiFile = IsPreprocessorFile(viewProvider)
 }

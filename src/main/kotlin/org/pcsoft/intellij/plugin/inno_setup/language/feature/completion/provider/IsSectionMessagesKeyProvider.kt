@@ -33,15 +33,18 @@ import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 import javax.swing.Icon
 
 /**
- * Key completion for internationalized sections ([Messages], [CustomMessages], driven by the
+ * Key completion for internationalized sections (\[Messages], \[CustomMessages], driven by the
  * spec's `internationalization` flag). Offers, at a key position:
  *  • a language-prefix list (flag icon + language name) that inserts `lang.` and re-opens the
  *    popup, and
- *  • the section's known message identifiers (empty for [CustomMessages]) that insert `name=`.
+ *  • the section's known message identifiers (empty for \[CustomMessages]) that insert `name=`.
  * When a `lang.` prefix is already typed, only the message identifiers are offered, matched
  * against the text after the dot.
  */
 object IsSectionMessagesKeyProvider : CompletionProvider<CompletionParameters>() {
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
@@ -128,14 +131,14 @@ object IsSectionMessagesKeyProvider : CompletionProvider<CompletionParameters>()
     }
 
     /**
-     * Languages offered as a key prefix: the `Name` values declared in the file's [Languages]
+     * Languages offered as a key prefix: the `Name` values declared in the file's \[Languages]
      * section (with the matching flag + display name), falling back to all built-in languages
      * when the file declares none.
      */
     /**
-     * Prefix sources are the `Name` values declared in the file's [Languages] section; flag and
+     * Prefix sources are the `Name` values declared in the file's \[Languages] section; flag and
      * English name are derived from each entry's MessagesFile → LanguageID (the single source of
-     * truth). No [Languages] section ⇒ no prefix suggestions.
+     * truth). No \[Languages] section ⇒ no prefix suggestions.
      */
     private fun languagePrefixSources(file: IsScriptFile): List<Triple<String, String, Icon>> =
         file.findSections("Languages")

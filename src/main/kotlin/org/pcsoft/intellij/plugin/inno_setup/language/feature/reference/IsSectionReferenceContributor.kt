@@ -19,6 +19,12 @@ import com.intellij.psi.PsiReferenceRegistrar
 // getReferences() overrides in IsSectionConstantBodyMixinImpl and IsSectionParamValueMixinImpl.
 // In IntelliJ 2025.3, ASTWrapperPsiElement.getReferences() no longer calls
 // PsiReferenceContributor providers, so the mixin approach is the only reliable path.
+/**
+ * Registers PSI reference providers for Inno Setup language elements.
+ */
 class IsSectionReferenceContributor : PsiReferenceContributor() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun registerReferenceProviders(registrar: PsiReferenceRegistrar) {}
 }

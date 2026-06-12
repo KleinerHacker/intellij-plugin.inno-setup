@@ -29,6 +29,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptL
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.parser.IsSectionParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Defines lexer, parser, PSI file, and token sets for this Inno Setup language.
+ */
 class IsSectionParserDefinition : ParserDefinition {
     companion object {
         val FILE = IFileElementType(IsScriptLanguage)
@@ -36,15 +39,36 @@ class IsSectionParserDefinition : ParserDefinition {
         val STRINGS = TokenSet.create(IsSectionTypes.QUOTE, IsSectionTypes.STRING_PART)
     }
 
+    /**
+     * Creates the lexer used by the parser definition.
+     */
     override fun createLexer(project: Project?): Lexer = IsSectionLexerAdapter()
+    /**
+     * Creates the parser used by the parser definition.
+     */
     override fun createParser(project: Project?): PsiParser = IsSectionParser()
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getFileNodeType(): IFileElementType = FILE
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getCommentTokens(): TokenSet = COMMENTS
+    /**
+     * Returns token metadata required by the parser definition.
+     */
     override fun getStringLiteralElements(): TokenSet = STRINGS
+    /**
+     * Creates a PSI element for the supplied AST node.
+     */
     override fun createElement(node: ASTNode): PsiElement = IsSectionTypes.Factory.createElement(node)!!
 
     // Central factory point: the .isl file type reuses this ISS parser but needs the IsLanguageFile PSI so
     // the ISL tooling can tell language files apart from scripts.
+    /**
+     * Creates the PSI file instance for the supplied view provider.
+     */
     override fun createFile(viewProvider: FileViewProvider): PsiFile =
         if (viewProvider.fileType == IsLanguageFileType.INSTANCE || viewProvider.virtualFile.extension.equals(
                 "isl",

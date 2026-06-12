@@ -22,18 +22,30 @@ import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 
+/**
+ * Creates a new Inno Setup file from the IDE New File action.
+ */
 class IsLanguageCreateFileAction : DumbAwareAction(
     "Inno Setup Language",
     "Create new Inno Setup language file",
     IsIcons.ScriptFile
 ) {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun update(e: AnActionEvent) {
         val view = e.getData(LangDataKeys.IDE_VIEW)
         e.presentation.isEnabledAndVisible = view?.directories?.isNotEmpty() == true
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val view = e.getData(LangDataKeys.IDE_VIEW) ?: return

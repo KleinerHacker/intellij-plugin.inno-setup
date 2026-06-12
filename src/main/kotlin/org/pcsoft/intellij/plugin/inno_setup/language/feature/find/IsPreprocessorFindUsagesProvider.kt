@@ -22,8 +22,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsin
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 class IsPreprocessorFindUsagesProvider : FindUsagesProvider {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getWordsScanner(): WordsScanner = DefaultWordsScanner(
         IsPreprocessorLexerAdapter(),
         TokenSet.create(IsPreprocessorTypes.IDENTIFIER),
@@ -31,16 +37,31 @@ class IsPreprocessorFindUsagesProvider : FindUsagesProvider {
         TokenSet.create(IsPreprocessorTypes.STRING_PART),
     )
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun canFindUsagesFor(element: PsiElement): Boolean =
         element is IsPreprocessorDirectiveEx && element.isDefine()
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getHelpId(element: PsiElement): String? = null
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getType(element: PsiElement): String = "ISPP define"
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getDescriptiveName(element: PsiElement): String =
         (element as? PsiNamedElement)?.name ?: element.text
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getNodeText(element: PsiElement, useFullName: Boolean): String =
         getDescriptiveName(element)
 }

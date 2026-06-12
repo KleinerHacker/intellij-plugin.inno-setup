@@ -22,15 +22,27 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class MoveCodeSectionLastQuickFix(file: IsScriptFile) : IntentionAction {
 
     private val filePointer =
         SmartPointerManager.getInstance(file.project).createSmartPsiElementPointer(file)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Move [Code] section to end of file"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Move [Code] to last section"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean {
         val issFile = filePointer.element ?: return false
         val sections = issFile.sections
@@ -38,6 +50,9 @@ class MoveCodeSectionLastQuickFix(file: IsScriptFile) : IntentionAction {
         return codeIdx >= 0 && codeIdx < sections.size - 1
     }
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val issFile = filePointer.element ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(issFile) ?: return
@@ -70,5 +85,8 @@ class MoveCodeSectionLastQuickFix(file: IsScriptFile) : IntentionAction {
         document.setText(newText)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 }

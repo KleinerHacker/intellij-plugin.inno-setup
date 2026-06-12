@@ -14,9 +14,21 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsi
 
 import com.intellij.psi.PsiNameIdentifierOwner
 
+/**
+ * Declares additional behavior mixed into generated PSI interfaces.
+ */
 interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     fun isDefine(): Boolean
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     fun getDefineName(): String?
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     fun getDefineValue(): String?
 
     /** A function-like macro: the name is immediately followed by `(` (no whitespace). */

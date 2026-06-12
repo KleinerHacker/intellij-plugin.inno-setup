@@ -28,4 +28,7 @@ package org.pcsoft.intellij.plugin.inno_setup
     AnnotationTarget.PROPERTY_GETTER,
     AnnotationTarget.PROPERTY_SETTER,
 )
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 annotation class Generated

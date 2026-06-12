@@ -21,8 +21,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPrep
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+ */
 class IsPreprocessorInjector : MultiHostInjector {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getLanguagesToInject(registrar: MultiHostRegistrar, context: PsiElement) {
         if (context !is IsSectionPreprocessorLine) return
 
@@ -36,6 +42,9 @@ class IsPreprocessorInjector : MultiHostInjector {
             .doneInjecting()
     }
 
+    /**
+     * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+     */
     override fun elementsToInjectIn(): List<Class<out PsiElement>> =
         listOf(IsSectionPreprocessorLine::class.java)
 }

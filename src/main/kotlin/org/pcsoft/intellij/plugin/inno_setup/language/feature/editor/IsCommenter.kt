@@ -14,10 +14,28 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
 import com.intellij.lang.Commenter
 
+/**
+ * Defines line and block comment syntax for Inno Setup files.
+ */
 class IsCommenter : Commenter {
+    /**
+     * Returns comment syntax used by the editor.
+     */
     override fun getLineCommentPrefix(): String = ";"
+    /**
+     * Returns comment syntax used by the editor.
+     */
     override fun getBlockCommentPrefix(): String? = null
+    /**
+     * Returns comment syntax used by the editor.
+     */
     override fun getBlockCommentSuffix(): String? = null
+    /**
+     * Returns comment syntax used by the editor.
+     */
     override fun getCommentedBlockCommentPrefix(): String? = null
+    /**
+     * Returns comment syntax used by the editor.
+     */
     override fun getCommentedBlockCommentSuffix(): String? = null
 }

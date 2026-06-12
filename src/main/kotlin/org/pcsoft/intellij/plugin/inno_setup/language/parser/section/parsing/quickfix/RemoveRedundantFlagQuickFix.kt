@@ -33,13 +33,25 @@ class RemoveRedundantFlagQuickFix(value: IsSectionParamValue, private val flagTe
     private val valuePointer =
         SmartPointerManager.getInstance(value.project).createSmartPsiElementPointer(value)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Remove redundant flag '$flagText'"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Remove redundant flag"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean =
         findFlagNode() != null
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val value = valuePointer.element ?: return
         val node = findFlagNode() ?: return
@@ -58,6 +70,9 @@ class RemoveRedundantFlagQuickFix(value: IsSectionParamValue, private val flagTe
         document.deleteString(start, end)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 
     private fun findFlagNode(): ASTNode? {

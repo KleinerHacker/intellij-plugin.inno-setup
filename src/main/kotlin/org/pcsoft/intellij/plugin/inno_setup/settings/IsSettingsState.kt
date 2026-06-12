@@ -14,7 +14,17 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.components.BaseState
 
+/**
+ * Persistent state for the plugin's Inno Setup configuration.
+ */
 class IsSettingsState : BaseState() {
+    /**
+     * Installation directory that should contain `ISCC.exe` and `Compil32.exe`.
+     */
     var installationPath: String? by string()
+
+    /**
+     * Minimum Inno Setup version selected for version-aware validation, or `null` when unset.
+     */
     var minInnoVersion: String? by string()
 }

@@ -23,8 +23,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 class IsSectionFindUsagesProvider : FindUsagesProvider {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getWordsScanner(): WordsScanner = DefaultWordsScanner(
         IsSectionLexerAdapter(),
         TokenSet.create(IsSectionTypes.IDENTIFIER),
@@ -32,21 +38,36 @@ class IsSectionFindUsagesProvider : FindUsagesProvider {
         TokenSet.create(IsSectionTypes.STRING_PART),
     )
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun canFindUsagesFor(element: PsiElement): Boolean =
         (element is IsSectionParamPairEx && element.isNameDeclaration())
                 || (element is IsSectionDirectiveEntryEx && element.isCustomMessageDeclaration())
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getHelpId(element: PsiElement): String? = null
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getType(element: PsiElement): String = when {
         element is IsSectionParamPairEx && element.isNameDeclaration() -> "ISS named item"
         element is IsSectionDirectiveEntryEx && element.isCustomMessageDeclaration() -> "ISS custom message"
         else -> ""
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getDescriptiveName(element: PsiElement): String =
         (element as? PsiNamedElement)?.name ?: element.text
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getNodeText(element: PsiElement, useFullName: Boolean): String =
         getDescriptiveName(element)
 }

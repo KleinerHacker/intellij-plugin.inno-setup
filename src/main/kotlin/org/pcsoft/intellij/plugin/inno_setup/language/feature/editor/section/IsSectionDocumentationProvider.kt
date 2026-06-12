@@ -38,8 +38,14 @@ private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
     append(DocumentationMarkup.SECTIONS_END)
 }
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getCustomDocumentationElement(
         editor: Editor, file: PsiFile,
         contextElement: PsiElement?, targetOffset: Int
@@ -61,6 +67,9 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         val spec = service<IsSpecService>().spec
 

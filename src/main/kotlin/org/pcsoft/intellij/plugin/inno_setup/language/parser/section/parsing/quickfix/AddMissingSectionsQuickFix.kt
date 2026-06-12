@@ -23,11 +23,17 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSection
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class AddMissingSectionsQuickFix(
     private val missingSectionNames: List<String>,
     private val spec: IsSectionSpec
 ) : IntentionAction {
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String {
         val properNames = spec.sections
             .filter { s -> missingSectionNames.any { it.equals(s.name, ignoreCase = true) } }
@@ -35,10 +41,19 @@ class AddMissingSectionsQuickFix(
         return "Add missing section(s): " + properNames.joinToString(", ") { "[$it]" }
     }
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Add missing required sections"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean = file is IsScriptFile
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val issFile = file as? IsScriptFile ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(issFile) ?: return
@@ -75,5 +90,8 @@ class AddMissingSectionsQuickFix(
         document.insertString(insertOffset, text)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 }

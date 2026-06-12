@@ -22,14 +22,32 @@ import javax.swing.Icon
  * under `/icons/flags/` — or `null`, in which case a neutral globe icon is used.
  *
  * Languages bundled with Inno Setup have [builtin] = `true` and additionally provide [issName] and
- * [messagesFile] — the values used for a `[Languages]` entry.
+ * [messagesFile] — the values used for a \[Languages] entry.
  */
 data class IsLanguageDataSpec(
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val displayName: String,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val id: String,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val flag: String? = null,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val builtin: Boolean = false,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val issName: String? = null,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val messagesFile: String? = null
 ) {
     /** Flag icon for this locale, or a globe fallback when no flag is available. */
@@ -37,11 +55,14 @@ data class IsLanguageDataSpec(
         get() = flag?.let { IconLoader.getIcon("/icons/flags/$it.svg", IsLanguageDataSpec::class.java) }
             ?: AllIcons.General.Web
 
-    /** The ready-to-use `[Languages]` entry line for a built-in language. */
+    /** The ready-to-use \[Languages] entry line for a built-in language. */
     fun toIssEntry(): String = "Name: \"$issName\"; MessagesFile: \"$messagesFile\""
 }
 
 /** Root of `isl-code.yaml`: all recognised Windows locales. */
 data class IsLanguageCodeSpec(
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val languages: List<IsLanguageDataSpec>
 )

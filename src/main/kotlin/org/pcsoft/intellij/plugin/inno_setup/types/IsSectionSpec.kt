@@ -12,4 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
+/**
+ * Root model for the bundled Inno Setup section specification.
+ *
+ * @property sections All sections known to the plugin.
+ */
 data class IsSectionSpec(val sections: List<IsSectionDefSpec>)

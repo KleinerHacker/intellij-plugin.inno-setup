@@ -30,7 +30,7 @@ import javax.swing.JList
 
 /**
  * Dialog for the "New Inno Setup Language" action. It asks for the file name, the language name
- * (`[LangOptions]`/`LanguageName`) and the language id (`[LangOptions]`/`LanguageID`).
+ * (\[LangOptions]/`LanguageName`) and the language id (\[LangOptions]/`LanguageID`).
  *
  * The language id is picked from a combo box whose entries mirror the look of the `LanguageID`
  * completion popup (see
@@ -65,8 +65,17 @@ class IsLanguageCreateFileDialog(project: Project) : DialogWrapper(project) {
         addActionListener { (selectedItem as? IsLanguageDataSpec)?.let { languageNameField.text = it.displayName } }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val fileName: String get() = fileNameField.text.trim()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val languageName: String get() = languageNameField.text.trim()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     val languageId: String get() = (languageIdCombo.selectedItem as? IsLanguageDataSpec)?.id.orEmpty()
 
     init {
@@ -75,12 +84,18 @@ class IsLanguageCreateFileDialog(project: Project) : DialogWrapper(project) {
         (languageIdCombo.selectedItem as? IsLanguageDataSpec)?.let { languageNameField.text = it.displayName }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun createCenterPanel(): JComponent = panel {
         row("File name:") { cell(fileNameField).focused().align(Align.FILL) }
         row("Language name:") { cell(languageNameField).align(Align.FILL) }
         row("Language ID:") { cell(languageIdCombo).align(Align.FILL) }
     }.also { it.minimumSize = Dimension(500, 150) }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun doValidate(): ValidationInfo? = when {
         fileName.isEmpty() -> ValidationInfo("File name must not be empty", fileNameField)
         languageName.isEmpty() -> ValidationInfo("Language name must not be empty", languageNameField)
@@ -88,5 +103,8 @@ class IsLanguageCreateFileDialog(project: Project) : DialogWrapper(project) {
         else -> null
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getPreferredFocusedComponent() = fileNameField
 }

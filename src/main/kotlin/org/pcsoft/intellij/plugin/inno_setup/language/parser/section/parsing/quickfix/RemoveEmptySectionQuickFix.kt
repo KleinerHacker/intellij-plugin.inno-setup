@@ -20,20 +20,35 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.SmartPointerManager
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
 
+/**
+ * Implements an IntelliJ quick fix or intention for Inno Setup PSI.
+ */
 class RemoveEmptySectionQuickFix(section: IsSectionBlock) : IntentionAction {
 
     private val sectionPointer =
         SmartPointerManager.getInstance(section.project).createSmartPsiElementPointer(section)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Remove empty section"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Remove empty section"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean {
         val section = sectionPointer.element ?: return false
         return section.directiveEntryList.isEmpty() && section.parameterEntryList.isEmpty()
     }
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val section = sectionPointer.element ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(section.containingFile) ?: return
@@ -50,5 +65,8 @@ class RemoveEmptySectionQuickFix(section: IsSectionBlock) : IntentionAction {
         document.setText(newText)
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 }

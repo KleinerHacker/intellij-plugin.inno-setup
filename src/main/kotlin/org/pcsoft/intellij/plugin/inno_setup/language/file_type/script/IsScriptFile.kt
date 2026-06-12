@@ -17,5 +17,8 @@ import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
 
 open class IsScriptFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, IsScriptLanguage) {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getFileType(): FileType = IsScriptFileType.INSTANCE
 }

@@ -25,8 +25,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
+/**
+ * Handles quote typing behavior for Inno Setup string literals.
+ */
 class IsQuoteHandler : TypedHandlerDelegate() {
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun beforeCharTyped(
         c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType
     ): Result {

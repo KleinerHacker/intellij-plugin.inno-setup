@@ -18,8 +18,14 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.intellij.openapi.components.Service
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionConstantSpec
 
+/**
+ * Application-level service that loads the bundled Inno Setup constants specification.
+ */
 @Service(Service.Level.APP)
 class IsConstantService {
+    /**
+     * Parsed constant specification used for constant completion, validation, and documentation.
+     */
     val spec: IsSectionConstantSpec by lazy {
         val mapper = YAMLMapper.builder()
             .addModule(kotlinModule())

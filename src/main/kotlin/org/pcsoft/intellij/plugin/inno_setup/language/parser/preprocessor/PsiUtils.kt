@@ -21,6 +21,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 
 // ── IsScriptFile (ISPP-Brücke) ──────────────────────────────────────────────────────
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsScriptFile.isppDirectives: List<IsPreprocessorDirective>
     get() {
         val mgr = InjectedLanguageManager.getInstance(project)
@@ -62,6 +65,9 @@ val IsScriptFile.isppDirectivesWithHostOffset: List<Pair<IsPreprocessorDirective
             }
     }
 
+/**
+ * Returns or performs the public behavior represented by this member.
+ */
 val IsScriptFile.definedConstants: List<Pair<String, String?>>
     get() = isppDirectives
         .filter { (it as? IsPreprocessorDirectiveEx)?.isDefine() == true }

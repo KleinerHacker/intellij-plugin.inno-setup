@@ -17,7 +17,13 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 
+/**
+ * Creates syntax highlighters for this Inno Setup language.
+ */
 class IsSectionHighlighterFactory : SyntaxHighlighterFactory() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter =
         IsSectionTokenHighlighter()
 }

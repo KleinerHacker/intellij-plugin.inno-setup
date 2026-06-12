@@ -23,9 +23,25 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nextParam
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
 
+/**
+ * Intention action that swaps two adjacent parameters in an Inno Setup section entry.
+ *
+ * The action is offered when the caret is positioned after a parameter separator, allowing users
+ * to move the parameter before the separator behind the parameter that follows it.
+ */
 class IsParameterFlipIntentionAction : IntentionAction {
+    /**
+     * Returns the label shown in the intention popup.
+     */
     override fun getText(): @IntentionName String = "Flip parameters"
 
+    /**
+     * Checks whether the caret is placed at a parameter separator inside a section parameter
+     * entry.
+     *
+     * The editor and file are nullable because IntelliJ may ask for availability outside of an
+     * editor-backed context; in those cases the intention is not available.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
         val offset = editor?.caretModel?.offset ?: return false
         val sign = file?.text?.elementAt(0.coerceAtLeast(offset - 1)) ?: return false
@@ -34,6 +50,13 @@ class IsParameterFlipIntentionAction : IntentionAction {
         return PsiTreeUtil.getParentOfType(elementAt, IsSectionParameterEntry::class.java) != null && sign == ';'
     }
 
+    /**
+     * Swaps the parameter before the current separator with the next parameter in the same section
+     * entry.
+     *
+     * If the caret is no longer on a valid pair of adjacent parameters when the action runs, the
+     * method exits without changing the PSI tree.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         val offset = editor?.caretModel?.offset ?: return
         val elementAt = file?.findElementAt(0.coerceAtLeast(offset - 2)) ?: return
@@ -46,7 +69,13 @@ class IsParameterFlipIntentionAction : IntentionAction {
         parameter2.replace(tmp)
     }
 
+    /**
+     * Indicates that the PSI replacement is performed inside IntelliJ's write action.
+     */
     override fun startInWriteAction(): Boolean = true
 
+    /**
+     * Returns the common family name used to group Inno Setup intentions.
+     */
     override fun getFamilyName(): @IntentionFamilyName String = "Inno Setup"
 }

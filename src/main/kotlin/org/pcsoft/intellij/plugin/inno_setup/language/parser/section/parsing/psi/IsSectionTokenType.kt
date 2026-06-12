@@ -15,4 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.ps
 import com.intellij.psi.tree.IElementType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 
+/**
+ * Defines a PSI element type for this Inno Setup language.
+ */
 class IsSectionTokenType(debugName: String) : IElementType(debugName, IsScriptLanguage)

@@ -28,7 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
 /**
- * Reference from a `{cm:MessageName}` constant to the matching [CustomMessages] declaration.
+ * Reference from a `{cm:MessageName}` constant to the matching \[CustomMessages] declaration.
  *
  * Anchored on the [IsSectionConstantBody]; the range covers only the message-name identifier (after
  * the `cm:` prefix). The reference is soft — the red highlight for an unresolved name is produced
@@ -37,6 +37,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 class IsSectionCustomMessageReference(constantBody: IsSectionConstantBody, private val name: String, range: TextRange) :
     PsiReferenceBase<IsSectionConstantBody>(constantBody, range, true) {
 
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
     override fun resolve(): PsiElement? {
         val issFile = element.containingFile as? IsScriptFile ?: return null
         return issFile.findSections("CustomMessages")
@@ -44,6 +47,9 @@ class IsSectionCustomMessageReference(constantBody: IsSectionConstantBody, priva
             .firstOrNull { it.customMessageName().equals(name, ignoreCase = true) }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isReferenceTo(element: PsiElement): Boolean {
         val entry = element as? IsSectionDirectiveEntryEx
             ?: PsiTreeUtil.getParentOfType(element, IsSectionDirectiveEntry::class.java) as? IsSectionDirectiveEntryEx
@@ -51,6 +57,9 @@ class IsSectionCustomMessageReference(constantBody: IsSectionConstantBody, priva
         return entry.isCustomMessageDeclaration() && entry.customMessageName().equals(name, ignoreCase = true)
     }
 
+    /**
+     * Returns completion variants available from this reference.
+     */
     override fun getVariants(): Array<Any> {
         val issFile = element.containingFile as? IsScriptFile ?: return emptyArray()
         return issFile.findSections("CustomMessages")
@@ -61,6 +70,9 @@ class IsSectionCustomMessageReference(constantBody: IsSectionConstantBody, priva
             .toTypedArray()
     }
 
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
     override fun handleElementRename(newElementName: String): PsiElement {
         val oldId = element.node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
             .firstOrNull { it.startOffset - element.textRange.startOffset == rangeInElement.startOffset }

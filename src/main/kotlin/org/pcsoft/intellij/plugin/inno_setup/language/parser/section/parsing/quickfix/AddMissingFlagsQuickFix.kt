@@ -32,13 +32,25 @@ class AddMissingFlagsQuickFix(value: IsSectionParamValue, private val requiredFl
     private val valuePointer =
         SmartPointerManager.getInstance(value.project).createSmartPsiElementPointer(value)
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getText(): String = "Add required flag(s) '${missingFlags().joinToString(", ")}'"
 
+    /**
+     * Returns the user-visible action text used by IntelliJ.
+     */
     override fun getFamilyName(): String = "Add required flags"
 
+    /**
+     * Checks whether this action can run in the current editor context.
+     */
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile): Boolean =
         missingFlags().isNotEmpty()
 
+    /**
+     * Executes this action against the current PSI file.
+     */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
         val value = valuePointer.element ?: return
         val missing = missingFlags()
@@ -51,6 +63,9 @@ class AddMissingFlagsQuickFix(value: IsSectionParamValue, private val requiredFl
         document.insertString(offset, " " + missing.joinToString(" "))
     }
 
+    /**
+     * Indicates whether this action must run inside an IntelliJ write action.
+     */
     override fun startInWriteAction(): Boolean = true
 
     private fun missingFlags(): List<String> {

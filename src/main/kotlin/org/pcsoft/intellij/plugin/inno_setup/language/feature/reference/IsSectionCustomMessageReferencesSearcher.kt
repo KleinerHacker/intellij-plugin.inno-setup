@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx
 
 /**
- * Finds `{cm:MessageName}` usages of a [CustomMessages] declaration so Find Usages and Rename
+ * Finds `{cm:MessageName}` usages of a \[CustomMessages] declaration so Find Usages and Rename
  * work. Like [IsSectionReferencesSearcher], the word-occurrence search calls getReferences() on
  * the leaf IDENTIFIER (which returns nothing) — the reference lives on the parent
  * [IsSectionConstantBody] — so this executor scans those bodies directly.
@@ -32,6 +32,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
  * setName (see IsSectionDirectiveEntryMixinImpl), not reported here.
  */
 class IsSectionCustomMessageReferencesSearcher : QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
+    /**
+     * Processes the search request and reports matching references to the consumer.
+     */
     override fun execute(
         queryParameters: ReferencesSearch.SearchParameters,
         consumer: Processor<in PsiReference>,

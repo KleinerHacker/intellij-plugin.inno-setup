@@ -22,5 +22,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * restriction in `language/isl/parsing`) distinguish `.isl` from `.iss`.
  */
 class IsLanguageFile(viewProvider: FileViewProvider) : IsScriptFile(viewProvider) {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun getFileType() = IsLanguageFileType.INSTANCE
 }

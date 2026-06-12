@@ -16,14 +16,26 @@ import com.intellij.openapi.components.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+/**
+ * Application-level persistent settings service for the Inno Setup plugin.
+ */
 @State(name = "IssSettings", storages = [Storage("inno-setup.xml")])
 @Service(Service.Level.APP)
 class IsSettingsService : SimplePersistentStateComponent<IsSettingsState>(IsSettingsState()) {
 
+    /**
+     * Static accessors and utility functions used by settings UI and version-aware validators.
+     */
     companion object {
+        /**
+         * Returns the application service instance.
+         */
         @JvmStatic
         fun getInstance(): IsSettingsService = service()
 
+        /**
+         * Compares dotted Inno Setup version strings numerically.
+         */
         fun compareIsVersions(a: String, b: String): Int {
             val aParts = a.split(".").map { it.toIntOrNull() ?: 0 }
             val bParts = b.split(".").map { it.toIntOrNull() ?: 0 }
@@ -56,5 +68,8 @@ class IsSettingsService : SimplePersistentStateComponent<IsSettingsState>(IsSett
         }
     }
 
+    /**
+     * Detects the installed Inno Setup major version from the configured installation directory.
+     */
     fun detectVersion(path: String): String? = detectVersionFromPath(path)
 }

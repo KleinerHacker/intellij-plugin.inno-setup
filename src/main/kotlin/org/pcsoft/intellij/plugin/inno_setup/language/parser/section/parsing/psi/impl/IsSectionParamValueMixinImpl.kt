@@ -33,6 +33,9 @@ abstract class IsSectionParamValueMixinImpl(node: ASTNode) : ASTWrapperPsiElemen
         )
     }
 
+    /**
+     * Returns references contributed by this PSI element.
+     */
     override fun getReferences(): Array<PsiReference> {
         val pair = containingParamPair ?: return PsiReference.EMPTY_ARRAY
         val targetSection = REF_KEY_TO_SECTION[pair.keyText().lowercase()] ?: return PsiReference.EMPTY_ARRAY

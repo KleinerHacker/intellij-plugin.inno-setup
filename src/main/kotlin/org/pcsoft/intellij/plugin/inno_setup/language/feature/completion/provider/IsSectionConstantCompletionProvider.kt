@@ -25,8 +25,14 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.define
 import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 
+/**
+ * Provides context-aware completion variants for Inno Setup PSI elements.
+ */
 object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParameters>() {
 
+    /**
+     * Adds lookup elements for the current completion request.
+     */
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,

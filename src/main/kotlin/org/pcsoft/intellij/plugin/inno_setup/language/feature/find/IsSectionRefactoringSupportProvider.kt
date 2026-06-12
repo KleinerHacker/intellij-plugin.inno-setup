@@ -16,7 +16,13 @@ import com.intellij.lang.refactoring.RefactoringSupportProvider
 import com.intellij.psi.PsiElement
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
 
+/**
+ * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
+ */
 class IsSectionRefactoringSupportProvider : RefactoringSupportProvider() {
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
     override fun isInplaceRenameAvailable(element: PsiElement, context: PsiElement?): Boolean =
         element is IsSectionParamPairEx && element.isNameDeclaration()
 }
