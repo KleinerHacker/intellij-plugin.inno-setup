@@ -75,6 +75,62 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
         assertFalse("A declared lang. prefix must not be flagged", hit)
     }
 
+    // ── Wrong key/value separator (':' vs '=') ────────────────────────────────
+
+    private fun separatorError(content: String) = highlights(content).any {
+        it.severity == HighlightSeverity.ERROR &&
+                it.description?.contains("separates key and value", ignoreCase = true) == true
+    }
+
+    /** True when a wrong-separator ERROR is reported exactly over the separator character at [sepOffset]. */
+    private fun separatorErrorOnChar(content: String, sepOffset: Int) = highlights(content).any {
+        it.severity == HighlightSeverity.ERROR &&
+                it.description?.contains("separates key and value", ignoreCase = true) == true &&
+                it.startOffset == sepOffset && it.endOffset == sepOffset + 1
+    }
+
+    fun testColonInDirectiveSectionProducesError() {
+        // [CustomMessages] is a directive section — entries must use '=', not ':'.
+        val text = "[CustomMessages]\ndemo: \"vgff\"\n"
+        assertTrue(
+            "the wrong ':' in a [CustomMessages] entry must be underlined in red",
+            separatorErrorOnChar(text, text.indexOf("demo: ") + 4) // the ':' itself
+        )
+    }
+
+    fun testColonInSetupSectionProducesError() {
+        val text = "[Setup]\nAppName: Test\nAppVersion=1.0\n"
+        assertTrue(
+            "the wrong ':' in a [Setup] entry must be underlined in red",
+            separatorErrorOnChar(text, text.indexOf("AppName") + "AppName".length) // the ':' itself
+        )
+    }
+
+    fun testEqualsInDirectiveSectionProducesNoSeparatorError() {
+        // Canonical '=' form must not be flagged.
+        assertFalse(
+            "'=' in a [CustomMessages] entry is correct and must not be flagged",
+            separatorError("[CustomMessages]\ndemo=vgff\n")
+        )
+    }
+
+    fun testEqualsInParameterSectionProducesError() {
+        // [Files] is a parameter section — entries must use ':', not '='.
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\n[Files]\nSource=app.exe\n"
+        assertTrue(
+            "the wrong '=' in a [Files] entry must be underlined in red",
+            separatorErrorOnChar(text, text.indexOf("Source") + "Source".length) // the '=' itself
+        )
+    }
+
+    fun testColonInParameterSectionProducesNoSeparatorError() {
+        // Canonical ':' form must not be flagged.
+        assertFalse(
+            "':' in a [Files] entry is correct and must not be flagged",
+            separatorError("[Setup]\nAppName=Test\nAppVersion=1.0\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n")
+        )
+    }
+
     // ── File level: required sections ─────────────────────────────────────────
 
     fun testFileLevelErrorWhenSetupSectionMissing() {

@@ -192,28 +192,27 @@ class IsSectionCompletionTest : BasePlatformTestCase() {
 
     // ── [Languages] built-in language completion ──────────────────────────────
 
-    fun testLanguageNameCompletionUnquoted() {
+    // The built-in language *name* suggestion list for [Languages] Name: was intentionally removed
+    // (the name is user-chosen and not tied to the built-in locales). Only MessagesFile still
+    // offers built-in suggestions. Guards against the suggestion list being reintroduced.
+    fun testLanguageNameOffersNoBuiltInSuggestions() {
         myFixture.configureByText(
             IsScriptFileType.INSTANCE,
             "[Languages]\nName: <caret>; MessagesFile: \"compiler:Default.isl\"\n"
         )
         myFixture.completeBasic()
-        val variants = myFixture.lookupElementStrings
-        assertNotNull("Expected built-in language name suggestions for unquoted Name:", variants)
-        assertTrue("Expected 'english' in language name suggestions", "english" in variants!!)
-        assertTrue("Expected 'german' in language name suggestions", "german" in variants)
-    }
+        val unquoted = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("Name: must not suggest built-in language names", "english" in unquoted)
+        assertFalse("Name: must not suggest built-in language names", "german" in unquoted)
 
-    fun testLanguageNameCompletionQuoted() {
         myFixture.configureByText(
             IsScriptFileType.INSTANCE,
             "[Languages]\nName: \"<caret>\"; MessagesFile: \"compiler:Default.isl\"\n"
         )
         myFixture.completeBasic()
-        val variants = myFixture.lookupElementStrings
-        assertNotNull("Expected built-in language name suggestions inside quoted Name:", variants)
-        assertTrue("Expected 'english' in quoted language name suggestions", "english" in variants!!)
-        assertTrue("Expected 'german' in quoted language name suggestions", "german" in variants)
+        val quoted = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("Quoted Name: must not suggest built-in language names", "english" in quoted)
+        assertFalse("Quoted Name: must not suggest built-in language names", "german" in quoted)
     }
 
     fun testLanguageMessagesFileCompletionQuoted() {
@@ -247,26 +246,6 @@ class IsSectionCompletionTest : BasePlatformTestCase() {
     private fun iconOf(name: String): javax.swing.Icon? =
         myFixture.lookupElements?.firstOrNull { it.lookupString == name }
             ?.let { LookupElementPresentation().also { p -> it.renderElement(p) }.icon }
-
-    fun testLanguageNameCompletionUsesPerLanguageFlagIcon() {
-        myFixture.configureByText(
-            IsScriptFileType.INSTANCE,
-            "[Languages]\nName: <caret>; MessagesFile: \"compiler:Default.isl\"\n"
-        )
-        myFixture.completeBasic()
-        val germanIcon = iconOf("german")
-        val frenchIcon = iconOf("french")
-        assertNotNull("German language suggestion must carry a flag icon", germanIcon)
-        assertNotNull("French language suggestion must carry a flag icon", frenchIcon)
-        assertEquals(
-            "German suggestion must use the German flag icon",
-            service<IsLanguageDataService>().fromIssName("german")!!.icon, germanIcon
-        )
-        assertFalse(
-            "Distinct languages must use distinct flag icons, not one shared generic icon",
-            germanIcon == frenchIcon
-        )
-    }
 
     fun testLanguageMessagesFileCompletionUsesPerLanguageFlagIcon() {
         myFixture.configureByText(

@@ -38,6 +38,10 @@ intellijPlatform {
     instrumentCode = false
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
 dependencies {
     testImplementation("junit:junit:4.13.2")
