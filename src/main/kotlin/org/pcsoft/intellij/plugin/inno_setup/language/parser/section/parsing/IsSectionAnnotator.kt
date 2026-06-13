@@ -23,6 +23,7 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.tree.TokenSet
+import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
@@ -203,21 +204,28 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Inno Setup requires `UsePreviousLanguage` to be explicitly `no` when the script declares only a
-     * single language in \[Languages]; otherwise the compiler rejects the script. Reported at file
-     * level (the rule spans the \[Setup] and \[Languages] sections rather than a single entry).
+     * When the effective AppId contains a constant (e.g. an \{#define} or \{code:…} expression), Inno
+     * Setup cannot reuse the previously selected language and requires `UsePreviousLanguage` to be set
+     * explicitly to `no`; otherwise the compiler rejects the script. `AppId` defaults to `AppName` when
+     * omitted, so the `AppName` value is checked in that case. Reported at file level.
      */
     private fun annotateUsePreviousLanguage(file: IsScriptFile, holder: AnnotationHolder) {
         if (file.specTarget != IsSectionSpecTarget.ISS) return
-        if (file.findSections("Languages").flatMap { it.nameDeclarations }.size != 1) return
+        val setup = file.findSection("Setup") ?: return
 
-        val entry = file.findSection("Setup")?.directiveEntryList
-            ?.firstOrNull { it.keyText().equals("UsePreviousLanguage", ignoreCase = true) }
+        // AppId defaults to AppName when not specified, so fall back to the AppName value.
+        val appIdValue = (setup.directiveEntryList.firstOrNull { it.keyText().equals("AppId", ignoreCase = true) }
+            ?: setup.directiveEntryList.firstOrNull { it.keyText().equals("AppName", ignoreCase = true) })
+            ?.paramValue ?: return
+        if (PsiTreeUtil.findChildrenOfType(appIdValue, IsSectionConstant::class.java).isEmpty()) return
+
+        val entry = setup.directiveEntryList
+            .firstOrNull { it.keyText().equals("UsePreviousLanguage", ignoreCase = true) }
         if (entry?.valueText?.trim().equals("no", ignoreCase = true)) return
 
         holder.newAnnotation(
             HighlightSeverity.ERROR,
-            "[Setup]: 'UsePreviousLanguage' must be set to 'no' when [Languages] declares only one language"
+            "UsePreviousLanguage must be set to \"no\" when AppId includes constants"
         ).fileLevel().withFix(SetUsePreviousLanguageNoQuickFix(file)).create()
     }
 

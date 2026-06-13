@@ -897,6 +897,73 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
         assertTrue("{cm:NonExistent} must produce an 'Unknown custom message' ERROR", hit)
     }
 
+    // ── UsePreviousLanguage vs AppId constants ────────────────────────────────
+
+    private fun usePreviousLanguageError(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("UsePreviousLanguage", ignoreCase = true) == true
+        }
+
+    fun testAppIdWithConstantAndNoUsePreviousLanguageProducesError() {
+        val text = "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\n"
+        assertTrue(
+            "AppId containing a constant without UsePreviousLanguage=no must produce a file-level ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testAppIdWithConstantAndUsePreviousLanguageNoProducesNoError() {
+        val text =
+            "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\nUsePreviousLanguage=no\n"
+        assertFalse(
+            "AppId containing a constant with UsePreviousLanguage=no must not produce the ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testAppIdWithConstantAndUsePreviousLanguageYesProducesError() {
+        val text =
+            "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\nUsePreviousLanguage=yes\n"
+        assertTrue(
+            "AppId with a constant and UsePreviousLanguage=yes must produce the ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testConstantAppNameWithoutAppIdProducesError() {
+        // AppId defaults to AppName when omitted — a constant in AppName therefore triggers the rule.
+        val text = "#define MyApp \"My Program\"\n[Setup]\nAppName={#MyApp}\nAppVersion=1.0\n"
+        assertTrue(
+            "A constant in AppName (no explicit AppId) without UsePreviousLanguage=no must produce the ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testConstantAppNameWithUsePreviousLanguageNoProducesNoError() {
+        val text =
+            "#define MyApp \"My Program\"\n[Setup]\nAppName={#MyApp}\nAppVersion=1.0\nUsePreviousLanguage=no\n"
+        assertFalse(
+            "A constant in AppName with UsePreviousLanguage=no must not produce the ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testConstantFreeAppIdProducesNoUsePreviousLanguageError() {
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\nAppId=MyStaticAppId\n"
+        assertFalse(
+            "A constant-free AppId must not trigger the UsePreviousLanguage ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
+    fun testNoAppIdProducesNoUsePreviousLanguageError() {
+        assertFalse(
+            "A script without AppId must not trigger the UsePreviousLanguage ERROR",
+            usePreviousLanguageError(highlights(VALID_SETUP))
+        )
+    }
+
     fun testCmReferenceResolvesViaGetReferences() {
         val text = VALID_SETUP + "\n[CustomMessages]\nMyMsg=Hello\n[Setup]\nAppComments={cm:MyMsg}\n"
         myFixture.configureByText(IsScriptFileType.INSTANCE, text)
