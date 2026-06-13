@@ -20,10 +20,14 @@ Inno Setup-Dokumentation: https://jrsoftware.org/ishelp/
 
 ## i18n
 
-Alle benutzersichtbaren Texte laufen über das `PluginBundle`-Objekt (`PluginBundle.message("key", args…)`,
-`DynamicBundle`) — **keine** hartkodierten UI-Strings. Bundle:
+Alle **unmittelbar benutzersichtbaren UI-Texte** laufen über das `PluginBundle`-Objekt
+(`PluginBundle.message("key", args…)`, `DynamicBundle`) — **keine** hartkodierten UI-Strings. Bundle:
 `src/main/resources/messages/PluginBundle.properties` (en) + `_ja`/`_ko`/`_zh_CN`; neue Keys immer in
 **allen vier** Bundles pflegen.
+
+**Nicht in i18n:** Konsolenausgaben, Diagnose-/Debug-Meldungen, Log-Texte und alle anderen Ausgaben, die
+nicht direkt in UI-Elementen (Labels, Tooltips, Action-Texte, Dialoge) erscheinen. Diese werden als
+hardkodierte englische Strings geschrieben.
 
 **Wichtig — `%key%`-Platzhalter in plugin.xml meiden:** In der Zielplattform (2025.3) werden `%key%` in
 `<action text|description>` **nicht** zuverlässig aufgelöst (auch nicht mit `resource-bundle` am

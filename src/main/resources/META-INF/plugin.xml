@@ -209,6 +209,21 @@
                 org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsParameterFlipIntentionAction
             </className>
         </intentionAction>
+
+        <!-- ═══════════════════════════════ Run ═══════════════════════════════ -->
+
+        <!-- Run configuration type for launching a compiled ISS installer -->
+        <configurationType
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationType"/>
+
+        <!-- Produces a ghost run configuration when an ISS file is selected -->
+        <runConfigurationProducer
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationProducer"/>
+
+        <!-- Play icon next to [Setup] section header -->
+        <codeInsight.lineMarkerProvider
+                language="ISS"
+                implementationClass="org.pcsoft.intellij.plugin.inno_setup.build.gutter.IsSetupSectionGutterIconProvider"/>
     </extensions>
 
     <!-- Action texts/descriptions are set in code via PluginBundle (see the action classes). -->
@@ -222,6 +237,14 @@
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action.IsLanguageCreateFileAction"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
+        </action>
+
+        <!-- Run a single .iss script (dry-run, shown above Build) -->
+        <action id="Iss.RunScript"
+                class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction"
+                icon="AllIcons.RunConfigurations.TestState.Run">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="Iss.BuildScript"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="Iss.BuildScript"/>
         </action>
 
         <!-- Compile a single .iss script via ISCC from the context menu -->
