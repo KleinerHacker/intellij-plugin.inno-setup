@@ -7,6 +7,124 @@ docs_dir: docs
 extra_css:
   - stylesheets/extra.css
 
+plugins:
+  - search
+  - i18n:
+      docs_structure: suffix
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: zh
+          name: 简体中文
+          build: true
+          nav_translations:
+            Home: 主页
+            File Types: 文件类型
+            Inno Setup Script: Inno Setup 脚本
+            Script Files: 脚本文件
+            Sections: 节
+            Setup: 设置
+            Types: 类型
+            Components: 组件
+            Tasks: 任务
+            Dirs: 目录
+            Files: 文件
+            Icons: 图标
+            Registry: 注册表
+            Run: 运行
+            UninstallRun: 卸载运行
+            Languages: 语言
+            LangOptions: 语言选项
+            Messages: 消息
+            CustomMessages: 自定义消息
+            InstallDelete: 安装删除
+            UninstallDelete: 卸载删除
+            ISSigKeys: ISSig 密钥
+            Code: 代码
+            Inno Setup Language: Inno Setup 语言文件
+            Language Files: 语言文件
+            Build Integration: 构建集成
+            Structure View: 结构视图
+            Settings: 设置
+            General: 常规
+            Build: 构建
+            API Docs: API 文档
+            Licences: 许可证
+        - locale: ja
+          name: 日本語
+          build: true
+          nav_translations:
+            Home: ホーム
+            File Types: ファイルタイプ
+            Inno Setup Script: Inno Setup スクリプト
+            Script Files: スクリプトファイル
+            Sections: セクション
+            Setup: セットアップ
+            Types: タイプ
+            Components: コンポーネント
+            Tasks: タスク
+            Dirs: ディレクトリ
+            Files: ファイル
+            Icons: アイコン
+            Registry: レジストリ
+            Run: 実行
+            UninstallRun: アンインストール実行
+            Languages: 言語
+            LangOptions: 言語オプション
+            Messages: メッセージ
+            CustomMessages: カスタムメッセージ
+            InstallDelete: インストール削除
+            UninstallDelete: アンインストール削除
+            ISSigKeys: ISSig キー
+            Code: コード
+            Inno Setup Language: Inno Setup 言語ファイル
+            Language Files: 言語ファイル
+            Build Integration: ビルド統合
+            Structure View: 構造ビュー
+            Settings: 設定
+            General: 一般
+            Build: ビルド
+            API Docs: API ドキュメント
+            Licences: ライセンス
+        - locale: ko
+          name: 한국어
+          build: true
+          nav_translations:
+            Home: 홈
+            File Types: 파일 형식
+            Inno Setup Script: Inno Setup 스크립트
+            Script Files: 스크립트 파일
+            Sections: 섹션
+            Setup: 설정
+            Types: 타입
+            Components: 컴포넌트
+            Tasks: 작업
+            Dirs: 디렉토리
+            Files: 파일
+            Icons: 아이콘
+            Registry: 레지스트리
+            Run: 실행
+            UninstallRun: 제거 실행
+            Languages: 언어
+            LangOptions: 언어 옵션
+            Messages: 메시지
+            CustomMessages: 사용자 지정 메시지
+            InstallDelete: 설치 삭제
+            UninstallDelete: 제거 삭제
+            ISSigKeys: ISSig 키
+            Code: 코드
+            Inno Setup Language: Inno Setup 언어 파일
+            Language Files: 언어 파일
+            Build Integration: 빌드 통합
+            Structure View: 구조 뷰
+            Settings: 설정
+            General: 일반
+            Build: 빌드
+            API Docs: API 문서
+            Licences: 라이선스
+
 markdown_extensions:
   - admonition
   - toc:

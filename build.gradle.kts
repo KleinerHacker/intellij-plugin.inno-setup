@@ -130,21 +130,28 @@ tasks {
         group = null
         description = "Install mkdocs"
         workingDir = file("docs")
-        commandLine("python", "-m", "pip", "install", "mkdocs")
+        commandLine("python", "-m", "pip", "install", "--upgrade", "mkdocs")
     }
 
     register<Exec>("installMkDocsMaterial") {
         group = null
         description = "Install mkdocs-material"
         workingDir = file("docs")
-        commandLine("python", "-m", "pip", "install", "mkdocs-material")
+        commandLine("python", "-m", "pip", "install", "--upgrade", "mkdocs-material")
     }
 
     register<Exec>("installGitHubPages") {
         group = null
         description = "Install ghp-import"
         workingDir = file("docs")
-        commandLine("python", "-m", "pip", "install", "ghp-import")
+        commandLine("python", "-m", "pip", "install", "--upgrade", "ghp-import")
+    }
+
+    register<Exec>("installI18N") {
+        group = null
+        description = "Install i18n"
+        workingDir = file("docs")
+        commandLine("python", "-m", "pip", "install", "--upgrade", "mkdocs-static-i18n")
     }
 
     register("installDocs") {
@@ -153,6 +160,7 @@ tasks {
         dependsOn("installMkDocs")
         dependsOn("installMkDocsMaterial")
         dependsOn("installGitHubPages")
+        dependsOn("installI18N")
     }
 
     register<Exec>("runDocs") {
