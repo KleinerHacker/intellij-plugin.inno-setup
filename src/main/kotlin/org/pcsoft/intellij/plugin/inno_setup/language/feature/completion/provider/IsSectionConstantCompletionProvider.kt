@@ -49,7 +49,7 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
         builtins.forEach { const ->
             val tail = if (const.parameterized) " (${const.syntax ?: "parameterized"})" else ""
             val element = LookupElementBuilder
-                .create(if (const.parameterized) "${const.name}:" else const.name)
+                .create(if (const.parameterized && const.syntax?.startsWith("${const.name}:") == true) "${const.name}:" else const.name)
                 .withTypeText(const.type.name.lowercase().replace('_', ' '))
                 .withTailText(tail, true)
                 .withIcon(IsIcons.Constant)

@@ -15,7 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 import com.intellij.openapi.components.BaseState
 
 /**
- * Persistent state for the plugin's Inno Setup configuration.
+ * IDE-wide persistent state for the plugin's Inno Setup configuration. Project-specific build
+ * options live in [IsBuildSettingsState].
  */
 class IsSettingsState : BaseState() {
     /**

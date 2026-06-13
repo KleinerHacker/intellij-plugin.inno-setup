@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="256"/>
+  <img src="docs/docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="256"/>
 </p>
 
 # Inno Setup – JetBrains Plugin
@@ -31,6 +31,10 @@ using.
 | **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                      |
 | **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                        |
 | **Code folding**           | Sections and long parameter entries fold independently                                                               |
+| **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                           |
+| **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build        |
+| **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                            |
+| **ISPP support**           | Preprocessor directives (`#define`, `#include`, …) are parsed, highlighted, and completed                           |
 
 ### IDE Compatibility
 
@@ -110,7 +114,7 @@ Preconfigured run configurations are included in `.run/`:
 ```
 
 > **Note:** The files under `build/parsing/gen/` are generated automatically before compilation via
-`./gradlew generateIssParser generateIssLexer`. Never edit them by hand — they are overwritten on every build.
+`./gradlew generateSources` (or `generateLexers` / `generateParsers` individually). Never edit them by hand — they are overwritten on every build.
 
 ---
 

@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SearchableConfigurable
+import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBLabel
@@ -25,7 +26,9 @@ import javax.swing.event.DocumentEvent
 import javax.swing.event.DocumentListener
 
 /**
- * Settings page that lets users configure the local Inno Setup installation and validation target.
+ * IDE-wide settings page for the Inno Setup installation and version validation. These are
+ * application-level (shared across all projects); the per-project build behaviour lives on the
+ * separate [IsBuildSettingsConfigurable] sub-page.
  */
 class IsSettingsConfigurable : SearchableConfigurable {
 
@@ -33,6 +36,9 @@ class IsSettingsConfigurable : SearchableConfigurable {
      * Version-list helpers used by the settings page and unit tests.
      */
     companion object {
+        /** Stable id; used as the parent for the project-level build sub-page. */
+        const val ID = "org.pcsoft.intellij.plugin.inno_setup.settings"
+
         private val VERSIONS_BY_MAJOR = mapOf(
             6 to listOf("6.0", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"),
             7 to listOf("7.0")
@@ -76,12 +82,12 @@ class IsSettingsConfigurable : SearchableConfigurable {
     /**
      * Returns the stable settings page id used by IntelliJ search.
      */
-    override fun getId() = "org.pcsoft.intellij.plugin.inno_setup.settings"
+    override fun getId() = ID
 
     /**
      * Returns the display name shown in the Settings tree.
      */
-    override fun getDisplayName() = "Inno Setup"
+    override fun getDisplayName() = PluginBundle.message("settings.inno_setup.display_name")
 
     /**
      * Builds the Swing component for the settings page.
@@ -131,7 +137,9 @@ class IsSettingsConfigurable : SearchableConfigurable {
      * Checks whether the current UI values differ from the persisted settings.
      */
     override fun isModified(): Boolean {
-        if (pathField?.text?.trim() != service.state.installationPath) return true
+        // Treat a null/empty installation path equivalently: BaseState.string() collapses "" to null,
+        // so a freshly cleared field would otherwise always read as modified.
+        if ((pathField?.text?.trim() ?: "") != (service.state.installationPath ?: "")) return true
         return minVersionCombo?.selectedItem?.toString() != service.state.minInnoVersion
     }
 

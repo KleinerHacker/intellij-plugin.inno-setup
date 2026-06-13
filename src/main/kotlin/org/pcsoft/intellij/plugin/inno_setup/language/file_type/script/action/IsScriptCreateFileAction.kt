@@ -20,16 +20,17 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 
 /**
- * Creates a new Inno Setup file from the IDE New File action.
+ * Creates a new Inno Setup file from the IDE New File action. Name and description are localized via
+ * [PluginBundle]; the icon comes from the `Iss.NewFile` action registration in `plugin.xml`.
  */
 class IsScriptCreateFileAction : DumbAwareAction(
-    "Inno Setup Script",
-    "Create new Inno Setup Script file",
-    IsIcons.ScriptFile
+    PluginBundle.message("action.iss.new_file.text"),
+    PluginBundle.message("action.iss.new_file.description"),
+    null
 ) {
     /**
      * Returns or performs the public behavior represented by this member.
@@ -55,7 +56,7 @@ class IsScriptCreateFileAction : DumbAwareAction(
         val dialog = IsScriptCreateFileDialog(project)
         if (!dialog.showAndGet()) return
 
-        WriteCommandAction.runWriteCommandAction(project, "Create Inno Setup Script", null, {
+        WriteCommandAction.runWriteCommandAction(project, PluginBundle.message("action.iss.new_file.command"), null, {
             dir.createFile("${dialog.fileName}.iss").let {
                 VfsUtil.saveText(
                     it.virtualFile,

@@ -271,4 +271,44 @@ class IsSectionAnnotatorQuickFixTest : BasePlatformTestCase() {
             result.indexOf("; code section content") > codeIdx
         )
     }
+
+    // ── Fix 8: Replace wrong key/value separator ─────────────────────────────
+
+    fun testReplaceColonWithEqualsInDirectiveSection() {
+        // [CustomMessages] is a directive section: ':' must become '='.
+        configure("[CustomMessages]\ndemo<caret>: \"vgff\"\n")
+        myFixture.launchAction(findIntention("Replace ':' with '='"))
+        assertEquals("[CustomMessages]\ndemo= \"vgff\"\n", myFixture.file.text)
+    }
+
+    fun testReplaceColonWithEqualsInSetupSection() {
+        configure("[Setup]\nAppName<caret>: Test\nAppVersion=1.0\n")
+        myFixture.launchAction(findIntention("Replace ':' with '='"))
+        assertEquals("[Setup]\nAppName= Test\nAppVersion=1.0\n", myFixture.file.text)
+    }
+
+    fun testReplaceEqualsWithColonInParameterSection() {
+        // [Files] is a parameter section: '=' must become ':'.
+        configure("[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource<caret>=app.exe\n")
+        myFixture.launchAction(findIntention("Replace '=' with ':'"))
+        assertEquals(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n\n[Files]\nSource:app.exe\n",
+            myFixture.file.text
+        )
+    }
+
+    fun testReplaceColonFixResolvesCustomMessageReference() {
+        // After fixing the separator the [CustomMessages] entry becomes a real declaration, so a
+        // {cm:demo} usage elsewhere is no longer reported as an unknown custom message.
+        configure("[Setup]\nAppComments={cm:demo}\n[CustomMessages]\ndemo<caret>: vgff\n")
+        myFixture.launchAction(findIntention("Replace ':' with '='"))
+        assertEquals(
+            "[Setup]\nAppComments={cm:demo}\n[CustomMessages]\ndemo= vgff\n",
+            myFixture.file.text
+        )
+        val stillUnknown = myFixture.doHighlighting().any {
+            it.description?.contains("Unknown custom message", ignoreCase = true) == true
+        }
+        assertFalse("{cm:demo} must resolve once the declaration uses '='", stillUnknown)
+    }
 }

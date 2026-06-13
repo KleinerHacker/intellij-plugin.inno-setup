@@ -12,14 +12,19 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 
+import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiManager
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
@@ -32,6 +37,7 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
+import java.io.File
 
 /**
  * Annotates Inno Setup PSI elements with validation and highlighting information.
@@ -54,10 +60,15 @@ class IsSectionAnnotator : Annotator {
 
             is IsSectionParamKey -> annotateParamKey(element, holder, spec)
             is IsSectionDirectiveKey -> annotateDirectiveKey(element, holder, spec)
+            is IsSectionParamPair -> annotateParamPairSeparator(element, holder, spec)
+            is IsSectionDirectiveEntry -> annotateDirectiveEntrySeparator(element, holder, spec)
             is IsSectionParamValue -> annotateParamValue(element, holder, spec)
             is IsSectionConstant -> annotateConstant(element, holder)
         }
-        if (element is IsSectionParamValue) annotateLanguageId(element, holder)
+        if (element is IsSectionParamValue) {
+            annotateLanguageId(element, holder)
+            annotateMessagesFile(element, holder)
+        }
     }
 
     /**
@@ -80,6 +91,81 @@ class IsSectionAnnotator : Annotator {
             HighlightSeverity.WARNING,
             "Unknown Windows language identifier '$text' — expected 0 or a valid LCID such as \$0409 (English – United States)"
         ).range(value.textRange).create()
+    }
+
+    /**
+     * Validates that a `MessagesFile` value in `[Languages]` points to an existing, readable, and
+     * structurally valid ISL file. Emits ERROR for missing/unreadable/incomplete files and WARNING
+     * when the Inno Setup installation path is not configured (so `compiler:` paths cannot be checked).
+     */
+    private fun annotateMessagesFile(value: IsSectionParamValue, holder: AnnotationHolder) {
+        if (value.isInCodeSection) return
+        val pair = value.containingParamPair ?: return
+        if (!pair.keyText().equals("MessagesFile", ignoreCase = true)) return
+        if (pair.containingSection?.nameText?.equals("Languages", ignoreCase = true) != true) return
+
+        val raw = value.singleText.trim()
+        if (raw.isEmpty()) return
+
+        val scriptVf = value.containingFile?.virtualFile ?: return
+        val scriptDir = scriptVf.parent?.path?.let { File(it) }
+        val defines = value.issFile?.definedConstants ?: emptyList()
+        val customMessages = value.issFile?.findSections("CustomMessages")
+            ?.flatMap { it.directiveEntryList }
+            ?.associate { it.keyText().substringAfterLast('.') to it.valueText }
+            ?: emptyMap()
+
+        val expanded = IsMessagesFileResolver.expandValue(raw, defines, scriptDir, customMessages)
+            ?: return  // unresolvable — no annotation
+
+        val installPath = IsSettingsService.getInstance().state.installationPath
+        when (val result = IsMessagesFileResolver.resolveMessagesFile(expanded, scriptDir, installPath)) {
+            is IsResolveResult.Missing ->
+                holder.newAnnotation(HighlightSeverity.ERROR, "ISL file not found: '${result.resolvedPath}'")
+                    .range(value.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+
+            is IsResolveResult.Unreadable ->
+                holder.newAnnotation(HighlightSeverity.ERROR, "ISL file is not readable: '${result.resolvedPath}'")
+                    .range(value.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+
+            IsResolveResult.NotConfigured ->
+                holder.newAnnotation(
+                    HighlightSeverity.WARNING,
+                    "Inno Setup installation path not configured — cannot verify existence of '$raw'"
+                ).range(value.textRange).create()
+
+            IsResolveResult.Unresolvable -> Unit  // no annotation
+
+            is IsResolveResult.Ok -> annotateIslContent(result.file, value, holder)
+        }
+    }
+
+    private fun annotateIslContent(file: File, value: IsSectionParamValue, holder: AnnotationHolder) {
+        val vf = LocalFileSystem.getInstance().findFileByIoFile(file) ?: return
+        val psiFile = PsiManager.getInstance(value.project).findFile(vf) as? IsScriptFile ?: run {
+            holder.newAnnotation(HighlightSeverity.ERROR, "ISL file cannot be parsed: '${file.absolutePath}'")
+                .range(value.textRange).create()
+            return
+        }
+        val langOptions = psiFile.findSection("LangOptions") ?: run {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Referenced ISL file is missing [LangOptions] section")
+                .range(value.textRange).create()
+            return
+        }
+        val present = langOptions.directiveEntryList.map { it.keyText().lowercase() }.toSet()
+        val required = setOf("languagename", "languageid")
+        val missing = required - present
+        if (missing.isNotEmpty()) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "Referenced ISL file is incomplete: required directive(s) missing: " +
+                        missing.joinToString(", ")
+            ).range(value.textRange).create()
+        }
     }
 
     private fun annotateFile(file: IsScriptFile, holder: AnnotationHolder, spec: IsSectionSpec) {
@@ -201,8 +287,18 @@ class IsSectionAnnotator : Annotator {
         val pair = key.parent as? IsSectionParamPair ?: return
         val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
+        // A ':'-separated pair in a directive section ([Setup], [Messages], [CustomMessages],
+        // [LangOptions]) is a wrong-separator mistake. The red mark is placed on the ':' token by
+        // annotateParamPairSeparator (visiting the pair, which contains the token); skip key checks.
+        if (specSection.type == "directive") return
+        // Internationalized sections ([Messages], [CustomMessages]) allow arbitrary user-defined key
+        // names — never flag an unrecognized name as unknown, even when colon syntax is used by mistake.
+        if (specSection.internationalization) {
+            highlight(key.textRange, IsSectionAnnotatorHighlighting.PARAM_KEY, holder)
+            return
+        }
         val attr = specSection.attributes.firstOrNull { it.name.equals(pair.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder, key.specTarget)
+        annotateKey(key.textRange, attr, holder, key.specTarget, pair.keyText())
     }
 
     private fun annotateDirectiveKey(key: IsSectionDirectiveKey, holder: AnnotationHolder, spec: IsSectionSpec) {
@@ -211,6 +307,11 @@ class IsSectionAnnotator : Annotator {
         val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
 
+        // An '='-separated entry in a parameter section ([Files], [Icons], [Registry], …) is a
+        // wrong-separator mistake. The red mark is placed on the '=' token by
+        // annotateDirectiveEntrySeparator (visiting the entry, which contains the token); skip key checks.
+        if (specSection.type == "parameter") return
+
         // Internationalized sections (\[Messages], \[CustomMessages]) allow a "lang." prefix and,
         // for \[CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
         // never flag an unrecognized name as unknown (the predefined list is advisory only).
@@ -218,7 +319,7 @@ class IsSectionAnnotator : Annotator {
             val baseName = entry.keyText().substringAfterLast('.')
             val attr = specSection.attributes.firstOrNull { it.name.equals(baseName, ignoreCase = true) }
             if (attr != null) {
-                annotateKey(key.textRange, attr, holder, key.specTarget)
+                annotateKey(key.textRange, attr, holder, key.specTarget, baseName)
             } else {
                 highlight(key.textRange, IsSectionAnnotatorHighlighting.PARAM_KEY, holder)
             }
@@ -227,7 +328,7 @@ class IsSectionAnnotator : Annotator {
         }
 
         val attr = specSection.attributes.firstOrNull { it.name.equals(entry.keyText(), ignoreCase = true) }
-        annotateKey(key.textRange, attr, holder, key.specTarget)
+        annotateKey(key.textRange, attr, holder, key.specTarget, entry.keyText())
     }
 
     /**
@@ -259,15 +360,76 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
+    /**
+     * Flags a `Key: Value` pair sitting in a directive section ([Setup], [Messages], [CustomMessages],
+     * [LangOptions]), where entries must instead use `Key=Value`. The red mark covers the wrong ':'.
+     */
+    private fun annotateParamPairSeparator(pair: IsSectionParamPair, holder: AnnotationHolder, spec: IsSectionSpec) {
+        if (pair.isInCodeSection) return
+        val section = pair.containingSection ?: return
+        val specSection = section.specSection(spec) ?: return
+        if (specSection.type != "directive") return
+        val colon = pair.node.findChildByType(IsSectionTypes.COLON) ?: return
+        reportSeparatorMismatch(
+            colon.textRange, section.nameText, "=", ":", "${pair.keyText()}=Value",
+            ReplaceSeparatorQuickFix(pair, IsSectionTypes.COLON, ":", "="), holder
+        )
+    }
+
+    /**
+     * Flags a `Key=Value` entry sitting in a parameter section ([Files], [Icons], [Registry], …),
+     * where entries must instead use `Key: Value`. The red mark covers the wrong '='.
+     */
+    private fun annotateDirectiveEntrySeparator(
+        entry: IsSectionDirectiveEntry,
+        holder: AnnotationHolder,
+        spec: IsSectionSpec
+    ) {
+        if (entry.isInCodeSection) return
+        val section = entry.containingSection ?: return
+        val specSection = section.specSection(spec) ?: return
+        if (specSection.type != "parameter") return
+        val eq = entry.node.findChildByType(IsSectionTypes.EQ) ?: return
+        reportSeparatorMismatch(
+            eq.textRange, section.nameText, ":", "=", "${entry.keyText()}: Value",
+            ReplaceSeparatorQuickFix(entry, IsSectionTypes.EQ, "=", ":"), holder
+        )
+    }
+
+    /**
+     * Flags an entry that uses the wrong key/value separator for its section: ':' inside a directive
+     * section, or '=' inside a parameter section. The red range covers the offending separator.
+     */
+    private fun reportSeparatorMismatch(
+        range: TextRange,
+        sectionName: String,
+        expected: String,
+        wrong: String,
+        example: String,
+        fix: IntentionAction,
+        holder: AnnotationHolder
+    ) {
+        // No custom text attributes: the default ERROR highlight draws a red wavy underline under
+        // the separator, rather than recolouring the character (UNKNOWN_REFERENCE would paint it red).
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "Section [$sectionName] separates key and value with '$expected' (e.g. $example), not '$wrong'"
+        )
+            .range(range)
+            .withFix(fix)
+            .create()
+    }
+
     private fun annotateKey(
         range: TextRange,
         attr: IsSectionAttributeSpec?,
         holder: AnnotationHolder,
-        target: IsSectionSpecTarget
+        target: IsSectionSpecTarget,
+        keyName: String
     ) {
         when {
             attr == null ->
-                holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '${range}'")
+                holder.newAnnotation(HighlightSeverity.ERROR, "Unknown parameter: '$keyName'")
                     .range(range)
                     .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
@@ -457,11 +619,34 @@ class IsSectionAnnotator : Annotator {
     private fun annotateConstant(constant: IsSectionConstant, holder: AnnotationHolder) {
         if (constant.isInCodeSection) return
         val body = constant.constantBody
-        val name = body.text.substringBefore(':').substringBefore('|').trim().trimStart('#')
+        val bodyText = body.text.trimStart()
+        val name = bodyText.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins = service<IsConstantService>().spec.constants
         val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
-        val isIspp = body.text.trimStart().startsWith("#")
+        val isIspp = bodyText.startsWith("#")
+        val isEnv = bodyText.startsWith("%")
+
+        // {%ENV} or {%ENV|default} — validate the environment variable name
+        if (isEnv) {
+            val rest = bodyText.removePrefix("%")
+            val pipe = rest.indexOf('|')
+            val envName = if (pipe >= 0) rest.substring(0, pipe) else rest
+            val hasDefault = pipe >= 0
+            if (System.getenv(envName) == null && !hasDefault) {
+                val startOffset = constant.textRange.startOffset + 1 + (bodyText.length - rest.length)
+                val endOffset = startOffset + envName.length
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Unknown environment variable '$envName'"
+                ).range(TextRange(startOffset, endOffset))
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+            } else {
+                highlight(constant.textRange, IsSectionAnnotatorHighlighting.REFERENCE, holder)
+            }
+            return
+        }
 
         val known = when {
             isIspp -> name in isppNames
@@ -505,11 +690,7 @@ class IsSectionAnnotator : Annotator {
         body: IsSectionConstantBody,
         holder: AnnotationHolder
     ) {
-        val colon = body.node.findChildByType(IsSectionTypes.COLON) ?: return
-        val nameNode = body.node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
-            .firstOrNull { it.startOffset > colon.startOffset } ?: return
-        val msgName = nameNode.text
-        if (msgName.isEmpty()) return
+        val (msgName, nameRange) = body.customMessageNameRange() ?: return
 
         val declared = constant.issFile?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
@@ -520,7 +701,7 @@ class IsSectionAnnotator : Annotator {
                 HighlightSeverity.ERROR,
                 "Unknown custom message: '$msgName' (not defined in [CustomMessages])"
             )
-                .range(nameNode.textRange)
+                .range(nameRange.shiftRight(body.textRange.startOffset))
                 .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         }

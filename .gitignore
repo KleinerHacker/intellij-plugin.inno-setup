@@ -2,6 +2,7 @@
 .idea
 .intellijPlatform
 .claude
-build
+/build
 docs/site
 docs/docs/dokka
+docs/docs/licences

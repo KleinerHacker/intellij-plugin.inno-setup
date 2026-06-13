@@ -79,12 +79,19 @@ class IsSectionCompletionContributor : CompletionContributor() {
                 .inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionReferenceValueProvider
         )
-        // Built-in language suggestions for \[Languages] Name and MessagesFile parameters.
+        // Built-in language suggestions for the \[Languages] MessagesFile parameter (the Name is
+        // user-chosen, so it intentionally gets no built-in suggestion list).
         // Registered for any element (not just IDENTIFIER) so it also fires inside quoted strings.
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionLanguageSectionValueProvider
+        )
+        // Environment variable name completion inside {%…} constants.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
+            IsSectionEnvVarAfterPercentProvider
         )
         // Windows language identifier suggestions for the \[LangOptions] LanguageID directive.
         extend(

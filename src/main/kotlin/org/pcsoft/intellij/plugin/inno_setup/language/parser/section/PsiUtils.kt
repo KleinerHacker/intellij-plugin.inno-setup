@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Document
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
@@ -203,6 +204,27 @@ val IsSectionParamValue.identifiers: List<PsiElement>
  */
 val IsSectionParamValue.singleText: String
     get() = text.trim().removeSurrounding("\"")
+
+// ── IsSectionConstantBody ───────────────────────────────────────────────────────────
+
+// For a {cm:Name,Arg1,Arg2} constant body, the message name and its range within the body.
+// The name is the text between the ':' and the first ',' (surrounding whitespace trimmed); the
+// printf-style arguments after the first comma are ignored. Text-based on purpose: the lexer can
+// merge "Name,Arg" into a single VALUE_CHAR token (',' is a value char), so the bare IDENTIFIER
+// token after the colon is not a reliable anchor. Returns null when this is not a {cm:…} body.
+fun IsSectionConstantBody.customMessageNameRange(): Pair<String, TextRange>? {
+    val t = text
+    if (!t.regionMatches(0, "cm:", 0, 3, ignoreCase = true)) return null
+    val afterColon = t.indexOf(':') + 1
+    val comma = t.indexOf(',', afterColon)
+    val rawEnd = if (comma >= 0) comma else t.length
+    var start = afterColon
+    while (start < rawEnd && t[start].isWhitespace()) start++
+    var end = rawEnd
+    while (end > start && t[end - 1].isWhitespace()) end--
+    if (start >= end) return null
+    return t.substring(start, end) to TextRange(start, end)
+}
 
 // ── PsiElement (Sections) ─────────────────────────────────────────────────────
 

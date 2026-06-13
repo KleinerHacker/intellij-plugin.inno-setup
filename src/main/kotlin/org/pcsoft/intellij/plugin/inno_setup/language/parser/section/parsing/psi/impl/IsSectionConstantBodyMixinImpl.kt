@@ -14,11 +14,10 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.ps
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
-import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiReference
-import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionCustomMessageReference
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionPreprocessorConstantReference
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.customMessageNameRange
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
@@ -38,21 +37,11 @@ abstract class IsSectionConstantBodyMixinImpl(node: ASTNode) : ASTWrapperPsiElem
             return arrayOf(IsSectionPreprocessorConstantReference(this as IsSectionConstantBody, name))
         }
 
-        // {cm:Name} — custom-message reference. The name is the first IDENTIFIER after the colon.
-        if (bodyText.regionMatches(0, "cm:", 0, 3, ignoreCase = true)) {
-            val colon = node.findChildByType(IsSectionTypes.COLON) ?: return PsiReference.EMPTY_ARRAY
-            val nameNode = node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
-                .firstOrNull { it.startOffset > colon.startOffset } ?: return PsiReference.EMPTY_ARRAY
-            val name = nameNode.text
-            if (name.isEmpty()) return PsiReference.EMPTY_ARRAY
-            val start = nameNode.startOffset - node.startOffset
-            return arrayOf(
-                IsSectionCustomMessageReference(
-                    this as IsSectionConstantBody,
-                    name,
-                    TextRange(start, start + name.length)
-                )
-            )
+        // {cm:Name} or {cm:Name,Arg1,…} — custom-message reference covering the name segment.
+        val cm = (this as IsSectionConstantBody).customMessageNameRange()
+        if (cm != null) {
+            val (name, range) = cm
+            return arrayOf(IsSectionCustomMessageReference(this, name, range))
         }
 
         return PsiReference.EMPTY_ARRAY

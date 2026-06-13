@@ -64,12 +64,24 @@ private entry ::= directiveEntry
 
 // [Setup]-style: Key=Value
 // pin=2 commits after "Key ="; no recoverWhile to avoid consuming the next entry.
-directiveEntry ::= directiveKey EQ paramValue CRLF? {
+directiveEntry ::= directiveKey EQ directiveValue CRLF? {
   pin=2
   mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionDirectiveEntryMixinImpl"
   implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx"
 }
 directiveKey   ::= IDENTIFIER
+
+// A directive value runs to the end of the line, so — unlike a parameter value — it also
+// accepts the COLON/SEMICOLON/EQ/HASH tokens as plain text. This keeps free-form, unquoted
+// values (e.g. [CustomMessages]/[Messages] strings like "Additional icons:" or "Launch %1;
+// then quit") from terminating the entry early and dropping the rest of the file from the parse.
+// elementType=paramValue collapses it onto the IsSectionParamValue PSI type, so every
+// IsSectionParamValue consumer (annotator, references, accessors) keeps working unchanged.
+directiveValue ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | SEMICOLON | EQ | HASH)* {
+  extends="paramValue"
+  elementType="paramValue"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionParamValueMixinImpl"
+}
 
 // [Files]-style: Key: Value; Key: Value
 // pin=1 commits after first paramPair; no recoverWhile (same reason as directiveEntry).
