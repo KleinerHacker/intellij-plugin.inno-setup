@@ -27,6 +27,7 @@ theme:
 
 nav:
   - Home: index.md
+  - File Types: file-types.md
   - Inno Setup Script:
       - Script Files: script-files.md
       - Sections:
@@ -55,6 +56,8 @@ nav:
           - LangOptions: sections/langoptions.md
           - Messages: sections/messages.md
           - CustomMessages: sections/custom-messages.md
+  - Build Integration: build.md
+  - Structure View: structure-view.md
   - Settings:
       - General: settings.md
       - Build: settings-build.md
