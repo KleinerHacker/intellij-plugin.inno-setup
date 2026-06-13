@@ -18,6 +18,7 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
+import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
@@ -42,7 +43,7 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
     /**
      * Returns the display name shown in the Settings tree.
      */
-    override fun getDisplayName() = "Build"
+    override fun getDisplayName() = PluginBundle.message("settings.build.display_name")
 
     /**
      * Builds the Swing component for the build settings sub-page.

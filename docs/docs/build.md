@@ -41,6 +41,22 @@ and any compiler diagnostics:
 | **Error**   | red text          | `Error on line 22 in C:\...\demo.iss: Source file "..." not found` |
 | **Warning** | yellow text       | `Warning on line 5 in C:\...\demo.iss: ...`                      |
 
+### Structured Section Output & Folding
+
+The ISCC output is presented in a structured form instead of one long flat log:
+
+- **Section nodes** — consecutive output lines that belong to the same Inno Setup section
+  (`Parsing [Setup] section …`, `Parsing [Languages] section …`, …) are grouped into a single node in
+  the Build tree, labelled with the section name and the number of folded lines, e.g. **`[Setup] (8)`**.
+  A section node is **always** shown, regardless of the overall build status, and carries a severity of
+  **INFO**, **WARN** or **ERROR** depending on its content.
+- **Console folds** — within the console, indented detail lines (e.g. the `Reading file: …` /
+  `Messages in script file` lines below `[Languages]`) are collapsed by default into a fold whose
+  placeholder reports the number of hidden lines. Expand a fold to inspect the individual lines.
+
+This keeps the output compact: you see one entry per section at a glance and can drill into the details
+only where needed.
+
 ### Navigable Error Links
 
 Error and warning lines that include a file position contain a clickable **`line XX`** hyperlink.

@@ -18,6 +18,24 @@ Inno Setup-Dokumentation: https://jrsoftware.org/ishelp/
 
 **Wichtig:** `build/parsing/gen/` niemals manuell bearbeiten — wird von GrammarKit generiert.
 
+## i18n
+
+Alle benutzersichtbaren Texte laufen über das `PluginBundle`-Objekt (`PluginBundle.message("key", args…)`,
+`DynamicBundle`) — **keine** hartkodierten UI-Strings. Bundle:
+`src/main/resources/messages/PluginBundle.properties` (en) + `_ja`/`_ko`/`_zh_CN`; neue Keys immer in
+**allen vier** Bundles pflegen.
+
+**Wichtig — `%key%`-Platzhalter in plugin.xml meiden:** In der Zielplattform (2025.3) werden `%key%` in
+`<action text|description>` **nicht** zuverlässig aufgelöst (auch nicht mit `resource-bundle` am
+`<actions>`-Tag). Stattdessen:
+
+- **Actions**: Text/Description im Code über den `DumbAwareAction`-Konstruktor mit Suppliern
+  (`{ PluginBundle.message(...) }`) bzw. in `update()` setzen — nicht über plugin.xml-Attribute.
+- **Configurables**: `key="…" bundle="messages.PluginBundle"` am `<applicationConfigurable>`/
+  `<projectConfigurable>` (das funktioniert, anders als `%…%` im `displayName`); `getDisplayName()`
+  zusätzlich über `PluginBundle`.
+- **`<fileType name>`**: interner Bezeichner, muss **wörtlich** `getName()` entsprechen — kein i18n.
+
 ## Namensräume
 
 Drei orthogonale Achsen, am `Is`+Rolle-Klassenprefix und am Paketpfad ablesbar:

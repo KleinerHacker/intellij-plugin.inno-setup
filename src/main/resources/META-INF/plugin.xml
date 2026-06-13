@@ -12,7 +12,7 @@
 
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>org.pcsoft.intellij.plugin.inno-setup</id>
+    <id>org.pcsoft.ij.plugin.inno-setup</id>
     <name>Inno Setup</name>
     <description><![CDATA[
         Inno Setup plugin for all JetBrains IDEs, providing support for the Inno Setup scripting language.
@@ -27,13 +27,13 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- File type -->
-        <fileType name="%filetype.script.name%"
+        <fileType name="Inno Setup Script"
                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
                   language="ISS"
                   extensions="iss"/>
 
         <!-- Language (translation) file type; same ISS language, restricted set of sections -->
-        <fileType name="%filetype.lang.name%"
+        <fileType name="Inno Setup Language"
                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
                   language="ISS"
                   extensions="isl"/>
@@ -147,6 +147,9 @@
         <lang.foldingBuilder language="ISS"
                              implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionCodeFoldingBuilder"/>
 
+        <!-- Build console folding: collapse indented ISCC detail lines -->
+        <console.folding implementation="org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputConsoleFolding"/>
+
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="ISS"
                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewFactory"/>
@@ -180,14 +183,14 @@
         <applicationConfigurable
                 parentId="build"
                 id="org.pcsoft.intellij.plugin.inno_setup.settings"
-                displayName="%settings.inno_setup.display_name%"
+                key="settings.inno_setup.display_name" bundle="messages.PluginBundle"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsConfigurable"/>
 
         <!-- Project-specific build sub-page (Inno Setup > Build); stored in the project. -->
         <projectConfigurable
                 parentId="org.pcsoft.intellij.plugin.inno_setup.settings"
                 id="org.pcsoft.intellij.plugin.inno_setup.settings.build"
-                displayName="%settings.build.display_name%"
+                key="settings.build.display_name" bundle="messages.PluginBundle"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsConfigurable"/>
 
         <!-- ═══════════════════════════════ Build ═══════════════════════════════ -->
@@ -208,18 +211,15 @@
         </intentionAction>
     </extensions>
 
+    <!-- Action texts/descriptions are set in code via PluginBundle (see the action classes). -->
     <actions>
         <action id="Iss.NewFile"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action.IsScriptCreateFileAction"
-                text="%action.iss.new_file.text%"
-                description="%action.iss.new_file.description%"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
         <action id="Isl.NewFile"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action.IsLanguageCreateFileAction"
-                text="%action.isl.new_file.text%"
-                description="%action.isl.new_file.description%"
                 icon="/icons/inno-setup-script-icon@16.png">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
         </action>
@@ -227,8 +227,6 @@
         <!-- Compile a single .iss script via ISCC from the context menu -->
         <action id="Iss.BuildScript"
                 class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptBuildAction"
-                text="%action.iss.build_script.text%"
-                description="%action.iss.build_script.description%"
                 icon="AllIcons.Actions.Compile">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>

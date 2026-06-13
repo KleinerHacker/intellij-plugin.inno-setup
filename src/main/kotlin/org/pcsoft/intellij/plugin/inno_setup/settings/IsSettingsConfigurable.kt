@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SearchableConfigurable
+import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBLabel
@@ -86,7 +87,7 @@ class IsSettingsConfigurable : SearchableConfigurable {
     /**
      * Returns the display name shown in the Settings tree.
      */
-    override fun getDisplayName() = "Inno Setup"
+    override fun getDisplayName() = PluginBundle.message("settings.inno_setup.display_name")
 
     /**
      * Builds the Swing component for the settings page.
