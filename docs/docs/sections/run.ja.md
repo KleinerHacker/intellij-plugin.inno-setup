@@ -1,7 +1,6 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
-.md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
 
 `[Run]` セクションは、インストールが成功した後、最終ウィザードページが表示される直前に Inno Setup が実行するプログラムまたはファイルを一覧表示します。エントリーは表示順に実行されます。バックグラウンドで実行可能ファイルをサイレント起動したり、関連アプリケーションでドキュメントを開いたり、完了ページのチェックボックスを通じてユーザーにオプションのインストール後アクション（*MyApp を起動*など）を提示したりできます。
 
@@ -65,7 +64,7 @@
 
 ## OnLog
 
-`string`
+`string` · **6.6 以降**
 
 各出力行に対して呼び出される `[Code]` の Pascal プロシージャ名（`logoutput` フラグが必要）。
 

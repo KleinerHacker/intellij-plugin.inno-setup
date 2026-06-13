@@ -127,6 +127,7 @@ plugins:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - toc:
       toc_depth: 3
   - pymdownx.emoji:

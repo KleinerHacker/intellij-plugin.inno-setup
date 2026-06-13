@@ -1,7 +1,6 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
-.md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
 
 The `[Run]` section lists programs or files that Inno Setup executes after a successful installation, just before the
 final wizard page is shown. Entries run sequentially in the order they appear. You can launch executables silently in
@@ -69,7 +68,7 @@ Shell verb used with the `shellexec` flag, e.g. `open`, `print`.
 
 ## OnLog
 
-`string`
+`string` · **Since 6.6**
 
 Name of a Pascal procedure in `[Code]` called for each line of output (requires the `logoutput` flag).
 

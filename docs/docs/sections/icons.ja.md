@@ -1,7 +1,6 @@
 # [Icons]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=iconssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=iconssection){ .md-button .md-button--primary }
 
 `[Icons]` セクションはインストール中に Windows ショートカットを作成します——スタートメニュー、デスクトップ、またはその他の場所。各エントリーは正確に 1 つのショートカットを作成します。ターゲットは実行可能ファイル、ドキュメント、フォルダー、または URL にできます。`Tasks` パラメーターを使用してショートカットをオプションにし、ユーザーが*追加タスクの選択*ウィザードページで決定できるようにします。
 
@@ -81,7 +80,7 @@ Windows 7+ のアプリケーションユーザーモデル ID。タスクバー
 
 ## AppUserModelToastActivatorCLSID
 
-`string`
+`string` · **6.1 以降**
 
 このショートカットを通じたトースト通知のアクティブ化用の Windows 10+ COM CLSID。
 

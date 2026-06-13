@@ -1,7 +1,6 @@
 # [UninstallDelete]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){ .md-button .md-button--primary }
 
 `[UninstallDelete]` セクションはアンインストール中に Inno Setup が最初に追跡したファイルに加えて削除するファイルとディレクトリを列挙します。実行時に作成されたため `[Files]` には一覧されていない生成ファイル、キャッシュ、ログファイル、ユーザーデータディレクトリのクリーンアップに使用します。
 

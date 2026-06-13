@@ -1,7 +1,6 @@
 # [Code]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){ .md-button .md-button--primary }
 
 The `[Code]` section is where the full power of Inno Setup's scripting engine comes in. Unlike every other section, it
 does not use `Key=Value` or `Key: Value` syntax — it contains free-form Pascal source code compiled and executed by the

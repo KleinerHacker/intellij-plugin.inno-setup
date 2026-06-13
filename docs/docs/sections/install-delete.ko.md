@@ -1,7 +1,6 @@
 # [InstallDelete]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){ .md-button .md-button--primary }
 
 `[InstallDelete]` 섹션은 설치 *시작* 시 새 파일이 복사되기 전에 Inno Setup이 삭제하는 파일과 디렉토리를 나열합니다. 이것은 새 설치 프로그램이 더 이상 추적하지 않는 애플리케이션 이전 버전이 남긴 오래된 파일이나 이전 디렉토리 구조를 정리하는 데 유용합니다.
 

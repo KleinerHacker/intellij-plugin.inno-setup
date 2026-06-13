@@ -1,7 +1,6 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=filessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
 
 `[Files]` セクションは、インストーラーがターゲットマシンにコピーすべきすべてのファイルを宣言する場所です。ワイルドカード、再帰的ディレクトリツリー、フォントインストール、.NET GAC 登録、ファイル整合性ハッシュ、さらにはインストール時にインターネットからファイルをダウンロードすることもサポートします。リストされたファイルに必要なディレクトリは自動的に作成されます——`[Dirs]` エントリーは不要です。
 
@@ -81,7 +80,7 @@
 
 ## Hash
 
-`string`
+`string` · **6.5 以降**
 
 ソースファイルの期待される SHA-256 ハッシュ。Inno Setup はコンパイル時にハッシュを検証して偶発的なファイル破損を検出します。
 
@@ -89,7 +88,7 @@
 
 ## ISSigAllowedKeys
 
-`string` · **複数の値**
+`string` · **複数の値** · **6.5 以降**
 
 ファイルの `.issig` 署名を検証するために `[ISSigKeys]` から使用するキー識別子のカンマ区切りリスト。
 
@@ -97,7 +96,7 @@
 
 ## ExtractArchivePassword
 
-`string`
+`string` · **6.5 以降**
 
 暗号化されたアーカイブのパスワード（`extractarchive` フラグと共に使用）。インストーラー内に暗号化されずに保存されます。
 
@@ -105,7 +104,7 @@
 
 ## DownloadISSigSource
 
-`string`
+`string` · **6.5 以降**
 
 インストール時にダウンロードされるファイルの `.issig` 署名ファイルの URL。
 
@@ -113,7 +112,7 @@
 
 ## DownloadUserName
 
-`string`
+`string` · **6.5 以降**
 
 認証されたファイルダウンロードの HTTP Basic 認証ユーザー名（`download` フラグが必要）。
 
@@ -121,7 +120,7 @@
 
 ## DownloadPassword
 
-`string`
+`string` · **6.5 以降**
 
 認証されたファイルダウンロードの HTTP Basic 認証パスワード（`download` フラグが必要）。
 

@@ -1,7 +1,6 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
 
 `[UninstallRun]` 节与 `[Run]` 的工作方式完全相同，但其条目在卸载*开始*时执行，而不是在安装后。使用它来停止服务、终止运行中的进程，或清理无法通过简单删除文件和注册表键处理的状态。条目按出现顺序依次运行。
 
@@ -65,7 +64,7 @@
 
 ## OnLog
 
-`string`
+`string` · **自 6.6**
 
 为每行输出调用的 `[Code]` 中的 Pascal 过程名称（需要 `logoutput` 标志）。
 

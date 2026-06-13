@@ -1,7 +1,6 @@
 # [Code]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){ .md-button .md-button--primary }
 
 `[Code]` 节是 Inno Setup 脚本引擎全部功能发挥之处。与其他每个节不同，它不使用 `Key=Value` 或 `Key: Value` 语法——它包含由安装程序使用 *RemObjects Pascal Script* 在运行时编译和执行的自由格式 Pascal 源代码。
 

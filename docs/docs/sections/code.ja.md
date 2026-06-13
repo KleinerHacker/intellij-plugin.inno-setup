@@ -1,7 +1,6 @@
 # [Code]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=scriptintro){ .md-button .md-button--primary }
 
 `[Code]` セクションは Inno Setup のスクリプトエンジンの全機能が活躍する場所です。他のすべてのセクションとは異なり、`Key=Value` や `Key: Value` 構文を使用しません——*RemObjects Pascal Script* を使用してインストーラーが実行時にコンパイルおよび実行する自由形式の Pascal ソースコードが含まれます。
 

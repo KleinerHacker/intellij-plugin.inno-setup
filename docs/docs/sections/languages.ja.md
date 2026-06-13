@@ -1,7 +1,6 @@
 # [Languages]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=languagessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=languagessection){ .md-button .md-button--primary }
 
 `[Languages]` セクションはインストーラーで使用可能なすべての言語を宣言します。各エントリーはウィザード UI の翻訳済み文字列を提供する ISL メッセージファイルを指します。リストの最初のエントリーがデフォルト言語になります。ここで定義された言語は、他のセクションの `Languages` 共通パラメーターを通じて参照でき、エントリーを特定のロケールに制限します。
 

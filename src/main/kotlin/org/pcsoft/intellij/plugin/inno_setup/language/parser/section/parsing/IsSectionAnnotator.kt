@@ -198,6 +198,27 @@ class IsSectionAnnotator : Annotator {
                 builder.create()
             }
         }
+
+        annotateUsePreviousLanguage(file, holder)
+    }
+
+    /**
+     * Inno Setup requires `UsePreviousLanguage` to be explicitly `no` when the script declares only a
+     * single language in \[Languages]; otherwise the compiler rejects the script. Reported at file
+     * level (the rule spans the \[Setup] and \[Languages] sections rather than a single entry).
+     */
+    private fun annotateUsePreviousLanguage(file: IsScriptFile, holder: AnnotationHolder) {
+        if (file.specTarget != IsSectionSpecTarget.ISS) return
+        if (file.findSections("Languages").flatMap { it.nameDeclarations }.size != 1) return
+
+        val entry = file.findSection("Setup")?.directiveEntryList
+            ?.firstOrNull { it.keyText().equals("UsePreviousLanguage", ignoreCase = true) }
+        if (entry?.valueText?.trim().equals("no", ignoreCase = true)) return
+
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "[Setup]: 'UsePreviousLanguage' must be set to 'no' when [Languages] declares only one language"
+        ).fileLevel().withFix(SetUsePreviousLanguageNoQuickFix(file)).create()
     }
 
     private fun annotateSectionName(name: IsSectionTitle, holder: AnnotationHolder, spec: IsSectionSpec) {

@@ -1,7 +1,6 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
 
 The `[Files]` section is where you declare every file your installer should copy to the target machine. It supports
 wildcards, recursive directory trees, font installation, .NET GAC registration, file integrity hashing, and even
@@ -85,7 +84,7 @@ Registry font name used when installing a font file, e.g. `My Font (TrueType)`. 
 
 ## Hash
 
-`string`
+`string` · **Since 6.5**
 
 Expected SHA-256 hash of the source file. Inno Setup verifies the hash at compile time to catch accidental file
 corruption.
@@ -94,7 +93,7 @@ corruption.
 
 ## ISSigAllowedKeys
 
-`string` · **Multiple values**
+`string` · **Multiple values** · **Since 6.5**
 
 Comma-separated list of key identifiers from `[ISSigKeys]` used to verify the file's `.issig` signature.
 
@@ -102,7 +101,7 @@ Comma-separated list of key identifiers from `[ISSigKeys]` used to verify the fi
 
 ## ExtractArchivePassword
 
-`string`
+`string` · **Since 6.5**
 
 Password for an encrypted archive (used with the `extractarchive` flag). Stored unencrypted inside the installer.
 
@@ -110,7 +109,7 @@ Password for an encrypted archive (used with the `extractarchive` flag). Stored 
 
 ## DownloadISSigSource
 
-`string`
+`string` · **Since 6.5**
 
 URL of the `.issig` signature file for a file downloaded at install time.
 
@@ -118,7 +117,7 @@ URL of the `.issig` signature file for a file downloaded at install time.
 
 ## DownloadUserName
 
-`string`
+`string` · **Since 6.5**
 
 HTTP Basic Auth username for authenticated file downloads (requires the `download` flag).
 
@@ -126,7 +125,7 @@ HTTP Basic Auth username for authenticated file downloads (requires the `downloa
 
 ## DownloadPassword
 
-`string`
+`string` · **Since 6.5**
 
 HTTP Basic Auth password for authenticated file downloads (requires the `download` flag).
 

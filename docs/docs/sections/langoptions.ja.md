@@ -1,7 +1,6 @@
 # [LangOptions]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){ .md-button .md-button--primary }
 
 `[LangOptions]` セクションは言語固有の表示設定を定義します。`.isl` 言語ファイルでは必須で、スクリプトで宣言された言語のオプションをオーバーライドするためにスクリプト内でも使用できます。スクリプトでは、ディレクティブ名に言語名をプレフィックスとして付けることができます（例：`german.DialogFontName=Segoe UI`）。
 

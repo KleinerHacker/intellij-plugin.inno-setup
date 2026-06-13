@@ -1,7 +1,6 @@
 # [Tasks]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=taskssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button .md-button--primary }
 
 `[Tasks]` セクションは、ユーザーが*追加タスクの選択*ウィザードページで有効または無効にできるオプションアクションを定義します——デスクトップショートカットの作成やコンテキストメニューエントリーの追加など。タスクはチェックボックスとして表示され、グループ内で `exclusive` とマークされた場合はラジオボタンとして表示されます。他のセクションのエントリーは `Tasks` パラメーターを通じてタスクにリンクされます。
 

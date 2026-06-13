@@ -1,7 +1,6 @@
 # [LangOptions]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){ .md-button .md-button--primary }
 
 `[LangOptions]` 节定义特定语言的显示设置。它在 `.isl` 语言文件中是必需的，也可以在脚本中用于覆盖已声明语言的选项。在脚本中，指令名称可以以语言名称为前缀，例如 `german.DialogFontName=Segoe UI`。
 

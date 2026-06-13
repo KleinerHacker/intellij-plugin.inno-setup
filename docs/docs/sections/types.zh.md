@@ -1,7 +1,6 @@
 # [Types]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=typessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=typessection){ .md-button .md-button--primary }
 
 `[Types]` 节定义了向导"选择组件"页面上显示的命名安装配置文件——例如*完整*、*精简*和*自定义*。`[Components]` 中的每个组件引用一个或多个类型，以声明默认情况下哪些配置文件包含它。只有一个类型可以使用 `iscustom` 标志标记为用户可自定义类型。
 

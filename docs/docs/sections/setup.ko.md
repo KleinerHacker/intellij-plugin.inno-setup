@@ -1,7 +1,6 @@
 # [Setup]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=setupsection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button .md-button--primary }
 
 `[Setup]` 섹션은 모든 Inno Setup 스크립트의 골격입니다. 간단한 `Directive=Value` 형식을 사용하며 Windows 프로그램 추가/제거에 표시되는 애플리케이션 메타데이터부터 압축 알고리즘, 마법사 모양, 권한 요구사항까지 모든 것을 제어합니다. `AppName`과 `AppVersion`만 엄격히 필수이며, 다른 모든 지시문에는 적절한 기본값이 있습니다.
 

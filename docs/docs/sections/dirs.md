@@ -1,7 +1,6 @@
 # [Dirs]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=dirssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button .md-button--primary }
 
 The `[Dirs]` section creates additional directories on the target machine during installation. In most cases you do not
 need this section at all — directories required by files listed in `[Files]` are created automatically. Use `[Dirs]`

@@ -1,7 +1,6 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
 
 `[UninstallRun]` セクションは `[Run]` と全く同じように機能しますが、エントリーはインストール後ではなくアンインストールの*開始*時に実行されます。サービスの停止、実行中のプロセスの終了、またはファイルとレジストリキーの削除だけでは処理できない状態のクリーンアップに使用します。エントリーは表示順に実行されます。
 
@@ -65,7 +64,7 @@
 
 ## OnLog
 
-`string`
+`string` · **6.6 以降**
 
 各出力行に対して呼び出される `[Code]` の Pascal プロシージャ名（`logoutput` フラグが必要）。
 

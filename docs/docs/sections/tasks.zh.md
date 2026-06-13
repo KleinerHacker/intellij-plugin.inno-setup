@@ -1,7 +1,6 @@
 # [Tasks]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=taskssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button .md-button--primary }
 
 `[Tasks]` 节定义用户可以在*选择附加任务*向导页面上启用或禁用的可选操作——例如创建桌面快捷方式或添加右键菜单条目。任务显示为复选框，或在组内标记为 `exclusive` 时显示为单选按钮。其他节中的条目通过其 `Tasks` 参数链接到任务。
 

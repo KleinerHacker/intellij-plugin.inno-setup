@@ -1,7 +1,6 @@
 # [Dirs]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=dirssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button .md-button--primary }
 
 `[Dirs]` 节在安装期间在目标机器上创建附加目录。大多数情况下根本不需要此节——`[Files]` 中列出的文件所需的目录会自动创建。当您需要创建空目录结构、设置特定的 NTFS 属性或配置目录的 ACL 权限时，请使用 `[Dirs]`。
 

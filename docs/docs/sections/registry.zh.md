@@ -1,7 +1,6 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=registrysection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
 
 `[Registry]` 节在安装期间创建、修改或删除 Windows 注册表键和值。它支持所有主要的注册表值类型，并通过 `uninsdeletekey` 和 `uninsdeletekeyifempty` 等标志对卸载时注册表数据的处理提供精细控制。可以明确定向 32 位和 64 位注册表视图。
 

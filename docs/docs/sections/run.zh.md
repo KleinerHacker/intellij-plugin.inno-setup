@@ -1,7 +1,6 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
-.md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
 
 `[Run]` 节列出了 Inno Setup 在成功安装后、显示最终向导页面之前执行的程序或文件。条目按出现顺序依次运行。您可以在后台静默启动可执行文件、用关联应用程序打开文档，或通过完成页面上的复选框向用户呈现可选的安装后操作（如*启动 MyApp*）。
 
@@ -65,7 +64,7 @@
 
 ## OnLog
 
-`string`
+`string` · **自 6.6**
 
 为每行输出调用的 `[Code]` 中的 Pascal 过程名称（需要 `logoutput` 标志）。
 

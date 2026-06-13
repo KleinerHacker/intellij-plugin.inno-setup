@@ -1,7 +1,6 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=registrysection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
 
 `[Registry]` セクションはインストール中に Windows レジストリキーと値を作成、変更、または削除します。すべての主要なレジストリ値タイプをサポートし、`uninsdeletekey` や `uninsdeletekeyifempty` などのフラグを通じてアンインストール時のレジストリデータの処理を細かく制御します。32 ビットおよび 64 ビットレジストリビューを明示的にターゲットにできます。
 

@@ -1,7 +1,6 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
 
 The `[UninstallRun]` section works exactly like `[Run]`, but its entries are executed at the *start* of uninstallation
 rather than after installation. Use it to stop services, kill running processes, or clean up state that cannot be
@@ -67,7 +66,7 @@ Shell verb used with the `shellexec` flag, e.g. `open`, `print`.
 
 ## OnLog
 
-`string`
+`string` · **Since 6.6**
 
 Name of a Pascal procedure in `[Code]` called for each line of output (requires the `logoutput` flag).
 

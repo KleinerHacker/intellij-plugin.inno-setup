@@ -1,7 +1,6 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=filessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
 
 `[Files]` 节是您声明安装程序应复制到目标机器的每个文件的地方。它支持通配符、递归目录树、字体安装、.NET GAC 注册、文件完整性哈希，甚至在安装时从互联网下载文件。列出文件所需的目录会自动创建——无需 `[Dirs]` 条目。
 
@@ -81,7 +80,7 @@
 
 ## Hash
 
-`string`
+`string` · **自 6.5**
 
 源文件的预期 SHA-256 哈希值。Inno Setup 在编译时验证哈希以捕获意外的文件损坏。
 
@@ -89,7 +88,7 @@
 
 ## ISSigAllowedKeys
 
-`string` · **多个值**
+`string` · **多个值** · **自 6.5**
 
 来自 `[ISSigKeys]` 的用于验证文件 `.issig` 签名的键标识符的逗号分隔列表。
 
@@ -97,7 +96,7 @@
 
 ## ExtractArchivePassword
 
-`string`
+`string` · **自 6.5**
 
 加密存档的密码（与 `extractarchive` 标志一起使用）。以未加密方式存储在安装程序内部。
 
@@ -105,7 +104,7 @@
 
 ## DownloadISSigSource
 
-`string`
+`string` · **自 6.5**
 
 安装时下载的文件的 `.issig` 签名文件的 URL。
 
@@ -113,7 +112,7 @@
 
 ## DownloadUserName
 
-`string`
+`string` · **自 6.5**
 
 用于身份验证文件下载的 HTTP 基本身份验证用户名（需要 `download` 标志）。
 
@@ -121,7 +120,7 @@
 
 ## DownloadPassword
 
-`string`
+`string` · **自 6.5**
 
 用于身份验证文件下载的 HTTP 基本身份验证密码（需要 `download` 标志）。
 

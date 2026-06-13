@@ -1,7 +1,6 @@
 # [INI]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=inissection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=inissection){ .md-button .md-button--primary }
 
 !!! warning "插件支持"
 `[INI]` 在当前插件规范中被标记为缺失。此节在这里是为了文档覆盖，但在实现规范之前，补全和验证支持可能不完整。

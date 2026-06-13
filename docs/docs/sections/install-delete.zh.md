@@ -1,7 +1,6 @@
 # [InstallDelete]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){ .md-button .md-button--primary }
 
 `[InstallDelete]` 节列出了 Inno Setup 在安装*开始*时、复制任何新文件之前删除的文件和目录。这对于清理应用程序先前版本遗留下来的、新安装程序不再跟踪的过时文件或旧目录结构很有用。
 

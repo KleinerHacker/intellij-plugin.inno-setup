@@ -1,9 +1,10 @@
 # [ISSigKeys]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){ .md-button .md-button--primary }
 
 `[ISSigKeys]` セクションは `.issig` ファイル署名の検証に使用する公開鍵を定義します。これらのキーは `[Files]` の `ISSigAllowedKeys` パラメーターと `issigverify` フラグから参照されます。
+
+*このセクションは Inno Setup 6.5 以降で利用できます。*
 
 ---
 

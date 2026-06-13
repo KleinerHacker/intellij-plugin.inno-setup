@@ -1,7 +1,6 @@
 # [Tasks]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=taskssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button .md-button--primary }
 
 The `[Tasks]` section defines optional actions the user can enable or disable on the *Select Additional Tasks* wizard
 page — things like creating a desktop shortcut or adding a context menu entry. Tasks appear as checkboxes or, when

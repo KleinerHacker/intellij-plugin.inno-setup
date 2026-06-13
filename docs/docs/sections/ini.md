@@ -1,7 +1,6 @@
 # [INI]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=inissection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=inissection){ .md-button .md-button--primary }
 
 !!! warning "Plugin support"
 `[INI]` is tracked as missing in the current plugin spec. The section is listed here for documentation coverage, but

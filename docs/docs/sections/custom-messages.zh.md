@@ -1,7 +1,6 @@
 # [CustomMessages]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=custommessagessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=custommessagessection){ .md-button .md-button--primary }
 
 `[CustomMessages]` 节定义项目特定的可本地化字符串。这些字符串可通过 `{cm:MessageName}` 常量从其他节和 Pascal 代码中引用。
 

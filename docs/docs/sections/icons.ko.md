@@ -1,7 +1,6 @@
 # [Icons]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=iconssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=iconssection){ .md-button .md-button--primary }
 
 `[Icons]` 섹션은 설치 중에 Windows 바로 가기를 만듭니다——시작 메뉴, 바탕화면 또는 다른 곳에. 각 항목은 정확히 하나의 바로 가기를 만듭니다. 대상은 실행 파일, 문서, 폴더 또는 URL이 될 수 있습니다. `Tasks` 매개변수를 사용하여 바로 가기를 선택 사항으로 만들어 사용자가 *추가 작업 선택* 마법사 페이지에서 결정할 수 있도록 합니다.
 
@@ -81,7 +80,7 @@ Windows 7+ 애플리케이션 사용자 모델 ID. 작업 표시줄 버튼 그�
 
 ## AppUserModelToastActivatorCLSID
 
-`string`
+`string` · **6.1 이상**
 
 이 바로 가기를 통한 토스트 알림 활성화를 위한 Windows 10+ COM CLSID.
 

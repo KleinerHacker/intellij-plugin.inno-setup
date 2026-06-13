@@ -1,7 +1,6 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=filessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
 
 `[Files]` 섹션은 설치 프로그램이 대상 컴퓨터에 복사해야 하는 모든 파일을 선언하는 곳입니다. 와일드카드, 재귀 디렉토리 트리, 글꼴 설치, .NET GAC 등록, 파일 무결성 해싱, 심지어 설치 시 인터넷에서 파일 다운로드도 지원합니다. 나열된 파일에 필요한 디렉토리는 자동으로 생성됩니다——`[Dirs]` 항목이 필요하지 않습니다.
 
@@ -81,7 +80,7 @@
 
 ## Hash
 
-`string`
+`string` · **6.5 이상**
 
 소스 파일의 예상 SHA-256 해시. Inno Setup이 컴파일 시 해시를 검증하여 우발적인 파일 손상을 감지합니다.
 
@@ -89,7 +88,7 @@
 
 ## ISSigAllowedKeys
 
-`string` · **여러 값**
+`string` · **여러 값** · **6.5 이상**
 
 파일의 `.issig` 서명을 검증하는 데 사용되는 `[ISSigKeys]`의 키 식별자 쉼표로 구분된 목록.
 
@@ -97,7 +96,7 @@
 
 ## ExtractArchivePassword
 
-`string`
+`string` · **6.5 이상**
 
 암호화된 아카이브의 비밀번호(`extractarchive` 플래그와 함께 사용). 설치 프로그램 내부에 암호화되지 않은 상태로 저장됩니다.
 
@@ -105,7 +104,7 @@
 
 ## DownloadISSigSource
 
-`string`
+`string` · **6.5 이상**
 
 설치 시 다운로드된 파일의 `.issig` 서명 파일 URL.
 
@@ -113,7 +112,7 @@
 
 ## DownloadUserName
 
-`string`
+`string` · **6.5 이상**
 
 인증된 파일 다운로드를 위한 HTTP 기본 인증 사용자 이름(`download` 플래그 필요).
 
@@ -121,7 +120,7 @@
 
 ## DownloadPassword
 
-`string`
+`string` · **6.5 이상**
 
 인증된 파일 다운로드를 위한 HTTP 기본 인증 비밀번호(`download` 플래그 필요).
 

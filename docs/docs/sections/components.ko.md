@@ -1,7 +1,6 @@
 # [Components]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=componentssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=componentssection){ .md-button .md-button--primary }
 
 `[Components]` 섹션은 마법사의 컴포넌트 선택 페이지에 표시되는 선택 가능한 기능을 정의합니다. 컴포넌트는 백슬래시 표기법을 사용하여 부모/자식 계층으로 구성할 수 있습니다(예: `extra\plugins`). `[Files]`, `[Icons]` 등의 섹션 항목은 `Components` 매개변수를 통해 컴포넌트에 연결되어 선택된 컴포넌트에 속한 파일만 설치됩니다.
 

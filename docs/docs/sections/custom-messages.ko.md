@@ -1,7 +1,6 @@
 # [CustomMessages]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=custommessagessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=custommessagessection){ .md-button .md-button--primary }
 
 `[CustomMessages]` 섹션은 프로젝트별 현지화 가능한 문자열을 정의합니다. 이러한 문자열은 `{cm:MessageName}` 상수를 통해 다른 섹션과 Pascal 코드에서 참조할 수 있습니다.
 

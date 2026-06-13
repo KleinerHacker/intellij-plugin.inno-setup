@@ -1,7 +1,6 @@
 # [Components]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=componentssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=componentssection){ .md-button .md-button--primary }
 
 The `[Components]` section defines the selectable features shown on the wizard's Select Components page. Components can
 be organised into a parent/child hierarchy using backslash notation, e.g. `extra\plugins`. Entries in `[Files]`,

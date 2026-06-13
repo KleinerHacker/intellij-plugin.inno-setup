@@ -1,7 +1,6 @@
 # [Icons]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=iconssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=iconssection){ .md-button .md-button--primary }
 
 `[Icons]` 节在安装期间创建 Windows 快捷方式——在开始菜单、桌面或任何其他位置。每个条目恰好创建一个快捷方式。目标可以是可执行文件、文档、文件夹或 URL。使用 `Tasks` 参数使快捷方式可选，让用户在*选择附加任务*向导页面上决定。
 
@@ -81,7 +80,7 @@ Windows 7+ 应用程序用户模型 ID，用于分组任务栏按钮和关联 to
 
 ## AppUserModelToastActivatorCLSID
 
-`string`
+`string` · **自 6.1**
 
 Windows 10+ COM CLSID，用于通过此快捷方式激活 toast 通知。
 

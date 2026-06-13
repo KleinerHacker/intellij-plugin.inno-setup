@@ -1,9 +1,10 @@
 # [ISSigKeys]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){ .md-button .md-button--primary }
 
 `[ISSigKeys]` 节定义用于验证 `.issig` 文件签名的公钥。这些键由 `[Files]` 中的 `ISSigAllowedKeys` 参数和 `issigverify` 标志引用。
+
+*此节自 Inno Setup 6.5 起可用。*
 
 ---
 

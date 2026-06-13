@@ -1,7 +1,6 @@
 # [Messages]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=messagessection){
-.md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button .md-button--primary }
 
 `[Messages]` セクションは `Default.isl` または選択された言語ファイルからの組み込みインストーラー UI 文字列をオーバーライドします。各エントリーはディレクティブ構文を使用します：
 
