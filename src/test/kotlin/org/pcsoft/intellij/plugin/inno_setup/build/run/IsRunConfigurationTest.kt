@@ -35,23 +35,13 @@ class IsRunConfigurationTest : BasePlatformTestCase() {
         assertThrows(RuntimeConfigurationException::class.java) { cfg.checkConfiguration() }
     }
 
-    fun testValidationFailsForUninstallWithoutDir() {
-        val cfg = config()
-        val f = myFixture.addFileToProject("setup.iss", "[Setup]\n").virtualFile
-        cfg.scriptPath = f.path
-        cfg.actionType = IsRunActionType.UNINSTALL
-        cfg.uninstallerDir = ""
-        assertThrows(RuntimeConfigurationException::class.java) { cfg.checkConfiguration() }
-    }
-
-    fun testValidationPassesForValidInstallConfig() {
+    fun testValidationPassesForValidConfig() {
         val cfg = config()
         // Use a temp file on the real FS so File.isFile() returns true.
         val tmpFile = createTempFile("setup", ".iss")
         tmpFile.deleteOnExit()
         try {
             cfg.scriptPath = tmpFile.absolutePath
-            cfg.actionType = IsRunActionType.INSTALL
             cfg.checkConfiguration() // must not throw
         } finally {
             tmpFile.delete()
@@ -60,10 +50,9 @@ class IsRunConfigurationTest : BasePlatformTestCase() {
 
     fun testDefaultValues() {
         val cfg = config()
-        assertEquals(IsRunMode.DRY, cfg.runMode)
-        assertEquals(IsRunActionType.INSTALL, cfg.actionType)
         assertTrue(cfg.debugOutput)
         assertTrue(cfg.languageOverride.isEmpty())
-        assertTrue(cfg.uninstallerDir.isEmpty())
+        assertTrue(cfg.lastBuildHash.isEmpty())
+        assertTrue(cfg.persistentTempOutputDir.isEmpty())
     }
 }

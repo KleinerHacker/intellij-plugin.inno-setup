@@ -13,14 +13,14 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.ConfigurationTypeBase
-import com.intellij.icons.AllIcons
 import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 
 class IsRunConfigurationType : ConfigurationTypeBase(
     "IssRunConfiguration",
     PluginBundle.message("run.config.type.name"),
     PluginBundle.message("run.config.type.name"),
-    AllIcons.RunConfigurations.TestState.Run
+    IsIcons.RunConfiguration
 ) {
     init {
         addFactory(IsRunConfigurationFactory(this))

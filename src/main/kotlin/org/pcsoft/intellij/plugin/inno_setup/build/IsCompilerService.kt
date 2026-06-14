@@ -10,24 +10,29 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
+@file:Suppress("UnstableApiUsage")
+
 package org.pcsoft.intellij.plugin.inno_setup.build
 
+import com.intellij.build.BuildDescriptor
 import com.intellij.build.BuildViewManager
 import com.intellij.build.DefaultBuildDescriptor
 import com.intellij.build.FilePosition
 import com.intellij.build.events.BuildEvent
+import com.intellij.build.events.BuildEvents
+import com.intellij.build.events.EventResult
+import com.intellij.build.events.FileMessageEvent
+import com.intellij.build.events.FinishBuildEvent
 import com.intellij.build.events.MessageEvent
+import com.intellij.build.events.OutputBuildEvent
+import com.intellij.build.events.StartBuildEvent
 import com.intellij.build.events.impl.FailureResultImpl
-import com.intellij.build.events.impl.FileMessageEventImpl
-import com.intellij.build.events.impl.FinishBuildEventImpl
-import com.intellij.build.events.impl.MessageEventImpl
-import com.intellij.build.events.impl.OutputBuildEventImpl
-import com.intellij.build.events.impl.StartBuildEventImpl
 import com.intellij.build.events.impl.SuccessResultImpl
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.OSProcessHandler
 import com.intellij.execution.process.ProcessEvent
 import com.intellij.execution.process.ProcessListener
+import com.intellij.execution.process.ProcessOutputType
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
@@ -62,17 +67,19 @@ class IsCompilerService(private val project: Project) {
      * Compiles all top-level scripts in the project. Blocking — intended to be called off the EDT
      * from the build pipeline. Returns the aggregate task-runner result.
      */
-    fun compileProject(): ProjectTaskRunner.Result {
+    @JvmOverloads
+    fun compileProject(force: Boolean = false): ProjectTaskRunner.Result {
         val scripts = IsScriptCollector(project).collectTopLevel()
-        return runCompilation(scripts, PluginBundle.message("build.title.project"))
+        return runCompilation(scripts, PluginBundle.message("build.title.project"), force)
     }
 
     /**
-     * Compiles a single [scriptFile] on a pooled thread (used by the context-menu action).
+     * Compiles a single [scriptFile] on a pooled thread (used by the context-menu action). An
+     * explicit single-file action always forces a (re)build.
      */
     fun compileScript(scriptFile: VirtualFile) {
         ApplicationManager.getApplication().executeOnPooledThread {
-            runCompilation(listOf(scriptFile), PluginBundle.message("build.title.script", scriptFile.name))
+            runCompilation(listOf(scriptFile), PluginBundle.message("build.title.script", scriptFile.name), force = true)
         }
     }
 
@@ -89,7 +96,7 @@ class IsCompilerService(private val project: Project) {
     private fun outputMode(): IsBuildOutputMode =
         IsBuildOutputMode.fromName(IsBuildSettingsService.getInstance(project).state.outputMode)
 
-    private fun runCompilation(scripts: List<VirtualFile>, title: String): ProjectTaskRunner.Result {
+    private fun runCompilation(scripts: List<VirtualFile>, title: String, force: Boolean): ProjectTaskRunner.Result {
         // Flush unsaved editor changes so ISCC compiles the current content from disk.
         ApplicationManager.getApplication().invokeAndWait {
             FileDocumentManager.getInstance().saveAllDocuments()
@@ -100,7 +107,7 @@ class IsCompilerService(private val project: Project) {
         val now = System.currentTimeMillis()
         val descriptor = DefaultBuildDescriptor(buildId, group, project.basePath ?: ".", now)
             .withExecutionFilter(IsBuildOutputFilter(project))
-        view.onEvent(buildId, StartBuildEventImpl(descriptor, "$group: $title"))
+        view.onEvent(buildId, startBuildEvent(descriptor, "$group: $title"))
 
         var hasErrors = false
         var firstError: Pair<VirtualFile, FilePosition>? = null
@@ -109,26 +116,37 @@ class IsCompilerService(private val project: Project) {
         if (iscc == null) {
             view.onEvent(
                 buildId,
-                MessageEventImpl(
+                messageEvent(
                     buildId, MessageEvent.Kind.ERROR, group,
                     PluginBundle.message("build.not_configured.title"),
                     PluginBundle.message("build.not_configured.detail")
                 )
             )
-            view.onEvent(buildId, FinishBuildEventImpl(buildId, null, System.currentTimeMillis(), PluginBundle.message("build.finish.failed"), FailureResultImpl()))
+            view.onEvent(buildId, finishBuildEvent(buildId, System.currentTimeMillis(), PluginBundle.message("build.finish.failed"), FailureResultImpl()))
             openSettings()
             return TaskRunnerResults.FAILURE
         }
 
         if (scripts.isEmpty()) {
-            view.onEvent(buildId, OutputBuildEventImpl(buildId, PluginBundle.message("build.no_scripts") + "\n", true))
+            view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.no_scripts") + "\n", true))
         }
 
         val resolver = IsBuildOutputResolver(project)
         val mode = outputMode()
+        val installPath = IsSettingsService.getInstance().state.installationPath
+        val buildHashes = IsBuildSettingsService.getInstance(project).state.buildHashes
 
         for (script in scripts) {
-            view.onEvent(buildId, OutputBuildEventImpl(buildId, PluginBundle.message("build.compiling", script.name) + "\n", true))
+            // Skip scripts whose participating files are unchanged since the last successful build,
+            // unless a rebuild was requested.
+            val scriptKey = canonicalPath(script.path)
+            val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
+            if (!force && buildHashes[scriptKey] == currentHash) {
+                view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.up_to_date", script.name) + "\n", true))
+                continue
+            }
+
+            view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.compiling", script.name) + "\n", true))
             val outputArg = resolver.resolveOutputArg(script, mode)
             val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg)
 
@@ -146,7 +164,7 @@ class IsCompilerService(private val project: Project) {
                                 is IsBuildOutputParser.Line.Output -> {
                                     // Full log in the root console (indented lines folded by the
                                     // console-folding); per-section nodes are added on flush.
-                                    view.onEvent(buildId, OutputBuildEventImpl(buildId, parsed.text + "\n", stdout))
+                                    view.onEvent(buildId, outputEvent(buildId, parsed.text + "\n", stdout))
                                     grouper.accept(parsed.text)
                                 }
 
@@ -170,12 +188,13 @@ class IsCompilerService(private val project: Project) {
                 handler.waitFor()
                 grouper.flush()
                 if (handler.exitCode != 0) hasErrors = true
+                else buildHashes[scriptKey] = currentHash
             } catch (e: Exception) {
                 thisLogger().warn("Failed to run ISCC for ${script.path}", e)
                 hasErrors = true
                 view.onEvent(
                     buildId,
-                    MessageEventImpl(buildId, MessageEvent.Kind.ERROR, group, PluginBundle.message("build.run_failed", e.message ?: ""), null)
+                    messageEvent(buildId, MessageEvent.Kind.ERROR, group, PluginBundle.message("build.run_failed", e.message ?: ""), null)
                 )
             }
         }
@@ -185,8 +204,8 @@ class IsCompilerService(private val project: Project) {
         val result = if (hasErrors) FailureResultImpl() else SuccessResultImpl()
         view.onEvent(
             buildId,
-            FinishBuildEventImpl(
-                buildId, null, System.currentTimeMillis(),
+            finishBuildEvent(
+                buildId, System.currentTimeMillis(),
                 if (hasErrors) PluginBundle.message("build.finish.failed") else PluginBundle.message("build.finish.success"),
                 result
             )
@@ -203,7 +222,7 @@ class IsCompilerService(private val project: Project) {
     private fun emitSection(view: BuildViewManager, buildId: Any, section: IsBuildOutputGrouper.OutputSection) {
         view.onEvent(
             buildId,
-            MessageEventImpl(buildId, severityOf(section.lines), group, section.title, section.lines.joinToString("\n"))
+            messageEvent(buildId, severityOf(section.lines), group, section.title, section.lines.joinToString("\n"))
         )
     }
 
@@ -224,6 +243,9 @@ class IsCompilerService(private val project: Project) {
         }
     }
 
+    private fun canonicalPath(path: String): String =
+        runCatching { File(path).canonicalPath }.getOrDefault(File(path).absolutePath)
+
     private fun resolvePath(path: String): VirtualFile? =
         LocalFileSystem.getInstance().findFileByPath(path.replace('\\', '/'))
 
@@ -239,10 +261,10 @@ class IsCompilerService(private val project: Project) {
         /**
          * Builds the Build-window events for a single ISCC problem line. Pure (no project/VFS), so it
          * is unit-testable. Returns, in order:
-         *  1. an [OutputBuildEventImpl] carrying the full raw line — keeps the text in the root
+         *  1. an [OutputBuildEvent] carrying the full raw line — keeps the text in the root
          *     overview console (stderr for errors, stdout for warnings);
-         *  2. a [FileMessageEventImpl] (navigable, with [FilePosition]) when [resolvedFile] and the
-         *     line number are known, otherwise a positionless [MessageEventImpl].
+         *  2. a [FileMessageEvent] (navigable, with [FilePosition]) when [resolvedFile] and the
+         *     line number are known, otherwise a positionless [MessageEvent].
          * Both message events use the short error text as title and the full raw line as detail.
          */
         fun problemEvents(
@@ -252,14 +274,14 @@ class IsCompilerService(private val project: Project) {
             resolvedFile: File?
         ): List<BuildEvent> {
             val kind = if (parsed.warning) MessageEvent.Kind.WARNING else MessageEvent.Kind.ERROR
-            val output = OutputBuildEventImpl(buildId, parsed.detail + "\n", parsed.warning)
+            val output = outputEvent(buildId, parsed.detail + "\n", parsed.warning)
             val message: BuildEvent = if (resolvedFile != null && parsed.line != null) {
-                FileMessageEventImpl(
+                fileMessageEvent(
                     buildId, kind, group, parsed.message, parsed.detail,
                     FilePosition(resolvedFile, parsed.line, parsed.column ?: 0)
                 )
             } else {
-                MessageEventImpl(buildId, kind, group, parsed.message, parsed.detail)
+                messageEvent(buildId, kind, group, parsed.message, parsed.detail)
             }
             return listOf(output, message)
         }
@@ -281,5 +303,65 @@ class IsCompilerService(private val project: Project) {
             if (workDir != null) cmd.withWorkDirectory(workDir)
             return cmd
         }
+
+        // ── Build-event factories ────────────────────────────────────────────────────
+        // Created via the stable BuildEvents factory + builder API instead of the now-internal,
+        // deprecated com.intellij.build.events.impl.*Impl constructors.
+
+        private fun buildEvents(): BuildEvents = BuildEvents.getInstance()
+
+        private fun startBuildEvent(descriptor: BuildDescriptor, message: String): StartBuildEvent =
+            buildEvents().startBuild()
+                .withBuildDescriptor(descriptor)
+                .withMessage(message)
+                .build()
+
+        private fun finishBuildEvent(buildId: Any, time: Long, message: String, result: EventResult): FinishBuildEvent =
+            buildEvents().finishBuild()
+                .withStartBuildId(buildId)
+                .withTime(time)
+                .withMessage(message)
+                .withResult(result)
+                .build()
+
+        /** [stdOut] keeps the text on stdout (warnings/info), otherwise it is routed to stderr (errors). */
+        private fun outputEvent(parentId: Any, message: String, stdOut: Boolean): OutputBuildEvent =
+            buildEvents().output()
+                .withParentId(parentId)
+                .withMessage(message)
+                .withOutputType(if (stdOut) ProcessOutputType.STDOUT else ProcessOutputType.STDERR)
+                .build()
+
+        private fun messageEvent(
+            parentId: Any,
+            kind: MessageEvent.Kind,
+            group: String,
+            message: String,
+            detail: String?
+        ): MessageEvent =
+            buildEvents().message()
+                .withParentId(parentId)
+                .withKind(kind)
+                .withGroup(group)
+                .withMessage(message)
+                .also { if (detail != null) it.withDescription(detail) }
+                .build()
+
+        private fun fileMessageEvent(
+            parentId: Any,
+            kind: MessageEvent.Kind,
+            group: String,
+            message: String,
+            detail: String,
+            position: FilePosition
+        ): FileMessageEvent =
+            buildEvents().fileMessage()
+                .withParentId(parentId)
+                .withKind(kind)
+                .withGroup(group)
+                .withMessage(message)
+                .withDescription(detail)
+                .withFilePosition(position)
+                .build()
     }
 }

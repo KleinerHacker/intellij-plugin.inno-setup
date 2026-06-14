@@ -14,6 +14,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
+import com.intellij.ui.LayeredIcon
+import com.intellij.util.IconUtil
 import javax.swing.Icon
 
 /**
@@ -31,6 +33,22 @@ object IsIcons {
      */
     @JvmField
     val LanguageFile: Icon = IconLoader.getIcon("/icons/inno-setup-lang-icon@16.png", IsIcons::class.java)
+
+    /**
+     * Icon for the Inno Setup run configuration: the script icon (from `inno-setup-script-icon.png`,
+     * scaled to 16px) with the standard green "run" play arrow overlaid as a badge in the lower-right
+     * corner.
+     */
+    @JvmField
+    val RunConfiguration: Icon = run {
+        val raw = IconLoader.getIcon("/icons/inno-setup-script-icon.png", IsIcons::class.java)
+        val base = if (raw.iconWidth > 0) IconUtil.scale(raw, null, 16f / raw.iconWidth) else raw
+        val badge = IconUtil.scale(AllIcons.RunConfigurations.TestState.Run, null, 0.7f)
+        LayeredIcon(2).apply {
+            setIcon(base, 0)
+            setIcon(badge, 1, base.iconWidth - badge.iconWidth, base.iconHeight - badge.iconHeight)
+        }
+    }
 
     /**
      * Provides Inno Setup plugin behavior for the IntelliJ Platform.

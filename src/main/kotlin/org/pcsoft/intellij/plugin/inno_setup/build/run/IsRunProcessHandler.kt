@@ -25,9 +25,12 @@ import com.intellij.openapi.util.Key
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver
 import org.pcsoft.intellij.plugin.inno_setup.build.IsCompilerService
+import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptHasher
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsService
+import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import java.io.File
 import java.io.OutputStream
+import java.util.UUID
 
 /**
  * A [ProcessHandler] that drives the two-stage pipeline:
@@ -72,27 +75,41 @@ class IsRunProcessHandler(
             IsBuildSettingsService.getInstance(project).state.outputMode
         )
         val scriptFile = File(config.scriptPath)
+        val installPath = IsSettingsService.getInstance().state.installationPath
         val scriptOutputDir = IsBuildOutputResolver.parseOutputDir(
             runCatching { scriptFile.readText() }.getOrDefault("")
         )
         val buildRoot = resolver.buildRoot()
-        val outputArg = IsScriptRunnerLogic.buildOutputArg(projectMode, buildRoot, scriptOutputDir)
+
+        // In project DRY mode no real setup.exe would be produced, so a temp output directory is
+        // attached to (and reused by) this run configuration.
+        if (projectMode == IsBuildOutputMode.DRY && config.persistentTempOutputDir.isBlank()) {
+            config.persistentTempOutputDir =
+                File(System.getProperty("java.io.tmpdir"), "inno-run-${UUID.randomUUID()}").path
+        }
+        val outputArg = IsScriptRunnerLogic.buildOutputArg(
+            projectMode, buildRoot, scriptOutputDir, config.persistentTempOutputDir
+        )
         val outputDir = IsScriptRunnerLogic.outputDirFromArg(outputArg) ?: File(buildRoot, "Output")
 
-        // ── Stage 1: compile ──────────────────────────────────────────────────
-        printOut("Compiling ${scriptFile.name}…\n")
-        val cmd = IsCompilerService.buildCommandLine(iscc, config.scriptPath, scriptFile.parent, outputArg)
-        if (!runProcess(cmd)) {
-            printErr("Build failed — aborting run.\n")
-            notifyProcessTerminated(1)
-            return
+        // ── Stage 1: compile (skipped when nothing changed since the last successful run) ──────
+        val currentHash = IsScriptHasher.hashScript(scriptFile, installPath)
+        val existingExe = IsScriptRunnerLogic.findSetupExe(outputDir)
+        if (currentHash == config.lastBuildHash && existingExe != null) {
+            printOut("No changes detected — skipping compile.\n")
+        } else {
+            printOut("Compiling ${scriptFile.name}…\n")
+            val cmd = IsCompilerService.buildCommandLine(iscc, config.scriptPath, scriptFile.parent, outputArg)
+            if (!runProcess(cmd)) {
+                printErr("Build failed — aborting run.\n")
+                notifyProcessTerminated(1)
+                return
+            }
+            config.lastBuildHash = currentHash
         }
 
-        // ── Stage 2: launch installer/uninstaller ─────────────────────────────
-        val exeFile: File? = when (config.actionType) {
-            IsRunActionType.INSTALL -> IsScriptRunnerLogic.findSetupExe(outputDir)
-            IsRunActionType.UNINSTALL -> IsScriptRunnerLogic.findUninstallerExe(File(config.uninstallerDir))
-        }
+        // ── Stage 2: launch installer ─────────────────────────────────────────
+        val exeFile: File? = IsScriptRunnerLogic.findSetupExe(outputDir)
 
         if (exeFile == null) {
             printErr("Setup executable not found in output directory: ${outputDir.path}\n")
@@ -102,7 +119,7 @@ class IsRunProcessHandler(
 
         val logFile = if (config.debugOutput) File.createTempFile("inno-run-", ".log") else null
         val launchArgs = IsScriptRunnerLogic.buildInstallerArgs(
-            exeFile, config.runMode,
+            exeFile,
             config.languageOverride.takeIf { it.isNotBlank() },
             config.debugOutput, logFile
         )

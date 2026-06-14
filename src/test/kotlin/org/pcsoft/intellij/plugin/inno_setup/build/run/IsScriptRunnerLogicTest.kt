@@ -29,71 +29,74 @@ class IsScriptRunnerLogicTest {
     fun `DRY mode overrides to temp directory`() {
         val buildRoot = tmp.newFolder("build")
         val tempBase = tmp.newFolder("temp")
-        val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, tempBase)
-        assertTrue(arg.startsWith("/O"))
-        assertTrue("must be under tempBase", arg.startsWith("/O${tempBase.path}"))
+        val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, null, tempBase)
+        assertTrue(arg.startsWith("/O\""))
+        assertTrue("must be under tempBase", arg.startsWith("/O\"${tempBase.path}"))
+        assertTrue("path is quoted", arg.endsWith("\""))
     }
 
     @Test
     fun `DRY mode generates unique directories`() {
         val buildRoot = tmp.newFolder("build")
         val tempBase = tmp.newFolder("temp")
-        val arg1 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, tempBase)
-        val arg2 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, tempBase)
+        val arg1 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, null, tempBase)
+        val arg2 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, null, tempBase)
         assertNotEquals(arg1, arg2)
+    }
+
+    @Test
+    fun `DRY mode reuses persistent temp directory when provided`() {
+        val buildRoot = tmp.newFolder("build")
+        val tempBase = tmp.newFolder("temp")
+        val persistent = tmp.newFolder("persistent").path
+        val arg1 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, persistent, tempBase)
+        val arg2 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, persistent, tempBase)
+        assertEquals("/O\"$persistent\"", arg1)
+        assertEquals(arg1, arg2)
     }
 
     @Test
     fun `BUILD_DIR mode uses buildRoot with relative scriptOutputDir`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.BUILD_DIR, buildRoot, "Release")
-        assertTrue(arg.startsWith("/O"))
-        assertTrue(arg.endsWith("Release"))
+        assertTrue(arg.startsWith("/O\""))
+        assertTrue(arg.endsWith("Release\""))
     }
 
     @Test
     fun `BUILD_DIR mode falls back to Output when scriptOutputDir is null`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.BUILD_DIR, buildRoot, null)
-        assertTrue(arg.endsWith("Output"))
+        assertTrue(arg.endsWith("Output\""))
     }
 
     @Test
     fun `SCRIPT mode uses buildRoot with scriptOutputDir`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.SCRIPT, buildRoot, "Dist")
-        assertTrue(arg.endsWith("Dist"))
+        assertTrue(arg.endsWith("Dist\""))
     }
 
     // ── buildInstallerArgs ────────────────────────────────────────────────────
 
     @Test
-    fun `DRY run adds silent flags`() {
+    fun `no flags produce just the exe path`() {
         val exe = File("setup.exe")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.DRY, null, false, null)
-        assertTrue(args.contains("/VERYSILENT"))
-        assertTrue(args.contains("/SUPPRESSMSGBOXES"))
-        assertTrue(args.contains("/NORESTART"))
-    }
-
-    @Test
-    fun `REAL run has no extra flags`() {
-        val exe = File("setup.exe")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.REAL, null, false, null)
+        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, null, false, null)
         assertEquals(listOf(exe.absolutePath), args)
     }
 
     @Test
     fun `language override is appended`() {
         val exe = File("setup.exe")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.DRY, "German", false, null)
+        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, "German", false, null)
         assertTrue(args.any { it == "/LANG=German" })
     }
 
     @Test
     fun `blank language override is ignored`() {
         val exe = File("setup.exe")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.DRY, "  ", false, null)
+        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, "  ", false, null)
         assertFalse(args.any { it.startsWith("/LANG") })
     }
 
@@ -101,18 +104,18 @@ class IsScriptRunnerLogicTest {
     fun `debug output adds LOG flag`() {
         val exe = File("setup.exe")
         val log = tmp.newFile("out.log")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.DRY, null, true, log)
+        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, null, true, log)
         assertTrue(args.any { it.startsWith("/LOG=") })
     }
 
     @Test
     fun `debug output without logFile does not add LOG`() {
         val exe = File("setup.exe")
-        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, IsRunMode.DRY, null, true, null)
+        val args = IsScriptRunnerLogic.buildInstallerArgs(exe, null, true, null)
         assertFalse(args.any { it.startsWith("/LOG") })
     }
 
-    // ── findSetupExe / findUninstallerExe ────────────────────────────────────
+    // ── findSetupExe ──────────────────────────────────────────────────────────
 
     @Test
     fun `findSetupExe returns non-unins exe`() {
@@ -128,26 +131,18 @@ class IsScriptRunnerLogicTest {
         assertNull(IsScriptRunnerLogic.findSetupExe(dir))
     }
 
-    @Test
-    fun `findUninstallerExe finds unins file`() {
-        val dir = tmp.newFolder("inst")
-        File(dir, "unins000.exe").createNewFile()
-        assertEquals("unins000.exe", IsScriptRunnerLogic.findUninstallerExe(dir)?.name)
-    }
-
-    @Test
-    fun `findUninstallerExe ignores regular exe`() {
-        val dir = tmp.newFolder("inst")
-        File(dir, "myapp.exe").createNewFile()
-        assertNull(IsScriptRunnerLogic.findUninstallerExe(dir))
-    }
-
     // ── outputDirFromArg ──────────────────────────────────────────────────────
 
     @Test
     fun `outputDirFromArg extracts path`() {
         val result = IsScriptRunnerLogic.outputDirFromArg("/OC:\\temp\\out")
         assertEquals(File("C:\\temp\\out"), result)
+    }
+
+    @Test
+    fun `outputDirFromArg strips surrounding quotes`() {
+        val result = IsScriptRunnerLogic.outputDirFromArg("/O\"C:\\temp\\my out\"")
+        assertEquals(File("C:\\temp\\my out"), result)
     }
 
     @Test

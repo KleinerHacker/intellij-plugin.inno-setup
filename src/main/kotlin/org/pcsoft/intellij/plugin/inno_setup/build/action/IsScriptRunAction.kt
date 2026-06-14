@@ -22,14 +22,12 @@ import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VirtualFile
 import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
-import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunActionType
 import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfiguration
 import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationType
-import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunMode
 
 /**
- * Context-menu action that runs a single `.iss` script as a dry-run installation. It creates
- * a ghost run configuration and immediately executes it. Greyed out for included scripts.
+ * Context-menu action that compiles and runs a single `.iss` script. It creates a ghost run
+ * configuration and immediately executes it. Greyed out for included scripts.
  */
 class IsScriptRunAction : DumbAwareAction({ PluginBundle.message("action.iss.run_script.text") }) {
 
@@ -75,8 +73,6 @@ class IsScriptRunAction : DumbAwareAction({ PluginBundle.message("action.iss.run
             val config = factory.createTemplateConfiguration(project) as IsRunConfiguration
             config.name = name
             config.scriptPath = scriptPath
-            config.runMode = IsRunMode.DRY
-            config.actionType = IsRunActionType.INSTALL
             config.debugOutput = true
 
             val executor = DefaultRunExecutor.getRunExecutorInstance()

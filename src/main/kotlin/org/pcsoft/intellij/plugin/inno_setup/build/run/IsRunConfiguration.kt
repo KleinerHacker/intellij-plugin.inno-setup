@@ -33,11 +33,22 @@ class IsRunConfiguration(
 ) : RunConfigurationBase<Element>(project, factory, name) {
 
     var scriptPath: String = ""
-    var runMode: IsRunMode = IsRunMode.DEFAULT
-    var actionType: IsRunActionType = IsRunActionType.DEFAULT
     var languageOverride: String = ""
-    var uninstallerDir: String = ""
     var debugOutput: Boolean = true
+
+    /**
+     * Hidden (not shown in the editor) — MD5 hash over all participating files at the time of the
+     * last successful run, used to decide whether a recompile is needed before launching.
+     */
+    var lastBuildHash: String = ""
+
+    /**
+     * Hidden (not shown in the editor) — persistent temporary output directory, used only when the
+     * project is configured for [org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode.DRY]
+     * (which would otherwise produce no real `setup.exe`). Stays attached to the run configuration so
+     * the generated installer can be reused across runs.
+     */
+    var persistentTempOutputDir: String = ""
 
     override fun getConfigurationEditor(): SettingsEditor<out IsRunConfiguration> =
         IsRunConfigurationEditor(project)
@@ -47,8 +58,6 @@ class IsRunConfiguration(
             throw RuntimeConfigurationException(PluginBundle.message("run.config.error.no_script"))
         if (!File(scriptPath).isFile)
             throw RuntimeConfigurationException(PluginBundle.message("run.config.error.script_missing", scriptPath))
-        if (actionType == IsRunActionType.UNINSTALL && uninstallerDir.isBlank())
-            throw RuntimeConfigurationException(PluginBundle.message("run.config.error.no_uninstaller_dir"))
     }
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): IsRunProfileState =
@@ -57,20 +66,18 @@ class IsRunConfiguration(
     override fun readExternal(element: Element) {
         super.readExternal(element)
         scriptPath = element.getAttributeValue("scriptPath") ?: ""
-        runMode = IsRunMode.fromName(element.getAttributeValue("runMode"))
-        actionType = IsRunActionType.fromName(element.getAttributeValue("actionType"))
         languageOverride = element.getAttributeValue("languageOverride") ?: ""
-        uninstallerDir = element.getAttributeValue("uninstallerDir") ?: ""
         debugOutput = element.getAttributeValue("debugOutput")?.toBoolean() ?: true
+        lastBuildHash = element.getAttributeValue("lastBuildHash") ?: ""
+        persistentTempOutputDir = element.getAttributeValue("persistentTempOutputDir") ?: ""
     }
 
     override fun writeExternal(element: Element) {
         super.writeExternal(element)
         element.setAttribute("scriptPath", scriptPath)
-        element.setAttribute("runMode", runMode.name)
-        element.setAttribute("actionType", actionType.name)
         element.setAttribute("languageOverride", languageOverride)
-        element.setAttribute("uninstallerDir", uninstallerDir)
         element.setAttribute("debugOutput", debugOutput.toString())
+        element.setAttribute("lastBuildHash", lastBuildHash)
+        element.setAttribute("persistentTempOutputDir", persistentTempOutputDir)
     }
 }

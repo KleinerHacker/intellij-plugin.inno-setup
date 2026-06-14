@@ -41,8 +41,6 @@ class IsRunConfigurationProducer : LazyRunConfigurationProducer<IsRunConfigurati
 
         configuration.scriptPath = vf.path
         configuration.name = vf.nameWithoutExtension
-        configuration.runMode = IsRunMode.DRY
-        configuration.actionType = IsRunActionType.INSTALL
         configuration.debugOutput = true
         return true
     }
