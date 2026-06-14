@@ -23,14 +23,14 @@ class IsBuildOutputResolverTest : BasePlatformTestCase() {
         val file = myFixture.addFileToProject("setup.iss", "[Setup]\nOutputDir=Release\n")
         val arg = IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.BUILD_DIR)
         assertNotNull(arg)
-        assertTrue(arg!!.startsWith("/O"))
-        assertTrue("must end with the relative dir, was: $arg", arg.endsWith("Release"))
+        assertTrue(arg!!.startsWith("/O\""))
+        assertTrue("must end with the relative dir, was: $arg", arg.endsWith("Release\""))
     }
 
     fun testBuildDirDefaultsToOutputWhenMissing() {
         val file = myFixture.addFileToProject("setup.iss", "[Setup]\nAppName=x\n")
         val arg = IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.BUILD_DIR)
-        assertTrue(arg!!.endsWith("Output"))
+        assertTrue(arg!!.endsWith("Output\""))
     }
 
     fun testBuildDirLeavesAbsoluteUntouched() {

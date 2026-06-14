@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpecTarget
 
 /**
  * Central ISL section policy. The set of sections permitted in `.isl` files is data-driven via the
- * `languageFile` flag in the spec YAML (see `spec/isi-spec.yaml`), so both the annotator and the
+ * `languageFile` flag in the spec YAML (see `spec/is-spec.yaml`), so both the annotator and the
  * section-name completion can share the exact same rule.
  */
 val IsSectionDefSpec.allowedInLanguageFile: Boolean

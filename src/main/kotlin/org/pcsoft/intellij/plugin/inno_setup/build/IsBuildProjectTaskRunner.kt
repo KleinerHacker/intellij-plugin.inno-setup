@@ -54,10 +54,13 @@ class IsBuildProjectTaskRunner : ProjectTaskRunner() {
         context: ProjectTaskContext,
         vararg tasks: ProjectTask
     ): Promise<Result> {
+        // Rebuild (vs. incremental Build) is signalled by a non-incremental module build task; it
+        // forces a full recompile, bypassing the hash-based up-to-date check.
+        val force = tasks.filterIsInstance<ModuleBuildTask>().any { !it.isIncrementalBuild }
         val promise = AsyncPromise<Result>()
         ApplicationManager.getApplication().executeOnPooledThread {
             try {
-                promise.setResult(project.service<IsCompilerService>().compileProject())
+                promise.setResult(project.service<IsCompilerService>().compileProject(force))
             } catch (e: Throwable) {
                 promise.setError(e)
             }

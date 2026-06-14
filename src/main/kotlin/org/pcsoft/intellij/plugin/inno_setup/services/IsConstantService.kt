@@ -31,8 +31,8 @@ class IsConstantService {
             .addModule(kotlinModule())
             .build()
         val stream = IsConstantService::class.java
-            .getResourceAsStream("/spec/isi-const.yaml")
-            ?: error("isi-const.yaml not found in resources")
+            .getResourceAsStream("/spec/is-const.yaml")
+            ?: error("is-const.yaml not found in resources")
         mapper.readValue(stream)
     }
 }

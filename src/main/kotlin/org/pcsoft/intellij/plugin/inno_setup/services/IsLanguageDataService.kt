@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageCodeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 
 /**
- * Provides the curated Windows language identifiers loaded from `isl-code.yaml` (the single source
+ * Provides the curated Windows language identifiers loaded from `is-lang-code.yaml` (the single source
  * of truth for the \[LangOptions] `LanguageID` directive): completion entries, flag/name lookup by
  * LCID, and the recognised-LCID set used for validation.
  */
@@ -28,12 +28,12 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 class IsLanguageDataService {
 
     /**
-     * Parsed language-code specification loaded from `isl-code.yaml`.
+     * Parsed language-code specification loaded from `is-lang-code.yaml`.
      */
     val spec: IsLanguageCodeSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
-        val stream = IsLanguageDataService::class.java.getResourceAsStream("/spec/isl-code.yaml")
-            ?: error("isl-code.yaml not found in resources")
+        val stream = IsLanguageDataService::class.java.getResourceAsStream("/spec/is-lang-code.yaml")
+            ?: error("is-lang-code.yaml not found in resources")
         mapper.readValue(stream)
     }
 

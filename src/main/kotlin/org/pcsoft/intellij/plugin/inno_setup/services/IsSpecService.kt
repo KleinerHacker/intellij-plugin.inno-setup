@@ -31,8 +31,8 @@ class IsSpecService {
             .addModule(kotlinModule())
             .build()
         val stream = IsSpecService::class.java
-            .getResourceAsStream("/spec/isi-spec.yaml")
-            ?: error("isi-spec.yaml not found in resources")
+            .getResourceAsStream("/spec/is-spec.yaml")
+            ?: error("is-spec.yaml not found in resources")
         mapper.readValue(stream)
     }
 }

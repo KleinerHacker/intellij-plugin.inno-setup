@@ -90,8 +90,9 @@ class IsBuildOutputResolver(private val project: Project) {
                 IsBuildOutputMode.SCRIPT -> null
                 IsBuildOutputMode.BUILD_DIR -> {
                     val relative = scriptOutputDir ?: "Output"
+                    // ISCC expects the path after /O wrapped in double quotes.
                     if (File(relative).isAbsolute) null
-                    else "/O" + File(buildRoot, relative).path
+                    else "/O\"" + File(buildRoot, relative).path + "\""
                 }
             }
     }

@@ -29,4 +29,12 @@ class IsBuildSettingsState : BaseState() {
      * Where ISCC writes its output, persisted as the [IsBuildOutputMode] enum name.
      */
     var outputMode: String? by string(IsBuildOutputMode.DEFAULT.name)
+
+    /**
+     * Last successfully built MD5 hash per top-level script and output target (key = canonical script
+     * path + `|` + the resolved ISCC `/O…` argument). Used to skip recompiling unchanged scripts —
+     * both during the regular project build and before a run — unless a rebuild is forced. Including
+     * the output target keeps build- and run-outputs tracked independently.
+     */
+    var buildHashes: MutableMap<String, String> by map()
 }
