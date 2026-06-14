@@ -25,8 +25,8 @@ class IsSpecServiceTest {
         val mapper = YAMLMapper.builder()
             .addModule(kotlinModule())
             .build()
-        val stream = IsSpecServiceTest::class.java.getResourceAsStream("/spec/isi-spec.yaml")
-            ?: error("isi-spec.yaml not found in test classpath")
+        val stream = IsSpecServiceTest::class.java.getResourceAsStream("/spec/is-spec.yaml")
+            ?: error("is-spec.yaml not found in test classpath")
         mapper.readValue(stream)
     }
 

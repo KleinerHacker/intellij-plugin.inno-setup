@@ -31,8 +31,8 @@ class IsPreprocessorService {
             .addModule(kotlinModule())
             .build()
         val stream = IsPreprocessorService::class.java
-            .getResourceAsStream("/spec/ispp-spec.yaml")
-            ?: error("ispp-spec.yaml not found in resources")
+            .getResourceAsStream("/spec/is-preprocessor.yaml")
+            ?: error("is-preprocessor.yaml not found in resources")
         mapper.readValue(stream)
     }
 }

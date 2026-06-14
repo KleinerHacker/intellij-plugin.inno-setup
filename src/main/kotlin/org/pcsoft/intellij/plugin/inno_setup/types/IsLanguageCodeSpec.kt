@@ -17,7 +17,7 @@ import com.intellij.openapi.util.IconLoader
 import javax.swing.Icon
 
 /**
- * A single recognised Windows locale, deserialized from `isl-code.yaml`. [id] is the Pascal-hex
+ * A single recognised Windows locale, deserialized from `is-lang-code.yaml`. [id] is the Pascal-hex
  * LCID (e.g. `$0407`), [displayName] the English locale name, and [flag] the base name of an SVG
  * under `/icons/flags/` — or `null`, in which case a neutral globe icon is used.
  *
@@ -59,7 +59,7 @@ data class IsLanguageDataSpec(
     fun toIssEntry(): String = "Name: \"$issName\"; MessagesFile: \"$messagesFile\""
 }
 
-/** Root of `isl-code.yaml`: all recognised Windows locales. */
+/** Root of `is-lang-code.yaml`: all recognised Windows locales. */
 data class IsLanguageCodeSpec(
     /**
      * Returns or performs the public behavior represented by this member.

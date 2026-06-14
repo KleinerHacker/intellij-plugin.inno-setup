@@ -23,8 +23,8 @@ class IsPreprocessorServiceTest {
 
     private val spec: IsPreprocessorSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
-        val stream = IsPreprocessorServiceTest::class.java.getResourceAsStream("/spec/ispp-spec.yaml")
-            ?: error("ispp-spec.yaml not found in test classpath")
+        val stream = IsPreprocessorServiceTest::class.java.getResourceAsStream("/spec/is-preprocessor.yaml")
+            ?: error("is-preprocessor.yaml not found in test classpath")
         mapper.readValue(stream)
     }
 

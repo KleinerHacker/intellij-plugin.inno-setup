@@ -24,8 +24,8 @@ class IsConstantServiceTest {
 
     private val spec: IsSectionConstantSpec by lazy {
         val mapper = YAMLMapper.builder().addModule(kotlinModule()).build()
-        val stream = IsConstantServiceTest::class.java.getResourceAsStream("/spec/isi-const.yaml")
-            ?: error("isi-const.yaml not found in test classpath")
+        val stream = IsConstantServiceTest::class.java.getResourceAsStream("/spec/is-const.yaml")
+            ?: error("is-const.yaml not found in test classpath")
         mapper.readValue(stream)
     }
 
