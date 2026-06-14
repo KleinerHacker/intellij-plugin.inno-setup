@@ -46,6 +46,7 @@ plugins:
             Inno Setup Language: Inno Setup 语言文件
             Language Files: 语言文件
             Build Integration: 构建集成
+            Run Configuration: 运行配置
             Structure View: 结构视图
             Settings: 设置
             General: 常规
@@ -82,6 +83,7 @@ plugins:
             Inno Setup Language: Inno Setup 言語ファイル
             Language Files: 言語ファイル
             Build Integration: ビルド統合
+            Run Configuration: 実行構成
             Structure View: 構造ビュー
             Settings: 設定
             General: 一般
@@ -118,6 +120,7 @@ plugins:
             Inno Setup Language: Inno Setup 언어 파일
             Language Files: 언어 파일
             Build Integration: 빌드 통합
+            Run Configuration: 실행 구성
             Structure View: 구조 뷰
             Settings: 설정
             General: 일반
@@ -182,6 +185,7 @@ nav:
           - Messages: sections/messages.md
           - CustomMessages: sections/custom-messages.md
   - Build Integration: build.md
+  - Run Configuration: run-configuration.md
   - Structure View: structure-view.md
   - Settings:
       - General: settings.md
