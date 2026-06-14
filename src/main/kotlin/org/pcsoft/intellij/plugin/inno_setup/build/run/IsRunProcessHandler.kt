@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
+@file:Suppress("UnstableApiUsage")
+
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.GeneralCommandLine
@@ -22,22 +24,23 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.task.TaskRunnerResults
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver
 import org.pcsoft.intellij.plugin.inno_setup.build.IsCompilerService
-import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptHasher
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsService
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import java.io.File
 import java.io.OutputStream
 import java.util.UUID
 
 /**
  * A [ProcessHandler] that drives the two-stage pipeline:
- * 1. Compile the ISS script with ISCC.
+ * 1. Hand off to the build ([IsCompilerService]), which decides whether a recompile is needed and
+ *    streams its output into the Build tool window.
  * 2. Launch the generated installer (or uninstaller).
  *
- * Output from both stages is forwarded to the attached [com.intellij.execution.ui.ConsoleView].
+ * Stage 2 output is forwarded to the attached [com.intellij.execution.ui.ConsoleView].
  */
 class IsRunProcessHandler(
     private val project: Project,
@@ -62,8 +65,7 @@ class IsRunProcessHandler(
 
     private fun runPipeline() {
         val compilerService = project.service<IsCompilerService>()
-        val iscc = compilerService.isccExecutable()
-        if (iscc == null) {
+        if (compilerService.isccExecutable() == null) {
             printErr("Inno Setup is not configured. Set ISCC.exe path in Settings | Build | Inno Setup.\n")
             notifyProcessTerminated(1)
             return
@@ -75,7 +77,6 @@ class IsRunProcessHandler(
             IsBuildSettingsService.getInstance(project).state.outputMode
         )
         val scriptFile = File(config.scriptPath)
-        val installPath = IsSettingsService.getInstance().state.installationPath
         val scriptOutputDir = IsBuildOutputResolver.parseOutputDir(
             runCatching { scriptFile.readText() }.getOrDefault("")
         )
@@ -92,20 +93,21 @@ class IsRunProcessHandler(
         )
         val outputDir = IsScriptRunnerLogic.outputDirFromArg(outputArg) ?: File(buildRoot, "Output")
 
-        // ── Stage 1: compile (skipped when nothing changed since the last successful run) ──────
-        val currentHash = IsScriptHasher.hashScript(scriptFile, installPath)
-        val existingExe = IsScriptRunnerLogic.findSetupExe(outputDir)
-        if (currentHash == config.lastBuildHash && existingExe != null) {
-            printOut("No changes detected — skipping compile.\n")
-        } else {
-            printOut("Compiling ${scriptFile.name}…\n")
-            val cmd = IsCompilerService.buildCommandLine(iscc, config.scriptPath, scriptFile.parent, outputArg)
-            if (!runProcess(cmd)) {
-                printErr("Build failed — aborting run.\n")
-                notifyProcessTerminated(1)
-                return
-            }
-            config.lastBuildHash = currentHash
+        // ── Stage 1: delegate to the build, which decides whether a recompile is necessary ─────
+        // The build is reused when the participating files are unchanged and the installer still
+        // exists; only then is compilation skipped. ISCC output appears in the Build tool window.
+        val scriptVFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(scriptFile)
+        if (scriptVFile == null) {
+            printErr("Script file not found: ${config.scriptPath}\n")
+            notifyProcessTerminated(1)
+            return
+        }
+        val hasArtifact = IsScriptRunnerLogic.findSetupExe(outputDir) != null
+        printOut("Building ${scriptFile.name} (see the Build tool window for details)…\n")
+        if (compilerService.compileScriptForRun(scriptVFile, outputArg, hasArtifact) != TaskRunnerResults.SUCCESS) {
+            printErr("Build failed — aborting run.\n")
+            notifyProcessTerminated(1)
+            return
         }
 
         // ── Stage 2: launch installer ─────────────────────────────────────────

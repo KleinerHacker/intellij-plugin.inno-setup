@@ -37,12 +37,6 @@ class IsRunConfiguration(
     var debugOutput: Boolean = true
 
     /**
-     * Hidden (not shown in the editor) — MD5 hash over all participating files at the time of the
-     * last successful run, used to decide whether a recompile is needed before launching.
-     */
-    var lastBuildHash: String = ""
-
-    /**
      * Hidden (not shown in the editor) — persistent temporary output directory, used only when the
      * project is configured for [org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode.DRY]
      * (which would otherwise produce no real `setup.exe`). Stays attached to the run configuration so
@@ -68,7 +62,6 @@ class IsRunConfiguration(
         scriptPath = element.getAttributeValue("scriptPath") ?: ""
         languageOverride = element.getAttributeValue("languageOverride") ?: ""
         debugOutput = element.getAttributeValue("debugOutput")?.toBoolean() ?: true
-        lastBuildHash = element.getAttributeValue("lastBuildHash") ?: ""
         persistentTempOutputDir = element.getAttributeValue("persistentTempOutputDir") ?: ""
     }
 
@@ -77,7 +70,6 @@ class IsRunConfiguration(
         element.setAttribute("scriptPath", scriptPath)
         element.setAttribute("languageOverride", languageOverride)
         element.setAttribute("debugOutput", debugOutput.toString())
-        element.setAttribute("lastBuildHash", lastBuildHash)
         element.setAttribute("persistentTempOutputDir", persistentTempOutputDir)
     }
 }

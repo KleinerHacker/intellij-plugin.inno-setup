@@ -52,7 +52,6 @@ class IsRunConfigurationTest : BasePlatformTestCase() {
         val cfg = config()
         assertTrue(cfg.debugOutput)
         assertTrue(cfg.languageOverride.isEmpty())
-        assertTrue(cfg.lastBuildHash.isEmpty())
         assertTrue(cfg.persistentTempOutputDir.isEmpty())
     }
 }

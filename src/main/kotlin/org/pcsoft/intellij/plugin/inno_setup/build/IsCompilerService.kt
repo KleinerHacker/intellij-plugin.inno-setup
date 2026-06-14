@@ -96,7 +96,43 @@ class IsCompilerService(private val project: Project) {
     private fun outputMode(): IsBuildOutputMode =
         IsBuildOutputMode.fromName(IsBuildSettingsService.getInstance(project).state.outputMode)
 
-    private fun runCompilation(scripts: List<VirtualFile>, title: String, force: Boolean): ProjectTaskRunner.Result {
+    /**
+     * Compiles a single [scriptFile] for the run pipeline
+     * ([org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunProcessHandler]) using an explicit
+     * [outputArg] — a run always needs a real installer, even when the project is configured
+     * [IsBuildOutputMode.DRY] (which on its own suppresses output). The rebuild decision stays with
+     * the build: the compile is skipped only when the participating files are unchanged since the
+     * last successful build to the same output *and* [hasArtifact] reports the produced installer is
+     * still present. Blocking — intended to be called off the EDT. Streams to the Build tool window
+     * and returns the aggregate task-runner result.
+     */
+    fun compileScriptForRun(
+        scriptFile: VirtualFile,
+        outputArg: String?,
+        hasArtifact: Boolean,
+        force: Boolean = false
+    ): ProjectTaskRunner.Result =
+        runCompilation(
+            listOf(scriptFile),
+            PluginBundle.message("build.title.script", scriptFile.name),
+            force,
+            outputArgFor = { outputArg },
+            artifactPresent = { hasArtifact }
+        )
+
+    /**
+     * @param outputArgFor     overrides the project-mode `/O…` resolution per script (used by the run
+     *                         pipeline); `null` falls back to the configured [outputMode].
+     * @param artifactPresent  extra up-to-date guard: a script is only skipped when its build artifact
+     *                         still exists. Defaults to always-present for the regular build.
+     */
+    private fun runCompilation(
+        scripts: List<VirtualFile>,
+        title: String,
+        force: Boolean,
+        outputArgFor: ((VirtualFile) -> String?)? = null,
+        artifactPresent: (VirtualFile) -> Boolean = { true }
+    ): ProjectTaskRunner.Result {
         // Flush unsaved editor changes so ISCC compiles the current content from disk.
         ApplicationManager.getApplication().invokeAndWait {
             FileDocumentManager.getInstance().saveAllDocuments()
@@ -137,17 +173,17 @@ class IsCompilerService(private val project: Project) {
         val buildHashes = IsBuildSettingsService.getInstance(project).state.buildHashes
 
         for (script in scripts) {
-            // Skip scripts whose participating files are unchanged since the last successful build,
-            // unless a rebuild was requested.
-            val scriptKey = canonicalPath(script.path)
+            val outputArg = outputArgFor?.invoke(script) ?: resolver.resolveOutputArg(script, mode)
+            // Skip scripts whose participating files are unchanged since the last successful build to
+            // the same output, unless a rebuild was forced or the previously produced artifact is gone.
+            val scriptKey = hashKey(script.path, outputArg)
             val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
-            if (!force && buildHashes[scriptKey] == currentHash) {
+            if (!force && buildHashes[scriptKey] == currentHash && artifactPresent(script)) {
                 view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.up_to_date", script.name) + "\n", true))
                 continue
             }
 
             view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.compiling", script.name) + "\n", true))
-            val outputArg = resolver.resolveOutputArg(script, mode)
             val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg)
 
             // Groups consecutive output lines per section into a Build-tree message node.
@@ -245,6 +281,14 @@ class IsCompilerService(private val project: Project) {
 
     private fun canonicalPath(path: String): String =
         runCatching { File(path).canonicalPath }.getOrDefault(File(path).absolutePath)
+
+    /**
+     * Up-to-date cache key. Includes the resolved [outputArg] so builds to different output locations
+     * (a regular build vs. a run that forces a real installer) are tracked independently and never
+     * wrongly skip one another.
+     */
+    private fun hashKey(path: String, outputArg: String?): String =
+        canonicalPath(path) + '|' + (outputArg ?: "")
 
     private fun resolvePath(path: String): VirtualFile? =
         LocalFileSystem.getInstance().findFileByPath(path.replace('\\', '/'))
