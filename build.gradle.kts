@@ -93,6 +93,13 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
 }
 
 tasks {
+    test {
+        jvmArgs(
+            "-Didea.log.config.file=idea/log4j.xml",
+            "-Didea.log.level=OFF",
+        )
+    }
+
     //region Dokka
     register<Copy>("copyDokka") {
         group = "dokka"
