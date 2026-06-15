@@ -114,6 +114,9 @@ ISPP preprocessor directives are injected into script files and receive their ow
 rename, and Find Usages support for `#define` names. Inline `{#Name}` references inside section values
 resolve to their `#define` declaration and participate in the same rename/find-usages flow.
 
+See [Inno Setup Preprocessor](preprocessor/overview.md) for the supported directives, the standard
+predefined variables, and inline `{#…}` emission.
+
 ---
 
 ## Building Scripts

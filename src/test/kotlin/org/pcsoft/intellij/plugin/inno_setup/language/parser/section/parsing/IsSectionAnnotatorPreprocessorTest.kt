@@ -45,6 +45,39 @@ class IsSectionAnnotatorPreprocessorTest : BasePlatformTestCase() {
         assertTrue("Unknown ISPP constant {#Unknown} should produce an error", errors.isNotEmpty())
     }
 
+    // ── Predefined ISPP variables via {#…} ─────────────────────────────────────
+
+    private fun unknownConstantErrors(text: String) =
+        myFixture.let {
+            it.configureByText(IsScriptFileType.INSTANCE, text)
+            it.doHighlighting()
+        }.filter {
+            it.severity.name == "ERROR" && it.description?.contains("Unknown constant") == true
+        }
+
+    fun testValueBearingPredefinedVariableProducesNoError() {
+        // {#SourcePath} is a value-bearing predefined variable and a valid inline emission.
+        val errors = unknownConstantErrors(
+            "[Files]\nSource: \"app.exe\"; DestDir: \"{#SourcePath}\"\n"
+        )
+        assertTrue("{#SourcePath} must not be flagged as unknown constant", errors.isEmpty())
+    }
+
+    fun testValueBearingPredefinedVariableIsCaseInsensitive() {
+        val errors = unknownConstantErrors(
+            "[Files]\nSource: \"app.exe\"; DestDir: \"{#ver}\"\n"
+        )
+        assertTrue("{#ver} (predefined Ver) must not be flagged, case-insensitively", errors.isEmpty())
+    }
+
+    fun testVoidPredefinedSymbolIsNotAValidEmission() {
+        // WINDOWS is a valueless `void` symbol — only defined for #ifdef, not emittable via {#…}.
+        val errors = unknownConstantErrors(
+            "[Files]\nSource: \"app.exe\"; DestDir: \"{#WINDOWS}\"\n"
+        )
+        assertTrue("{#WINDOWS} (void symbol) must still be flagged — not a valid {#…} emission", errors.isNotEmpty())
+    }
+
     // ── Unused #define ────────────────────────────────────────────────────────
 
     fun testUnusedDefineProducesWeakWarning() {

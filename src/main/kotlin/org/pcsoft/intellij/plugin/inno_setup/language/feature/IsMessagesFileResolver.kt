@@ -46,14 +46,16 @@ object IsMessagesFileResolver {
      * @param raw           Raw `MessagesFile` value, possibly containing `{#Foo}`, `{%ENV}`, or
      *                      built-in constants.
      * @param defines       ISPP `#define` name→value pairs from the host `.iss` file.
-     * @param scriptDir     Directory of the `.iss` file, used to resolve `{src}`.
+     * @param scriptDir     Directory of the `.iss` file, used to resolve `{src}` and `{#SourcePath}`.
      * @param customMessages Entries from `[CustomMessages]` key→value (optional, rarely used in paths).
+     * @param installPath   Inno Setup installation directory (from settings), used for `{#CompilerPath}`.
      */
     fun expandValue(
         raw: String,
         defines: List<Pair<String, String?>>,
         scriptDir: File?,
-        customMessages: Map<String, String?> = emptyMap()
+        customMessages: Map<String, String?> = emptyMap(),
+        installPath: String? = null
     ): String? {
         val sb = StringBuilder()
         var i = 0
@@ -67,7 +69,7 @@ object IsMessagesFileResolver {
             val close = raw.indexOf('}', brace + 1)
             if (close < 0) return null  // unclosed brace — treat as unresolvable
             val inner = raw.substring(brace + 1, close)
-            val expanded = expandPlaceholder(inner, defines, scriptDir, customMessages) ?: return null
+            val expanded = expandPlaceholder(inner, defines, scriptDir, customMessages, installPath) ?: return null
             sb.append(expanded)
             i = close + 1
         }
@@ -78,14 +80,15 @@ object IsMessagesFileResolver {
         inner: String,
         defines: List<Pair<String, String?>>,
         scriptDir: File?,
-        customMessages: Map<String, String?>
+        customMessages: Map<String, String?>,
+        installPath: String?
     ): String? = when {
-        // {#Name} — ISPP define
+        // {#Name} — ISPP define, with fallback to a value-bearing predefined variable
         inner.startsWith("#") -> {
             val name = inner.removePrefix("#").trim()
             val entry = defines.firstOrNull { it.first.equals(name, ignoreCase = true) }
-                ?: return null
-            entry.second  // null if the define has no value (function macro)
+            if (entry != null) entry.second  // null if the define has no value (function macro)
+            else resolvePredefinedVariable(name, scriptDir, installPath)
         }
 
         // {%ENV} or {%ENV|default}
@@ -109,6 +112,20 @@ object IsMessagesFileResolver {
             IsConstantResolver.resolve(name, scriptDir)
         }
     }
+
+    /**
+     * Resolves a value-bearing ISPP predefined variable to a statically known path component, or
+     * `null` when its value is only known at compile time (`__LINE__`, `Ver`, …) or is not a path
+     * (`NewLine`, `Tab`). Only the path-relevant variables are mapped; everything else stays
+     * unresolvable so no false error is produced. `void` symbols never reach here (they carry no value).
+     */
+    private fun resolvePredefinedVariable(name: String, scriptDir: File?, installPath: String?): String? =
+        when (name.lowercase()) {
+            "sourcepath", "__dir__" -> scriptDir?.absolutePath
+            "compilerpath" -> installPath?.ifBlank { null }
+            "syspath" -> IsConstantResolver.resolve("sys", scriptDir)
+            else -> null
+        }
 
     /**
      * Resolves an already-expanded (no `{…}` remaining) `MessagesFile` path to an [IsResolveResult].

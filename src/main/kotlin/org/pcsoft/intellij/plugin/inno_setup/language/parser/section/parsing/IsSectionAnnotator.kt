@@ -35,6 +35,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
@@ -116,10 +117,10 @@ class IsSectionAnnotator : Annotator {
             ?.associate { it.keyText().substringAfterLast('.') to it.valueText }
             ?: emptyMap()
 
-        val expanded = IsMessagesFileResolver.expandValue(raw, defines, scriptDir, customMessages)
+        val installPath = IsSettingsService.getInstance().state.installationPath
+        val expanded = IsMessagesFileResolver.expandValue(raw, defines, scriptDir, customMessages, installPath)
             ?: return  // unresolvable — no annotation
 
-        val installPath = IsSettingsService.getInstance().state.installationPath
         when (val result = IsMessagesFileResolver.resolveMessagesFile(expanded, scriptDir, installPath)) {
             is IsResolveResult.Missing ->
                 holder.newAnnotation(HighlightSeverity.ERROR, "ISL file not found: '${result.resolvedPath}'")
@@ -662,6 +663,9 @@ class IsSectionAnnotator : Annotator {
 
         val builtins = service<IsConstantService>().spec.constants
         val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
+        // Value-bearing ISPP predefined variables ({#__LINE__}, {#SourcePath}, …) are valid inline
+        // emissions too; the valueless `void` symbols are not emittable via {#…} and stay unknown here.
+        val predefinedNames = service<IsPreprocessorService>().emittableVariables.map { it.name }
         val isIspp = bodyText.startsWith("#")
         val isEnv = bodyText.startsWith("%")
 
@@ -687,7 +691,7 @@ class IsSectionAnnotator : Annotator {
         }
 
         val known = when {
-            isIspp -> name in isppNames
+            isIspp -> name in isppNames || predefinedNames.any { it.equals(name, ignoreCase = true) }
             else -> builtins.any { it.name.equals(name, ignoreCase = true) }
         }
 

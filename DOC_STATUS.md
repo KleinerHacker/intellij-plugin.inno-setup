@@ -148,6 +148,25 @@ Directive keywords are validated against this spec by `IsPreprocessorAnnotator`:
 whose keyword is not declared in `ispp-spec.yaml` is flagged as an error (`Unknown preprocessor
 directive`, case-insensitive), mirroring the unknown-section/flag/constant checks.
 
+**Predefined variables via `{#…}`:** Inline emission `{#expr}` (short for `{#emit expr}`) replaces
+itself with the value of an expression, so the **value-bearing** predefined variables (`type` `int`/`str`
+in `ispp-spec.yaml` — e.g. `{#__LINE__}`, `{#SourcePath}`, `{#Ver}`) are valid there alongside user
+`#define`s. The **valueless `void` symbols** (`__WIN32__`, `ISPP_INVOKED`, `ISCC_INVOKED`, `WINDOWS`,
+`UNICODE`) carry no value and are only defined for conditional compilation (`#ifdef` / `#if defined(...)`);
+they are therefore **excluded** from `{#…}` everywhere. The single source for the emittable set is
+`IsPreprocessorService.emittableVariables`, used by completion (after `{` and after `{#`), the
+`{#…}` constant validation in `IsSectionAnnotator`, and the `[Languages] MessagesFile` path
+interpretation (`IsMessagesFileResolver`, which expands the path-relevant `{#SourcePath}`/`{#__DIR__}`/
+`{#CompilerPath}`/`{#SysPath}`; dynamic/non-path variables stay unresolvable rather than producing a
+false error). `#ifdef`/`#if` handling for the `void` symbols is not yet implemented.
+
+**User documentation:** The MkDocs site has a dedicated **Inno Setup Preprocessor** rubric
+(`docs/docs/preprocessor/`, all four locales), modelled on the official ISPP docs: an `overview.md`
+(general preprocessor description + supported-directive table + inline `{#…}`) plus one page per
+semantically supported directive — currently only `define.md` (`#define`, `{#Name}` usage, the standard
+predefined variables). Add a new page under this rubric whenever another directive gains full semantic
+support.
+
 ---
 
 ## IDE Features
@@ -161,6 +180,7 @@ directive`, case-insensitive), mirroring the unknown-section/flag/constant check
 | Code completion — flags                         | ✅      |                                                                                                                                                                                                   |
 | Code completion — constants                     | ✅      |                                                                                                                                                                                                   |
 | Code completion — ISPP directives               | ✅      |                                                                                                                                                                                                   |
+| Code completion — `{#…}` ISPP variables         | ✅      | After `{` and `{#`: user `#define`s + value-bearing predefined variables; valueless `void` symbols excluded                                                                                       |
 | Code completion — `[Languages]`                 | ✅      | Built-in names + MessagesFile, with flag icons                                                                                                                                                    |
 | Code completion — `LanguageID`                  | ✅      | Windows LCIDs: name + flag + greyed `$hex` id                                                                                                                                                     |
 | Code completion — message i18n prefix           | ✅      | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only; flag + name from LanguageID) + message ids                                                                     |
@@ -179,4 +199,6 @@ directive`, case-insensitive), mirroring the unknown-section/flag/constant check
 | ISPP language injection                         | ✅      | Preprocessor lines injected into ISI                                                                                                                                                              |
 | Semantic annotations / errors                   | ✅      |                                                                                                                                                                                                   |
 | ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `ispp-spec.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                          |
+| `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s + value-bearing predefined variables; valueless `void` symbols stay flagged as invalid emissions                                                            |
+| `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                 |
 | [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                     |

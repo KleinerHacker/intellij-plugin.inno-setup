@@ -15,11 +15,14 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provid
 import com.intellij.codeInsight.completion.CompletionParameters
 import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
+import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
@@ -46,18 +49,38 @@ object IsSectionPreprocessorVariableAfterHashProvider : CompletionProvider<Compl
         val file = parameters.originalFile as? IsScriptFile ?: return
         val adjusted = result.withPrefixMatcher(typedName)
 
+        // The closing-brace insert handler is shared by user defines and predefined variables.
+        val insertClosingBrace = { ctx: com.intellij.codeInsight.completion.InsertionContext ->
+            val tail = ctx.tailOffset
+            val doc = ctx.document.charsSequence
+            if (tail >= doc.length || doc[tail] != '}')
+                ctx.document.insertString(tail, "}")
+            ctx.editor.caretModel.moveToOffset(tail + 1)
+        }
+
         file.definedConstants.forEach { (name, value) ->
             adjusted.addElement(
-                LookupElementBuilder.create(name)
-                    .withTypeText(value?.let { "= $it" } ?: "define")
-                    .withIcon(IsIcons.Variable)
-                    .withInsertHandler { ctx, _ ->
-                        val tail = ctx.tailOffset
-                        val doc = ctx.document.charsSequence
-                        if (tail >= doc.length || doc[tail] != '}')
-                            ctx.document.insertString(tail, "}")
-                        ctx.editor.caretModel.moveToOffset(tail + 1)
-                    }
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(name)
+                        .withTypeText(value?.let { "= $it" } ?: "define")
+                        .withIcon(IsIcons.Variable)
+                        .withInsertHandler { ctx, _ -> insertClosingBrace(ctx) },
+                    5.0
+                )
+            )
+        }
+
+        // Value-bearing ISPP predefined variables ({#__LINE__}, {#SourcePath}, …); the valueless
+        // `void` symbols are excluded — they are only defined for #ifdef and cannot be emitted via {#…}.
+        service<IsPreprocessorService>().emittableVariables.forEach { v ->
+            adjusted.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(v.name)
+                        .withTypeText("${v.type.typeName} · ISPP")
+                        .withIcon(IsIcons.Variable)
+                        .withInsertHandler { ctx, _ -> insertClosingBrace(ctx) },
+                    3.0
+                )
             )
         }
     }

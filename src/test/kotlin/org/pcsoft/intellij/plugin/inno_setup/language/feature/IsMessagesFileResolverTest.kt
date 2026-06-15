@@ -95,6 +95,70 @@ class IsMessagesFileResolverTest : TestCase() {
         assertEquals("${dir.absolutePath}\\lang.isl", result)
     }
 
+    // ── expandValue: ISPP predefined variables (value-bearing, via {#…}) ──────────
+
+    fun testExpandValuePredefinedSourcePath() {
+        val dir = File(System.getProperty("java.io.tmpdir"))
+        val result = IsMessagesFileResolver.expandValue(
+            raw = "{#SourcePath}\\lang.isl",
+            defines = emptyList(),
+            scriptDir = dir
+        )
+        assertEquals("${dir.absolutePath}\\lang.isl", result)
+    }
+
+    fun testExpandValuePredefinedDir() {
+        val dir = File(System.getProperty("java.io.tmpdir"))
+        val result = IsMessagesFileResolver.expandValue(
+            raw = "{#__DIR__}\\lang.isl",
+            defines = emptyList(),
+            scriptDir = dir
+        )
+        assertEquals("${dir.absolutePath}\\lang.isl", result)
+    }
+
+    fun testExpandValuePredefinedCompilerPath() {
+        val result = IsMessagesFileResolver.expandValue(
+            raw = "{#CompilerPath}\\Languages\\German.isl",
+            defines = emptyList(),
+            scriptDir = null,
+            installPath = "C:\\Inno"
+        )
+        assertEquals("C:\\Inno\\Languages\\German.isl", result)
+    }
+
+    fun testExpandValuePredefinedCompilerPathNotConfigured() {
+        val result = IsMessagesFileResolver.expandValue(
+            raw = "{#CompilerPath}\\Languages\\German.isl",
+            defines = emptyList(),
+            scriptDir = null,
+            installPath = null
+        )
+        assertNull("Without an install path, {#CompilerPath} must stay unresolvable", result)
+    }
+
+    fun testExpandValuePredefinedDynamicYieldsNull() {
+        // Compile-time-only / non-path predefined variables have no statically known value.
+        assertNull(
+            "{#__LINE__} must stay unresolvable",
+            IsMessagesFileResolver.expandValue("{#__LINE__}.isl", emptyList(), null)
+        )
+        assertNull(
+            "{#NewLine} must stay unresolvable",
+            IsMessagesFileResolver.expandValue("{#NewLine}lang.isl", emptyList(), null)
+        )
+    }
+
+    fun testExpandValueDefineTakesPrecedenceOverPredefined() {
+        // A user #define with the same name as a predefined variable wins.
+        val result = IsMessagesFileResolver.expandValue(
+            raw = "{#SourcePath}\\lang.isl",
+            defines = listOf("SourcePath" to "Custom"),
+            scriptDir = File(System.getProperty("java.io.tmpdir"))
+        )
+        assertEquals("Custom\\lang.isl", result)
+    }
+
     fun testExpandValueInstallTimeConstant() {
         val result = IsMessagesFileResolver.expandValue(
             raw = "{app}\\lang.isl",

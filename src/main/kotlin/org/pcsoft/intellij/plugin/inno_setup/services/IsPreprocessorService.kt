@@ -17,6 +17,8 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.intellij.openapi.components.Service
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
 /**
  * Application-level service that loads the bundled Inno Setup preprocessor specification.
@@ -34,5 +36,14 @@ class IsPreprocessorService {
             .getResourceAsStream("/spec/is-preprocessor.yaml")
             ?: error("is-preprocessor.yaml not found in resources")
         mapper.readValue(stream)
+    }
+
+    /**
+     * Predefined variables that carry a value and can therefore be emitted inline via `{#…}`.
+     * Excludes the valueless `void` symbols (e.g. `WINDOWS`, `ISPP_INVOKED`), which are only
+     * "defined" for conditional compilation (`#ifdef` / `#if defined(...)`) and have no value to emit.
+     */
+    val emittableVariables: List<IsPreprocessorVariableSpec> by lazy {
+        spec.predefinedVariables.filter { it.type != IsPreprocessorVariableType.VOID }
     }
 }

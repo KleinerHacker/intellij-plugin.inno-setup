@@ -74,7 +74,7 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
             result.addElement(PrioritizedLookupElement.withPriority(element, 5.0))
         }
 
-        service<IsPreprocessorService>().spec.predefinedVariables.forEach { v ->
+        service<IsPreprocessorService>().emittableVariables.forEach { v ->
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")
