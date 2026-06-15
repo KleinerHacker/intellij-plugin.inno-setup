@@ -252,10 +252,28 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
         assertTrue("Unknown flag must produce 'Unknown flag' ERROR with UNKNOWN_REFERENCE", hit)
     }
 
+    fun testDigitLeadingFlagHighlightedAsFlagColor() {
+        // Flags may start with a digit (e.g. '64bit'). The lexer must still tokenize them as a
+        // single IDENTIFIER so the annotator recognises and highlights them as a flag.
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: 64bit\n"
+        val fileText = myFixture.run {
+            configureByText(IsScriptFileType.INSTANCE, text); file.text
+        }
+        val all = myFixture.doHighlighting()
+        val flagOffset = fileText.lastIndexOf("64bit")
+        val hit = all.any {
+            it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.FLAG &&
+                    it.startOffset == flagOffset
+        }
+        assertTrue("Digit-leading flag '64bit' must be highlighted with FLAG attribute", hit)
+        assertFalse(
+            "Digit-leading flag '64bit' must not be flagged as an unknown flag",
+            all.any { it.description?.contains("Unknown flag", ignoreCase = true) == true }
+        )
+    }
+
     fun testConflictingFlagsWithErrorSeverityProducesTwoErrors() {
         // deleteafterinstall and restartreplace conflict at ERROR level in [Files].
-        // Using these instead of 32bit/64bit because flag names starting with a digit
-        // are not tokenized as IDENTIFIER by the ISS lexer.
         val text =
             VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: deleteafterinstall restartreplace\n"
         val all = highlights(text)

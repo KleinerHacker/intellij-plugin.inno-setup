@@ -18,6 +18,11 @@ import com.intellij.psi.TokenType;
 ALPHA      = [A-Za-z_]
 IDENT_CHAR = [A-Za-z0-9_.\-]
 IDENTIFIER = {ALPHA}{IDENT_CHAR}*
+// Identifiers must generally start with a letter. Flag identifiers are the sole exception: they may
+// start with a digit as long as a letter follows (e.g. the flag "64bit"). Flags only occur in the
+// value area, so this relaxed form is used exclusively in the VALUE state. A purely numeric token
+// stays a NUMBER, because a letter is required here.
+VALUE_IDENTIFIER = ({ALPHA} | [0-9]+ {ALPHA}) {IDENT_CHAR}*
 NUMBER     = [0-9]+(\.[0-9]+)*
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
@@ -58,10 +63,12 @@ VALUE_CHAR = [^\r\n{};:=\"()#\t ]
     ";"           { yybegin(YYINITIAL); return IsSectionTypes.SEMICOLON; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
-    {IDENTIFIER}  { return IsSectionTypes.IDENTIFIER; }
+    {VALUE_IDENTIFIER} { return IsSectionTypes.IDENTIFIER; }
     {VALUE_CHAR}+ { return IsSectionTypes.VALUE_CHAR; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }
+// NOTE: VALUE_IDENTIFIER (digit-leading flags) is intentionally NOT used below; constant
+// identifiers inside {…} keep the standard letter-leading IDENTIFIER form.
 
 <IN_STRING> {
     "{"           { yybegin(IN_STRING_CONSTANT); return IsSectionTypes.LBRACE; }

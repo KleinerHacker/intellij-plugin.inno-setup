@@ -69,6 +69,13 @@ class IsSectionCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
             IsSectionBooleanValueProvider
         )
+        // Flag suggestions for `kind: flags` attributes (e.g. [Files] Flags:). Offered after the
+        // ':'/'=' and after each already typed flag; whitespace between flags is ignored.
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().inFile(PlatformPatterns.psiFile(IsScriptFile::class.java)),
+            IsSectionFlagValueProvider
+        )
         // Cross-section reference completion: Tasks: <name>, Components: <name>, etc.
         // ReferenceBasedCompletionContributor does not fire for ISS because the reference
         // lives on IsSectionParamValue (parent), not the leaf IDENTIFIER. This provider reads

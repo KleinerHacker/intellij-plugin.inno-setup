@@ -165,6 +165,83 @@ class IsSectionCompletionTest : BasePlatformTestCase() {
         assertFalse("'no' must not appear in string directive completion", "no" in variants)
     }
 
+    // ── Flag value completion (kind: flags) ──────────────────────────────────────
+
+    fun testFlagValueCompletionAfterColon() {
+        // [Files] Flags is a `kind: flags` attribute → must offer its flags right after the ':'
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"; Flags: <caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected flag suggestions after 'Flags:'", variants)
+        assertTrue("Expected 'ignoreversion' in flag suggestions", "ignoreversion" in variants!!)
+        assertTrue("Expected 'recursesubdirs' in flag suggestions", "recursesubdirs" in variants)
+    }
+
+    fun testFlagValueCompletionAfterAnotherFlagWithWhitespace() {
+        // After a typed flag and whitespace, the remaining flags must still be offered.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"; Flags: ignoreversion <caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings
+        assertNotNull("Expected flag suggestions after a typed flag", variants)
+        assertTrue("Expected 'recursesubdirs' to still be offered", "recursesubdirs" in variants!!)
+    }
+
+    fun testFlagValueCompletionFiltersAlreadyPresentFlags() {
+        // A flag already present in the value must not be offered again.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"; Flags: ignoreversion <caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("Already-present 'ignoreversion' must not be offered again", "ignoreversion" in variants)
+    }
+
+    fun testFlagValueCompletionWithMultipleWhitespaceSeparatedFlags() {
+        // Several flags separated by (varying) whitespace: every present flag must be filtered out,
+        // while the remaining flags are still offered. Whitespace between flags is the separator.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"; Flags: ignoreversion   recursesubdirs \t <caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("Present 'ignoreversion' must be filtered out", "ignoreversion" in variants)
+        assertFalse("Present 'recursesubdirs' must be filtered out", "recursesubdirs" in variants)
+        assertTrue("Remaining flags must still be offered", "32bit" in variants)
+    }
+
+    fun testFlagValueCompletionBetweenTwoWhitespaceSeparatedFlags() {
+        // Caret sits in the whitespace gap between two already typed flags — completion must still
+        // fire and offer the still-available flags.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: \"{app}\"; Flags: ignoreversion <caret> recursesubdirs\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertTrue("A flag must be offered in the whitespace gap between flags", "32bit" in variants)
+        assertFalse("Already-present 'ignoreversion' must not be re-offered", "ignoreversion" in variants)
+        assertFalse("Already-present 'recursesubdirs' must not be re-offered", "recursesubdirs" in variants)
+    }
+
+    fun testFlagValueCompletionNotShownForNonFlagAttribute() {
+        // DestDir is a string attribute → no flag suggestions.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "[Files]\nSource: \"a.exe\"; DestDir: <caret>\n"
+        )
+        myFixture.completeBasic()
+        val variants = myFixture.lookupElementStrings ?: emptyList()
+        assertFalse("Flags must not appear for a non-flag attribute", "ignoreversion" in variants)
+    }
+
     // ── ISPP variable completion ──────────────────────────────────────────────────
 
     fun testIsppVariableCompletionAfterHash() {

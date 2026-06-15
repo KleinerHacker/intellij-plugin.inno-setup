@@ -93,3 +93,9 @@ Drei orthogonale Achsen, am `Is`+Rolle-Klassenprefix und am Paketpfad ablesbar:
 | `IN_STRING_CONSTANT` | Innerhalb `{…}` in einem String                  |
 
 `VALUE_CHAR = [^\r\n{};:=\"()#\t ]` — `#` ist bewusst ausgeschlossen, damit HASH-Token korrekt erkannt werden.
+
+**Bezeichner-Ausnahme für Flags:** Bezeichner beginnen grundsätzlich mit einem Buchstaben (`IDENTIFIER`).
+Einzige Ausnahme sind Flag-Bezeichner, die mit einer Ziffer beginnen dürfen (z. B. `64bit`). Da Flags nur
+im Wertbereich vorkommen, gilt im `VALUE`-Zustand die gelockerte Form `VALUE_IDENTIFIER`
+(`({ALPHA} | [0-9]+ {ALPHA}) {IDENT_CHAR}*`); ein rein numerisches Token bleibt `NUMBER`. In `YYINITIAL`
+(Keys/Header) und `IN_STRING_CONSTANT` (`{…}`-Konstanten) gilt weiterhin das buchstabenführende `IDENTIFIER`.
