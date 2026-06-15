@@ -19,6 +19,8 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
@@ -63,6 +65,7 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
      * Returns or performs the public behavior represented by this member.
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
+        if (element is IsDocLookupStub) return element.docHtml
         if (element.node?.elementType != IsPreprocessorTypes.IDENTIFIER) return null
         val spec = service<IsPreprocessorService>().spec
 
@@ -75,6 +78,22 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
 
         // Otherwise: a predefined ISPP variable referenced in an expression.
         return generateVariableDoc(element.text, spec)
+    }
+
+    /**
+     * Quick-documentation for the highlighted completion entry. The lookup objects are plain strings
+     * (the directive keyword without `#`, or a predefined ISPP variable name); predefined variables are
+     * resolved first, then directive keywords. User-defined `#define` names carry no spec doc and yield
+     * no popup. The rendered HTML is wrapped in an [IsDocLookupStub] handed back to [generateDoc].
+     */
+    override fun getDocumentationElementForLookupItem(
+        psiManager: PsiManager, obj: Any?, element: PsiElement?
+    ): PsiElement? {
+        val name = obj as? String ?: return null
+        val ctx = element ?: return null
+        val spec = service<IsPreprocessorService>().spec
+        val html = generateVariableDoc(name, spec) ?: generateDirectiveDoc(ctx, name, spec) ?: return null
+        return IsDocLookupStub(ctx, html)
     }
 
     private fun generateDirectiveDoc(element: PsiElement, keyword: String, spec: IsPreprocessorSpec): String? {

@@ -28,6 +28,55 @@ class IsSectionDocumentationProviderTest : BasePlatformTestCase() {
         return provider.generateDoc(target, ctx)
     }
 
+    /** Mirrors the completion-popup path: resolve the doc for a highlighted lookup string at the caret. */
+    private fun lookupDocFor(lookup: String, content: String): String? {
+        myFixture.configureByText(IsScriptFileType.INSTANCE, content)
+        val ctx = myFixture.file.findElementAt(myFixture.caretOffset) ?: return null
+        val target = provider.getDocumentationElementForLookupItem(myFixture.psiManager, lookup, ctx)
+            ?: return null
+        return provider.generateDoc(target, ctx)
+    }
+
+    fun testLookupSectionNameDoc() {
+        val doc = lookupDocFor("Setup", "[Se<caret>]\n")
+        assertNotNull("Expected lookup doc for the [Setup] section", doc)
+        assertTrue(doc!!.contains("Setup"))
+    }
+
+    fun testLookupAttributeKeyDoc() {
+        val doc = lookupDocFor("AppName", "[Setup]\nApp<caret>\n")
+        assertNotNull("Expected lookup doc for the AppName directive", doc)
+        assertTrue(doc!!.contains("AppName"))
+    }
+
+    fun testLookupFlagDoc() {
+        val doc = lookupDocFor(
+            "ignoreversion",
+            "[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: ignoreversi<caret>on\n"
+        )
+        assertNotNull("Expected lookup doc for the ignoreversion flag", doc)
+        assertTrue(doc!!.contains("ignoreversion"))
+        assertTrue("Flag lookup doc must declare it is a flag", doc.contains("flag"))
+    }
+
+    fun testLookupConstantDoc() {
+        val doc = lookupDocFor("app", "[Files]\nSource: \"app.exe\"; DestDir: \"{ap<caret>}\"\n")
+        assertNotNull("Expected lookup doc for the {app} constant", doc)
+        assertTrue(doc!!.contains("app"))
+    }
+
+    fun testLookupInlineIsppVariableDoc() {
+        // After-"{#" popup offers the bare variable name (no leading '#').
+        val doc = lookupDocFor("__LINE__", "[Setup]\nAppVersion={#<caret>}\n")
+        assertNotNull("Expected lookup doc for the __LINE__ ISPP variable", doc)
+        assertTrue(doc!!.contains("__LINE__"))
+    }
+
+    fun testLookupUnknownReturnsNull() {
+        val doc = lookupDocFor("DefinitelyNotAThing", "[Setup]\nApp<caret>\n")
+        assertNull("Unknown lookup string must not produce docs", doc)
+    }
+
     fun testSectionNameDoc() {
         val doc = docFor("[Set<caret>up]\nAppName=My App\n")
         assertNotNull("Expected doc for section name", doc)

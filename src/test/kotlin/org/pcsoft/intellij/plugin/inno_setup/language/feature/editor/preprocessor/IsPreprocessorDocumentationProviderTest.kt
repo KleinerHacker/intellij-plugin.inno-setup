@@ -33,6 +33,36 @@ class IsPreprocessorDocumentationProviderTest : BasePlatformTestCase() {
         return provider.generateDoc(target, ctx)
     }
 
+    /** Mirrors the completion-popup path for the injected ISPP fragment. */
+    private fun lookupDocFor(lookup: String, content: String): String? {
+        myFixture.configureByText(IsScriptFileType.INSTANCE, content)
+        val offset = myFixture.caretOffset
+        val ctx = InjectedLanguageManager.getInstance(project).findInjectedElementAt(myFixture.file, offset)
+            ?: myFixture.file.findElementAt(offset)
+            ?: return null
+        val target = provider.getDocumentationElementForLookupItem(ctx.manager, lookup, ctx)
+            ?: return null
+        return provider.generateDoc(target, ctx)
+    }
+
+    fun testLookupDirectiveKeywordDoc() {
+        val doc = lookupDocFor("define", "#def<caret>ine\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected lookup doc for the #define directive keyword", doc)
+        assertTrue("Doc must name the directive", doc!!.contains("#define"))
+        assertTrue("Doc must declare it is a directive", doc.contains("directive"))
+    }
+
+    fun testLookupPredefinedVariableDoc() {
+        val doc = lookupDocFor("PREPROCVER", "#define A PREPROC<caret>VER\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected lookup doc for the PREPROCVER predefined variable", doc)
+        assertTrue("Doc must name the variable", doc!!.contains("PREPROCVER"))
+    }
+
+    fun testLookupUserDefineProducesNoDoc() {
+        val doc = lookupDocFor("MyConst", "#define A My<caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNull("A user-defined macro name must not produce ISPP documentation", doc)
+    }
+
     fun testDirectiveKeywordDoc() {
         val doc = docFor("#def<caret>ine MyConst \"1.0\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
         assertNotNull("Expected doc for the #define directive keyword", doc)

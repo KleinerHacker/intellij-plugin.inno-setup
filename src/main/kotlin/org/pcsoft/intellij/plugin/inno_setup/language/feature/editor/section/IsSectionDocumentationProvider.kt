@@ -18,12 +18,18 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sectionAtOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.specSection
 import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.*
 
@@ -71,6 +77,8 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
      * Returns or performs the public behavior represented by this member.
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
+        if (element is IsDocLookupStub) return element.docHtml
+
         val spec = service<IsSpecService>().spec
 
         return when (element) {
@@ -89,13 +97,70 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
-    private fun generateSectionDoc(name: IsSectionTitle, spec: IsSectionSpec): String? {
-        val sec: IsSectionDefSpec = spec.sections.firstOrNull { it.name.equals(name.text, ignoreCase = true) }
+    /**
+     * Provides the quick-documentation for the entry currently highlighted in the completion popup.
+     *
+     * The lookup objects are plain strings, so the matching spec entry is reconstructed from the lookup
+     * text ([obj]) and the caret context ([element]): which kind of completion (constant, flag, attribute
+     * key, section name, inline `{#…}` ISPP symbol) is decided by the surrounding PSI, then the same
+     * renderers used for in-editor quick-doc produce the HTML, wrapped in an [IsDocLookupStub].
+     */
+    override fun getDocumentationElementForLookupItem(
+        psiManager: PsiManager, obj: Any?, element: PsiElement?
+    ): PsiElement? {
+        val lookup = obj as? String ?: return null
+        val ctx = element ?: return null
+        val html = resolveLookupDoc(lookup, ctx) ?: return null
+        return IsDocLookupStub(ctx, html)
+    }
+
+    private fun resolveLookupDoc(lookup: String, ctx: PsiElement): String? {
+        val spec = service<IsSpecService>().spec
+        val target = ctx.specTarget
+
+        // Inline ISPP emission inside {#…}: predefined variable or user define (only predefined are documented).
+        if (lookup.startsWith("#")) {
+            val varName = lookup.removePrefix("#")
+            return service<IsPreprocessorService>().spec.predefinedVariables
+                .firstOrNull { it.name.equals(varName, ignoreCase = true) }
+                ?.let { preprocessorVariableDoc(it) }
+        }
+
+        // Constant lookups fire right after "{" — only treat the entry as a constant when the caret is
+        // actually inside a {…} body, so a bareword like "Name" can't masquerade as a constant.
+        val name = lookup.substringBefore(':').trim()
+        if (PsiTreeUtil.getParentOfType(ctx, IsSectionConstantBody::class.java) != null ||
+            PsiTreeUtil.getParentOfType(ctx, IsSectionConstant::class.java) != null
+        ) {
+            constantDocByName(name, target)?.let { return it }
+            // {#VAR}: an inline ISPP variable typed via the after-"{#" popup (name carries no leading '#').
+            return service<IsPreprocessorService>().spec.predefinedVariables
+                .firstOrNull { it.name.equals(name, ignoreCase = true) }
+                ?.let { preprocessorVariableDoc(it) }
+        }
+
+        // Flag value of a `Flags:` parameter.
+        val pair = ctx.containingParamPair
+        if (pair != null && pair.keyText().equals("Flags", ignoreCase = true)) {
+            return generateFlagDoc(name, pair, spec)
+        }
+
+        // Otherwise resolve against the surrounding section: first an attribute key, then a section name.
+        val section = ctx.containingSection
+            ?: (ctx.containingFile as? IsScriptFile)?.sectionAtOffset(ctx.textOffset)
+        generateAttrDoc(section, name, spec)?.let { return it }
+        return sectionDocByName(name, target, spec)
+    }
+
+    private fun generateSectionDoc(name: IsSectionTitle, spec: IsSectionSpec): String? =
+        sectionDocByName(name.text, name.specTarget, spec)
+
+    private fun sectionDocByName(rawName: String, target: IsSectionSpecTarget, spec: IsSectionSpec): String? {
+        val sec: IsSectionDefSpec = spec.sections.firstOrNull { it.name.equals(rawName, ignoreCase = true) }
             ?: return null
 
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
-            val target = name.specTarget
             append("<b>[${sec.name}]</b> · ${sec.type.typeName}")
             if (sec.required.appliesTo(target)) append(" · <b>required</b>")
             if (sec.deprecated.appliesTo(target)) append(" · <s>deprecated</s>")
@@ -178,13 +243,17 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
         val body = constant.constantBody.text
             ?.substringBefore(':')?.substringBefore('|')?.trim()?.trimStart('#')
             ?: return null
+        return constantDocByName(body, constant.specTarget)
+    }
+
+    private fun constantDocByName(name: String, target: IsSectionSpecTarget): String? {
         val builtins = service<IsConstantService>().spec.constants
-        val const = builtins.firstOrNull { it.name.equals(body, ignoreCase = true) } ?: return null
+        val const = builtins.firstOrNull { it.name.equals(name, ignoreCase = true) } ?: return null
 
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             append("<b>{${const.name}}</b> · ${const.type.name.lowercase().replace('_', ' ')}")
-            if (const.deprecated.appliesTo(constant.specTarget)) append(" · <s>deprecated</s>")
+            if (const.deprecated.appliesTo(target)) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${const.description}</p>")
@@ -195,4 +264,15 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.CONTENT_END)
         }
     }
+
+    private fun preprocessorVariableDoc(variable: IsPreprocessorVariableSpec): String =
+        buildString {
+            append(DocumentationMarkup.DEFINITION_START)
+            append("<b>${variable.name}</b> · ${variable.type.typeName} · ISPP")
+            append(DocumentationMarkup.DEFINITION_END)
+            append(DocumentationMarkup.CONTENT_START)
+            append("<p>${variable.description}</p>")
+            appendVersionSection(variable.since, variable.until)
+            append(DocumentationMarkup.CONTENT_END)
+        }
 }
