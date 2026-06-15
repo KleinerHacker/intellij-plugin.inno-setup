@@ -2743,6 +2743,149 @@ sections:
         array: false
 
   # ---------------------------------------------------------------------------
+  # [INI] — parameter section
+  # ---------------------------------------------------------------------------
+  - name: INI
+    type: parameter
+    deprecated: [ ]
+    description: "Creates or modifies entries in <code>.INI</code> files during installation, with optional cleanup on uninstall via flags."
+    attributes:
+
+      - name: Filename
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "The <code>.INI</code> file to modify (constants are supported). Defaults to <code>WIN.INI</code> in the Windows directory if no path is given."
+        array: false
+
+      - name: Section
+        type:
+          kind: native
+          dataType: string
+        required: [ iss ]
+        deprecated: [ ]
+        description: "Name of the section in which the entry is created (constants are supported)."
+        array: false
+
+      - name: Key
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of the key to set (constants are supported). If omitted or blank, no key is created — only the section is created."
+        array: false
+
+      - name: String
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Value to assign to the key (constants are supported). If omitted, no key is created."
+        array: false
+
+      - name: Flags
+        type:
+          kind: flags
+          flags:
+            - name: createkeyifdoesntexist
+              description: "Only assigns the value if the key does not already exist in the INI file."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsdeleteentry
+              description: "Deletes the entry from the INI file on uninstall."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsdeletesection
+              description: "Deletes the entire section from the INI file on uninstall."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsdeletesectionifempty
+              description: "Deletes the section from the INI file on uninstall only if it contains no other entries."
+              deprecated: [ ]
+              conflicts: [ ]
+        required: [ ]
+        deprecated: [ ]
+        description: "Behavioural flags controlling INI entry handling and uninstall cleanup."
+        array: true
+
+      # Common parameters
+      - name: Components
+        type:
+          kind: reference
+          section: Components
+        required: [ ]
+        deprecated: [ ]
+        description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
+        array: true
+
+      - name: Tasks
+        type:
+          kind: reference
+          section: Tasks
+        required: [ ]
+        deprecated: [ ]
+        description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
+        array: true
+
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: [ ]
+        deprecated: [ ]
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
+  # ---------------------------------------------------------------------------
   # [Run] — parameter section
   # ---------------------------------------------------------------------------
   - name: Run

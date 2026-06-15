@@ -37,7 +37,7 @@
 | `[Dirs]`            | parameter | ✅      | All attributes + flags covered                                                          |
 | `[Files]`           | parameter | ✅      | All attributes + flags covered                                                          |
 | `[Icons]`           | parameter | ✅      | All attributes + flags covered                                                          |
-| `[INI]`             | parameter | ❌      | Entirely missing from spec                                                              |
+| `[INI]`             | parameter | ✅      | All attributes + flags covered                                                          |
 | `[Registry]`        | parameter | ✅      | All attributes + flags covered                                                          |
 | `[Run]`             | parameter | ✅      | All attributes + flags covered                                                          |
 | `[UninstallRun]`    | parameter | ✅      | All attributes + flags covered                                                          |
@@ -69,12 +69,14 @@ The obsolete directives below are intentionally skipped.
 
 ## Missing Sections — Details
 
-### `[INI]` section
+### `[INI]` section ✅
 
-Allows Setup to modify `.ini` files on the user's system.  
-**Attributes:** `Filename` (req), `Section` (req), `Key`, `String`  
+Allows Setup to create or modify `.ini` files on the user's system. Implemented as a parameter section
+in `is-spec.yaml`.  
+**Attributes:** `Filename` (optional, defaults to `WIN.INI`), `Section` (req), `Key`, `String`  
 **Flags:** `createkeyifdoesntexist`, `uninsdeleteentry`, `uninsdeletesection`, `uninsdeletesectionifempty`  
-**Common params:** `Components`, `Tasks`, `Languages`, `Check`, `MinVersion`, `OnlyBelowVersion`
+**Common params:** `Components`, `Tasks`, `Languages`, `Check`, `BeforeInstall`, `AfterInstall`,
+`MinVersion`, `OnlyBelowVersion`
 
 ### `[Messages]` section ✅
 
