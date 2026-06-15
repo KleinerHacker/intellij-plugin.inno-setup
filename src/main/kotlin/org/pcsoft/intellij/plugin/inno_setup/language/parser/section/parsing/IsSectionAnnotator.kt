@@ -158,7 +158,14 @@ class IsSectionAnnotator : Annotator {
             return
         }
         val present = langOptions.directiveEntryList.map { it.keyText().lowercase() }.toSet()
-        val required = setOf("languagename", "languageid")
+        // Required [LangOptions] directives for .isl files come from the spec — the single source of truth.
+        val required = service<IsSpecService>().spec.sections
+            .firstOrNull { it.name.equals("LangOptions", ignoreCase = true) }
+            ?.attributes
+            ?.filter { it.required.appliesTo(IsSectionSpecTarget.ISL) }
+            ?.map { it.name.lowercase() }
+            ?.toSet()
+            ?: emptySet()
         val missing = required - present
         if (missing.isNotEmpty()) {
             holder.newAnnotation(

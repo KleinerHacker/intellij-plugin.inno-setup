@@ -20,20 +20,12 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
  */
 object IsSectionReferenceValueProvider : CompletionProvider<CompletionParameters>() {
-    private val KEY_TO_SECTION = mapOf(
-        "tasks" to "Tasks",
-        "components" to "Components",
-        "types" to "Types",
-        "languages" to "Languages",
-    )
-
     /**
      * Adds lookup elements for the current completion request.
      */
@@ -45,8 +37,8 @@ object IsSectionReferenceValueProvider : CompletionProvider<CompletionParameters
         val position = parameters.position
         if (position.isInCodeSection) return
         val paramValue = PsiTreeUtil.getParentOfType(position, IsSectionParamValue::class.java) ?: return
-        val pair = paramValue.containingParamPair as? IsSectionParamPairEx ?: return
-        val targetSection = KEY_TO_SECTION[pair.keyText().lowercase()] ?: return
+        val pair = paramValue.containingParamPair ?: return
+        val targetSection = pair.referenceTargetSection ?: return
         val file = paramValue.issFile ?: return
         file.findSections(targetSection)
             .flatMap { it.nameDeclarations }

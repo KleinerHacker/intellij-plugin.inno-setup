@@ -22,6 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionDefSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionReferenceTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
 
 // ── IsScriptFile (Sektionen) ────────────────────────────────────────────────────────
@@ -181,6 +182,19 @@ val IsSectionParamPair.valueUnquoted: String
  */
 val IsSectionParamPair.nextParam: IsSectionParamPair?
     get() = PsiTreeUtil.getNextSiblingOfType(this, IsSectionParamPair::class.java)
+
+/**
+ * The section that this pair's value references, when its key maps to a `reference`-typed attribute
+ * in the section spec (e.g. `Tasks` in `[Icons]` → `Tasks`), or `null` otherwise. Derived from the
+ * YAML spec (`type: { kind: reference, section: … }`), the single source of truth — so a key only
+ * counts as a reference in the sections where the spec actually declares it as one.
+ */
+val IsSectionParamPair.referenceTargetSection: String?
+    get() {
+        val attr = containingSection?.specSection
+            ?.attributes?.firstOrNull { it.name.equals(keyText(), ignoreCase = true) }
+        return (attr?.type as? IsSectionReferenceTypeSpec)?.section
+    }
 
 // ── IsSectionDirectiveEntry ─────────────────────────────────────────────────────────
 // keyText() is provided as a member by IsSectionDirectiveEntryEx (the directiveEntry mixin).

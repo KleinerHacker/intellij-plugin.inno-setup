@@ -2,7 +2,7 @@
 
 > **Reference version:** Inno Setup 7.0.1-beta  
 > **Docs URL:** https://jrsoftware.org/ishelp/  
-> **Last checked:** 2026-06-12
+> **Last checked:** 2026-06-15
 >
 > This file tracks which parts of the official Inno Setup documentation are implemented in the plugin's
 > spec files (`src/main/resources/spec/`) and language support. Update the "Last checked" date and the
@@ -144,6 +144,10 @@ Coverage appears **complete**: 24 directives, 13+ predefined variables, 31+ buil
 All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#ifdef`, `#ifndef`,
 `#include`, `#for`, `#sub`, `#endsub`, `#emit`, `#expr`, `#pragma`, `#error`, etc.) are present.
 
+Directive keywords are validated against this spec by `IsPreprocessorAnnotator`: a `#…` directive
+whose keyword is not declared in `ispp-spec.yaml` is flagged as an error (`Unknown preprocessor
+directive`, case-insensitive), mirroring the unknown-section/flag/constant checks.
+
 ---
 
 ## IDE Features
@@ -174,4 +178,5 @@ All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#
 | Quote handler                                   | ✅      |                                                                                                                                                                                                   |
 | ISPP language injection                         | ✅      | Preprocessor lines injected into ISI                                                                                                                                                              |
 | Semantic annotations / errors                   | ✅      |                                                                                                                                                                                                   |
+| ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `ispp-spec.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                          |
 | [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                     |

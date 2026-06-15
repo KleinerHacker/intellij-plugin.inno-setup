@@ -19,26 +19,18 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingParamPair
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.referenceTargetSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
 abstract class IsSectionParamValueMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node) {
-
-    companion object {
-        private val REF_KEY_TO_SECTION = mapOf(
-            "tasks" to "Tasks",
-            "components" to "Components",
-            "types" to "Types",
-            "languages" to "Languages",
-        )
-    }
 
     /**
      * Returns references contributed by this PSI element.
      */
     override fun getReferences(): Array<PsiReference> {
         val pair = containingParamPair ?: return PsiReference.EMPTY_ARRAY
-        val targetSection = REF_KEY_TO_SECTION[pair.keyText().lowercase()] ?: return PsiReference.EMPTY_ARRAY
+        val targetSection = pair.referenceTargetSection ?: return PsiReference.EMPTY_ARRAY
         val paramValue = this as IsSectionParamValue
         return node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
             .map { idNode ->

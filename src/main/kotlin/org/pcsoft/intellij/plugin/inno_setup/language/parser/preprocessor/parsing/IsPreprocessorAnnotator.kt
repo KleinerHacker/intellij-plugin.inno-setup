@@ -16,6 +16,7 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -28,6 +29,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsin
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 
 /**
  * Annotates Inno Setup PSI elements with validation and highlighting information.
@@ -44,10 +46,21 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateDirective(directive: IsPreprocessorDirective, holder: AnnotationHolder) {
         val hash = directive.node.findChildByType(IsPreprocessorTypes.HASH) ?: return
         val keyword = directive.node.findChildByType(IsPreprocessorTypes.IDENTIFIER) ?: return
-        highlight(
-            TextRange(hash.startOffset, keyword.textRange.endOffset),
-            IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder
-        )
+        val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
+
+        // The directive keyword must be one declared by the ISPP spec (the single source of truth).
+        // ISPP directives are case-insensitive.
+        val known = service<IsPreprocessorService>().spec.directives
+            .any { it.name.equals(keyword.text, ignoreCase = true) }
+        if (!known) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Unknown preprocessor directive: '#${keyword.text}'")
+                .range(keywordRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+
+        highlight(keywordRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
 
         val ex = directive as? IsPreprocessorDirectiveEx ?: return
         if (!ex.isDefine()) return

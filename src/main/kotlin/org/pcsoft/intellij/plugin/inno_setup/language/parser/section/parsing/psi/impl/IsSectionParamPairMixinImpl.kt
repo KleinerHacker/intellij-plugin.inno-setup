@@ -19,12 +19,11 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.referenceTargetSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
 
 abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsSectionParamPairEx,
     PsiNameIdentifierOwner {
-
-    private val REFERENCE_KEYS = setOf("tasks", "components", "types", "languages")
 
     /**
      * Returns the normalized key text represented by this PSI element.
@@ -42,7 +41,7 @@ abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement
      * Returns whether this PSI element value references another section entry.
      */
     override fun isReferenceParam(): Boolean =
-        keyText().lowercase() in REFERENCE_KEYS
+        (this as IsSectionParamPair).referenceTargetSection != null
 
     // PsiNameIdentifierOwner — only meaningful for Name: <value> pairs
     /**
