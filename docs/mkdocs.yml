@@ -3,6 +3,7 @@ site_description: JetBrains plugin providing language support for Inno Setup scr
 site_author: PCSoft
 
 docs_dir: docs
+site_dir: ../build/docs
 
 extra_css:
   - stylesheets/extra.css

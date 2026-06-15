@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorSyntaxHighlighting
 
 /**
  * Semantic highlighting tests — verifies that IsSectionAnnotator applies the correct
@@ -108,6 +109,37 @@ class IsSectionHighlightingTest : BasePlatformTestCase() {
         }
         assertNotNull(
             "The name of a function-like #define (Max) must be highlighted with DEFINE_NAME (italic)", hit
+        )
+    }
+
+    // ── ISPP injected token highlighting (strings / numbers) ──────────────────
+    // Inside the ISPP injection these colours are applied through IsPreprocessorAnnotator
+    // (the injected SyntaxHighlighter lexer does not paint reliably in the host editor).
+
+    fun testPreprocessorStringHighlighted() {
+        val text = "#define AppVersion \"1.0\"\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val strOffset = text.indexOf("\"1.0\"")
+        val strEnd = strOffset + "\"1.0\"".length
+        val hit = all.firstOrNull { info ->
+            info.forcedTextAttributesKey == IsPreprocessorSyntaxHighlighting.STRING &&
+                    info.startOffset >= strOffset && info.endOffset <= strEnd
+        }
+        assertNotNull(
+            "The string \"1.0\" in a #define must be highlighted with the ISPP STRING attribute", hit
+        )
+    }
+
+    fun testPreprocessorNumberHighlighted() {
+        val text = "#define Count 42\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"
+        val all = highlights(text)
+        val numOffset = text.indexOf("42")
+        val hit = all.firstOrNull { info ->
+            info.forcedTextAttributesKey == IsPreprocessorSyntaxHighlighting.NUMBER &&
+                    info.startOffset == numOffset && info.endOffset == numOffset + "42".length
+        }
+        assertNotNull(
+            "The number 42 in a #define must be highlighted with the ISPP NUMBER attribute", hit
         )
     }
 

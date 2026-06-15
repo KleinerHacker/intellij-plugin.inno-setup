@@ -29,6 +29,13 @@
       "items": {
         "$ref": "#/definitions/function"
       }
+    },
+    "forbidden_variables_name": {
+      "description": "List of reserved ISPP keywords that must not be used as a #define (or other macro) name.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/forbiddenName"
+      }
     }
   },
   "definitions": {
@@ -145,6 +152,33 @@
         },
         "until": {
           "description": "Inno Setup / ISPP version up to which this function is supported; absent if still current.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "forbiddenName": {
+      "description": "A single reserved ISPP keyword that cannot be used as a macro name.",
+      "type": "object",
+      "required": [
+        "name",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "description": "Reserved keyword, matched case-insensitively against macro names (e.g. \"defined\", \"int\").",
+          "type": "string"
+        },
+        "description": {
+          "description": "Human-readable reason why the name is reserved, shown in documentation and tooltips.",
+          "type": "string"
+        },
+        "since": {
+          "description": "Inno Setup / ISPP version in which this name became reserved (e.g. \"6.0.0\").",
+          "type": "string"
+        },
+        "until": {
+          "description": "Inno Setup / ISPP version up to which this name is reserved; absent if still current.",
           "type": "string"
         }
       },

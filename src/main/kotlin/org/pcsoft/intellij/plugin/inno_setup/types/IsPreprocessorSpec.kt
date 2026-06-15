@@ -130,11 +130,39 @@ data class IsPreprocessorFunctionSpec(
 )
 
 /**
+ * Describes a reserved ISPP keyword that must not be used as a `#define` (or other macro) name.
+ *
+ * @property name Reserved keyword, matched case-insensitively against macro names.
+ * @property description Human-readable reason why the name is reserved.
+ * @property since First Inno Setup version in which the name became reserved, or `null` when unknown.
+ * @property until Last Inno Setup version in which the name is reserved, or `null` when it still is.
+ */
+data class IsPreprocessorForbiddenNameSpec(
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    val name: String,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    val description: String,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    val since: String? = null,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    val until: String? = null
+)
+
+/**
  * Root model for the bundled ISPP specification YAML.
  *
  * @property directives All known preprocessor directives.
  * @property predefinedVariables All known predefined variables.
  * @property builtinFunctions All known built-in functions.
+ * @property forbiddenVariableNames Reserved keywords that must not be used as macro names.
  */
 data class IsPreprocessorSpec(
     /**
@@ -142,5 +170,7 @@ data class IsPreprocessorSpec(
      */
     val directives: List<IsPreprocessorDirectiveSpec>,
     @field:JsonProperty("predefined_variables") val predefinedVariables: List<IsPreprocessorVariableSpec>,
-    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IsPreprocessorFunctionSpec>
+    @field:JsonProperty("builtin_functions") val builtinFunctions: List<IsPreprocessorFunctionSpec>,
+    @field:JsonProperty("forbidden_variables_name")
+    val forbiddenVariableNames: List<IsPreprocessorForbiddenNameSpec> = emptyList()
 )

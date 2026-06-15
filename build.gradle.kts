@@ -179,6 +179,17 @@ tasks {
         finalizedBy("deleteDokka", "deleteLicenceReport")
     }
 
+    register<Exec>("buildDocs") {
+        group = "MKDocs"
+        description = "Build the mkdocs site into build/docs (per mkdocs.yml site_dir; no serve, no deploy) — usable as a generation test"
+        workingDir = file("docs")
+        // --strict fails the build on warnings (broken links, missing pages …) so it acts as a test;
+        // --clean wipes the previous output first.
+        commandLine("python", "-m", "mkdocs", "build", "--clean", "--strict")
+        dependsOn("installDocs", "copyDokka", "copyLicenceReport")
+        finalizedBy("deleteDokka", "deleteLicenceReport")
+    }
+
     register<Exec>("deployDocs") {
         group = "MKDocs"
         description = "Deploy mkdocs to gh-pages"

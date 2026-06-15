@@ -254,3 +254,29 @@ builtin_functions:
   - name: ReadIni
     signature: "ReadIni(Filename: str, Section: str, Key: str, Default: str): str"
     description: "Reads a value from an INI file at compile time."
+
+# Reserved ISPP keywords that must not be used as a #define (or other macro) name.
+# Matched case-insensitively against the declared macro name.
+# Source: ISPP #define syntax and expression syntax (https://jrsoftware.org/ispphelp/).
+#   variable-definition: (define | :) [private | protected | public] <ident> [[<expr>]] [[=] <expr>]
+# The scope keywords directly precede <ident> and the type keywords are reserved in expressions.
+forbidden_variables_name:
+  # Scope/visibility keywords
+  - name: public
+    description: "Reserved scope keyword in a #define (sets public visibility); cannot be used as a macro name."
+  - name: protected
+    description: "Reserved scope keyword in a #define (sets protected visibility); cannot be used as a macro name."
+  - name: private
+    description: "Reserved scope keyword in a #define (sets private visibility); cannot be used as a macro name."
+  # Type keywords (ISPP expression types)
+  - name: void
+    description: "Reserved type keyword (null/void type); cannot be used as a macro name."
+  - name: int
+    description: "Reserved type keyword (integer type); cannot be used as a macro name."
+  - name: str
+    description: "Reserved type keyword (string type); cannot be used as a macro name."
+  - name: any
+    description: "Reserved type keyword (any type); cannot be used as a macro name."
+  # Operator keyword
+  - name: defined
+    description: "Reserved operator keyword (e.g. <code>#if defined(Name)</code>); cannot be used as a macro name."

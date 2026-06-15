@@ -77,4 +77,21 @@ class IsPreprocessorServiceTest {
         assertNotNull("GetFileVersion must exist", fn)
         assertTrue("Must have signature", fn!!.signature.isNotBlank())
     }
+
+    @Test
+    fun `forbidden variable names list is loaded`() {
+        assertTrue("Must have forbidden variable names", spec.forbiddenVariableNames.isNotEmpty())
+        spec.forbiddenVariableNames.forEach { f ->
+            assertFalse("Forbidden name must not be blank", f.name.isBlank())
+            assertFalse("Forbidden name '${f.name}' description must not be blank", f.description.isBlank())
+        }
+    }
+
+    @Test
+    fun `defined is a forbidden variable name`() {
+        assertNotNull(
+            "'defined' must be a reserved/forbidden macro name",
+            spec.forbiddenVariableNames.find { it.name == "defined" }
+        )
+    }
 }
