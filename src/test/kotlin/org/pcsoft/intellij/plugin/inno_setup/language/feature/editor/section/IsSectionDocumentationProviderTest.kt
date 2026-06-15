@@ -102,6 +102,19 @@ class IsSectionDocumentationProviderTest : BasePlatformTestCase() {
         )
     }
 
+    fun testDeprecatedConstantShowsDeprecatedMarker() {
+        // {pf} is deprecated → doc must show the deprecated marker.
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{p<caret>f}\\App\"\n")
+        assertNotNull("Expected doc for the deprecated {pf} constant", doc)
+        assertTrue("Doc for {pf} must mark it as deprecated", doc!!.contains("deprecated", ignoreCase = true))
+    }
+
+    fun testNonDeprecatedConstantHasNoDeprecatedMarker() {
+        val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{a<caret>pp}\"\n")
+        assertNotNull("Expected doc for {app}", doc)
+        assertFalse("Doc for {app} must not contain a deprecated marker", doc!!.contains("deprecated", ignoreCase = true))
+    }
+
     fun testFlagWithSinceShowsVersionSection() {
         // signcheck flag has since="6.4"
         val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"; Flags: signche<caret>ck\n")

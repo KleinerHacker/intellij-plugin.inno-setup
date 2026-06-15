@@ -21,11 +21,13 @@ import com.intellij.openapi.components.service
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionFlagTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
 /**
  * Offers the available flags of a `kind: flags` attribute as completion suggestions.
@@ -62,6 +64,7 @@ object IsSectionFlagValueProvider : CompletionProvider<CompletionParameters>() {
         } ?: return
 
         val flagType = attr.type as? IsSectionFlagTypeSpec ?: return
+        val target = paramValue.specTarget
 
         // Flags already present in the value (excluding the token currently being typed at the caret).
         val present = paramValue.node
@@ -73,9 +76,10 @@ object IsSectionFlagValueProvider : CompletionProvider<CompletionParameters>() {
         flagType.flags
             .filter { it.name.lowercase() !in present }
             .forEach { flag ->
-                result.addElement(
-                    PrioritizedLookupElement.withPriority(LookupElementBuilder.create(flag.name), 20.0)
-                )
+                // Deprecation is shown via strikethrough (withStrikeoutness), not as tail text.
+                val element = LookupElementBuilder.create(flag.name)
+                    .withStrikeoutness(flag.deprecated.appliesTo(target))
+                result.addElement(PrioritizedLookupElement.withPriority(element, 20.0))
             }
     }
 }

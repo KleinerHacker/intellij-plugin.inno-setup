@@ -684,6 +684,48 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
         }
     }
 
+    // ── Deprecation strikethrough (constants & flags) ────────────────────────
+
+    fun testDeprecatedConstantIsStruckThrough() {
+        // {pf} is deprecated (deprecated: [iss, isl]) → DEPRECATED text attribute (strikethrough).
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{pf}\\App\"\n"
+        val pfOffset = text.indexOf("{pf}")
+        val struck = highlights(text).any {
+            it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.DEPRECATED &&
+                    it.startOffset <= pfOffset && it.endOffset >= pfOffset + "{pf}".length
+        }
+        assertTrue("Deprecated constant {pf} must be struck through (DEPRECATED attribute)", struck)
+    }
+
+    fun testNonDeprecatedConstantIsNotStruckThrough() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\\App\"\n"
+        val appOffset = text.indexOf("{app}")
+        val struck = highlights(text).any {
+            it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.DEPRECATED &&
+                    it.startOffset <= appOffset && it.endOffset >= appOffset + "{app}".length
+        }
+        assertFalse("Non-deprecated constant {app} must not be struck through", struck)
+    }
+
+    fun testRemovedConstantIsBothStruckThroughAndErrored() {
+        // {hwnd} is deprecated AND until=6.4 → strikethrough plus a 'removed' ERROR coexist.
+        withMinVersion("6.4") {
+            val text = VALID_SETUP + "AppComments={hwnd}\n"
+            val hwndOffset = text.indexOf("{hwnd}")
+            val all = highlights(text)
+            val struck = all.any {
+                it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.DEPRECATED &&
+                        it.startOffset <= hwndOffset && it.endOffset >= hwndOffset + "{hwnd}".length
+            }
+            val removed = all.any {
+                it.severity == HighlightSeverity.ERROR &&
+                        it.description?.contains("removed in Inno Setup", ignoreCase = true) == true
+            }
+            assertTrue("Removed+deprecated constant {hwnd} must be struck through", struck)
+            assertTrue("Removed constant {hwnd} must also produce a 'removed' ERROR", removed)
+        }
+    }
+
     fun testNoMinVersionConfiguredProducesNoVersionAnnotations() {
         // Without configured minVersion no version warnings are emitted
         withMinVersion(null) {

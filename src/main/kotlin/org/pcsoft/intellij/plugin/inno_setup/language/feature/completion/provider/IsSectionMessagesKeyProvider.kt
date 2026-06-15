@@ -109,14 +109,12 @@ object IsSectionMessagesKeyProvider : CompletionProvider<CompletionParameters>()
         target: IsSectionSpecTarget
     ) {
         specSection.attributes.forEach { attr ->
-            val tail = buildString {
-                if (attr.deprecated.appliesTo(target)) append(" deprecated")
-            }
+            // Deprecation is shown via strikethrough (withStrikeoutness) + gray colour, not as tail text.
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create(attr.name)
                         .withTypeText("message")
-                        .withTailText(tail, true)
+                        .withStrikeoutness(attr.deprecated.appliesTo(target))
                         .withItemTextForeground(
                             if (attr.deprecated.appliesTo(target)) JBColor.GRAY else JBColor.foreground()
                         )

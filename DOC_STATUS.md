@@ -160,6 +160,16 @@ interpretation (`IsMessagesFileResolver`, which expands the path-relevant `{#Sou
 `{#CompilerPath}`/`{#SysPath}`; dynamic/non-path variables stay unresolvable rather than producing a
 false error). `#ifdef`/`#if` handling for the `void` symbols is not yet implemented.
 
+**Quick documentation (in-editor):** `IsPreprocessorDocumentationProvider` (registered for language
+`ISPP`) provides Quick Doc inside the injected preprocessor fragment for two cases: the **directive
+keyword** (`#define`, `#include`, …) shows the directive's description, syntax, `deprecated` marker and
+`since`/`until` version range from `ispp-spec.yaml`; a **predefined variable** referenced in an
+expression (e.g. `PREPROCVER`, `__LINE__`) shows its type, description and version range. The
+`deprecated` marker is evaluated against the host file's spec target (resolved via
+`InjectedLanguageManager`). Built-in functions are not yet covered by Quick Doc. Within a `#define`
+expression, completion offers earlier `#define` names **and** the predefined variables
+(`IsPreprocessorDefineExpressionProvider`).
+
 **User documentation:** The MkDocs site has a dedicated **Inno Setup Preprocessor** rubric
 (`docs/docs/preprocessor/`, all four locales), modelled on the official ISPP docs: an `overview.md`
 (general preprocessor description + supported-directive table + inline `{#…}`) plus one page per
@@ -191,7 +201,8 @@ support.
 | Brace matching `[]`, `{}`, `()`                 | ✅      |                                                                                                                                                                                                   |
 | Code folding                                    | ✅      |                                                                                                                                                                                                   |
 | Structure view                                  | ✅      |                                                                                                                                                                                                   |
-| Documentation popup                             | ✅      | From spec YAML descriptions                                                                                                                                                                       |
+| Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                         |
+| Documentation popup (ISPP)                      | ✅      | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until` |
 | Find usages                                     | ✅      | For ISPP `#define` references                                                                                                                                                                     |
 | Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                              |
 | Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                   |
@@ -201,4 +212,5 @@ support.
 | ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `ispp-spec.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                          |
 | `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s + value-bearing predefined variables; valueless `void` symbols stay flagged as invalid emissions                                                            |
 | `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                 |
+| Completion — deprecated members struck through  | ✅      | Deprecated sections/attributes/flags/constants/message-keys are rendered with strikethrough in the lookup (`withStrikeoutness`, target-aware); no extra "deprecated" tail text — it follows from the strikethrough |
 | [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                     |

@@ -17,14 +17,17 @@ import com.intellij.codeInsight.completion.CompletionProvider
 import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 
 /**
- * Inside a `#define` expression, suggest the names of all `#define`s declared on an earlier line.
+ * Inside a `#define` expression, suggest the names of all `#define`s declared on an earlier line, plus the
+ * predefined ISPP variables (e.g. `__LINE__`, `PREPROCVER`) which are always referenceable.
  * Declaration order is enforced via host offsets, so neither the current define nor later ones appear.
  */
 object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionParameters>() {
@@ -65,6 +68,15 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
                 LookupElementBuilder.create(name)
                     .withTypeText("define")
                     .withIcon(IsIcons.Variable)
+            )
+        }
+
+        // Predefined ISPP variables are always available in an expression.
+        service<IsPreprocessorService>().spec.predefinedVariables.forEach { variable ->
+            adjusted.addElement(
+                LookupElementBuilder.create(variable.name)
+                    .withTypeText("predefined ${variable.type.typeName}")
+                    .withIcon(IsIcons.Constant)
             )
         }
     }

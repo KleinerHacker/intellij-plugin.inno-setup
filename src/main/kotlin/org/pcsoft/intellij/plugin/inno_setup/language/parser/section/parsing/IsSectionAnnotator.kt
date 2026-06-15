@@ -709,10 +709,19 @@ class IsSectionAnnotator : Annotator {
             }
         } else {
             val constSpec = builtins.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            // Version (since/until) and deprecation are independent dimensions: a constant may be both
+            // removed in a version (red "removed"/"requires" line) and deprecated (struck through).
             if (constSpec != null) {
                 annotateVersion(constant.textRange, "{${constSpec.name}}", constSpec.since, constSpec.until, holder)
             }
-            highlight(constant.textRange, IsSectionAnnotatorHighlighting.REFERENCE, holder)
+            if (constSpec != null && constSpec.deprecated.appliesTo(constant.specTarget)) {
+                holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                    .range(constant.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.DEPRECATED)
+                    .create()
+            } else {
+                highlight(constant.textRange, IsSectionAnnotatorHighlighting.REFERENCE, holder)
+            }
             if (name.equals("cm", ignoreCase = true)) {
                 // Render the `cm` keyword italic (layers over the reference colour above).
                 body.node.findChildByType(IsSectionTypes.IDENTIFIER)?.let {

@@ -159,6 +159,8 @@
         <!-- Documentation provider -->
         <lang.documentationProvider language="ISS"
                                     implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionDocumentationProvider"/>
+        <lang.documentationProvider language="ISPP"
+                                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsPreprocessorDocumentationProvider"/>
 
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"

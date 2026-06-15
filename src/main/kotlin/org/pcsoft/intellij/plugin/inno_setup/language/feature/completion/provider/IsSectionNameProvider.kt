@@ -60,7 +60,7 @@ object IsSectionNameProvider : CompletionProvider<CompletionParameters>() {
             val removed = minVersion != null && specSection.until != null &&
                     IsSettingsService.compareIsVersions(specSection.until, minVersion) <= 0
             val tailText = buildString {
-                if (specSection.deprecated.appliesTo(target)) append(" (deprecated)")
+                // Deprecation is shown via strikethrough (withStrikeoutness), not as tail text.
                 if (removed) append(" [removed IS ${specSection.until}]")
                 else if (tooNew) append(" [IS ${specSection.since}+]")
             }
@@ -68,6 +68,7 @@ object IsSectionNameProvider : CompletionProvider<CompletionParameters>() {
                 .create(specSection.name)
                 .withTypeText(specSection.type.typeName)
                 .withTailText(tailText, true)
+                .withStrikeoutness(specSection.deprecated.appliesTo(target))
                 .withItemTextForeground(
                     when {
                         duplicate -> JBColor.RED

@@ -104,7 +104,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
             }
             val tail = buildString {
                 if (attr.required.appliesTo(target)) append(" required")
-                if (attr.deprecated.appliesTo(target)) append(" deprecated")
+                // Deprecation is shown via strikethrough (withStrikeoutness), not as tail text.
                 if (attr.array) append("[]")
                 if (removed) append(" [removed IS ${attr.until}]")
                 else if (tooNew) append(" [IS ${attr.since}+]")
@@ -123,6 +123,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
                 .withTailText(tail, true)
                 .withItemTextForeground(foreground)
                 .withBoldness(attr.required.appliesTo(target))
+                .withStrikeoutness(attr.deprecated.appliesTo(target))
                 .withInsertHandler { ctx, _ ->
                     ctx.document.insertString(ctx.tailOffset, separator)
                     ctx.editor.caretModel.moveToOffset(ctx.tailOffset)

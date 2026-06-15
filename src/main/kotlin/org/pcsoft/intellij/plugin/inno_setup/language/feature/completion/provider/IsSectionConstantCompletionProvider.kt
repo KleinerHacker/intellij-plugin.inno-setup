@@ -19,11 +19,13 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
 /**
  * Provides context-aware completion variants for Inno Setup PSI elements.
@@ -43,15 +45,18 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
         if (offset == 0 || chars[offset - 1] != '{') return
 
         val file = parameters.originalFile as? IsScriptFile ?: return
+        val target = file.specTarget
         val builtins = service<IsConstantService>().spec.constants
         val userDefs = file.definedConstants
 
         builtins.forEach { const ->
+            // Deprecation is shown via strikethrough (withStrikeoutness), not as tail text.
             val tail = if (const.parameterized) " (${const.syntax ?: "parameterized"})" else ""
             val element = LookupElementBuilder
                 .create(if (const.parameterized && const.syntax?.startsWith("${const.name}:") == true) "${const.name}:" else const.name)
                 .withTypeText(const.type.name.lowercase().replace('_', ' '))
                 .withTailText(tail, true)
+                .withStrikeoutness(const.deprecated.appliesTo(target))
                 .withIcon(IsIcons.Constant)
                 .withInsertHandler { ctx, _ ->
                     if (!const.parameterized)
