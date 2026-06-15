@@ -2,7 +2,7 @@
 
 > **Reference version:** Inno Setup 7.0.1-beta  
 > **Docs URL:** https://jrsoftware.org/ishelp/  
-> **Last checked:** 2026-06-15
+> **Last checked:** 2026-06-15 (parameter/flag completeness re-audited against the official section pages)
 >
 > This file tracks which parts of the official Inno Setup documentation are implemented in the plugin's
 > spec files (`src/main/resources/spec/`) and language support. Update the "Last checked" date and the
@@ -31,17 +31,17 @@
 | Section             | Type      | Status | Notes                                                                                   |
 |---------------------|-----------|--------|-----------------------------------------------------------------------------------------|
 | `[Setup]`           | directive | ✅      | All ~158 current attributes covered                                                     |
-| `[Types]`           | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Components]`      | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Tasks]`           | parameter | ✅      | All attributes + flags covered                                                          |
+| `[Types]`           | parameter | ✅      | Attributes + `iscustom` flag + common params (`Languages`/`Check`/`MinVersion`/`OnlyBelowVersion`, added 2026-06-15) |
+| `[Components]`      | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)   |
+| `[Tasks]`           | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)   |
 | `[Dirs]`            | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Files]`           | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Icons]`           | parameter | ✅      | All attributes + flags covered                                                          |
+| `[Files]`           | parameter | ✅      | All attributes + flags covered (18 missing flags added 2026-06-15, see below)           |
+| `[Icons]`           | parameter | ✅      | All attributes + flags covered (`excludefromshowinnewinstall`/`uninsneveruninstall`/`useapppaths` added 2026-06-15) |
 | `[INI]`             | parameter | ✅      | All attributes + flags covered                                                          |
 | `[Registry]`        | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Run]`             | parameter | ✅      | All attributes + flags covered                                                          |
-| `[UninstallRun]`    | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Languages]`       | parameter | ✅      | All attributes covered                                                                  |
+| `[Run]`             | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15, see below)            |
+| `[UninstallRun]`    | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15)                       |
+| `[Languages]`       | parameter | ✅      | All attributes covered (`LicenseFile`/`InfoBeforeFile`/`InfoAfterFile` added 2026-06-15) |
 | `[Messages]`        | directive | ✅      | Full standard `Default.isl` message set; `lang.` prefix completion                      |
 | `[CustomMessages]`  | directive | ✅      | No predefined names; `lang.` prefix completion + `{cm:}` reference/find-usages/rename   |
 | `[LangOptions]`     | directive | ✅      | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion |
@@ -49,6 +49,47 @@
 | `[UninstallDelete]` | parameter | ✅      | All attributes covered                                                                  |
 | `[ISSigKeys]`       | parameter | ✅      | All attributes covered (IS 6.5+)                                                        |
 | `[Code]`            | code      | ✅      | Treated as injected Pascal, no spec needed                                              |
+
+---
+
+## 2026-06-15 parameter/flag completeness audit
+
+A full re-check against the official section pages found several gaps that were closed:
+
+- **Common parameters** (`Languages`/`MinVersion`/`OnlyBelowVersion` are supported by *all* parameter
+  sections; `Check` additionally by `[Types]`/`[Components]`/`[Tasks]`): added `MinVersion`/`OnlyBelowVersion`
+  to `[Components]` and `[Tasks]`, and the full `Languages`/`Check`/`MinVersion`/`OnlyBelowVersion` set to
+  `[Types]`.
+- **`[Languages]`**: added `LicenseFile`, `InfoBeforeFile`, `InfoAfterFile` (per-language overrides of the
+  matching `[Setup]` directives).
+- **`[Files]` flags** added: `allowunsafefiles`, `dontverifychecksum`, `fontisnttruetype`, `gacinstall`,
+  `noregerror`, `onlyifdestfileexists`, `overwritereadonly`, `promptifolder`, `sign`, `signonce`,
+  `skipifsourcedoesntexist`, `solidbreak`, `sortfilesbyextension`, `sortfilesbyname`, `uninsneveruninstall`,
+  `uninsnosharedfileprompt`, `uninsremovereadonly`, `uninsrestartdelete`.
+- **`[Run]`/`[UninstallRun]` flags** added: `32bit`, `64bit`, `dontlogparameters`, `hidewizard`,
+  `runascurrentuser`, `runmaximized`, `runminimized`, `skipifdoesntexist`.
+- **`[Icons]` flags** added: `excludefromshowinnewinstall`, `uninsneveruninstall`, `useapppaths`.
+
+- **`[InstallDelete]`/`[UninstallDelete]`**: added `BeforeInstall`/`AfterInstall` (per
+  `topic_scriptinstall.htm` these are supported by every parameter section *except* `[Languages]`,
+  `[Types]`, `[Components]`, `[Tasks]`).
+
+`[Dirs]`, `[Registry]`, `[INI]`, `[ISSigKeys]` were verified complete with no changes needed.
+
+### Authoritative cross-section parameter rules (per official docs)
+
+These five parameters are not section-specific; their applicability is governed by dedicated doc pages:
+
+| Parameter(s)                         | Supported by                                                        | Source |
+|--------------------------------------|---------------------------------------------------------------------|--------|
+| `Languages`, `MinVersion`, `OnlyBelowVersion` | all parameter sections                                     | `topic_commonparams.htm` |
+| `Check`                              | all parameter sections                                              | `topic_scriptcheck.htm` |
+| `Components`                         | all **except** `[Types]`, `[Components]`                            | `topic_componentstasksparams.htm` |
+| `Tasks`                              | all **except** `[Types]`, `[Components]`, `[Tasks]`                 | `topic_componentstasksparams.htm` |
+| `BeforeInstall`, `AfterInstall`      | all **except** `[Languages]`, `[Types]`, `[Components]`, `[Tasks]`  | `topic_scriptinstall.htm` |
+
+(`[Languages]` itself only exposes `Name`, `MessagesFile`, `LicenseFile`, `InfoBeforeFile`,
+`InfoAfterFile` — it does not take the common/conditional parameters.)
 
 ---
 

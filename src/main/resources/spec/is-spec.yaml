@@ -1586,6 +1586,43 @@ sections:
         description: "Behavioural flags controlling the installation type behaviour."
         array: true
 
+      # Common parameters
+      - name: Languages
+        type:
+          kind: reference
+          section: Languages
+        required: [ ]
+        deprecated: [ ]
+        description: "Space-separated list of language names. Limits this entry to the specified languages."
+        array: true
+
+      - name: Check
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
   # ---------------------------------------------------------------------------
   # [Components] — parameter section
   # ---------------------------------------------------------------------------
@@ -1687,6 +1724,24 @@ sections:
         description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
         array: true
 
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
+
   # ---------------------------------------------------------------------------
   # [Tasks] — parameter section
   # ---------------------------------------------------------------------------
@@ -1787,6 +1842,24 @@ sections:
         deprecated: [ ]
         description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
         array: true
+
+      - name: MinVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
+        array: false
+
+      - name: OnlyBelowVersion
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
+        array: false
 
   # ---------------------------------------------------------------------------
   # [Dirs] — parameter section
@@ -2255,6 +2328,88 @@ sections:
               conflicts:
                 - flag: ignoreversion
                   type: forbidden
+            - name: allowunsafefiles
+              description: "Disables the compiler's safety check for potentially unsafe files (e.g. system DLLs). Strongly discouraged — only use when absolutely necessary."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: dontverifychecksum
+              description: "Skips checksum verification of the file after extraction. Requires <code>nocompression</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: nocompression
+                  type: requires
+            - name: fontisnttruetype
+              description: "Indicates the installed font is not a TrueType font. Use together with the <code>FontInstall</code> parameter."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: gacinstall
+              description: "Installs the file into the .NET Global Assembly Cache. Combine with <code>sharedfile</code> for reference-counted uninstallation."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: noregerror
+              description: "Suppresses error messages if COM/type-library registration fails. Requires <code>regserver</code> or <code>regtypelib</code>."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: onlyifdestfileexists
+              description: "Installs the file only if a file of the same name already exists on the target system."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: overwritereadonly
+              description: "Overwrites an existing read-only file without prompting the user."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: promptifolder
+              description: "If the existing file on disk is newer than the one being installed, prompts the user whether to overwrite it."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: sign
+              description: "Digitally signs the source file using the configured <code>SignTool</code> before storing it in the installer. Ignored if no sign tool is set."
+              deprecated: [ ]
+              conflicts:
+                - flag: issigverify
+                  type: forbidden
+              since: "6.3"
+            - name: signonce
+              description: "Like <code>sign</code>, but signs the file only if it is not already signed. Ignored if no sign tool is set."
+              deprecated: [ ]
+              conflicts:
+                - flag: issigverify
+                  type: forbidden
+              since: "6.3"
+            - name: skipifsourcedoesntexist
+              description: "Silently skips the entry if the source file does not exist instead of reporting an error."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: solidbreak
+              description: "When solid compression is enabled, starts a new compression block before this file, allowing faster access to it."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: sortfilesbyextension
+              description: "When using wildcards, compresses the matched files sorted by extension to improve solid-compression efficiency."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: sortfilesbyname
+              description: "When using wildcards, compresses the matched files sorted by name to improve solid-compression efficiency."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsneveruninstall
+              description: "The file is never removed during uninstallation. Can be combined with <code>sharedfile</code> to keep reference counts accurate."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsnosharedfileprompt
+              description: "Removes a shared file on uninstall without prompting the user when its reference count reaches zero. Requires <code>sharedfile</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: sharedfile
+                  type: requires
+            - name: uninsremovereadonly
+              description: "Removes the read-only attribute from the file before deleting it during uninstallation."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsrestartdelete
+              description: "If the file is locked during uninstallation, schedules it for deletion on the next system restart."
+              deprecated: [ ]
+              conflicts: [ ]
         required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how each file is installed."
@@ -2467,6 +2622,18 @@ sections:
               conflicts: [ ]
             - name: preventpinning
               description: "Prevents the shortcut from being pinned to the Windows 7+ taskbar or Start Menu."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: excludefromshowinnewinstall
+              description: "Prevents the new shortcut from being highlighted in the Start menu on Windows 7 and from being auto-pinned on Windows 8 and later."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: uninsneveruninstall
+              description: "The shortcut is never removed during uninstallation."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: useapppaths
+              description: "Allows <code>Filename</code> to contain only a file name; Setup resolves the full path from the registry's App Paths key."
               deprecated: [ ]
               conflicts: [ ]
         required: [ ]
@@ -3043,11 +3210,55 @@ sections:
                   type: forbidden
               since: "6.6"
             - name: runasoriginaluser
-              description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges."
+              description: "Runs the process as the user who launched the installer, not as the elevated user. Only relevant when running with elevated privileges. Mutually exclusive with <code>runascurrentuser</code>."
               deprecated: [ ]
               conflicts:
                 - flag: logoutput
                   type: forbidden
+                - flag: runascurrentuser
+                  type: forbidden
+            - name: 32bit
+              description: "Runs the program as a 32-bit process, affecting which registry/file-system view it sees. Mutually exclusive with <code>64bit</code> and <code>shellexec</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: 64bit
+                  type: forbidden
+                - flag: shellexec
+                  type: forbidden
+            - name: 64bit
+              description: "Runs the program as a 64-bit process (64-bit Windows only). Mutually exclusive with <code>32bit</code> and <code>shellexec</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: 32bit
+                  type: forbidden
+                - flag: shellexec
+                  type: forbidden
+            - name: dontlogparameters
+              description: "Prevents the command-line parameters from being written to the setup log."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: hidewizard
+              description: "Hides the wizard window while the program runs."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: runascurrentuser
+              description: "Runs the program with the same privileges as Setup (typically elevated). Mutually exclusive with <code>runasoriginaluser</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: runasoriginaluser
+                  type: forbidden
+            - name: runmaximized
+              description: "Launches the program in a maximised window."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: runminimized
+              description: "Launches the program in a minimised window."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: skipifdoesntexist
+              description: "Silently skips the entry if the file specified in <code>Filename</code> does not exist."
+              deprecated: [ ]
+              conflicts: [ ]
         required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how and when the program is executed."
@@ -3284,11 +3495,55 @@ sections:
                   type: forbidden
               since: "6.6"
             - name: runasoriginaluser
-              description: "Runs the process as the user who launched the uninstaller, not as the elevated user."
+              description: "Runs the process as the user who launched the uninstaller, not as the elevated user. Mutually exclusive with <code>runascurrentuser</code>."
               deprecated: [ ]
               conflicts:
                 - flag: logoutput
                   type: forbidden
+                - flag: runascurrentuser
+                  type: forbidden
+            - name: 32bit
+              description: "Runs the program as a 32-bit process, affecting which registry/file-system view it sees. Mutually exclusive with <code>64bit</code> and <code>shellexec</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: 64bit
+                  type: forbidden
+                - flag: shellexec
+                  type: forbidden
+            - name: 64bit
+              description: "Runs the program as a 64-bit process (64-bit Windows only). Mutually exclusive with <code>32bit</code> and <code>shellexec</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: 32bit
+                  type: forbidden
+                - flag: shellexec
+                  type: forbidden
+            - name: dontlogparameters
+              description: "Prevents the command-line parameters from being written to the uninstall log."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: hidewizard
+              description: "Hides the uninstall window while the program runs."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: runascurrentuser
+              description: "Runs the program with the same privileges as the uninstaller (typically elevated). Mutually exclusive with <code>runasoriginaluser</code>."
+              deprecated: [ ]
+              conflicts:
+                - flag: runasoriginaluser
+                  type: forbidden
+            - name: runmaximized
+              description: "Launches the program in a maximised window."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: runminimized
+              description: "Launches the program in a minimised window."
+              deprecated: [ ]
+              conflicts: [ ]
+            - name: skipifdoesntexist
+              description: "Silently skips the entry if the file specified in <code>Filename</code> does not exist."
+              deprecated: [ ]
+              conflicts: [ ]
         required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how and when the program is executed during uninstallation."
@@ -3392,6 +3647,33 @@ sections:
         required: [ iss ]
         deprecated: [ ]
         description: "Path to the ISL message file. Use <code>compiler:Default.isl</code> for the built-in English messages or <code>compiler:Languages\\German.isl</code> for bundled translations."
+        array: false
+
+      - name: LicenseFile
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Path to a language-specific license file, overriding the <code>[Setup]</code> <code>LicenseFile</code> directive for this language."
+        array: false
+
+      - name: InfoBeforeFile
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Path to a language-specific 'before installation' info file, overriding the <code>[Setup]</code> <code>InfoBeforeFile</code> directive for this language."
+        array: false
+
+      - name: InfoAfterFile
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Path to a language-specific 'after installation' info file, overriding the <code>[Setup]</code> <code>InfoAfterFile</code> directive for this language."
         array: false
 
   # ---------------------------------------------------------------------------
@@ -6116,6 +6398,24 @@ sections:
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
 
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
+        array: false
+
       - name: MinVersion
         type:
           kind: native
@@ -6196,6 +6496,24 @@ sections:
         required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
+        array: false
+
+      - name: BeforeInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
+        array: false
+
+      - name: AfterInstall
+        type:
+          kind: native
+          dataType: string
+        required: [ ]
+        deprecated: [ ]
+        description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
 
       - name: MinVersion
