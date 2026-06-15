@@ -216,10 +216,6 @@
         <configurationType
                 implementation="org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationType"/>
 
-        <!-- Produces a ghost run configuration when an ISS file is selected -->
-        <runConfigurationProducer
-                implementation="org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationProducer"/>
-
         <!-- Play icon next to [Setup] section header -->
         <codeInsight.lineMarkerProvider
                 language="ISS"
@@ -239,20 +235,21 @@
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
         </action>
 
-        <!-- Run a single .iss script (dry-run, shown above Build) -->
+        <!-- Run a single .iss script (dry-run). Shown only on a single .iss file and greyed out
+             (with reason) for scripts included by another script. -->
         <action id="Iss.RunScript"
                 class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction"
                 icon="AllIcons.RunConfigurations.TestState.Run">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="Iss.BuildScript"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="Iss.BuildScript"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="ProjectViewPopupMenuRunGroup"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu.Run"/>
         </action>
 
-        <!-- Compile a single .iss script via ISCC from the context menu -->
+        <!-- Compile a single .iss script via ISCC from the context menu, directly after Run. -->
         <action id="Iss.BuildScript"
                 class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptBuildAction"
                 icon="AllIcons.Actions.Compile">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
         </action>
     </actions>
 
