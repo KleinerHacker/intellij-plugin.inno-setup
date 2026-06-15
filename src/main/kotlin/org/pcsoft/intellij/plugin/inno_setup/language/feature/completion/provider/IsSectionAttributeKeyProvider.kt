@@ -79,7 +79,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
         // Directive keys are unique per section; parameter keys are unique per
         // line (entry). So for parameter sections, only the keys already present
         // on the current line count as duplicates — not the whole section.
-        val usedKeys = if (specSection.type == "directive") {
+        val usedKeys = if (specSection.type == IsSectionType.DIRECTIVE) {
             psiSection.directiveEntryList.map { it.directiveKey.text.trim().lowercase() }.toSet()
         } else {
             val document = parameters.editor.document
@@ -98,7 +98,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
             val removed = minVersion != null && attr.until != null &&
                     IsSettingsService.compareIsVersions(attr.until, minVersion) <= 0
             val typeHint = when (val t = attr.type) {
-                is IsSectionNativeTypeSpec -> t.dataType
+                is IsSectionNativeTypeSpec -> t.dataType.typeName
                 is IsSectionReferenceTypeSpec -> "→ ${t.section}"
                 is IsSectionFlagTypeSpec -> "flags"
             }
@@ -109,7 +109,7 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
                 if (removed) append(" [removed IS ${attr.until}]")
                 else if (tooNew) append(" [IS ${attr.since}+]")
             }
-            val separator = if (specSection.type == "directive") "=" else ": "
+            val separator = if (specSection.type == IsSectionType.DIRECTIVE) "=" else ": "
             val foreground = when {
                 duplicate -> JBColor.RED
                 removed -> JBColor.GRAY

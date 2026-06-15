@@ -38,10 +38,10 @@ internal object IsSectionDefaultValueGenerator {
     }
 
     private fun typeDefault(type: IsSectionAttributeTypeSpec): String = when (type) {
-        is IsSectionNativeTypeSpec -> when (type.dataType.lowercase()) {
-            "integer" -> "0"
-            "boolean" -> "yes"
-            else -> "MyValue"
+        is IsSectionNativeTypeSpec -> when (type.dataType) {
+            IsSectionNativeDataType.INTEGER -> "0"
+            IsSectionNativeDataType.BOOLEAN -> "yes"
+            IsSectionNativeDataType.STRING -> "MyValue"
         }
 
         is IsSectionReferenceTypeSpec -> "ref"

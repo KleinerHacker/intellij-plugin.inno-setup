@@ -60,6 +60,20 @@ data class IsPreprocessorDirectiveSpec(
  * @property since First Inno Setup version that provides the variable, or `null` when unknown.
  * @property until Last Inno Setup version that provides the variable, or `null` when it is still valid.
  */
+enum class IsPreprocessorVariableType(val typeName: String) {
+    /** Integer-valued predefined variable. */
+    @JsonProperty("int")
+    INT("int"),
+
+    /** String-valued predefined variable. */
+    @JsonProperty("str")
+    STR("str"),
+
+    /** Valueless macro (defined but carrying no value). */
+    @JsonProperty("void")
+    VOID("void"),
+}
+
 data class IsPreprocessorVariableSpec(
     /**
      * Returns or performs the public behavior represented by this member.
@@ -68,7 +82,7 @@ data class IsPreprocessorVariableSpec(
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    val type: String,
+    val type: IsPreprocessorVariableType,
     /**
      * Returns or performs the public behavior represented by this member.
      */

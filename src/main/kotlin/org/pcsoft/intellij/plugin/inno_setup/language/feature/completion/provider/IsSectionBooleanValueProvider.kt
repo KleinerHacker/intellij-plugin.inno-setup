@@ -27,6 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionSyntaxHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeDataType
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeTypeSpec
 
 /**
@@ -59,7 +60,7 @@ object IsSectionBooleanValueProvider : CompletionProvider<CompletionParameters>(
         } ?: return
 
         val type = attr.type as? IsSectionNativeTypeSpec ?: return
-        if (type.dataType.lowercase() != "boolean") return
+        if (type.dataType != IsSectionNativeDataType.BOOLEAN) return
 
         listOf("yes", "no").forEach { value ->
             result.addElement(

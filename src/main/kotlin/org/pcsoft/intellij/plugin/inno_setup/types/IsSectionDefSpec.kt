@@ -34,7 +34,7 @@ data class IsSectionDefSpec(
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    val type: String,
+    val type: IsSectionType,
     /**
      * Returns or performs the public behavior represented by this member.
      */

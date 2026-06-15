@@ -66,7 +66,7 @@ object IsSectionNameProvider : CompletionProvider<CompletionParameters>() {
             }
             val element = LookupElementBuilder
                 .create(specSection.name)
-                .withTypeText(specSection.type)
+                .withTypeText(specSection.type.typeName)
                 .withTailText(tailText, true)
                 .withItemTextForeground(
                     when {

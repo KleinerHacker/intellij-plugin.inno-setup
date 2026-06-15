@@ -18,6 +18,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
 class IsPreprocessorServiceTest {
 
@@ -67,7 +68,7 @@ class IsPreprocessorServiceTest {
     fun `LINE predefined variable exists`() {
         val lineVar = spec.predefinedVariables.find { it.name == "__LINE__" }
         assertNotNull("__LINE__ must exist", lineVar)
-        assertEquals("int", lineVar!!.type)
+        assertEquals(IsPreprocessorVariableType.INT, lineVar!!.type)
     }
 
     @Test

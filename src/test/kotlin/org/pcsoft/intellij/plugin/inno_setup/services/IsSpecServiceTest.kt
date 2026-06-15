@@ -50,7 +50,7 @@ class IsSpecServiceTest {
     fun `Messages and CustomMessages are internationalized directive sections`() {
         listOf("Messages", "CustomMessages").forEach { name ->
             val section = spec.sections.find { it.name == name }!!
-            assertEquals("$name must be a directive section", "directive", section.type)
+            assertEquals("$name must be a directive section", IsSectionType.DIRECTIVE, section.type)
             assertTrue("$name must be internationalized", section.internationalization)
         }
         val custom = spec.sections.find { it.name == "CustomMessages" }!!
@@ -62,13 +62,13 @@ class IsSpecServiceTest {
     @Test
     fun `Setup section is directive type`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
-        assertEquals("directive", setup.type)
+        assertEquals(IsSectionType.DIRECTIVE, setup.type)
     }
 
     @Test
     fun `LangOptions is a directive section with all expected attributes`() {
         val lang = spec.sections.find { it.name == "LangOptions" }!!
-        assertEquals("directive", lang.type)
+        assertEquals(IsSectionType.DIRECTIVE, lang.type)
         assertTrue("LangOptions section must not be deprecated", lang.deprecated.isEmpty())
         val attrNames = lang.attributes.map { it.name }.toSet()
         listOf(
@@ -85,7 +85,7 @@ class IsSpecServiceTest {
         val languageId = lang.attributes.find { it.name == "LanguageID" }!!
         val type = languageId.type
         assertTrue("LanguageID must be a native type", type is IsSectionNativeTypeSpec)
-        assertEquals("integer", (type as IsSectionNativeTypeSpec).dataType)
+        assertEquals(IsSectionNativeDataType.INTEGER, (type as IsSectionNativeTypeSpec).dataType)
     }
 
     @Test
@@ -106,14 +106,14 @@ class IsSpecServiceTest {
         )
         parameterSections.forEach { name ->
             val section = spec.sections.find { it.name == name }!!
-            assertEquals("Section '$name' should be parameter", "parameter", section.type)
+            assertEquals("Section '$name' should be parameter", IsSectionType.PARAMETER, section.type)
         }
     }
 
     @Test
     fun `Code section is code type with no attributes`() {
         val code = spec.sections.find { it.name == "Code" }!!
-        assertEquals("code", code.type)
+        assertEquals(IsSectionType.CODE, code.type)
         assertTrue("Code section must have no attributes", code.attributes.isEmpty())
     }
 
@@ -161,7 +161,7 @@ class IsSpecServiceTest {
         val setup = spec.sections.find { it.name == "Setup" }!!
         val attr = setup.attributes.find { it.name == "AppName" }!!
         assertTrue("AppName must be native type", attr.type is IsSectionNativeTypeSpec)
-        assertEquals("string", (attr.type as IsSectionNativeTypeSpec).dataType)
+        assertEquals(IsSectionNativeDataType.STRING, (attr.type as IsSectionNativeTypeSpec).dataType)
     }
 
     @Test

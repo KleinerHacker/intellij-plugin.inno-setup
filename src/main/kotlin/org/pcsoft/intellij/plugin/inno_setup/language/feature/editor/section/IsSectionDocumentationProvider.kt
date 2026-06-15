@@ -96,7 +96,7 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             val target = name.specTarget
-            append("<b>[${sec.name}]</b> · ${sec.type}")
+            append("<b>[${sec.name}]</b> · ${sec.type.typeName}")
             if (sec.required.appliesTo(target)) append(" · <b>required</b>")
             if (sec.deprecated.appliesTo(target)) append(" · <s>deprecated</s>")
             append(DocumentationMarkup.DEFINITION_END)
@@ -112,14 +112,14 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
         val attr = specSec.attributes.firstOrNull { it.name.equals(keyText, ignoreCase = true) }
             ?: return null
         val typeStr = when (val t = attr.type) {
-            is IsSectionNativeTypeSpec -> t.dataType
+            is IsSectionNativeTypeSpec -> t.dataType.typeName
             is IsSectionReferenceTypeSpec -> "→ ${t.section}"
             is IsSectionFlagTypeSpec -> "flags"
         }
 
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
-            val target = section?.specTarget ?: IsSectionSpecTarget.ISS
+            val target = section.specTarget
             append("<b>${attr.name}</b> · $typeStr")
             if (attr.required.appliesTo(target)) append(" · <b>required</b>")
             if (attr.array) append("[]")

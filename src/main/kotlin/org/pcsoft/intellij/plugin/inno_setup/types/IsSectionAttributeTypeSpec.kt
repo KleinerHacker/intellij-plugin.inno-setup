@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.types
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
@@ -32,11 +33,31 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 sealed class IsSectionAttributeTypeSpec
 
 /**
- * Native scalar value type such as `string`, `boolean`, or `path`.
+ * Concrete primitive data type of a native attribute value, mirroring the `dataType` enum in
+ * `is-spec.json`.
  *
- * @property dataType Name of the native type used by validators and completion providers.
+ * @property typeName The lowercase wire name used in the spec YAML and shown in documentation/completion.
  */
-data class IsSectionNativeTypeSpec(val dataType: String) : IsSectionAttributeTypeSpec()
+enum class IsSectionNativeDataType(val typeName: String) {
+    /** Free-form text. */
+    @JsonProperty("string")
+    STRING("string"),
+
+    /** A `yes`/`no` boolean. */
+    @JsonProperty("boolean")
+    BOOLEAN("boolean"),
+
+    /** A decimal or Pascal-style hexadecimal (`$XXXX`) integer. */
+    @JsonProperty("integer")
+    INTEGER("integer"),
+}
+
+/**
+ * Native scalar value type such as `string`, `boolean`, or `integer`.
+ *
+ * @property dataType The native primitive type used by validators and completion providers.
+ */
+data class IsSectionNativeTypeSpec(val dataType: IsSectionNativeDataType) : IsSectionAttributeTypeSpec()
 
 /**
  * Value type that references a named entry in another section.

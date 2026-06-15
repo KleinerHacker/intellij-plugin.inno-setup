@@ -78,7 +78,7 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")
-                        .withTypeText("${v.type} · ISPP")
+                        .withTypeText("${v.type.typeName} · ISPP")
                         .withIcon(IsIcons.Variable)
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, "}")

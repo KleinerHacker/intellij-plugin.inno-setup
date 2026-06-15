@@ -21,6 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSection
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionType
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 
 /**
@@ -69,11 +70,11 @@ class AddMissingSectionsQuickFix(
                 val requiredAttrs = sectionSpec.attributes.filter { it.required.appliesTo(file.specTarget) }
                 append("\n[${sectionSpec.name}]\n")
                 when (sectionSpec.type) {
-                    "directive" -> requiredAttrs.forEach { attr ->
+                    IsSectionType.DIRECTIVE -> requiredAttrs.forEach { attr ->
                         append("${attr.name}=${IsSectionDefaultValueGenerator.defaultFor(attr)}\n")
                     }
 
-                    "parameter" -> if (requiredAttrs.isNotEmpty()) {
+                    IsSectionType.PARAMETER -> if (requiredAttrs.isNotEmpty()) {
                         append(requiredAttrs.joinToString("; ") {
                             "${it.name}: ${
                                 IsSectionDefaultValueGenerator.defaultFor(
@@ -83,6 +84,8 @@ class AddMissingSectionsQuickFix(
                         })
                         append("\n")
                     }
+
+                    IsSectionType.CODE -> Unit  // [Code] is never a required section
                 }
             }
         }

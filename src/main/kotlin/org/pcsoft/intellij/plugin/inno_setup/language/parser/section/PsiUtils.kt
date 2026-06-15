@@ -24,6 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionDefSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionReferenceTypeSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpec
+import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionType
 
 // ── IsScriptFile (Sektionen) ────────────────────────────────────────────────────────
 
@@ -97,7 +98,7 @@ val IsSectionBlock.specSection: IsSectionDefSpec?
  * Returns or performs the public behavior represented by this member.
  */
 val IsSectionBlock.isParameterSection: Boolean
-    get() = specSection?.type == "parameter"
+    get() = specSection?.type == IsSectionType.PARAMETER
 
 // The parameter entry sharing the caret's line. Used when the caret sits after a
 // dangling ';' whose incomplete pair fell outside the entry/section PSI, so the

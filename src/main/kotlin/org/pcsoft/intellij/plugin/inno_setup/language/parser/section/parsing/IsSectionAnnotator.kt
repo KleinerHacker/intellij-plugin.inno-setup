@@ -264,7 +264,7 @@ class IsSectionAnnotator : Annotator {
         }
 
         val specSection = section.specSection(spec) ?: return
-        if (specSection.type != "directive") return
+        if (specSection.type != IsSectionType.DIRECTIVE) return
 
         val target = section.specTarget
         val required =
@@ -298,7 +298,7 @@ class IsSectionAnnotator : Annotator {
         if (entry.isInCodeSection) return
         val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
-        if (specSection.type != "parameter") return
+        if (specSection.type != IsSectionType.PARAMETER) return
 
         val target = section.specTarget
         val required =
@@ -326,7 +326,7 @@ class IsSectionAnnotator : Annotator {
         // A ':'-separated pair in a directive section ([Setup], [Messages], [CustomMessages],
         // [LangOptions]) is a wrong-separator mistake. The red mark is placed on the ':' token by
         // annotateParamPairSeparator (visiting the pair, which contains the token); skip key checks.
-        if (specSection.type == "directive") return
+        if (specSection.type == IsSectionType.DIRECTIVE) return
         // Internationalized sections ([Messages], [CustomMessages]) allow arbitrary user-defined key
         // names — never flag an unrecognized name as unknown, even when colon syntax is used by mistake.
         if (specSection.internationalization) {
@@ -346,7 +346,7 @@ class IsSectionAnnotator : Annotator {
         // An '='-separated entry in a parameter section ([Files], [Icons], [Registry], …) is a
         // wrong-separator mistake. The red mark is placed on the '=' token by
         // annotateDirectiveEntrySeparator (visiting the entry, which contains the token); skip key checks.
-        if (specSection.type == "parameter") return
+        if (specSection.type == IsSectionType.PARAMETER) return
 
         // Internationalized sections (\[Messages], \[CustomMessages]) allow a "lang." prefix and,
         // for \[CustomMessages], arbitrary user-defined names. Strip the prefix before matching and
@@ -404,7 +404,7 @@ class IsSectionAnnotator : Annotator {
         if (pair.isInCodeSection) return
         val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
-        if (specSection.type != "directive") return
+        if (specSection.type != IsSectionType.DIRECTIVE) return
         val colon = pair.node.findChildByType(IsSectionTypes.COLON) ?: return
         reportSeparatorMismatch(
             colon.textRange, section.nameText, "=", ":", "${pair.keyText()}=Value",
@@ -424,7 +424,7 @@ class IsSectionAnnotator : Annotator {
         if (entry.isInCodeSection) return
         val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
-        if (specSection.type != "parameter") return
+        if (specSection.type != IsSectionType.PARAMETER) return
         val eq = entry.node.findChildByType(IsSectionTypes.EQ) ?: return
         reportSeparatorMismatch(
             eq.textRange, section.nameText, ":", "=", "${entry.keyText()}: Value",
@@ -628,8 +628,8 @@ class IsSectionAnnotator : Annotator {
         holder: AnnotationHolder
     ) {
         val text = value.singleText
-        when (type.dataType.lowercase()) {
-            "boolean" -> {
+        when (type.dataType) {
+            IsSectionNativeDataType.BOOLEAN -> {
                 if (text.lowercase() in setOf("yes", "no")) {
                     value.node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER)).forEach {
                         highlight(it.textRange, IsSectionSyntaxHighlighting.KEYWORD, holder)
@@ -637,18 +637,20 @@ class IsSectionAnnotator : Annotator {
                 } else {
                     holder.newAnnotation(
                         HighlightSeverity.ERROR,
-                        "Expected type '${type.dataType}', got: '$text'"
+                        "Expected type '${type.dataType.typeName}', got: '$text'"
                     ).range(value.textRange).create()
                 }
             }
 
             // Accept decimal (-?[0-9]+) or Pascal-style hexadecimal ($ followed by hex digits, e.g. $0409)
-            "integer" -> if (!text.matches(Regex("-?[0-9]+")) && !text.matches(Regex("\\\$[0-9A-Fa-f]+"))) {
+            IsSectionNativeDataType.INTEGER -> if (!text.matches(Regex("-?[0-9]+")) && !text.matches(Regex("\\\$[0-9A-Fa-f]+"))) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,
-                    "Expected type '${type.dataType}', got: '$text'"
+                    "Expected type '${type.dataType.typeName}', got: '$text'"
                 ).range(value.textRange).create()
             }
+
+            IsSectionNativeDataType.STRING -> Unit  // free-form text — no validation
         }
     }
 
