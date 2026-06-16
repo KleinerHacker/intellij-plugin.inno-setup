@@ -76,8 +76,8 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
             return generateDirectiveDoc(element, element.text, spec)
         }
 
-        // Otherwise: a predefined ISPP variable referenced in an expression.
-        return generateVariableDoc(element.text, spec)
+        // Otherwise: a predefined ISPP variable or built-in function referenced in an expression.
+        return generateVariableDoc(element.text, spec) ?: generateFunctionDoc(element.text, spec)
     }
 
     /**
@@ -92,7 +92,10 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
         val name = obj as? String ?: return null
         val ctx = element ?: return null
         val spec = service<IsPreprocessorService>().spec
-        val html = generateVariableDoc(name, spec) ?: generateDirectiveDoc(ctx, name, spec) ?: return null
+        val html = generateVariableDoc(name, spec)
+            ?: generateFunctionDoc(name, spec)
+            ?: generateDirectiveDoc(ctx, name, spec)
+            ?: return null
         return IsDocLookupStub(ctx, html)
     }
 
@@ -124,6 +127,22 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${variable.description}</p>")
             appendVersionSection(variable.since, variable.until)
+            append(DocumentationMarkup.CONTENT_END)
+        }
+    }
+
+    private fun generateFunctionDoc(name: String, spec: IsPreprocessorSpec): String? {
+        val function = spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            ?: return null
+
+        return buildString {
+            append(DocumentationMarkup.DEFINITION_START)
+            append("<b>${function.name}</b> · function · ${function.returnType.typeName}")
+            append(DocumentationMarkup.DEFINITION_END)
+            append(DocumentationMarkup.CONTENT_START)
+            append("<p>${function.description}</p>")
+            append("<p><b>Signature:</b> <code>${function.signature}</code></p>")
+            appendVersionSection(function.since, function.until)
             append(DocumentationMarkup.CONTENT_END)
         }
     }

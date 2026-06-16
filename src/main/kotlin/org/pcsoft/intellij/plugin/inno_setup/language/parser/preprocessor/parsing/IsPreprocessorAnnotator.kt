@@ -143,8 +143,10 @@ class IsPreprocessorAnnotator : Annotator {
 
         val name = ex.getDefineName() ?: return
         if (!isDefineUsed(directive, name)) {
+            // Gray only the name identifier, not the whole line — otherwise the value's syntax
+            // highlighting (strings/numbers/operators) would be lost behind the unused colour.
             holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "#define '$name' is never used")
-                .range(directive.textRange)
+                .range(ex.nameIdentifier?.textRange ?: directive.textRange)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
                 .withFix(RemoveUnusedDefineQuickFix(directive))
                 .create()
@@ -248,7 +250,14 @@ class IsPreprocessorAnnotator : Annotator {
             val text = dex.getDefineExpressionText() ?: return@mapNotNull null
             IsPreprocessorExprDefineInfo(name, text, offset)
         } ?: emptyList()
-        return IsPreprocessorExprTypeResolver(defines, variableType, functionReturnType)
+        // Names of function-like macros: a bare reference to one (without an argument list) is an error.
+        val functionMacroNames = hostFile?.isppDirectives
+            ?.mapNotNull { it as? IsPreprocessorDirectiveEx }
+            ?.filter { it.isDefine() && it.isFunctionMacro() }
+            ?.mapNotNull { it.getDefineName()?.lowercase() }
+            ?.toSet() ?: emptySet()
+        val isFunctionMacro: (String) -> Boolean = { it.lowercase() in functionMacroNames }
+        return IsPreprocessorExprTypeResolver(defines, variableType, functionReturnType, isFunctionMacro)
     }
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */

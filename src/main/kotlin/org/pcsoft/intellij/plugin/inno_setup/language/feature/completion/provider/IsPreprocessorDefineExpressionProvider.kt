@@ -29,12 +29,10 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
  * Inside a `#define` expression, suggest the names of all `#define`s declared on an earlier line, plus the
  * predefined ISPP variables (e.g. `__LINE__`, `PREPROCVER`) which are always referenceable.
  * Declaration order is enforced via host offsets, so neither the current define nor later ones appear.
+ *
+ * Built-in functions are contributed separately by [IsPreprocessorBuiltinFunctionProvider].
  */
 object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionParameters>() {
-    // There is already a complete name (with optional parameter list) followed by whitespace,
-    // i.e. the caret sits in the expression part.
-    private val EXPR_PREFIX = Regex("^#\\s*define\\s+[A-Za-z0-9_.\\-]+(?:\\([^)]*\\))?\\s+.*$")
-    private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
 
     /**
      * Adds lookup elements for the current completion request.
@@ -44,11 +42,7 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        val offset = params.offset
-        val doc = params.editor.document
-        val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
-        val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
-        if (!EXPR_PREFIX.matches(linePrefix)) return
+        val adjusted = IsPreprocessorExpressionContext.adjustedResult(params, result) ?: return
 
         val position = params.position
         val injMgr = InjectedLanguageManager.getInstance(position.project)
@@ -61,8 +55,6 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
             .mapNotNull { (it.first as? IsPreprocessorDirectiveEx)?.getDefineName()?.ifEmpty { null } }
             .distinct()
 
-        val typed = WORD_TAIL.find(linePrefix)?.value ?: ""
-        val adjusted = result.withPrefixMatcher(typed)
         precedingNames.forEach { name ->
             adjusted.addElement(
                 LookupElementBuilder.create(name)

@@ -23,11 +23,23 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expre
  *
  * @param referenceType resolves a referenced identifier (macro / predefined variable) to its type.
  * @param functionReturnType resolves a called function name to its return type.
+ * @param isFunctionMacro tells whether a name denotes a function-like macro (`#define f(x) …`); such a
+ *   macro must be referenced as a call `f(…)`, never as a bare identifier.
  */
 class IsPreprocessorExprTypeInference(
     private val referenceType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
     private val functionReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
+    private val isFunctionMacro: (String) -> Boolean = { false },
 ) {
+
+    private companion object {
+        /** Operator categories whose operands must be integers (a string operand is always an error). */
+        val STRING_FORBIDDEN_CATEGORIES = setOf(
+            IsPreprocessorExprOperatorCategory.ARITHMETIC,
+            IsPreprocessorExprOperatorCategory.BITWISE,
+            IsPreprocessorExprOperatorCategory.LOGICAL,
+        )
+    }
 
     private val errorList = mutableListOf<IsPreprocessorExprError>()
 
@@ -41,7 +53,7 @@ class IsPreprocessorExprTypeInference(
         is IsPreprocessorExprConstant -> IsPreprocessorExprType.ANY
         is IsPreprocessorExprEmpty -> IsPreprocessorExprType.VOID
         is IsPreprocessorExprErrorNode -> IsPreprocessorExprType.ANY
-        is IsPreprocessorExprReference -> referenceType(node.name)
+        is IsPreprocessorExprReference -> referenceTypeChecked(node)
         is IsPreprocessorExprParen -> infer(node.inner)
         is IsPreprocessorExprCall -> {
             node.arguments.forEach { infer(it) }
@@ -50,6 +62,20 @@ class IsPreprocessorExprTypeInference(
         is IsPreprocessorExprUnary -> unaryType(node)
         is IsPreprocessorExprBinary -> binaryType(node)
         is IsPreprocessorExprTernary -> ternaryType(node)
+    }
+
+    /**
+     * Type of a bare identifier reference. A function-like macro (`#define f(x) …`) must be invoked as a
+     * call `f(…)`; using its name without an argument list is an error.
+     */
+    private fun referenceTypeChecked(node: IsPreprocessorExprReference): IsPreprocessorExprType {
+        if (isFunctionMacro(node.name)) {
+            errorList += IsPreprocessorExprError(
+                node.span,
+                "Function-like macro '${node.name}' must be called with an argument list",
+            )
+        }
+        return referenceType(node.name)
     }
 
     private fun unaryType(node: IsPreprocessorExprUnary): IsPreprocessorExprType {
@@ -79,6 +105,18 @@ class IsPreprocessorExprTypeInference(
         if (operator.category == IsPreprocessorExprOperatorCategory.COMMA) return rightType
 
         if (leftType == IsPreprocessorExprType.ANY || rightType == IsPreprocessorExprType.ANY) {
+            // `+` stays permissive (concatenation with an unknown value may be valid). For every other
+            // arithmetic/bitwise/logical operator a *concrete* string operand is always illegal, even when
+            // the other side is unresolved — e.g. `"abc" * x` where `x` is a macro parameter.
+            if (operator != IsPreprocessorExprBinaryOperator.PLUS &&
+                operator.category in STRING_FORBIDDEN_CATEGORIES &&
+                (leftType == IsPreprocessorExprType.STR || rightType == IsPreprocessorExprType.STR)
+            ) {
+                errorList += IsPreprocessorExprError(
+                    node.opSpan,
+                    "Operator '${operator.symbol}' cannot be applied to a string operand",
+                )
+            }
             return when (operator) {
                 IsPreprocessorExprBinaryOperator.PLUS -> IsPreprocessorExprType.ANY
                 else -> IsPreprocessorExprType.INT

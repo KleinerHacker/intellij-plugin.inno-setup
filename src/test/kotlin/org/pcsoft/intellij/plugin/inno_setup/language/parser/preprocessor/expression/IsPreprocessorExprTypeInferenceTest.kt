@@ -123,14 +123,41 @@ class IsPreprocessorExprTypeInferenceTest {
     // ── ANY suppression ──────────────────────────────────────────────────────
 
     @Test
-    fun `any operand suppresses type errors`() {
-        assertEquals(0, analyse("A * \"b\"", refs = mapOf("A" to IsPreprocessorExprType.ANY)).errors.size)
+    fun `any operand suppresses plus and comparison errors`() {
+        // `+` and comparisons stay permissive against an unresolved operand.
         assertEquals(0, analyse("\"a\" + B", refs = mapOf("B" to IsPreprocessorExprType.ANY)).errors.size)
+        assertEquals(0, analyse("\"a\" < B", refs = mapOf("B" to IsPreprocessorExprType.ANY)).errors.size)
+    }
+
+    @Test
+    fun `concrete string with non-plus operator is an error even against an any operand`() {
+        // A concrete string operand is never valid with `*`, even when the other side is unresolved
+        // (e.g. a macro parameter): `#define func(x) "abc" * x`.
+        assertEquals(1, analyse("\"abc\" * x", refs = mapOf("x" to IsPreprocessorExprType.ANY)).errors.size)
+        assertEquals(1, analyse("x * \"abc\"", refs = mapOf("x" to IsPreprocessorExprType.ANY)).errors.size)
     }
 
     @Test
     fun `brace constant operand is any and suppresses errors`() {
         assertEquals(0, errorCount("{app} * 2"))
+    }
+
+    // ── function-like macro used without arguments ───────────────────────────
+
+    @Test
+    fun `bare reference to a function-like macro is an error`() {
+        val ast = IsPreprocessorExprParser.parse("func").ast
+        val inference = IsPreprocessorExprTypeInference(isFunctionMacro = { it.equals("func", ignoreCase = true) })
+        inference.infer(ast)
+        assertEquals(1, inference.errors.size)
+    }
+
+    @Test
+    fun `calling a function-like macro with arguments is fine`() {
+        val ast = IsPreprocessorExprParser.parse("func(1)").ast
+        val inference = IsPreprocessorExprTypeInference(isFunctionMacro = { it.equals("func", ignoreCase = true) })
+        inference.infer(ast)
+        assertEquals(0, inference.errors.size)
     }
 
     // ── built-in return types ────────────────────────────────────────────────

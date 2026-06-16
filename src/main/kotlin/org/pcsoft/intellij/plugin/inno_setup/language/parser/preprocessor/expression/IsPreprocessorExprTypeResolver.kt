@@ -32,11 +32,14 @@ data class IsPreprocessorExprDefineInfo(val name: String, val expression: String
  * @param defines all simple (non function-like) `#define`s of the file.
  * @param variableType resolves a predefined variable name to its type, or `null` if it is not one.
  * @param functionReturnType resolves a built-in function name to its return type.
+ * @param isFunctionMacro tells whether a name denotes a function-like macro of the file (which must be
+ *   referenced as a call, never as a bare identifier).
  */
 class IsPreprocessorExprTypeResolver(
     defines: List<IsPreprocessorExprDefineInfo>,
     private val variableType: (String) -> IsPreprocessorExprType? = { null },
     private val functionReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
+    private val isFunctionMacro: (String) -> Boolean = { false },
 ) {
 
     private val defines: List<IsPreprocessorExprDefineInfo> = defines.sortedBy { it.order }
@@ -79,6 +82,7 @@ class IsPreprocessorExprTypeResolver(
         IsPreprocessorExprTypeInference(
             referenceType = { typeOfReference(it, order) },
             functionReturnType = functionReturnType,
+            isFunctionMacro = isFunctionMacro,
         )
 
     private fun inferDefineType(define: IsPreprocessorExprDefineInfo): IsPreprocessorExprType {

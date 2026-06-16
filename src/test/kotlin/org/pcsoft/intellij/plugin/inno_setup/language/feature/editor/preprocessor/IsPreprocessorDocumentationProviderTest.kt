@@ -85,6 +85,21 @@ class IsPreprocessorDocumentationProviderTest : BasePlatformTestCase() {
         assertTrue("Doc must contain the variable description", doc.contains("version", ignoreCase = true))
     }
 
+    fun testLookupBuiltinFunctionDoc() {
+        val doc = lookupDocFor("FileExists", "#define A FileExi<caret>sts\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected lookup doc for the FileExists built-in function", doc)
+        assertTrue("Doc must name the function", doc!!.contains("FileExists"))
+        assertTrue("Doc must declare it is a function", doc.contains("function"))
+        assertTrue("Doc must show the signature", doc.contains("Signature"))
+    }
+
+    fun testBuiltinFunctionDoc() {
+        val doc = docFor("#define A FileExi<caret>sts\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected doc for the FileExists built-in function", doc)
+        assertTrue("Doc must name the function", doc!!.contains("FileExists"))
+        assertTrue("Doc must show the signature", doc.contains("Signature"))
+    }
+
     fun testUserDefinedNameProducesNoDoc() {
         // The macro name itself is neither a directive keyword nor a predefined variable.
         val doc = docFor("#define MyCon<caret>st \"1.0\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n")

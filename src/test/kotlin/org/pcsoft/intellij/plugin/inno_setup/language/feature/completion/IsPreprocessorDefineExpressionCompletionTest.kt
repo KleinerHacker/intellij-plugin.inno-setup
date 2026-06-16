@@ -46,4 +46,15 @@ class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
         val variants = expressionLookup("#define <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
         assertFalse("Predefined variables must not be offered as a #define name, was: $variants", "__LINE__" in variants)
     }
+
+    fun testBuiltinFunctionsSuggestedInDefineExpression() {
+        val variants = expressionLookup("#define Second <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertTrue("Expected built-in function 'Len', was: $variants", "Len" in variants)
+        assertTrue("Expected built-in function 'FileExists', was: $variants", "FileExists" in variants)
+    }
+
+    fun testBuiltinFunctionsNotSuggestedAsDefineName() {
+        val variants = expressionLookup("#define <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertFalse("Built-in functions must not be offered as a #define name, was: $variants", "Len" in variants)
+    }
 }
