@@ -135,6 +135,11 @@ plugins:
             API Docs: API 문서
             Licences: 라이선스
 
+extra:
+  version:
+    provider: mike
+    alias: true
+
 markdown_extensions:
   - admonition
   - attr_list

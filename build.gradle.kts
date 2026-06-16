@@ -134,6 +134,22 @@ tasks {
     //endregion
 
     //region MkDocs
+    // mike spawns `mkdocs` as a subprocess; on Windows the Python Scripts dir
+    // (where mkdocs.exe lives) is often not on PATH. Resolve it once and prepend
+    // it to PATH for the mike tasks. In CI (setup-python) it is already on PATH.
+    val pythonScriptsDir: String? by lazy {
+        runCatching {
+            providers.exec {
+                commandLine("python", "-c", "import sysconfig; print(sysconfig.get_path('scripts'))")
+            }.standardOutput.asText.get().trim().ifEmpty { null }
+        }.getOrNull()
+    }
+    fun Exec.withMikePath() {
+        pythonScriptsDir?.let { dir ->
+            environment("PATH", dir + File.pathSeparator + System.getenv("PATH"))
+        }
+    }
+
     register<Exec>("installMkDocs") {
         group = null
         description = "Install mkdocs"
@@ -155,6 +171,13 @@ tasks {
         commandLine("python", "-m", "pip", "install", "--upgrade", "ghp-import")
     }
 
+    register<Exec>("installMike") {
+        group = null
+        description = "Install mike for versioned docs deployment"
+        workingDir = file("docs")
+        commandLine("python", "-m", "pip", "install", "--upgrade", "mike")
+    }
+
     register<Exec>("installI18N") {
         group = null
         description = "Install i18n"
@@ -169,11 +192,12 @@ tasks {
         dependsOn("installMkDocsMaterial")
         dependsOn("installGitHubPages")
         dependsOn("installI18N")
+        dependsOn("installMike")
     }
 
     register<Exec>("runDocs") {
         group = "MKDocs"
-        description = "Run mkdocs serve and open browser"
+        description = "Run mkdocs serve and open browser (no version selector — that only appears on the deployed site)"
         workingDir = file("docs")
         commandLine("python", "-m", "mkdocs", "serve", "-o", "-w", ".", "-w", "./docs")
         dependsOn("installDocs", "copyDokka", "copyLicenceReport")
@@ -193,11 +217,28 @@ tasks {
 
     register<Exec>("deployDocs") {
         group = "MKDocs"
-        description = "Deploy mkdocs to gh-pages"
+        description = "Deploy a versioned docs snapshot via mike. Requires -Pversion=<tag> and a pre-configured git push target."
         workingDir = file("docs")
-        commandLine("python", "-m", "mkdocs", "gh-deploy", "--force")
+        val ver = (project.findProperty("version") as String?)
+            ?: error("Pass -Pversion=<tag> to deployDocs")
+        val setLatest = (project.findProperty("setLatest") as String?) != "false"
+        val args = buildList {
+            add("python"); add("-c"); add("from mike.driver import main; main()"); add("deploy"); add("--push")
+            if (setLatest) { add("--update-aliases"); add(ver); add("latest") } else add(ver)
+        }
+        commandLine(args)
+        withMikePath()
         dependsOn("installDocs", "copyDokka", "copyLicenceReport")
         finalizedBy("deleteDokka", "deleteLicenceReport")
+    }
+
+    register<Exec>("setDefaultDocs") {
+        group = "MKDocs"
+        description = "Set the default docs version shown at the root URL via mike (run once after the first release deploy)."
+        workingDir = file("docs")
+        commandLine("python", "-c", "from mike.driver import main; main()", "set-default", "--push", "latest")
+        withMikePath()
+        dependsOn("installDocs")
     }
     //endregion
 
