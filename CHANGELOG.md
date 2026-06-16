@@ -4,10 +4,25 @@
 
 ## [Unreleased]
 
-### Changed
+### Added
 
-- Restructured the language tooling into explicit `file_type/`, `parser/`, and `feature/` packages and
-  harmonized class names to the `Is`+role scheme (`IsScript`/`IsLanguage`/`IsSection`/`IsPreprocessor`).
+- **Inno Setup Run configuration**: Added a run configuration to launch and build Inno Setup scripts directly
+  from the IDE, with a dedicated build settings page and context menu actions for run and build.
+- **`[INI]` section support**: Added support for the `[INI]` section including parameter completion and
+  validation.
+- **Preprocessor expression calculation**: Added evaluation of ISPP expressions and `#define` values,
+  including fixes for edge cases and missing parameters.
+- **Predefined directive variables**: Improved support for `{#...}` inline preprocessor variables with
+  better completion and highlighting.
+- **Documentation lookup in completion popup**: Added inline documentation display when browsing completion
+  suggestions.
+
+### Fixed
+
+- Fixed broken preprocessor syntax highlighting.
+- Fixed flag completion suggestions.
+- Fixed annotator for `UsePreviousLanguage` usage.
+- Fixed custom message reference handling.
 
 ## [0.4.1]
 

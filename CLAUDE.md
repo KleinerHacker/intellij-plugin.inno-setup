@@ -3,6 +3,13 @@
 IntelliJ plugin for Inno Setup `.iss` script files.
 Inno Setup documentation: https://jrsoftware.org/ishelp/
 
+## Changelog policy
+
+`CHANGELOG.md` must only contain changes that an **end user of the plugin** can perceive directly — new
+features, visible behaviour changes, and user-facing bug fixes. **No internals:** architecture refactors,
+package renames, class/namespace changes, build system updates, documentation site changes, test fixes, or
+any other implementation detail that has zero user-visible effect must not appear in the changelog.
+
 > **Documentation coverage:** Which parts of the official Inno Setup docs are already implemented in the
 > plugin, and what is still missing, is tracked in [`DOC_STATUS.md`](DOC_STATUS.md). This file must be kept
 > up to date for new Inno Setup releases or after extensions of the spec YAML.
