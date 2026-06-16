@@ -36,4 +36,16 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
 
     /** For function-like macros: the expression after the `(…)` parameter list, or `null` if absent. */
     fun getMacroBody(): String?
+
+    /**
+     * The raw expression of this `#define` (no quote stripping): for a simple macro the value after the
+     * name, for a function-like macro the body after the parameter list. `null` when there is none.
+     */
+    fun getDefineExpressionText(): String?
+
+    /**
+     * Offset of [getDefineExpressionText] within this directive's text (for mapping analysis spans back to
+     * editor ranges), or `-1` when there is no expression.
+     */
+    fun getDefineExpressionOffsetInDirective(): Int
 }

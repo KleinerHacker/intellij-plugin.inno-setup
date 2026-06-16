@@ -31,8 +31,8 @@ class IsSpecServiceTest {
     }
 
     @Test
-    fun `all 18 sections are loaded`() {
-        assertEquals(18, spec.sections.size)
+    fun `all 19 sections are loaded`() {
+        assertEquals(19, spec.sections.size)
     }
 
     @Test

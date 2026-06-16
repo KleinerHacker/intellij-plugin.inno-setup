@@ -142,6 +142,16 @@
           "description": "Full call signature including parameters and return type (e.g. \"GetEnv(Name: str): str\").",
           "type": "string"
         },
+        "return_type": {
+          "description": "Structured result type used by expression type inference: \"int\", \"str\", \"void\" or \"any\".",
+          "type": "string",
+          "enum": [
+            "int",
+            "str",
+            "void",
+            "any"
+          ]
+        },
         "description": {
           "description": "Human-readable explanation of what the function does, shown in documentation and tooltips.",
           "type": "string"

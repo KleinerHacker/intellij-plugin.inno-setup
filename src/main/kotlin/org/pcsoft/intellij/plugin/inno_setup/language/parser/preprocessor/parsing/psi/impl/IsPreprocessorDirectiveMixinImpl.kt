@@ -86,6 +86,44 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return after.substring(close + 1).trim().ifEmpty { null }
     }
 
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getDefineExpressionText(): String? = defineExpression()?.first
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getDefineExpressionOffsetInDirective(): Int = defineExpression()?.second ?: -1
+
+    /**
+     * The raw expression of this `#define` together with its start offset inside the directive's text.
+     *
+     * For a simple macro this is the value following the name; for a function-like macro it is the body
+     * after the `(…)` parameter list. Returns `null` when there is no expression. The offset lets the
+     * analysis map token spans back to host-editor ranges.
+     */
+    private fun defineExpression(): Pair<String, Int>? {
+        if (!isDefine()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val after = rawAfterName() ?: return null
+        val afterOffsetInValue = value.text.length - after.length // start of `after` within the value text
+
+        val (raw, rawOffsetInValue) = if (after.startsWith("(")) {
+            val close = matchingParen(after) ?: return null
+            (after.substring(close + 1) to afterOffsetInValue + close + 1)
+        } else {
+            (after to afterOffsetInValue)
+        }
+
+        val leadingWs = raw.length - raw.trimStart().length
+        val trimmed = raw.trim()
+        if (trimmed.isEmpty()) return null
+        return trimmed to (valueOffsetInDirective + rawOffsetInValue + leadingWs)
+    }
+
     /** Index of the `)` matching the `(` at index 0, or `null` if unbalanced. */
     private fun matchingParen(text: String): Int? {
         var depth = 0

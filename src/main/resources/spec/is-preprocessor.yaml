@@ -175,85 +175,501 @@ predefined_variables:
     description: "The tab character."
 
 builtin_functions:
-  - name: GetFileVersion
-    signature: "GetFileVersion(Filename: str): str"
-    description: "Returns the file version of an executable or DLL as a dotted string, e.g. <code>1.2.3.4</code>."
+  # Sorted alphabetically to match the official ISPP function index (topic_funcs).
+  - name: AddBackslash
+    signature: "AddBackslash(S: str): str"
+    return_type: str
+    description: "Adds a trailing backslash to S if not already present."
 
-  - name: GetStringFileInfo
-    signature: "GetStringFileInfo(Filename: str, Key: str): str"
-    description: "Returns a string from the version info of a file. Common keys: <code>FileVersion</code>, <code>ProductVersion</code>, <code>CompanyName</code>."
+  - name: AddQuotes
+    signature: "AddQuotes(S: str): str"
+    return_type: str
+    description: "Surrounds S with double quotes if it contains spaces."
 
-  - name: FileExists
-    signature: "FileExists(Filename: str): int"
-    description: "Returns 1 if the file exists, 0 otherwise."
+  - name: ChangeFileExt
+    signature: "ChangeFileExt(Filename: str, Extension: str): str"
+    return_type: str
+    description: "Returns Filename with its extension replaced by Extension."
 
-  - name: DirExists
-    signature: "DirExists(Path: str): int"
-    description: "Returns 1 if the directory exists, 0 otherwise."
-
-  - name: Defined
-    signature: "Defined(Ident): int"
-    description: "Returns 1 if the identifier is defined, 0 otherwise."
-
-  - name: TypeOf
-    signature: "TypeOf(Ident): int"
-    description: "Returns the type of an identifier: 0=void, 1=int, 2=str."
-
-  - name: Int
-    signature: "Int(Value): int"
-    description: "Converts a value to integer."
-
-  - name: Str
-    signature: "Str(Value): str"
-    description: "Converts a value to string."
-
-  - name: GetEnv
-    signature: "GetEnv(Name: str): str"
-    description: "Returns the value of an environment variable."
-
-  - name: LowerCase
-    signature: "LowerCase(S: str): str"
-    description: "Returns the string converted to lower case."
-
-  - name: UpperCase
-    signature: "UpperCase(S: str): str"
-    description: "Returns the string converted to upper case."
-
-  - name: Len
-    signature: "Len(S: str): int"
-    description: "Returns the length of the string."
+  - name: ComparePackedVersion
+    signature: "ComparePackedVersion(Version1: int, Version2: int): int"
+    return_type: int
+    description: "Compares two packed (encoded) version numbers; returns -1, 0 or 1."
 
   - name: Copy
     signature: "Copy(S: str, Index: int, Count: int): str"
-    description: "Returns a substring. Index is 1-based."
+    return_type: str
+    description: "Returns a substring of S. Index is 1-based."
+
+  - name: CopyFile
+    signature: "CopyFile(ExistingFile: str, NewFile: str): int"
+    return_type: int
+    description: "Copies an existing file at compile time; returns non-zero on success."
+
+  - name: DecodeVer
+    signature: "DecodeVer(Version: int): str"
+    return_type: str
+    description: "Converts a packed version number into a dotted version string."
+
+  - name: Defined
+    signature: "Defined(Ident): int"
+    return_type: int
+    description: "Returns 1 if the identifier is defined, 0 otherwise."
+
+  - name: Delete
+    signature: "Delete(S: str*, Index: int, Count: int)"
+    return_type: void
+    description: "Deletes Count characters from S starting at Index (modifies S by reference)."
+
+  - name: DeleteFile
+    signature: "DeleteFile(Filename: str): int"
+    return_type: int
+    description: "Deletes a file at compile time; returns non-zero on success."
+
+  - name: DeleteFileNow
+    signature: "DeleteFileNow(Filename: str): int"
+    return_type: int
+    description: "Deletes a file immediately during preprocessing; returns non-zero on success."
+
+  - name: DimOf
+    signature: "DimOf(Array): int"
+    return_type: int
+    description: "Returns the number of elements of an array variable."
+
+  - name: DirExists
+    signature: "DirExists(Path: str): int"
+    return_type: int
+    description: "Returns 1 if the directory exists, 0 otherwise."
+
+  - name: EmitLanguagesSection
+    signature: "EmitLanguagesSection()"
+    return_type: void
+    description: "Emits a [Languages] section from the bundled language files."
+
+  - name: EncodeVer
+    signature: "EncodeVer(Major: int, Minor: int, Revision: int = 0, Build: int = 0): int"
+    return_type: int
+    description: "Encodes version components into a single packed version number."
+
+  - name: EntryCount
+    signature: "EntryCount(Section: str): int"
+    return_type: int
+    description: "Returns the number of entries in the given script section."
+
+  - name: Error
+    signature: "Error(Message: str)"
+    return_type: void
+    description: "Raises a compile-time error with the given message."
+
+  - name: Exec
+    signature: "Exec(CmdLine: str, Params: str = \"\", WorkingDir: str = \"\", ShowCmd: int = 0, Wait: int = 0): int"
+    return_type: int
+    description: "Executes a program at compile time; returns the process exit code."
+
+  - name: ExecAndGetFirstLine
+    signature: "ExecAndGetFirstLine(CmdLine: str, Params: str = \"\", WorkingDir: str = \"\"): str"
+    return_type: str
+    description: "Executes a program and returns the first line of its standard output."
+
+  - name: ExtractFileDir
+    signature: "ExtractFileDir(Filename: str): str"
+    return_type: str
+    description: "Returns the directory part of Filename (without a trailing backslash)."
+
+  - name: ExtractFileExt
+    signature: "ExtractFileExt(Filename: str): str"
+    return_type: str
+    description: "Returns the extension of Filename (including the leading dot)."
+
+  - name: ExtractFileName
+    signature: "ExtractFileName(Filename: str): str"
+    return_type: str
+    description: "Returns the name and extension part of Filename."
+
+  - name: ExtractFilePath
+    signature: "ExtractFilePath(Filename: str): str"
+    return_type: str
+    description: "Returns the drive and directory part of Filename (with a trailing backslash)."
+
+  - name: FileClose
+    signature: "FileClose(Handle: int)"
+    return_type: void
+    description: "Closes a file previously opened with FileOpen."
+
+  - name: FileEof
+    signature: "FileEof(Handle: int): int"
+    return_type: int
+    description: "Returns non-zero when the end of an open file has been reached."
+
+  - name: FileExists
+    signature: "FileExists(Filename: str): int"
+    return_type: int
+    description: "Returns 1 if the file exists, 0 otherwise."
+
+  - name: FileOpen
+    signature: "FileOpen(Filename: str): int"
+    return_type: int
+    description: "Opens a text file for reading and returns a file handle."
+
+  - name: FileRead
+    signature: "FileRead(Handle: int): str"
+    return_type: str
+    description: "Reads the next line from an open file."
+
+  - name: FileReset
+    signature: "FileReset(Handle: int)"
+    return_type: void
+    description: "Resets the read position of an open file to the beginning."
+
+  - name: FileSize
+    signature: "FileSize(Filename: str): int"
+    return_type: int
+    description: "Returns the size of a file in bytes."
+
+  - name: Find
+    signature: "Find(S: str, Substr: str, Index: int = 1): int"
+    return_type: int
+    description: "Returns the position of Substr in S starting at Index, or 0."
+
+  - name: FindClose
+    signature: "FindClose(Handle: int)"
+    return_type: void
+    description: "Closes a search handle opened with FindFirst."
+
+  - name: FindCode
+    signature: "FindCode(): int"
+    return_type: int
+    description: "Returns the line index where the [Code] section begins."
+
+  - name: FindFirst
+    signature: "FindFirst(Pattern: str, Attributes: int = 0): int"
+    return_type: int
+    description: "Starts a file search and returns a handle, or a negative value if none found."
+
+  - name: FindGetFileName
+    signature: "FindGetFileName(Handle: int): str"
+    return_type: str
+    description: "Returns the file name found by the current FindFirst/FindNext."
+
+  - name: FindNext
+    signature: "FindNext(Handle: int): int"
+    return_type: int
+    description: "Advances a file search to the next match; returns non-zero on success."
+
+  - name: FindSection
+    signature: "FindSection(Section: str): int"
+    return_type: int
+    description: "Returns the line index of the given section header."
+
+  - name: FindSectionEnd
+    signature: "FindSectionEnd(Section: str): int"
+    return_type: int
+    description: "Returns the line index following the last entry of the given section."
+
+  - name: ForceDirectories
+    signature: "ForceDirectories(Dir: str): int"
+    return_type: int
+    description: "Creates a directory tree at compile time; returns non-zero on success."
+
+  - name: GetDateTimeString
+    signature: "GetDateTimeString(Format: str, DateSep: str, TimeSep: str): str"
+    return_type: str
+    description: "Returns the current date/time formatted according to Format."
+
+  - name: GetEnv
+    signature: "GetEnv(Name: str): str"
+    return_type: str
+    description: "Returns the value of an environment variable."
+
+  - name: GetFileCompanyString
+    signature: "GetFileCompanyString(Filename: str): str"
+    return_type: str
+    description: "Returns the CompanyName string from a file's version information."
+
+  - name: GetFileCopyrightString
+    signature: "GetFileCopyrightString(Filename: str): str"
+    return_type: str
+    description: "Returns the LegalCopyright string from a file's version information."
+
+  - name: GetFileDateTimeString
+    signature: "GetFileDateTimeString(Filename: str, Format: str, DateSep: str, TimeSep: str): str"
+    return_type: str
+    description: "Returns a file's last-modified timestamp formatted according to Format."
+
+  - name: GetFileDescriptionString
+    signature: "GetFileDescriptionString(Filename: str): str"
+    return_type: str
+    description: "Returns the FileDescription string from a file's version information."
+
+  - name: GetFileOriginalFilenameString
+    signature: "GetFileOriginalFilenameString(Filename: str): str"
+    return_type: str
+    description: "Returns the OriginalFilename string from a file's version information."
+
+  - name: GetFileProductVersionString
+    signature: "GetFileProductVersionString(Filename: str): str"
+    return_type: str
+    description: "Returns the ProductVersion string from a file's version information."
+
+  - name: GetFileVersionString
+    signature: "GetFileVersionString(Filename: str): str"
+    return_type: str
+    description: "Returns the file version of an executable or DLL as a dotted string, e.g. <code>1.2.3.4</code>."
+
+  - name: GetMD5OfFile
+    signature: "GetMD5OfFile(Filename: str): str"
+    return_type: str
+    description: "Returns the MD5 hash of a file as a hex string."
+
+  - name: GetMD5OfString
+    signature: "GetMD5OfString(S: str): str"
+    return_type: str
+    description: "Returns the MD5 hash of an ANSI string as a hex string."
+
+  - name: GetMD5OfUnicodeString
+    signature: "GetMD5OfUnicodeString(S: str): str"
+    return_type: str
+    description: "Returns the MD5 hash of a Unicode string as a hex string."
+
+  - name: GetPackedVersion
+    signature: "GetPackedVersion(Filename: str): int"
+    return_type: int
+    description: "Returns the packed (encoded) version number of a file."
+
+  - name: GetSHA1OfFile
+    signature: "GetSHA1OfFile(Filename: str): str"
+    return_type: str
+    description: "Returns the SHA-1 hash of a file as a hex string."
+
+  - name: GetSHA1OfString
+    signature: "GetSHA1OfString(S: str): str"
+    return_type: str
+    description: "Returns the SHA-1 hash of an ANSI string as a hex string."
+
+  - name: GetSHA1OfUnicodeString
+    signature: "GetSHA1OfUnicodeString(S: str): str"
+    return_type: str
+    description: "Returns the SHA-1 hash of a Unicode string as a hex string."
+
+  - name: GetSHA256OfFile
+    signature: "GetSHA256OfFile(Filename: str): str"
+    return_type: str
+    description: "Returns the SHA-256 hash of a file as a hex string."
+
+  - name: GetSHA256OfString
+    signature: "GetSHA256OfString(S: str): str"
+    return_type: str
+    description: "Returns the SHA-256 hash of an ANSI string as a hex string."
+
+  - name: GetSHA256OfUnicodeString
+    signature: "GetSHA256OfUnicodeString(S: str): str"
+    return_type: str
+    description: "Returns the SHA-256 hash of a Unicode string as a hex string."
+
+  - name: GetStringFileInfo
+    signature: "GetStringFileInfo(Filename: str, Key: str): str"
+    return_type: str
+    description: "Returns a string from the version info of a file. Common keys: <code>FileVersion</code>, <code>ProductVersion</code>, <code>CompanyName</code>."
+
+  - name: GetVersionComponents
+    signature: "GetVersionComponents(Filename: str, Major: int*, Minor: int*, Revision: int*, Build: int*): int"
+    return_type: int
+    description: "Reads a file's version components into the referenced variables; returns non-zero on success."
+
+  - name: GetVersionNumbers
+    signature: "GetVersionNumbers(Filename: str, VersionMS: int*, VersionLS: int*): int"
+    return_type: int
+    description: "Reads a file's version into the referenced high/low words; returns non-zero on success."
+
+  - name: GetVersionNumbersString
+    signature: "GetVersionNumbersString(Filename: str): str"
+    return_type: str
+    description: "Returns a file's version as a dotted string, e.g. <code>1.2.3.4</code>."
+
+  - name: Insert
+    signature: "Insert(Source: str, S: str*, Index: int)"
+    return_type: void
+    description: "Inserts Source into S at Index (modifies S by reference)."
+
+  - name: Int
+    signature: "Int(Value: any, Default: int = 0): int"
+    return_type: int
+    description: "Converts a value to integer, using Default when conversion fails."
+
+  - name: Is64BitPEImage
+    signature: "Is64BitPEImage(Filename: str): int"
+    return_type: int
+    description: "Returns non-zero if the given PE image is 64-bit."
+
+  - name: IsWin64
+    signature: "IsWin64(): int"
+    return_type: int
+    description: "Returns non-zero when the compiler is running on 64-bit Windows."
+
+  - name: Len
+    signature: "Len(S: str): int"
+    return_type: int
+    description: "Returns the length of the string."
+
+  - name: LowerCase
+    signature: "LowerCase(S: str): str"
+    return_type: str
+    description: "Returns the string converted to lower case."
+
+  - name: Max
+    signature: "Max(A: int, B: int): int"
+    return_type: int
+    description: "Returns the greater of two integers."
+
+  - name: Message
+    signature: "Message(S: str)"
+    return_type: void
+    description: "Outputs an informational message in the compiler log."
+
+  - name: Min
+    signature: "Min(A: int, B: int): int"
+    return_type: int
+    description: "Returns the smaller of two integers."
+
+  - name: PackVersionComponents
+    signature: "PackVersionComponents(Major: int, Minor: int, Revision: int, Build: int): int"
+    return_type: int
+    description: "Packs version components into a single packed version number."
+
+  - name: PackVersionNumbers
+    signature: "PackVersionNumbers(VersionMS: int, VersionLS: int): int"
+    return_type: int
+    description: "Packs high/low version words into a single packed version number."
 
   - name: Pos
     signature: "Pos(Substr: str, S: str): int"
+    return_type: int
     description: "Returns the 1-based position of Substr in S, or 0 if not found."
 
-  - name: AddBackslash
-    signature: "AddBackslash(S: str): str"
-    description: "Adds a trailing backslash to S if not already present."
+  - name: Power
+    signature: "Power(Base: int, Exponent: int): int"
+    return_type: int
+    description: "Returns Base raised to the power of Exponent."
 
-  - name: RemoveBackslash
-    signature: "RemoveBackslash(S: str): str"
-    description: "Removes a trailing backslash from S if present."
+  - name: ReadIni
+    signature: "ReadIni(Filename: str, Section: str, Key: str, Default: str = \"\"): str"
+    return_type: str
+    description: "Reads a value from an INI file at compile time."
 
-  - name: SetupSetting
-    signature: "SetupSetting(Name: str): str"
-    description: "Returns the value of a [Setup] section directive by name."
+  - name: ReadReg
+    signature: "ReadReg(RootKey: int, SubKeyName: str, ValueName: str = \"\", Default: str = \"\"): str"
+    return_type: str
+    description: "Reads a registry value at compile time."
+
+  - name: RemoveBackslashUnlessRoot
+    signature: "RemoveBackslashUnlessRoot(S: str): str"
+    return_type: str
+    description: "Removes a trailing backslash from S unless S is a drive root."
+
+  - name: RemoveFileExt
+    signature: "RemoveFileExt(Filename: str): str"
+    return_type: str
+    description: "Returns Filename with its extension removed."
+
+  - name: RPos
+    signature: "RPos(Substr: str, S: str): int"
+    return_type: int
+    description: "Returns the 1-based position of the last occurrence of Substr in S, or 0."
+
+  - name: SamePackedVersion
+    signature: "SamePackedVersion(Version1: int, Version2: int): int"
+    return_type: int
+    description: "Returns non-zero if two packed version numbers are equal."
+
+  - name: SameStr
+    signature: "SameStr(S1: str, S2: str): int"
+    return_type: int
+    description: "Returns non-zero if two strings are equal (case-insensitive)."
+
+  - name: SameText
+    signature: "SameText(S1: str, S2: str): int"
+    return_type: int
+    description: "Returns non-zero if two strings are equal (case-insensitive)."
+
+  - name: SaveStringToFile
+    signature: "SaveStringToFile(Filename: str, S: str, Append: int = 0)"
+    return_type: void
+    description: "Writes a string to a file, optionally appending."
+
+  - name: SaveToFile
+    signature: "SaveToFile(Filename: str)"
+    return_type: void
+    description: "Writes the preprocessed output collected so far to a file (debugging aid)."
 
   - name: SetSetupSetting
     signature: "SetSetupSetting(Name: str, Value: str)"
+    return_type: void
     description: "Sets a [Setup] section directive at compile time."
 
-  - name: ReadReg
-    signature: "ReadReg(Root: int, Key: str, Name: str): str"
-    description: "Reads a registry value at compile time."
+  - name: SetupSetting
+    signature: "SetupSetting(Name: str): str"
+    return_type: str
+    description: "Returns the value of a [Setup] section directive by name."
 
-  - name: ReadIni
-    signature: "ReadIni(Filename: str, Section: str, Key: str, Default: str): str"
-    description: "Reads a value from an INI file at compile time."
+  - name: Str
+    signature: "Str(Value: any): str"
+    return_type: str
+    description: "Converts a value to string. Integers become text, void becomes an empty string."
+
+  - name: StringChange
+    signature: "StringChange(S: str*, FromStr: str, ToStr: str): int"
+    return_type: int
+    description: "Replaces all occurrences of FromStr with ToStr in S; returns the replacement count."
+
+  - name: StrToVersion
+    signature: "StrToVersion(S: str): int"
+    return_type: int
+    description: "Parses a dotted version string into a packed version number."
+
+  - name: Trim
+    signature: "Trim(S: str): str"
+    return_type: str
+    description: "Returns S with leading and trailing whitespace removed."
+
+  - name: TypeOf
+    signature: "TypeOf(Ident): int"
+    return_type: int
+    description: "Returns the type of an identifier: 0=void, 1=int, 2=str."
+
+  - name: UnpackVersionComponents
+    signature: "UnpackVersionComponents(Version: int, Major: int*, Minor: int*, Revision: int*, Build: int*)"
+    return_type: void
+    description: "Splits a packed version number into the referenced components."
+
+  - name: UnpackVersionNumbers
+    signature: "UnpackVersionNumbers(Version: int, VersionMS: int*, VersionLS: int*)"
+    return_type: void
+    description: "Splits a packed version number into the referenced high/low words."
+
+  - name: UpperCase
+    signature: "UpperCase(S: str): str"
+    return_type: str
+    description: "Returns the string converted to upper case."
+
+  - name: VersionToStr
+    signature: "VersionToStr(Version: int): str"
+    return_type: str
+    description: "Converts a packed version number into a dotted version string."
+
+  - name: Warning
+    signature: "Warning(Message: str)"
+    return_type: void
+    description: "Emits a compile-time warning with the given message."
+
+  - name: WriteIni
+    signature: "WriteIni(Filename: str, Section: str, Key: str, Value: str)"
+    return_type: void
+    description: "Writes a value to an INI file at compile time."
+
+  - name: YesNo
+    signature: "YesNo(S: str): int"
+    return_type: int
+    description: "Returns non-zero if the string represents an affirmative (yes/true) value."
 
 # Reserved ISPP keywords that must not be used as a #define (or other macro) name.
 # Matched case-insensitively against the declared macro name.

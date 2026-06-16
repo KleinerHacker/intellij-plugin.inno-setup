@@ -17,6 +17,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorFunctionReturnType
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
@@ -72,10 +73,54 @@ class IsPreprocessorServiceTest {
     }
 
     @Test
-    fun `GetFileVersion builtin function exists`() {
-        val fn = spec.builtinFunctions.find { it.name == "GetFileVersion" }
-        assertNotNull("GetFileVersion must exist", fn)
+    fun `GetFileVersionString builtin function exists`() {
+        val fn = spec.builtinFunctions.find { it.name == "GetFileVersionString" }
+        assertNotNull("GetFileVersionString must exist", fn)
         assertTrue("Must have signature", fn!!.signature.isNotBlank())
+    }
+
+    @Test
+    fun `builtin functions cover the official ISPP index`() {
+        val expected = setOf(
+            "AddBackslash", "AddQuotes", "ChangeFileExt", "ComparePackedVersion", "Copy", "CopyFile",
+            "DecodeVer", "Defined", "Delete", "DeleteFile", "DeleteFileNow", "DimOf", "DirExists",
+            "EmitLanguagesSection", "EncodeVer", "EntryCount", "Error", "Exec", "ExecAndGetFirstLine",
+            "ExtractFileDir", "ExtractFileExt", "ExtractFileName", "ExtractFilePath", "FileClose",
+            "FileEof", "FileExists", "FileOpen", "FileRead", "FileReset", "FileSize", "Find", "FindClose",
+            "FindCode", "FindFirst", "FindGetFileName", "FindNext", "FindSection", "FindSectionEnd",
+            "ForceDirectories", "GetDateTimeString", "GetEnv", "GetFileCompanyString",
+            "GetFileCopyrightString", "GetFileDateTimeString", "GetFileDescriptionString",
+            "GetFileOriginalFilenameString", "GetFileProductVersionString", "GetFileVersionString",
+            "GetMD5OfFile", "GetMD5OfString", "GetMD5OfUnicodeString", "GetPackedVersion", "GetSHA1OfFile",
+            "GetSHA1OfString", "GetSHA1OfUnicodeString", "GetSHA256OfFile", "GetSHA256OfString",
+            "GetSHA256OfUnicodeString", "GetStringFileInfo", "GetVersionComponents", "GetVersionNumbers",
+            "GetVersionNumbersString", "Insert", "Int", "Is64BitPEImage", "IsWin64", "Len", "LowerCase",
+            "Max", "Message", "Min", "PackVersionComponents", "PackVersionNumbers", "Pos", "Power",
+            "ReadIni", "ReadReg", "RemoveBackslashUnlessRoot", "RemoveFileExt", "RPos", "SamePackedVersion",
+            "SameStr", "SameText", "SaveStringToFile", "SaveToFile", "SetSetupSetting", "SetupSetting",
+            "Str", "StringChange", "StrToVersion", "Trim", "TypeOf", "UnpackVersionComponents",
+            "UnpackVersionNumbers", "UpperCase", "VersionToStr", "Warning", "WriteIni", "YesNo"
+        )
+        val actual = spec.builtinFunctions.map { it.name }.toSet()
+        val missing = expected - actual
+        assertTrue("Missing built-in functions: $missing", missing.isEmpty())
+    }
+
+    @Test
+    fun `builtin function names are unique`() {
+        val names = spec.builtinFunctions.map { it.name }
+        assertEquals("Built-in function names must be unique", names.size, names.toSet().size)
+    }
+
+    @Test
+    fun `sampled builtin functions have expected return types`() {
+        fun ret(name: String) = spec.builtinFunctions.first { it.name == name }.returnType
+        assertEquals(IsPreprocessorFunctionReturnType.STR, ret("Str"))
+        assertEquals(IsPreprocessorFunctionReturnType.INT, ret("Int"))
+        assertEquals(IsPreprocessorFunctionReturnType.INT, ret("FileExists"))
+        assertEquals(IsPreprocessorFunctionReturnType.STR, ret("Trim"))
+        assertEquals(IsPreprocessorFunctionReturnType.INT, ret("Power"))
+        assertEquals(IsPreprocessorFunctionReturnType.VOID, ret("Warning"))
     }
 
     @Test

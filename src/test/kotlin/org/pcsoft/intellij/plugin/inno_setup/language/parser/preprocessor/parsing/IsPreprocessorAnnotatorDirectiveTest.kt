@@ -76,7 +76,7 @@ class IsPreprocessorAnnotatorDirectiveTest : BasePlatformTestCase() {
     }
 
     fun testBuiltinFunctionReferenceNoError() {
-        val errors = errorsContaining("#define A GetFileVersion(\"app.exe\")\n$setupTail", "Unresolved preprocessor reference")
+        val errors = errorsContaining("#define A GetFileVersionString(\"app.exe\")\n$setupTail", "Unresolved preprocessor reference")
         assertTrue("A reference to a known ISPP built-in function must not produce an error", errors.isEmpty())
     }
 
