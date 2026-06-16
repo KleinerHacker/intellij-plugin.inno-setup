@@ -31,7 +31,7 @@ jobs:
         run: ./gradlew cyclonedxBom --stacktrace
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: build/reports/cyclonedx/bom.xml
@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew buildPlugin -Pversion=${{ github.ref_name }} --stacktrace
 
       - name: Upload plugin artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: plugin-distribution
           path: build/distributions/*.zip
