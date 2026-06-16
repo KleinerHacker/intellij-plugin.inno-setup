@@ -54,7 +54,9 @@ jobs:
       - name: Run tests
         run: ./gradlew test --stacktrace --info
 
-  deploy-docs:
+  # Build the docs as a generation test (mkdocs --strict) on every push and PR.
+  # No deployment here — that only happens for pushes (see deploy-snapshot-docs).
+  validate-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -81,5 +83,42 @@ jobs:
       - name: Build docs
         run: ./gradlew buildDocs --stacktrace --info
 
-      - name: Deploy docs
-        run: ./gradlew deployDocs --stacktrace --info
+  # Publish the docs via mike as the 'snapshot' version on a push to the default
+  # branch — without the 'latest' alias, so released versions stay the default.
+  # Never runs for pull requests. Tag releases publish their own versioned docs
+  # (see release.yml).
+  deploy-snapshot-docs:
+    runs-on: ubuntu-latest
+    needs: validate-docs
+    if: ${{ github.event_name == 'push' && (github.ref_name == 'master' || github.ref_name == 'main') }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Pip Update
+        run: pip install --upgrade pip
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Configure git for mike
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy snapshot docs
+        run: ./gradlew deployDocs -Pversion=snapshot -PsetLatest=false --stacktrace --info
