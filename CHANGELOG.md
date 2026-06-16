@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.4.2]
+
 ### Added
 
 - **Inno Setup Run configuration**: Added a run configuration to launch and build Inno Setup scripts directly
