@@ -24,11 +24,17 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.preprocessorTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
@@ -37,6 +43,18 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
  * Annotates Inno Setup PSI elements with validation and highlighting information.
  */
 class IsPreprocessorAnnotator : Annotator {
+
+    private companion object {
+        /** Token kinds that are painted with the operator colour inside #define expressions. */
+        val OPERATOR_TOKEN_TYPES = setOf(
+            IsPreprocessorExprTokenType.OPERATOR,
+            IsPreprocessorExprTokenType.LPAREN,
+            IsPreprocessorExprTokenType.RPAREN,
+            IsPreprocessorExprTokenType.COMMA,
+            IsPreprocessorExprTokenType.QUESTION,
+            IsPreprocessorExprTokenType.COLON,
+        )
+    }
 
     /**
      * Annotates the supplied PSI element when it matches this component's checks.
@@ -115,10 +133,17 @@ class IsPreprocessorAnnotator : Annotator {
             return
         }
 
+        // Validate the #define expression: missing operators, syntax problems and type violations (e.g.
+        // multiplying strings). Operators are highlighted here too. Reference types are resolved
+        // recursively through the names of other #defines.
+        annotateExpression(directive, ex, holder)
+
         val name = ex.getDefineName() ?: return
         if (!isDefineUsed(directive, name)) {
+            // Gray only the name identifier, not the whole line — otherwise the value's syntax
+            // highlighting (strings/numbers/operators) would be lost behind the unused colour.
             holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "#define '$name' is never used")
-                .range(directive.textRange)
+                .range(ex.nameIdentifier?.textRange ?: directive.textRange)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
                 .withFix(RemoveUnusedDefineQuickFix(directive))
                 .create()
@@ -165,6 +190,53 @@ class IsPreprocessorAnnotator : Annotator {
                 .create()
         }
     }
+
+    /**
+     * Analyses the `#define` expression: highlights operators and reports syntax errors (missing operator,
+     * unbalanced parenthesis, …) and type errors (e.g. `"a" * "b"`) at the precise offending token. Reference
+     * types are resolved recursively through the names of the other #defines in the host file.
+     */
+    private fun annotateExpression(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        val exprText = ex.getDefineExpressionText() ?: return
+        val exprOffset = ex.getDefineExpressionOffsetInDirective()
+        if (exprOffset < 0) return
+        val base = directive.textRange.startOffset + exprOffset
+
+        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+        tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
+            highlight(
+                TextRange(base + token.start, base + token.end),
+                IsPreprocessorSyntaxHighlighting.OPERATOR,
+                holder,
+            )
+        }
+
+        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+        val resolver = buildTypeResolver(hostFile)
+        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+        inference.infer(parseResult.ast)
+
+        (parseResult.errors + inference.errors).forEach { error ->
+            holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                .range(TextRange(base + error.span.start, base + error.span.end))
+                .create()
+        }
+    }
+
+    /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
+    private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver =
+        hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
+
+    /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */
+    private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: IsScriptFile?): Int =
+        hostFile?.isppDirectivesWithHostOffset?.firstOrNull { it.first === directive }?.second ?: Int.MAX_VALUE
 
     private fun isDefineUsed(directive: IsPreprocessorDirective, name: String): Boolean {
         val injMgr = InjectedLanguageManager.getInstance(directive.project)

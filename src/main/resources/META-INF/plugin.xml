@@ -135,9 +135,11 @@
         <completion.contributor language="ISS"
                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsSectionCompletionContributor"/>
 
-        <!-- Brace matching: [], {}, () -->
+        <!-- Brace matching: [], {}, () for sections; () for preprocessor directives -->
         <lang.braceMatcher language="ISS"
-                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsBraceMatcher"/>
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsSectionBraceMatcher"/>
+        <lang.braceMatcher language="ISPP"
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsPreprocessorBraceMatcher"/>
 
         <!-- Quote handler: " -->
         <typedHandler

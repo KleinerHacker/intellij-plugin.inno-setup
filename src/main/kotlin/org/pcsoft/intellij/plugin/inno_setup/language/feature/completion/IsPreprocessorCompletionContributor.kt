@@ -15,6 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorBuiltinFunctionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDirectiveKeywordProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
@@ -39,6 +40,12 @@ class IsPreprocessorCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
             IsPreprocessorDefineExpressionProvider
+        )
+        // Built-in ISPP functions inside a #define expression
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
+            IsPreprocessorBuiltinFunctionProvider
         )
     }
 }

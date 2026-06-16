@@ -27,4 +27,10 @@ object IsPreprocessorSyntaxHighlighting {
      * Returns or performs the public behavior represented by this member.
      */
     val NUMBER: TextAttributesKey = DefaultLanguageHighlighterColors.NUMBER
+
+    /**
+     * Highlighting for ISPP expression operators (`+ - * / % & | ^ ~ << >> < > <= >= == != && || ! ? :`)
+     * and grouping parentheses inside `#define` expressions.
+     */
+    val OPERATOR: TextAttributesKey = DefaultLanguageHighlighterColors.OPERATION_SIGN
 }

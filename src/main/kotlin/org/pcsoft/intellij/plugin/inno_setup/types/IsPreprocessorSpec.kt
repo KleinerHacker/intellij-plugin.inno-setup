@@ -98,10 +98,32 @@ data class IsPreprocessorVariableSpec(
 )
 
 /**
+ * Result type of a built-in ISPP function, used by the expression type inference.
+ */
+enum class IsPreprocessorFunctionReturnType(val typeName: String) {
+    /** Function returns an integer value. */
+    @JsonProperty("int")
+    INT("int"),
+
+    /** Function returns a string value. */
+    @JsonProperty("str")
+    STR("str"),
+
+    /** Function returns nothing (void / no usable value). */
+    @JsonProperty("void")
+    VOID("void"),
+
+    /** Function return type is unknown or context dependent. */
+    @JsonProperty("any")
+    ANY("any"),
+}
+
+/**
  * Describes a built-in ISPP function offered by completion and documentation.
  *
  * @property name Function name without arguments.
  * @property signature Display signature including argument information.
+ * @property returnType Structured result type used by the expression type inference.
  * @property description HTML-capable description loaded from the specification file.
  * @property since First Inno Setup version that provides the function, or `null` when unknown.
  * @property until Last Inno Setup version that provides the function, or `null` when it is still valid.
@@ -115,6 +137,11 @@ data class IsPreprocessorFunctionSpec(
      * Returns or performs the public behavior represented by this member.
      */
     val signature: String,
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    @field:JsonProperty("return_type")
+    val returnType: IsPreprocessorFunctionReturnType = IsPreprocessorFunctionReturnType.ANY,
     /**
      * Returns or performs the public behavior represented by this member.
      */

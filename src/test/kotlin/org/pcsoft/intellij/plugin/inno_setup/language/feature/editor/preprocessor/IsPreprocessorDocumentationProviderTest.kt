@@ -58,9 +58,14 @@ class IsPreprocessorDocumentationProviderTest : BasePlatformTestCase() {
         assertTrue("Doc must name the variable", doc!!.contains("PREPROCVER"))
     }
 
-    fun testLookupUserDefineProducesNoDoc() {
-        val doc = lookupDocFor("MyConst", "#define A My<caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
-        assertNull("A user-defined macro name must not produce ISPP documentation", doc)
+    fun testLookupUserDefineDoc() {
+        val doc = lookupDocFor(
+            "First",
+            "#define First 10\n#define Second Firs<caret>t\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertNotNull("Expected lookup doc for the referenced own #define 'First'", doc)
+        assertTrue("Doc must name the define", doc!!.contains("First"))
+        assertTrue("Doc must show the computed value 10", doc.contains("10"))
     }
 
     fun testDirectiveKeywordDoc() {
@@ -85,9 +90,66 @@ class IsPreprocessorDocumentationProviderTest : BasePlatformTestCase() {
         assertTrue("Doc must contain the variable description", doc.contains("version", ignoreCase = true))
     }
 
-    fun testUserDefinedNameProducesNoDoc() {
-        // The macro name itself is neither a directive keyword nor a predefined variable.
+    fun testLookupBuiltinFunctionDoc() {
+        val doc = lookupDocFor("FileExists", "#define A FileExi<caret>sts\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected lookup doc for the FileExists built-in function", doc)
+        assertTrue("Doc must name the function", doc!!.contains("FileExists"))
+        assertTrue("Doc must declare it is a function", doc.contains("function"))
+        assertTrue("Doc must show the signature", doc.contains("Signature"))
+    }
+
+    fun testBuiltinFunctionDoc() {
+        val doc = docFor("#define A FileExi<caret>sts\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected doc for the FileExists built-in function", doc)
+        assertTrue("Doc must name the function", doc!!.contains("FileExists"))
+        assertTrue("Doc must show the signature", doc.contains("Signature"))
+    }
+
+    fun testSimpleDefineOwnNameDoc() {
         val doc = docFor("#define MyCon<caret>st \"1.0\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
-        assertNull("A user-defined macro name must not produce ISPP documentation", doc)
+        assertNotNull("Expected doc for the own #define name", doc)
+        assertTrue("Doc must name the define", doc!!.contains("MyConst"))
+        assertTrue("Doc must show the str type", doc.contains("str"))
+        assertTrue("Doc must show the computed value", doc.contains("\"1.0\""))
+    }
+
+    fun testReferencedSimpleDefineShowsTypeAndComputedValue() {
+        // Hovering the 'First' reference inside Second's expression documents First (int, value 10).
+        val doc = docFor(
+            "#define First 10\n#define Second Firs<caret>t + 5\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertNotNull("Expected doc for the referenced define 'First'", doc)
+        assertTrue("Doc must name the define", doc!!.contains("First"))
+        assertTrue("Doc must show the int type", doc.contains("int"))
+        assertTrue("Doc must show the computed value 10", doc.contains("10"))
+    }
+
+    fun testComputedValueAcrossReferences() {
+        // Sum = Base + 5 = 15 — the computed value is resolved transitively.
+        val doc = docFor(
+            "#define Base 10\n#define Su<caret>m Base + 5\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertNotNull(doc)
+        assertTrue("Computed value must be 15", doc!!.contains("15"))
+    }
+
+    fun testComputedValueThroughMacroCall() {
+        // hello = demo + anyany("y") = "test" + ("demo.isl" + "y") = "testdemo.isly"
+        val doc = docFor(
+            "#define demo \"test\"\n#define lang \"demo.isl\"\n#define anyany(x) lang + x\n" +
+                "#define hel<caret>lo demo + anyany(\"y\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertNotNull(doc)
+        assertTrue("Computed value must resolve through the macro call", doc!!.contains("testdemo.isly"))
+    }
+
+    fun testFunctionMacroDefineDocShowsParamsAndReturnType() {
+        // func(x) "abc" + x → x is constrained to str, return type str.
+        val doc = docFor("#define fun<caret>c(x) \"abc\" + x\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected doc for the function-like macro", doc)
+        assertTrue("Doc must name the macro", doc!!.contains("func"))
+        assertTrue("Doc must declare it is a macro", doc.contains("macro"))
+        assertTrue("Doc must show the parameter type", doc.contains("x: str"))
+        assertTrue("Doc must show the return type str", doc.contains("· str") || doc.contains("str"))
     }
 }

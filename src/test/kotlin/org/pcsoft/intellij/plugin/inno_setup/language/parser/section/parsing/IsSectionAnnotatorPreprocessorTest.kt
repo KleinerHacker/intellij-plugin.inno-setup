@@ -119,6 +119,131 @@ class IsSectionAnnotatorPreprocessorTest : BasePlatformTestCase() {
         assertFalse("#define used via {#Name} must not produce a 'never used' warning", hit)
     }
 
+    fun testUnusedDefineHighlightCoversOnlyTheName() {
+        val text = "#define UnusedConst \"value\"\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        myFixture.configureByText(IsScriptFileType.INSTANCE, text)
+        val highlights = myFixture.doHighlighting()
+        val unused = highlights.first {
+            it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.UNUSED &&
+                    it.severity == HighlightSeverity.WEAK_WARNING
+        }
+        // Only the name identifier is grayed — not the whole line — so the value keeps its highlighting.
+        assertEquals("UnusedConst", text.substring(unused.startOffset, unused.endOffset))
+    }
+
+    // ── String with non-+ operator ────────────────────────────────────────────
+
+    fun testStringTimesMacroParameterIsError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) \"abc\" * x\n[Setup]\nAppName={#func(1)}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("cannot be applied to a string operand", ignoreCase = true) == true
+        }
+        assertTrue("'\"abc\" * x' must be an error even though x is a macro parameter", hit)
+    }
+
+    // ── Function-like macro referenced without arguments ──────────────────────
+
+    fun testFunctionMacroReferencedWithoutArgumentsIsError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) x\n#define myVar func\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("must be called with an argument list", ignoreCase = true) == true
+        }
+        assertTrue("A function-like macro used without an argument list must be an error", hit)
+    }
+
+    fun testFunctionMacroCalledWithArgumentsIsNoError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) x\n#define myVar func(1)\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    (it.description?.contains("must be called with an argument list", ignoreCase = true) == true ||
+                            it.description?.contains("expects", ignoreCase = true) == true)
+        }
+        assertFalse("A correctly called function-like macro must not be flagged", hit)
+    }
+
+    fun testFunctionMacroCalledWithWrongArgumentCountIsError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) x\n#define myVar func(1, 2)\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("expects 1 argument", ignoreCase = true) == true
+        }
+        assertTrue("Calling a 1-parameter macro with 2 arguments must be an error", hit)
+    }
+
+    fun testFunctionMacroCalledWithWrongArgumentTypeIsError() {
+        // twice(x) x * 2 constrains x to int; calling twice("a") passes a string.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define twice(x) x * 2\n#define myVar twice(\"a\")\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("must be int", ignoreCase = true) == true
+        }
+        assertTrue("Passing a string to an int parameter must be a type error", hit)
+    }
+
+    fun testFunctionMacroCalledWithCorrectArgumentTypeIsNoError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define twice(x) x * 2\n#define myVar twice(21)\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("of macro", ignoreCase = true) == true
+        }
+        assertFalse("A correctly typed argument must not be flagged", hit)
+    }
+
+    fun testFunctionMacroReturnTypeFlowsIntoCaller() {
+        // func("x") returns str ("abc" + str); str + intVar (int) must be flagged.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) \"abc\" + x\n#define intVar 10\n#define myVar func(\"x\") + intVar\n" +
+                "[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("cannot combine a string operand with an integer operand", ignoreCase = true) == true
+        }
+        assertTrue("Inferred str return type of func must make 'func(\"x\") + intVar' an error", hit)
+    }
+
+    fun testFunctionMacroReturnTypeProducesNoFalsePositive() {
+        // func("x") returns str; str + "y" (str) is valid — no error.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) \"abc\" + x\n#define myVar func(\"x\") + \"y\"\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("string operand", ignoreCase = true) == true
+        }
+        assertFalse("A valid str + str via an inferred macro return type must not be flagged", hit)
+    }
+
     fun testUsedDefineViaCrossReferenceProducesNoUnusedWarning() {
         // Base is used by Full's expression; Full is used via {#Full}.
         // Neither must be flagged as unused.

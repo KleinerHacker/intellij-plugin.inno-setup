@@ -19,9 +19,9 @@ import com.intellij.psi.tree.IElementType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
 /**
- * Defines brace pairs and brace matching behavior for Inno Setup files.
+ * Defines brace pairs and brace matching behavior for Inno Setup section files (`.iss` / `.isl`).
  */
-class IsBraceMatcher : PairedBraceMatcher {
+class IsSectionBraceMatcher : PairedBraceMatcher {
 
     /**
      * Returns brace-matching metadata for the supplied editor context.

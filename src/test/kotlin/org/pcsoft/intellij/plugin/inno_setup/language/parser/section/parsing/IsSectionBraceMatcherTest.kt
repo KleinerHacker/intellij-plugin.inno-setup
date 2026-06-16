@@ -13,38 +13,38 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsBraceMatcher
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsSectionBraceMatcher
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
 
-class IsBraceMatcherTest : BasePlatformTestCase() {
+class IsSectionBraceMatcherTest : BasePlatformTestCase() {
 
     // --- Unit tests on getBracePairs() ---
 
     fun testBracePairsCount() {
-        assertEquals(3, IsBraceMatcher.PAIRS.size)
+        assertEquals(3, IsSectionBraceMatcher.PAIRS.size)
     }
 
     fun testSquareBracketPair() {
-        val pair = IsBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LBRACKET }
+        val pair = IsSectionBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LBRACKET }
         assertEquals(IsSectionTypes.RBRACKET, pair.rightBraceType)
         assertTrue("[] must be structural", pair.isStructural)
     }
 
     fun testCurlyBracePair() {
-        val pair = IsBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LBRACE }
+        val pair = IsSectionBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LBRACE }
         assertEquals(IsSectionTypes.RBRACE, pair.rightBraceType)
         assertFalse("{} must not be structural", pair.isStructural)
     }
 
     fun testParenPair() {
-        val pair = IsBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LPAREN }
+        val pair = IsSectionBraceMatcher.PAIRS.first { it.leftBraceType == IsSectionTypes.LPAREN }
         assertEquals(IsSectionTypes.RPAREN, pair.rightBraceType)
         assertFalse("() must not be structural", pair.isStructural)
     }
 
     fun testIsPairedBracesAllowedBeforeTypeAlwaysTrue() {
-        val matcher = IsBraceMatcher()
+        val matcher = IsSectionBraceMatcher()
         assertTrue(matcher.isPairedBracesAllowedBeforeType(IsSectionTypes.LBRACKET, null))
         assertTrue(matcher.isPairedBracesAllowedBeforeType(IsSectionTypes.LBRACE, IsSectionTypes.IDENTIFIER))
         assertTrue(matcher.isPairedBracesAllowedBeforeType(IsSectionTypes.LPAREN, IsSectionTypes.CRLF))

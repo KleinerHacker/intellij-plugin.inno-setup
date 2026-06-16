@@ -101,4 +101,10 @@ object IsIcons {
      */
     @JvmField
     val Variable: Icon = AllIcons.Nodes.Variable
+
+    /**
+     * Icon for built-in ISPP functions offered in completion.
+     */
+    @JvmField
+    val Function: Icon = AllIcons.Nodes.Method
 }

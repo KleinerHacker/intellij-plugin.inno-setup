@@ -183,9 +183,23 @@ deprecated). Notable items already marked deprecated/removed in `isi-const.yaml`
 
 ## ISPP Preprocessor (`iss-ispp.yaml`)
 
-Coverage appears **complete**: 24 directives, 13+ predefined variables, 31+ builtin functions.
-All standard directives (`#define`, `#undef`, `#if`/`#elif`/`#else`/`#endif`, `#ifdef`, `#ifndef`,
-`#include`, `#for`, `#sub`, `#endsub`, `#emit`, `#expr`, `#pragma`, `#error`, etc.) are present.
+Coverage appears **complete**: 24 directives, 13+ predefined variables and the **full** ISPP built-in
+function set (~104 functions from the official `topic_funcs` index, each with `signature`, `return_type`
+and `description` in `is-preprocessor.yaml`). All standard directives (`#define`, `#undef`,
+`#if`/`#elif`/`#else`/`#endif`, `#ifdef`, `#ifndef`, `#include`, `#for`, `#sub`, `#endsub`, `#emit`,
+`#expr`, `#pragma`, `#error`, etc.) are present.
+
+**`#define` expression analysis & operator highlighting:** The value of a `#define` (and a function-like
+macro body) is parsed as a C/C++-like ISPP expression (`…/preprocessor/expression/`: tokenizer, fault-
+tolerant precedence-climbing parser, type inference and a recursive name resolver) and validated by
+`IsPreprocessorAnnotator`. Missing operators, unbalanced parentheses and **type violations** (`"a" * "b"`,
+`1 + "s"`, `"a" < 1`, …) are reported as **errors** anchored at the precise offending token; references to
+other `#define`s are resolved **recursively by name** (declaration-order rule + cycle guard) so a conflict
+like `#define A "x"` / `#define B 5` / `#define C A * B` is detected on `C`. An operand whose type cannot be
+determined statically (unresolved reference, macro parameter, unknown function result, `{…}` constant) is
+treated as `any` and suppresses type errors to avoid false positives. The same pass highlights all operator
+tokens (`IsPreprocessorSyntaxHighlighting.OPERATOR`). The built-in functions' `return_type` feeds the type
+inference (e.g. `Str`→`str`, `Int`→`int`).
 
 Directive keywords are validated against this spec by `IsPreprocessorAnnotator`: a `#…` directive
 whose keyword is not declared in `ispp-spec.yaml` is flagged as an error (`Unknown preprocessor
