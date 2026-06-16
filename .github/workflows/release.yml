@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  check-licences:
+  licences:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,9 +27,18 @@ jobs:
       - name: Check licences
         run: ./gradlew licensee --stacktrace
 
-  release:
+      - name: Generate SBOM
+        run: ./gradlew cyclonedxBom --stacktrace
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: build/reports/cyclonedx/bom.xml
+
+  build:
     runs-on: ubuntu-latest
-    needs: check-licences
+    needs: licences
 
     steps:
       - uses: actions/checkout@v4
@@ -46,18 +55,58 @@ jobs:
       - name: Build plugin
         run: ./gradlew buildPlugin -Pversion=${{ github.ref_name }} --stacktrace
 
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-distribution
+          path: build/distributions/*.zip
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download plugin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: plugin-distribution
+          path: build/distributions/
+
+      - name: Download SBOM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: sbom
+          path: build/reports/cyclonedx/
+
+      - name: Extract changelog
+        run: |
+          TAG="${{ github.ref_name }}"
+          NOTES=$(awk "/^## \[$TAG\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md)
+          NOTES=$(echo "$NOTES" | sed '/./,$!d' | sed -e :a -e '/^\n*$/{$d;N;ba}')
+          if [ -z "$NOTES" ]; then
+            echo "ERROR: No changelog entry found for tag $TAG"
+            exit 1
+          fi
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           TAG="${{ github.ref_name }}"
           if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then
-            gh release create "$TAG" build/distributions/*.zip \
+            gh release create "$TAG" build/distributions/*.zip build/reports/cyclonedx/bom.xml \
               --title "$TAG" \
+              --notes "$RELEASE_NOTES" \
               --prerelease \
               --latest=false
           else
-            gh release create "$TAG" build/distributions/*.zip \
+            gh release create "$TAG" build/distributions/*.zip build/reports/cyclonedx/bom.xml \
               --title "$TAG" \
+              --notes "$RELEASE_NOTES" \
               --latest
           fi

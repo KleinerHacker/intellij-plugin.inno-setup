@@ -78,5 +78,8 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
-      - name: Deploy
+      - name: Build docs
+        run: ./gradlew buildDocs --stacktrace --info
+
+      - name: Deploy docs
         run: ./gradlew deployDocs --stacktrace --info
