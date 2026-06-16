@@ -18,33 +18,48 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expre
 data class IsPreprocessorExprDefineInfo(val name: String, val expression: String, val order: Int)
 
 /**
+ * A function-like macro `#define Name(params…) body` as seen by the resolver, ordered by [order].
+ */
+data class IsPreprocessorExprFunctionMacroInfo(
+    val name: String,
+    val parameters: List<String>,
+    val body: String,
+    val order: Int,
+)
+
+/**
  * Resolves the [IsPreprocessorExprType] of a referenced identifier by recursively inferring the type of the
  * `#define` it points at — so a type error like `str * int` is detected even when the operands are
  * themselves other `#define`s (e.g. `#define A "x"` / `#define B 5` / `#define C A * B`).
  *
+ * Function-like macros are resolved the same way: a call's result type is the type of the macro body with the
+ * parameters bound to the inferred argument types. So `#define func(x) "abc" + x` called as `func("x")` yields
+ * `str`, which lets `#define myVar func("x") + intVar` flag the `str + int` mix.
+ *
  * Two independent safeguards prevent infinite recursion:
- *  1. **Declaration order** — a reference only resolves to a `#define` declared *before* the referencing
+ *  1. **Declaration order** — a reference only resolves to a `#define`/macro declared *before* the referencing
  *     line ([beforeOrder]). A well-formed script can therefore never form a reference ring, because every
  *     macro must already exist earlier to be referenced.
- *  2. **Cycle guard** — a `visiting` set plus memoization break any residual cycle (e.g. a self-reference or
- *     an out-of-order script) by yielding [IsPreprocessorExprType.ANY] instead of recursing forever.
+ *  2. **Cycle guard** — `visiting`/`visitingMacros` sets plus memoization break any residual cycle (e.g. a
+ *     self-reference or an out-of-order script) by yielding [IsPreprocessorExprType.ANY].
  *
  * @param defines all simple (non function-like) `#define`s of the file.
+ * @param functionMacros all function-like macros of the file.
  * @param variableType resolves a predefined variable name to its type, or `null` if it is not one.
- * @param functionReturnType resolves a built-in function name to its return type.
- * @param isFunctionMacro tells whether a name denotes a function-like macro of the file (which must be
- *   referenced as a call, never as a bare identifier).
+ * @param builtinReturnType resolves a built-in function name to its return type.
  */
 class IsPreprocessorExprTypeResolver(
     defines: List<IsPreprocessorExprDefineInfo>,
+    functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = emptyList(),
     private val variableType: (String) -> IsPreprocessorExprType? = { null },
-    private val functionReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
-    private val isFunctionMacro: (String) -> Boolean = { false },
+    private val builtinReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
 ) {
 
     private val defines: List<IsPreprocessorExprDefineInfo> = defines.sortedBy { it.order }
+    private val functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = functionMacros.sortedBy { it.order }
     private val cache = HashMap<String, IsPreprocessorExprType>()
     private val visiting = HashSet<String>()
+    private val visitingMacros = HashSet<String>()
 
     /**
      * Type of the identifier [name] referenced from a line at position [beforeOrder].
@@ -77,13 +92,58 @@ class IsPreprocessorExprTypeResolver(
         return type
     }
 
-    /** Builds an inference whose references are resolved against this resolver at [order]. */
+    /** Declared parameter count of the latest function-like macro named [name], or `null` if there is none. */
+    fun arityOf(name: String): Int? =
+        functionMacros.filter { it.name.equals(name, ignoreCase = true) }.maxByOrNull { it.order }?.parameters?.size
+
+    /** Builds an inference whose references and calls are resolved against this resolver at [order]. */
     fun inferenceAt(order: Int): IsPreprocessorExprTypeInference =
         IsPreprocessorExprTypeInference(
             referenceType = { typeOfReference(it, order) },
-            functionReturnType = functionReturnType,
-            isFunctionMacro = isFunctionMacro,
+            functionCallType = { name, argTypes -> functionCallType(name, argTypes, order, emptyMap()) },
+            functionMacroArity = { arityOf(it) },
         )
+
+    /**
+     * Result type of calling [name] with the given [argTypes] from a line at [beforeOrder]. A user function-
+     * like macro declared earlier is inferred from its body with parameters bound to [argTypes]; otherwise the
+     * built-in return type is used. [bindings] carries the parameter bindings active in the enclosing body.
+     */
+    private fun functionCallType(
+        name: String,
+        argTypes: List<IsPreprocessorExprType>,
+        beforeOrder: Int,
+        bindings: Map<String, IsPreprocessorExprType>,
+    ): IsPreprocessorExprType {
+        val macro = functionMacros
+            .filter { it.order < beforeOrder && it.name.equals(name, ignoreCase = true) }
+            .maxByOrNull { it.order }
+            ?: return builtinReturnType(name)
+
+        val key = name.lowercase()
+        if (key in visitingMacros) return IsPreprocessorExprType.ANY // residual cycle guard
+
+        visitingMacros += key
+        return try {
+            val bound = macro.parameters.mapIndexedNotNull { i, p -> argTypes.getOrNull(i)?.let { p to it } }.toMap()
+            inferMacroBodyType(macro, bound)
+        } finally {
+            visitingMacros -= key
+        }
+    }
+
+    /** Type of [macro]'s body with its parameters bound to [bound]; inner errors are intentionally discarded. */
+    private fun inferMacroBodyType(
+        macro: IsPreprocessorExprFunctionMacroInfo,
+        bound: Map<String, IsPreprocessorExprType>,
+    ): IsPreprocessorExprType {
+        val ast = IsPreprocessorExprParser.parse(macro.body).ast
+        return IsPreprocessorExprTypeInference(
+            referenceType = { bound[it] ?: typeOfReference(it, macro.order) },
+            functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order, bound) },
+            functionMacroArity = { arityOf(it) },
+        ).infer(ast)
+    }
 
     private fun inferDefineType(define: IsPreprocessorExprDefineInfo): IsPreprocessorExprType {
         val ast = IsPreprocessorExprParser.parse(define.expression).ast

@@ -22,14 +22,19 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expre
  * constant) makes the surrounding operation permissive so that valid scripts never produce false errors.
  *
  * @param referenceType resolves a referenced identifier (macro / predefined variable) to its type.
- * @param functionReturnType resolves a called function name to its return type.
- * @param isFunctionMacro tells whether a name denotes a function-like macro (`#define f(x) …`); such a
- *   macro must be referenced as a call `f(…)`, never as a bare identifier.
+ * @param functionCallType resolves a call to its result type from the callee name and the inferred argument
+ *   types. For a user function-like macro this is the type of its body with the parameters bound to the
+ *   argument types (so `#define func(x) "abc" + x` called as `func("x")` yields `str`); for a built-in it is
+ *   the spec return type.
+ * @param functionMacroArity the declared parameter count of a function-like macro (`#define f(x) …`), or
+ *   `null` if the name is not one. Such a macro must be referenced as a call `f(…)` with exactly that many
+ *   arguments — a bare identifier or a wrong argument count is an error.
  */
 class IsPreprocessorExprTypeInference(
     private val referenceType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
-    private val functionReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
-    private val isFunctionMacro: (String) -> Boolean = { false },
+    private val functionCallType: (String, List<IsPreprocessorExprType>) -> IsPreprocessorExprType =
+        { _, _ -> IsPreprocessorExprType.ANY },
+    private val functionMacroArity: (String) -> Int? = { null },
 ) {
 
     private companion object {
@@ -55,10 +60,7 @@ class IsPreprocessorExprTypeInference(
         is IsPreprocessorExprErrorNode -> IsPreprocessorExprType.ANY
         is IsPreprocessorExprReference -> referenceTypeChecked(node)
         is IsPreprocessorExprParen -> infer(node.inner)
-        is IsPreprocessorExprCall -> {
-            node.arguments.forEach { infer(it) }
-            functionReturnType(node.name)
-        }
+        is IsPreprocessorExprCall -> callType(node)
         is IsPreprocessorExprUnary -> unaryType(node)
         is IsPreprocessorExprBinary -> binaryType(node)
         is IsPreprocessorExprTernary -> ternaryType(node)
@@ -69,13 +71,31 @@ class IsPreprocessorExprTypeInference(
      * call `f(…)`; using its name without an argument list is an error.
      */
     private fun referenceTypeChecked(node: IsPreprocessorExprReference): IsPreprocessorExprType {
-        if (isFunctionMacro(node.name)) {
+        if (functionMacroArity(node.name) != null) {
             errorList += IsPreprocessorExprError(
                 node.span,
                 "Function-like macro '${node.name}' must be called with an argument list",
             )
         }
         return referenceType(node.name)
+    }
+
+    /**
+     * Type of a function call. The arguments are always inferred (so nested violations are reported). When
+     * the callee is a function-like macro of the file, the argument count must match its declared parameter
+     * count; built-in functions keep their permissive signature handling.
+     */
+    private fun callType(node: IsPreprocessorExprCall): IsPreprocessorExprType {
+        val argTypes = node.arguments.map { infer(it) }
+        val arity = functionMacroArity(node.name)
+        if (arity != null && node.arguments.size != arity) {
+            errorList += IsPreprocessorExprError(
+                node.nameSpan,
+                "Function-like macro '${node.name}' expects $arity " +
+                    "argument${if (arity == 1) "" else "s"}, but got ${node.arguments.size}",
+            )
+        }
+        return functionCallType(node.name, argTypes)
     }
 
     private fun unaryType(node: IsPreprocessorExprUnary): IsPreprocessorExprType {

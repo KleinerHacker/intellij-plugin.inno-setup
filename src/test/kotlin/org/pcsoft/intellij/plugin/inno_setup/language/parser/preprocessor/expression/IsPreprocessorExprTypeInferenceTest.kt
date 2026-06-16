@@ -30,7 +30,7 @@ class IsPreprocessorExprTypeInferenceTest {
         val ast = IsPreprocessorExprParser.parse(text).ast
         val inference = IsPreprocessorExprTypeInference(
             referenceType = { refs[it] ?: IsPreprocessorExprType.ANY },
-            functionReturnType = { funcs[it] ?: IsPreprocessorExprType.ANY },
+            functionCallType = { name, _ -> funcs[name] ?: IsPreprocessorExprType.ANY },
         )
         inference.infer(ast)
         return inference
@@ -144,20 +144,40 @@ class IsPreprocessorExprTypeInferenceTest {
 
     // ── function-like macro used without arguments ───────────────────────────
 
-    @Test
-    fun `bare reference to a function-like macro is an error`() {
-        val ast = IsPreprocessorExprParser.parse("func").ast
-        val inference = IsPreprocessorExprTypeInference(isFunctionMacro = { it.equals("func", ignoreCase = true) })
+    /** A single function-like macro `func` declaring [arity] parameters. */
+    private fun withMacro(text: String, arity: Int): IsPreprocessorExprTypeInference {
+        val ast = IsPreprocessorExprParser.parse(text).ast
+        val inference = IsPreprocessorExprTypeInference(
+            functionMacroArity = { if (it.equals("func", ignoreCase = true)) arity else null },
+        )
         inference.infer(ast)
-        assertEquals(1, inference.errors.size)
+        return inference
     }
 
     @Test
-    fun `calling a function-like macro with arguments is fine`() {
-        val ast = IsPreprocessorExprParser.parse("func(1)").ast
-        val inference = IsPreprocessorExprTypeInference(isFunctionMacro = { it.equals("func", ignoreCase = true) })
-        inference.infer(ast)
-        assertEquals(0, inference.errors.size)
+    fun `bare reference to a function-like macro is an error`() {
+        assertEquals(1, withMacro("func", arity = 1).errors.size)
+    }
+
+    @Test
+    fun `calling a function-like macro with the right argument count is fine`() {
+        assertEquals(0, withMacro("func(1)", arity = 1).errors.size)
+        assertEquals(0, withMacro("func(1, 2)", arity = 2).errors.size)
+    }
+
+    @Test
+    fun `calling a function-like macro with too few arguments is an error`() {
+        assertEquals(1, withMacro("func(1)", arity = 2).errors.size)
+    }
+
+    @Test
+    fun `calling a function-like macro with too many arguments is an error`() {
+        assertEquals(1, withMacro("func(1, 2, 3)", arity = 2).errors.size)
+    }
+
+    @Test
+    fun `calling a parameterless function-like macro with no arguments is fine`() {
+        assertEquals(0, withMacro("func()", arity = 0).errors.size)
     }
 
     // ── built-in return types ────────────────────────────────────────────────

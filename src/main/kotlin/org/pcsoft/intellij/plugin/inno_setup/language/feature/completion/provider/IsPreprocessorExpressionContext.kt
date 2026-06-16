@@ -29,6 +29,10 @@ internal object IsPreprocessorExpressionContext {
     /**
      * The result set re-bound to the word being typed when the caret sits in a `#define` expression, or
      * `null` when the caret is not in an expression context (so the provider should contribute nothing).
+     *
+     * Identifiers inside a string literal of the expression (e.g. `#define X "abc <caret>"`) are plain text,
+     * not references, so completion must not fire there. An odd number of quotes before the caret means the
+     * caret is inside an open string.
      */
     fun adjustedResult(params: CompletionParameters, result: CompletionResultSet): CompletionResultSet? {
         val offset = params.offset
@@ -36,6 +40,7 @@ internal object IsPreprocessorExpressionContext {
         val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
         val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
         if (!EXPR_PREFIX.matches(linePrefix)) return null
+        if (linePrefix.count { it == '"' } % 2 == 1) return null
 
         val typed = WORD_TAIL.find(linePrefix)?.value ?: ""
         return result.withPrefixMatcher(typed)

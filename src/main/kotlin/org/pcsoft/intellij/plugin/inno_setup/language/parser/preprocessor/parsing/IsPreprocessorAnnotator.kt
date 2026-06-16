@@ -25,6 +25,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprDefineInfo
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprFunctionMacroInfo
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
@@ -233,10 +234,10 @@ class IsPreprocessorAnnotator : Annotator {
         }
     }
 
-    /** Builds a resolver over all simple (non function-like) #defines of [hostFile] plus the ISPP spec. */
+    /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
     private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver {
         val spec = service<IsPreprocessorService>().spec
-        val functionReturnType: (String) -> IsPreprocessorExprType = { name ->
+        val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
             spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
                 ?.returnType?.toExprType() ?: IsPreprocessorExprType.ANY
         }
@@ -250,14 +251,16 @@ class IsPreprocessorAnnotator : Annotator {
             val text = dex.getDefineExpressionText() ?: return@mapNotNull null
             IsPreprocessorExprDefineInfo(name, text, offset)
         } ?: emptyList()
-        // Names of function-like macros: a bare reference to one (without an argument list) is an error.
-        val functionMacroNames = hostFile?.isppDirectives
-            ?.mapNotNull { it as? IsPreprocessorDirectiveEx }
-            ?.filter { it.isDefine() && it.isFunctionMacro() }
-            ?.mapNotNull { it.getDefineName()?.lowercase() }
-            ?.toSet() ?: emptySet()
-        val isFunctionMacro: (String) -> Boolean = { it.lowercase() in functionMacroNames }
-        return IsPreprocessorExprTypeResolver(defines, variableType, functionReturnType, isFunctionMacro)
+        // Function-like macros with their parameter list and body: their call result type is inferred from the
+        // body (parameters bound to the argument types), and a bare reference / wrong argument count is flagged.
+        val functionMacros = hostFile?.isppDirectivesWithHostOffset?.mapNotNull { (dir, offset) ->
+            val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
+            if (!dex.isDefine() || !dex.isFunctionMacro()) return@mapNotNull null
+            val name = dex.getDefineName() ?: return@mapNotNull null
+            val body = dex.getMacroBody() ?: return@mapNotNull null
+            IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameters(), body, offset)
+        } ?: emptyList()
+        return IsPreprocessorExprTypeResolver(defines, functionMacros, variableType, builtinReturnType)
     }
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */

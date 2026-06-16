@@ -24,11 +24,15 @@ class IsPreprocessorExprTypeResolverTest {
     private fun define(order: Int, name: String, expr: String) =
         IsPreprocessorExprDefineInfo(name, expr, order)
 
+    private fun macro(order: Int, name: String, parameters: List<String>, body: String) =
+        IsPreprocessorExprFunctionMacroInfo(name, parameters, body, order)
+
     private fun resolver(
         vararg defines: IsPreprocessorExprDefineInfo,
+        functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = emptyList(),
         variableType: (String) -> IsPreprocessorExprType? = { null },
-        functionReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
-    ) = IsPreprocessorExprTypeResolver(defines.toList(), variableType, functionReturnType)
+        builtinReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
+    ) = IsPreprocessorExprTypeResolver(defines.toList(), functionMacros, variableType, builtinReturnType)
 
     @Test
     fun `simple reference resolves to the referenced define's type`() {
@@ -119,8 +123,65 @@ class IsPreprocessorExprTypeResolverTest {
     fun `builtin return type flows into reference resolution`() {
         val r = resolver(
             define(0, "V", "Str(5)"),
-            functionReturnType = { if (it == "Str") IsPreprocessorExprType.STR else IsPreprocessorExprType.ANY },
+            builtinReturnType = { if (it == "Str") IsPreprocessorExprType.STR else IsPreprocessorExprType.ANY },
         )
         assertEquals(IsPreprocessorExprType.STR, r.typeOfReference("V", beforeOrder = 1))
+    }
+
+    // ── function-like macro return-type inference ─────────────────────────────
+
+    @Test
+    fun `function macro return type flows into a call producing a type error`() {
+        // #define func(x) "abc" + x / #define intVar 10 / #define myVar func("x") + intVar
+        // func("x") is str → str + int is an error.
+        val r = resolver(
+            define(1, "intVar", "10"),
+            functionMacros = listOf(macro(0, "func", listOf("x"), "\"abc\" + x")),
+        )
+        val inference = r.inferenceAt(2)
+        inference.infer(IsPreprocessorExprParser.parse("func(\"x\") + intVar").ast)
+        assertEquals(1, inference.errors.size)
+    }
+
+    @Test
+    fun `function macro returning str concatenated with str is fine`() {
+        val r = resolver(functionMacros = listOf(macro(0, "func", listOf("x"), "\"abc\" + x")))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("func(\"x\") + \"y\"").ast)
+        assertEquals(0, inference.errors.size)
+    }
+
+    @Test
+    fun `function macro returning int used in arithmetic is fine`() {
+        val r = resolver(functionMacros = listOf(macro(0, "twice", listOf("x"), "x * 2")))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("twice(5) + 1").ast)
+        assertEquals(0, inference.errors.size)
+    }
+
+    @Test
+    fun `function macro return type depends on the argument type`() {
+        // The same macro yields str for a string argument (→ error against int) …
+        val r = resolver(
+            define(1, "n", "10"),
+            functionMacros = listOf(macro(0, "id", listOf("x"), "x")),
+        )
+        val strCall = r.inferenceAt(2)
+        strCall.infer(IsPreprocessorExprParser.parse("id(\"a\") * n").ast)
+        assertEquals(1, strCall.errors.size)
+
+        // … and int for an integer argument (→ no error).
+        val intCall = r.inferenceAt(2)
+        intCall.infer(IsPreprocessorExprParser.parse("id(5) * n").ast)
+        assertEquals(0, intCall.errors.size)
+    }
+
+    @Test
+    fun `recursive function macro terminates`() {
+        val r = resolver(functionMacros = listOf(macro(0, "rec", listOf("x"), "rec(x) + 1")))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("rec(1)").ast)
+        // The cycle guard must break recursion; the result is permissive (no stack overflow / false error).
+        assertEquals(0, inference.errors.size)
     }
 }

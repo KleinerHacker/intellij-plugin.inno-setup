@@ -138,17 +138,21 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return null
     }
 
-    /** The names declared as macro parameters (e.g. `a`, `b` in `name(a,b)`) — these are local, not references. */
-    private fun macroParameterNames(): Set<String> {
-        if (!isFunctionMacro()) return emptySet()
-        val after = rawAfterName() ?: return emptySet()
-        val close = matchingParen(after) ?: return emptySet()
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getMacroParameters(): List<String> {
+        if (!isFunctionMacro()) return emptyList()
+        val after = rawAfterName() ?: return emptyList()
+        val close = matchingParen(after) ?: return emptyList()
         return after.substring(1, close)        // text between '(' and ')'
             .split(',')
             .map { it.trim() }
             .filter { it.isNotEmpty() }
-            .toSet()
     }
+
+    /** The names declared as macro parameters (e.g. `a`, `b` in `name(a,b)`) — these are local, not references. */
+    private fun macroParameterNames(): Set<String> = getMacroParameters().toSet()
 
     /** The identifier tokens in the value that act as references to other #defines (free text). */
     private fun expressionReferenceIdentifiers(): List<ASTNode> {

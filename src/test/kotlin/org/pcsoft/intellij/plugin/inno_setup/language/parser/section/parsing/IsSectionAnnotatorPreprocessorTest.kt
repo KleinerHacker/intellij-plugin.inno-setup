@@ -169,9 +169,52 @@ class IsSectionAnnotatorPreprocessorTest : BasePlatformTestCase() {
         val highlights = myFixture.doHighlighting()
         val hit = highlights.any {
             it.severity == HighlightSeverity.ERROR &&
-                    it.description?.contains("must be called with an argument list", ignoreCase = true) == true
+                    (it.description?.contains("must be called with an argument list", ignoreCase = true) == true ||
+                            it.description?.contains("expects", ignoreCase = true) == true)
         }
         assertFalse("A correctly called function-like macro must not be flagged", hit)
+    }
+
+    fun testFunctionMacroCalledWithWrongArgumentCountIsError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) x\n#define myVar func(1, 2)\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("expects 1 argument", ignoreCase = true) == true
+        }
+        assertTrue("Calling a 1-parameter macro with 2 arguments must be an error", hit)
+    }
+
+    fun testFunctionMacroReturnTypeFlowsIntoCaller() {
+        // func("x") returns str ("abc" + str); str + intVar (int) must be flagged.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) \"abc\" + x\n#define intVar 10\n#define myVar func(\"x\") + intVar\n" +
+                "[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("cannot combine a string operand with an integer operand", ignoreCase = true) == true
+        }
+        assertTrue("Inferred str return type of func must make 'func(\"x\") + intVar' an error", hit)
+    }
+
+    fun testFunctionMacroReturnTypeProducesNoFalsePositive() {
+        // func("x") returns str; str + "y" (str) is valid — no error.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define func(x) \"abc\" + x\n#define myVar func(\"x\") + \"y\"\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("string operand", ignoreCase = true) == true
+        }
+        assertFalse("A valid str + str via an inferred macro return type must not be flagged", hit)
     }
 
     fun testUsedDefineViaCrossReferenceProducesNoUnusedWarning() {

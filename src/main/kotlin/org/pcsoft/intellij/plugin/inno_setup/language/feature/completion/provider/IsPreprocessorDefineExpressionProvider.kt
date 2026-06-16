@@ -50,17 +50,27 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
         val host = injMgr.getInjectionHost(position) ?: return
         val lineOffset = host.textRange.startOffset
 
-        val precedingNames = hostFile.isppDirectivesWithHostOffset
+        val precedingDefines = hostFile.isppDirectivesWithHostOffset
             .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true }
-            .mapNotNull { (it.first as? IsPreprocessorDirectiveEx)?.getDefineName()?.ifEmpty { null } }
-            .distinct()
+            .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+            .filter { !it.getDefineName().isNullOrEmpty() }
+            .distinctBy { it.getDefineName() }
 
-        precedingNames.forEach { name ->
-            adjusted.addElement(
+        precedingDefines.forEach { dex ->
+            val name = dex.getDefineName()!!
+            // A function-like macro (#define f(x) …) is presented like a built-in function: function icon
+            // plus its parameter list, so it is visually distinct from a plain value define.
+            val element = if (dex.isFunctionMacro()) {
+                LookupElementBuilder.create(name)
+                    .withTailText("(${dex.getMacroParameters().joinToString(", ")})", true)
+                    .withTypeText("macro")
+                    .withIcon(IsIcons.Function)
+            } else {
                 LookupElementBuilder.create(name)
                     .withTypeText("define")
                     .withIcon(IsIcons.Variable)
-            )
+            }
+            adjusted.addElement(element)
         }
 
         // Predefined ISPP variables are always available in an expression.
