@@ -20,10 +20,17 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
+import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.computeValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferParameterTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.precedingDefine
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpecTarget
@@ -76,8 +83,10 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
             return generateDirectiveDoc(element, element.text, spec)
         }
 
-        // Otherwise: a predefined ISPP variable or built-in function referenced in an expression.
-        return generateVariableDoc(element.text, spec) ?: generateFunctionDoc(element.text, spec)
+        // Otherwise: a predefined ISPP variable, a built-in function, or a referenced own `#define`.
+        return generateVariableDoc(element.text, spec)
+            ?: generateFunctionDoc(element.text, spec)
+            ?: resolveUserDefine(element)?.let { generateUserDefineDoc(it) }
     }
 
     /**
@@ -94,9 +103,58 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
         val spec = service<IsPreprocessorService>().spec
         val html = generateVariableDoc(name, spec)
             ?: generateFunctionDoc(name, spec)
+            ?: precedingDefineFor(ctx, name)?.let { generateUserDefineDoc(it) }
             ?: generateDirectiveDoc(ctx, name, spec)
             ?: return null
         return IsDocLookupStub(ctx, html)
+    }
+
+    /**
+     * The own `#define` an IDENTIFIER refers to: either the directive whose name it *is* (definition site), or
+     * the nearest preceding `#define` of that name in the host file (a reference). `null` when it is neither.
+     */
+    private fun resolveUserDefine(element: PsiElement): IsPreprocessorDirectiveEx? {
+        val enclosing = PsiTreeUtil.getParentOfType(element, IsPreprocessorDirective::class.java)
+                as? IsPreprocessorDirectiveEx
+        if (enclosing != null && enclosing.isDefine() &&
+            enclosing.nameIdentifier?.textRange == element.textRange
+        ) {
+            return enclosing
+        }
+        return precedingDefineFor(element, element.text)
+    }
+
+    /** The nearest `#define` named [name] declared before [element]'s line in the host ISS file. */
+    private fun precedingDefineFor(element: PsiElement, name: String): IsPreprocessorDirectiveEx? {
+        val injMgr = InjectedLanguageManager.getInstance(element.project)
+        val host = injMgr.getTopLevelFile(element.containingFile) as? IsScriptFile ?: return null
+        val hostLine = injMgr.getInjectionHost(element) ?: return null
+        return host.precedingDefine(name, hostLine.textRange.startOffset)
+    }
+
+    /**
+     * Quick-doc for a user `#define`: its inferred type and, for a simple macro, its computed value; for a
+     * function-like macro the (probable) parameter types and return type. Unknown types/values render as `any`
+     * resp. a "not computable" note.
+     */
+    private fun generateUserDefineDoc(define: IsPreprocessorDirectiveEx): String? {
+        val name = define.getDefineName()?.ifEmpty { null } ?: return null
+        return buildString {
+            append(DocumentationMarkup.DEFINITION_START)
+            if (define.isFunctionMacro()) {
+                val params = define.inferParameterTypes().joinToString(", ") { "${it.first}: ${it.second.name.lowercase()}" }
+                append("<b>$name</b>($params) · macro · ${define.inferType().name.lowercase()}")
+            } else {
+                append("<b>$name</b> · define · ${define.inferType().name.lowercase()}")
+            }
+            append(DocumentationMarkup.DEFINITION_END)
+            if (!define.isFunctionMacro()) {
+                append(DocumentationMarkup.CONTENT_START)
+                val value = define.computeValue()?.display() ?: "<i>not computable</i>"
+                append("<p><b>Value:</b> <code>$value</code></p>")
+                append(DocumentationMarkup.CONTENT_END)
+            }
+        }
     }
 
     private fun generateDirectiveDoc(element: PsiElement, keyword: String, spec: IsPreprocessorSpec): String? {

@@ -144,11 +144,15 @@ class IsPreprocessorExprTypeInferenceTest {
 
     // ── function-like macro used without arguments ───────────────────────────
 
-    /** A single function-like macro `func` declaring [arity] parameters. */
-    private fun withMacro(text: String, arity: Int): IsPreprocessorExprTypeInference {
+    /** A single function-like macro `func` declaring [arity] unconstrained (ANY) parameters. */
+    private fun withMacro(text: String, arity: Int): IsPreprocessorExprTypeInference =
+        withMacroParams(text, List(arity) { IsPreprocessorExprType.ANY })
+
+    /** A single function-like macro `func` whose probable parameter types are [paramTypes]. */
+    private fun withMacroParams(text: String, paramTypes: List<IsPreprocessorExprType>): IsPreprocessorExprTypeInference {
         val ast = IsPreprocessorExprParser.parse(text).ast
         val inference = IsPreprocessorExprTypeInference(
-            functionMacroArity = { if (it.equals("func", ignoreCase = true)) arity else null },
+            functionMacroParameterTypes = { if (it.equals("func", ignoreCase = true)) paramTypes else null },
         )
         inference.infer(ast)
         return inference
@@ -178,6 +182,26 @@ class IsPreprocessorExprTypeInferenceTest {
     @Test
     fun `calling a parameterless function-like macro with no arguments is fine`() {
         assertEquals(0, withMacro("func()", arity = 0).errors.size)
+    }
+
+    @Test
+    fun `argument of the wrong type for a typed parameter is an error`() {
+        // func expects an int parameter; passing a string is a type error.
+        assertEquals(1, withMacroParams("func(\"a\")", listOf(IsPreprocessorExprType.INT)).errors.size)
+        // … and the reverse: a str parameter, passing an int.
+        assertEquals(1, withMacroParams("func(5)", listOf(IsPreprocessorExprType.STR)).errors.size)
+    }
+
+    @Test
+    fun `argument of the matching type for a typed parameter is fine`() {
+        assertEquals(0, withMacroParams("func(5)", listOf(IsPreprocessorExprType.INT)).errors.size)
+        assertEquals(0, withMacroParams("func(\"a\")", listOf(IsPreprocessorExprType.STR)).errors.size)
+    }
+
+    @Test
+    fun `any-typed parameter accepts any argument`() {
+        assertEquals(0, withMacroParams("func(\"a\")", listOf(IsPreprocessorExprType.ANY)).errors.size)
+        assertEquals(0, withMacroParams("func(5)", listOf(IsPreprocessorExprType.ANY)).errors.size)
     }
 
     // ── built-in return types ────────────────────────────────────────────────

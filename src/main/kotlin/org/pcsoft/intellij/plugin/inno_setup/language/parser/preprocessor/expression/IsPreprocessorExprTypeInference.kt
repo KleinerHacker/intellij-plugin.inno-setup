@@ -26,15 +26,17 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expre
  *   types. For a user function-like macro this is the type of its body with the parameters bound to the
  *   argument types (so `#define func(x) "abc" + x` called as `func("x")` yields `str`); for a built-in it is
  *   the spec return type.
- * @param functionMacroArity the declared parameter count of a function-like macro (`#define f(x) …`), or
- *   `null` if the name is not one. Such a macro must be referenced as a call `f(…)` with exactly that many
- *   arguments — a bare identifier or a wrong argument count is an error.
+ * @param functionMacroParameterTypes the (probable) parameter types of a function-like macro
+ *   (`#define f(x) …`), or `null` if the name is not one. Such a macro must be referenced as a call `f(…)`
+ *   with exactly that many arguments, and each argument must be type-compatible with the corresponding
+ *   parameter — a bare identifier, a wrong argument count, or an ill-typed argument is an error. The list
+ *   size is the declared arity; a parameter of type `ANY`/`VOID` accepts any argument.
  */
 class IsPreprocessorExprTypeInference(
     private val referenceType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
     private val functionCallType: (String, List<IsPreprocessorExprType>) -> IsPreprocessorExprType =
         { _, _ -> IsPreprocessorExprType.ANY },
-    private val functionMacroArity: (String) -> Int? = { null },
+    private val functionMacroParameterTypes: (String) -> List<IsPreprocessorExprType>? = { null },
 ) {
 
     private companion object {
@@ -71,7 +73,7 @@ class IsPreprocessorExprTypeInference(
      * call `f(…)`; using its name without an argument list is an error.
      */
     private fun referenceTypeChecked(node: IsPreprocessorExprReference): IsPreprocessorExprType {
-        if (functionMacroArity(node.name) != null) {
+        if (functionMacroParameterTypes(node.name) != null) {
             errorList += IsPreprocessorExprError(
                 node.span,
                 "Function-like macro '${node.name}' must be called with an argument list",
@@ -81,21 +83,47 @@ class IsPreprocessorExprTypeInference(
     }
 
     /**
-     * Type of a function call. The arguments are always inferred (so nested violations are reported). When
-     * the callee is a function-like macro of the file, the argument count must match its declared parameter
-     * count; built-in functions keep their permissive signature handling.
+     * Type of a function call. The arguments are always inferred (so nested violations are reported). When the
+     * callee is a function-like macro of the file, the argument count must match its declared parameter count
+     * and each argument must be type-compatible with the corresponding (probable) parameter type; built-in
+     * functions keep their permissive signature handling.
      */
     private fun callType(node: IsPreprocessorExprCall): IsPreprocessorExprType {
         val argTypes = node.arguments.map { infer(it) }
-        val arity = functionMacroArity(node.name)
-        if (arity != null && node.arguments.size != arity) {
-            errorList += IsPreprocessorExprError(
-                node.nameSpan,
-                "Function-like macro '${node.name}' expects $arity " +
-                    "argument${if (arity == 1) "" else "s"}, but got ${node.arguments.size}",
-            )
+        val paramTypes = functionMacroParameterTypes(node.name)
+        if (paramTypes != null) {
+            val arity = paramTypes.size
+            if (node.arguments.size != arity) {
+                errorList += IsPreprocessorExprError(
+                    node.nameSpan,
+                    "Function-like macro '${node.name}' expects $arity " +
+                        "argument${if (arity == 1) "" else "s"}, but got ${node.arguments.size}",
+                )
+            } else {
+                node.arguments.forEachIndexed { i, arg ->
+                    val expected = paramTypes[i]
+                    val actual = argTypes[i]
+                    if (!argumentCompatible(expected, actual)) {
+                        errorList += IsPreprocessorExprError(
+                            arg.span,
+                            "Argument ${i + 1} of macro '${node.name}' must be ${expected.name.lowercase()}, " +
+                                "but got ${actual.name.lowercase()}",
+                        )
+                    }
+                }
+            }
         }
         return functionCallType(node.name, argTypes)
+    }
+
+    /** Whether an argument of type [actual] is acceptable for a parameter of (probable) type [expected]. */
+    private fun argumentCompatible(
+        expected: IsPreprocessorExprType,
+        actual: IsPreprocessorExprType,
+    ): Boolean = when (expected) {
+        IsPreprocessorExprType.INT -> actual.intCompatible
+        IsPreprocessorExprType.STR -> actual.strCompatible
+        IsPreprocessorExprType.VOID, IsPreprocessorExprType.ANY -> true
     }
 
     private fun unaryType(node: IsPreprocessorExprUnary): IsPreprocessorExprType {

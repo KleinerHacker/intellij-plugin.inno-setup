@@ -176,6 +176,46 @@ class IsPreprocessorExprTypeResolverTest {
         assertEquals(0, intCall.errors.size)
     }
 
+    // ── probable parameter / return types (for documentation) ────────────────
+
+    @Test
+    fun `probable parameter and return type are int when the body forces int`() {
+        val r = resolver(functionMacros = listOf(macro(0, "twice", listOf("x"), "x * 2")))
+        assertEquals(listOf(IsPreprocessorExprType.INT), r.probableMacroParameterTypes("twice"))
+        assertEquals(IsPreprocessorExprType.INT, r.probableMacroReturnType("twice"))
+    }
+
+    @Test
+    fun `probable parameter and return type are str when the body forces str`() {
+        val r = resolver(functionMacros = listOf(macro(0, "f", listOf("x"), "\"abc\" + x")))
+        assertEquals(listOf(IsPreprocessorExprType.STR), r.probableMacroParameterTypes("f"))
+        assertEquals(IsPreprocessorExprType.STR, r.probableMacroReturnType("f"))
+    }
+
+    @Test
+    fun `unconstrained parameter and return type are any`() {
+        val r = resolver(functionMacros = listOf(macro(0, "id", listOf("x"), "x")))
+        assertEquals(listOf(IsPreprocessorExprType.ANY), r.probableMacroParameterTypes("id"))
+        assertEquals(IsPreprocessorExprType.ANY, r.probableMacroReturnType("id"))
+    }
+
+    @Test
+    fun `calling a function macro with an ill-typed argument is an error`() {
+        // twice(x) = x * 2 constrains x to int; passing a string is a type error.
+        val r = resolver(functionMacros = listOf(macro(0, "twice", listOf("x"), "x * 2")))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("twice(\"a\")").ast)
+        assertEquals(1, inference.errors.size)
+    }
+
+    @Test
+    fun `calling a function macro with a well-typed argument is fine`() {
+        val r = resolver(functionMacros = listOf(macro(0, "twice", listOf("x"), "x * 2")))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("twice(5)").ast)
+        assertEquals(0, inference.errors.size)
+    }
+
     @Test
     fun `recursive function macro terminates`() {
         val r = resolver(functionMacros = listOf(macro(0, "rec", listOf("x"), "rec(x) + 1")))

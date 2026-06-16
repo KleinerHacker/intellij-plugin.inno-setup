@@ -24,12 +24,9 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprDefineInfo
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprFunctionMacroInfo
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
@@ -37,11 +34,10 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsin
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.preprocessorTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorFunctionReturnType
-import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
 /**
  * Annotates Inno Setup PSI elements with validation and highlighting information.
@@ -235,50 +231,12 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
-    private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver {
-        val spec = service<IsPreprocessorService>().spec
-        val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
-            spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
-                ?.returnType?.toExprType() ?: IsPreprocessorExprType.ANY
-        }
-        val variableType: (String) -> IsPreprocessorExprType? = { name ->
-            spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
-        }
-        val defines = hostFile?.isppDirectivesWithHostOffset?.mapNotNull { (dir, offset) ->
-            val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
-            if (!dex.isDefine() || dex.isFunctionMacro()) return@mapNotNull null
-            val name = dex.getDefineName() ?: return@mapNotNull null
-            val text = dex.getDefineExpressionText() ?: return@mapNotNull null
-            IsPreprocessorExprDefineInfo(name, text, offset)
-        } ?: emptyList()
-        // Function-like macros with their parameter list and body: their call result type is inferred from the
-        // body (parameters bound to the argument types), and a bare reference / wrong argument count is flagged.
-        val functionMacros = hostFile?.isppDirectivesWithHostOffset?.mapNotNull { (dir, offset) ->
-            val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
-            if (!dex.isDefine() || !dex.isFunctionMacro()) return@mapNotNull null
-            val name = dex.getDefineName() ?: return@mapNotNull null
-            val body = dex.getMacroBody() ?: return@mapNotNull null
-            IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameters(), body, offset)
-        } ?: emptyList()
-        return IsPreprocessorExprTypeResolver(defines, functionMacros, variableType, builtinReturnType)
-    }
+    private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver =
+        hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */
     private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: IsScriptFile?): Int =
         hostFile?.isppDirectivesWithHostOffset?.firstOrNull { it.first === directive }?.second ?: Int.MAX_VALUE
-
-    private fun IsPreprocessorFunctionReturnType.toExprType(): IsPreprocessorExprType = when (this) {
-        IsPreprocessorFunctionReturnType.INT -> IsPreprocessorExprType.INT
-        IsPreprocessorFunctionReturnType.STR -> IsPreprocessorExprType.STR
-        IsPreprocessorFunctionReturnType.VOID -> IsPreprocessorExprType.VOID
-        IsPreprocessorFunctionReturnType.ANY -> IsPreprocessorExprType.ANY
-    }
-
-    private fun IsPreprocessorVariableType.toExprType(): IsPreprocessorExprType = when (this) {
-        IsPreprocessorVariableType.INT -> IsPreprocessorExprType.INT
-        IsPreprocessorVariableType.STR -> IsPreprocessorExprType.STR
-        IsPreprocessorVariableType.VOID -> IsPreprocessorExprType.VOID
-    }
 
     private fun isDefineUsed(directive: IsPreprocessorDirective, name: String): Boolean {
         val injMgr = InjectedLanguageManager.getInstance(directive.project)

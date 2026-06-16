@@ -188,6 +188,33 @@ class IsSectionAnnotatorPreprocessorTest : BasePlatformTestCase() {
         assertTrue("Calling a 1-parameter macro with 2 arguments must be an error", hit)
     }
 
+    fun testFunctionMacroCalledWithWrongArgumentTypeIsError() {
+        // twice(x) x * 2 constrains x to int; calling twice("a") passes a string.
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define twice(x) x * 2\n#define myVar twice(\"a\")\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("must be int", ignoreCase = true) == true
+        }
+        assertTrue("Passing a string to an int parameter must be a type error", hit)
+    }
+
+    fun testFunctionMacroCalledWithCorrectArgumentTypeIsNoError() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define twice(x) x * 2\n#define myVar twice(21)\n[Setup]\nAppName={#myVar}\n"
+        )
+        val highlights = myFixture.doHighlighting()
+        val hit = highlights.any {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("of macro", ignoreCase = true) == true
+        }
+        assertFalse("A correctly typed argument must not be flagged", hit)
+    }
+
     fun testFunctionMacroReturnTypeFlowsIntoCaller() {
         // func("x") returns str ("abc" + str); str + intVar (int) must be flagged.
         myFixture.configureByText(

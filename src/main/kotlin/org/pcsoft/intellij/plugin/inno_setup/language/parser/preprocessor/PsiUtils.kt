@@ -13,11 +13,22 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.components.service
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprDefineInfo
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprFunctionMacroInfo
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprType
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTypeResolver
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprValueResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorFunctionReturnType
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
 // ── IsScriptFile (ISPP-Brücke) ──────────────────────────────────────────────────────
 
@@ -76,3 +87,119 @@ val IsScriptFile.definedConstants: List<Pair<String, String?>>
             val name = ex.getDefineName()?.ifEmpty { null } ?: return@mapNotNull null
             name to ex.getDefineValue()
         }
+
+// ── ISPP type / value analysis ──────────────────────────────────────────────
+
+private fun IsPreprocessorFunctionReturnType.toExprType(): IsPreprocessorExprType = when (this) {
+    IsPreprocessorFunctionReturnType.INT -> IsPreprocessorExprType.INT
+    IsPreprocessorFunctionReturnType.STR -> IsPreprocessorExprType.STR
+    IsPreprocessorFunctionReturnType.VOID -> IsPreprocessorExprType.VOID
+    IsPreprocessorFunctionReturnType.ANY -> IsPreprocessorExprType.ANY
+}
+
+private fun IsPreprocessorVariableType.toExprType(): IsPreprocessorExprType = when (this) {
+    IsPreprocessorVariableType.INT -> IsPreprocessorExprType.INT
+    IsPreprocessorVariableType.STR -> IsPreprocessorExprType.STR
+    IsPreprocessorVariableType.VOID -> IsPreprocessorExprType.VOID
+}
+
+private fun IsScriptFile.simpleDefineInfos(): List<IsPreprocessorExprDefineInfo> =
+    isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
+        val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
+        if (!dex.isDefine() || dex.isFunctionMacro()) return@mapNotNull null
+        val name = dex.getDefineName() ?: return@mapNotNull null
+        val text = dex.getDefineExpressionText() ?: return@mapNotNull null
+        IsPreprocessorExprDefineInfo(name, text, offset)
+    }
+
+private fun IsScriptFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMacroInfo> =
+    isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
+        val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
+        if (!dex.isDefine() || !dex.isFunctionMacro()) return@mapNotNull null
+        val name = dex.getDefineName() ?: return@mapNotNull null
+        val body = dex.getMacroBody() ?: return@mapNotNull null
+        IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameters(), body, offset)
+    }
+
+/** A type resolver over all `#define`s and function-like macros of this file plus the bundled ISPP spec. */
+fun IsScriptFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
+    val spec = service<IsPreprocessorService>().spec
+    val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
+        spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            ?.returnType?.toExprType() ?: IsPreprocessorExprType.ANY
+    }
+    val variableType: (String) -> IsPreprocessorExprType? = { name ->
+        spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
+    }
+    return IsPreprocessorExprTypeResolver(simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType)
+}
+
+/** A value resolver over all simple `#define`s and function-like macros of this file. */
+fun IsScriptFile.preprocessorValueResolver(): IsPreprocessorExprValueResolver =
+    IsPreprocessorExprValueResolver(simpleDefineInfos(), functionMacroInfos())
+
+/** The nearest `#define` named [name] declared before host offset [beforeOffset], or `null`. */
+fun IsScriptFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =
+    isppDirectivesWithHostOffset
+        .filter { (d, off) ->
+            off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
+                (d as? IsPreprocessorDirectiveEx)?.getDefineName().equals(name, ignoreCase = true)
+        }
+        .maxByOrNull { it.second }
+        ?.first as? IsPreprocessorDirectiveEx
+
+/** This directive's host [IsScriptFile] together with its declaration order (host offset), or `null`. */
+private fun IsPreprocessorDirectiveEx.hostContext(): Pair<IsScriptFile, Int>? {
+    val host = InjectedLanguageManager.getInstance(project).getTopLevelFile(containingFile) as? IsScriptFile
+        ?: return null
+    val order = host.isppDirectivesWithHostOffset.firstOrNull { it.first === this }?.second ?: return null
+    return host to order
+}
+
+/**
+ * The inferred type of this `#define`: for a simple macro the type of its value expression, for a function-
+ * like macro its probable return type. [IsPreprocessorExprType.VOID] for a value-less `#define`,
+ * [IsPreprocessorExprType.ANY] when it cannot be determined.
+ */
+fun IsPreprocessorDirectiveEx.inferType(): IsPreprocessorExprType {
+    if (!isDefine()) return IsPreprocessorExprType.ANY
+    val name = getDefineName() ?: return IsPreprocessorExprType.ANY
+    val (host, order) = hostContext() ?: return IsPreprocessorExprType.ANY
+    if (isFunctionMacro()) return host.preprocessorTypeResolver().probableMacroReturnType(name)
+    val expr = getDefineExpressionText() ?: return IsPreprocessorExprType.VOID
+    return host.preprocessorTypeResolver().inferenceAt(order).infer(IsPreprocessorExprParser.parse(expr).ast)
+}
+
+/** The statically computed value of a simple `#define`, or `null` (function-like macro / not computable). */
+fun IsPreprocessorDirectiveEx.computeValue(): IsPreprocessorExprValue? {
+    if (!isDefine() || isFunctionMacro()) return null
+    val expr = getDefineExpressionText() ?: return null
+    val (host, order) = hostContext() ?: return null
+    return host.preprocessorValueResolver().evaluate(expr, order)
+}
+
+/**
+ * The probable return type of this `#define`: for a function-like macro the type of its body with the
+ * parameters bound to their probable types; for a simple `#define` the same as [inferType].
+ * [IsPreprocessorExprType.ANY] when it cannot be determined.
+ */
+fun IsPreprocessorDirectiveEx.inferReturnType(): IsPreprocessorExprType {
+    if (!isFunctionMacro()) return inferType()
+    val name = getDefineName() ?: return IsPreprocessorExprType.ANY
+    val host = hostContext()?.first ?: return IsPreprocessorExprType.ANY
+    return host.preprocessorTypeResolver().probableMacroReturnType(name)
+}
+
+/** Probable parameter types of a function-like macro, paired with their names; empty for a simple `#define`. */
+fun IsPreprocessorDirectiveEx.inferParameterTypes(): List<Pair<String, IsPreprocessorExprType>> {
+    if (!isFunctionMacro()) return emptyList()
+    val params = getMacroParameters()
+    val name = getDefineName() ?: return params.map { it to IsPreprocessorExprType.ANY }
+    val host = hostContext()?.first ?: return params.map { it to IsPreprocessorExprType.ANY }
+    val types = host.preprocessorTypeResolver().probableMacroParameterTypes(name)
+    return params.mapIndexed { i, p -> p to (types.getOrNull(i) ?: IsPreprocessorExprType.ANY) }
+}
+
+/** Probable type of the parameter named [parameterName] of a function-like macro, or [IsPreprocessorExprType.ANY]. */
+fun IsPreprocessorDirectiveEx.inferParameterType(parameterName: String): IsPreprocessorExprType =
+    inferParameterTypes().firstOrNull { it.first == parameterName }?.second ?: IsPreprocessorExprType.ANY
