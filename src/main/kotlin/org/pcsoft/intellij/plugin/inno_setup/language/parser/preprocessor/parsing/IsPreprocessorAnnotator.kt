@@ -22,6 +22,8 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludeDiagnostics
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
@@ -94,6 +96,11 @@ class IsPreprocessorAnnotator : Annotator {
         highlight(keywordRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
 
         val ex = directive as? IsPreprocessorDirectiveEx ?: return
+
+        if (ex.isInclude()) {
+            annotateInclude(directive, ex, holder)
+            return
+        }
         if (!ex.isDefine()) return
 
         // A #define name must start with a letter/underscore. When it starts with a digit the lexer splits
@@ -148,6 +155,124 @@ class IsPreprocessorAnnotator : Annotator {
                 .withFix(RemoveUnusedDefineQuickFix(directive))
                 .create()
         }
+    }
+
+    /**
+     * Validates an `#include`: the value must end up as a string (a literal or an ISPP expression of type
+     * `str`), and a literal path must point to an existing file. The included file's *content* is not
+     * checked — `#include` pastes raw text that may be a free-form fragment.
+     */
+    private fun annotateInclude(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        val value = directive.value
+        if (value == null || value.text.isBlank()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include requires a string value")
+                .range(directive.textRange).create()
+            return
+        }
+
+        val exprText = value.text
+        val base = value.textRange.startOffset
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+
+        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+        val resolver = hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
+        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+        val type = inference.infer(parseResult.ast)
+
+        (parseResult.errors + inference.errors).forEach { error ->
+            holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                .range(TextRange(base + error.span.start, base + error.span.end))
+                .create()
+        }
+
+        if (!type.strCompatible) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include requires a string value")
+                .range(value.textRange).create()
+            return
+        }
+
+        // Existence/content checks only for a literal path (an expression's value cannot be resolved here).
+        val string = ex.getIncludeLiteralString() ?: return
+        val path = ex.getIncludePath() ?: return
+        // The path inside the quotes; for an empty string fall back to the quotes themselves so the marker shows.
+        val pathRange =
+            if (path.isEmpty()) string.textRange
+            else TextRange(string.textRange.startOffset + 1, string.textRange.endOffset - 1)
+
+        if (path.isEmpty()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include path must not be empty")
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+
+        val baseDir = hostFile?.virtualFile?.parent
+        val target = baseDir?.let { IsIncludePaths.resolve(it, path) }
+        if (target == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Included file not found: '$path'")
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+
+        // Collect structural (parser) errors of the included file — and of files it transitively includes —
+        // and surface them on this #include so problems introduced by the inclusion are visible here.
+        collectIncludeProblems(target, directive.project, hashSetOf(target.path)).forEach { message ->
+            holder.newAnnotation(HighlightSeverity.ERROR, message)
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
+    }
+
+    /**
+     * Parser-level problems of the included [target] file and the files it includes (relative `#include`s),
+     * each as a human-readable message. [visited] guards against include cycles.
+     */
+    private fun collectIncludeProblems(
+        target: com.intellij.openapi.vfs.VirtualFile,
+        project: com.intellij.openapi.project.Project,
+        visited: MutableSet<String>,
+    ): List<String> {
+        val psi = com.intellij.psi.PsiManager.getInstance(project).findFile(target) as? IsScriptFile
+            ?: return emptyList()
+        val result = mutableListOf<String>()
+
+        PsiTreeUtil.findChildrenOfType(psi, com.intellij.psi.PsiErrorElement::class.java).forEach { err ->
+            result += "In '${target.name}': ${err.errorDescription}"
+        }
+
+        // Semantic (spec-based) problems of the fragment: unknown sections/directives/parameters/flags, …
+        IsIncludeDiagnostics.collect(psi).forEach { result += "In '${target.name}': $it" }
+
+        // Recurse into the literal includes of the included file (resolved relative to its own directory).
+        val baseDir = target.parent
+        if (baseDir != null) {
+            psi.isppDirectives
+                .mapNotNull { (it as? IsPreprocessorDirectiveEx)?.takeIf { d -> d.isInclude() } }
+                .forEach { inc ->
+                    val p = inc.getIncludePath() ?: return@forEach
+                    if (p.isEmpty()) {
+                        result += "In '${target.name}': #include path must not be empty"
+                        return@forEach
+                    }
+                    val nested = IsIncludePaths.resolve(baseDir, p)
+                    if (nested == null) {
+                        result += "In '${target.name}': included file not found: '$p'"
+                    } else if (visited.add(nested.path)) {
+                        result += collectIncludeProblems(nested, project, visited)
+                    }
+                }
+        }
+        return result
     }
 
     /**

@@ -84,6 +84,23 @@ class IsSectionAnnotatorQuickFixTest : BasePlatformTestCase() {
         assertTrue("AppVersion must appear after Compression", appVersionIdx > compressionIdx)
     }
 
+    // ── Fix 2c: Remove duplicate flag ────────────────────────────────────────
+
+    fun testRemoveDuplicateFlag() {
+        configure(
+            "[Setup]\nAppName=MyApp\nAppVersion=1.0\n" +
+                    "[Files]\nSource: \"a\"; DestDir: \"{app}\"; Flags: ignore<caret>version recursesubdirs ignoreversion\n"
+        )
+        myFixture.launchAction(findIntention("Remove duplicate flag"))
+        val result = myFixture.file.text
+        assertEquals(
+            "Exactly one 'ignoreversion' must remain after removing duplicates",
+            1,
+            Regex("ignoreversion").findAll(result).count()
+        )
+        assertTrue("The other flag must be kept", result.contains("recursesubdirs"))
+    }
+
     // ── Fix 2b: Add missing parameters ───────────────────────────────────────
 
     fun testAddMissingParameterDestDir() {

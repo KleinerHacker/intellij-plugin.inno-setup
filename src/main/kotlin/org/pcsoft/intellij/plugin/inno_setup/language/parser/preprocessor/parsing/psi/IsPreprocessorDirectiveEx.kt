@@ -54,4 +54,16 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      * editor ranges), or `-1` when there is no expression.
      */
     fun getDefineExpressionOffsetInDirective(): Int
+
+    /** Whether this directive is an `#include` (case-insensitive). */
+    fun isInclude(): Boolean
+
+    /**
+     * For an `#include` whose value is exactly a single quoted-string literal, that string PSI; `null` when
+     * this is not an `#include` or its value is an expression / not a single literal string.
+     */
+    fun getIncludeLiteralString(): IsPreprocessorQuotedString?
+
+    /** The inner text (path) of [getIncludeLiteralString], or `null`. */
+    fun getIncludePath(): String?
 }

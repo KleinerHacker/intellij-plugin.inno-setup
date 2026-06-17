@@ -19,9 +19,12 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.TokenSet
+import com.intellij.openapi.util.TextRange
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsIncludeFileReference
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorQuotedString
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 
 abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsPreprocessorDirectiveEx {
@@ -168,6 +171,11 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Returns references contributed by this PSI element.
      */
     override fun getReferences(): Array<PsiReference> {
+        if (isInclude()) {
+            val range = includePathRangeInDirective() ?: return PsiReference.EMPTY_ARRAY
+            val path = getIncludePath() ?: return PsiReference.EMPTY_ARRAY
+            return arrayOf(IsIncludeFileReference(this as IsPreprocessorDirective, range, path))
+        }
         val ids = expressionReferenceIdentifiers()
         if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
         val directive = this as IsPreprocessorDirective
@@ -175,6 +183,41 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return ids.map { id ->
             IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
         }.toTypedArray()
+    }
+
+    // ── #include ──────────────────────────────────────────────────────────────
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isInclude(): Boolean =
+        (this as IsPreprocessorDirective).identifier?.text?.equals("include", ignoreCase = true) == true
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getIncludeLiteralString(): IsPreprocessorQuotedString? {
+        if (!isInclude()) return null
+        val value = (this as IsPreprocessorDirective).value ?: return null
+        // Only a single literal string counts (no embedded constants, no surrounding expression tokens).
+        if (value.constantList.isNotEmpty()) return null
+        val string = value.quotedStringList.singleOrNull() ?: return null
+        return if (value.text.trim() == string.text.trim()) string else null
+    }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getIncludePath(): String? =
+        getIncludeLiteralString()?.text?.trim()?.removeSurrounding("\"")
+
+    /** The path span of [getIncludeLiteralString] relative to this directive's text, or `null`. */
+    private fun includePathRangeInDirective(): TextRange? {
+        val string = getIncludeLiteralString() ?: return null
+        val path = getIncludePath() ?: return null
+        val base = (this as IsPreprocessorDirective).textRange.startOffset
+        val start = string.textRange.startOffset - base + 1  // after the opening quote
+        return TextRange(start, start + path.length)
     }
 
     // ── PsiNameIdentifierOwner ────────────────────────────────────────────────
