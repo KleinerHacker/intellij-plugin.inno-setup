@@ -28,6 +28,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.declarationScope
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.toEffectiveScript
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
@@ -114,8 +115,11 @@ class IsSectionAnnotator : Annotator {
 
         val scriptVf = value.containingFile?.virtualFile ?: return
         val scriptDir = scriptVf.parent?.path?.let { File(it) }
-        val defines = value.issFile?.definedConstants ?: emptyList()
-        val customMessages = value.issFile?.findSections("CustomMessages")
+        // Resolve #defines and custom messages over the effective (#include-resolved) script, so values
+        // contributed by included files are taken into account.
+        val scope = value.issFile?.declarationScope()
+        val defines = scope?.definedConstants ?: emptyList()
+        val customMessages = scope?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
             ?.associate { it.keyText().substringAfterLast('.') to it.valueText }
             ?: emptyMap()
@@ -429,7 +433,8 @@ class IsSectionAnnotator : Annotator {
         val dot = full.indexOf('.')
         if (dot <= 0) return
         val prefix = full.substring(0, dot)
-        val declared = key.issFile?.findSections("Languages")
+        // [Languages] entries may be contributed by an #include — resolve over the effective script.
+        val declared = key.issFile?.declarationScope()?.findSections("Languages")
             ?.flatMap { it.nameDeclarations }
             ?.map { it.valueUnquoted }
             ?: emptyList()
@@ -727,7 +732,8 @@ class IsSectionAnnotator : Annotator {
         val name = bodyText.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins = service<IsConstantService>().spec.constants
-        val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
+        // #defines may live in an included file — resolve over the effective (#include-resolved) script.
+        val isppNames = constant.issFile?.declarationScope()?.definedConstants?.map { it.first } ?: emptyList()
         // Value-bearing ISPP predefined variables ({#__LINE__}, {#SourcePath}, …) are valid inline
         // emissions too; the valueless `void` symbols are not emittable via {#…} and stay unknown here.
         val predefinedNames = service<IsPreprocessorService>().emittableVariables.map { it.name }
@@ -808,7 +814,8 @@ class IsSectionAnnotator : Annotator {
     ) {
         val (msgName, nameRange) = body.customMessageNameRange() ?: return
 
-        val declared = constant.issFile?.findSections("CustomMessages")
+        // [CustomMessages] entries may be contributed by an #include — resolve over the effective script.
+        val declared = constant.issFile?.declarationScope()?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
             ?.mapNotNull { (it as? IsSectionDirectiveEntryEx)?.customMessageName() }
             ?: emptyList()

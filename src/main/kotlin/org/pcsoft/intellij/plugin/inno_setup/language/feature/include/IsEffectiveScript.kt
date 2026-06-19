@@ -52,8 +52,23 @@ fun IsScriptFile.toEffectiveScript(): IsScriptFile =
         val unified = mergeSameNamedSections(project, merged)
         val effective = PsiFileFactory.getInstance(project)
             .createFileFromText("effective_$name", IsScriptLanguage, unified) as IsScriptFile
+        // Mark it so a (re-entrant) declaration lookup on the effective file short-circuits to itself
+        // instead of building yet another effective script (see [declarationScope]).
+        effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
         CachedValueProvider.Result.create(effective, PsiModificationTracker.MODIFICATION_COUNT)
     }
+
+/**
+ * The script that *declarations* must be resolved against during validation: the fully `#include`-resolved
+ * effective script, so that sections, `#define`s, custom messages and language names contributed by included
+ * files are taken into account (otherwise a value that is only provided through an `#include` is wrongly
+ * reported as missing/unknown).
+ *
+ * For a file that already **is** an effective script (e.g. while the effective-script problem replay walks it)
+ * this returns the file itself, avoiding needless recomputation and any re-entrancy.
+ */
+fun IsScriptFile.declarationScope(): IsScriptFile =
+    if (getUserData(EFFECTIVE_SCRIPT_MARKER) == true) this else toEffectiveScript()
 
 /**
  * Marker set on an in-memory effective [IsScriptFile]. The annotators recognise it to avoid re-triggering the

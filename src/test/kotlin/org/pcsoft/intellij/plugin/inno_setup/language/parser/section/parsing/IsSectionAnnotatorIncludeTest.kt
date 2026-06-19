@@ -69,4 +69,61 @@ class IsSectionAnnotatorIncludeTest : BasePlatformTestCase() {
             hasError("Required section")
         )
     }
+
+    // ── declarations resolved over the effective (#include-resolved) script ────
+
+    fun testCustomMessageDefinedInIncludeIsNotFlagged() {
+        myFixture.addFileToProject("messages.iss", "[CustomMessages]\nMyMsg=Hello\n")
+        val main = myFixture.addFileToProject(
+            "main.iss",
+            "[Setup]\nAppName={cm:MyMsg}\nAppVersion=1.0\n#include \"messages.iss\"\n",
+        )
+        open(main)
+        assertFalse(
+            "A {cm:…} message provided via #include must not be flagged as unknown",
+            hasError("Unknown custom message")
+        )
+    }
+
+    fun testUnknownCustomMessageStillFlaggedWithInclude() {
+        myFixture.addFileToProject("messages.iss", "[CustomMessages]\nMyMsg=Hello\n")
+        val main = myFixture.addFileToProject(
+            "main.iss",
+            "[Setup]\nAppName={cm:Missing}\nAppVersion=1.0\n#include \"messages.iss\"\n",
+        )
+        open(main)
+        assertTrue(
+            "A {cm:…} message defined nowhere must still be flagged",
+            hasError("Unknown custom message")
+        )
+    }
+
+    fun testIsppDefineFromIncludeIsNotFlagged() {
+        myFixture.addFileToProject("defines.iss", "#define MyVar \"1.0\"\n")
+        val main = myFixture.addFileToProject(
+            "main.iss",
+            "#include \"defines.iss\"\n[Setup]\nAppName=Test\nAppVersion={#MyVar}\n",
+        )
+        open(main)
+        assertFalse(
+            "A {#…} constant defined in an included file must not be flagged as unknown",
+            hasError("Unknown constant")
+        )
+    }
+
+    fun testLanguagePrefixDeclaredInIncludeIsNotFlagged() {
+        myFixture.addFileToProject(
+            "langs.iss",
+            "[Languages]\nName: \"de\"; MessagesFile: \"compiler:Default.isl\"\n",
+        )
+        val main = myFixture.addFileToProject(
+            "main.iss",
+            "[Setup]\nAppName=Test\nAppVersion=1.0\n#include \"langs.iss\"\n[Messages]\nde.WelcomeLabel1=Willkommen\n",
+        )
+        open(main)
+        assertFalse(
+            "A language prefix declared via #include must not be flagged as unknown",
+            hasError("Unknown language prefix")
+        )
+    }
 }
