@@ -13,14 +13,21 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.TextRange
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiFileFactory
+import com.intellij.psi.SmartPointerManager
+import com.intellij.psi.SmartPsiElementPointer
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
@@ -47,6 +54,95 @@ fun IsScriptFile.toEffectiveScript(): IsScriptFile =
             .createFileFromText("effective_$name", IsScriptLanguage, unified) as IsScriptFile
         CachedValueProvider.Result.create(effective, PsiModificationTracker.MODIFICATION_COUNT)
     }
+
+/**
+ * Marker set on an in-memory effective [IsScriptFile]. The annotators recognise it to avoid re-triggering the
+ * effective-script analysis recursively when they walk the effective file (see `IsPreprocessorAnnotator`).
+ */
+val EFFECTIVE_SCRIPT_MARKER: Key<Boolean> = Key.create("inno.effectiveScript")
+
+/**
+ * One contiguous slice of the attributed effective text together with where it came from: [origin] is `null`
+ * for text of the host (main) file, or the **topmost** `#include` directive of the host file through which the
+ * slice was pulled in (no matter how deeply nested the actual include is).
+ */
+data class IsEffectiveSegment(val range: TextRange, val origin: SmartPsiElementPointer<IsPreprocessorDirective>?)
+
+/**
+ * The effective, fully `#include`-resolved text of a script **without** same-named section merging (so output
+ * offsets map 1:1 onto the source slices) plus a [segments] source-map attributing every offset to its origin.
+ */
+class IsAttributedEffectiveScript(val file: IsScriptFile, val segments: List<IsEffectiveSegment>) {
+    /** The topmost host `#include` directive that produced the text at [offset], or `null` for host text. */
+    fun originAt(offset: Int): SmartPsiElementPointer<IsPreprocessorDirective>? =
+        segments.firstOrNull { offset >= it.range.startOffset && offset < it.range.endOffset }?.origin
+}
+
+/**
+ * Builds the [IsAttributedEffectiveScript] of this host file: the host text with every literal `#include "…"`
+ * line replaced by the (recursively resolved) text of its target, each produced slice attributed to the host
+ * `#include` that introduced it. Unlike [toEffectiveScript] no section merge is applied, so segment offsets map
+ * exactly. Cached and recomputed on any PSI change. Returns `null` when the host has no literal `#include`.
+ */
+fun IsScriptFile.toAttributedEffectiveScript(): IsAttributedEffectiveScript? =
+    CachedValuesManager.getCachedValue(this) {
+        CachedValueProvider.Result.create(buildAttributedEffectiveScript(this), PsiModificationTracker.MODIFICATION_COUNT)
+    }
+
+private fun buildAttributedEffectiveScript(host: IsScriptFile): IsAttributedEffectiveScript? {
+    val hostText = host.text
+    if (!LITERAL_INCLUDE.containsMatchIn(hostText)) return null
+
+    val baseDir = host.virtualFile?.parent
+    val pointerManager = SmartPointerManager.getInstance(host.project)
+    // The host's literal #include directives paired with the start offset of their line — the anchor used to
+    // attribute a regex match back to the directive that owns it.
+    val includeAnchors = host.isppDirectivesWithHostOffset
+        .filter { (d, _) -> (d as? IsPreprocessorDirectiveEx)?.isInclude() == true }
+
+    val visited = hashSetOf(host.virtualFile?.path ?: host.name)
+    val segments = mutableListOf<IsEffectiveSegment>()
+    val sb = StringBuilder()
+
+    fun append(text: String, origin: SmartPsiElementPointer<IsPreprocessorDirective>?) {
+        if (text.isEmpty()) return
+        val start = sb.length
+        sb.append(text)
+        segments += IsEffectiveSegment(TextRange(start, sb.length), origin)
+    }
+
+    var lastEnd = 0
+    LITERAL_INCLUDE.findAll(hostText).forEach { match ->
+        if (match.range.first > lastEnd) {
+            append(hostText.substring(lastEnd, match.range.first), null)
+        }
+        val directive = includeAnchors.firstOrNull { it.second in match.range }?.first
+        val origin = directive?.let { pointerManager.createSmartPsiElementPointer(it) }
+
+        val target = baseDir?.let { IsIncludePaths.resolve(it, match.groupValues[1]) }
+        val expanded = when {
+            target == null -> match.value                                   // unresolvable → keep verbatim
+            !visited.add(target.path) -> match.value                        // cycle → keep verbatim
+            else -> {
+                val content = runCatching { VfsUtilCore.loadText(target) }.getOrNull()
+                if (content == null) match.value
+                else try {
+                    mergeIncludes(target.parent, content, visited)
+                } finally {
+                    visited.remove(target.path)
+                }
+            }
+        }
+        append(expanded, origin)
+        lastEnd = match.range.last + 1
+    }
+    if (lastEnd < hostText.length) append(hostText.substring(lastEnd), null)
+
+    val effective = PsiFileFactory.getInstance(host.project)
+        .createFileFromText("attributed_${host.name}", IsScriptLanguage, sb.toString()) as IsScriptFile
+    effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
+    return IsAttributedEffectiveScript(effective, segments)
+}
 
 /**
  * Unifies sections that occur more than once (across the script and its now-inlined includes) into a single

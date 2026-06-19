@@ -32,6 +32,11 @@ class IsPreprocessorIncludeAnnotatorTest : BasePlatformTestCase() {
             it.severity.name == "ERROR" && it.description?.contains(needle, ignoreCase = true) == true
         }
 
+    private fun warnings(needle: String) =
+        myFixture.doHighlighting().filter {
+            it.severity.name == "WARNING" && it.description?.contains(needle, ignoreCase = true) == true
+        }
+
     fun testMissingIncludeFileProducesError() {
         open("main.iss", "#include \"missing.iss\"\n")
         assertTrue("A non-existent include must be flagged", errors("Included file not found").isNotEmpty())
@@ -67,17 +72,59 @@ class IsPreprocessorIncludeAnnotatorTest : BasePlatformTestCase() {
         open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
         assertTrue(
             "An unknown directive inside the included file must be collected onto the #include",
-            errors("unknown directive").isNotEmpty()
+            errors("NotARealDirective").isNotEmpty()
         )
     }
 
     fun testErrorsOfIncludedFileAreReportedOnInclude() {
-        // part.iss itself includes a missing file → that problem must surface on main's #include.
+        // part.iss itself includes a missing file → in the effective script that #include stays verbatim and
+        // its 'not found' problem must surface on main's #include (the topmost directive that pulled it in).
         myFixture.addFileToProject("part.iss", "#include \"deep-missing.iss\"\n")
         open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
         assertTrue(
             "A problem inside the included file must be collected onto the #include",
             errors("deep-missing.iss").isNotEmpty()
+        )
+    }
+
+    fun testIncludedConstantResolvedAgainstMainDefineProducesNoError() {
+        // {#MyVar} is unknown in part.iss alone, but the combined effective script defines it in main → valid.
+        myFixture.addFileToProject("part.iss", "[Setup]\nAppPublisher={#MyVar}\n")
+        open("main.iss", "#define MyVar \"ACME\"\n#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue(
+            "A constant resolved via a main-file #define must not be flagged on the #include",
+            errors("Unknown constant").isEmpty()
+        )
+    }
+
+    fun testUndefinedConstantInIncludedFileIsReportedOnInclude() {
+        // {#Missing} is defined nowhere → unknown in the combined script → surfaces on the #include.
+        myFixture.addFileToProject("part.iss", "[Setup]\nAppPublisher={#Missing}\n")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue(
+            "An unknown constant introduced by the include must be collected onto the #include",
+            errors("Unknown constant").isNotEmpty()
+        )
+    }
+
+    fun testFragmentMissingRequiredSectionIsNotReportedOnInclude() {
+        // part.iss is a bare [Files] fragment (no [Setup]); valid only as part of main. The file-level
+        // 'required section missing' problem must not be attributed to the #include.
+        myFixture.addFileToProject("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue(
+            "A fragment's missing mandatory section must not be flagged on the #include",
+            errors("Required section").isEmpty()
+        )
+    }
+
+    fun testWarningFromIncludedLineIsReportedOnInclude() {
+        // An out-of-range LanguageID is a WARNING; coming from the included line it must surface on the #include.
+        myFixture.addFileToProject("part.iss", "[LangOptions]\nLanguageID=99999\n")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue(
+            "A warning introduced by the include must be collected onto the #include",
+            warnings("language identifier").isNotEmpty()
         )
     }
 }

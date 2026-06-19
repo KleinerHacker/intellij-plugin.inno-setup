@@ -22,7 +22,8 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludeDiagnostics
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.EFFECTIVE_SCRIPT_MARKER
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiveScriptProblems
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
@@ -223,56 +224,20 @@ class IsPreprocessorAnnotator : Annotator {
             return
         }
 
-        // Collect structural (parser) errors of the included file — and of files it transitively includes —
-        // and surface them on this #include so problems introduced by the inclusion are visible here.
-        collectIncludeProblems(target, directive.project, hashSetOf(target.path)).forEach { message ->
-            holder.newAnnotation(HighlightSeverity.ERROR, message)
+        // Re-entrancy guard: when the recording run replays this annotator over the in-memory effective script,
+        // its remaining (unresolvable) #include lines must not trigger the effective analysis again. The base
+        // checks above already ran; stop before the combined analysis below.
+        if (hostFile.getUserData(EFFECTIVE_SCRIPT_MARKER) == true) return
+
+        // Surface the problems that the inclusion introduces into the *combined* effective script (a flag
+        // conflict with the main file, a fragment that is only valid in context, a transitively missing
+        // include, …) on this #include. Problems of the included file in isolation are intentionally ignored.
+        IsEffectiveScriptProblems.forHost(hostFile)[directive]?.forEach { problem ->
+            holder.newAnnotation(problem.severity, problem.message)
                 .range(pathRange)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         }
-    }
-
-    /**
-     * Parser-level problems of the included [target] file and the files it includes (relative `#include`s),
-     * each as a human-readable message. [visited] guards against include cycles.
-     */
-    private fun collectIncludeProblems(
-        target: com.intellij.openapi.vfs.VirtualFile,
-        project: com.intellij.openapi.project.Project,
-        visited: MutableSet<String>,
-    ): List<String> {
-        val psi = com.intellij.psi.PsiManager.getInstance(project).findFile(target) as? IsScriptFile
-            ?: return emptyList()
-        val result = mutableListOf<String>()
-
-        PsiTreeUtil.findChildrenOfType(psi, com.intellij.psi.PsiErrorElement::class.java).forEach { err ->
-            result += "In '${target.name}': ${err.errorDescription}"
-        }
-
-        // Semantic (spec-based) problems of the fragment: unknown sections/directives/parameters/flags, …
-        IsIncludeDiagnostics.collect(psi).forEach { result += "In '${target.name}': $it" }
-
-        // Recurse into the literal includes of the included file (resolved relative to its own directory).
-        val baseDir = target.parent
-        if (baseDir != null) {
-            psi.isppDirectives
-                .mapNotNull { (it as? IsPreprocessorDirectiveEx)?.takeIf { d -> d.isInclude() } }
-                .forEach { inc ->
-                    val p = inc.getIncludePath() ?: return@forEach
-                    if (p.isEmpty()) {
-                        result += "In '${target.name}': #include path must not be empty"
-                        return@forEach
-                    }
-                    val nested = IsIncludePaths.resolve(baseDir, p)
-                    if (nested == null) {
-                        result += "In '${target.name}': included file not found: '$p'"
-                    } else if (visited.add(nested.path)) {
-                        result += collectIncludeProblems(nested, project, visited)
-                    }
-                }
-        }
-        return result
     }
 
     /**
