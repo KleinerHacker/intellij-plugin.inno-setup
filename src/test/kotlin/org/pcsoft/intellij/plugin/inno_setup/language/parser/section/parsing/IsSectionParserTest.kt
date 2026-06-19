@@ -37,7 +37,7 @@ class IsSectionParserTest : BasePlatformTestCase() {
     }
 
     fun testSimpleIssNoParseErrors() {
-        myFixture.configureByFile("scripts/simple.iss")
+        myFixture.configureByFile("default/simple.iss")
         val file = issFile()
         val errors = PsiTreeUtil.collectElementsOfType(file, PsiErrorElement::class.java)
         assertTrue(
@@ -54,7 +54,7 @@ class IsSectionParserTest : BasePlatformTestCase() {
     }
 
     fun testSimpleIssSectionCount() {
-        myFixture.configureByFile("scripts/simple.iss")
+        myFixture.configureByFile("default/simple.iss")
         val file = issFile()
         val sections = file.sections
         assertEquals("Expected 3 sections", 3, sections.size)
@@ -64,7 +64,7 @@ class IsSectionParserTest : BasePlatformTestCase() {
     }
 
     fun testSetupSectionDirectiveCount() {
-        myFixture.configureByFile("scripts/simple.iss")
+        myFixture.configureByFile("default/simple.iss")
         val setup = issFile().findSection("Setup") ?: error("No [Setup] section")
         // AppName, AppVersion, WizardStyle, DefaultDirName, DefaultGroupName,
         // UninstallDisplayIcon, Compression  (2 commented-out lines not counted)
@@ -72,7 +72,7 @@ class IsSectionParserTest : BasePlatformTestCase() {
     }
 
     fun testFilesSectionParameterCount() {
-        myFixture.configureByFile("scripts/simple.iss")
+        myFixture.configureByFile("default/simple.iss")
         val files = issFile().findSection("Files") ?: error("No [Files] section")
         assertEquals("Expected 3 parameter entries", 3, files.parameterEntryList.size)
     }
@@ -115,8 +115,8 @@ class IsSectionParserTest : BasePlatformTestCase() {
     }
 
     fun testSimpleIssPsiTree() {
-        myFixture.configureByFile("scripts/simple.iss")
+        myFixture.configureByFile("structure/structure.iss")
         val actualTree = DebugUtil.psiToString(issFile(), false).trimEnd()
-        assertSameLinesWithFile("$testDataPath/scripts/simple.iss.tree", actualTree)
+        assertSameLinesWithFile("$testDataPath/structure/structure.iss.tree", actualTree)
     }
 }

@@ -52,7 +52,8 @@ completed as you type. Two editor actions make working with includes easier:
 
 - **Inline `#include` content** — with the caret on an `#include` line that resolves to an existing file,
   the intention (**Alt+Enter**) replaces the line with the verbatim content of that file. Only one level
-  is expanded; nested `#include` lines in the inserted text are kept as-is.
+  is expanded; nested `#include` lines in the inserted text are kept as-is. Afterwards you are asked whether
+  the now-inlined include file should be deleted (default: no).
 - **Extract selection to `#include` file** — select one or more lines and invoke the intention to move
   them into a new file next to the current script. A file name is requested (and you are asked before an
   existing file is overwritten); the selected full lines are replaced with an `#include` of the new file.

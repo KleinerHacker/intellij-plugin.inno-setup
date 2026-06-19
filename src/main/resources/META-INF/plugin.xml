@@ -54,7 +54,7 @@
                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotator"/>
         <!-- ISL-only: restrict sections in .isl language files -->
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.parsing.IsLanguageAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.lang.IsLanguageAnnotator"/>
 
         <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
         <codeInsight.inlayProvider language="ISS"

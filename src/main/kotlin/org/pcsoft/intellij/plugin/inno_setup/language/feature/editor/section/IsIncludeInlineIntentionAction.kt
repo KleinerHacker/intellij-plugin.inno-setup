@@ -16,8 +16,10 @@ import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.codeInspection.util.IntentionFamilyName
 import com.intellij.codeInspection.util.IntentionName
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
@@ -55,22 +57,42 @@ class IsIncludeInlineIntentionAction : IntentionAction {
         resolveTarget(project, editor, file) != null
 
     /**
-     * Replaces the whole `#include` line with the included file's text.
+     * Replaces the whole `#include` line with the included file's text and, after asking the user
+     * (default: no), optionally deletes the now-inlined include file.
+     *
+     * The confirmation dialog is shown outside the write action; the document edit and the optional file
+     * deletion run inside a single [WriteCommandAction].
      */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile?) {
         val (line, target) = resolveTarget(project, editor, file) ?: return
         val document = PsiDocumentManager.getInstance(project).getDocument(line.containingFile) ?: return
 
         val content = VfsUtilCore.loadText(target).removeSuffix("\n").removeSuffix("\r")
-        val range = line.textRange
-        document.replaceString(range.startOffset, range.endOffset, content)
-        PsiDocumentManager.getInstance(project).commitDocument(document)
+
+        // Ask whether to delete the now-inlined include file; the default (focused) choice is "No".
+        val deleteOriginal = Messages.showDialog(
+            project,
+            PluginBundle.message("intention.iss.include.inline.delete.message", target.name),
+            PluginBundle.message("intention.iss.include.inline.delete.title"),
+            arrayOf(Messages.getYesButton(), Messages.getNoButton()),
+            /* defaultOptionIndex = */ 1,
+            Messages.getQuestionIcon(),
+        ) == Messages.YES
+
+        WriteCommandAction.runWriteCommandAction(project, getText(), null, {
+            val range = line.textRange
+            document.replaceString(range.startOffset, range.endOffset, content)
+            PsiDocumentManager.getInstance(project).commitDocument(document)
+            if (deleteOriginal && target.isValid) {
+                runCatching { target.delete(this) }
+            }
+        }, line.containingFile)
     }
 
     /**
-     * Indicates that the document modification is performed inside IntelliJ's write action.
+     * The delete confirmation requires user interaction, so the action manages its own write action.
      */
-    override fun startInWriteAction(): Boolean = true
+    override fun startInWriteAction(): Boolean = false
 
     /**
      * Resolves the `#include` line at the caret together with its existing target file, or `null`.

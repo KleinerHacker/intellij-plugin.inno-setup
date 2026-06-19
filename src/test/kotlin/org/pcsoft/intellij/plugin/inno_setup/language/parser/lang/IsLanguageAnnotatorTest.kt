@@ -10,14 +10,16 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang
+package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
+import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
- * Tests for the ISL section restriction ([org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.parsing.IsLanguageAnnotator])
+ * Tests for the ISL section restriction ([IsLanguageAnnotator])
  * plus the .isl-specific relaxations in the shared ISI annotator (no required [Setup]).
  */
 class IsLanguageAnnotatorTest : BasePlatformTestCase() {
@@ -34,13 +36,13 @@ class IsLanguageAnnotatorTest : BasePlatformTestCase() {
                     it.description?.contains("not allowed in Inno Setup language", ignoreCase = true) == true
         }
 
-    private fun missingSectionError(highlights: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+    private fun missingSectionError(highlights: List<HighlightInfo>) =
         highlights.any {
             it.severity == HighlightSeverity.ERROR &&
                     it.description?.contains("Required section", ignoreCase = true) == true
         }
 
-    private fun preprocessorNotAllowedError(highlights: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+    private fun preprocessorNotAllowedError(highlights: List<HighlightInfo>) =
         highlights.any {
             it.severity == HighlightSeverity.ERROR &&
                     it.description == "Preprocessor directives are not allowed in Inno Setup language (.isl) files"
@@ -82,7 +84,7 @@ class IsLanguageAnnotatorTest : BasePlatformTestCase() {
     }
 
     private fun errorContaining(
-        highlights: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>,
+        highlights: List<HighlightInfo>,
         needle: String
     ) = highlights.any {
         it.severity == HighlightSeverity.ERROR &&

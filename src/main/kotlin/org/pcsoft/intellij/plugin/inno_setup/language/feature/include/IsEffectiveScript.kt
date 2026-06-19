@@ -47,16 +47,33 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
  */
 fun IsScriptFile.toEffectiveScript(): IsScriptFile =
     CachedValuesManager.getCachedValue(this) {
-        val visited = hashSetOf(virtualFile?.path ?: name)
-        val merged = mergeIncludes(virtualFile?.parent, text, visited)
-        val unified = mergeSameNamedSections(project, merged)
-        val effective = PsiFileFactory.getInstance(project)
-            .createFileFromText("effective_$name", IsScriptLanguage, unified) as IsScriptFile
-        // Mark it so a (re-entrant) declaration lookup on the effective file short-circuits to itself
-        // instead of building yet another effective script (see [declarationScope]).
-        effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
-        CachedValueProvider.Result.create(effective, PsiModificationTracker.MODIFICATION_COUNT)
+        CachedValueProvider.Result.create(buildOrReuseEffective(this), PsiModificationTracker.MODIFICATION_COUNT)
     }
+
+/** Per-modification-count memo of the merged effective file, so recomputation returns the same instance. */
+private val EFFECTIVE_SCRIPT_INSTANCE: Key<Pair<Long, IsScriptFile>> = Key.create("inno.effectiveScript.instance")
+
+/**
+ * Builds the merged effective [IsScriptFile], reusing the instance already produced for the current PSI
+ * modification count. Creating a fresh PSI file on every call would make [toEffectiveScript]'s cached value
+ * non-idempotent (IntelliJ's idempotence checker compares two computations and would see two distinct files);
+ * memoizing per modification count keeps repeated computations stable.
+ */
+private fun buildOrReuseEffective(host: IsScriptFile): IsScriptFile {
+    val stamp = PsiModificationTracker.getInstance(host.project).modificationCount
+    host.getUserData(EFFECTIVE_SCRIPT_INSTANCE)?.let { if (it.first == stamp) return it.second }
+
+    val visited = hashSetOf(host.virtualFile?.path ?: host.name)
+    val merged = mergeIncludes(host.virtualFile?.parent, host.text, visited)
+    val unified = mergeSameNamedSections(host.project, merged)
+    val effective = PsiFileFactory.getInstance(host.project)
+        .createFileFromText("effective_${host.name}", IsScriptLanguage, unified) as IsScriptFile
+    // Mark it so a (re-entrant) declaration lookup on the effective file short-circuits to itself
+    // instead of building yet another effective script (see [declarationScope]).
+    effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
+    host.putUserData(EFFECTIVE_SCRIPT_INSTANCE, stamp to effective)
+    return effective
+}
 
 /**
  * The script that *declarations* must be resolved against during validation: the fully `#include`-resolved
@@ -101,8 +118,25 @@ class IsAttributedEffectiveScript(val file: IsScriptFile, val segments: List<IsE
  */
 fun IsScriptFile.toAttributedEffectiveScript(): IsAttributedEffectiveScript? =
     CachedValuesManager.getCachedValue(this) {
-        CachedValueProvider.Result.create(buildAttributedEffectiveScript(this), PsiModificationTracker.MODIFICATION_COUNT)
+        CachedValueProvider.Result.create(buildOrReuseAttributed(this), PsiModificationTracker.MODIFICATION_COUNT)
     }
+
+/** Per-modification-count memo of the attributed effective script (see [buildOrReuseEffective] for why). */
+private val ATTRIBUTED_EFFECTIVE_INSTANCE: Key<Pair<Long, IsAttributedEffectiveScript?>> =
+    Key.create("inno.effectiveScript.attributed.instance")
+
+/**
+ * Builds the [IsAttributedEffectiveScript], reusing the instance already produced for the current PSI
+ * modification count so [toAttributedEffectiveScript]'s cached value stays idempotent (it wraps a freshly
+ * parsed PSI file, which would otherwise differ between two computations).
+ */
+private fun buildOrReuseAttributed(host: IsScriptFile): IsAttributedEffectiveScript? {
+    val stamp = PsiModificationTracker.getInstance(host.project).modificationCount
+    host.getUserData(ATTRIBUTED_EFFECTIVE_INSTANCE)?.let { if (it.first == stamp) return it.second }
+    val built = buildAttributedEffectiveScript(host)
+    host.putUserData(ATTRIBUTED_EFFECTIVE_INSTANCE, stamp to built)
+    return built
+}
 
 private fun buildAttributedEffectiveScript(host: IsScriptFile): IsAttributedEffectiveScript? {
     val hostText = host.text

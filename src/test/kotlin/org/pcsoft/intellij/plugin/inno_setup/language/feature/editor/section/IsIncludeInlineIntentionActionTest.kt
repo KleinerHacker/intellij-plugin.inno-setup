@@ -12,22 +12,36 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.ui.TestDialog
+import com.intellij.openapi.ui.TestDialogManager
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 /**
  * Tests for [IsIncludeInlineIntentionAction], which replaces an `#include "file"` line with the verbatim
- * content of the referenced file (one level only).
+ * content of the referenced file (one level only) and optionally deletes the now-inlined include file.
  */
 class IsIncludeInlineIntentionActionTest : BasePlatformTestCase() {
 
     private val action = IsIncludeInlineIntentionAction()
 
+    override fun setUp() {
+        super.setUp()
+        // Default the delete confirmation to "No" so the inline behaviour is unaffected unless a test opts in.
+        TestDialogManager.setTestDialog { Messages.NO }
+    }
+
+    override fun tearDown() {
+        try {
+            TestDialogManager.setTestDialog(TestDialog.DEFAULT)
+        } finally {
+            super.tearDown()
+        }
+    }
+
     private fun isAvailable() = action.isAvailable(project, myFixture.editor, myFixture.file)
 
-    private fun runInline() = WriteCommandAction.runWriteCommandAction(project) {
-        action.invoke(project, myFixture.editor, myFixture.file)
-    }
+    private fun runInline() = action.invoke(project, myFixture.editor, myFixture.file)
 
     // ── isAvailable ───────────────────────────────────────────────────────────
 
@@ -63,5 +77,25 @@ class IsIncludeInlineIntentionActionTest : BasePlatformTestCase() {
         myFixture.configureByText("main.iss", "#inc<caret>lude \"outer.iss\"\n")
         runInline()
         myFixture.checkResult("#include \"inner.iss\"\n")
+    }
+
+    // ── delete-original confirmation ──────────────────────────────────────────
+
+    fun testInlineKeepsOriginalFileWhenDeclined() {
+        // Default answer is "No" (set in setUp) — the include file must be kept.
+        val inc = myFixture.addFileToProject("inc.iss", "[Files]\n")
+        myFixture.configureByText("main.iss", "#inc<caret>lude \"inc.iss\"\n")
+        runInline()
+        assertTrue("Include file must remain when the user declines deletion", inc.virtualFile.isValid)
+    }
+
+    fun testInlineDeletesOriginalFileWhenConfirmed() {
+        TestDialogManager.setTestDialog { Messages.YES }
+        val inc = myFixture.addFileToProject("inc.iss", "[Files]\n")
+        val incVf = inc.virtualFile
+        myFixture.configureByText("main.iss", "#inc<caret>lude \"inc.iss\"\n")
+        runInline()
+        myFixture.checkResult("[Files]\n")
+        assertFalse("Include file must be deleted when the user confirms", incVf.isValid)
     }
 }

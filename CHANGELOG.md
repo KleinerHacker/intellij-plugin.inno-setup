@@ -12,8 +12,9 @@
   path, are flagged as errors. Problems detected inside an included file (unknown directives, flags,
   undefined constants, warnings) are surfaced on the `#include` line of the including script, while
   required-section checks correctly account for content contributed by includes.
-- **`#include` intentions**: Added an intention to inline an `#include` file's content in place, and an
-  intention to extract selected lines into a new file and replace them with an `#include`.
+- **`#include` intentions**: Added an intention to inline an `#include` file's content in place (optionally
+  deleting the now-inlined file), and an intention to extract selected lines into a new file and replace them
+  with an `#include`.
 - **`#include` path refactoring**: Renaming or moving an included file now updates the `#include` path
   automatically.
 
