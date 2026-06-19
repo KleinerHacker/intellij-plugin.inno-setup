@@ -14,12 +14,18 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorQuotedString
 
 /**
  * The file path inside an `#include "…"` directive, resolving to the referenced `*.iss` file.
@@ -51,4 +57,43 @@ class IsIncludeFileReference(
      * Returns completion variants available from this reference.
      */
     override fun getVariants(): Array<Any> = emptyArray()
+
+    /**
+     * Updates the `#include` path after the referenced file has been renamed: only the file-name segment
+     * of the path changes, the directory part is kept.
+     */
+    override fun handleElementRename(newElementName: String): PsiElement {
+        val current = element.getIncludePath() ?: return element
+        val dirPart = current.substringBeforeLast('/', "")
+            .ifEmpty { current.substringBeforeLast('\\', "") }
+        val separator = if (current.contains('\\') && !current.contains('/')) '\\' else '/'
+        val newPath = if (dirPart.isEmpty()) newElementName else "$dirPart$separator$newElementName"
+        rewritePath(newPath)
+        return element
+    }
+
+    /**
+     * Updates the `#include` path after the referenced file has been moved: the new path is computed
+     * relative to the including script's directory (absolute path as a fallback).
+     */
+    override fun bindToElement(element: PsiElement): PsiElement {
+        val target = (element as? PsiFile)?.virtualFile ?: return this.element
+        val injMgr = InjectedLanguageManager.getInstance(this.element.project)
+        val hostFile = injMgr.getTopLevelFile(this.element.containingFile) as? IsScriptFile ?: return this.element
+        val baseDir = hostFile.virtualFile?.parent ?: return this.element
+        val newPath = VfsUtilCore.findRelativePath(baseDir, target, '/') ?: target.path
+        rewritePath(newPath)
+        return this.element
+    }
+
+    /**
+     * Replaces the quoted-string literal of the directive with a `"<newPath>"` literal.
+     */
+    private fun rewritePath(newPath: String) {
+        val literal = element.getIncludeLiteralString() ?: return
+        val dummy = PsiFileFactory.getInstance(element.project)
+            .createFileFromText("d.ispp", IsPreprocessorFileType.INSTANCE, "#include \"$newPath\"")
+        val newLiteral = PsiTreeUtil.findChildOfType(dummy, IsPreprocessorQuotedString::class.java) ?: return
+        literal.replace(newLiteral)
+    }
 }

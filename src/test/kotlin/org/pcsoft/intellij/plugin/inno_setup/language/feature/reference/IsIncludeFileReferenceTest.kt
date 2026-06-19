@@ -13,6 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesProcessor
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
@@ -39,5 +41,31 @@ class IsIncludeFileReferenceTest : BasePlatformTestCase() {
     fun testMissingIncludeDoesNotResolve() {
         val main = myFixture.addFileToProject("main.iss", "#include \"nope.iss\"\n") as IsScriptFile
         assertNull("A missing include path must not resolve", includeReference(main).resolve())
+    }
+
+    // ── rename / move keep the #include path consistent ───────────────────────
+
+    fun testRenameIncludedFileUpdatesDirective() {
+        val inc = myFixture.addFileToProject("inc.iss", "[Files]\n")
+        myFixture.configureByText("main.iss", "#include \"inc.iss\"\n[Setup]\nAppName=Test\n")
+
+        myFixture.renameElement(inc, "renamed.iss")
+
+        myFixture.checkResult("#include \"renamed.iss\"\n[Setup]\nAppName=Test\n")
+    }
+
+    fun testMoveIncludedFileUpdatesDirectiveToRelativePath() {
+        val inc = myFixture.addFileToProject("inc.iss", "[Files]\n")
+        myFixture.configureByText("main.iss", "#include \"inc.iss\"\n[Setup]\nAppName=Test\n")
+
+        val subDir = myFixture.tempDirFixture.findOrCreateDir("sub")
+        val psiDir = PsiManager.getInstance(project).findDirectory(subDir)!!
+
+        MoveFilesOrDirectoriesProcessor(
+            project, arrayOf<PsiFile>(inc), psiDir,
+            /* searchInComments = */ false, /* searchInNonJavaFiles = */ true, null, null,
+        ).run()
+
+        myFixture.checkResult("#include \"sub/inc.iss\"\n[Setup]\nAppName=Test\n")
     }
 }

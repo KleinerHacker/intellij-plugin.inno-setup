@@ -214,6 +214,20 @@
             </className>
         </intentionAction>
 
+        <intentionAction>
+            <language>ISS</language>
+            <className>
+                org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsIncludeInlineIntentionAction
+            </className>
+        </intentionAction>
+
+        <intentionAction>
+            <language>ISS</language>
+            <className>
+                org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsExtractIncludeIntentionAction
+            </className>
+        </intentionAction>
+
         <!-- ═══════════════════════════════ Run ═══════════════════════════════ -->
 
         <!-- Run configuration type for launching a compiled ISS installer -->
