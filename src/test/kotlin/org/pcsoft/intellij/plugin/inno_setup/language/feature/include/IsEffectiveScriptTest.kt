@@ -78,6 +78,27 @@ class IsEffectiveScriptTest : BasePlatformTestCase() {
         assertTrue("Merged [Files] must contain the included entry", text.contains("\"b\""))
     }
 
+    fun testEffectiveScriptViewTintsExactlyTheIncludedText() {
+        script("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")
+        val main = script("main.iss", "[Setup]\nAppName=x\n#include \"part.iss\"\n")
+
+        val view = main.effectiveScriptView()
+        assertTrue("Effective text must contain the host [Setup]", view.text.contains("[Setup]"))
+        assertTrue("Effective text must contain the included [Files]", view.text.contains("[Files]"))
+        assertTrue("The included text must be tinted", view.includeRanges.isNotEmpty())
+
+        val tinted = view.includeRanges.joinToString("") { view.text.substring(it.startOffset, it.endOffset) }
+        assertTrue("Tinted ranges must cover the included [Files] block", tinted.contains("[Files]"))
+        assertFalse("Host text ([Setup]) must not be tinted", tinted.contains("[Setup]"))
+    }
+
+    fun testEffectiveScriptViewWithoutIncludeHasNoTint() {
+        val main = script("main.iss", "[Setup]\nAppName=x\n")
+        val view = main.effectiveScriptView()
+        assertEquals("Without #include the effective text equals the original", main.text, view.text)
+        assertTrue("Without #include nothing is tinted", view.includeRanges.isEmpty())
+    }
+
     fun testExpressionIncludeIsNotResolved() {
         script("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")
         // An expression-based include is not a literal string → not inlined.

@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing
 
+import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
@@ -35,6 +36,12 @@ class IsPreprocessorIncludeAnnotatorTest : BasePlatformTestCase() {
     private fun warnings(needle: String) =
         myFixture.doHighlighting().filter {
             it.severity.name == "WARNING" && it.description?.contains(needle, ignoreCase = true) == true
+        }
+
+    private fun weakWarnings(needle: String) =
+        myFixture.doHighlighting().filter {
+            it.severity == HighlightSeverity.WEAK_WARNING &&
+                    it.description?.contains(needle, ignoreCase = true) == true
         }
 
     fun testMissingIncludeFileProducesError() {
@@ -116,6 +123,34 @@ class IsPreprocessorIncludeAnnotatorTest : BasePlatformTestCase() {
             "A fragment's missing mandatory section must not be flagged on the #include",
             errors("Required section").isEmpty()
         )
+    }
+
+    fun testEmptyIncludedFileProducesWeakWarning() {
+        myFixture.addFileToProject("part.iss", "")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue("An empty included file must produce a weak warning", weakWarnings("empty file").isNotEmpty())
+    }
+
+    fun testSingleLineIncludedFileProducesWeakWarning() {
+        myFixture.addFileToProject("part.iss", "AppName=x")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue("A single-line included file must produce a weak warning", weakWarnings("single-line").isNotEmpty())
+    }
+
+    fun testSingleLineWithTrailingNewlineStillCountsAsSingle() {
+        myFixture.addFileToProject("part.iss", "AppName=x\n")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue(
+            "A trailing newline must not count as a second line",
+            weakWarnings("single-line").isNotEmpty()
+        )
+    }
+
+    fun testMultiLineIncludedFileProducesNoWeakWarning() {
+        myFixture.addFileToProject("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")
+        open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+        assertTrue("A multi-line included file must not be flagged as empty", weakWarnings("empty file").isEmpty())
+        assertTrue("A multi-line included file must not be flagged as single-line", weakWarnings("single-line").isEmpty())
     }
 
     fun testWarningFromIncludedLineIsReportedOnInclude() {

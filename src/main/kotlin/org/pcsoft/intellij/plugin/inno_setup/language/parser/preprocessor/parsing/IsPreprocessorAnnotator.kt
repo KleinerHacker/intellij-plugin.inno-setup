@@ -19,6 +19,7 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
@@ -36,7 +37,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.ReplaceIncludeWithLineQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.preprocessorTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
@@ -224,6 +227,27 @@ class IsPreprocessorAnnotator : Annotator {
             return
         }
 
+        // A literal include whose target is trivially small is unnecessary: an empty file does nothing, a
+        // single-line file can simply be inlined. Surface a weak warning with a matching quick fix. This is a
+        // base check on the literal include itself, so it runs before the effective-script analysis below.
+        if (!target.isDirectory) {
+            val content = VfsUtilCore.loadText(target)
+            when (nonTrailingLineCount(content)) {
+                0 -> holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "#include points to an empty file")
+                    .range(pathRange)
+                    .withFix(RemoveIncludeQuickFix(directive))
+                    .create()
+
+                1 -> holder.newAnnotation(
+                    HighlightSeverity.WEAK_WARNING,
+                    "#include points to a single-line file; inline the line instead"
+                )
+                    .range(pathRange)
+                    .withFix(ReplaceIncludeWithLineQuickFix(path, content.removeSuffix("\n").removeSuffix("\r")))
+                    .create()
+            }
+        }
+
         // Re-entrancy guard: when the recording run replays this annotator over the in-memory effective script,
         // its remaining (unresolvable) #include lines must not trigger the effective analysis again. The base
         // checks above already ran; stop before the combined analysis below.
@@ -348,4 +372,13 @@ class IsPreprocessorAnnotator : Annotator {
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
+
+    /**
+     * Number of content lines in [text], ignoring a single trailing line break. A blank/empty file yields 0,
+     * a one-line file (with or without a trailing newline) yields 1.
+     */
+    private fun nonTrailingLineCount(text: String): Int {
+        if (text.isBlank()) return 0
+        return text.removeSuffix("\n").removeSuffix("\r").count { it == '\n' } + 1
+    }
 }

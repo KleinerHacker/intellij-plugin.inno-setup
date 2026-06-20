@@ -269,6 +269,14 @@
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
         </action>
+
+        <!-- Open the fully #include-resolved effective script in a read-only in-memory tab. Shown at the very
+             bottom of the context menu on a single .iss file. -->
+        <action id="Iss.ShowEffectiveScript"
+                class="org.pcsoft.intellij.plugin.inno_setup.language.feature.include.action.IsShowEffectiveScriptAction">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
     </actions>
 
 </idea-plugin>

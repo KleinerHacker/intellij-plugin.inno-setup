@@ -194,6 +194,24 @@ private fun buildAttributedEffectiveScript(host: IsScriptFile): IsAttributedEffe
 }
 
 /**
+ * The read-only *effective script view* of a host file: the fully `#include`-resolved [text] together with the
+ * [includeRanges] (offsets into [text]) that originate from an `#include`. Used by the effective-script viewer
+ * to render the merged script with the include-pulled parts tinted. When the host has no literal `#include`,
+ * [text] is the original and [includeRanges] is empty.
+ */
+data class IsEffectiveScriptView(val text: String, val includeRanges: List<TextRange>)
+
+/**
+ * Builds the [IsEffectiveScriptView] of this host file from its [toAttributedEffectiveScript] (offsets map 1:1,
+ * since the attributed variant applies no same-named section merge).
+ */
+fun IsScriptFile.effectiveScriptView(): IsEffectiveScriptView {
+    val attributed = toAttributedEffectiveScript() ?: return IsEffectiveScriptView(text, emptyList())
+    val ranges = attributed.segments.filter { it.origin != null }.map { it.range }
+    return IsEffectiveScriptView(attributed.file.text, ranges)
+}
+
+/**
  * Unifies sections that occur more than once (across the script and its now-inlined includes) into a single
  * section: the first occurrence keeps its header, the entries of every later same-named section are appended
  * to it and their headers dropped. Sections keep their first-occurrence order. Returns [text] unchanged when

@@ -15,7 +15,9 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsi
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.ReplaceIncludeWithLineQuickFix
 
 /**
  * Tests for [RemoveUnusedDefineQuickFix].
@@ -69,5 +71,44 @@ class IsPreprocessorAnnotatorQuickFixTest : BasePlatformTestCase() {
 
         assertFalse("UnusedConst line must be removed", result.contains("UnusedConst"))
         assertTrue("UsedConst definition must be preserved", result.contains("#define UsedConst"))
+    }
+
+    // ── Fix: Remove #include (empty target) ───────────────────────────────────
+
+    fun testRemoveIncludeDeletesTheLine() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#include \"part.iss\"\n[<caret>Setup]\nAppName=MyApp\nAppVersion=1.0\n"
+        )
+        val issFile = myFixture.file
+        val doc = myFixture.editor.document
+
+        var result = ""
+        WriteCommandAction.runWriteCommandAction(myFixture.project) {
+            RemoveIncludeQuickFix("part.iss").invoke(myFixture.project, myFixture.editor, issFile)
+            result = doc.text
+        }
+
+        assertEquals("[Setup]\nAppName=MyApp\nAppVersion=1.0\n", result)
+    }
+
+    // ── Fix: Replace #include with its single line ────────────────────────────
+
+    fun testReplaceIncludeWithSingleLineReplacesTheLine() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#include \"part.iss\"\n[<caret>Setup]\nAppName=MyApp\nAppVersion=1.0\n"
+        )
+        val issFile = myFixture.file
+        val doc = myFixture.editor.document
+
+        var result = ""
+        WriteCommandAction.runWriteCommandAction(myFixture.project) {
+            ReplaceIncludeWithLineQuickFix("part.iss", "AppPublisher=ACME")
+                .invoke(myFixture.project, myFixture.editor, issFile)
+            result = doc.text
+        }
+
+        assertEquals("AppPublisher=ACME\n[Setup]\nAppName=MyApp\nAppVersion=1.0\n", result)
     }
 }
