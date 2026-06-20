@@ -81,7 +81,7 @@ class IsExtractIncludeIntentionAction : IntentionAction {
             PluginBundle.message("intention.iss.include.extract.dialog.prompt"),
             PluginBundle.message("intention.iss.include.extract.dialog.title"),
             Messages.getQuestionIcon(),
-            "include.iss",
+            "include.ist",
             null,
         )?.trim()?.ifEmpty { null } ?: return
 

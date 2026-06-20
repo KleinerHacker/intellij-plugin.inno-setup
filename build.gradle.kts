@@ -34,6 +34,7 @@ val rootPackage = "org/pcsoft/intellij/plugin/inno_setup"
 val languagePackage = "$rootPackage/language"
 val preprocessorPackage = "$languagePackage/parser/preprocessor"
 val sectionPackage = "$languagePackage/parser/section"
+val templatePackage = "$languagePackage/parser/template"
 
 intellijPlatform {
     instrumentCode = false
@@ -272,17 +273,31 @@ tasks {
         purgeOldFiles.set(true)
     }
 
+    register<GenerateParserTask>("generateIsTemplateParser") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateGrammar.bnf"))
+        targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
+        pathToParser.set("$templatePackage/parsing/parser/IsTemplateParser.java")
+        pathToPsiRoot.set("$templatePackage/parsing/psi")
+        purgeOldFiles.set(true)
+    }
+
+    register<GenerateLexerTask>("generateIsTemplateLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateLexer.flex"))
+        targetOutputDir.set(file("$generatedRoot/$templatePackage/parsing"))
+        purgeOldFiles.set(true)
+    }
+
     // Aggregator tasks: generate all lexers / all parsers as a single unit, plus an umbrella.
     register("generateLexers") {
         group = "grammar-kit"
-        description = "Generate all JFlex lexers (Section + Preprocessor)"
-        dependsOn("generateIsSectionLexer", "generateIsPreprocessorLexer")
+        description = "Generate all JFlex lexers (Section + Preprocessor + Template)"
+        dependsOn("generateIsSectionLexer", "generateIsPreprocessorLexer", "generateIsTemplateLexer")
     }
 
     register("generateParsers") {
         group = "grammar-kit"
-        description = "Generate all Grammar-Kit parsers/PSI (Section + Preprocessor)"
-        dependsOn("generateIsSectionParser", "generateIsPreprocessorParser")
+        description = "Generate all Grammar-Kit parsers/PSI (Section + Preprocessor + Template)"
+        dependsOn("generateIsSectionParser", "generateIsPreprocessorParser", "generateIsTemplateParser")
     }
 
     // Wipes the whole generated tree before a full regeneration. Catches stale files left
@@ -307,7 +322,9 @@ tasks {
         "generateIsSectionParser",
         "generateIsSectionLexer",
         "generateIsPreprocessorParser",
-        "generateIsPreprocessorLexer"
+        "generateIsPreprocessorLexer",
+        "generateIsTemplateParser",
+        "generateIsTemplateLexer"
     ).forEach { taskName ->
         named(taskName) { mustRunAfter("cleanGeneratedSources") }
     }

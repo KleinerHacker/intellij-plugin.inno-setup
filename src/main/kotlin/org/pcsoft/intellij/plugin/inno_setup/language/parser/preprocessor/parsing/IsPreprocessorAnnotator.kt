@@ -28,6 +28,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiv
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.asIsppHostFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
@@ -181,7 +183,7 @@ class IsPreprocessorAnnotator : Annotator {
         val exprText = value.text
         val base = value.textRange.startOffset
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
-            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
 
         val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
         val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
@@ -256,6 +258,7 @@ class IsPreprocessorAnnotator : Annotator {
         // Surface the problems that the inclusion introduces into the *combined* effective script (a flag
         // conflict with the main file, a fragment that is only valid in context, a transitively missing
         // include, …) on this #include. Problems of the included file in isolation are intentionally ignored.
+        if (hostFile !is IsScriptFile) return
         IsEffectiveScriptProblems.forHost(hostFile)[directive]?.forEach { problem ->
             holder.newAnnotation(problem.severity, problem.message)
                 .range(pathRange)
@@ -284,7 +287,7 @@ class IsPreprocessorAnnotator : Annotator {
         if (refs.isEmpty()) return
 
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
-            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
         val definedNames = hostFile?.isppDirectives
             ?.mapNotNull { (it as? IsPreprocessorDirectiveEx)?.getDefineName() }
             ?.toSet() ?: emptySet()
@@ -332,7 +335,7 @@ class IsPreprocessorAnnotator : Annotator {
         val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
 
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
-            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
         val resolver = buildTypeResolver(hostFile)
         val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
         inference.infer(parseResult.ast)
@@ -345,16 +348,16 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
-    private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver =
+    private fun buildTypeResolver(hostFile: PsiFile?): IsPreprocessorExprTypeResolver =
         hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */
-    private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: IsScriptFile?): Int =
+    private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: PsiFile?): Int =
         hostFile?.isppDirectivesWithHostOffset?.firstOrNull { it.first === directive }?.second ?: Int.MAX_VALUE
 
     private fun isDefineUsed(directive: IsPreprocessorDirective, name: String): Boolean {
         val injMgr = InjectedLanguageManager.getInstance(directive.project)
-        val hostFile = injMgr.getTopLevelFile(directive.containingFile) as? IsScriptFile ?: return true
+        val hostFile = injMgr.getTopLevelFile(directive.containingFile).asIsppHostFile() ?: return true
 
         // Check {#Name} references anywhere in the ISS host file.
         val usedAsConstant = PsiTreeUtil.findChildrenOfType(hostFile, IsSectionConstant::class.java).any { constant ->

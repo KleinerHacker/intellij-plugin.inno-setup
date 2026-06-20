@@ -36,6 +36,16 @@ class IsEffectiveScriptTest : BasePlatformTestCase() {
         assertTrue("Effective script must contain the included [Files]", "files" in sectionNames(effective))
     }
 
+    fun testIstTemplateIncludeIsMerged() {
+        // A .ist template is a valid include target; its sections must appear in the effective script.
+        myFixture.addFileToProject("part.ist", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")
+        val main = script("main.iss", "[Setup]\nAppName=x\n#include \"part.ist\"\n")
+
+        val names = sectionNames(main.toEffectiveScript())
+        assertTrue("Effective script must contain the main [Setup]", "setup" in names)
+        assertTrue("Effective script must merge the included .ist [Files]", "files" in names)
+    }
+
     fun testTransitiveIncludesAreResolved() {
         script("c.iss", "[Tasks]\nName: t; Description: \"d\"\n")
         script("b.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n#include \"c.iss\"\n")

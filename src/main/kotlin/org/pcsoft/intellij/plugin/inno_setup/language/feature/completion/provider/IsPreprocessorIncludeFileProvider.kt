@@ -25,6 +25,7 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorQuotedString
@@ -59,7 +60,10 @@ object IsPreprocessorIncludeFileProvider : CompletionProvider<CompletionParamete
         val hostFile = injMgr.getTopLevelFile(parameters.originalFile) as? IsScriptFile ?: return
         val hostDir = hostFile.virtualFile?.parent?.path ?: return
 
-        FileTypeIndex.getFiles(IsScriptFileType.INSTANCE, GlobalSearchScope.projectScope(project))
+        val scope = GlobalSearchScope.projectScope(project)
+        // Both real scripts (.iss) and free-text template fragments (.ist) are valid include targets.
+        (FileTypeIndex.getFiles(IsScriptFileType.INSTANCE, scope) +
+                FileTypeIndex.getFiles(IsTemplateFileType.INSTANCE, scope))
             .filter { it != hostFile.virtualFile }
             .forEach { vf ->
                 val relative = relativePath(hostDir, vf)

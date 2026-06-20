@@ -42,4 +42,17 @@ class IsPreprocessorIncludeFileCompletionTest : BasePlatformTestCase() {
             myFixture.editor.document.text.contains("#include \"lib/dep.iss\"")
         )
     }
+
+    fun testTemplateFilesAreOffered() {
+        myFixture.addFileToProject("lib/part.ist", "[Files]\n")
+        myFixture.addFileToProject("lib/other.iss", "[Files]\n")
+        val main = myFixture.addFileToProject("main.iss", "#include \"\"\n")
+        myFixture.configureFromExistingVirtualFile(main.virtualFile)
+        myFixture.editor.caretModel.moveToOffset(main.text.indexOf("\"\"") + 1)
+
+        val items = myFixture.completeBasic()
+        // More than one candidate, so completion does not auto-insert and returns the list.
+        val strings = items?.map { it.lookupString } ?: emptyList()
+        assertTrue("Expected the .ist template to be offered, was: $strings", "part.ist" in strings)
+    }
 }

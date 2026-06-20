@@ -14,8 +14,12 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplatePreprocessorLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprDefineInfo
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprFunctionMacroInfo
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
@@ -30,15 +34,29 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorFunctionReturnType
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
-// ── IsScriptFile (ISPP-Brücke) ──────────────────────────────────────────────────────
+// ── ISPP host bridge (.iss/.isl script + .ist template) ──────────────────────────────
+
+/** Whether [this] is a file ISPP directives can be injected into: a script (.iss/.isl) or template (.ist). */
+fun PsiFile?.isIsppHostFile(): Boolean = this is IsScriptFile || this is IsTemplateFile
+
+/** [this] if it is an ISPP host file (script or template), otherwise `null`. */
+fun PsiFile?.asIsppHostFile(): PsiFile? = this?.takeIf { it.isIsppHostFile() }
+
+/**
+ * The direct child lines of this host file that carry an injected ISPP `#…` fragment: the section
+ * preprocessor lines of a script (.iss/.isl) or the preprocessor lines of a template (.ist). A given file
+ * only ever has one kind, so the children stay in document order.
+ */
+private val PsiFile.preprocessorHostLines: List<PsiElement>
+    get() = children.filter { it is IsSectionPreprocessorLine || it is IsTemplatePreprocessorLine }
 
 /**
  * Returns or performs the public behavior represented by this member.
  */
-val IsScriptFile.isppDirectives: List<IsPreprocessorDirective>
+val PsiFile.isppDirectives: List<IsPreprocessorDirective>
     get() {
         val mgr = InjectedLanguageManager.getInstance(project)
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, IsSectionPreprocessorLine::class.java)
+        return preprocessorHostLines
             .flatMap { line ->
                 val result = mutableListOf<IsPreprocessorDirective>()
                 mgr.enumerate(line) { injectedPsi, _ ->
@@ -58,12 +76,12 @@ val IsScriptFile.isppDirectives: List<IsPreprocessorDirective>
 /**
  * All ISPP directives paired with the host-file offset of the line they live on.
  * Because each `#define` line is injected as its own fragment, the host offset (the start of the
- * containing [IsSectionPreprocessorLine], a direct child of this file) is the authority for declaration order.
+ * containing preprocessor line, a direct child of this file) is the authority for declaration order.
  */
-val IsScriptFile.isppDirectivesWithHostOffset: List<Pair<IsPreprocessorDirective, Int>>
+val PsiFile.isppDirectivesWithHostOffset: List<Pair<IsPreprocessorDirective, Int>>
     get() {
         val mgr = InjectedLanguageManager.getInstance(project)
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, IsSectionPreprocessorLine::class.java)
+        return preprocessorHostLines
             .flatMap { line ->
                 val result = mutableListOf<Pair<IsPreprocessorDirective, Int>>()
                 mgr.enumerate(line) { injectedPsi, _ ->
@@ -79,7 +97,7 @@ val IsScriptFile.isppDirectivesWithHostOffset: List<Pair<IsPreprocessorDirective
 /**
  * Returns or performs the public behavior represented by this member.
  */
-val IsScriptFile.definedConstants: List<Pair<String, String?>>
+val PsiFile.definedConstants: List<Pair<String, String?>>
     get() = isppDirectives
         .filter { (it as? IsPreprocessorDirectiveEx)?.isDefine() == true }
         .mapNotNull { directive ->
@@ -103,7 +121,7 @@ private fun IsPreprocessorVariableType.toExprType(): IsPreprocessorExprType = wh
     IsPreprocessorVariableType.VOID -> IsPreprocessorExprType.VOID
 }
 
-private fun IsScriptFile.simpleDefineInfos(): List<IsPreprocessorExprDefineInfo> =
+private fun PsiFile.simpleDefineInfos(): List<IsPreprocessorExprDefineInfo> =
     isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
         val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
         if (!dex.isDefine() || dex.isFunctionMacro()) return@mapNotNull null
@@ -112,7 +130,7 @@ private fun IsScriptFile.simpleDefineInfos(): List<IsPreprocessorExprDefineInfo>
         IsPreprocessorExprDefineInfo(name, text, offset)
     }
 
-private fun IsScriptFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMacroInfo> =
+private fun PsiFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMacroInfo> =
     isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
         val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
         if (!dex.isDefine() || !dex.isFunctionMacro()) return@mapNotNull null
@@ -122,7 +140,7 @@ private fun IsScriptFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMa
     }
 
 /** A type resolver over all `#define`s and function-like macros of this file plus the bundled ISPP spec. */
-fun IsScriptFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
+fun PsiFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
     val spec = service<IsPreprocessorService>().spec
     val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
         spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
@@ -135,11 +153,11 @@ fun IsScriptFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
 }
 
 /** A value resolver over all simple `#define`s and function-like macros of this file. */
-fun IsScriptFile.preprocessorValueResolver(): IsPreprocessorExprValueResolver =
+fun PsiFile.preprocessorValueResolver(): IsPreprocessorExprValueResolver =
     IsPreprocessorExprValueResolver(simpleDefineInfos(), functionMacroInfos())
 
 /** The nearest `#define` named [name] declared before host offset [beforeOffset], or `null`. */
-fun IsScriptFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =
+fun PsiFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =
     isppDirectivesWithHostOffset
         .filter { (d, off) ->
             off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
@@ -148,9 +166,9 @@ fun IsScriptFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocesso
         .maxByOrNull { it.second }
         ?.first as? IsPreprocessorDirectiveEx
 
-/** This directive's host [IsScriptFile] together with its declaration order (host offset), or `null`. */
-private fun IsPreprocessorDirectiveEx.hostContext(): Pair<IsScriptFile, Int>? {
-    val host = InjectedLanguageManager.getInstance(project).getTopLevelFile(containingFile) as? IsScriptFile
+/** This directive's host file (script or template) together with its declaration order (host offset), or `null`. */
+private fun IsPreprocessorDirectiveEx.hostContext(): Pair<PsiFile, Int>? {
+    val host = InjectedLanguageManager.getInstance(project).getTopLevelFile(containingFile).asIsppHostFile()
         ?: return null
     val order = host.isppDirectivesWithHostOffset.firstOrNull { it.first === this }?.second ?: return null
     return host to order

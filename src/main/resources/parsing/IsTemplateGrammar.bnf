@@ -1,0 +1,45 @@
+{
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.parser.IsTemplateParser"
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="IsTemplate"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.impl"
+
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTokenType"
+
+  tokens=[
+    LBRACKET   = "["
+    RBRACKET   = "]"
+    LPAREN     = "("
+    RPAREN     = ")"
+    HASH_LINE  = "regexp:#[^\r\n]*"
+    IDENTIFIER = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
+    CRLF       = "regexp:\r?\n"
+    TEXT       = "regexp:[^\r\n \t#\[\]()A-Za-z_]+"
+  ]
+}
+
+// A .ist template file is free text: a flat sequence of preprocessor lines (the only structured part,
+// into which the ISPP language is injected), brackets/parens (for brace matching + section completion),
+// identifiers and opaque free text. Nothing here is validated.
+templateFile ::= item*
+
+private item ::= preprocessorLine
+               | LBRACKET
+               | RBRACKET
+               | LPAREN
+               | RPAREN
+               | IDENTIFIER
+               | CRLF
+               | TEXT
+
+// The entire #... line is captured as a single opaque token; the ISPP language is injected into this
+// element by IsPreprocessorInjector (same mechanism as the section preprocessor line).
+preprocessorLine ::= HASH_LINE {
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.impl.IsTemplatePreprocessorLineMixinImpl"
+  implements="com.intellij.psi.PsiLanguageInjectionHost"
+}
