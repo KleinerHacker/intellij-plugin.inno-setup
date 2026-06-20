@@ -1,6 +1,6 @@
 # File Types
 
-The plugin registers two dedicated file types within the IntelliJ platform. Each file type gets its own
+The plugin registers three dedicated file types within the IntelliJ platform. Each file type gets its own
 icon, language infrastructure, and editor feature set.
 
 ![Inno Setup File Types](assets/images/filetypes.png)
@@ -13,8 +13,9 @@ icon, language infrastructure, and editor feature set.
 |----------------------------|-----------|----------------------------------------------------------------|
 | **Inno Setup Script**      | `.iss`    | Main installer definition — sections, files, registry, code   |
 | **Inno Setup Language**    | `.isl`    | Translated messages and locale options for a single language   |
+| **Inno Setup Template**    | `.ist`    | Reusable free-text fragment pulled into a script via `#include` |
 
-Both file types are automatically recognised by their extension. No manual association is required.
+All file types are automatically recognised by their extension. No manual association is required.
 
 ---
 
@@ -39,6 +40,17 @@ See [Language Files](language-files.md) for the full list of supported sections 
 
 ---
 
+## Inno Setup Template (`.ist`)
+
+`.ist` files are reusable, free-text fragments meant to be pulled into a script through an ISPP `#include`
+directive. A template may hold whole sections, partial sections, loose directive lines, or preprocessor
+definitions — and, because it is only a building block rather than a complete installer, it is never
+validated on its own. Its content is analysed only once it is included into a host `.iss`/`.isl` script.
+
+See [Template Files](template-files.md) for the full description and editing features.
+
+---
+
 ## Relationship Between File Types
 
 A `.iss` script can reference one or more `.isl` files through its `[Languages]` section:
@@ -52,3 +64,12 @@ Name: "german";  MessagesFile: "compiler:Languages\German.isl"
 The plugin resolves these references across files: language names declared in `[Languages]` are the
 targets for language-prefix references (e.g. `german.WelcomeLabel1`) used inside `[Messages]` and
 `[CustomMessages]`, and for `{cm:…}` constants inside values throughout the script.
+
+A `.iss` (or `.isl`) script can additionally pull in any number of `.ist` templates through `#include`:
+
+```ini
+#include "common-files.ist"
+```
+
+The plugin resolves the include and merges the template's sections into the script's effective,
+include-resolved view, so the shared fragment behaves as if it had been written inline.

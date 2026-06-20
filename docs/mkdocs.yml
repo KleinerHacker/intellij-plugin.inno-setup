@@ -46,6 +46,8 @@ plugins:
             Code: 代码
             Inno Setup Language: Inno Setup 语言文件
             Language Files: 语言文件
+            Inno Setup Template: Inno Setup 模板
+            Template Files: 模板文件
             Inno Setup Preprocessor: Inno Setup 预处理器
             Overview: 概述
             Build Integration: 构建集成
@@ -85,6 +87,8 @@ plugins:
             Code: コード
             Inno Setup Language: Inno Setup 言語ファイル
             Language Files: 言語ファイル
+            Inno Setup Template: Inno Setup テンプレート
+            Template Files: テンプレートファイル
             Inno Setup Preprocessor: Inno Setup プリプロセッサー
             Overview: 概要
             Build Integration: ビルド統合
@@ -124,6 +128,8 @@ plugins:
             Code: 코드
             Inno Setup Language: Inno Setup 언어 파일
             Language Files: 언어 파일
+            Inno Setup Template: Inno Setup 템플릿
+            Template Files: 템플릿 파일
             Inno Setup Preprocessor: Inno Setup 전처리기
             Overview: 개요
             Build Integration: 빌드 통합
@@ -207,6 +213,8 @@ nav:
           - LangOptions: sections/langoptions.md
           - Messages: sections/messages.md
           - CustomMessages: sections/custom-messages.md
+  - Inno Setup Template:
+      - Template Files: template-files.md
   - Inno Setup Preprocessor:
       - Overview: preprocessor/overview.md
       - "#define": preprocessor/define.md
