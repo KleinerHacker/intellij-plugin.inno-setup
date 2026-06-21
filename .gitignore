@@ -6,3 +6,5 @@
 docs/site
 docs/docs/dokka
 docs/docs/licences
+# Local plugin signing material (private key must never be committed)
+/.signing

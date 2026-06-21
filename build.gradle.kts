@@ -14,6 +14,7 @@ import com.github.jk1.license.render.ReportRenderer
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.tasks.SignPluginTask
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.2.20"
@@ -38,6 +39,35 @@ val templatePackage = "$languagePackage/parser/template"
 
 intellijPlatform {
     instrumentCode = false
+
+    signing {
+        // Material is read from files; only the (non-secret) *_FILE paths are passed via env, so no
+        // secret value lives in the build/signer process environment. file("") would fail at
+        // configuration time, hence the presence guards.
+        System.getenv("CERTIFICATE_CHAIN_FILE")?.takeIf { it.isNotBlank() }?.let { certificateChainFile = file(it) }
+        System.getenv("PRIVATE_KEY_FILE")?.takeIf { it.isNotBlank() }?.let { privateKeyFile = file(it) }
+
+        // Prefer the password from a file (PRIVATE_KEY_PASSWORD_FILE); fall back to the env var.
+        val pwFile = System.getenv("PRIVATE_KEY_PASSWORD_FILE")?.takeIf { it.isNotBlank() }
+        password = if (pwFile != null) {
+            providers.fileContents(layout.file(provider { File(pwFile) })).asText.map { it.trim() }
+        } else {
+            providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+        }
+    }
+
+    publishing {
+        // Token via the in-process Marketplace API: reading it from a file keeps it out of the
+        // environment entirely. Falls back to the env var.
+        val tokenFile = System.getenv("PUBLISH_TOKEN_FILE")?.takeIf { it.isNotBlank() }
+        token = if (tokenFile != null) {
+            providers.fileContents(layout.file(provider { File(tokenFile) })).asText.map { it.trim() }
+        } else {
+            providers.environmentVariable("PUBLISH_TOKEN")
+        }
+        // Default channel "default" = stable; pre-releases go to a separate channel via -PpublishChannel=eap
+        channels = listOf(providers.gradleProperty("publishChannel").getOrElse("default"))
+    }
 }
 
 kotlin {
