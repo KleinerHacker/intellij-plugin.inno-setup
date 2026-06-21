@@ -4,6 +4,25 @@
 
 ## [Unreleased]
 
+### Added
+
+- **`.ist` template files**: Added a new free-text *Inno Setup Template* file type (`.ist`) as an
+  alternative `#include` target. Template files are not validated, but support the ISPP preprocessor
+  directives, brace matching for `[]`/`()`, and section-name completion after `[`. `#include` completion
+  offers `.ist` files, the extract-to-file intention proposes a `.ist` name, and a "New Inno Setup Template"
+  action creates one.
+- **`#include` directive support**: `#include "file"` paths resolve to the referenced script, with
+  go-to-definition (**Ctrl+B** / **Cmd+B**) and path completion as you type.
+- **`#include` validation**: A missing or non-existent include file, and a non-literal or empty include
+  path, are flagged as errors. Problems detected inside an included file (unknown directives, flags,
+  undefined constants, warnings) are surfaced on the `#include` line of the including script, while
+  required-section checks correctly account for content contributed by includes.
+- **`#include` intentions**: Added an intention to inline an `#include` file's content in place (optionally
+  deleting the now-inlined file), and an intention to extract selected lines into a new file and replace them
+  with an `#include`.
+- **`#include` path refactoring**: Renaming or moving an included file now updates the `#include` path
+  automatically.
+
 ## [0.4.2]
 
 ### Added

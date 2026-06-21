@@ -316,6 +316,24 @@ class IsSectionAnnotatorTest : BasePlatformTestCase() {
         assertEquals("A flag missing its required flags must produce exactly one ERROR", 1, errors.size)
     }
 
+    fun testDuplicateFlagProducesError() {
+        val text = VALID_SETUP + "\n[Files]\nSource: \"a\"; DestDir: \"{app}\"; Flags: ignoreversion ignoreversion\n"
+        val errors = highlights(text).filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains("Duplicate flag", ignoreCase = true) == true
+        }
+        assertEquals("A duplicated flag must produce exactly one 'Duplicate flag' ERROR", 1, errors.size)
+    }
+
+    fun testDuplicatedFlagStillHighlightsBothOccurrences() {
+        // Regression: the first occurrence used to lose its flag colour (associateBy kept only the last).
+        val text = VALID_SETUP + "\n[Files]\nSource: \"a\"; DestDir: \"{app}\"; Flags: ignoreversion ignoreversion\n"
+        val flagHighlights = highlights(text).count {
+            it.forcedTextAttributesKey == IsSectionAnnotatorHighlighting.FLAG
+        }
+        assertEquals("Both 'ignoreversion' occurrences must be highlighted as flags", 2, flagHighlights)
+    }
+
     fun testRequiredFlagsPresentProducesNoError() {
         val text =
             VALID_SETUP + "\n[Files]\nSource: \"a.zip\"; DestDir: \"{app}\"; Flags: extractarchive external ignoreversion\n"

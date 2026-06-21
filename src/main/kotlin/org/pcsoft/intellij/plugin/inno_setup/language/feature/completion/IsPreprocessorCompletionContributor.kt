@@ -18,6 +18,7 @@ import com.intellij.patterns.PlatformPatterns
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorBuiltinFunctionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDirectiveKeywordProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorIncludeFileProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
@@ -46,6 +47,12 @@ class IsPreprocessorCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
             IsPreprocessorBuiltinFunctionProvider
+        )
+        // File names inside an #include "…" string
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
+            IsPreprocessorIncludeFileProvider
         )
     }
 }

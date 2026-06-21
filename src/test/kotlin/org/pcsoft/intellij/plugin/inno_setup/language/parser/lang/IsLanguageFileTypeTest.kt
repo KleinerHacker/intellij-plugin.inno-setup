@@ -10,15 +10,17 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang
+package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 
 /**
  * Tests that `.isl` files are recognised as a distinct file type that reuses the ISS language and
- * parses into an [IsLanguageFile] (which is also an [IsScriptFile], so all ISS tooling keeps working).
+ * parses into an [org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile] (which is also an [IsScriptFile], so all ISS tooling keeps working).
  */
 class IsLanguageFileTypeTest : BasePlatformTestCase() {
 

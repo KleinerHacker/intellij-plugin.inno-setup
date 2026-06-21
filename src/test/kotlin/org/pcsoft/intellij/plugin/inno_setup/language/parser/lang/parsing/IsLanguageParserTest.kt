@@ -1,8 +1,9 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang
+package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang.parsing
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.impl.DebugUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 
 class IsLanguageParserTest : BasePlatformTestCase() {
@@ -18,9 +19,9 @@ class IsLanguageParserTest : BasePlatformTestCase() {
     }
 
     fun testSimpleIslPsiTree() {
-        myFixture.configureByFile("scripts/simple.isl")
+        myFixture.configureByFile("structure/structure.isl")
         val actualTree = DebugUtil.psiToString(islFile(), false).trimEnd()
-        assertSameLinesWithFile("$testDataPath/scripts/simple.isl.tree", actualTree)
+        assertSameLinesWithFile("$testDataPath/structure/structure.isl.tree", actualTree)
     }
 
 }

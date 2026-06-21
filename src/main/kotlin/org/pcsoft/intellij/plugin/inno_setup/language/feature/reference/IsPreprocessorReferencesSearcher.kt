@@ -18,7 +18,7 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Processor
 import com.intellij.util.QueryExecutor
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.asIsppHostFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstantBody
@@ -41,11 +41,12 @@ class IsPreprocessorReferencesSearcher : QueryExecutor<PsiReference, ReferencesS
         val element = queryParameters.elementToSearch as? IsPreprocessorDirectiveEx ?: return true
         if (!element.isDefine()) return true
 
-        // The IsPreprocessorDirective lives in an injected fragment; find the top-level ISS file.
+        // The IsPreprocessorDirective lives in an injected fragment; find the top-level host file
+        // (a .iss/.isl script or a .ist template).
         val hostFile = InjectedLanguageManager.getInstance(element.project)
-            .getTopLevelFile(element.containingFile) as? IsScriptFile ?: return true
+            .getTopLevelFile(element.containingFile).asIsppHostFile() ?: return true
 
-        // {#Name} references in the host ISS file.
+        // {#Name} references in the host ISS file (none in a free-text template).
         for (body in PsiTreeUtil.findChildrenOfType(hostFile, IsSectionConstantBody::class.java)) {
             for (ref in body.references) {
                 if (ref.isReferenceTo(element) && !consumer.process(ref)) return false

@@ -13,6 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing
 
 import com.intellij.codeInsight.intention.IntentionAction
+import com.intellij.lang.ASTNode
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
@@ -24,8 +25,11 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.declarationScope
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.toEffectiveScript
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
@@ -111,8 +115,11 @@ class IsSectionAnnotator : Annotator {
 
         val scriptVf = value.containingFile?.virtualFile ?: return
         val scriptDir = scriptVf.parent?.path?.let { File(it) }
-        val defines = value.issFile?.definedConstants ?: emptyList()
-        val customMessages = value.issFile?.findSections("CustomMessages")
+        // Resolve #defines and custom messages over the effective (#include-resolved) script, so values
+        // contributed by included files are taken into account.
+        val scope = value.issFile?.declarationScope()
+        val defines = scope?.definedConstants ?: emptyList()
+        val customMessages = scope?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
             ?.associate { it.keyText().substringAfterLast('.') to it.valueText }
             ?: emptyMap()
@@ -180,16 +187,32 @@ class IsSectionAnnotator : Annotator {
     private fun annotateFile(file: IsScriptFile, holder: AnnotationHolder, spec: IsSectionSpec) {
         // Required sections are file-type specific: \[Setup] in scripts, \[LangOptions] in .isl files.
         val target = file.specTarget
-        val required = spec.sections.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
-        val existing = file.sections.map { it.nameText.lowercase() }.toSet()
-        val missing = required - existing
-        if (missing.isNotEmpty()) {
-            holder.newAnnotation(
-                HighlightSeverity.ERROR,
-                "Required section(s) missing: " + missing.joinToString(", ") { "[$it]" }
-            ).fileLevel()
-                .withFix(AddMissingSectionsQuickFix(missing.toList(), spec))
-                .create()
+
+        // A fragment pulled in via #include by another script is intentionally incomplete on its own — its
+        // mandatory sections/directives are validated as part of the including script's effective view. So
+        // file-level mandatory checks are skipped here (per-line parameter checks still run).
+        val isFragment = target == IsSectionSpecTarget.ISS &&
+                file.virtualFile?.let { IsScriptCollector(file.project).isIncludedByOther(it) } == true
+
+        if (!isFragment) {
+            // Mandatory checks run on the effective, fully #include-resolved script (required sections and
+            // directives may legitimately be spread across the main file and its includes). For .isl files
+            // there are no includes, so the file itself is used.
+            val effective = if (target == IsSectionSpecTarget.ISS) file.toEffectiveScript() else file
+
+            val required = spec.sections.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
+            val existing = effective.sections.map { it.nameText.lowercase() }.toSet()
+            val missing = required - existing
+            if (missing.isNotEmpty()) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Required section(s) missing: " + missing.joinToString(", ") { "[$it]" }
+                ).fileLevel()
+                    .withFix(AddMissingSectionsQuickFix(missing.toList(), spec))
+                    .create()
+            }
+
+            annotateRequiredDirectives(file, effective, holder, spec, target)
         }
 
         val sections = file.sections
@@ -209,6 +232,49 @@ class IsSectionAnnotator : Annotator {
         }
 
         annotateUsePreviousLanguage(file, holder)
+    }
+
+    /**
+     * Validates required directives over the **effective** script: present directives are the union across
+     * all same-named section blocks of [effective] (so a required directive may sit in the main file or in
+     * any include). Missing ones are reported at file level on the edited [file]; the quick fix targets the
+     * first matching block actually present in the edited file (if any).
+     */
+    private fun annotateRequiredDirectives(
+        file: IsScriptFile,
+        effective: IsScriptFile,
+        holder: AnnotationHolder,
+        spec: IsSectionSpec,
+        target: IsSectionSpecTarget,
+    ) {
+        spec.sections.filter { it.type == IsSectionType.DIRECTIVE }.forEach { specSection ->
+            val required = specSection.attributes
+                .filter { it.required.appliesTo(target) }
+                .map { it.name.lowercase() }
+                .toSet()
+            if (required.isEmpty()) return@forEach
+
+            val blocks = effective.findSections(specSection.name)
+            if (blocks.isEmpty()) return@forEach   // section absent → covered by the required-section check
+
+            val present = blocks.flatMap { it.directiveEntryList }.map { it.keyText().lowercase() }.toSet()
+            val missing = required - present
+            if (missing.isEmpty()) return@forEach
+
+            val message = "Required directive(s) missing in [${specSection.name}]: " + missing.joinToString(", ")
+            // Anchor on the section header in the edited file when present (so the marker sits on the actual
+            // section, not over unrelated lines); fall back to file level when the section lives only in an
+            // include.
+            val editedBlock = file.findSection(specSection.name)
+            val builder = if (editedBlock != null) {
+                holder.newAnnotation(HighlightSeverity.ERROR, message)
+                    .range(editedBlock.header.title?.textRange ?: editedBlock.header.textRange)
+                    .withFix(AddMissingDirectivesQuickFix(editedBlock, missing.toList(), specSection))
+            } else {
+                holder.newAnnotation(HighlightSeverity.ERROR, message).fileLevel()
+            }
+            builder.create()
+        }
     }
 
     /**
@@ -263,23 +329,9 @@ class IsSectionAnnotator : Annotator {
                 .withFix(RemoveEmptySectionQuickFix(section))
                 .create()
         }
-
-        val specSection = section.specSection(spec) ?: return
-        if (specSection.type != IsSectionType.DIRECTIVE) return
-
-        val target = section.specTarget
-        val required =
-            specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
-        val present = section.directiveEntryList.map { it.keyText().lowercase() }.toSet()
-        val missing = required - present
-        if (missing.isNotEmpty()) {
-            holder.newAnnotation(
-                HighlightSeverity.ERROR,
-                "Required directive(s) missing: " + missing.joinToString(", ")
-            ).range(section.header.title?.textRange ?: section.header.textRange)
-                .withFix(AddMissingDirectivesQuickFix(section, missing.toList(), specSection))
-                .create()
-        }
+        // Required-directive validation is performed file-level over the effective (#include-resolved) script
+        // in annotateRequiredDirectives, since required directives may be spread across the main file and its
+        // includes.
     }
 
     private fun annotateTrailingSemicolon(entry: IsSectionParameterEntry, holder: AnnotationHolder) {
@@ -381,7 +433,8 @@ class IsSectionAnnotator : Annotator {
         val dot = full.indexOf('.')
         if (dot <= 0) return
         val prefix = full.substring(0, dot)
-        val declared = key.issFile?.findSections("Languages")
+        // [Languages] entries may be contributed by an #include — resolve over the effective script.
+        val declared = key.issFile?.declarationScope()?.findSections("Languages")
             ?.flatMap { it.nameDeclarations }
             ?.map { it.valueUnquoted }
             ?: emptyList()
@@ -544,12 +597,16 @@ class IsSectionAnnotator : Annotator {
     ) {
         val target = value.specTarget
         val flagMap = flagType.flags.associateBy { it.name.lowercase() }
-        val tokenNodes = value.node
-            .getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
-            .associateBy { it.text.lowercase() }
+        // All flag tokens in order. A flag may legitimately appear here more than once (duplicate) — keep
+        // every occurrence so each is validated and highlighted (a deduped map is used for cross-flag lookups).
+        val tokenList = value.node.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER)).toList()
+        val byName: Map<String, List<ASTNode>> = tokenList.groupBy { it.text.lowercase() }
+        // First occurrence per flag name — the authority for conflict/required cross-references.
+        val tokenNodes: Map<String, ASTNode> = byName.mapValues { it.value.first() }
 
-        tokenNodes.forEach { (name, node) ->
-            val def = flagMap[name]
+        // Validate and highlight every occurrence (so duplicates do not silently lose their colour).
+        tokenList.forEach { node ->
+            val def = flagMap[node.text.lowercase()]
             when {
                 def == null ->
                     holder.newAnnotation(HighlightSeverity.ERROR, "Unknown flag: '${node.text}'")
@@ -567,6 +624,19 @@ class IsSectionAnnotator : Annotator {
                     annotateVersion(node.textRange, def.name, def.since, def.until, holder)
                     highlight(node.textRange, IsSectionAnnotatorHighlighting.FLAG, holder)
                 }
+            }
+        }
+
+        // Duplicate flags: every occurrence after the first of a (known) flag is an error. Unknown flags are
+        // already reported above, so they are skipped here.
+        byName.forEach { (name, nodes) ->
+            if (nodes.size < 2 || flagMap[name] == null) return@forEach
+            nodes.drop(1).forEach { dup ->
+                holder.newAnnotation(HighlightSeverity.ERROR, "Duplicate flag: '${dup.text}'")
+                    .range(dup.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .withFix(RemoveDuplicateFlagsQuickFix(value, dup.text))
+                    .create()
             }
         }
 
@@ -662,7 +732,8 @@ class IsSectionAnnotator : Annotator {
         val name = bodyText.substringBefore(':').substringBefore('|').trim().trimStart('#')
 
         val builtins = service<IsConstantService>().spec.constants
-        val isppNames = constant.issFile?.definedConstants?.map { it.first } ?: emptyList()
+        // #defines may live in an included file — resolve over the effective (#include-resolved) script.
+        val isppNames = constant.issFile?.declarationScope()?.definedConstants?.map { it.first } ?: emptyList()
         // Value-bearing ISPP predefined variables ({#__LINE__}, {#SourcePath}, …) are valid inline
         // emissions too; the valueless `void` symbols are not emittable via {#…} and stay unknown here.
         val predefinedNames = service<IsPreprocessorService>().emittableVariables.map { it.name }
@@ -743,7 +814,8 @@ class IsSectionAnnotator : Annotator {
     ) {
         val (msgName, nameRange) = body.customMessageNameRange() ?: return
 
-        val declared = constant.issFile?.findSections("CustomMessages")
+        // [CustomMessages] entries may be contributed by an #include — resolve over the effective script.
+        val declared = constant.issFile?.declarationScope()?.findSections("CustomMessages")
             ?.flatMap { it.directiveEntryList }
             ?.mapNotNull { (it as? IsSectionDirectiveEntryEx)?.customMessageName() }
             ?: emptyList()

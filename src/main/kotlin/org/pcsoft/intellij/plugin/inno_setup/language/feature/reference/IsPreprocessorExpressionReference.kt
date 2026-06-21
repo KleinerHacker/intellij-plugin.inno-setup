@@ -18,7 +18,7 @@ import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.asIsppHostFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
@@ -47,11 +47,11 @@ class IsPreprocessorExpressionReference(
      */
     override fun resolve(): PsiElement? {
         val injMgr = InjectedLanguageManager.getInstance(element.project)
-        val issFile = injMgr.getTopLevelFile(element.containingFile) as? IsScriptFile ?: return null
+        val hostFile = injMgr.getTopLevelFile(element.containingFile).asIsppHostFile() ?: return null
         val hostLine = injMgr.getInjectionHost(element) ?: return null
         val currentOffset = hostLine.textRange.startOffset
 
-        return issFile.isppDirectivesWithHostOffset
+        return hostFile.isppDirectivesWithHostOffset
             .filter { (d, offset) ->
                 offset < currentOffset &&
                         (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&

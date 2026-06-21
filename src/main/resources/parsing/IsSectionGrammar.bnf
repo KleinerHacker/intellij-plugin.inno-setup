@@ -35,7 +35,14 @@
 
 issFile ::= item*
 
+// Top level also accepts bare directive/parameter entries (no preceding section header). A script that is
+// pulled in via #include is often a fragment whose owning [Section] header lives in the including file (or
+// is contributed by an #include of its own), so entries may legitimately appear before the first header.
+// Per-line key/flag/value checks are skipped for such header-less entries (no containing section); the
+// effective, #include-resolved script supplies the section context for mandatory-section/-directive checks.
 private item ::= block
+               | directiveEntry
+               | parameterEntry
                | preprocessorLine
                | comment
                | CRLF

@@ -41,5 +41,11 @@
                 <option name="FOREGROUND" value="808080"/>
             </value>
         </option>
+        <!-- Background tint for #include-pulled text in the effective-script view — light translucent blue -->
+        <option name="ISS_INCLUDE_SEGMENT_BACKGROUND">
+            <value>
+                <option name="BACKGROUND" value="e8ecfb"/>
+            </value>
+        </option>
     </attributes>
 </scheme>

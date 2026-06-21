@@ -71,4 +71,12 @@ object IsSectionAnnotatorHighlighting {
     /** Unused elements (trailing semicolons, unused #define, empty sections) — gray, like Java's unused. */
     val UNUSED: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_UNUSED", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
+
+    /**
+     * Background tint for text pulled in via `#include` in the read-only *effective script* view — a light,
+     * translucent blue (same hue as the directive colour). Default attributes are provided by the bundled
+     * color schemes (colorSchemes/IssDefault.xml, colorSchemes/IssDarcula.xml).
+     */
+    val INCLUDE_SEGMENT_BACKGROUND: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_INCLUDE_SEGMENT_BACKGROUND")
 }

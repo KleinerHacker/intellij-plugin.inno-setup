@@ -1,0 +1,5 @@
+#define test "demo"
+#define demo test
+
+AppName=My Program
+AppVersion=1.5

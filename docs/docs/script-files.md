@@ -114,6 +114,10 @@ ISPP preprocessor directives are injected into script files and receive their ow
 rename, and Find Usages support for `#define` names. Inline `{#Name}` references inside section values
 resolve to their `#define` declaration and participate in the same rename/find-usages flow.
 
+`#include` paths resolve to the referenced file and offer two intentions (**Alt+Enter**): inline the
+included file's content in place, or extract the selected lines into a new file and replace them with an
+`#include`. Renaming or moving an included file keeps the `#include` path consistent.
+
 See [Inno Setup Preprocessor](preprocessor/overview.md) for the supported directives, the standard
 predefined variables, and inline `{#…}` emission.
 

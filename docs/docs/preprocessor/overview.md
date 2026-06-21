@@ -44,6 +44,25 @@ variable. See [`#define`](define.md) for details and the predefined variables us
 
 ---
 
+## Working with `#include`
+
+An `#include "file"` path resolves to the referenced `.iss` file (relative to the including script's
+directory; absolute paths are used as-is). **Ctrl+B** / **Cmd+B** jumps to the file, and the path is
+completed as you type. Two editor actions make working with includes easier:
+
+- **Inline `#include` content** — with the caret on an `#include` line that resolves to an existing file,
+  the intention (**Alt+Enter**) replaces the line with the verbatim content of that file. Only one level
+  is expanded; nested `#include` lines in the inserted text are kept as-is. Afterwards you are asked whether
+  the now-inlined include file should be deleted (default: no).
+- **Extract selection to `#include` file** — select one or more lines and invoke the intention to move
+  them into a new file next to the current script. A file name is requested (and you are asked before an
+  existing file is overwritten); the selected full lines are replaced with an `#include` of the new file.
+
+When the referenced file is **renamed or moved** in the IDE, the `#include` path is updated automatically
+to keep pointing at the file.
+
+---
+
 ## Editor support
 
 - **Syntax highlighting** for directives, macro names and inline `{#…}` references
@@ -51,3 +70,4 @@ variable. See [`#define`](define.md) for details and the predefined variables us
   built-in functions
 - **Validation** of unknown directives, unknown `{#…}` references and never-used `#define`s
 - **Rename** and **Find Usages** across a `#define` and all its `{#Name}` usages
+- **Inline** and **Extract** intentions for `#include`, with automatic path updates on rename/move

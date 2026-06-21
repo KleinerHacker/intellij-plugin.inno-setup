@@ -19,11 +19,17 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.EFFECTIVE_SCRIPT_MARKER
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiveScriptProblems
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.asIsppHostFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
@@ -33,7 +39,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDi
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.quickfix.ReplaceIncludeWithLineQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.preprocessorTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstant
@@ -94,6 +102,11 @@ class IsPreprocessorAnnotator : Annotator {
         highlight(keywordRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
 
         val ex = directive as? IsPreprocessorDirectiveEx ?: return
+
+        if (ex.isInclude()) {
+            annotateInclude(directive, ex, holder)
+            return
+        }
         if (!ex.isDefine()) return
 
         // A #define name must start with a letter/underscore. When it starts with a digit the lexer splits
@@ -151,6 +164,110 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /**
+     * Validates an `#include`: the value must end up as a string (a literal or an ISPP expression of type
+     * `str`), and a literal path must point to an existing file. The included file's *content* is not
+     * checked — `#include` pastes raw text that may be a free-form fragment.
+     */
+    private fun annotateInclude(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        val value = directive.value
+        if (value == null || value.text.isBlank()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include requires a string value")
+                .range(directive.textRange).create()
+            return
+        }
+
+        val exprText = value.text
+        val base = value.textRange.startOffset
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+
+        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+        val resolver = hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
+        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+        val type = inference.infer(parseResult.ast)
+
+        (parseResult.errors + inference.errors).forEach { error ->
+            holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                .range(TextRange(base + error.span.start, base + error.span.end))
+                .create()
+        }
+
+        if (!type.strCompatible) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include requires a string value")
+                .range(value.textRange).create()
+            return
+        }
+
+        // Existence/content checks only for a literal path (an expression's value cannot be resolved here).
+        val string = ex.getIncludeLiteralString() ?: return
+        val path = ex.getIncludePath() ?: return
+        // The path inside the quotes; for an empty string fall back to the quotes themselves so the marker shows.
+        val pathRange =
+            if (path.isEmpty()) string.textRange
+            else TextRange(string.textRange.startOffset + 1, string.textRange.endOffset - 1)
+
+        if (path.isEmpty()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#include path must not be empty")
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+
+        val baseDir = hostFile?.virtualFile?.parent
+        val target = baseDir?.let { IsIncludePaths.resolve(it, path) }
+        if (target == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Included file not found: '$path'")
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+
+        // A literal include whose target is trivially small is unnecessary: an empty file does nothing, a
+        // single-line file can simply be inlined. Surface a weak warning with a matching quick fix. This is a
+        // base check on the literal include itself, so it runs before the effective-script analysis below.
+        if (!target.isDirectory) {
+            val content = VfsUtilCore.loadText(target)
+            when (nonTrailingLineCount(content)) {
+                0 -> holder.newAnnotation(HighlightSeverity.WEAK_WARNING, "#include points to an empty file")
+                    .range(pathRange)
+                    .withFix(RemoveIncludeQuickFix(directive))
+                    .create()
+
+                1 -> holder.newAnnotation(
+                    HighlightSeverity.WEAK_WARNING,
+                    "#include points to a single-line file; inline the line instead"
+                )
+                    .range(pathRange)
+                    .withFix(ReplaceIncludeWithLineQuickFix(path, content.removeSuffix("\n").removeSuffix("\r")))
+                    .create()
+            }
+        }
+
+        // Re-entrancy guard: when the recording run replays this annotator over the in-memory effective script,
+        // its remaining (unresolvable) #include lines must not trigger the effective analysis again. The base
+        // checks above already ran; stop before the combined analysis below.
+        if (hostFile.getUserData(EFFECTIVE_SCRIPT_MARKER) == true) return
+
+        // Surface the problems that the inclusion introduces into the *combined* effective script (a flag
+        // conflict with the main file, a fragment that is only valid in context, a transitively missing
+        // include, …) on this #include. Problems of the included file in isolation are intentionally ignored.
+        if (hostFile !is IsScriptFile) return
+        IsEffectiveScriptProblems.forHost(hostFile)[directive]?.forEach { problem ->
+            holder.newAnnotation(problem.severity, problem.message)
+                .range(pathRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
+    }
+
+    /**
      * Range of a #define name that illegally starts with a digit, or `null` when the name is valid.
      *
      * A valid name starts with a letter/underscore and is lexed as a single IDENTIFIER. A name beginning
@@ -170,7 +287,7 @@ class IsPreprocessorAnnotator : Annotator {
         if (refs.isEmpty()) return
 
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
-            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
         val definedNames = hostFile?.isppDirectives
             ?.mapNotNull { (it as? IsPreprocessorDirectiveEx)?.getDefineName() }
             ?.toSet() ?: emptySet()
@@ -218,7 +335,7 @@ class IsPreprocessorAnnotator : Annotator {
         val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
 
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
-            .getTopLevelFile(directive.containingFile) as? IsScriptFile
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
         val resolver = buildTypeResolver(hostFile)
         val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
         inference.infer(parseResult.ast)
@@ -231,16 +348,16 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
-    private fun buildTypeResolver(hostFile: IsScriptFile?): IsPreprocessorExprTypeResolver =
+    private fun buildTypeResolver(hostFile: PsiFile?): IsPreprocessorExprTypeResolver =
         hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */
-    private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: IsScriptFile?): Int =
+    private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: PsiFile?): Int =
         hostFile?.isppDirectivesWithHostOffset?.firstOrNull { it.first === directive }?.second ?: Int.MAX_VALUE
 
     private fun isDefineUsed(directive: IsPreprocessorDirective, name: String): Boolean {
         val injMgr = InjectedLanguageManager.getInstance(directive.project)
-        val hostFile = injMgr.getTopLevelFile(directive.containingFile) as? IsScriptFile ?: return true
+        val hostFile = injMgr.getTopLevelFile(directive.containingFile).asIsppHostFile() ?: return true
 
         // Check {#Name} references anywhere in the ISS host file.
         val usedAsConstant = PsiTreeUtil.findChildrenOfType(hostFile, IsSectionConstant::class.java).any { constant ->
@@ -258,4 +375,13 @@ class IsPreprocessorAnnotator : Annotator {
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
+
+    /**
+     * Number of content lines in [text], ignoring a single trailing line break. A blank/empty file yields 0,
+     * a one-line file (with or without a trailing newline) yields 1.
+     */
+    private fun nonTrailingLineCount(text: String): Int {
+        if (text.isBlank()) return 0
+        return text.removeSuffix("\n").removeSuffix("\r").count { it == '\n' } + 1
+    }
 }

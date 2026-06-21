@@ -10,9 +10,10 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang
+package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 
 /**
  * Section-name completion must only offer the language-file sections inside `.isl` files.
