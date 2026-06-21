@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    inno-setup
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+snapshot        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix////PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../index.html">inno-setup</a><span class="delimiter">/</span><span class="current">org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-1600065512%2FClasslikes%2F-251573632" anchor-label="AddMissingDirectivesQuickFix" id="-1600065512%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-add-missing-directives-quick-fix/index.html"><span>Add</span><wbr></wbr><span>Missing</span><wbr></wbr><span>Directives</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1600065512%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-add-missing-directives-quick-fix/index.html">AddMissingDirectivesQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">section<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionBlock<span class="token punctuation">, </span></span><span class="parameter ">missingNames<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">specSection<span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.types/-is-section-def-spec/index.html">IsSectionDefSpec</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="30081327%2FClasslikes%2F-251573632" anchor-label="AddMissingFlagsQuickFix" id="30081327%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-add-missing-flags-quick-fix/index.html"><span>Add</span><wbr></wbr><span>Missing</span><wbr></wbr><span>Flags</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="30081327%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-add-missing-flags-quick-fix/index.html">AddMissingFlagsQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionParamValue<span class="token punctuation">, </span></span><span class="parameter ">requiredFlags<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Appends one or more required flag identifiers to a flags IsSectionParamValue, e.g. adding <code class="lang-kotlin">external ignoreversion</code> to <code class="lang-kotlin">Flags: extractarchive</code>. Only the flags still missing from the value are inserted, separated by single spaces, after the existing flag list.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1195918578%2FClasslikes%2F-251573632" anchor-label="AddMissingParametersQuickFix" id="1195918578%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-add-missing-parameters-quick-fix/index.html"><span>Add</span><wbr></wbr><span>Missing</span><wbr></wbr><span>Parameters</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1195918578%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-add-missing-parameters-quick-fix/index.html">AddMissingParametersQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">entry<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionParameterEntry<span class="token punctuation">, </span></span><span class="parameter ">missingNames<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">specSection<span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.types/-is-section-def-spec/index.html">IsSectionDefSpec</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1210778094%2FClasslikes%2F-251573632" anchor-label="AddMissingSectionsQuickFix" id="1210778094%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-add-missing-sections-quick-fix/index.html"><span>Add</span><wbr></wbr><span>Missing</span><wbr></wbr><span>Sections</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1210778094%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-add-missing-sections-quick-fix/index.html">AddMissingSectionsQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">missingSectionNames<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">spec<span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.types/-is-section-spec/index.html">IsSectionSpec</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="168195508%2FClasslikes%2F-251573632" anchor-label="MoveCodeSectionLastQuickFix" id="168195508%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-move-code-section-last-quick-fix/index.html"><span>Move</span><wbr></wbr><span>Code</span><wbr></wbr><span>Section</span><wbr></wbr><span>Last</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="168195508%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-move-code-section-last-quick-fix/index.html">MoveCodeSectionLastQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.language.file_type.script/-is-script-file/index.html">IsScriptFile</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-837375387%2FClasslikes%2F-251573632" anchor-label="RemoveEmptySectionQuickFix" id="-837375387%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-remove-empty-section-quick-fix/index.html"><span>Remove</span><wbr></wbr><span>Empty</span><wbr></wbr><span>Section</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-837375387%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-remove-empty-section-quick-fix/index.html">RemoveEmptySectionQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">section<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionBlock</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1887043516%2FClasslikes%2F-251573632" anchor-label="RemoveRedundantFlagQuickFix" id="1887043516%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-remove-redundant-flag-quick-fix/index.html"><span>Remove</span><wbr></wbr><span>Redundant</span><wbr></wbr><span>Flag</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1887043516%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-remove-redundant-flag-quick-fix/index.html">RemoveRedundantFlagQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionParamValue<span class="token punctuation">, </span></span><span class="parameter ">flagText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Removes a single redundant flag identifier (and one adjacent whitespace gap) from a flags IsSectionParamValue, e.g. removing <code class="lang-kotlin">nocompression</code> from <code class="lang-kotlin">Flags: external nocompression</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-564991168%2FClasslikes%2F-251573632" anchor-label="RemoveTrailingSemicolonQuickFix" id="-564991168%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-remove-trailing-semicolon-quick-fix/index.html"><span>Remove</span><wbr></wbr><span>Trailing</span><wbr></wbr><span>Semicolon</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-564991168%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-remove-trailing-semicolon-quick-fix/index.html">RemoveTrailingSemicolonQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">entry<span class="token operator">: </span>ERROR CLASS: Symbol not found for IsSectionParameterEntry</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Implements an IntelliJ quick fix or intention for Inno Setup PSI.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-744403984%2FClasslikes%2F-251573632" anchor-label="ReplaceSeparatorQuickFix" id="-744403984%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-replace-separator-quick-fix/index.html"><span>Replace</span><wbr></wbr><span>Separator</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-744403984%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-replace-separator-quick-fix/index.html">ReplaceSeparatorQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">holderElement<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span><span class="token punctuation">, </span></span><span class="parameter ">tokenType<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi.tree/IElementType///PointingToDeclaration/">IElementType</span><span class="token punctuation">, </span></span><span class="parameter ">wrong<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">replacement<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Replaces the wrong key/value separator of a single entry with the one its section expects: ':' → '=' inside a directive section, or '=' → ':' inside a parameter section. <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix/ReplaceSeparatorQuickFix//#com.intellij.psi.PsiElement#com.intellij.psi.tree.IElementType#kotlin.String#kotlin.String/PointingToCallableParameters(0)/">holderElement</span> is the pair/entry that owns the separator token; <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix/ReplaceSeparatorQuickFix//#com.intellij.psi.PsiElement#com.intellij.psi.tree.IElementType#kotlin.String#kotlin.String/PointingToCallableParameters(1)/">tokenType</span> is the wrong separator's token type and <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.quickfix/ReplaceSeparatorQuickFix//#com.intellij.psi.PsiElement#com.intellij.psi.tree.IElementType#kotlin.String#kotlin.String/PointingToCallableParameters(3)/">replacement</span> the correct character.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1549800756%2FClasslikes%2F-251573632" anchor-label="SetUsePreviousLanguageNoQuickFix" id="-1549800756%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-set-use-previous-language-no-quick-fix/index.html"><span>Set</span><wbr></wbr><span>Use</span><wbr></wbr><span>Previous</span><wbr></wbr><span>Language</span><wbr></wbr><span>No</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1549800756%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-set-use-previous-language-no-quick-fix/index.html">SetUsePreviousLanguageNoQuickFix</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">file<span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.language.file_type.script/-is-script-file/index.html">IsScriptFile</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></div><div class="brief "><p class="paragraph">Sets <code class="lang-kotlin">UsePreviousLanguage</code> in <code class="lang-kotlin">[Setup]</code> to <code class="lang-kotlin">no</code>, the value Inno Setup requires when the script declares only a single language. Replaces an existing value, inserts the directive into an existing <code class="lang-kotlin">[Setup]</code>, or creates a <code class="lang-kotlin">[Setup]</code> section if none is present.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

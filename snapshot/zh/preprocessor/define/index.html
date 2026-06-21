@@ -1,0 +1,2839 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="JetBrains plugin providing language support for Inno Setup scripts (.iss) in all IntelliJ-platform IDEs">
+      
+      
+        <meta name="author" content="PCSoft">
+      
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../../build/">
+      
+      
+        
+          <link rel="alternate" href="../../../preprocessor/define/" hreflang="en">
+        
+          <link rel="alternate" href="./" hreflang="zh">
+        
+          <link rel="alternate" href="../../../ja/preprocessor/define/" hreflang="ja">
+        
+          <link rel="alternate" href="../../../ko/preprocessor/define/" hreflang="ko">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>#define - Inno Setup – JetBrains Plugin</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#define" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../" title="Inno Setup – JetBrains Plugin" class="md-header__button md-logo" aria-label="Inno Setup – JetBrains Plugin" data-md-component="logo">
+      
+  <img src="../../../assets/images/inno-setup-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Inno Setup – JetBrains Plugin
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              #define
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="选择当前语言">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../preprocessor/define/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="zh" class="md-select__link">
+              简体中文
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../ja/preprocessor/define/" hreflang="ja" class="md-select__link">
+              日本語
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../ko/preprocessor/define/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="Inno Setup – JetBrains Plugin" class="md-nav__button md-logo" aria-label="Inno Setup – JetBrains Plugin" data-md-component="logo">
+      
+  <img src="../../../assets/images/inno-setup-icon.png" alt="logo">
+
+    </a>
+    Inno Setup – JetBrains Plugin
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    主页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../file-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件类型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 脚本
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 脚本
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../script-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    脚本文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    节
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    节
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    类型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    组件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    任务
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/dirs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    目录
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/icons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    图标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/ini/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    注册表
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    运行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/uninstall-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    卸载运行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/languages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    语言
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/langoptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    语言选项
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    消息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/custom-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    自定义消息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/install-delete/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    安装删除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/uninstall-delete/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    卸载删除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/issigkeys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ISSig 密钥
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 语言文件
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 语言文件
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    语言文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    节
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    节
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/langoptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    语言选项
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    消息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/custom-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    自定义消息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 预处理器
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 预处理器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #define
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #define
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        语法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用宏：{#Name}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #define 中的表达式与运算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="#define 中的表达式与运算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        类型系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运算符
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数调用提供类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        递归引用解析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        插件标记为错误的内容
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数式宏体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内置函数参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预定义变量
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    构建集成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../run-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    运行配置
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../structure-view/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    结构视图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    设置
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    设置
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    常规
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../settings-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    构建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dokka/html/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API 文档
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../licences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    许可证
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        语法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用宏：{#Name}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #define 中的表达式与运算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="#define 中的表达式与运算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        类型系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运算符
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数调用提供类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        递归引用解析
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        插件标记为错误的内容
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        函数式宏体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内置函数参考
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        预定义变量
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="define"><code>#define</code></h1>
+<p><code>#define</code> 声明一个预处理器宏——一个在编译时被替换进脚本的命名值或表达式。它是最常用的 ISPP 指令，也是插件提供完整语义支持（引用解析、重命名和查找用法）的指令。</p>
+<hr />
+<h2 id="_1">语法</h2>
+<pre><code class="language-ini">#define Name [Value]
+#define Name(Param1, Param2) Expression
+</code></pre>
+<ul>
+<li><code>#define Name Value</code> 定义一个常量宏（可省略值，从而定义一个 <em>void</em> 宏）。</li>
+<li><code>#define Name(params) Expression</code> 定义类函数宏。插件会将没有表达式主体的类函数宏标记为错误。</li>
+<li><code>#undef Name</code> 移除先前定义的宏。</li>
+</ul>
+<hr />
+<h2 id="name">使用宏：<code>{#Name}</code></h2>
+<p>在普通脚本行内，<code>{#Name}</code>（<code>{#emit Name}</code> 的简写）会输出宏的值：</p>
+<pre><code class="language-ini">#define MyAppVersion &quot;1.5.0&quot;
+
+[Setup]
+AppVersion={#MyAppVersion}
+OutputBaseFilename=setup-{#MyAppVersion}
+</code></pre>
+<ul>
+<li><code>{#Name}</code> 解析到其 <code>#define</code> 声明——转到定义（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）和查找用法（<strong>Alt+F7</strong>）均可用，重命名会保持声明与所有用法同步。</li>
+<li>它在 <code>{</code> 之后和 <code>{#</code> 之后都会出现在补全中。</li>
+<li>从未使用的 <code>#define</code> 会被标记，并提供移除的快速修复。</li>
+</ul>
+<hr />
+<h2 id="define_1"><code>#define</code> 中的表达式与运算</h2>
+<p><code>#define</code> 的值不仅仅是字面量——它是一个完整的<strong>表达式</strong>。ISPP 在编译时使用类 C/C++ 的表达式语法对其求值，插件会对其进行解析、类型检查和高亮。单个字面量是最简单的情形；一旦组合多个值，就必须用<strong>运算符</strong>连接它们。</p>
+<pre><code class="language-ini">#define Major     1
+#define Minor     5
+#define Build     100
+#define Version   Str(Major) + &quot;.&quot; + Str(Minor)   ; 字符串连接
+#define NextBuild (Build + 1)                      ; 算术，带括号分组
+#define OutputDir &quot;Builds\\&quot; + Version             ; 与另一个宏连接
+#define IsBeta    Build &lt; 200                       ; 比较 → 整数 0/1
+</code></pre>
+<h3 id="_2">类型系统</h3>
+<p>每个表达式都具有以下类型之一；插件会推断它以验证运算：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>来源</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td>整数字面量（<code>100</code>）、算术/比较/逻辑结果</td>
+<td></td>
+</tr>
+<tr>
+<td><code>str</code></td>
+<td>字符串字面量（<code>"x"</code>、<code>'x'</code>）、返回字符串的函数</td>
+<td>单引号或双引号；重复的引号 <code>""</code> 表示字面量引号</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><strong>没有</strong>值的 <code>#define</code></td>
+<td>与 <code>int</code>（作为 <code>0</code>）和 <code>str</code>（作为 <code>""</code>）都兼容</td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td>未解析的引用、宏参数、未知函数结果、<code>{…}</code> 常量</td>
+<td>抑制类型检查——绝不产生误报</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">运算符</h3>
+<p>ISPP 支持完整的类 C/C++ 运算符集。插件会高亮每个运算符标记并应用以下类型规则。</p>
+<table>
+<thead>
+<tr>
+<th>分组</th>
+<th>运算符</th>
+<th>操作数类型</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>算术</td>
+<td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code></td>
+<td><code>int</code>（<code>+</code> 也可 <code>str</code> + <code>str</code>）</td>
+<td><code>int</code>（连接时为 <code>str</code>）</td>
+</tr>
+<tr>
+<td>字符串连接</td>
+<td><code>+</code></td>
+<td><code>str</code> + <code>str</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td>比较</td>
+<td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code> <code>==</code> <code>!=</code></td>
+<td>两者都是 <code>int</code> <strong>或</strong>都是 <code>str</code></td>
+<td><code>int</code>（<code>0</code>/<code>1</code>）</td>
+</tr>
+<tr>
+<td>逻辑</td>
+<td><code>&amp;&amp;</code> <code>\|\|</code> <code>!</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>位运算</td>
+<td><code>&amp;</code> <code>\|</code> <code>^</code> <code>~</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>移位</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>三元</td>
+<td><code>cond ? a : b</code></td>
+<td>条件为 <code>int</code></td>
+<td>分支的类型</td>
+</tr>
+<tr>
+<td>一元（前缀）</td>
+<td><code>+</code> <code>-</code> <code>~</code> <code>!</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>分组</td>
+<td><code>( … )</code></td>
+<td>—</td>
+<td>内部表达式的类型</td>
+</tr>
+<tr>
+<td>逗号</td>
+<td><code>a , b</code></td>
+<td>—</td>
+<td>右操作数的类型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>优先级</strong>（越高结合越紧，遵循 C/C++）：
+<code>( )</code> 和函数调用 → 一元 <code>+ - ~ !</code> → <code>* / %</code> → <code>+ -</code> → <code>&lt;&lt; &gt;&gt;</code> → <code>&lt; &gt; &lt;= &gt;=</code> → <code>== !=</code> →
+<code>&amp;</code> → <code>^</code> → <code>|</code> → <code>&amp;&amp;</code> → <code>||</code> → <code>?:</code> → <code>,</code>。
+拿不准时请使用括号——<code>#define X 1 + 2 * 3</code> 为 <code>7</code>，<code>#define X (1 + 2) * 3</code> 为 <code>9</code>。</p>
+<h3 id="_4">函数调用提供类型</h3>
+<p><code>#define</code> 的值可以调用任何 ISPP <strong>内置函数</strong>（完整的官方集合已随插件打包），函数的返回类型会流入周围的表达式——例如 <code>Str(...)</code> 为 <code>str</code>，<code>Int(...)</code> 和 <code>Power(...)</code> 为 <code>int</code>，<code>FileExists(...)</code> 为 <code>int</code>。因此 <code>Str(Major) + "."</code> 是有效的（<code>str</code> + <code>str</code>），而 <code>Str(Major) * 2</code> 会被拒绝。</p>
+<pre><code class="language-ini">#define FullVer  GetFileVersionString(&quot;app.exe&quot;)      ; str
+#define Padded   &quot;v&quot; + Str(Build)                       ; str + str → str
+#define Doubled  Power(2, 10) * 2                        ; int * int → int
+</code></pre>
+<h3 id="_5">递归引用解析</h3>
+<p>对另一个宏的引用会取<strong>该宏的</strong>类型，并通过名称递归解析——因此即使操作数本身是 <code>#define</code>，也能捕获类型错误：</p>
+<pre><code class="language-ini">#define A &quot;x&quot;
+#define B 5
+#define C A * B     ; A 是 str，B 是 int → &quot;str * int&quot; 会在 * 上被标记
+</code></pre>
+<p>解析只跟随<strong>向后</strong>引用（宏必须已在前面的行声明）。这使得格式正确的脚本不可能形成引用环。残留的环（例如自引用 <code>#define P P + 1</code>，或顺序错乱的相互引用）会被安全地打断：引用退化为 <code>any</code>，因此既不会无限循环也不会产生误报。</p>
+<h3 id="_6">插件标记为错误的内容</h3>
+<p>每个问题都报告为<strong>错误</strong>，并锚定到确切的出错标记（而非整行）：</p>
+<table>
+<thead>
+<tr>
+<th>示例</th>
+<th>标记的标记</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#define X "a" * "b"</code></td>
+<td><code>*</code></td>
+<td>对字符串操作数使用算术运算符</td>
+</tr>
+<tr>
+<td><code>#define X 1 + "s"</code></td>
+<td><code>+</code></td>
+<td>在 <code>+</code> 中混用整数和字符串</td>
+</tr>
+<tr>
+<td><code>#define X "a" &lt; 1</code></td>
+<td><code>&lt;</code></td>
+<td>比较字符串与整数</td>
+</tr>
+<tr>
+<td><code>#define X -"s"</code></td>
+<td><code>"s"</code></td>
+<td>对字符串操作数使用一元负号</td>
+</tr>
+<tr>
+<td><code>#define X 5 6</code></td>
+<td><code>6</code></td>
+<td>两个操作数之间缺少运算符</td>
+</tr>
+<tr>
+<td><code>#define X (1 + 2</code></td>
+<td><code>(</code></td>
+<td>括号不匹配</td>
+</tr>
+</tbody>
+</table>
+<p>涉及 <code>any</code> 操作数（未解析的引用、宏参数、未知函数或 <code>{…}</code> 常量）的表达式会被有意地<strong>不</strong>标记，以避免在有效脚本上产生误报。</p>
+<h3 id="_7">函数式宏体</h3>
+<p>表达式规则同样适用于函数式宏体；参数被视为 <code>any</code>，因此绝不会触发类型错误：</p>
+<pre><code class="language-ini">#define Max(a, b) a &gt; b ? a : b
+#define Clamp(x)  x &lt; 0 ? 0 : x
+</code></pre>
+<hr />
+<h2 id="_8">内置函数参考</h2>
+<p>ISPP 提供大量可在 <code>#define</code> 表达式中调用的<strong>内置函数</strong>。插件捆绑了完整的官方集合；每个函数的返回类型会供给表达式类型检查器（见上文），并在补全中提供。下表是详尽的，并（与官方 ISPP 函数索引一致）按字母顺序排列。</p>
+<div class="admonition note">
+<p class="admonition-title">记法</p>
+<p>标记为 <code>Name: int*</code> / <code>Name: str*</code> 的参数按<strong>引用传递</strong>——函数会写回所提供的变量。末尾的 <code>= value</code> 表示带默认值的<strong>可选</strong>参数。</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>返回</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AddBackslash(S: str): str</code></td>
+<td><code>str</code></td>
+<td>如果 S 末尾没有反斜杠则添加。</td>
+</tr>
+<tr>
+<td><code>AddQuotes(S: str): str</code></td>
+<td><code>str</code></td>
+<td>如果 S 包含空格，则用双引号将其括起。</td>
+</tr>
+<tr>
+<td><code>ChangeFileExt(Filename: str, Extension: str): str</code></td>
+<td><code>str</code></td>
+<td>返回将 Filename 的扩展名替换为 Extension 后的结果。</td>
+</tr>
+<tr>
+<td><code>ComparePackedVersion(Version1: int, Version2: int): int</code></td>
+<td><code>int</code></td>
+<td>比较两个打包（编码）的版本号；返回 -1、0 或 1。</td>
+</tr>
+<tr>
+<td><code>Copy(S: str, Index: int, Count: int): str</code></td>
+<td><code>str</code></td>
+<td>返回 S 的子字符串。Index 从 1 开始。</td>
+</tr>
+<tr>
+<td><code>CopyFile(ExistingFile: str, NewFile: str): int</code></td>
+<td><code>int</code></td>
+<td>在编译时复制现有文件；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>DecodeVer(Version: int): str</code></td>
+<td><code>str</code></td>
+<td>将打包的版本号转换为以点分隔的版本字符串。</td>
+</tr>
+<tr>
+<td><code>Defined(Ident): int</code></td>
+<td><code>int</code></td>
+<td>如果标识符已定义则返回 1，否则返回 0。</td>
+</tr>
+<tr>
+<td><code>Delete(S: str*, Index: int, Count: int)</code></td>
+<td><code>void</code></td>
+<td>从 Index 开始删除 S 中的 Count 个字符（按引用修改 S）。</td>
+</tr>
+<tr>
+<td><code>DeleteFile(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>在编译时删除文件；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>DeleteFileNow(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>在预处理期间立即删除文件；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>DimOf(Array): int</code></td>
+<td><code>int</code></td>
+<td>返回数组变量的元素个数。</td>
+</tr>
+<tr>
+<td><code>DirExists(Path: str): int</code></td>
+<td><code>int</code></td>
+<td>如果目录存在则返回 1，否则返回 0。</td>
+</tr>
+<tr>
+<td><code>EmitLanguagesSection()</code></td>
+<td><code>void</code></td>
+<td>从捆绑的语言文件生成 [Languages] 节。</td>
+</tr>
+<tr>
+<td><code>EncodeVer(Major: int, Minor: int, Revision: int = 0, Build: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>将版本组成部分编码为单个打包的版本号。</td>
+</tr>
+<tr>
+<td><code>EntryCount(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>返回指定脚本节中的条目数。</td>
+</tr>
+<tr>
+<td><code>Error(Message: str)</code></td>
+<td><code>void</code></td>
+<td>使用给定消息引发编译时错误。</td>
+</tr>
+<tr>
+<td><code>Exec(CmdLine: str, Params: str = "", WorkingDir: str = "", ShowCmd: int = 0, Wait: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>在编译时执行程序；返回进程退出代码。</td>
+</tr>
+<tr>
+<td><code>ExecAndGetFirstLine(CmdLine: str, Params: str = "", WorkingDir: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>执行程序并返回其标准输出的第一行。</td>
+</tr>
+<tr>
+<td><code>ExtractFileDir(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>返回 Filename 的目录部分（不含末尾反斜杠）。</td>
+</tr>
+<tr>
+<td><code>ExtractFileExt(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>返回 Filename 的扩展名（含前导点）。</td>
+</tr>
+<tr>
+<td><code>ExtractFileName(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>返回 Filename 的名称和扩展名部分。</td>
+</tr>
+<tr>
+<td><code>ExtractFilePath(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>返回 Filename 的驱动器和目录部分（含末尾反斜杠）。</td>
+</tr>
+<tr>
+<td><code>FileClose(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>关闭先前用 FileOpen 打开的文件。</td>
+</tr>
+<tr>
+<td><code>FileEof(Handle: int): int</code></td>
+<td><code>int</code></td>
+<td>当到达已打开文件的末尾时返回非零值。</td>
+</tr>
+<tr>
+<td><code>FileExists(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>如果文件存在则返回 1，否则返回 0。</td>
+</tr>
+<tr>
+<td><code>FileOpen(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>以只读方式打开文本文件并返回文件句柄。</td>
+</tr>
+<tr>
+<td><code>FileRead(Handle: int): str</code></td>
+<td><code>str</code></td>
+<td>从已打开的文件中读取下一行。</td>
+</tr>
+<tr>
+<td><code>FileReset(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>将已打开文件的读取位置重置到开头。</td>
+</tr>
+<tr>
+<td><code>FileSize(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>返回文件的大小（字节）。</td>
+</tr>
+<tr>
+<td><code>Find(S: str, Substr: str, Index: int = 1): int</code></td>
+<td><code>int</code></td>
+<td>返回从 Index 开始 S 中 Substr 的位置，找不到则返回 0。</td>
+</tr>
+<tr>
+<td><code>FindClose(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>关闭用 FindFirst 打开的搜索句柄。</td>
+</tr>
+<tr>
+<td><code>FindCode(): int</code></td>
+<td><code>int</code></td>
+<td>返回 [Code] 节开始的行索引。</td>
+</tr>
+<tr>
+<td><code>FindFirst(Pattern: str, Attributes: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>开始文件搜索并返回句柄；若无匹配则返回负值。</td>
+</tr>
+<tr>
+<td><code>FindGetFileName(Handle: int): str</code></td>
+<td><code>str</code></td>
+<td>返回当前 FindFirst/FindNext 找到的文件名。</td>
+</tr>
+<tr>
+<td><code>FindNext(Handle: int): int</code></td>
+<td><code>int</code></td>
+<td>将文件搜索推进到下一个匹配项；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>FindSection(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>返回给定节标题的行索引。</td>
+</tr>
+<tr>
+<td><code>FindSectionEnd(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>返回给定节最后一个条目之后的行索引。</td>
+</tr>
+<tr>
+<td><code>ForceDirectories(Dir: str): int</code></td>
+<td><code>int</code></td>
+<td>在编译时创建目录树；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>GetDateTimeString(Format: str, DateSep: str, TimeSep: str): str</code></td>
+<td><code>str</code></td>
+<td>按 Format 格式化并返回当前日期/时间。</td>
+</tr>
+<tr>
+<td><code>GetEnv(Name: str): str</code></td>
+<td><code>str</code></td>
+<td>返回环境变量的值。</td>
+</tr>
+<tr>
+<td><code>GetFileCompanyString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回 CompanyName 字符串。</td>
+</tr>
+<tr>
+<td><code>GetFileCopyrightString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回 LegalCopyright 字符串。</td>
+</tr>
+<tr>
+<td><code>GetFileDateTimeString(Filename: str, Format: str, DateSep: str, TimeSep: str): str</code></td>
+<td><code>str</code></td>
+<td>按 Format 格式化并返回文件的最后修改时间戳。</td>
+</tr>
+<tr>
+<td><code>GetFileDescriptionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回 FileDescription 字符串。</td>
+</tr>
+<tr>
+<td><code>GetFileOriginalFilenameString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回 OriginalFilename 字符串。</td>
+</tr>
+<tr>
+<td><code>GetFileProductVersionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回 ProductVersion 字符串。</td>
+</tr>
+<tr>
+<td><code>GetFileVersionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>以点分隔的字符串返回可执行文件或 DLL 的文件版本，例如 <code>1.2.3.4</code>。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回文件的 MD5 哈希。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 ANSI 字符串的 MD5 哈希。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 Unicode 字符串的 MD5 哈希。</td>
+</tr>
+<tr>
+<td><code>GetPackedVersion(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>返回文件的打包（编码）版本号。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回文件的 SHA-1 哈希。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 ANSI 字符串的 SHA-1 哈希。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 Unicode 字符串的 SHA-1 哈希。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回文件的 SHA-256 哈希。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 ANSI 字符串的 SHA-256 哈希。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>以十六进制字符串返回 Unicode 字符串的 SHA-256 哈希。</td>
+</tr>
+<tr>
+<td><code>GetStringFileInfo(Filename: str, Key: str): str</code></td>
+<td><code>str</code></td>
+<td>从文件的版本信息中返回字符串。常用键：<code>FileVersion</code>、<code>ProductVersion</code>、<code>CompanyName</code>。</td>
+</tr>
+<tr>
+<td><code>GetVersionComponents(Filename: str, Major: int*, Minor: int*, Revision: int*, Build: int*): int</code></td>
+<td><code>int</code></td>
+<td>将文件的版本组成部分读入引用变量；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>GetVersionNumbers(Filename: str, VersionMS: int*, VersionLS: int*): int</code></td>
+<td><code>int</code></td>
+<td>将文件的版本读入引用的高/低位字；成功时返回非零值。</td>
+</tr>
+<tr>
+<td><code>GetVersionNumbersString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>以点分隔的字符串返回文件的版本，例如 <code>1.2.3.4</code>。</td>
+</tr>
+<tr>
+<td><code>Insert(Source: str, S: str*, Index: int)</code></td>
+<td><code>void</code></td>
+<td>将 Source 插入到 S 的 Index 处（按引用修改 S）。</td>
+</tr>
+<tr>
+<td><code>Int(Value: any, Default: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>将值转换为整数，转换失败时使用 Default。</td>
+</tr>
+<tr>
+<td><code>Is64BitPEImage(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>如果给定的 PE 映像是 64 位则返回非零值。</td>
+</tr>
+<tr>
+<td><code>IsWin64(): int</code></td>
+<td><code>int</code></td>
+<td>当编译器运行在 64 位 Windows 上时返回非零值。</td>
+</tr>
+<tr>
+<td><code>Len(S: str): int</code></td>
+<td><code>int</code></td>
+<td>返回字符串的长度。</td>
+</tr>
+<tr>
+<td><code>LowerCase(S: str): str</code></td>
+<td><code>str</code></td>
+<td>返回转换为小写的字符串。</td>
+</tr>
+<tr>
+<td><code>Max(A: int, B: int): int</code></td>
+<td><code>int</code></td>
+<td>返回两个整数中较大的一个。</td>
+</tr>
+<tr>
+<td><code>Message(S: str)</code></td>
+<td><code>void</code></td>
+<td>在编译器日志中输出一条信息性消息。</td>
+</tr>
+<tr>
+<td><code>Min(A: int, B: int): int</code></td>
+<td><code>int</code></td>
+<td>返回两个整数中较小的一个。</td>
+</tr>
+<tr>
+<td><code>PackVersionComponents(Major: int, Minor: int, Revision: int, Build: int): int</code></td>
+<td><code>int</code></td>
+<td>将版本组成部分打包为单个打包的版本号。</td>
+</tr>
+<tr>
+<td><code>PackVersionNumbers(VersionMS: int, VersionLS: int): int</code></td>
+<td><code>int</code></td>
+<td>将高/低位版本字打包为单个打包的版本号。</td>
+</tr>
+<tr>
+<td><code>Pos(Substr: str, S: str): int</code></td>
+<td><code>int</code></td>
+<td>返回 S 中 Substr 从 1 开始的位置，找不到则返回 0。</td>
+</tr>
+<tr>
+<td><code>Power(Base: int, Exponent: int): int</code></td>
+<td><code>int</code></td>
+<td>返回 Base 的 Exponent 次幂。</td>
+</tr>
+<tr>
+<td><code>ReadIni(Filename: str, Section: str, Key: str, Default: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>在编译时从 INI 文件读取值。</td>
+</tr>
+<tr>
+<td><code>ReadReg(RootKey: int, SubKeyName: str, ValueName: str = "", Default: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>在编译时读取注册表值。</td>
+</tr>
+<tr>
+<td><code>RemoveBackslashUnlessRoot(S: str): str</code></td>
+<td><code>str</code></td>
+<td>除非 S 是驱动器根目录，否则删除 S 末尾的反斜杠。</td>
+</tr>
+<tr>
+<td><code>RemoveFileExt(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>返回去掉扩展名后的 Filename。</td>
+</tr>
+<tr>
+<td><code>RPos(Substr: str, S: str): int</code></td>
+<td><code>int</code></td>
+<td>返回 S 中 Substr 最后一次出现的从 1 开始的位置，找不到则返回 0。</td>
+</tr>
+<tr>
+<td><code>SamePackedVersion(Version1: int, Version2: int): int</code></td>
+<td><code>int</code></td>
+<td>如果两个打包的版本号相等则返回非零值。</td>
+</tr>
+<tr>
+<td><code>SameStr(S1: str, S2: str): int</code></td>
+<td><code>int</code></td>
+<td>如果两个字符串相等（不区分大小写）则返回非零值。</td>
+</tr>
+<tr>
+<td><code>SameText(S1: str, S2: str): int</code></td>
+<td><code>int</code></td>
+<td>如果两个字符串相等（不区分大小写）则返回非零值。</td>
+</tr>
+<tr>
+<td><code>SaveStringToFile(Filename: str, S: str, Append: int = 0)</code></td>
+<td><code>void</code></td>
+<td>将字符串写入文件，可选择追加。</td>
+</tr>
+<tr>
+<td><code>SaveToFile(Filename: str)</code></td>
+<td><code>void</code></td>
+<td>将到目前为止收集的预处理输出写入文件（调试辅助）。</td>
+</tr>
+<tr>
+<td><code>SetSetupSetting(Name: str, Value: str)</code></td>
+<td><code>void</code></td>
+<td>在编译时设置 [Setup] 节指令。</td>
+</tr>
+<tr>
+<td><code>SetupSetting(Name: str): str</code></td>
+<td><code>str</code></td>
+<td>按名称返回 [Setup] 节指令的值。</td>
+</tr>
+<tr>
+<td><code>Str(Value: any): str</code></td>
+<td><code>str</code></td>
+<td>将值转换为字符串。整数变为文本，void 变为空字符串。</td>
+</tr>
+<tr>
+<td><code>StringChange(S: str*, FromStr: str, ToStr: str): int</code></td>
+<td><code>int</code></td>
+<td>将 S 中所有的 FromStr 替换为 ToStr；返回替换次数。</td>
+</tr>
+<tr>
+<td><code>StrToVersion(S: str): int</code></td>
+<td><code>int</code></td>
+<td>将以点分隔的版本字符串解析为打包的版本号。</td>
+</tr>
+<tr>
+<td><code>Trim(S: str): str</code></td>
+<td><code>str</code></td>
+<td>返回去掉首尾空白后的 S。</td>
+</tr>
+<tr>
+<td><code>TypeOf(Ident): int</code></td>
+<td><code>int</code></td>
+<td>返回标识符的类型：0=void、1=int、2=str。</td>
+</tr>
+<tr>
+<td><code>UnpackVersionComponents(Version: int, Major: int*, Minor: int*, Revision: int*, Build: int*)</code></td>
+<td><code>void</code></td>
+<td>将打包的版本号拆分到引用的组成部分中。</td>
+</tr>
+<tr>
+<td><code>UnpackVersionNumbers(Version: int, VersionMS: int*, VersionLS: int*)</code></td>
+<td><code>void</code></td>
+<td>将打包的版本号拆分到引用的高/低位字中。</td>
+</tr>
+<tr>
+<td><code>UpperCase(S: str): str</code></td>
+<td><code>str</code></td>
+<td>返回转换为大写的字符串。</td>
+</tr>
+<tr>
+<td><code>VersionToStr(Version: int): str</code></td>
+<td><code>str</code></td>
+<td>将打包的版本号转换为以点分隔的版本字符串。</td>
+</tr>
+<tr>
+<td><code>Warning(Message: str)</code></td>
+<td><code>void</code></td>
+<td>使用给定消息发出编译时警告。</td>
+</tr>
+<tr>
+<td><code>WriteIni(Filename: str, Section: str, Key: str, Value: str)</code></td>
+<td><code>void</code></td>
+<td>在编译时将值写入 INI 文件。</td>
+</tr>
+<tr>
+<td><code>YesNo(S: str): int</code></td>
+<td><code>int</code></td>
+<td>如果字符串表示肯定（yes/true）值则返回非零值。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_9">预定义变量</h2>
+<p>除了你自己的 <code>#define</code>，ISPP 还提供一组无需声明即可使用的<strong>预定义变量</strong>。其中<strong>带值的</strong>变量（<code>int</code> / <code>str</code>）可以像用户定义一样通过 <code>{#…}</code> 内联输出，也可在表达式中使用；<strong>无值的</strong>变量（<code>void</code>）仅用于条件编译。下表是完整的：</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__COUNTER__</code></td>
+<td><code>int</code></td>
+<td>自动递增计数器；每次使用时递增。</td>
+</tr>
+<tr>
+<td><code>__LINE__</code></td>
+<td><code>int</code></td>
+<td>当前文件中的当前行号。</td>
+</tr>
+<tr>
+<td><code>__FILENAME__</code></td>
+<td><code>str</code></td>
+<td>当前包含文件路径的文件名部分。</td>
+</tr>
+<tr>
+<td><code>__PATHFILENAME__</code></td>
+<td><code>str</code></td>
+<td>当前包含文件的完整路径。</td>
+</tr>
+<tr>
+<td><code>__DIR__</code></td>
+<td><code>str</code></td>
+<td>当前包含文件路径的目录部分。</td>
+</tr>
+<tr>
+<td><code>__INCLUDE__</code></td>
+<td><code>str</code></td>
+<td>当前包含路径（多个路径以分号分隔）。</td>
+</tr>
+<tr>
+<td><code>__WIN32__</code></td>
+<td><code>void</code></td>
+<td>始终已定义。可与 #ifdef 一起用于检测 ISPP 环境。</td>
+</tr>
+<tr>
+<td><code>ISPP_INVOKED</code></td>
+<td><code>void</code></td>
+<td>当 ISPP 处于活动状态时始终已定义。</td>
+</tr>
+<tr>
+<td><code>ISCC_INVOKED</code></td>
+<td><code>void</code></td>
+<td>当使用控制台模式编译器（ISCC.exe）编译时已定义。</td>
+</tr>
+<tr>
+<td><code>PREPROCVER</code></td>
+<td><code>int</code></td>
+<td>Inno Setup 预处理器的 32 位打包版本号。</td>
+</tr>
+<tr>
+<td><code>Ver</code></td>
+<td><code>int</code></td>
+<td>PREPROCVER 的别名。</td>
+</tr>
+<tr>
+<td><code>WINDOWS</code></td>
+<td><code>void</code></td>
+<td>始终已定义。</td>
+</tr>
+<tr>
+<td><code>UNICODE</code></td>
+<td><code>void</code></td>
+<td>始终已定义（ISPP 仅支持 Unicode）。</td>
+</tr>
+<tr>
+<td><code>CompilerPath</code></td>
+<td><code>str</code></td>
+<td>Inno Setup 编译器（ISCC.exe）所在的目录。</td>
+</tr>
+<tr>
+<td><code>SourcePath</code></td>
+<td><code>str</code></td>
+<td>包含根脚本文件的目录。</td>
+</tr>
+<tr>
+<td><code>SysPath</code></td>
+<td><code>str</code></td>
+<td>与编译器类型相对应的系统目录。</td>
+</tr>
+<tr>
+<td><code>NewLine</code></td>
+<td><code>str</code></td>
+<td>换行符序列。</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td><code>str</code></td>
+<td>制表符。</td>
+</tr>
+</tbody>
+</table>
+<p>这些变量出现在 <code>{#…}</code> 补全中并被验证接受。与路径相关的变量（<code>{#SourcePath}</code>、<code>{#__DIR__}</code>、<code>{#CompilerPath}</code>、<code>{#SysPath}</code>）在插件解析 <code>[Languages]</code> 的 <code>MessagesFile</code> 路径时也会被展开；其余动态变量保持未解析，而不会产生误报错误。</p>
+<div class="admonition note">
+<p class="admonition-title">无值符号</p>
+<p><code>__WIN32__</code>、<code>ISPP_INVOKED</code>、<code>ISCC_INVOKED</code>、<code>WINDOWS</code> 和 <code>UNICODE</code> <strong>没有值</strong>：它们仅为条件编译（<code>#ifdef</code> / <code>#if defined(...)</code>）而<em>定义</em>，因此<strong>不能</strong>通过 <code>{#…}</code> 输出。它们被排除在 <code>{#…}</code> 补全之外，也不被接受为内联输出。</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"alias": true, "provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

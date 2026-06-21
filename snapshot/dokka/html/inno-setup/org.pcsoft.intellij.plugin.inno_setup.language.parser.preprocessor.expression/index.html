@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    inno-setup
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+snapshot        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression////PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../index.html">inno-setup</a><span class="delimiter">/</span><span class="current">org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-257307214%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprBinary" id="-257307214%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-binary/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Binary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-257307214%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-binary/index.html">IsPreprocessorExprBinary</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>operator<span class="token operator">: </span><a href="-is-preprocessor-expr-binary-operator/index.html">IsPreprocessorExprBinaryOperator</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>opSpan<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>left<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>right<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A binary operation such as <code class="lang-kotlin">a * b</code>. <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression/IsPreprocessorExprBinary//#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprBinaryOperator#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprSpan#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprNode#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprNode#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprSpan/PointingToCallableParameters(1)/">opSpan</span> is the operator token used for error highlighting.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1307356050%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprBinaryOperator" id="-1307356050%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-binary-operator/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Binary</span><wbr></wbr><span><span>Operator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1307356050%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-preprocessor-expr-binary-operator/index.html">IsPreprocessorExprBinaryOperator</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-binary-operator/index.html">IsPreprocessorExprBinaryOperator</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">ISPP binary operators with their C/C++-like precedence (higher binds tighter) and category.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-139394443%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprCall" id="-139394443%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-call/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Call</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-139394443%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-call/index.html">IsPreprocessorExprCall</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>nameSpan<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>arguments<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A built-in or user function call such as <code class="lang-kotlin">Str(Major)</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="807219951%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprConstant" id="807219951%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-constant/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Constant</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="807219951%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-constant/index.html">IsPreprocessorExprConstant</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A <code class="lang-kotlin">{…}</code> constant — its type is not statically known, so it is treated as <a href="-is-preprocessor-expr-type/-a-n-y/index.html">IsPreprocessorExprType.ANY</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1121504086%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprDefineInfo" id="-1121504086%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-define-info/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Define</span><wbr></wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1121504086%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-define-info/index.html">IsPreprocessorExprDefineInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>expression<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A <code class="lang-kotlin">#define Name Expression</code> declaration as seen by the resolver, ordered by <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression/IsPreprocessorExprDefineInfo//#kotlin.String#kotlin.String#kotlin.Int/PointingToCallableParameters(2)/">order</span> (declaration order).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2087310110%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprEmpty" id="-2087310110%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-empty/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Empty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2087310110%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-empty/index.html">IsPreprocessorExprEmpty</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">An empty expression (a <code class="lang-kotlin">#define</code> without a value) — type <a href="-is-preprocessor-expr-type/-v-o-i-d/index.html">IsPreprocessorExprType.VOID</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="138483847%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprError" id="138483847%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-error/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Error</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="138483847%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-error/index.html">IsPreprocessorExprError</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A problem detected during analysis, anchored at the precise offending <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression/IsPreprocessorExprError//#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprSpan#kotlin.String/PointingToCallableParameters(0)/">span</span>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1087494747%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprErrorNode" id="-1087494747%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-error-node/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Error</span><wbr></wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1087494747%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-error-node/index.html">IsPreprocessorExprErrorNode</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A placeholder for a missing operand; never produced for valid input.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1037267648%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprEvaluator" id="-1037267648%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-evaluator/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Evaluator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1037267648%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-expr-evaluator/index.html">IsPreprocessorExprEvaluator</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">referenceValue<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a><span class="token operator">?</span><span class="token operator"> = </span>{ null }<span class="token punctuation">, </span></span><span class="parameter ">callValue<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a><span class="token operator">?</span><span class="token operator"> = </span>{ _, _ -&gt; null }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Statically evaluates an <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a> tree to an <a href="-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a> (integer or string), or <code class="lang-kotlin">null</code> when the value cannot be determined (function calls, <code class="lang-kotlin">{…}</code> constants, unresolved references, version-style numbers, division by zero, type-mismatched operands).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="765002029%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprFunctionMacroInfo" id="765002029%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-function-macro-info/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Function</span><wbr></wbr><span>Macro</span><wbr></wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="765002029%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-function-macro-info/index.html">IsPreprocessorExprFunctionMacroInfo</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>parameters<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>body<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>order<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A function-like macro <code class="lang-kotlin">#define Name(params…) body</code> as seen by the resolver, ordered by <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression/IsPreprocessorExprFunctionMacroInfo//#kotlin.String#kotlin.collections.List[kotlin.String]#kotlin.String#kotlin.Int/PointingToCallableParameters(3)/">order</span>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="524802003%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprIntLiteral" id="524802003%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-int-literal/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Int</span><wbr></wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="524802003%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-int-literal/index.html">IsPreprocessorExprIntLiteral</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">An integer literal such as <code class="lang-kotlin">100</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="303329105%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprNode" id="303329105%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-node/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="303329105%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">Abstract syntax tree node of an ISPP expression. Every node carries its source <a href="-is-preprocessor-expr-node/span.html">span</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="56077457%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprOperatorCategory" id="56077457%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-operator-category/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Operator</span><wbr></wbr><span><span>Category</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56077457%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-preprocessor-expr-operator-category/index.html">IsPreprocessorExprOperatorCategory</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-operator-category/index.html">IsPreprocessorExprOperatorCategory</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Category of an ISPP operator, used both for type rules and for highlighting.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-843485920%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprOperators" id="-843485920%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-operators/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Operators</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-843485920%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-expr-operators/index.html">IsPreprocessorExprOperators</a></div><div class="brief "><p class="paragraph">Registry of the operator symbols the tokenizer recognises.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="214849477%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprParen" id="214849477%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-paren/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Paren</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="214849477%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-paren/index.html">IsPreprocessorExprParen</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>inner<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A parenthesised expression <code class="lang-kotlin">( inner )</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1377674412%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprParser" id="-1377674412%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-parser/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Parser</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1377674412%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-expr-parser/index.html">IsPreprocessorExprParser</a></div><div class="brief "><p class="paragraph">A fault-tolerant recursive-descent / precedence-climbing parser for ISPP expressions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2131131487%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprParseResult" id="2131131487%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-parse-result/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Parse</span><wbr></wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2131131487%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-parse-result/index.html">IsPreprocessorExprParseResult</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ast<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>errors<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-error/index.html">IsPreprocessorExprError</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Result of parsing an ISPP expression: its AST plus any structural (syntax) errors found.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-830001756%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprReference" id="-830001756%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-reference/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-830001756%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-reference/index.html">IsPreprocessorExprReference</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A reference to another macro, a predefined variable or a macro parameter.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="908437257%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprSpan" id="908437257%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-span/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Span</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="908437257%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>start<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>end<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A half-open <code class="lang-kotlin">[start, end)</code> range within the analysed expression string.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1764854251%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprStrLiteral" id="-1764854251%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-str-literal/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Str</span><wbr></wbr><span><span>Literal</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1764854251%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-str-literal/index.html">IsPreprocessorExprStrLiteral</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A string literal such as <code class="lang-kotlin">&quot;.&quot;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-147076204%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprTernary" id="-147076204%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-ternary/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Ternary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-147076204%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-ternary/index.html">IsPreprocessorExprTernary</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>condition<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>whenTrue<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>whenFalse<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A ternary conditional <code class="lang-kotlin">cond ? whenTrue : whenFalse</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1138208330%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprToken" id="-1138208330%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-token/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Token</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1138208330%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-token/index.html">IsPreprocessorExprToken</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>type<span class="token operator">: </span><a href="-is-preprocessor-expr-token-type/index.html">IsPreprocessorExprTokenType</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>start<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>end<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A single lexical token of an ISPP expression.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1395254104%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprTokenizer" id="1395254104%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-tokenizer/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Tokenizer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1395254104%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-expr-tokenizer/index.html">IsPreprocessorExprTokenizer</a></div><div class="brief "><p class="paragraph">Splits an ISPP expression string into <a href="-is-preprocessor-expr-token/index.html">IsPreprocessorExprToken</a>s.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1564319004%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprTokenType" id="1564319004%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-token-type/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Token</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1564319004%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-preprocessor-expr-token-type/index.html">IsPreprocessorExprTokenType</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-token-type/index.html">IsPreprocessorExprTokenType</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Kinds of token the <a href="-is-preprocessor-expr-tokenizer/index.html">IsPreprocessorExprTokenizer</a> produces.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="569040153%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprType" id="569040153%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-type/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="569040153%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">The ISPP expression type system (<code class="lang-kotlin">topic_expressions</code>).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="299057776%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprTypeInference" id="299057776%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-type-inference/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Inference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="299057776%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-expr-type-inference/index.html">IsPreprocessorExprTypeInference</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">referenceType<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator"> = </span>{ IsPreprocessorExprType.ANY }<span class="token punctuation">, </span></span><span class="parameter ">functionCallType<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator"> = </span>{ _, _ -&gt; IsPreprocessorExprType.ANY }<span class="token punctuation">, </span></span><span class="parameter ">functionMacroParameterTypes<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator"> = </span>{ null }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Infers the <a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a> of an <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a> tree and reports type violations.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-378688589%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprTypeResolver" id="-378688589%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-type-resolver/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Resolver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-378688589%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-expr-type-resolver/index.html">IsPreprocessorExprTypeResolver</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defines<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-define-info/index.html">IsPreprocessorExprDefineInfo</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">functionMacros<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-function-macro-info/index.html">IsPreprocessorExprFunctionMacroInfo</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span></span><span class="parameter ">variableType<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">?</span><span class="token operator"> = </span>{ null }<span class="token punctuation">, </span></span><span class="parameter ">builtinReturnType<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator"> = </span>{ IsPreprocessorExprType.ANY }</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Resolves the <a href="-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a> of a referenced identifier by recursively inferring the type of the <code class="lang-kotlin">#define</code> it points at — so a type error like <code class="lang-kotlin">str * int</code> is detected even when the operands are themselves other <code class="lang-kotlin">#define</code>s (e.g. <code class="lang-kotlin">#define A &quot;x&quot;</code> / <code class="lang-kotlin">#define B 5</code> / <code class="lang-kotlin">#define C A * B</code>).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="684669760%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprUnary" id="684669760%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-unary/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Unary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="684669760%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-unary/index.html">IsPreprocessorExprUnary</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>operator<span class="token operator">: </span><a href="-is-preprocessor-expr-unary-operator/index.html">IsPreprocessorExprUnaryOperator</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>opSpan<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>operand<span class="token operator">: </span><a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>span<span class="token operator">: </span><a href="-is-preprocessor-expr-span/index.html">IsPreprocessorExprSpan</a></span></span><span class="token punctuation">)</span> : <a href="-is-preprocessor-expr-node/index.html">IsPreprocessorExprNode</a></div><div class="brief "><p class="paragraph">A prefix unary operation such as <code class="lang-kotlin">-x</code>. <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression/IsPreprocessorExprUnary//#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprUnaryOperator#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprSpan#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprNode#org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprSpan/PointingToCallableParameters(1)/">opSpan</span> is the operator token.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1450267644%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprUnaryOperator" id="1450267644%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-unary-operator/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Unary</span><wbr></wbr><span><span>Operator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1450267644%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-preprocessor-expr-unary-operator/index.html">IsPreprocessorExprUnaryOperator</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-unary-operator/index.html">IsPreprocessorExprUnaryOperator</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">ISPP prefix (unary) operators.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-262057666%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprValue" id="-262057666%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-value/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-262057666%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a></div><div class="brief "><p class="paragraph">A statically computed value of an ISPP expression. Only integers and strings are representable; an expression whose value cannot be determined (a function call, a <code class="lang-kotlin">{…}</code> constant, an unresolved reference) has no value and is represented as <code class="lang-kotlin">null</code> by the evaluator rather than an instance of this type.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1377053400%2FClasslikes%2F-251573632" anchor-label="IsPreprocessorExprValueResolver" id="1377053400%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-expr-value-resolver/index.html"><span>Is</span><wbr></wbr><span>Preprocessor</span><wbr></wbr><span>Expr</span><wbr></wbr><span>Value</span><wbr></wbr><span><span>Resolver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1377053400%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-expr-value-resolver/index.html">IsPreprocessorExprValueResolver</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defines<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-define-info/index.html">IsPreprocessorExprDefineInfo</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">functionMacros<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-preprocessor-expr-function-macro-info/index.html">IsPreprocessorExprFunctionMacroInfo</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Computes the static value of a <code class="lang-kotlin">#define</code> expression, resolving references to other simple <code class="lang-kotlin">#define</code>s and calls to function-like macros recursively — so <code class="lang-kotlin">#define A 10</code> / <code class="lang-kotlin">#define B A + 5</code> lets <code class="lang-kotlin">B</code> evaluate to <code class="lang-kotlin">15</code>, and <code class="lang-kotlin">#define f(x) &quot;a&quot; + x</code> / <code class="lang-kotlin">#define C f(&quot;b&quot;)</code> lets <code class="lang-kotlin">C</code> evaluate to <code class="lang-kotlin">&quot;ab&quot;</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.pcsoft.intellij.plugin.inno_setup.build</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="../../index.html" tabindex="1">
+                    inno-setup
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+snapshot        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true"
+                        data-filter=":/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox"
+                        data-role="dropdown-toggle"
+                        aria-controls="platform-tags-listbox"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                        aria-label="Toggle source sets"
+                ></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":/main"
+                                       data-filter=":/main"/>
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.build////PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../index.html">inno-setup</a><span class="delimiter">/</span><span class="current">org.pcsoft.intellij.plugin.inno_setup.build</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="26292290%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputConsoleFolding" id="26292290%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-console-folding/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span>Console</span><wbr></wbr><span><span>Folding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="26292290%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-build-output-console-folding/index.html">IsBuildOutputConsoleFolding</a> : <span data-unresolved-link="com.intellij.execution/ConsoleFolding///PointingToDeclaration/">ConsoleFolding</span></div><div class="brief "><p class="paragraph">Folds the indented detail lines of the ISCC compiler output in the Build tool window console (e.g. the <code class="lang-kotlin">Reading file: …</code> / <code class="lang-kotlin">Messages in script file</code> lines below a <code class="lang-kotlin">[Languages]</code> section). Consecutive indented lines are merged by the platform into a single, collapsed-by-default region whose placeholder shows the number of hidden lines.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1240646028%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputFilter" id="-1240646028%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-filter/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span><span>Filter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1240646028%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-build-output-filter/index.html">IsBuildOutputFilter</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.execution.filters/Filter///PointingToDeclaration/">Filter</span></div><div class="brief "><p class="paragraph">Console filter for the Inno Setup build output: turns the <code class="lang-kotlin">line XX</code> token of an ISCC error/warning line into a clickable hyperlink that opens the referenced file at that line.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-461495574%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputGrouper" id="-461495574%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-grouper/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span><span>Grouper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-461495574%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-build-output-grouper/index.html">IsBuildOutputGrouper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">onSection<span class="token operator">: </span><span class="token punctuation">(</span><a href="-is-build-output-grouper/-output-section/index.html">IsBuildOutputGrouper.OutputSection</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stateful segmenter that turns the flat stream of ISCC output lines into <a href="-is-build-output-grouper/-output-section/index.html">OutputSection</a>s — one group per Inno-Setup section (<code class="lang-kotlin">[Setup]</code>, <code class="lang-kotlin">[Languages]</code>, …) plus catch-all groups for any output that appears outside a section. Each completed section is reported through <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.build/IsBuildOutputGrouper//#kotlin.Function1[org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputGrouper.OutputSection,kotlin.Unit]/PointingToCallableParameters(0)/">onSection</span>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1422821015%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputMode" id="-1422821015%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-mode/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span><span>Mode</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1422821015%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-build-output-mode/index.html">IsBuildOutputMode</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-build-output-mode/index.html">IsBuildOutputMode</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Where ISCC should write its output when compiling on project build. The three modes are mutually exclusive and are surfaced in the settings as a single combo box so they cannot be combined into an invalid state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1999763539%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputParser" id="-1999763539%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-parser/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span><span>Parser</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1999763539%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-build-output-parser/index.html">IsBuildOutputParser</a></div><div class="brief "><p class="paragraph">Pure parser for ISCC console output. Turns raw compiler lines into structured results so the compiler service can render plain output, navigable error links, and positionless problems alike.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-511432986%2FClasslikes%2F-251573632" anchor-label="IsBuildOutputResolver" id="-511432986%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-output-resolver/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Output</span><wbr></wbr><span><span>Resolver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-511432986%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-build-output-resolver/index.html">IsBuildOutputResolver</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Determines the ISCC <code class="lang-kotlin">/O</code> argument for a script according to the configured <a href="-is-build-output-mode/index.html">IsBuildOutputMode</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1065247641%2FClasslikes%2F-251573632" anchor-label="IsBuildProjectTaskRunner" id="-1065247641%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-build-project-task-runner/index.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Project</span><wbr></wbr><span>Task</span><wbr></wbr><span><span>Runner</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1065247641%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-build-project-task-runner/index.html">IsBuildProjectTaskRunner</a> : <span data-unresolved-link="com.intellij.task/ProjectTaskRunner///PointingToDeclaration/">ProjectTaskRunner</span></div><div class="brief "><p class="paragraph">Hooks Inno Setup compilation into the IDE's <i>Build Project</i> pipeline. Participates in module build tasks when compilation on build is enabled (per project) and a valid ISCC installation is configured (IDE-wide), delegating the actual work to <a href="-is-compiler-service/index.html">IsCompilerService</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1082702885%2FClasslikes%2F-251573632" anchor-label="IsCompilerService" id="1082702885%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-compiler-service/index.html"><span>Is</span><wbr></wbr><span>Compiler</span><wbr></wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1082702885%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-compiler-service/index.html">IsCompilerService</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Compiles Inno Setup scripts with ISCC and streams the output into the IDE Build tool window as a dedicated &quot;Inno Setup&quot; build session. Shared by the project-build hook (<a href="-is-compiler-service/compile-project.html">compileProject</a>) and the per-file context-menu action (<a href="-is-compiler-service/compile-script.html">compileScript</a>).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1448484537%2FClasslikes%2F-251573632" anchor-label="IsScriptCollector" id="1448484537%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-script-collector/index.html"><span>Is</span><wbr></wbr><span>Script</span><wbr></wbr><span><span>Collector</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1448484537%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-script-collector/index.html">IsScriptCollector</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Finds the <code class="lang-kotlin">.iss</code> scripts in a project that should be compiled on build: the <strong>top-level</strong> scripts, i.e. those not pulled in via <code class="lang-kotlin">#include</code> from another <code class="lang-kotlin">.iss</code>. Include fragments would fail to compile standalone, so they are excluded.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1271264255%2FClasslikes%2F-251573632" anchor-label="IsScriptHasher" id="-1271264255%2FClasslikes%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-script-hasher/index.html"><span>Is</span><wbr></wbr><span>Script</span><wbr></wbr><span><span>Hasher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1271264255%2FClasslikes%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-script-hasher/index.html">IsScriptHasher</a></div><div class="brief "><p class="paragraph">Computes an MD5 hash over all files that participate in compiling a top-level <code class="lang-kotlin">.iss</code> script: the script itself, every <code class="lang-kotlin">.iss</code> pulled in (recursively) via <code class="lang-kotlin">#include</code>, and every <code class="lang-kotlin">.isl</code> language file referenced through a <code class="lang-kotlin">[Languages] MessagesFile:</code> entry that resolves to a local file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
