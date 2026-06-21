@@ -159,23 +159,21 @@ jobs:
       # `set`/`env` dump there reveals nothing.
       - name: Write signing material
         env:
-          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         run: |
           umask 077
-          printf '%s' "$CERTIFICATE_CHAIN"    > "$RUNNER_TEMP/chain.crt"
-          printf '%s' "$PRIVATE_KEY"          > "$RUNNER_TEMP/private.pem"
-          printf '%s' "$PRIVATE_KEY_PASSWORD" > "$RUNNER_TEMP/key.pass"
-          printf '%s' "$PUBLISH_TOKEN"        > "$RUNNER_TEMP/publish.token"
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/keystore.p12"
+          printf '%s' "$KEYSTORE_PASSWORD"           > "$RUNNER_TEMP/keystore.pass"
+          printf '%s' "$PUBLISH_TOKEN"               > "$RUNNER_TEMP/publish.token"
 
       - name: Publish to JetBrains Marketplace
         env:
-          PRIVATE_KEY_PASSWORD_FILE: ${{ runner.temp }}/key.pass
+          KEYSTORE_FILE: ${{ runner.temp }}/keystore.p12
+          KEYSTORE_PASSWORD_FILE: ${{ runner.temp }}/keystore.pass
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           PUBLISH_TOKEN_FILE: ${{ runner.temp }}/publish.token
-          CERTIFICATE_CHAIN_FILE: ${{ runner.temp }}/chain.crt
-          PRIVATE_KEY_FILE: ${{ runner.temp }}/private.pem
         run: |
           TAG="${{ github.ref_name }}"
           if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then CHANNEL="eap"; else CHANNEL="default"; fi

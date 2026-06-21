@@ -79,15 +79,15 @@ jobs:
       - name: Check signing secrets presence
         id: secrets
         env:
-          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          if [ -n "$CERTIFICATE_CHAIN" ] && [ -n "$PRIVATE_KEY" ] && [ -n "$PRIVATE_KEY_PASSWORD" ]; then
+          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Signing secrets (CERTIFICATE_CHAIN / PRIVATE_KEY / PRIVATE_KEY_PASSWORD) not configured — skipping signability check."
+            echo "::warning::Signing secrets (KEYSTORE_BASE64 / KEYSTORE_PASSWORD / KEY_ALIAS) not configured — skipping signability check."
           fi
 
       # Secrets touch the environment only in this trusted printf-only step; the Gradle/signer
@@ -95,21 +95,19 @@ jobs:
       - name: Write signing material
         if: steps.secrets.outputs.available == 'true'
         env:
-          CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
-          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-          PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         run: |
           umask 077
-          printf '%s' "$CERTIFICATE_CHAIN"    > "$RUNNER_TEMP/chain.crt"
-          printf '%s' "$PRIVATE_KEY"          > "$RUNNER_TEMP/private.pem"
-          printf '%s' "$PRIVATE_KEY_PASSWORD" > "$RUNNER_TEMP/key.pass"
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/keystore.p12"
+          printf '%s' "$KEYSTORE_PASSWORD"           > "$RUNNER_TEMP/keystore.pass"
 
       - name: Build and sign the plugin (signability check)
         if: steps.secrets.outputs.available == 'true'
         env:
-          PRIVATE_KEY_PASSWORD_FILE: ${{ runner.temp }}/key.pass
-          CERTIFICATE_CHAIN_FILE: ${{ runner.temp }}/chain.crt
-          PRIVATE_KEY_FILE: ${{ runner.temp }}/private.pem
+          KEYSTORE_FILE: ${{ runner.temp }}/keystore.p12
+          KEYSTORE_PASSWORD_FILE: ${{ runner.temp }}/keystore.pass
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: ./gradlew signPlugin --stacktrace --info
 
   # Build the docs as a generation test (mkdocs --strict) on every push and PR.

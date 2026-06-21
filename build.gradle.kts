@@ -41,18 +41,20 @@ intellijPlatform {
     instrumentCode = false
 
     signing {
-        // Material is read from files; only the (non-secret) *_FILE paths are passed via env, so no
-        // secret value lives in the build/signer process environment. file("") would fail at
-        // configuration time, hence the presence guards.
-        System.getenv("CERTIFICATE_CHAIN_FILE")?.takeIf { it.isNotBlank() }?.let { certificateChainFile = file(it) }
-        System.getenv("PRIVATE_KEY_FILE")?.takeIf { it.isNotBlank() }?.let { privateKeyFile = file(it) }
+        // Sign from a PKCS#12 keystore. Only non-secret values (the keystore path and key alias) go
+        // through env; the store password is read from a file (KEYSTORE_PASSWORD_FILE) so no secret
+        // value lives in the build/signer process environment. file("") would fail at configuration
+        // time, hence the presence guards.
+        System.getenv("KEYSTORE_FILE")?.takeIf { it.isNotBlank() }?.let { keyStore = file(it) }
+        keyStoreType = "PKCS12"
+        System.getenv("KEY_ALIAS")?.takeIf { it.isNotBlank() }?.let { keyStoreKeyAlias = it }
 
-        // Prefer the password from a file (PRIVATE_KEY_PASSWORD_FILE); fall back to the env var.
-        val pwFile = System.getenv("PRIVATE_KEY_PASSWORD_FILE")?.takeIf { it.isNotBlank() }
-        password = if (pwFile != null) {
+        // Prefer the password from a file (KEYSTORE_PASSWORD_FILE); fall back to the env var.
+        val pwFile = System.getenv("KEYSTORE_PASSWORD_FILE")?.takeIf { it.isNotBlank() }
+        keyStorePassword = if (pwFile != null) {
             providers.fileContents(layout.file(provider { File(pwFile) })).asText.map { it.trim() }
         } else {
-            providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+            providers.environmentVariable("KEYSTORE_PASSWORD")
         }
     }
 
@@ -125,6 +127,37 @@ plugins.withId("org.jetbrains.kotlin.jvm") {
 }
 
 tasks {
+    //region Signing
+    // Local convenience task: sign the built plugin with the project's own PKCS#12 keystore stored
+    // under .signing/ (gitignored). Keystore path + alias are fixed; the keystore password is taken
+    // from -PkeyPassword=… or the KEYSTORE_PASSWORD env var. (No interactive prompt: a console-reading
+    // provider is not serializable by the configuration cache, which is enabled project-wide.)
+    register<SignPluginTask>("selfSignPlugin") {
+        val signPluginTask = named<SignPluginTask>("signPlugin")
+        group = "intellij platform"
+        description = "Sign the plugin locally with the project's own PKCS#12 keystore (.signing/)."
+
+        // Reuse the wiring of the built-in signPlugin task (input archive + signer tool + output path).
+        archiveFile.set(signPluginTask.flatMap { it.archiveFile })
+        signedArchiveFile.set(signPluginTask.flatMap { it.signedArchiveFile })
+        zipSignerExecutable.set(signPluginTask.flatMap { it.zipSignerExecutable })
+
+        // Hard-coded keystore; never committed (see .gitignore).
+        keyStore.set(layout.projectDirectory.file(".signing/keystore.p12"))
+        keyStoreType.set("PKCS12")
+        keyStoreKeyAlias.set(
+            providers.gradleProperty("keyAlias")
+                .orElse(providers.environmentVariable("KEY_ALIAS"))
+                .orElse("inno-setup")
+        )
+
+        keyStorePassword.set(
+            providers.gradleProperty("keyPassword")
+                .orElse(providers.environmentVariable("KEYSTORE_PASSWORD"))
+        )
+    }
+    //endregion
+
     test {
         jvmArgs(
             "-Didea.log.config.file=idea/log4j.xml",
