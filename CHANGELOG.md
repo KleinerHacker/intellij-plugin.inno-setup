@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.5.0]
+
 ### Added
 
 - **`.ist` template files**: Added a new free-text *Inno Setup Template* file type (`.ist`) as an
@@ -22,6 +24,8 @@
   with an `#include`.
 - **`#include` path refactoring**: Renaming or moving an included file now updates the `#include` path
   automatically.
+- **Show effective script**: Added a "Show Effective Script" action that opens the fully
+  `#include`-resolved script in a read-only tab.
 
 ## [0.4.2]
 

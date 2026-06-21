@@ -61,6 +61,18 @@ completed as you type. Two editor actions make working with includes easier:
 When the referenced file is **renamed or moved** in the IDE, the `#include` path is updated automatically
 to keep pointing at the file.
 
+### Validation
+
+The `#include` line itself is checked: a missing or non-existent file, and a non-literal or empty path,
+are flagged as errors. Problems detected **inside** an included file (unknown directives, flags, undefined
+constants, warnings) are surfaced on the `#include` line of the including script, and required-section
+checks correctly account for content contributed by includes.
+
+### Show Effective Script
+
+The **Show Effective Script** action opens the fully `#include`-resolved script — all includes inlined —
+in a read-only tab, so you can inspect what the compiler actually sees.
+
 ---
 
 ## Editor support
@@ -68,6 +80,8 @@ to keep pointing at the file.
 - **Syntax highlighting** for directives, macro names and inline `{#…}` references
 - **Completion** of directive keywords, of `#define`s and value-bearing predefined variables, and of
   built-in functions
-- **Validation** of unknown directives, unknown `{#…}` references and never-used `#define`s
+- **Validation** of unknown directives, unknown `{#…}` references, never-used `#define`s and broken or
+  problematic `#include` lines
 - **Rename** and **Find Usages** across a `#define` and all its `{#Name}` usages
+- **Show Effective Script** to view the fully `#include`-resolved script in a read-only tab
 - **Inline** and **Extract** intentions for `#include`, with automatic path updates on rename/move

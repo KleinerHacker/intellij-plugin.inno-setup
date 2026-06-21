@@ -16,6 +16,8 @@
     <name>Inno Setup</name>
     <description><![CDATA[
         Inno Setup plugin for all JetBrains IDEs, providing support for the Inno Setup scripting language.
+        <br/>
+        Full documentation: <a href="https://kleinerhacker.github.io/intellij-plugin.inno-setup/">https://kleinerhacker.github.io/intellij-plugin.inno-setup/</a>
         ]]></description>
     <version>1.0.0</version>
     <vendor url="https://github.com/KleinerHacker/intellij-plugin.inno-setup">KleinerHacker alias Pfeiffer C Soft</vendor>
