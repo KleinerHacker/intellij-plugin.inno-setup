@@ -6,7 +6,7 @@ changelog = "2.5.0"
 foojay-resolver = "1.0.0"
 intellij-platform = "2.16.0"
 idea = "2025.3.5"
-grammarkit = "2022.3.2"
+grammarkit = "2023.3.0.3"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }
