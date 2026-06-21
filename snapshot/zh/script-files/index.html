@@ -1476,7 +1476,7 @@
   <span class="md-ellipsis">
     
   
-    Inno Setup 预处理器
+    Inno Setup 模板
   
 
     
@@ -1489,6 +1489,93 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 模板
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    模板文件
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 预处理器
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1662,10 +1749,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1683,8 +1770,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2111,6 +2198,7 @@
 <hr />
 <h2 id="ispp">预处理器（ISPP）</h2>
 <p>ISPP 预处理器指令被注入到脚本文件中，并为 <code>#define</code> 名称提供独立的高亮、补全、重命名和查找用法支持。节值内的内联 <code>{#Name}</code> 引用解析到其 <code>#define</code> 声明，并参与相同的重命名/查找用法流程。</p>
+<p><code>#include</code> 路径会解析到所引用的文件，并提供两个意图操作（<strong>Alt+Enter</strong>）：在原处内联被包含文件的内容，或将选定的行提取到新文件并用 <code>#include</code> 替换它们。重命名或移动被包含的文件会保持 <code>#include</code> 路径一致。</p>
 <p>有关支持的指令、标准预定义变量和内联 <code>{#…}</code> 输出，请参阅 <a href="../preprocessor/overview/">Inno Setup 预处理器</a>。</p>
 <hr />
 <h2 id="_13">构建脚本</h2>

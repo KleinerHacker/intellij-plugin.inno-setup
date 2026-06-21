@@ -406,6 +406,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-template-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup Template (.ist)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#relationship-between-file-types" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1358,7 +1369,7 @@
   <span class="md-ellipsis">
     
   
-    Inno Setup Preprocessor
+    Inno Setup Template
   
 
     
@@ -1371,6 +1382,93 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup Template
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup Preprocessor
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1544,10 +1642,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1565,8 +1663,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1753,6 +1851,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-template-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup Template (.ist)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#relationship-between-file-types" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1781,7 +1890,7 @@
 
 
 <h1 id="file-types">File Types</h1>
-<p>The plugin registers two dedicated file types within the IntelliJ platform. Each file type gets its own
+<p>The plugin registers three dedicated file types within the IntelliJ platform. Each file type gets its own
 icon, language infrastructure, and editor feature set.</p>
 <p><img alt="Inno Setup File Types" src="../assets/images/filetypes.png" /></p>
 <hr />
@@ -1805,9 +1914,14 @@ icon, language infrastructure, and editor feature set.</p>
 <td><code>.isl</code></td>
 <td>Translated messages and locale options for a single language</td>
 </tr>
+<tr>
+<td><strong>Inno Setup Template</strong></td>
+<td><code>.ist</code></td>
+<td>Reusable free-text fragment pulled into a script via <code>#include</code></td>
+</tr>
 </tbody>
 </table>
-<p>Both file types are automatically recognised by their extension. No manual association is required.</p>
+<p>All file types are automatically recognised by their extension. No manual association is required.</p>
 <hr />
 <h2 id="inno-setup-script-iss">Inno Setup Script (<code>.iss</code>)</h2>
 <p><code>.iss</code> files are the primary Inno Setup format. They describe the complete installer: which files are
@@ -1822,6 +1936,13 @@ the <code>MessagesFile:</code> parameter in <code>[Languages]</code> and may ove
 messages. Custom project-specific messages can also be placed in <code>[CustomMessages]</code>.</p>
 <p>See <a href="../language-files/">Language Files</a> for the full list of supported sections and editing features.</p>
 <hr />
+<h2 id="inno-setup-template-ist">Inno Setup Template (<code>.ist</code>)</h2>
+<p><code>.ist</code> files are reusable, free-text fragments meant to be pulled into a script through an ISPP <code>#include</code>
+directive. A template may hold whole sections, partial sections, loose directive lines, or preprocessor
+definitions — and, because it is only a building block rather than a complete installer, it is never
+validated on its own. Its content is analysed only once it is included into a host <code>.iss</code>/<code>.isl</code> script.</p>
+<p>See <a href="../template-files/">Template Files</a> for the full description and editing features.</p>
+<hr />
 <h2 id="relationship-between-file-types">Relationship Between File Types</h2>
 <p>A <code>.iss</code> script can reference one or more <code>.isl</code> files through its <code>[Languages]</code> section:</p>
 <pre><code class="language-ini">[Languages]
@@ -1831,6 +1952,11 @@ Name: &quot;german&quot;;  MessagesFile: &quot;compiler:Languages\German.isl&quo
 <p>The plugin resolves these references across files: language names declared in <code>[Languages]</code> are the
 targets for language-prefix references (e.g. <code>german.WelcomeLabel1</code>) used inside <code>[Messages]</code> and
 <code>[CustomMessages]</code>, and for <code>{cm:…}</code> constants inside values throughout the script.</p>
+<p>A <code>.iss</code> (or <code>.isl</code>) script can additionally pull in any number of <code>.ist</code> templates through <code>#include</code>:</p>
+<pre><code class="language-ini">#include &quot;common-files.ist&quot;
+</code></pre>
+<p>The plugin resolves the include and merges the template's sections into the script's effective,
+include-resolved view, so the shared fragment behaves as if it had been written inline.</p>
 
 
 

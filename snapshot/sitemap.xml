@@ -82,6 +82,15 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/structure-view/"/>
     </url>
     <url>
+        <loc>Nonetemplate-files/</loc>
+        <lastmod>2026-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonetemplate-files/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
+    </url>
+    <url>
         <loc>Nonepreprocessor/define/</loc>
         <lastmod>2026-06-21</lastmod>
         <changefreq>daily</changefreq>
@@ -350,6 +359,15 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonestructure-view/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/structure-view/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/structure-view/"/>
+    </url>
+    <url>
+        <loc>Nonezh/template-files/</loc>
+        <lastmod>2026-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonetemplate-files/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/template-files/"/>
     </url>
     <url>
         <loc>Nonezh/preprocessor/define/</loc>
@@ -622,6 +640,15 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/structure-view/"/>
     </url>
     <url>
+        <loc>Noneja/template-files/</loc>
+        <lastmod>2026-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonetemplate-files/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
+    </url>
+    <url>
         <loc>Noneja/preprocessor/define/</loc>
         <lastmod>2026-06-21</lastmod>
         <changefreq>daily</changefreq>
@@ -890,6 +917,15 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonestructure-view/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/structure-view/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/structure-view/"/>
+    </url>
+    <url>
+        <loc>Noneko/template-files/</loc>
+        <lastmod>2026-06-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonetemplate-files/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/template-files/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
     </url>
     <url>
         <loc>Noneko/preprocessor/define/</loc>

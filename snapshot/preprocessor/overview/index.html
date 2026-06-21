@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../../sections/custom-messages/">
+        <link rel="prev" href="../../template-files/">
       
       
         <link rel="next" href="../define/">
@@ -1241,6 +1241,93 @@
       
   
   
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup Template
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup Template
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Template Files
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -1259,10 +1346,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -1280,8 +1367,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1384,6 +1471,17 @@
     <span class="md-ellipsis">
       
         Inline emission {#…}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#working-with-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with #include
       
     </span>
   </a>
@@ -1546,10 +1644,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1567,8 +1665,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1755,6 +1853,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#working-with-include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Working with #include
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#editor-support" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1842,6 +1951,22 @@ own page:</p>
 expression and replaces the placeholder with its value. The expression is typically a macro or a predefined
 variable. See <a href="../define/"><code>#define</code></a> for details and the predefined variables usable this way.</p>
 <hr />
+<h2 id="working-with-include">Working with <code>#include</code></h2>
+<p>An <code>#include "file"</code> path resolves to the referenced <code>.iss</code> file (relative to the including script's
+directory; absolute paths are used as-is). <strong>Ctrl+B</strong> / <strong>Cmd+B</strong> jumps to the file, and the path is
+completed as you type. Two editor actions make working with includes easier:</p>
+<ul>
+<li><strong>Inline <code>#include</code> content</strong> — with the caret on an <code>#include</code> line that resolves to an existing file,
+  the intention (<strong>Alt+Enter</strong>) replaces the line with the verbatim content of that file. Only one level
+  is expanded; nested <code>#include</code> lines in the inserted text are kept as-is. Afterwards you are asked whether
+  the now-inlined include file should be deleted (default: no).</li>
+<li><strong>Extract selection to <code>#include</code> file</strong> — select one or more lines and invoke the intention to move
+  them into a new file next to the current script. A file name is requested (and you are asked before an
+  existing file is overwritten); the selected full lines are replaced with an <code>#include</code> of the new file.</li>
+</ul>
+<p>When the referenced file is <strong>renamed or moved</strong> in the IDE, the <code>#include</code> path is updated automatically
+to keep pointing at the file.</p>
+<hr />
 <h2 id="editor-support">Editor support</h2>
 <ul>
 <li><strong>Syntax highlighting</strong> for directives, macro names and inline <code>{#…}</code> references</li>
@@ -1849,6 +1974,7 @@ variable. See <a href="../define/"><code>#define</code></a> for details and the 
   built-in functions</li>
 <li><strong>Validation</strong> of unknown directives, unknown <code>{#…}</code> references and never-used <code>#define</code>s</li>
 <li><strong>Rename</strong> and <strong>Find Usages</strong> across a <code>#define</code> and all its <code>{#Name}</code> usages</li>
+<li><strong>Inline</strong> and <strong>Extract</strong> intentions for <code>#include</code>, with automatic path updates on rename/move</li>
 </ul>
 
 

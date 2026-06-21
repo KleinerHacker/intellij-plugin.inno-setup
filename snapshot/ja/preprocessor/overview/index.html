@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../../sections/custom-messages/">
+        <link rel="prev" href="../../template-files/">
       
       
         <link rel="next" href="../define/">
@@ -1241,6 +1241,93 @@
       
   
   
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup テンプレート
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup テンプレート
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    テンプレートファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -1259,10 +1346,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -1280,8 +1367,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1384,6 +1471,17 @@
     <span class="md-ellipsis">
       
         インライン出力 {#…}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #include の操作
       
     </span>
   </a>
@@ -1546,10 +1644,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1567,8 +1665,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1755,6 +1853,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#include" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #include の操作
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1832,12 +1941,30 @@
 <h2 id="_3">インライン出力 <code>{#…}</code></h2>
 <p>通常のスクリプト行内では、<code>{#expr}</code> は <code>{#emit expr}</code> のインライン形式です。プリプロセッサーは式を評価し、プレースホルダーをその値で置き換えます。式は通常マクロまたは定義済み変数です。詳細とこの方法で使用できる定義済み変数については、<a href="../define/"><code>#define</code></a> を参照してください。</p>
 <hr />
+<h2 id="include"><code>#include</code> の操作</h2>
+<p><code>#include "file"</code> のパスは参照先の <code>.iss</code> ファイルに解決されます（インクルードするスクリプトの
+ディレクトリからの相対パス。絶対パスはそのまま使用されます）。<strong>Ctrl+B</strong> / <strong>Cmd+B</strong> でファイルへ
+ジャンプでき、入力中にパスが補完されます。インクルードの操作を容易にする 2 つのエディターアクション
+があります。</p>
+<ul>
+<li><strong><code>#include</code> の内容をインライン展開</strong> — 既存ファイルに解決される <code>#include</code> 行にキャレットを置くと、
+  インテンション（<strong>Alt+Enter</strong>）がその行をファイルの内容そのままで置き換えます。展開は 1 階層のみで、
+  挿入されたテキスト内のネストした <code>#include</code> 行はそのまま保持されます。その後、インライン展開した
+  インクルードファイルを削除するか確認されます（既定：いいえ）。</li>
+<li><strong>選択範囲を <code>#include</code> ファイルに抽出</strong> — 1 行以上を選択してインテンションを実行すると、現在の
+  スクリプトの隣に新しいファイルとして切り出します。ファイル名を尋ね（既存ファイルを上書きする前にも
+  確認します）、選択された行全体をその新しいファイルの <code>#include</code> に置き換えます。</li>
+</ul>
+<p>参照先ファイルを IDE で<strong>リネームまたは移動</strong>すると、<code>#include</code> のパスは自動的に更新され、ファイルを
+指し続けます。</p>
+<hr />
 <h2 id="_4">エディターサポート</h2>
 <ul>
 <li>ディレクティブ、マクロ名、インライン <code>{#…}</code> 参照の<strong>構文ハイライト</strong></li>
 <li>ディレクティブキーワード、<code>#define</code> と値を持つ定義済み変数、組み込み関数の<strong>補完</strong></li>
 <li>未知のディレクティブ、未知の <code>{#…}</code> 参照、未使用の <code>#define</code> の<strong>検証</strong></li>
 <li><code>#define</code> とそのすべての <code>{#Name}</code> 使用箇所にわたる<strong>リネーム</strong>と<strong>使用箇所検索</strong></li>
+<li><code>#include</code> の<strong>インライン</strong>と<strong>抽出</strong>インテンション、リネーム/移動時のパス自動更新</li>
 </ul>
 
 

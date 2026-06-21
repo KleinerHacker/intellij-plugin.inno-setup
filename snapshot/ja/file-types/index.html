@@ -406,6 +406,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup テンプレート（.ist）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1358,7 +1369,7 @@
   <span class="md-ellipsis">
     
   
-    Inno Setup プリプロセッサー
+    Inno Setup テンプレート
   
 
     
@@ -1371,6 +1382,93 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup テンプレート
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    テンプレートファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup プリプロセッサー
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1544,10 +1642,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1565,8 +1663,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1753,6 +1851,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup テンプレート（.ist）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1781,7 +1890,7 @@
 
 
 <h1 id="_1">ファイルタイプ</h1>
-<p>このプラグインは IntelliJ プラットフォーム内に 2 つの専用ファイルタイプを登録します。各ファイルタイプには独自のアイコン、言語インフラ、エディター機能セットがあります。</p>
+<p>このプラグインは IntelliJ プラットフォーム内に 3 つの専用ファイルタイプを登録します。各ファイルタイプには独自のアイコン、言語インフラ、エディター機能セットがあります。</p>
 <p><img alt="Inno Setup ファイルタイプ" src="../../assets/images/filetypes.png" /></p>
 <hr />
 <h2 id="_2">概要</h2>
@@ -1804,9 +1913,14 @@
 <td><code>.isl</code></td>
 <td>単一言語の翻訳メッセージとロケールオプション</td>
 </tr>
+<tr>
+<td><strong>Inno Setup テンプレート</strong></td>
+<td><code>.ist</code></td>
+<td><code>#include</code> でスクリプトに取り込む再利用可能な自由テキスト断片</td>
+</tr>
 </tbody>
 </table>
-<p>どちらのファイルタイプも拡張子によって自動認識されます。手動での関連付けは不要です。</p>
+<p>すべてのファイルタイプは拡張子によって自動認識されます。手動での関連付けは不要です。</p>
 <hr />
 <h2 id="inno-setup-iss">Inno Setup スクリプト（<code>.iss</code>）</h2>
 <p><code>.iss</code> ファイルは Inno Setup のプライマリ形式です。パッケージ化するファイル、書き込むレジストリキー、提供する言語、そしてオプションとして <code>[Code]</code> セクションの Pascal スクリプトランタイムロジックなど、完全なインストーラーを記述します。ISPP プリプロセッサーディレクティブ（<code>#define</code>、<code>#include</code>…）はファイルの先頭に記述できます。</p>
@@ -1816,6 +1930,10 @@
 <p><code>.isl</code> ファイルは単一のロケール向けに翻訳済み文字列を提供します。<code>.iss</code> スクリプトの <code>[Languages]</code> にある <code>MessagesFile:</code> パラメーターから参照され、組み込みの Inno Setup メッセージの任意のサブセットをオーバーライドできます。プロジェクト固有のカスタムメッセージは <code>[CustomMessages]</code> に配置することもできます。</p>
 <p>サポートされるセクションと編集機能の完全なリストは<a href="../language-files/">言語ファイル</a>を参照してください。</p>
 <hr />
+<h2 id="inno-setup-ist">Inno Setup テンプレート（<code>.ist</code>）</h2>
+<p><code>.ist</code> ファイルは、ISPP の <code>#include</code> ディレクティブを通じてスクリプトに取り込むことを意図した再利用可能な自由テキストの断片です。テンプレートはセクション全体、部分的なセクション、ばらばらのディレクティブ行、プリプロセッサー定義を保持できます。完全なインストーラーではなく構成要素にすぎないため、単独で検証されることはありません。その内容はホストの <code>.iss</code>/<code>.isl</code> スクリプトに取り込まれて初めて解析されます。</p>
+<p>完全な説明と編集機能については<a href="../template-files/">テンプレートファイル</a>を参照してください。</p>
+<hr />
 <h2 id="_3">ファイルタイプ間の関係</h2>
 <p><code>.iss</code> スクリプトは <code>[Languages]</code> セクションを通じて 1 つ以上の <code>.isl</code> ファイルを参照できます：</p>
 <pre><code class="language-ini">[Languages]
@@ -1823,6 +1941,10 @@ Name: &quot;english&quot;; MessagesFile: &quot;compiler:Default.isl&quot;
 Name: &quot;german&quot;;  MessagesFile: &quot;compiler:Languages\German.isl&quot;
 </code></pre>
 <p>プラグインはこれらの参照をファイル間で解決します：<code>[Languages]</code> で宣言された言語名は <code>[Messages]</code> および <code>[CustomMessages]</code> 内の言語プレフィックス参照（例：<code>german.WelcomeLabel1</code>）のターゲットであり、スクリプト全体の値内の <code>{cm:…}</code> 定数のターゲットでもあります。</p>
+<p><code>.iss</code>（または <code>.isl</code>）スクリプトは、さらに <code>#include</code> を通じて任意の数の <code>.ist</code> テンプレートを取り込めます：</p>
+<pre><code class="language-ini">#include &quot;common-files.ist&quot;
+</code></pre>
+<p>プラグインはインクルードを解決し、テンプレートのセクションをスクリプトの有効な（インクルード解決済みの）ビューにマージするため、共有された断片はインラインで書かれたかのように振る舞います。</p>
 
 
 

@@ -406,6 +406,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup 템플릿(.ist)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1358,7 +1369,7 @@
   <span class="md-ellipsis">
     
   
-    Inno Setup 전처리기
+    Inno Setup 템플릿
   
 
     
@@ -1371,6 +1382,93 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 템플릿
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    템플릿 파일
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 전처리기
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1544,10 +1642,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
             
   
   
@@ -1565,8 +1663,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_9">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1753,6 +1851,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#inno-setup-ist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inno Setup 템플릿(.ist)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1781,7 +1890,7 @@
 
 
 <h1 id="_1">파일 형식</h1>
-<p>이 플러그인은 IntelliJ 플랫폼 내에 두 가지 전용 파일 형식을 등록합니다. 각 파일 형식에는 고유한 아이콘, 언어 인프라, 편집기 기능 세트가 있습니다.</p>
+<p>이 플러그인은 IntelliJ 플랫폼 내에 세 가지 전용 파일 형식을 등록합니다. 각 파일 형식에는 고유한 아이콘, 언어 인프라, 편집기 기능 세트가 있습니다.</p>
 <p><img alt="Inno Setup 파일 형식" src="../../assets/images/filetypes.png" /></p>
 <hr />
 <h2 id="_2">개요</h2>
@@ -1804,9 +1913,14 @@
 <td><code>.isl</code></td>
 <td>단일 언어에 대한 번역된 메시지 및 로케일 옵션</td>
 </tr>
+<tr>
+<td><strong>Inno Setup 템플릿</strong></td>
+<td><code>.ist</code></td>
+<td><code>#include</code>로 스크립트에 가져오는 재사용 가능한 자유 텍스트 조각</td>
+</tr>
 </tbody>
 </table>
-<p>두 파일 형식 모두 확장자에 의해 자동으로 인식됩니다. 수동 연결이 필요하지 않습니다.</p>
+<p>모든 파일 형식은 확장자에 의해 자동으로 인식됩니다. 수동 연결이 필요하지 않습니다.</p>
 <hr />
 <h2 id="inno-setup-iss">Inno Setup 스크립트(<code>.iss</code>)</h2>
 <p><code>.iss</code> 파일은 Inno Setup의 기본 형식입니다. 패키지할 파일, 작성할 레지스트리 키, 제공할 언어, 그리고 선택적으로 <code>[Code]</code> 섹션의 Pascal 스크립트 런타임 로직 등 전체 설치 프로그램을 설명합니다. ISPP 전처리기 지시문(<code>#define</code>, <code>#include</code>…)은 파일 상단에 나타날 수 있습니다.</p>
@@ -1816,6 +1930,10 @@
 <p><code>.isl</code> 파일은 단일 로케일에 대한 번역된 문자열을 제공합니다. <code>[Languages]</code>의 <code>MessagesFile:</code> 매개변수를 통해 <code>.iss</code> 스크립트에서 참조되며 내장된 Inno Setup 메시지의 임의 하위 집합을 재정의할 수 있습니다. 프로젝트별 사용자 지정 메시지는 <code>[CustomMessages]</code>에도 배치할 수 있습니다.</p>
 <p>지원되는 섹션 및 편집 기능의 전체 목록은 <a href="../language-files/">언어 파일</a>을 참조하세요.</p>
 <hr />
+<h2 id="inno-setup-ist">Inno Setup 템플릿(<code>.ist</code>)</h2>
+<p><code>.ist</code> 파일은 ISPP의 <code>#include</code> 지시문을 통해 스크립트에 가져오기 위한 재사용 가능한 자유 텍스트 조각입니다. 템플릿은 전체 섹션, 부분 섹션, 흩어진 지시문 줄 또는 전처리기 정의를 담을 수 있으며, 완전한 설치 프로그램이 아니라 구성 요소일 뿐이므로 단독으로 검증되지 않습니다. 그 내용은 호스트 <code>.iss</code>/<code>.isl</code> 스크립트에 포함된 후에야 분석됩니다.</p>
+<p>전체 설명과 편집 기능은 <a href="../template-files/">템플릿 파일</a>을 참조하세요.</p>
+<hr />
 <h2 id="_3">파일 형식 간의 관계</h2>
 <p><code>.iss</code> 스크립트는 <code>[Languages]</code> 섹션을 통해 하나 이상의 <code>.isl</code> 파일을 참조할 수 있습니다:</p>
 <pre><code class="language-ini">[Languages]
@@ -1823,6 +1941,10 @@ Name: &quot;english&quot;; MessagesFile: &quot;compiler:Default.isl&quot;
 Name: &quot;german&quot;;  MessagesFile: &quot;compiler:Languages\German.isl&quot;
 </code></pre>
 <p>플러그인은 파일 간에 이러한 참조를 해결합니다: <code>[Languages]</code>에서 선언된 언어 이름은 <code>[Messages]</code> 및 <code>[CustomMessages]</code> 내의 언어 접두사 참조(예: <code>german.WelcomeLabel1</code>)의 대상이며, 스크립트 전체의 값 내 <code>{cm:…}</code> 상수의 대상이기도 합니다.</p>
+<p><code>.iss</code>(또는 <code>.isl</code>) 스크립트는 추가로 <code>#include</code>를 통해 임의 개수의 <code>.ist</code> 템플릿을 가져올 수 있습니다:</p>
+<pre><code class="language-ini">#include &quot;common-files.ist&quot;
+</code></pre>
+<p>플러그인은 포함을 해석하고 템플릿의 섹션을 스크립트의 유효한(포함 해석된) 뷰에 병합하므로, 공유 조각은 인라인으로 작성된 것처럼 동작합니다.</p>
 
 
 
