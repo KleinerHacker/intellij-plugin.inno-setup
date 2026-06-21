@@ -1486,10 +1486,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="#include の操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        検証
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        有効なスクリプトを表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         エディターサポート
@@ -1861,10 +1889,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="#include の操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        検証
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        有効なスクリプトを表示
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         エディターサポート
@@ -1957,14 +2013,24 @@
 </ul>
 <p>参照先ファイルを IDE で<strong>リネームまたは移動</strong>すると、<code>#include</code> のパスは自動的に更新され、ファイルを
 指し続けます。</p>
+<h3 id="_4">検証</h3>
+<p><code>#include</code> 行自体もチェックされます。存在しないファイルや見つからないファイル、リテラルでないパスや空の
+パスはエラーとしてフラグ付けされます。インクルードされたファイル<strong>内部</strong>で検出された問題（未知の
+ディレクティブ、フラグ、未定義の定数、警告）は、インクルードするスクリプトの <code>#include</code> 行に表示され、
+必須セクションのチェックもインクルードが提供する内容を正しく考慮します。</p>
+<h3 id="_5">有効なスクリプトを表示</h3>
+<p><strong>有効なスクリプトを表示（Show Effective Script）</strong>アクションは、<code>#include</code> を完全に解決した（すべての
+インクルードをインライン展開した）スクリプトを読み取り専用タブで開き、コンパイラーが実際に見る内容を
+確認できます。</p>
 <hr />
-<h2 id="_4">エディターサポート</h2>
+<h2 id="_6">エディターサポート</h2>
 <ul>
 <li>ディレクティブ、マクロ名、インライン <code>{#…}</code> 参照の<strong>構文ハイライト</strong></li>
 <li>ディレクティブキーワード、<code>#define</code> と値を持つ定義済み変数、組み込み関数の<strong>補完</strong></li>
-<li>未知のディレクティブ、未知の <code>{#…}</code> 参照、未使用の <code>#define</code> の<strong>検証</strong></li>
+<li>未知のディレクティブ、未知の <code>{#…}</code> 参照、未使用の <code>#define</code>、壊れたまたは問題のある <code>#include</code> 行の<strong>検証</strong></li>
 <li><code>#define</code> とそのすべての <code>{#Name}</code> 使用箇所にわたる<strong>リネーム</strong>と<strong>使用箇所検索</strong></li>
 <li><code>#include</code> の<strong>インライン</strong>と<strong>抽出</strong>インテンション、リネーム/移動時のパス自動更新</li>
+<li><strong>有効なスクリプトを表示</strong> — <code>#include</code> を完全に解決したスクリプトを読み取り専用タブで表示</li>
 </ul>
 
 

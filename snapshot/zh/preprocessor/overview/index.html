@@ -1486,10 +1486,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="使用 #include">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        显示有效脚本
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         编辑器支持
@@ -1861,10 +1889,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="使用 #include">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        显示有效脚本
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         编辑器支持
@@ -1952,14 +2008,22 @@
   文件中。会请求输入文件名（在覆盖已有文件前也会确认），并将选定的整行替换为对该新文件的 <code>#include</code>。</li>
 </ul>
 <p>当在 IDE 中<strong>重命名或移动</strong>所引用的文件时，<code>#include</code> 路径会自动更新以继续指向该文件。</p>
+<h3 id="_4">验证</h3>
+<p><code>#include</code> 行本身也会被检查：缺失或不存在的文件，以及非字面量或空路径，都会被标记为错误。在被包含文件
+<strong>内部</strong>检测到的问题（未知指令、标志、未定义常量、警告）会显示在包含脚本的 <code>#include</code> 行上，必需节检查
+也会正确计入由 include 提供的内容。</p>
+<h3 id="_5">显示有效脚本</h3>
+<p><strong>显示有效脚本（Show Effective Script）</strong>操作会在只读标签页中打开完全解析 <code>#include</code>（所有 include 均内联）
+后的脚本，便于你查看编译器实际看到的内容。</p>
 <hr />
-<h2 id="_4">编辑器支持</h2>
+<h2 id="_6">编辑器支持</h2>
 <ul>
 <li>对指令、宏名称和内联 <code>{#…}</code> 引用的<strong>语法高亮</strong></li>
 <li>指令关键字、<code>#define</code> 与带值预定义变量以及内置函数的<strong>补全</strong></li>
-<li>对未知指令、未知 <code>{#…}</code> 引用以及从未使用的 <code>#define</code> 的<strong>验证</strong></li>
+<li>对未知指令、未知 <code>{#…}</code> 引用、从未使用的 <code>#define</code> 以及损坏或有问题的 <code>#include</code> 行的<strong>验证</strong></li>
 <li>跨 <code>#define</code> 及其所有 <code>{#Name}</code> 用法的<strong>重命名</strong>和<strong>查找用法</strong></li>
 <li>针对 <code>#include</code> 的<strong>内联</strong>与<strong>提取</strong>意图操作，并在重命名/移动时自动更新路径</li>
+<li><strong>显示有效脚本</strong>，在只读标签页中查看完全解析 <code>#include</code> 后的脚本</li>
 </ul>
 
 

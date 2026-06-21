@@ -1486,6 +1486,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Working with #include">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-effective-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Show Effective Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1861,6 +1889,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Working with #include">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#show-effective-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Show Effective Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1966,14 +2022,24 @@ completed as you type. Two editor actions make working with includes easier:</p>
 </ul>
 <p>When the referenced file is <strong>renamed or moved</strong> in the IDE, the <code>#include</code> path is updated automatically
 to keep pointing at the file.</p>
+<h3 id="validation">Validation</h3>
+<p>The <code>#include</code> line itself is checked: a missing or non-existent file, and a non-literal or empty path,
+are flagged as errors. Problems detected <strong>inside</strong> an included file (unknown directives, flags, undefined
+constants, warnings) are surfaced on the <code>#include</code> line of the including script, and required-section
+checks correctly account for content contributed by includes.</p>
+<h3 id="show-effective-script">Show Effective Script</h3>
+<p>The <strong>Show Effective Script</strong> action opens the fully <code>#include</code>-resolved script — all includes inlined —
+in a read-only tab, so you can inspect what the compiler actually sees.</p>
 <hr />
 <h2 id="editor-support">Editor support</h2>
 <ul>
 <li><strong>Syntax highlighting</strong> for directives, macro names and inline <code>{#…}</code> references</li>
 <li><strong>Completion</strong> of directive keywords, of <code>#define</code>s and value-bearing predefined variables, and of
   built-in functions</li>
-<li><strong>Validation</strong> of unknown directives, unknown <code>{#…}</code> references and never-used <code>#define</code>s</li>
+<li><strong>Validation</strong> of unknown directives, unknown <code>{#…}</code> references, never-used <code>#define</code>s and broken or
+  problematic <code>#include</code> lines</li>
 <li><strong>Rename</strong> and <strong>Find Usages</strong> across a <code>#define</code> and all its <code>{#Name}</code> usages</li>
+<li><strong>Show Effective Script</strong> to view the fully <code>#include</code>-resolved script in a read-only tab</li>
 <li><strong>Inline</strong> and <strong>Extract</strong> intentions for <code>#include</code>, with automatic path updates on rename/move</li>
 </ul>
 

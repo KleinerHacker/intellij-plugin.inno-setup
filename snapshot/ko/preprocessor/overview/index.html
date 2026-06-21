@@ -1486,10 +1486,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="#include 작업">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        검증
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        유효 스크립트 표시
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         편집기 지원
@@ -1861,10 +1889,38 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="#include 작업">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        검증
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        유효 스크립트 표시
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         편집기 지원
@@ -1956,14 +2012,23 @@ include 작업을 더 쉽게 해 주는 두 가지 편집기 동작이 있습니
 </ul>
 <p>참조된 파일을 IDE에서 <strong>이름 바꾸기 또는 이동</strong>하면 <code>#include</code> 경로가 자동으로 갱신되어 파일을 계속
 가리킵니다.</p>
+<h3 id="_4">검증</h3>
+<p><code>#include</code> 줄 자체도 검사됩니다. 누락되었거나 존재하지 않는 파일, 리터럴이 아니거나 빈 경로는 오류로
+표시됩니다. 포함된 파일 <strong>내부</strong>에서 감지된 문제(알 수 없는 지시문, 플래그, 정의되지 않은 상수, 경고)는
+포함하는 스크립트의 <code>#include</code> 줄에 표시되며, 필수 섹션 검사도 include가 제공하는 내용을 올바르게
+반영합니다.</p>
+<h3 id="_5">유효 스크립트 표시</h3>
+<p><strong>유효 스크립트 표시(Show Effective Script)</strong> 동작은 <code>#include</code>가 완전히 해석된(모든 include가 인라인된)
+스크립트를 읽기 전용 탭에서 열어 컴파일러가 실제로 보는 내용을 확인할 수 있게 합니다.</p>
 <hr />
-<h2 id="_4">편집기 지원</h2>
+<h2 id="_6">편집기 지원</h2>
 <ul>
 <li>지시문, 매크로 이름, 인라인 <code>{#…}</code> 참조에 대한 <strong>구문 강조 표시</strong></li>
 <li>지시문 키워드, <code>#define</code> 및 값을 가진 사전 정의 변수, 내장 함수의 <strong>완성</strong></li>
-<li>알 수 없는 지시문, 알 수 없는 <code>{#…}</code> 참조, 사용되지 않는 <code>#define</code>의 <strong>검증</strong></li>
+<li>알 수 없는 지시문, 알 수 없는 <code>{#…}</code> 참조, 사용되지 않는 <code>#define</code>, 손상되었거나 문제가 있는 <code>#include</code> 줄의 <strong>검증</strong></li>
 <li><code>#define</code> 및 모든 <code>{#Name}</code> 사용에 걸친 <strong>이름 바꾸기</strong>와 <strong>사용 찾기</strong></li>
 <li><code>#include</code>의 <strong>인라인</strong> 및 <strong>추출</strong> 인텐션, 이름 바꾸기/이동 시 경로 자동 갱신</li>
+<li><strong>유효 스크립트 표시</strong> — <code>#include</code>가 완전히 해석된 스크립트를 읽기 전용 탭에서 확인</li>
 </ul>
 
 
