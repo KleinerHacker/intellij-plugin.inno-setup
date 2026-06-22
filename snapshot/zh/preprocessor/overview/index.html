@@ -2279,10 +2279,14 @@
 <hr />
 <h2 id="_6">编辑器支持</h2>
 <ul>
-<li>对指令、宏名称和内联 <code>{#…}</code> 引用的<strong>语法高亮</strong></li>
-<li>指令关键字、<code>#define</code> 与带值预定义变量以及内置函数的<strong>补全</strong></li>
-<li>对未知指令、未知 <code>{#…}</code> 引用、从未使用的 <code>#define</code> 以及损坏或有问题的 <code>#include</code> 行的<strong>验证</strong></li>
-<li>跨 <code>#define</code> 及其所有 <code>{#Name}</code> 用法的<strong>重命名</strong>和<strong>查找用法</strong></li>
+<li>对指令、宏名称、作用域关键字和内联 <code>{#…}</code> 引用的<strong>语法高亮</strong></li>
+<li>指令关键字、<code>#define</code>/<code>#undef</code> 作用域关键字、<code>#define</code> 与带值预定义变量以及内置函数的<strong>补全</strong> ——
+  包括 <code>#if</code>/<code>#elif</code> 条件内部</li>
+<li>对未知指令、未知 <code>{#…}</code> 引用、从未使用的 <code>#define</code>、损坏或有问题的 <code>#include</code> 行、<code>#if … #endif</code>
+  块结构（缺少 <code>#endif</code>、游离的 <code>#elif</code>/<code>#else</code>/<code>#endif</code>、无条件的 <code>#if</code>）以及条件中的字面布尔值的<strong>验证</strong></li>
+<li>跨 <code>#define</code> 及其所有用法（<code>{#Name}</code> 引用、<code>#undef</code>、<code>#if</code>/<code>#elif</code> 条件中的标识符）的<strong>重命名</strong>和
+  <strong>查找用法</strong></li>
+<li>对完全位于单个节内或完全位于所有节之外的 <code>#if … #endif</code> 块的<strong>折叠</strong></li>
 <li>针对 <code>#include</code> 的<strong>内联</strong>与<strong>提取</strong>意图操作，并在重命名/移动时自动更新路径</li>
 <li><strong>显示有效脚本</strong>，在只读标签页中查看完全解析 <code>#include</code> 后的脚本</li>
 </ul>

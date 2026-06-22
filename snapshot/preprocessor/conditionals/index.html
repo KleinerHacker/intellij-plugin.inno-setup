@@ -2141,8 +2141,27 @@ opening directive and its matching <code>#endif</code> is only emitted when the 
 </code></pre>
 <hr />
 <h2 id="editor-support">Editor support</h2>
-<p>All conditional keywords are highlighted, completed (after <code>#</code>) and validated against the bundled ISPP
-specification; the controlling expression is parsed and type-checked.</p>
+<ul>
+<li><strong>Highlighting &amp; completion</strong> — all conditional keywords are highlighted and completed (after <code>#</code>) and
+  validated against the bundled ISPP specification.</li>
+<li><strong>Condition expression</strong> — the <code>#if</code> / <code>#elif</code> condition is the same full ISPP expression as a
+  <a href="../define/"><code>#define</code></a> value: operators are highlighted, syntax and type errors are reported on the
+  offending token, and the expression providers (other <code>#define</code>s, predefined variables and built-in
+  functions) are offered in completion inside the condition.</li>
+<li><strong>References</strong> — identifiers in the condition resolve to their <code>#define</code> declaration, so
+  go-to-definition (<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>), Find Usages (<strong>Alt+F7</strong>) and rename work; an unknown name
+  is flagged as an <em>unresolved reference</em> error (just like in a <code>#define</code>). <code>defined(Name)</code> is exempt —
+  its argument may legitimately be undefined.</li>
+<li><strong>Boolean literals</strong> — ISPP has no booleans, so a literal <code>true</code> / <code>false</code> / <code>yes</code> / <code>no</code> used directly
+  in a condition is painted <strong>yellow</strong> and carries a warning (the word is silently treated as an
+  undefined identifier <code>0</code>).</li>
+<li><strong>Structure validation</strong> — every opener (<code>#if</code> / <code>#ifdef</code> / <code>#ifndef</code> / <code>#ifexist</code> / <code>#ifnexist</code>) must
+  be closed by an <code>#endif</code> before the end of the file; an unterminated opener, a stray
+  <code>#elif</code> / <code>#else</code> / <code>#endif</code> without an open block, and an <code>#elif</code> after <code>#else</code> are all flagged as
+  errors. A <code>#if</code> / <code>#elif</code> <strong>without a condition</strong> is an error.</li>
+<li><strong>Folding</strong> — a complete <code>#if … #endif</code> block can be collapsed when it lies entirely within a single
+  section <em>or</em> entirely outside any section (a block that crosses a section header is not folded).</li>
+</ul>
 <hr />
 <p>See the official <a href="https://jrsoftware.org/ispphelp/topic_if.htm"><code>#if</code> documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 

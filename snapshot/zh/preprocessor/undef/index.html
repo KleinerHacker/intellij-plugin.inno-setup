@@ -2104,8 +2104,9 @@
 之后对该名称的任何使用都被视为未定义。</p>
 <hr />
 <h2 id="_1">语法</h2>
-<pre><code class="language-ini">#undef Name
+<pre><code class="language-ini">#undef [Scope] Name
 </code></pre>
+<p>名称前可加可选的作用域关键字（<code>public</code>、<code>protected</code> 或 <code>private</code>），与 <a href="../define/"><code>#define</code></a> 一致。</p>
 <hr />
 <h2 id="_2">说明</h2>
 <p><code>#undef</code> 通常与条件配合使用，以重新定义某个值或清除功能标志：</p>
@@ -2121,7 +2122,13 @@
 <a href="../conditionals/">条件指令</a>配合时最为有用。</p>
 <hr />
 <h2 id="_3">编辑器支持</h2>
-<p>指令关键字会被高亮、补全（<code>#</code> 之后）并根据内置 ISPP 规范验证。</p>
+<ul>
+<li>指令关键字（以及可选的作用域关键字）会被高亮、补全（<code>#</code> 之后）并根据内置 ISPP 规范验证。</li>
+<li><code>#undef Name</code> 中的名称会<strong>解析</strong>到其 <code>#define</code> —— 跳转到定义（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）、查找用法
+  （<strong>Alt+F7</strong>）和重命名会同步 <code>#define</code>、<code>#undef</code> 及所有 <code>{#Name}</code> 用法。</li>
+<li><code>#undef</code> 之后的补全会提供作用域关键字以及先前定义的宏名称。</li>
+<li>没有匹配 <code>#define</code> 的 <code>#undef</code> 不起任何作用：其名称会变灰，并提供删除该指令的快速修复。</li>
+</ul>
 <hr />
 <p>参阅官方 <a href="https://jrsoftware.org/ispphelp/topic_define.htm"><code>#define</code> / <code>#undef</code> 文档 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>。</p>
 

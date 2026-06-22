@@ -2291,12 +2291,15 @@
 <p><code>#define</code> はプリプロセッサーマクロ——コンパイル時にスクリプトへ置き換えられる名前付きの値または式——を宣言します。最もよく使われる ISPP ディレクティブであり、プラグインが完全なセマンティクス（参照解決、リネーム、使用箇所検索）でサポートするディレクティブです。</p>
 <hr />
 <h2 id="_1">構文</h2>
-<pre><code class="language-ini">#define Name [Value]
-#define Name(Param1, Param2) Expression
+<pre><code class="language-ini">#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 </code></pre>
 <ul>
 <li><code>#define Name Value</code> は定数マクロを定義します（値は省略可能で、その場合は <em>void</em> マクロになります）。</li>
 <li><code>#define Name(params) Expression</code> は関数形式のマクロを定義します。プラグインは式の本体を持たない関数形式マクロをエラーとしてフラグ付けします。</li>
+<li>名前の前にオプションの<strong>スコープキーワード</strong>（<code>public</code>、<code>protected</code>、<code>private</code>）を付けられます
+  （例：<code>#define public MyAppVersion "1.5.0"</code>）。キーワードとしてハイライト・補完され、付けても付けなくても
+  名前の解決と参照は同じように機能します。</li>
 <li><code>#undef Name</code> は以前に定義されたマクロを削除します。</li>
 </ul>
 <hr />

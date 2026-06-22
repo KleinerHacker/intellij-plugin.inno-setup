@@ -2104,8 +2104,10 @@
 정의되지 않습니다. <code>defined(Name)</code>은 거짓이 되고 이후 그 이름의 사용은 정의되지 않은 것으로 처리됩니다.</p>
 <hr />
 <h2 id="_1">구문</h2>
-<pre><code class="language-ini">#undef Name
+<pre><code class="language-ini">#undef [Scope] Name
 </code></pre>
+<p>이름 앞에 선택적 범위 키워드(<code>public</code>, <code>protected</code>, <code>private</code>)를 붙일 수 있습니다(<a href="../define/"><code>#define</code></a>과
+동일).</p>
 <hr />
 <h2 id="_2">설명</h2>
 <p><code>#undef</code>는 일반적으로 값을 다시 정의하거나 기능 플래그를 지우기 위해 조건과 함께 사용됩니다:</p>
@@ -2121,7 +2123,15 @@
 테스트하는 <a href="../conditionals/">조건 지시문</a>과 함께 사용할 때 가장 유용합니다.</p>
 <hr />
 <h2 id="_3">편집기 지원</h2>
-<p>지시문 키워드는 강조 표시되고 완성되며(<code>#</code> 뒤) 내장 ISPP 사양에 대해 검증됩니다.</p>
+<ul>
+<li>지시문 키워드(및 선택적 범위 키워드)는 강조 표시되고 완성되며(<code>#</code> 뒤) 내장 ISPP 사양에 대해
+  검증됩니다.</li>
+<li><code>#undef Name</code>의 이름은 해당 <code>#define</code>으로 <strong>확인됩니다</strong> — 정의로 이동(<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>),
+  사용처 찾기(<strong>Alt+F7</strong>), 이름 바꾸기가 <code>#define</code>, <code>#undef</code>, 모든 <code>{#Name}</code> 사용을 동기화합니다.</li>
+<li><code>#undef</code> 뒤의 완성은 범위 키워드와 앞서 정의된 매크로 이름을 제시합니다.</li>
+<li>일치하는 <code>#define</code>이 <strong>없는</strong> <code>#undef</code>는 아무 일도 하지 않습니다. 그 이름은 회색으로 표시되며 지시문을
+  제거하는 빠른 수정이 제공됩니다.</li>
+</ul>
 <hr />
 <p>공식 <a href="https://jrsoftware.org/ispphelp/topic_define.htm"><code>#define</code> / <code>#undef</code> 문서 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 

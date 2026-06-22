@@ -2293,13 +2293,16 @@ at compile time. It is the most-used ISPP directive and the one the plugin suppo
 (reference resolution, rename and Find Usages).</p>
 <hr />
 <h2 id="syntax">Syntax</h2>
-<pre><code class="language-ini">#define Name [Value]
-#define Name(Param1, Param2) Expression
+<pre><code class="language-ini">#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 </code></pre>
 <ul>
 <li><code>#define Name Value</code> defines a constant macro (the value may be omitted, defining a <em>void</em> macro).</li>
 <li><code>#define Name(params) Expression</code> defines a function-like macro. The plugin flags a function-like macro
   that has no expression body as an error.</li>
+<li>An optional <strong>scope keyword</strong> — <code>public</code>, <code>protected</code> or <code>private</code> — may precede the name
+  (e.g. <code>#define public MyAppVersion "1.5.0"</code>). It is highlighted like a keyword and offered in
+  completion; the name resolution and referencing work the same with or without it.</li>
 <li><code>#undef Name</code> removes a previously defined macro.</li>
 </ul>
 <hr />

@@ -2141,7 +2141,22 @@
 </code></pre>
 <hr />
 <h2 id="_3">编辑器支持</h2>
-<p>所有条件关键字都会被高亮、补全（<code>#</code> 之后）并根据内置 ISPP 规范验证；控制表达式会被解析和类型检查。</p>
+<ul>
+<li><strong>高亮与补全</strong> —— 所有条件关键字都会被高亮、补全（<code>#</code> 之后）并根据内置 ISPP 规范验证。</li>
+<li><strong>条件表达式</strong> —— <code>#if</code> / <code>#elif</code> 的条件与 <a href="../define/"><code>#define</code></a> 的值一样是完整的 ISPP 表达式：运算符
+  会被高亮，语法和类型错误会标注在出错的标记上，表达式补全候选（其他 <code>#define</code>、预定义变量、内置函数）
+  在条件中也会提供。</li>
+<li><strong>引用</strong> —— 条件中的标识符会解析到其 <code>#define</code> 声明，因此跳转到定义（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）、查找用法
+  （<strong>Alt+F7</strong>）和重命名均可用；未知名称会被标记为<em>未解析引用</em>错误（与 <code>#define</code> 相同）。<code>defined(Name)</code>
+  例外，其参数允许未定义。</li>
+<li><strong>布尔字面量</strong> —— ISPP 没有布尔类型，因此在条件中直接使用的 <code>true</code> / <code>false</code> / <code>yes</code> / <code>no</code> 会被显示为
+  <strong>黄色</strong>并带有警告（该词会被静默地当作未定义标识符 <code>0</code>）。</li>
+<li><strong>结构验证</strong> —— 每个开启指令（<code>#if</code> / <code>#ifdef</code> / <code>#ifndef</code> / <code>#ifexist</code> / <code>#ifnexist</code>）都必须在文件结束前
+  以 <code>#endif</code> 关闭；未关闭的开启指令、没有对应开启块的 <code>#elif</code> / <code>#else</code> / <code>#endif</code>，以及位于 <code>#else</code>
+  之后的 <code>#elif</code>，都会被标记为错误。没有条件的 <code>#if</code> / <code>#elif</code> 也是错误。</li>
+<li><strong>折叠</strong> —— 当完整的 <code>#if … #endif</code> 块完全位于单个节内或完全位于任何节之外时可以折叠（跨越节标题的块
+  不会折叠）。</li>
+</ul>
 <hr />
 <p>参阅官方 <a href="https://jrsoftware.org/ispphelp/topic_if.htm"><code>#if</code> 文档 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>。</p>
 

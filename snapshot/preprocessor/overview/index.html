@@ -2293,12 +2293,16 @@ in a read-only tab, so you can inspect what the compiler actually sees.</p>
 <hr />
 <h2 id="editor-support">Editor support</h2>
 <ul>
-<li><strong>Syntax highlighting</strong> for directives, macro names and inline <code>{#…}</code> references</li>
-<li><strong>Completion</strong> of directive keywords, of <code>#define</code>s and value-bearing predefined variables, and of
-  built-in functions</li>
-<li><strong>Validation</strong> of unknown directives, unknown <code>{#…}</code> references, never-used <code>#define</code>s and broken or
-  problematic <code>#include</code> lines</li>
-<li><strong>Rename</strong> and <strong>Find Usages</strong> across a <code>#define</code> and all its <code>{#Name}</code> usages</li>
+<li><strong>Syntax highlighting</strong> for directives, macro names, scope keywords and inline <code>{#…}</code> references</li>
+<li><strong>Completion</strong> of directive keywords, of <code>#define</code>/<code>#undef</code> scope keywords, of <code>#define</code>s and
+  value-bearing predefined variables, and of built-in functions — including inside a <code>#if</code>/<code>#elif</code>
+  condition</li>
+<li><strong>Validation</strong> of unknown directives, unknown <code>{#…}</code> references, never-used <code>#define</code>s, broken or
+  problematic <code>#include</code> lines, the <code>#if … #endif</code> block structure (a missing <code>#endif</code>, a stray
+  <code>#elif</code>/<code>#else</code>/<code>#endif</code>, a condition-less <code>#if</code>) and literal booleans in a condition</li>
+<li><strong>Rename</strong> and <strong>Find Usages</strong> across a <code>#define</code> and all its usages — its <code>{#Name}</code> references, its
+  <code>#undef</code>, and identifiers in <code>#if</code>/<code>#elif</code> conditions</li>
+<li><strong>Folding</strong> of an <code>#if … #endif</code> block that lies wholly inside one section or wholly outside any section</li>
 <li><strong>Show Effective Script</strong> to view the fully <code>#include</code>-resolved script in a read-only tab</li>
 <li><strong>Inline</strong> and <strong>Extract</strong> intentions for <code>#include</code>, with automatic path updates on rename/move</li>
 </ul>

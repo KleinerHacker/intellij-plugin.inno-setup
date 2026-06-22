@@ -2291,12 +2291,15 @@
 <p><code>#define</code>은 전처리기 매크로 — 컴파일 시점에 스크립트로 치환되는 명명된 값 또는 표현식 — 를 선언합니다. 가장 많이 사용되는 ISPP 지시문이며, 플러그인이 완전한 의미 체계(참조 해석, 이름 바꾸기, 사용 찾기)로 지원하는 지시문입니다.</p>
 <hr />
 <h2 id="_1">구문</h2>
-<pre><code class="language-ini">#define Name [Value]
-#define Name(Param1, Param2) Expression
+<pre><code class="language-ini">#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 </code></pre>
 <ul>
 <li><code>#define Name Value</code>는 상수 매크로를 정의합니다(값을 생략하면 <em>void</em> 매크로가 됩니다).</li>
 <li><code>#define Name(params) Expression</code>은 함수형 매크로를 정의합니다. 플러그인은 표현식 본문이 없는 함수형 매크로를 오류로 표시합니다.</li>
+<li>이름 앞에 선택적 <strong>범위 키워드</strong>(<code>public</code>, <code>protected</code>, <code>private</code>)를 붙일 수 있습니다
+  (예: <code>#define public MyAppVersion "1.5.0"</code>). 키워드로 강조 표시되고 완성되며, 붙이든 안 붙이든 이름
+  확인과 참조는 동일하게 작동합니다.</li>
 <li><code>#undef Name</code>은 이전에 정의된 매크로를 제거합니다.</li>
 </ul>
 <hr />

@@ -2286,12 +2286,17 @@
 <hr />
 <h2 id="_6">エディターサポート</h2>
 <ul>
-<li>ディレクティブ、マクロ名、インライン <code>{#…}</code> 参照の<strong>構文ハイライト</strong></li>
-<li>ディレクティブキーワード、<code>#define</code> と値を持つ定義済み変数、組み込み関数の<strong>補完</strong></li>
-<li>未知のディレクティブ、未知の <code>{#…}</code> 参照、未使用の <code>#define</code>、壊れたまたは問題のある <code>#include</code> 行の<strong>検証</strong></li>
-<li><code>#define</code> とそのすべての <code>{#Name}</code> 使用箇所にわたる<strong>リネーム</strong>と<strong>使用箇所検索</strong></li>
-<li><code>#include</code> の<strong>インライン</strong>と<strong>抽出</strong>インテンション、リネーム/移動時のパス自動更新</li>
+<li>ディレクティブ、マクロ名、スコープキーワード、インライン <code>{#…}</code> 参照の<strong>構文ハイライト</strong></li>
+<li>ディレクティブキーワード、<code>#define</code>/<code>#undef</code> のスコープキーワード、<code>#define</code> と値を持つ定義済み変数、
+  組み込み関数の<strong>補完</strong> — <code>#if</code>/<code>#elif</code> の条件内も含む</li>
+<li>未知のディレクティブ、未知の <code>{#…}</code> 参照、未使用の <code>#define</code>、壊れたまたは問題のある <code>#include</code> 行、
+  <code>#if … #endif</code> のブロック構造（<code>#endif</code> の欠落、孤立した <code>#elif</code>/<code>#else</code>/<code>#endif</code>、条件の無い <code>#if</code>）、
+  条件内のリテラル真偽値の<strong>検証</strong></li>
+<li><code>#define</code> とそのすべての使用箇所（<code>{#Name}</code> 参照、<code>#undef</code>、<code>#if</code>/<code>#elif</code> の条件内の識別子）にわたる
+  <strong>リネーム</strong>と<strong>使用箇所検索</strong></li>
+<li>単一のセクション内または全セクション外に完全に収まる <code>#if … #endif</code> ブロックの<strong>折りたたみ</strong></li>
 <li><strong>有効なスクリプトを表示</strong> — <code>#include</code> を完全に解決したスクリプトを読み取り専用タブで表示</li>
+<li><code>#include</code> の<strong>インライン</strong>と<strong>抽出</strong>インテンション、リネーム/移動時のパス自動更新</li>
 </ul>
 
 

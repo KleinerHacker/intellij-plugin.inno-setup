@@ -2284,12 +2284,17 @@ include 작업을 더 쉽게 해 주는 두 가지 편집기 동작이 있습니
 <hr />
 <h2 id="_6">편집기 지원</h2>
 <ul>
-<li>지시문, 매크로 이름, 인라인 <code>{#…}</code> 참조에 대한 <strong>구문 강조 표시</strong></li>
-<li>지시문 키워드, <code>#define</code> 및 값을 가진 사전 정의 변수, 내장 함수의 <strong>완성</strong></li>
-<li>알 수 없는 지시문, 알 수 없는 <code>{#…}</code> 참조, 사용되지 않는 <code>#define</code>, 손상되었거나 문제가 있는 <code>#include</code> 줄의 <strong>검증</strong></li>
-<li><code>#define</code> 및 모든 <code>{#Name}</code> 사용에 걸친 <strong>이름 바꾸기</strong>와 <strong>사용 찾기</strong></li>
-<li><code>#include</code>의 <strong>인라인</strong> 및 <strong>추출</strong> 인텐션, 이름 바꾸기/이동 시 경로 자동 갱신</li>
+<li>지시문, 매크로 이름, 범위 키워드, 인라인 <code>{#…}</code> 참조에 대한 <strong>구문 강조 표시</strong></li>
+<li>지시문 키워드, <code>#define</code>/<code>#undef</code> 범위 키워드, <code>#define</code> 및 값을 가진 사전 정의 변수, 내장 함수의
+  <strong>완성</strong> — <code>#if</code>/<code>#elif</code> 조건 내부 포함</li>
+<li>알 수 없는 지시문, 알 수 없는 <code>{#…}</code> 참조, 사용되지 않는 <code>#define</code>, 손상되었거나 문제가 있는 <code>#include</code>
+  줄, <code>#if … #endif</code> 블록 구조(누락된 <code>#endif</code>, 떠도는 <code>#elif</code>/<code>#else</code>/<code>#endif</code>, 조건 없는 <code>#if</code>),
+  조건 내 리터럴 불리언의 <strong>검증</strong></li>
+<li><code>#define</code> 및 그 모든 사용(<code>{#Name}</code> 참조, <code>#undef</code>, <code>#if</code>/<code>#elif</code> 조건 내 식별자)에 걸친 <strong>이름 바꾸기</strong>와
+  <strong>사용 찾기</strong></li>
+<li>단일 섹션 내부 또는 모든 섹션 외부에 완전히 있는 <code>#if … #endif</code> 블록의 <strong>접기</strong></li>
 <li><strong>유효 스크립트 표시</strong> — <code>#include</code>가 완전히 해석된 스크립트를 읽기 전용 탭에서 확인</li>
+<li><code>#include</code>의 <strong>인라인</strong> 및 <strong>추출</strong> 인텐션, 이름 바꾸기/이동 시 경로 자동 갱신</li>
 </ul>
 
 
