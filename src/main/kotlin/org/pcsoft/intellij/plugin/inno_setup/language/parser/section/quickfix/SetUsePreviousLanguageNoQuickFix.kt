@@ -22,9 +22,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSection
 
 /**
- * Sets `UsePreviousLanguage` in `[Setup]` to `no`, the value Inno Setup requires when the script
+ * Sets `UsePreviousLanguage` in `\[Setup]` to `no`, the value Inno Setup requires when the script
  * declares only a single language. Replaces an existing value, inserts the directive into an existing
- * `[Setup]`, or creates a `[Setup]` section if none is present.
+ * `\[Setup]`, or creates a `\[Setup]` section if none is present.
  */
 class SetUsePreviousLanguageNoQuickFix(file: IsScriptFile) : IntentionAction {
 

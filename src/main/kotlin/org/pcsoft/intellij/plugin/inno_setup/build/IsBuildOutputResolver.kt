@@ -24,7 +24,7 @@ import java.io.File
  *
  * The path-mapping decisions live in pure, dependency-free helpers ([detectBuildSubdir],
  * [computeOutputArg]) so they can be unit-tested without a project; only [resolveOutputArg] reaches
- * into PSI to read the script's `[Setup] OutputDir`.
+ * into PSI to read the script's `\[Setup] OutputDir`.
  */
 class IsBuildOutputResolver(private val project: Project) {
 
@@ -63,7 +63,7 @@ class IsBuildOutputResolver(private val project: Project) {
         private val OUTPUT_DIR = Regex("""^\s*OutputDir\s*=\s*(.+?)\s*$""", setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE))
 
         /**
-         * Extracts the `[Setup] OutputDir` value from raw script [text], or `null` when absent.
+         * Extracts the `\[Setup] OutputDir` value from raw script [text], or `null` when absent.
          */
         fun parseOutputDir(text: String): String? =
             OUTPUT_DIR.find(text)?.groupValues?.get(1)?.trim()?.removeSurrounding("\"")?.takeIf { it.isNotBlank() }

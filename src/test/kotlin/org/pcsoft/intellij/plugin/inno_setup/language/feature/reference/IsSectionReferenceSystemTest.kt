@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
 /**
  * End-to-end tests for both reference types:
  *   1. ISPP constant references  {#Name} → #define Name  (now in injected ISPP PSI)
- *   2. Section cross-references  Tasks: name → [Tasks] Name: name
+ *   2. Section cross-references  Tasks: name → `\[Tasks]` Name: name
  */
 class IsSectionReferenceSystemTest : BasePlatformTestCase() {
 

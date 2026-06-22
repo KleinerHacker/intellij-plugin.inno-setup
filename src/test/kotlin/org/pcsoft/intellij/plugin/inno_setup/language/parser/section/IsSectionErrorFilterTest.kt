@@ -20,10 +20,10 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
- * Tests for [IsSectionErrorFilter] — parse errors inside the `[Code]` section or an
+ * Tests for [IsSectionErrorFilter] — parse errors inside the `\[Code]` section or an
  * ISPP preprocessor line must be suppressed, all others highlighted.
  *
- * An unclosed section header (`[Name` without `]`) pins after `[` and yields a
+ * An unclosed section header (`\[Name` without `]`) pins after `[` and yields a
  * [PsiErrorElement] inside that section, giving a deterministic in-section error.
  */
 class IsSectionErrorFilterTest : BasePlatformTestCase() {

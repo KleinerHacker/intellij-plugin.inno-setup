@@ -99,7 +99,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Validates that a `MessagesFile` value in `[Languages]` points to an existing, readable, and
+     * Validates that a `MessagesFile` value in `\[Languages]` points to an existing, readable, and
      * structurally valid ISL file. Emits ERROR for missing/unreadable/incomplete files and WARNING
      * when the Inno Setup installation path is not configured (so `compiler:` paths cannot be checked).
      */
@@ -450,8 +450,8 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Flags a `Key: Value` pair sitting in a directive section ([Setup], [Messages], [CustomMessages],
-     * [LangOptions]), where entries must instead use `Key=Value`. The red mark covers the wrong ':'.
+     * Flags a `Key: Value` pair sitting in a directive section (`\[Setup]`, `\[Messages]`, `\[CustomMessages]`,
+     * `\[LangOptions]`), where entries must instead use `Key=Value`. The red mark covers the wrong ':'.
      */
     private fun annotateParamPairSeparator(pair: IsSectionParamPair, holder: AnnotationHolder, spec: IsSectionSpec) {
         if (pair.isInCodeSection) return
@@ -466,7 +466,7 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Flags a `Key=Value` entry sitting in a parameter section ([Files], [Icons], [Registry], …),
+     * Flags a `Key=Value` entry sitting in a parameter section (`\[Files]`, `\[Icons]`, `\[Registry]`, …),
      * where entries must instead use `Key: Value`. The red mark covers the wrong '='.
      */
     private fun annotateDirectiveEntrySeparator(

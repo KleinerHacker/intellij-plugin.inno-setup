@@ -28,7 +28,7 @@ class IsSectionSectionMoverTest : BasePlatformTestCase() {
         myFixture.checkResult(after)
     }
 
-    /** Three sections, caret on the middle section header ([Files]). */
+    /** Three sections, caret on the middle section header (`\[Files]`). */
     private val threeSections =
         """
         [Setup]

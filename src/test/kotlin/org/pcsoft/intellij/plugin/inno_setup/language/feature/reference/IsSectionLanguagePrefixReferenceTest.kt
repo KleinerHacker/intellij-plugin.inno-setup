@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclara
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
 
 /**
- * Tests for the `lang.` key prefix (in [Messages]/[CustomMessages]) ↔ `[Languages] Name`:
+ * Tests for the `lang.` key prefix (in `\[Messages]`/`\[CustomMessages]`) ↔ `\[Languages] Name`:
  * resolve, unknown-prefix highlighting, find usages and rename.
  */
 class IsSectionLanguagePrefixReferenceTest : BasePlatformTestCase() {

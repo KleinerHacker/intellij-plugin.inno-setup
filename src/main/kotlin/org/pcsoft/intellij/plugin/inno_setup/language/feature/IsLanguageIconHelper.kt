@@ -28,7 +28,7 @@ import kotlin.math.roundToInt
  */
 object IsLanguageIconHelper {
 
-    /** Flag icon for [psiFile] based on its `[LangOptions] LanguageID`, or a globe fallback. */
+    /** Flag icon for [psiFile] based on its `\[LangOptions] LanguageID`, or a globe fallback. */
     fun flagIconForIslFile(psiFile: IsScriptFile?): Icon {
         psiFile ?: return AllIcons.General.Web
         val langOptions = psiFile.findSection("LangOptions") ?: return AllIcons.General.Web

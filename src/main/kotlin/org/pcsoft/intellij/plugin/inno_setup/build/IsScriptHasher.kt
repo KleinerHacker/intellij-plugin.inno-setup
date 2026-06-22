@@ -20,7 +20,7 @@ import java.security.MessageDigest
 /**
  * Computes an MD5 hash over all files that participate in compiling a top-level `.iss` script:
  * the script itself, every `.iss` pulled in (recursively) via `#include`, and every `.isl` language
- * file referenced through a `[Languages] MessagesFile:` entry that resolves to a local file.
+ * file referenced through a `\[Languages] MessagesFile:` entry that resolves to a local file.
  *
  * The hash is used to decide whether a recompile is required before launching the installer
  * ([org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunProcessHandler]) and to skip unchanged

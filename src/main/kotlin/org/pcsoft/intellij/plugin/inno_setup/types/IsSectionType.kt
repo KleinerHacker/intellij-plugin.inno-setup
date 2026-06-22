@@ -20,15 +20,15 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @property typeName The lowercase wire name used in the spec YAML and shown in documentation/completion.
  */
 enum class IsSectionType(val typeName: String) {
-    /** `Key=Value` sections such as `[Setup]`, `[Messages]`, `[LangOptions]`. */
+    /** `Key=Value` sections such as `\[Setup]`, `\[Messages]`, `\[LangOptions]`. */
     @JsonProperty("directive")
     DIRECTIVE("directive"),
 
-    /** `Key: Value; …` parameter lists such as `[Files]`, `[Icons]`, `[Registry]`. */
+    /** `Key: Value; …` parameter lists such as `\[Files]`, `\[Icons]`, `\[Registry]`. */
     @JsonProperty("parameter")
     PARAMETER("parameter"),
 
-    /** The free-form Pascal `[Code]` section. */
+    /** The free-form Pascal `\[Code]` section. */
     @JsonProperty("code")
     CODE("code"),
 }

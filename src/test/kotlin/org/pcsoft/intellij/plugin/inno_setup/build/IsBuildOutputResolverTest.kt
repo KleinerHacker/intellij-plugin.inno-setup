@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 /**
- * Tests [IsBuildOutputResolver]'s end-to-end resolution, including reading `[Setup] OutputDir` via PSI.
+ * Tests [IsBuildOutputResolver]'s end-to-end resolution, including reading `\[Setup] OutputDir` via PSI.
  */
 class IsBuildOutputResolverTest : BasePlatformTestCase() {
 

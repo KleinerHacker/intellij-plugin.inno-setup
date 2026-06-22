@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntryEx
 
 /**
- * Tests for {cm:MessageName} ↔ [CustomMessages] declarations: resolve, unresolved highlighting,
+ * Tests for {cm:MessageName} ↔ `\[CustomMessages]` declarations: resolve, unresolved highlighting,
  * find usages and rename (including keeping language variants in sync).
  */
 class IsSectionCustomMessageReferenceTest : BasePlatformTestCase() {

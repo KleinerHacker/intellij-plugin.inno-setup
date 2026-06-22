@@ -186,7 +186,7 @@ val IsSectionParamPair.nextParam: IsSectionParamPair?
 
 /**
  * The section that this pair's value references, when its key maps to a `reference`-typed attribute
- * in the section spec (e.g. `Tasks` in `[Icons]` → `Tasks`), or `null` otherwise. Derived from the
+ * in the section spec (e.g. `Tasks` in `\[Icons]` → `Tasks`), or `null` otherwise. Derived from the
  * YAML spec (`type: { kind: reference, section: … }`), the single source of truth — so a key only
  * counts as a reference in the sections where the spec actually declares it as one.
  */

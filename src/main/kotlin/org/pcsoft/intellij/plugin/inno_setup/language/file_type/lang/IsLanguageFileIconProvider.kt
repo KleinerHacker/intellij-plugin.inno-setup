@@ -23,7 +23,7 @@ import javax.swing.Icon
 
 /**
  * Decorates ISL file icons in the project tree with a 25 % flag-overlay (bottom-right) that
- * reflects the language declared in the file's `[LangOptions] LanguageID` directive.
+ * reflects the language declared in the file's `\[LangOptions] LanguageID` directive.
  */
 class IsLanguageFileIconProvider : FileIconProvider {
 

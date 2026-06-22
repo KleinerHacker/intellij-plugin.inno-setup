@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTitle
 
 /**
- * Renders a play icon in the gutter next to the `[Setup]` section header. Clicking it triggers a
+ * Renders a play icon in the gutter next to the `\[Setup]` section header. Clicking it triggers a
  * dry-run installation of the current script.
  */
 class IsSetupSectionGutterIconProvider : LineMarkerProvider {

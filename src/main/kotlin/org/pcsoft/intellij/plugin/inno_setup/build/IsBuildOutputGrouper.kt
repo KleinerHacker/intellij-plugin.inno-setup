@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 
 /**
  * Stateful segmenter that turns the flat stream of ISCC output lines into [OutputSection]s — one
- * group per Inno-Setup section (`[Setup]`, `[Languages]`, …) plus catch-all groups for any output
+ * group per Inno-Setup section (`\[Setup]`, `\[Languages]`, …) plus catch-all groups for any output
  * that appears outside a section. Each completed section is reported through [onSection].
  *
  * It is deliberately free of any IntelliJ dependency so it can be unit-tested in isolation (mirrors
@@ -27,7 +27,7 @@ class IsBuildOutputGrouper(private val onSection: (OutputSection) -> Unit) {
     /** A completed group of consecutive output lines. [title] already carries the `(N)` count. */
     data class OutputSection(val title: String, val lines: List<String>)
 
-    /** Label of the currently open section (e.g. `[Setup]`), or `null` for a catch-all group. */
+    /** Label of the currently open section (e.g. `\[Setup]`), or `null` for a catch-all group. */
     private var currentLabel: String? = null
     private val buffer = mutableListOf<String>()
 
@@ -58,7 +58,7 @@ class IsBuildOutputGrouper(private val onSection: (OutputSection) -> Unit) {
         // "Parsing [Setup] section, line 10" → captures "[Setup]".
         private val SECTION = Regex("""^Parsing (\[[^]]+]) section\b.*""")
 
-        /** Returns the `[X]` label when [text] is a `Parsing [X] section …` line, else `null`. */
+        /** Returns the `\[X]` label when [text] is a `Parsing \[X] section …` line, else `null`. */
         fun sectionLabel(text: String): String? = SECTION.matchEntire(text.trim())?.groupValues?.get(1)
 
         /** Short title for a catch-all group derived from its first line. */

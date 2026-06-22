@@ -23,12 +23,12 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickf
  * Tests for [RemoveUnusedDefineQuickFix].
  *
  * Testing via [com.intellij.testFramework.fixtures.CodeInsightTestFixture.launchAction] or
- * [myFixture.availableIntentions] is not viable here: after the quickfix deletes a
+ * `myFixture.availableIntentions` is not viable here: after the quickfix deletes a
  * [org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine] from the host
  * document, IntelliJ's injection-cache cleanup invalidates the test [com.intellij.testFramework.LightVirtualFile],
- * making any subsequent access to [myFixture.file] throw.
+ * making any subsequent access to `myFixture.file` throw.
  *
- * Instead we invoke the quickfix directly via the [internal] String constructor (which bypasses
+ * Instead we invoke the quickfix directly via the `internal` String constructor (which bypasses
  * injection entirely) inside a [WriteCommandAction], and read the document text synchronously
  * before the fixture teardown can observe the stale VF.
  */

@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 
 /**
  * Tests for the ISL section restriction ([IsLanguageAnnotator])
- * plus the .isl-specific relaxations in the shared ISI annotator (no required [Setup]).
+ * plus the .isl-specific relaxations in the shared ISI annotator (no required `\[Setup]`).
  */
 class IsLanguageAnnotatorTest : BasePlatformTestCase() {
 

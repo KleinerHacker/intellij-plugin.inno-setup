@@ -30,10 +30,10 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorVariableType
 
 // ── ISPP host bridge (.iss/.isl script + .ist template) ──────────────────────────────
 
-/** Whether [this] is a file ISPP directives can be injected into: a script (.iss/.isl) or template (.ist). */
+/** Whether `this` is a file ISPP directives can be injected into: a script (.iss/.isl) or template (.ist). */
 fun PsiFile?.isIsppHostFile(): Boolean = this is IsScriptFile || this is IsTemplateFile
 
-/** [this] if it is an ISPP host file (script or template), otherwise `null`. */
+/** `this` if it is an ISPP host file (script or template), otherwise `null`. */
 fun PsiFile?.asIsppHostFile(): PsiFile? = this?.takeIf { it.isIsppHostFile() }
 
 /**

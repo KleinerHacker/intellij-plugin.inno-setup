@@ -34,7 +34,7 @@ sealed interface IsResolveResult {
 }
 
 /**
- * Pure-logic utilities for expanding and resolving `MessagesFile` values in `[Languages]` sections.
+ * Pure-logic utilities for expanding and resolving `MessagesFile` values in `\[Languages]` sections.
  * All methods are stateless and testable without a PSI/project context.
  */
 object IsMessagesFileResolver {
@@ -48,7 +48,7 @@ object IsMessagesFileResolver {
      *                      built-in constants.
      * @param defines       ISPP `#define` name→value pairs from the host `.iss` file.
      * @param scriptDir     Directory of the `.iss` file, used to resolve `{src}` and `{#SourcePath}`.
-     * @param customMessages Entries from `[CustomMessages]` key→value (optional, rarely used in paths).
+     * @param customMessages Entries from `\[CustomMessages]` key→value (optional, rarely used in paths).
      * @param installPath   Inno Setup installation directory (from settings), used for `{#CompilerPath}`.
      */
     fun expandValue(

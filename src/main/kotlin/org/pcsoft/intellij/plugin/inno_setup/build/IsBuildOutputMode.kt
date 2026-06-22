@@ -24,7 +24,7 @@ enum class IsBuildOutputMode(
     /** Human-readable label shown in the settings combo box. */
     val label: String
 ) {
-    /** Leave the script's `[Setup] OutputDir` untouched (no `/O` switch). */
+    /** Leave the script's `\[Setup] OutputDir` untouched (no `/O` switch). */
     SCRIPT("As defined in script"),
 
     /** Redirect a relative `OutputDir` under the project build directory (`out`/`target`/`build`). */
