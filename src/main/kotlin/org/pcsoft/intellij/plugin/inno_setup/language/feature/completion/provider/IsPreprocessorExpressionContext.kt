@@ -23,7 +23,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 internal object IsPreprocessorExpressionContext {
     // There is already a complete name (with optional parameter list) followed by whitespace,
     // i.e. the caret sits in the expression part.
-    private val EXPR_PREFIX = Regex("^#\\s*define\\s+[A-Za-z0-9_.\\-]+(?:\\([^)]*\\))?\\s+.*$")
+    private val EXPR_PREFIX =
+        Regex("^#\\s*define\\s+(?:(?:public|protected|private)\\s+)?[A-Za-z0-9_.\\-]+(?:\\([^)]*\\))?\\s+.*$")
 
     // The caret sits in the expression argument of a `#pragma` sub-command that takes one (string/integer).
     private val PRAGMA_EXPR_PREFIX = Regex(

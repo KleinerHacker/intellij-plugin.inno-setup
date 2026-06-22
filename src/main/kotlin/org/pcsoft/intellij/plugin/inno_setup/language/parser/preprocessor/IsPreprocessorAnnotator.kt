@@ -38,6 +38,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveUselessUndefQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.ReplaceIncludeWithLineQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstant
@@ -115,7 +116,14 @@ class IsPreprocessorAnnotator : Annotator {
             annotatePragma(directive, ex, holder)
             return
         }
+        if (ex.isUndef()) {
+            annotateUndef(directive, ex, holder)
+            return
+        }
         if (!ex.isDefine()) return
+
+        // Optional scope/visibility keyword (#define public Foo …) — highlighted like a keyword.
+        highlightVisibility(ex, holder)
 
         // A #define name must start with a letter/underscore. When it starts with a digit the lexer splits
         // it into NUMBER + IDENTIFIER, so the first value token is a NUMBER — flag that as an error.
@@ -167,6 +175,56 @@ class IsPreprocessorAnnotator : Annotator {
                 .range(ex.nameIdentifier?.textRange ?: directive.textRange)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
                 .withFix(RemoveUnusedDefineQuickFix(directive))
+                .create()
+        }
+    }
+
+    /** Highlights the optional scope/visibility keyword of a `#define`/`#undef` like a keyword. */
+    private fun highlightVisibility(ex: IsPreprocessorDirectiveEx, holder: AnnotationHolder) {
+        val visibility = ex.getVisibilityIdentifier() ?: return
+        highlight(visibility.textRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+    }
+
+    /**
+     * Validates an `#undef`: highlights the optional scope keyword, rejects a reserved keyword used as the
+     * name, and resolves the name against the preceding `#define`s. A matching name is highlighted as a
+     * define name; an `#undef` without any matching `#define` does nothing useful, so its name is grayed
+     * out with a weak warning and a quick fix that removes the directive.
+     */
+    private fun annotateUndef(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        highlightVisibility(ex, holder)
+
+        val nameIdentifier = ex.nameIdentifier ?: return
+
+        val forbidden = service<IsPreprocessorService>().spec.forbiddenVariableNames
+            .firstOrNull { it.name.equals(nameIdentifier.text, ignoreCase = true) }
+        if (forbidden != null) {
+            holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "'${nameIdentifier.text}' is a reserved preprocessor keyword and cannot be used as an #undef name"
+            ).range(nameIdentifier.textRange).create()
+            return
+        }
+
+        // Resolve against a preceding #define (declaration-order aware, via the directive's reference).
+        val resolved = directive.references
+            .filterIsInstance<IsPreprocessorExpressionReference>()
+            .any { it.resolve() != null }
+
+        if (resolved) {
+            highlight(nameIdentifier.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+        } else {
+            holder.newAnnotation(
+                HighlightSeverity.WEAK_WARNING,
+                "#undef '${nameIdentifier.text}' has no matching #define"
+            )
+                .range(nameIdentifier.textRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
+                .withFix(RemoveUselessUndefQuickFix(directive))
                 .create()
         }
     }
@@ -543,9 +601,11 @@ class IsPreprocessorAnnotator : Annotator {
         }
         if (usedAsConstant) return true
 
-        // Check cross-references inside other #define expressions.
+        // Check cross-references inside other #define expressions. A #undef references the #define but is
+        // not a real use, so it must not suppress the "never used" warning.
         return hostFile.isppDirectives
             .filter { it !== directive }
+            .filter { (it as? IsPreprocessorDirectiveEx)?.isUndef() != true }
             .any { other -> other.references.any { ref -> ref.canonicalText.equals(name, ignoreCase = true) } }
     }
 

@@ -216,4 +216,81 @@ class IsSectionPreprocessorReferenceTest : BasePlatformTestCase() {
             "#define C 1\n#define B C + 2\n[Setup]\nX={#B}\n"
         )
     }
+
+    // ── #undef references the preceding #define ───────────────────────────────
+
+    private fun findUndef(file: IsScriptFile, name: String): IsPreprocessorDirective? {
+        val mgr = InjectedLanguageManager.getInstance(file.project)
+        return PsiTreeUtil.getChildrenOfTypeAsList(file, IsSectionPreprocessorLine::class.java)
+            .flatMap { line ->
+                val dirs = mutableListOf<IsPreprocessorDirective>()
+                mgr.enumerate(line) { injectedPsi, _ ->
+                    if (injectedPsi is IsPreprocessorFile)
+                        dirs.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsPreprocessorDirective::class.java))
+                }
+                dirs
+            }
+            .firstOrNull { (it as? IsPreprocessorDirectiveEx)?.isUndef() == true && it.name == name }
+    }
+
+    fun testUndefResolvesToPrecedingDefine() {
+        val file = setup("#define Foo 1\n#undef Foo\n")
+        val undef = findUndef(file, "Foo")!!
+        val ref = undef.references.firstOrNull { it.canonicalText == "Foo" }
+        assertNotNull("Expected an #undef reference 'Foo'", ref)
+        assertEquals("Foo", (ref!!.resolve() as? IsPreprocessorDirectiveEx)?.getDefineName())
+    }
+
+    fun testForwardUndefDoesNotResolve() {
+        // Foo is defined *after* the #undef → must not resolve (declaration order enforced).
+        val file = setup("#undef Foo\n#define Foo 1\n")
+        val undef = findUndef(file, "Foo")!!
+        val ref = undef.references.firstOrNull { it.canonicalText == "Foo" }
+        assertNotNull("Expected an #undef reference 'Foo'", ref)
+        assertNull("A forward #undef must not resolve", ref!!.resolve())
+    }
+
+    fun testRenameDefineUpdatesUndef() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define Ap<caret>p 1\n#undef App\n[Setup]\nX={#App}\n"
+        )
+        myFixture.renameElementAtCaret("Tool")
+        myFixture.checkResult("#define Tool 1\n#undef Tool\n[Setup]\nX={#Tool}\n")
+    }
+
+    fun testReferencesSearchFindsUndefUsage() {
+        val file = setup("#define A 1\n#undef A\n")
+        val a = findDefine(file, "A")!!
+        val refs = ReferencesSearch.search(a).findAll()
+        assertTrue("Find Usages must include the #undef usage of A", refs.any { it.canonicalText == "A" })
+    }
+
+    // ── optional visibility/scope keyword ─────────────────────────────────────
+
+    fun testVisibilityDefineNameIsTheNameNotTheKeyword() {
+        val file = setup("#define public MyConst 1\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        val directive = findDefine(file, "MyConst")
+        assertNotNull("Expected #define with scope keyword to expose 'MyConst' as the name", directive)
+        assertEquals("MyConst", (directive as IsPreprocessorDirectiveEx).getDefineName())
+        assertEquals("public", directive.getVisibilityIdentifier()?.text)
+    }
+
+    fun testVisibilityDefineResolvesConstantReference() {
+        val file = setup("#define private AppVersion \"1.0\"\n[Files]\nSource: \"a.exe\"; DestDir: \"{#AppVersion}\"\n")
+        val body = findIsppConstantBody(file)!!
+        val ref = IsSectionPreprocessorConstantReference(body, "AppVersion")
+        assertEquals(
+            "AppVersion",
+            (ref.resolve() as? IsPreprocessorDirectiveEx)?.getDefineName()
+        )
+    }
+
+    fun testUndefWithVisibilityResolvesToDefine() {
+        val file = setup("#define Foo 1\n#undef protected Foo\n")
+        val undef = findUndef(file, "Foo")!!
+        assertEquals("protected", (undef as IsPreprocessorDirectiveEx).getVisibilityIdentifier()?.text)
+        val ref = undef.references.firstOrNull { it.canonicalText == "Foo" }
+        assertEquals("Foo", (ref?.resolve() as? IsPreprocessorDirectiveEx)?.getDefineName())
+    }
 }

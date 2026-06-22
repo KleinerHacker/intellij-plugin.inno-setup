@@ -17,6 +17,7 @@ import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorBuiltinFunctionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineNameProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDirectiveKeywordProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorIncludeFileProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorPragmaProvider
@@ -36,6 +37,12 @@ class IsPreprocessorCompletionContributor : CompletionContributor() {
                 .afterLeaf(PlatformPatterns.psiElement(IsPreprocessorTypes.HASH))
                 .withParent(IsPreprocessorDirective::class.java),
             IsPreprocessorDirectiveKeywordProvider
+        )
+        // Scope/visibility keywords (and, for #undef, existing define names) in the name position
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
+            IsPreprocessorDefineNameProvider
         )
         // Names of preceding #defines inside a #define expression
         extend(

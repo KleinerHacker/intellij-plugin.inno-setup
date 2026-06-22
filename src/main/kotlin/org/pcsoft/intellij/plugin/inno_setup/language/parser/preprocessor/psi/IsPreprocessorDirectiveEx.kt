@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
 
 /**
@@ -22,6 +23,15 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      * Returns or performs the public behavior represented by this member.
      */
     fun isDefine(): Boolean
+
+    /** Whether this directive is an `#undef` (case-insensitive). */
+    fun isUndef(): Boolean
+
+    /**
+     * The optional scope/visibility keyword (`public`/`protected`/`private`) preceding the name of a
+     * `#define`/`#undef`, or `null` when none is present. Recognized only when an actual name follows it.
+     */
+    fun getVisibilityIdentifier(): PsiElement?
     /**
      * Returns or performs the public behavior represented by this member.
      */

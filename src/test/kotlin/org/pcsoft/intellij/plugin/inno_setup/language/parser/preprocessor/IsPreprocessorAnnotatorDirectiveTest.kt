@@ -133,4 +133,50 @@ class IsPreprocessorAnnotatorDirectiveTest : BasePlatformTestCase() {
         val errors = errorsContaining("#define abc \"x\"\n$setupTail", "must not start with a digit")
         assertTrue("A valid #define name must not produce a digit error", errors.isEmpty())
     }
+
+    // ── optional visibility/scope keyword ─────────────────────────────────────
+
+    private fun anyErrors(text: String) =
+        myFixture.also { it.configureByText(IsScriptFileType.INSTANCE, text) }
+            .doHighlighting()
+            .filter { it.severity.name == "ERROR" }
+
+    private fun warningsContaining(text: String, needle: String) =
+        myFixture.also { it.configureByText(IsScriptFileType.INSTANCE, text) }
+            .doHighlighting()
+            .filter { it.severity.name == "WEAK WARNING" && it.description?.contains(needle) == true }
+
+    fun testVisibilityDefineIsValid() {
+        // `public` is a scope keyword here (a name follows), so neither a forbidden-name nor any other error.
+        val errors = anyErrors("#define public MyConst 1\n$setupTail")
+        assertTrue("A scope-prefixed #define must not produce errors, was: $errors", errors.isEmpty())
+    }
+
+    fun testVisibilityDefineNameNotTreatedAsForbidden() {
+        val errors = errorsContaining("#define private Foo 1\n$setupTail", "reserved preprocessor keyword")
+        assertTrue("The scope keyword must not be flagged as a forbidden name", errors.isEmpty())
+    }
+
+    fun testScopeKeywordWithoutNameStillForbidden() {
+        // No name follows → `public` is the name → still the forbidden-name error (unchanged behavior).
+        val errors = errorsContaining("#define public 1\n$setupTail", "reserved preprocessor keyword")
+        assertTrue("`#define public 1` must still flag the reserved name", errors.isNotEmpty())
+    }
+
+    // ── #undef ────────────────────────────────────────────────────────────────
+
+    fun testUndefWithMatchingDefineNoWarning() {
+        val warnings = warningsContaining("#define Foo 1\n#undef Foo\n$setupTail", "no matching #define")
+        assertTrue("A #undef with a matching #define must not warn, was: $warnings", warnings.isEmpty())
+    }
+
+    fun testUndefWithoutMatchingDefineWarns() {
+        val warnings = warningsContaining("#undef Foo\n$setupTail", "no matching #define")
+        assertTrue("A #undef without a matching #define must produce a weak warning", warnings.isNotEmpty())
+    }
+
+    fun testUndefWithVisibilityAndMatchingDefineNoWarning() {
+        val warnings = warningsContaining("#define Foo 1\n#undef public Foo\n$setupTail", "no matching #define")
+        assertTrue("A scope-prefixed #undef with a matching #define must not warn", warnings.isEmpty())
+    }
 }

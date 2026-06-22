@@ -222,8 +222,8 @@ Legend: ✅ implemented · ⚠️ partial · — not applicable.
 
 | Directive | Parsing | Validation | Completion | References | MkDocs page |
 |-----------|:-------:|:----------:|:----------:|:----------:|-------------|
-| `#define` | ✅ | ✅ expr + type + unused | ✅ keyword + names + funcs | ✅ | `define.md` |
-| `#undef` | ✅ | ✅ keyword | ✅ keyword | — | `undef.md` |
+| `#define` | ✅ | ✅ expr + type + unused + scope kw | ✅ keyword + scope kw + names + funcs | ✅ | `define.md` |
+| `#undef` | ✅ | ✅ keyword + scope kw + no-match warning | ✅ keyword + scope kw + define names | ✅ → `#define` | `undef.md` |
 | `#dim` / `#redim` | ✅ | ✅ keyword | ✅ keyword | — | `arrays.md` |
 | `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
 | `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
@@ -289,7 +289,7 @@ table above in sync whenever a directive's semantics change.
 | Structure view                                  | ✅      |                                                                                                                                                                                                   |
 | Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                         |
 | Documentation popup (ISPP)                      | ✅      | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until` |
-| Find usages                                     | ✅      | For ISPP `#define` references                                                                                                                                                                     |
+| Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages)                                                                                                                                             |
 | Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                              |
 | Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                   |
 | Quote handler                                   | ✅      |                                                                                                                                                                                                   |

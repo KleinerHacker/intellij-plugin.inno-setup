@@ -6,6 +6,14 @@
 
 ### Added
 
+- **`#undef` directive support**: `#undef Name` now resolves to the matching `#define`, with
+  go-to-definition, Find Usages and rename across the `#define`, its `{#Name}` uses and the `#undef`.
+  Completion after `#undef ` offers the names of the defines declared earlier. An `#undef` without a
+  matching `#define` is grayed out with a quick fix to remove it.
+- **`#define`/`#undef` scope keywords**: The optional visibility keywords `public`, `protected` and
+  `private` before the macro name (e.g. `#define public MyVar 1`) are now recognized — highlighted like
+  keywords and offered in completion — without breaking name resolution or referencing.
+
 - **`#pragma` directive support**: The `#pragma` sub-commands (`option`, `parseroption`, `message`,
   `warning`, `error`, `verboselevel`, `inlinestart`, `inlineend`, `include`, `spansymbol`) are now
   validated — unknown sub-commands, invalid option flags and arguments of the wrong type are flagged as

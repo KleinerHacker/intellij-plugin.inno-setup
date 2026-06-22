@@ -17,6 +17,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveUnusedDefineQuickFix
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveUselessUndefQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.ReplaceIncludeWithLineQuickFix
 
 /**
@@ -71,6 +72,42 @@ class IsPreprocessorAnnotatorQuickFixTest : BasePlatformTestCase() {
 
         assertFalse("UnusedConst line must be removed", result.contains("UnusedConst"))
         assertTrue("UsedConst definition must be preserved", result.contains("#define UsedConst"))
+    }
+
+    // ── Fix: Remove useless #undef ────────────────────────────────────────────
+
+    fun testRemoveUselessUndefDeletesTheLine() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#undef Foo\n[<caret>Setup]\nAppName=MyApp\nAppVersion=1.0\n"
+        )
+        val issFile = myFixture.file
+        val doc = myFixture.editor.document
+
+        var result = ""
+        WriteCommandAction.runWriteCommandAction(myFixture.project) {
+            RemoveUselessUndefQuickFix("Foo").invoke(myFixture.project, myFixture.editor, issFile)
+            result = doc.text
+        }
+
+        assertEquals("[Setup]\nAppName=MyApp\nAppVersion=1.0\n", result)
+    }
+
+    fun testRemoveUselessUndefHandlesScopeKeyword() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#undef private Foo\n[<caret>Setup]\nAppName=MyApp\nAppVersion=1.0\n"
+        )
+        val issFile = myFixture.file
+        val doc = myFixture.editor.document
+
+        var result = ""
+        WriteCommandAction.runWriteCommandAction(myFixture.project) {
+            RemoveUselessUndefQuickFix("Foo").invoke(myFixture.project, myFixture.editor, issFile)
+            result = doc.text
+        }
+
+        assertEquals("[Setup]\nAppName=MyApp\nAppVersion=1.0\n", result)
     }
 
     // ── Fix: Remove #include (empty target) ───────────────────────────────────

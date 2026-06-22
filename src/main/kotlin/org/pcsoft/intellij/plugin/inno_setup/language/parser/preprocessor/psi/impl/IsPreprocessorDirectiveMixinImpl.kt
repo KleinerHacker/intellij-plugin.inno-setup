@@ -37,7 +37,29 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             ?.node?.getChildren(TokenSet.create(IsPreprocessorTypes.IDENTIFIER))
             ?: emptyArray()
 
-    private fun nameNode(): ASTNode? = valueIdentifiers().firstOrNull()
+    /** The ISPP scope/visibility keywords (`public`/`protected`/`private`), lower-cased. */
+    private fun visibilityKeywords(): Set<String> =
+        service<IsPreprocessorService>().spec.visibilityKeywords.map { it.name.lowercase() }.toSet()
+
+    /**
+     * The leading value identifier that acts as a scope/visibility keyword, or `null`.
+     *
+     * Only `#define`/`#undef` may carry a scope, and the keyword is recognized **only when a name
+     * follows it** (a second identifier). This keeps `#define public 1` interpreting `public` as the
+     * (forbidden) name, while `#define public Foo 1` treats `public` as the scope and `Foo` as the name.
+     */
+    private fun visibilityNode(): ASTNode? {
+        if (!isDefine() && !isUndef()) return null
+        val ids = valueIdentifiers()
+        val first = ids.firstOrNull() ?: return null
+        if (first.text.lowercase() in visibilityKeywords() && ids.size >= 2) return first
+        return null
+    }
+
+    private fun nameNode(): ASTNode? {
+        val ids = valueIdentifiers()
+        return if (visibilityNode() != null) ids.getOrNull(1) else ids.firstOrNull()
+    }
 
     /** Raw text of the value node that follows the name identifier (no trimming, quotes kept). */
     private fun rawAfterName(): String? {
@@ -52,6 +74,17 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      */
     override fun isDefine(): Boolean =
         (this as IsPreprocessorDirective).identifier?.text?.equals("define", ignoreCase = true) == true
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isUndef(): Boolean =
+        (this as IsPreprocessorDirective).identifier?.text?.equals("undef", ignoreCase = true) == true
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getVisibilityIdentifier(): PsiElement? = visibilityNode()?.psi
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -174,9 +207,11 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         }
         if (!isExprDefine && !isExprPragma) return emptyList()
         val name = nameNode() ?: return emptyList()  // the #define name resp. the #pragma sub-command
+        val visibility = visibilityNode()
         val params = if (isExprDefine) macroParameterNames() else emptySet()
         return valueIdentifiers()
             .filter { it !== name }          // not the define's own name / pragma sub-command
+            .filter { it !== visibility }    // not a scope/visibility keyword
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
     }
 
@@ -188,6 +223,13 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             val range = includePathRangeInDirective() ?: return PsiReference.EMPTY_ARRAY
             val path = getIncludePath() ?: return PsiReference.EMPTY_ARRAY
             return arrayOf(IsIncludeFileReference(this as IsPreprocessorDirective, range, path))
+        }
+        // `#undef Name` references the nearest preceding `#define Name` (for navigation/rename/find-usages).
+        if (isUndef()) {
+            val name = nameNode() ?: return PsiReference.EMPTY_ARRAY
+            val directive = this as IsPreprocessorDirective
+            val offset = name.startOffset - directive.textRange.startOffset
+            return arrayOf(IsPreprocessorExpressionReference(directive, offset, name.text))
         }
         val ids = expressionReferenceIdentifiers()
         if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
@@ -285,7 +327,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     /**
      * Returns the logical name exposed by this PSI element.
      */
-    override fun getName(): String? = getDefineName()
+    override fun getName(): String? = getNameIdentifier()?.text
 
     /**
      * Renames this PSI element and returns the updated element.
@@ -308,7 +350,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Returns the PSI element that carries the renameable name.
      */
     override fun getNameIdentifier(): PsiElement? {
-        if (!isDefine()) return null
+        if (!isDefine() && !isUndef()) return null
         return nameNode()?.psi
     }
 

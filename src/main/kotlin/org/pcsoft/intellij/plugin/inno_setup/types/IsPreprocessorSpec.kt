@@ -184,6 +184,18 @@ data class IsPreprocessorForbiddenNameSpec(
 )
 
 /**
+ * Describes an ISPP scope/visibility keyword (`public`/`protected`/`private`) that may optionally
+ * precede the name in a `#define` or `#undef`.
+ *
+ * @property name The keyword as written in the script (matched case-insensitively).
+ * @property description Human-readable meaning of the scope.
+ */
+data class IsPreprocessorVisibilityKeywordSpec(
+    val name: String,
+    val description: String,
+)
+
+/**
  * Kind of argument a `#pragma` sub-command expects.
  */
 enum class IsPreprocessorPragmaArgument {
@@ -253,6 +265,8 @@ data class IsPreprocessorSpec(
     @field:JsonProperty("builtin_functions") val builtinFunctions: List<IsPreprocessorFunctionSpec>,
     @field:JsonProperty("forbidden_variables_name")
     val forbiddenVariableNames: List<IsPreprocessorForbiddenNameSpec> = emptyList(),
+    @field:JsonProperty("visibility_keywords")
+    val visibilityKeywords: List<IsPreprocessorVisibilityKeywordSpec> = emptyList(),
     @field:JsonProperty("pragma_sub_commands")
     val pragmaSubCommands: List<IsPreprocessorPragmaSpec> = emptyList()
 )

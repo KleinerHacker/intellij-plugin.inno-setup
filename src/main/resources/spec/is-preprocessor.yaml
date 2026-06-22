@@ -1,12 +1,12 @@
 # $schema: ./ispp-spec.json
 directives:
   - name: define
-    syntax: "#define Name [Value]"
-    description: "Defines a macro variable. Without value, defines it as void (empty)."
+    syntax: "#define [Scope] Name [Value]"
+    description: "Defines a macro variable. Without value, defines it as void (empty). An optional scope keyword (public/protected/private) may precede the name."
     deprecated: [ ]
   - name: undef
-    syntax: "#undef Name"
-    description: "Undefines a previously defined identifier."
+    syntax: "#undef [Scope] Name"
+    description: "Undefines a previously defined identifier. An optional scope keyword (public/protected/private) may precede the name."
     deprecated: [ ]
   - name: dim
     syntax: "#dim Name[Size]"
@@ -674,6 +674,17 @@ builtin_functions:
     signature: "YesNo(S: str): int"
     return_type: int
     description: "Returns non-zero if the string represents an affirmative (yes/true) value."
+
+# Scope/visibility keywords that may optionally precede the name in a #define or #undef
+# (e.g. `#define public Foo 1`). They are highlighted and offered like keywords. The same words are
+# also reserved as macro names (see forbidden_variables_name below).
+visibility_keywords:
+  - name: public
+    description: "Declares the macro with public visibility (accessible from including scripts)."
+  - name: protected
+    description: "Declares the macro with protected visibility."
+  - name: private
+    description: "Declares the macro with private visibility (local to the current file)."
 
 # Reserved ISPP keywords that must not be used as a #define (or other macro) name.
 # Matched case-insensitively against the declared macro name.
