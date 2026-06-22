@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [0.5.1]
+
+- Updates for automatic release
+- Copyright updates
+- Fixes for warnings in the Plugin upload process
+
 ## [0.5.0]
 
 ### Added
