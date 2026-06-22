@@ -22,9 +22,18 @@ Inno Setup 预处理器（ISPP）在脚本编译**之前**运行，允许你通�
 | 循环与宏 | `#for`、`#sub`、`#endsub` |
 | 其他 | `#pragma`、`#error` |
 
-所有指令关键字都会被高亮、补全（`#` 之后）并根据规范验证。插件还为某些指令提供完整语义支持（引用解析、重命名、查找用法），它们有各自的页面：
+所有指令关键字都会被高亮、补全（`#` 之后）并根据规范验证。每个指令都有各自的页面：
 
 - [`#define`](define.md) — 声明和使用宏，以及标准预定义变量
+- [`#undef`](undef.md) — 移除先前定义的宏
+- [`#dim` / `#redim`](arrays.md) — 声明和调整数组宏的大小
+- [`#include` / `#file`](include.md) — 粘贴另一个文件的内容 / 读取文件
+- [`#emit` / `#expr` / `#insert` / `#append`](output.md) — 计算表达式并输出（或不输出）
+- [`#if` / `#ifdef` / …](conditionals.md) — 条件编译
+- [`#for`](for.md) — 以 C 风格循环重复执行指令
+- [`#sub` / `#endsub`](sub.md) — 定义可重用的子例程
+- [`#pragma`](pragma.md) — 控制预处理器（选项、诊断、分隔符……）
+- [`#error`](error.md) — 中止编译并显示消息
 
 ---
 

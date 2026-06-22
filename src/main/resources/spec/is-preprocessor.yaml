@@ -92,10 +92,14 @@ directives:
     description: "Ends a subroutine definition started with #sub."
     deprecated: [ ]
   - name: pragma
-    syntax: "#pragma option|parseroption|verboselevel ..."
+    syntax: "#pragma <sub-command> [arguments]"
     description: >
-      Sets compiler options. Common uses:
-      <code>#pragma option -v+</code> (verbose), <code>#pragma warning enable|disable id</code>.
+      Controls the preprocessor itself via a sub-command. Sub-commands set reading/parsing options
+      (<code>option</code>, <code>parseroption</code>), emit diagnostics (<code>message</code>,
+      <code>warning</code>, <code>error</code>), adjust the verbosity threshold
+      (<code>verboselevel</code>), change the inline-directive delimiters
+      (<code>inlinestart</code>, <code>inlineend</code>), set include search paths
+      (<code>include</code>) or define the line-continuation symbol (<code>spansymbol</code>).
     deprecated: [ ]
   - name: error
     syntax: "#error Message"
@@ -696,3 +700,73 @@ forbidden_variables_name:
   # Operator keyword
   - name: defined
     description: "Reserved operator keyword (e.g. <code>#if defined(Name)</code>); cannot be used as a macro name."
+
+# Sub-commands of the #pragma directive. 'argument' describes the expected argument:
+#   none  - no argument allowed
+#   flags - one or more option flags of the form -<letter>(+|-); allowed letters in 'flag_letters'
+#   str   - a string expression
+#   int   - an integer expression
+pragma_sub_commands:
+  - name: option
+    syntax: "#pragma option -<letter>(+|-) [...]"
+    description: "Sets general reading/output options of the preprocessor."
+    argument: flags
+    flag_letters:
+      - letter: c
+        description: "Output to compiler."
+        default: true
+      - letter: e
+        description: "Emit empty lines."
+        default: true
+      - letter: v
+        description: "Verbose mode."
+        default: false
+  - name: parseroption
+    syntax: "#pragma parseroption -<letter>(+|-) [...]"
+    description: "Sets options that control expression parsing."
+    argument: flags
+    flag_letters:
+      - letter: b
+        description: "Short-circuit boolean evaluation."
+        default: true
+      - letter: m
+        description: "Short-circuit multiplication evaluation."
+        default: false
+      - letter: p
+        description: "Pascal-style string literals."
+        default: true
+      - letter: u
+        description: "Allow undeclared identifiers."
+        default: false
+  - name: message
+    syntax: "#pragma message <string-expression>"
+    description: "Outputs an informational message to the compiler window."
+    argument: str
+  - name: warning
+    syntax: "#pragma warning <string-expression>"
+    description: "Outputs a warning to the compiler window."
+    argument: str
+  - name: error
+    syntax: "#pragma error <string-expression>"
+    description: "Displays an error message in a dialog box."
+    argument: str
+  - name: verboselevel
+    syntax: "#pragma verboselevel <integer-expression>"
+    description: "Sets the verbosity threshold (0-10) that controls which messages appear."
+    argument: int
+  - name: inlinestart
+    syntax: "#pragma inlinestart <string-expression>"
+    description: "Sets the opening delimiter for inline directives (default <code>{#</code>)."
+    argument: str
+  - name: inlineend
+    syntax: "#pragma inlineend <string-expression>"
+    description: "Sets the closing delimiter for inline directives (default <code>}</code>)."
+    argument: str
+  - name: include
+    syntax: "#pragma include <string-expression>"
+    description: "Sets the semicolon-delimited search paths used for included files."
+    argument: str
+  - name: spansymbol
+    syntax: "#pragma spansymbol <string-expression>"
+    description: "Sets the line-continuation character (only the first character is used)."
+    argument: str

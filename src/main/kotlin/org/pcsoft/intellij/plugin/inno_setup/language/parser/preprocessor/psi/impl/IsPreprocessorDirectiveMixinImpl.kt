@@ -15,6 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.i
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
@@ -26,6 +27,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorQuotedString
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorPragmaArgument
 
 abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiElement(node), IsPreprocessorDirectiveEx {
 
@@ -157,13 +160,23 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     /** The names declared as macro parameters (e.g. `a`, `b` in `name(a,b)`) — these are local, not references. */
     private fun macroParameterNames(): Set<String> = getMacroParameters().toSet()
 
-    /** The identifier tokens in the value that act as references to other #defines (free text). */
+    /**
+     * The identifier tokens in the value that act as references to other #defines (free text).
+     *
+     * Applies to a `#define` value/body and to a `#pragma` whose sub-command takes an expression
+     * argument (`str`/`int`) — there the identifiers reference other #defines just like in a #define.
+     * Flag-based pragmas (`option`/`parseroption`) carry no references (their `-v+` letters are not names).
+     */
     private fun expressionReferenceIdentifiers(): List<ASTNode> {
-        if (!isDefine()) return emptyList()
-        val name = nameNode() ?: return emptyList()
-        val params = macroParameterNames()
+        val isExprDefine = isDefine()
+        val isExprPragma = isPragma() && pragmaArgumentType().let {
+            it == IsPreprocessorPragmaArgument.STR || it == IsPreprocessorPragmaArgument.INT
+        }
+        if (!isExprDefine && !isExprPragma) return emptyList()
+        val name = nameNode() ?: return emptyList()  // the #define name resp. the #pragma sub-command
+        val params = if (isExprDefine) macroParameterNames() else emptySet()
         return valueIdentifiers()
-            .filter { it !== name }          // not the define's own name
+            .filter { it !== name }          // not the define's own name / pragma sub-command
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
     }
 
@@ -183,6 +196,53 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return ids.map { id ->
             IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
         }.toTypedArray()
+    }
+
+    // ── #pragma ───────────────────────────────────────────────────────────────
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isPragma(): Boolean =
+        (this as IsPreprocessorDirective).identifier?.text?.equals("pragma", ignoreCase = true) == true
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getPragmaSubCommand(): String? {
+        if (!isPragma()) return null
+        return nameNode()?.text
+    }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getPragmaArgumentText(): String? = pragmaArgument()?.first
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getPragmaArgumentOffsetInDirective(): Int = pragmaArgument()?.second ?: -1
+
+    /** The raw argument of this `#pragma` (after the sub-command) and its start offset inside the directive. */
+    private fun pragmaArgument(): Pair<String, Int>? {
+        if (!isPragma()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val after = rawAfterName() ?: return null
+        val afterOffsetInValue = value.text.length - after.length
+        val leadingWs = after.length - after.trimStart().length
+        val trimmed = after.trim()
+        if (trimmed.isEmpty()) return null
+        return trimmed to (valueOffsetInDirective + afterOffsetInValue + leadingWs)
+    }
+
+    /** Argument kind declared for this `#pragma`'s sub-command in the ISPP spec, or `null` if unknown. */
+    private fun pragmaArgumentType(): IsPreprocessorPragmaArgument? {
+        val sub = getPragmaSubCommand() ?: return null
+        return service<IsPreprocessorService>().spec.pragmaSubCommands
+            .firstOrNull { it.name.equals(sub, ignoreCase = true) }?.argument
     }
 
     // ── #include ──────────────────────────────────────────────────────────────

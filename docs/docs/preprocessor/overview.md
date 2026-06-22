@@ -28,11 +28,19 @@ unknown-section/flag/constant checks.
 | Loops & macros | `#for`, `#sub`, `#endsub` |
 | Misc | `#pragma`, `#error` |
 
-All directive keywords are highlighted, completed (after `#`) and validated against the spec. Directives
-that the plugin also supports with full semantics (reference resolution, rename, Find Usages) have their
-own page:
+All directive keywords are highlighted, completed (after `#`) and validated against the spec. Every
+directive has its own page:
 
 - [`#define`](define.md) — declare and use macros, plus the standard predefined variables
+- [`#undef`](undef.md) — remove a previously defined macro
+- [`#dim` / `#redim`](arrays.md) — declare and resize array macros
+- [`#include` / `#file`](include.md) — paste another file's content / read a file
+- [`#emit` / `#expr` / `#insert` / `#append`](output.md) — evaluate an expression and emit (or not)
+- [`#if` / `#ifdef` / …](conditionals.md) — conditional compilation
+- [`#for`](for.md) — repeat a directive with a C-style loop
+- [`#sub` / `#endsub`](sub.md) — define a reusable subroutine
+- [`#pragma`](pragma.md) — control the preprocessor (options, diagnostics, delimiters, …)
+- [`#error`](error.md) — abort compilation with a message
 
 ---
 

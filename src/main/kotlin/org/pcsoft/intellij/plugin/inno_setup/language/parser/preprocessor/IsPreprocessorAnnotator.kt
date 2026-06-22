@@ -42,6 +42,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickf
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotatorHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstant
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorPragmaArgument
+import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorPragmaSpec
 
 /**
  * Annotates Inno Setup PSI elements with validation and highlighting information.
@@ -58,6 +60,12 @@ class IsPreprocessorAnnotator : Annotator {
             IsPreprocessorExprTokenType.QUESTION,
             IsPreprocessorExprTokenType.COLON,
         )
+
+        /** A single `#pragma option`/`parseroption` flag, e.g. `-v+` or `-c-`. */
+        val PRAGMA_FLAG = Regex("^-([A-Za-z])([+-])$")
+
+        /** Splits a flag argument into its whitespace-separated tokens (with their positions). */
+        val NON_WHITESPACE = Regex("\\S+")
     }
 
     /**
@@ -101,6 +109,10 @@ class IsPreprocessorAnnotator : Annotator {
 
         if (ex.isInclude()) {
             annotateInclude(directive, ex, holder)
+            return
+        }
+        if (ex.isPragma()) {
+            annotatePragma(directive, ex, holder)
             return
         }
         if (!ex.isDefine()) return
@@ -260,6 +272,175 @@ class IsPreprocessorAnnotator : Annotator {
                 .range(pathRange)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
+        }
+    }
+
+    /**
+     * Validates a `#pragma`: the sub-command must be one declared by the ISPP spec, and its argument must
+     * match the declared kind — flag list (`option`/`parseroption`), a string expression
+     * (`message`/`warning`/`error`/`include`/`inlinestart`/`inlineend`/`spansymbol`) or an integer
+     * expression (`verboselevel`). Identifiers inside an expression argument resolve against the #defines of
+     * the host file (see [annotateUnresolvedReferences]).
+     */
+    private fun annotatePragma(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        val value = directive.value
+        val subName = ex.getPragmaSubCommand()
+        if (subName == null || value == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#pragma requires a sub-command")
+                .range(directive.textRange).create()
+            return
+        }
+        val subNode = value.node.findChildByType(IsPreprocessorTypes.IDENTIFIER) ?: return
+
+        val spec = service<IsPreprocessorService>().spec.pragmaSubCommands
+            .firstOrNull { it.name.equals(subName, ignoreCase = true) }
+        if (spec == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Unknown #pragma sub-command: '$subName'")
+                .range(subNode.textRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+        highlight(subNode.textRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+
+        val argText = ex.getPragmaArgumentText()
+        val argOffset = ex.getPragmaArgumentOffsetInDirective()
+        val argRange = if (argText != null && argOffset >= 0) {
+            val base = directive.textRange.startOffset + argOffset
+            TextRange(base, base + argText.length)
+        } else null
+
+        when (spec.argument) {
+            IsPreprocessorPragmaArgument.NONE ->
+                if (argText != null && argRange != null) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "#pragma ${spec.name} does not take an argument")
+                        .range(argRange).create()
+                }
+
+            IsPreprocessorPragmaArgument.FLAGS -> {
+                if (argText == null || argOffset < 0) {
+                    pragmaMissingArgument(directive, spec, holder)
+                    return
+                }
+                annotatePragmaFlags(directive, spec, argText, argOffset, holder)
+            }
+
+            IsPreprocessorPragmaArgument.STR, IsPreprocessorPragmaArgument.INT -> {
+                if (argText == null || argOffset < 0) {
+                    pragmaMissingArgument(directive, spec, holder)
+                    return
+                }
+                annotatePragmaExpression(directive, spec, argText, argOffset, argRange, holder)
+            }
+        }
+    }
+
+    private fun pragmaMissingArgument(
+        directive: IsPreprocessorDirective,
+        spec: IsPreprocessorPragmaSpec,
+        holder: AnnotationHolder,
+    ) {
+        holder.newAnnotation(HighlightSeverity.ERROR, "#pragma ${spec.name} requires an argument")
+            .range(directive.textRange).create()
+    }
+
+    /** Validates the `-<letter>(+|-)` flags of an `option`/`parseroption` pragma against the spec letters. */
+    private fun annotatePragmaFlags(
+        directive: IsPreprocessorDirective,
+        spec: IsPreprocessorPragmaSpec,
+        argText: String,
+        argOffset: Int,
+        holder: AnnotationHolder,
+    ) {
+        val base = directive.textRange.startOffset + argOffset
+        val allowed = spec.flagLetters.map { it.letter.lowercase() }.toSet()
+        NON_WHITESPACE.findAll(argText).forEach { match ->
+            val token = match.value
+            val range = TextRange(base + match.range.first, base + match.range.last + 1)
+            val flag = PRAGMA_FLAG.matchEntire(token)
+            if (flag == null) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Invalid #pragma ${spec.name} flag '$token'; expected -<letter>(+|-)"
+                ).range(range).create()
+                return@forEach
+            }
+            val letter = flag.groupValues[1]
+            if (letter.lowercase() !in allowed) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Unknown #pragma ${spec.name} flag letter '$letter'"
+                ).range(range).textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE).create()
+            }
+        }
+    }
+
+    /** Validates the string/integer expression argument of a `#pragma`, including type and references. */
+    private fun annotatePragmaExpression(
+        directive: IsPreprocessorDirective,
+        spec: IsPreprocessorPragmaSpec,
+        argText: String,
+        argOffset: Int,
+        argRange: TextRange?,
+        holder: AnnotationHolder,
+    ) {
+        val base = directive.textRange.startOffset + argOffset
+
+        val tokens = IsPreprocessorExprTokenizer.tokenize(argText)
+        tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
+            highlight(
+                TextRange(base + token.start, base + token.end),
+                IsPreprocessorSyntaxHighlighting.OPERATOR,
+                holder,
+            )
+        }
+
+        val parseResult = IsPreprocessorExprParser.parse(tokens, argText.length)
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        val resolver = buildTypeResolver(hostFile)
+        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+        val type = inference.infer(parseResult.ast)
+
+        (parseResult.errors + inference.errors).forEach { error ->
+            holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                .range(TextRange(base + error.span.start, base + error.span.end))
+                .create()
+        }
+
+        // Identifiers in the argument that refer to a non-existent #define are unresolved references.
+        annotateUnresolvedReferences(directive, holder)
+
+        when (spec.argument) {
+            IsPreprocessorPragmaArgument.STR ->
+                if (!type.strCompatible && argRange != null) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "#pragma ${spec.name} requires a string value")
+                        .range(argRange).create()
+                }
+
+            IsPreprocessorPragmaArgument.INT -> {
+                if (!type.intCompatible && argRange != null) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "#pragma ${spec.name} requires an integer value")
+                        .range(argRange).create()
+                }
+                // verboselevel accepts only 0..10; flag a literal out of range.
+                if (spec.name.equals("verboselevel", ignoreCase = true) && argRange != null) {
+                    argText.trim().toIntOrNull()?.let { level ->
+                        if (level !in 0..10) {
+                            holder.newAnnotation(
+                                HighlightSeverity.ERROR,
+                                "#pragma verboselevel must be between 0 and 10"
+                            ).range(argRange).create()
+                        }
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 

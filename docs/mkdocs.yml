@@ -218,6 +218,15 @@ nav:
   - Inno Setup Preprocessor:
       - Overview: preprocessor/overview.md
       - "#define": preprocessor/define.md
+      - "#undef": preprocessor/undef.md
+      - "#dim / #redim": preprocessor/arrays.md
+      - "#include / #file": preprocessor/include.md
+      - "#emit / #expr / #insert / #append": preprocessor/output.md
+      - "#if / #ifdef / …": preprocessor/conditionals.md
+      - "#for": preprocessor/for.md
+      - "#sub / #endsub": preprocessor/sub.md
+      - "#pragma": preprocessor/pragma.md
+      - "#error": preprocessor/error.md
   - Build Integration: build.md
   - Run Configuration: run-configuration.md
   - Structure View: structure-view.md

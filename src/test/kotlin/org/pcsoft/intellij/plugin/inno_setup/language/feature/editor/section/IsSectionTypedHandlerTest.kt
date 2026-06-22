@@ -56,6 +56,18 @@ class IsSectionTypedHandlerTest : BasePlatformTestCase() {
         assertEquals(Result.CONTINUE, checkAutoPopup('#', "[Setup]\nAppName=<caret>\n"))
     }
 
+    fun testHashAtLineStartSchedulesPopup() {
+        assertEquals(Result.STOP, checkAutoPopup('#', "[Setup]\n<caret>\n"))
+    }
+
+    fun testHashAtIndentedLineStartSchedulesPopup() {
+        assertEquals(Result.STOP, checkAutoPopup('#', "[Setup]\n  \t<caret>\n"))
+    }
+
+    fun testHashAtFileStartSchedulesPopup() {
+        assertEquals(Result.STOP, checkAutoPopup('#', "<caret>"))
+    }
+
     fun testUnrelatedCharContinues() {
         assertEquals(Result.CONTINUE, checkAutoPopup('A', "[Setup]\n<caret>\n"))
     }

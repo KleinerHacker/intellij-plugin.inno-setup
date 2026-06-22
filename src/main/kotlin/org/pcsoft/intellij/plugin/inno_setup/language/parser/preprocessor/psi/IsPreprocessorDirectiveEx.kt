@@ -55,6 +55,24 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      */
     fun getDefineExpressionOffsetInDirective(): Int
 
+    /** Whether this directive is a `#pragma` (case-insensitive). */
+    fun isPragma(): Boolean
+
+    /** For a `#pragma`: the sub-command keyword (first identifier of the value), or `null` when absent. */
+    fun getPragmaSubCommand(): String?
+
+    /**
+     * For a `#pragma`: the raw argument text following the sub-command (no trimming, quotes kept), or
+     * `null` when this is not a `#pragma` or there is no argument.
+     */
+    fun getPragmaArgumentText(): String?
+
+    /**
+     * Offset of [getPragmaArgumentText] within this directive's text (for mapping analysis spans back to
+     * editor ranges), or `-1` when there is no argument.
+     */
+    fun getPragmaArgumentOffsetInDirective(): Int
+
     /** Whether this directive is an `#include` (case-insensitive). */
     fun isInclude(): Boolean
 

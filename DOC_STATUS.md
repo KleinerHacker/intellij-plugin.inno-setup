@@ -205,6 +205,34 @@ Directive keywords are validated against this spec by `IsPreprocessorAnnotator`:
 whose keyword is not declared in `ispp-spec.yaml` is flagged as an error (`Unknown preprocessor
 directive`, case-insensitive), mirroring the unknown-section/flag/constant checks.
 
+**`#pragma` sub-command analysis:** The `#pragma` sub-commands are modelled as data in
+`is-preprocessor.yaml` (`pragma_sub_commands`: `name`, `syntax`, `description`, `argument`, optional
+`flag_letters`). `IsPreprocessorAnnotator.annotatePragma` validates the sub-command name (unknown → error)
+and its argument by kind: `option`/`parseroption` flag lists are checked against the declared `-<letter>(±)`
+form and the allowed letters; `verboselevel` is an integer expression (range 0–10); `message`, `warning`,
+`error`, `include`, `inlinestart`, `inlineend`, `spansymbol` are string expressions. Expression arguments
+go through the same tokenizer/parser/type-resolver as `#define`, so identifiers inside them resolve to
+`#define`s (reference resolution, Find Usages, rename) and an unknown name is an unresolved-reference error.
+Completion offers the sub-commands after `#pragma ` and the option flags after `#pragma option `/
+`#pragma parseroption ` (`IsPreprocessorPragmaProvider`).
+
+### Per-directive implementation overview
+
+Legend: ✅ implemented · ⚠️ partial · — not applicable.
+
+| Directive | Parsing | Validation | Completion | References | MkDocs page |
+|-----------|:-------:|:----------:|:----------:|:----------:|-------------|
+| `#define` | ✅ | ✅ expr + type + unused | ✅ keyword + names + funcs | ✅ | `define.md` |
+| `#undef` | ✅ | ✅ keyword | ✅ keyword | — | `undef.md` |
+| `#dim` / `#redim` | ✅ | ✅ keyword | ✅ keyword | — | `arrays.md` |
+| `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
+| `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
+| `#if` / `#elif` / `#else` / `#endif` / `#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist` | ✅ | ✅ keyword | ✅ keyword | — | `conditionals.md` |
+| `#for` | ✅ | ✅ keyword | ✅ keyword | — | `for.md` |
+| `#sub` / `#endsub` | ✅ | ✅ keyword | ✅ keyword | — | `sub.md` |
+| `#pragma` | ✅ | ✅ sub-command + flags + expr/type | ✅ keyword + sub-command + flags | ✅ in expr args | `pragma.md` |
+| `#error` | ✅ | ✅ keyword | ✅ keyword | — | `error.md` |
+
 **Predefined variables via `{#…}`:** Inline emission `{#expr}` (short for `{#emit expr}`) replaces
 itself with the value of an expression, so the **value-bearing** predefined variables (`type` `int`/`str`
 in `ispp-spec.yaml` — e.g. `{#__LINE__}`, `{#SourcePath}`, `{#Ver}`) are valid there alongside user
@@ -229,10 +257,11 @@ expression, completion offers earlier `#define` names **and** the predefined var
 
 **User documentation:** The MkDocs site has a dedicated **Inno Setup Preprocessor** rubric
 (`docs/docs/preprocessor/`, all four locales), modelled on the official ISPP docs: an `overview.md`
-(general preprocessor description + supported-directive table + inline `{#…}`) plus one page per
-semantically supported directive — currently only `define.md` (`#define`, `{#Name}` usage, the standard
-predefined variables). Add a new page under this rubric whenever another directive gains full semantic
-support.
+(general preprocessor description + supported-directive table + inline `{#…}`) plus **one page per
+directive** — `define.md`, `undef.md`, `arrays.md` (`#dim`/`#redim`), `include.md` (`#include`/`#file`),
+`output.md` (`#emit`/`#expr`/`#insert`/`#append`), `conditionals.md` (`#if`/`#ifdef`/…), `for.md`,
+`sub.md` (`#sub`/`#endsub`), `pragma.md` and `error.md`. Keep these pages and the per-directive overview
+table above in sync whenever a directive's semantics change.
 
 ---
 

@@ -184,12 +184,65 @@ data class IsPreprocessorForbiddenNameSpec(
 )
 
 /**
+ * Kind of argument a `#pragma` sub-command expects.
+ */
+enum class IsPreprocessorPragmaArgument {
+    /** No argument is allowed. */
+    @JsonProperty("none")
+    NONE,
+
+    /** One or more option flags of the form `-<letter>(+|-)`. */
+    @JsonProperty("flags")
+    FLAGS,
+
+    /** A string expression. */
+    @JsonProperty("str")
+    STR,
+
+    /** An integer expression. */
+    @JsonProperty("int")
+    INT,
+}
+
+/**
+ * Describes a single option flag letter accepted by a flag-based `#pragma` sub-command.
+ *
+ * @property letter Single flag letter (e.g. `v` in `-v+`).
+ * @property description Human-readable meaning of the flag.
+ * @property default Default state of the flag when it is not set.
+ */
+data class IsPreprocessorPragmaFlagSpec(
+    val letter: String,
+    val description: String,
+    val default: Boolean = false,
+)
+
+/**
+ * Describes a `#pragma` sub-command from the bundled ISPP specification.
+ *
+ * @property name Sub-command keyword (e.g. `option`, `verboselevel`).
+ * @property syntax Human-readable usage syntax shown in completion and documentation.
+ * @property description HTML-capable description loaded from the specification file.
+ * @property argument Kind of argument the sub-command expects.
+ * @property flagLetters For [IsPreprocessorPragmaArgument.FLAGS] sub-commands: the accepted flag letters.
+ */
+data class IsPreprocessorPragmaSpec(
+    val name: String,
+    val syntax: String,
+    val description: String,
+    val argument: IsPreprocessorPragmaArgument = IsPreprocessorPragmaArgument.NONE,
+    @field:JsonProperty("flag_letters")
+    val flagLetters: List<IsPreprocessorPragmaFlagSpec> = emptyList(),
+)
+
+/**
  * Root model for the bundled ISPP specification YAML.
  *
  * @property directives All known preprocessor directives.
  * @property predefinedVariables All known predefined variables.
  * @property builtinFunctions All known built-in functions.
  * @property forbiddenVariableNames Reserved keywords that must not be used as macro names.
+ * @property pragmaSubCommands All known `#pragma` sub-commands.
  */
 data class IsPreprocessorSpec(
     /**
@@ -199,5 +252,7 @@ data class IsPreprocessorSpec(
     @field:JsonProperty("predefined_variables") val predefinedVariables: List<IsPreprocessorVariableSpec>,
     @field:JsonProperty("builtin_functions") val builtinFunctions: List<IsPreprocessorFunctionSpec>,
     @field:JsonProperty("forbidden_variables_name")
-    val forbiddenVariableNames: List<IsPreprocessorForbiddenNameSpec> = emptyList()
+    val forbiddenVariableNames: List<IsPreprocessorForbiddenNameSpec> = emptyList(),
+    @field:JsonProperty("pragma_sub_commands")
+    val pragmaSubCommands: List<IsPreprocessorPragmaSpec> = emptyList()
 )

@@ -38,7 +38,13 @@ class IsSectionTypedHandler : TypedHandlerDelegate() {
 
             '#' -> {
                 val offset = editor.caretModel.offset
-                if (offset > 0 && editor.document.charsSequence[offset - 1] == '{') {
+                val chars = editor.document.charsSequence
+                // Inline preprocessor usage: {#…
+                if (offset > 0 && chars[offset - 1] == '{') {
+                    AutoPopupController.getInstance(project).scheduleAutoPopup(editor)
+                    Result.STOP
+                } else if (isAtLineStart(chars, offset)) {
+                    // Preprocessor directive line: # at the beginning of a (only whitespace-preceded) line
                     AutoPopupController.getInstance(project).scheduleAutoPopup(editor)
                     Result.STOP
                 } else {
@@ -48,5 +54,20 @@ class IsSectionTypedHandler : TypedHandlerDelegate() {
 
             else -> Result.CONTINUE
         }
+    }
+
+    /**
+     * Returns `true` if the given offset (the insertion point of the typed character) is at the start of a
+     * line, i.e. only whitespace precedes it on the current line. Used to detect a preprocessor directive line.
+     */
+    private fun isAtLineStart(chars: CharSequence, offset: Int): Boolean {
+        var i = offset - 1
+        while (i >= 0) {
+            val c = chars[i]
+            if (c == '\n') return true
+            if (c != ' ' && c != '\t') return false
+            i--
+        }
+        return true
     }
 }

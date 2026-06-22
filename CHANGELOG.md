@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- **`#pragma` directive support**: The `#pragma` sub-commands (`option`, `parseroption`, `message`,
+  `warning`, `error`, `verboselevel`, `inlinestart`, `inlineend`, `include`, `spansymbol`) are now
+  validated — unknown sub-commands, invalid option flags and arguments of the wrong type are flagged as
+  errors — and completion offers the sub-commands after `#pragma ` and the option flags after
+  `#pragma option `/`#pragma parseroption `. `#define`s used inside a `#pragma` expression argument resolve,
+  and support Find Usages and rename.
+
 ## [0.5.1]
 
 - Updates for automatic release

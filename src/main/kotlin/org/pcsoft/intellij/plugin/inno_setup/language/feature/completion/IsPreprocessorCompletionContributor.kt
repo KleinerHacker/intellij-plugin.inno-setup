@@ -19,6 +19,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provide
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDirectiveKeywordProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorIncludeFileProvider
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorPragmaProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
@@ -53,6 +54,12 @@ class IsPreprocessorCompletionContributor : CompletionContributor() {
             CompletionType.BASIC,
             PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
             IsPreprocessorIncludeFileProvider
+        )
+        // #pragma sub-commands and option flags
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement().withLanguage(IsPreprocessorLanguage),
+            IsPreprocessorPragmaProvider
         )
     }
 }
