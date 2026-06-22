@@ -1564,6 +1564,258 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../undef/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #undef
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #dim / #redim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../include/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #include / #file
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #emit / #expr / #insert / #append
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #if / #ifdef / …
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../for/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #sub / #endsub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pragma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #pragma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1989,9 +2241,18 @@
 </tr>
 </tbody>
 </table>
-<p>所有指令关键字都会被高亮、补全（<code>#</code> 之后）并根据规范验证。插件还为某些指令提供完整语义支持（引用解析、重命名、查找用法），它们有各自的页面：</p>
+<p>所有指令关键字都会被高亮、补全（<code>#</code> 之后）并根据规范验证。每个指令都有各自的页面：</p>
 <ul>
 <li><a href="../define/"><code>#define</code></a> — 声明和使用宏，以及标准预定义变量</li>
+<li><a href="../undef/"><code>#undef</code></a> — 移除先前定义的宏</li>
+<li><a href="../arrays/"><code>#dim</code> / <code>#redim</code></a> — 声明和调整数组宏的大小</li>
+<li><a href="../include/"><code>#include</code> / <code>#file</code></a> — 粘贴另一个文件的内容 / 读取文件</li>
+<li><a href="../output/"><code>#emit</code> / <code>#expr</code> / <code>#insert</code> / <code>#append</code></a> — 计算表达式并输出（或不输出）</li>
+<li><a href="../conditionals/"><code>#if</code> / <code>#ifdef</code> / …</a> — 条件编译</li>
+<li><a href="../for/"><code>#for</code></a> — 以 C 风格循环重复执行指令</li>
+<li><a href="../sub/"><code>#sub</code> / <code>#endsub</code></a> — 定义可重用的子例程</li>
+<li><a href="../pragma/"><code>#pragma</code></a> — 控制预处理器（选项、诊断、分隔符……）</li>
+<li><a href="../error/"><code>#error</code></a> — 中止编译并显示消息</li>
 </ul>
 <hr />
 <h2 id="_3">内联输出 <code>{#…}</code></h2>

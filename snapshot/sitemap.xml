@@ -91,6 +91,24 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
     </url>
     <url>
+        <loc>Nonepreprocessor/arrays/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/arrays/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/conditionals/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/conditionals/"/>
+    </url>
+    <url>
         <loc>Nonepreprocessor/define/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -100,6 +118,42 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/define/"/>
     </url>
     <url>
+        <loc>Nonepreprocessor/error/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/error/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/for/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/for/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/include/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/include/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/output/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/output/"/>
+    </url>
+    <url>
         <loc>Nonepreprocessor/overview/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -107,6 +161,33 @@
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/overview/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/pragma/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/pragma/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/sub/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/sub/"/>
+    </url>
+    <url>
+        <loc>Nonepreprocessor/undef/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/undef/"/>
     </url>
     <url>
         <loc>Nonesections/code/</loc>
@@ -370,6 +451,24 @@
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/template-files/"/>
     </url>
     <url>
+        <loc>Nonezh/preprocessor/arrays/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/arrays/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/conditionals/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/conditionals/"/>
+    </url>
+    <url>
         <loc>Nonezh/preprocessor/define/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -379,6 +478,42 @@
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/define/"/>
     </url>
     <url>
+        <loc>Nonezh/preprocessor/error/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/error/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/for/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/for/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/include/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/include/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/output/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/output/"/>
+    </url>
+    <url>
         <loc>Nonezh/preprocessor/overview/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -386,6 +521,33 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/overview/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/pragma/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/pragma/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/sub/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/sub/"/>
+    </url>
+    <url>
+        <loc>Nonezh/preprocessor/undef/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/undef/"/>
     </url>
     <url>
         <loc>Nonezh/sections/code/</loc>
@@ -649,6 +811,24 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
     </url>
     <url>
+        <loc>Noneja/preprocessor/arrays/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/arrays/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/conditionals/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/conditionals/"/>
+    </url>
+    <url>
         <loc>Noneja/preprocessor/define/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -658,6 +838,42 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/define/"/>
     </url>
     <url>
+        <loc>Noneja/preprocessor/error/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/error/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/for/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/for/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/include/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/include/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/output/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/output/"/>
+    </url>
+    <url>
         <loc>Noneja/preprocessor/overview/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -665,6 +881,33 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/overview/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/pragma/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/pragma/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/sub/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/sub/"/>
+    </url>
+    <url>
+        <loc>Noneja/preprocessor/undef/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/undef/"/>
     </url>
     <url>
         <loc>Noneja/sections/code/</loc>
@@ -928,6 +1171,24 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/template-files/"/>
     </url>
     <url>
+        <loc>Noneko/preprocessor/arrays/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/arrays/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/arrays/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/conditionals/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/conditionals/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/conditionals/"/>
+    </url>
+    <url>
         <loc>Noneko/preprocessor/define/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -937,6 +1198,42 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/define/"/>
     </url>
     <url>
+        <loc>Noneko/preprocessor/error/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/error/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/error/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/for/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/for/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/for/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/include/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/include/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/include/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/output/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/output/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/output/"/>
+    </url>
+    <url>
         <loc>Noneko/preprocessor/overview/</loc>
         <lastmod>2026-06-22</lastmod>
         <changefreq>daily</changefreq>
@@ -944,6 +1241,33 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/overview/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/overview/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/pragma/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/pragma/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/pragma/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/sub/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/sub/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/sub/"/>
+    </url>
+    <url>
+        <loc>Noneko/preprocessor/undef/</loc>
+        <lastmod>2026-06-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonepreprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/preprocessor/undef/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/preprocessor/undef/"/>
     </url>
     <url>
         <loc>Noneko/sections/code/</loc>

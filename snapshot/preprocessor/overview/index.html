@@ -1564,6 +1564,258 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../undef/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #undef
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #dim / #redim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../include/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #include / #file
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #emit / #expr / #insert / #append
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #if / #ifdef / …
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../for/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #sub / #endsub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pragma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #pragma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1995,11 +2247,19 @@ unknown-section/flag/constant checks.</p>
 </tr>
 </tbody>
 </table>
-<p>All directive keywords are highlighted, completed (after <code>#</code>) and validated against the spec. Directives
-that the plugin also supports with full semantics (reference resolution, rename, Find Usages) have their
-own page:</p>
+<p>All directive keywords are highlighted, completed (after <code>#</code>) and validated against the spec. Every
+directive has its own page:</p>
 <ul>
 <li><a href="../define/"><code>#define</code></a> — declare and use macros, plus the standard predefined variables</li>
+<li><a href="../undef/"><code>#undef</code></a> — remove a previously defined macro</li>
+<li><a href="../arrays/"><code>#dim</code> / <code>#redim</code></a> — declare and resize array macros</li>
+<li><a href="../include/"><code>#include</code> / <code>#file</code></a> — paste another file's content / read a file</li>
+<li><a href="../output/"><code>#emit</code> / <code>#expr</code> / <code>#insert</code> / <code>#append</code></a> — evaluate an expression and emit (or not)</li>
+<li><a href="../conditionals/"><code>#if</code> / <code>#ifdef</code> / …</a> — conditional compilation</li>
+<li><a href="../for/"><code>#for</code></a> — repeat a directive with a C-style loop</li>
+<li><a href="../sub/"><code>#sub</code> / <code>#endsub</code></a> — define a reusable subroutine</li>
+<li><a href="../pragma/"><code>#pragma</code></a> — control the preprocessor (options, diagnostics, delimiters, …)</li>
+<li><a href="../error/"><code>#error</code></a> — abort compilation with a message</li>
 </ul>
 <hr />
 <h2 id="inline-emission">Inline emission <code>{#…}</code></h2>

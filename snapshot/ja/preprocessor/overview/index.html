@@ -1564,6 +1564,258 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../undef/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #undef
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #dim / #redim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../include/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #include / #file
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #emit / #expr / #insert / #append
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #if / #ifdef / …
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../for/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #sub / #endsub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pragma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #pragma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1989,9 +2241,18 @@
 </tr>
 </tbody>
 </table>
-<p>すべてのディレクティブキーワードはハイライト、補完（<code>#</code> の後）され、仕様に対して検証されます。プラグインが完全なセマンティクス（参照解決、リネーム、使用箇所検索）でサポートするディレクティブには専用ページがあります：</p>
+<p>すべてのディレクティブキーワードはハイライト、補完（<code>#</code> の後）され、仕様に対して検証されます。各ディレクティブには専用ページがあります：</p>
 <ul>
 <li><a href="../define/"><code>#define</code></a> — マクロの宣言と使用、および標準の定義済み変数</li>
+<li><a href="../undef/"><code>#undef</code></a> — 以前に定義したマクロを削除する</li>
+<li><a href="../arrays/"><code>#dim</code> / <code>#redim</code></a> — 配列マクロの宣言とサイズ変更</li>
+<li><a href="../include/"><code>#include</code> / <code>#file</code></a> — 別ファイルの内容を貼り付ける / ファイルを読み込む</li>
+<li><a href="../output/"><code>#emit</code> / <code>#expr</code> / <code>#insert</code> / <code>#append</code></a> — 式を評価して出力する（またはしない）</li>
+<li><a href="../conditionals/"><code>#if</code> / <code>#ifdef</code> / …</a> — 条件付きコンパイル</li>
+<li><a href="../for/"><code>#for</code></a> — C 形式のループでディレクティブを繰り返す</li>
+<li><a href="../sub/"><code>#sub</code> / <code>#endsub</code></a> — 再利用可能なサブルーチンを定義する</li>
+<li><a href="../pragma/"><code>#pragma</code></a> — プリプロセッサーを制御する（オプション、診断、区切り文字など）</li>
+<li><a href="../error/"><code>#error</code></a> — メッセージを表示してコンパイルを中止する</li>
 </ul>
 <hr />
 <h2 id="_3">インライン出力 <code>{#…}</code></h2>

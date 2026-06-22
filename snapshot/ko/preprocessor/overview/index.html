@@ -1564,6 +1564,258 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../undef/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #undef
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #dim / #redim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../include/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #include / #file
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #emit / #expr / #insert / #append
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #if / #ifdef / …
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../for/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #sub / #endsub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pragma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #pragma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1989,9 +2241,18 @@
 </tr>
 </tbody>
 </table>
-<p>모든 지시문 키워드는 강조 표시되고 완성되며(<code>#</code> 뒤) 사양에 대해 검증됩니다. 플러그인이 완전한 의미 체계(참조 해석, 이름 바꾸기, 사용 찾기)로 지원하는 지시문은 전용 페이지가 있습니다:</p>
+<p>모든 지시문 키워드는 강조 표시되고 완성되며(<code>#</code> 뒤) 사양에 대해 검증됩니다. 각 지시문에는 전용 페이지가 있습니다:</p>
 <ul>
 <li><a href="../define/"><code>#define</code></a> — 매크로 선언 및 사용, 그리고 표준 사전 정의 변수</li>
+<li><a href="../undef/"><code>#undef</code></a> — 이전에 정의된 매크로 제거</li>
+<li><a href="../arrays/"><code>#dim</code> / <code>#redim</code></a> — 배열 매크로 선언 및 크기 조정</li>
+<li><a href="../include/"><code>#include</code> / <code>#file</code></a> — 다른 파일의 내용 붙여넣기 / 파일 읽기</li>
+<li><a href="../output/"><code>#emit</code> / <code>#expr</code> / <code>#insert</code> / <code>#append</code></a> — 식을 평가하여 출력(또는 출력 안 함)</li>
+<li><a href="../conditionals/"><code>#if</code> / <code>#ifdef</code> / …</a> — 조건부 컴파일</li>
+<li><a href="../for/"><code>#for</code></a> — C 스타일 루프로 지시문 반복</li>
+<li><a href="../sub/"><code>#sub</code> / <code>#endsub</code></a> — 재사용 가능한 서브루틴 정의</li>
+<li><a href="../pragma/"><code>#pragma</code></a> — 전처리기 제어(옵션, 진단, 구분 기호 등)</li>
+<li><a href="../error/"><code>#error</code></a> — 메시지와 함께 컴파일 중단</li>
 </ul>
 <hr />
 <h2 id="_3">인라인 출력 <code>{#…}</code></h2>
