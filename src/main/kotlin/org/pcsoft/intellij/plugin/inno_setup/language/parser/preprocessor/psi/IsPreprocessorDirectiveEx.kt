@@ -27,6 +27,42 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
     /** Whether this directive is an `#undef` (case-insensitive). */
     fun isUndef(): Boolean
 
+    /** Whether this directive is an `#if` (case-insensitive). */
+    fun isIf(): Boolean
+
+    /** Whether this directive is an `#elif` (case-insensitive). */
+    fun isElif(): Boolean
+
+    /** Whether this directive is an `#else` (case-insensitive). */
+    fun isElse(): Boolean
+
+    /** Whether this directive is an `#endif` (case-insensitive). */
+    fun isEndif(): Boolean
+
+    /** Whether this directive is `#if` or `#elif` — the two that carry a boolean condition expression. */
+    fun isIfElif(): Boolean
+
+    /**
+     * Whether this directive opens a conditional block that must be closed by `#endif`:
+     * `#if`/`#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist`.
+     */
+    fun isConditionalOpener(): Boolean
+
+    /** Whether this directive is part of the conditional family (opener, `#elif`, `#else` or `#endif`). */
+    fun isConditionalDirective(): Boolean
+
+    /**
+     * The condition expression of an `#if`/`#elif` (the whole value after the keyword, trimmed), or `null`
+     * when this is not an `#if`/`#elif` or it has no condition.
+     */
+    fun getConditionExpressionText(): String?
+
+    /**
+     * Offset of [getConditionExpressionText] within this directive's text (for mapping analysis spans back
+     * to editor ranges), or `-1` when there is no condition.
+     */
+    fun getConditionExpressionOffsetInDirective(): Int
+
     /**
      * The optional scope/visibility keyword (`public`/`protected`/`private`) preceding the name of a
      * `#define`/`#undef`, or `null` when none is present. Recognized only when an actual name follows it.

@@ -31,6 +31,11 @@ internal object IsPreprocessorExpressionContext {
         "^#\\s*pragma\\s+(?:message|warning|error|verboselevel|include|inlinestart|inlineend|spansymbol)\\s+.*$",
         RegexOption.IGNORE_CASE,
     )
+
+    // The caret sits in the condition of a `#if`/`#elif` (an expression). The `\s+` after the keyword keeps
+    // `#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist` (which take a name/filename, not an expression) out.
+    private val IF_EXPR_PREFIX = Regex("^#\\s*(?:if|elif)\\s+.*$", RegexOption.IGNORE_CASE)
+
     private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
 
     /**
@@ -46,7 +51,10 @@ internal object IsPreprocessorExpressionContext {
         val doc = params.editor.document
         val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
         val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
-        if (!EXPR_PREFIX.matches(linePrefix) && !PRAGMA_EXPR_PREFIX.matches(linePrefix)) return null
+        if (!EXPR_PREFIX.matches(linePrefix) &&
+            !PRAGMA_EXPR_PREFIX.matches(linePrefix) &&
+            !IF_EXPR_PREFIX.matches(linePrefix)
+        ) return null
         if (linePrefix.count { it == '"' } % 2 == 1) return null
 
         val typed = WORD_TAIL.find(linePrefix)?.value ?: ""

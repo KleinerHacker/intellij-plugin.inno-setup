@@ -85,11 +85,15 @@ in a read-only tab, so you can inspect what the compiler actually sees.
 
 ## Editor support
 
-- **Syntax highlighting** for directives, macro names and inline `{#…}` references
-- **Completion** of directive keywords, of `#define`s and value-bearing predefined variables, and of
-  built-in functions
-- **Validation** of unknown directives, unknown `{#…}` references, never-used `#define`s and broken or
-  problematic `#include` lines
-- **Rename** and **Find Usages** across a `#define` and all its `{#Name}` usages
+- **Syntax highlighting** for directives, macro names, scope keywords and inline `{#…}` references
+- **Completion** of directive keywords, of `#define`/`#undef` scope keywords, of `#define`s and
+  value-bearing predefined variables, and of built-in functions — including inside a `#if`/`#elif`
+  condition
+- **Validation** of unknown directives, unknown `{#…}` references, never-used `#define`s, broken or
+  problematic `#include` lines, the `#if … #endif` block structure (a missing `#endif`, a stray
+  `#elif`/`#else`/`#endif`, a condition-less `#if`) and literal booleans in a condition
+- **Rename** and **Find Usages** across a `#define` and all its usages — its `{#Name}` references, its
+  `#undef`, and identifiers in `#if`/`#elif` conditions
+- **Folding** of an `#if … #endif` block that lies wholly inside one section or wholly outside any section
 - **Show Effective Script** to view the fully `#include`-resolved script in a read-only tab
 - **Inline** and **Extract** intentions for `#include`, with automatic path updates on rename/move

@@ -8,8 +8,11 @@ longer defined: `defined(Name)` becomes false and any later use of the name is t
 ## Syntax
 
 ```ini
-#undef Name
+#undef [Scope] Name
 ```
+
+An optional scope keyword — `public`, `protected` or `private` — may precede the name, mirroring
+[`#define`](define.md).
 
 ---
 
@@ -34,8 +37,13 @@ Undefining a name that was never defined has no effect. `#undef` is most useful 
 
 ## Editor support
 
-The directive keyword is highlighted, completed (after `#`) and validated against the bundled ISPP
-specification.
+- The directive keyword (and an optional scope keyword) is highlighted, completed (after `#`) and
+  validated against the bundled ISPP specification.
+- The name in `#undef Name` **resolves to its `#define`** — go-to-definition (**Ctrl+B** / **Cmd+B**),
+  Find Usages (**Alt+F7**) and rename keep the `#define`, the `#undef` and all `{#Name}` usages in sync.
+- After `#undef ` completion offers the scope keywords and the names of the macros defined earlier.
+- An `#undef` whose name has **no matching `#define`** does nothing: its name is grayed out with a
+  quick-fix to remove the directive.
 
 ---
 

@@ -227,7 +227,8 @@ Legend: ✅ implemented · ⚠️ partial · — not applicable.
 | `#dim` / `#redim` | ✅ | ✅ keyword | ✅ keyword | — | `arrays.md` |
 | `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
 | `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
-| `#if` / `#elif` / `#else` / `#endif` / `#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist` | ✅ | ✅ keyword | ✅ keyword | — | `conditionals.md` |
+| `#if` / `#elif` | ✅ | ✅ expr + type + structure + boolean-literal | ✅ keyword | ✅ → `#define` | `conditionals.md` |
+| `#else` / `#endif` / `#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist` | ✅ | ✅ keyword + structure (opener↔#endif) | ✅ keyword | — | `conditionals.md` |
 | `#for` | ✅ | ✅ keyword | ✅ keyword | — | `for.md` |
 | `#sub` / `#endsub` | ✅ | ✅ keyword | ✅ keyword | — | `sub.md` |
 | `#pragma` | ✅ | ✅ sub-command + flags + expr/type | ✅ keyword + sub-command + flags | ✅ in expr args | `pragma.md` |
@@ -285,7 +286,7 @@ table above in sync whenever a directive's semantics change.
 | `lang.` prefix reference / find usages / rename | ✅      | Prefix resolves to a `[Languages] Name`; red when undeclared; renaming the Name updates all prefixes                                                                                              |
 | Inlay hints — language flags                    | ✅      | Flag + English name (from the LanguageID in the referenced `.isl`) before `[Languages] MessagesFile` and `[LangOptions] LanguageID`; flag of the referenced language before a `lang.` message key |
 | Brace matching `[]`, `{}`, `()`                 | ✅      |                                                                                                                                                                                                   |
-| Code folding                                    | ✅      |                                                                                                                                                                                                   |
+| Code folding                                    | ✅      | Sections, multi-pair entries, and `#if … #endif` blocks (when wholly inside one section or wholly outside)                                                                                          |
 | Structure view                                  | ✅      |                                                                                                                                                                                                   |
 | Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                         |
 | Documentation popup (ISPP)                      | ✅      | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until` |

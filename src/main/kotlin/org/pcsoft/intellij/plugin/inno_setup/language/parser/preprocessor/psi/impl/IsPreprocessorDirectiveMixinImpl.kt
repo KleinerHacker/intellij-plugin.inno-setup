@@ -20,8 +20,10 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
+import com.intellij.psi.TokenType
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsIncludeFileReference
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IS_PREPROCESSOR_BOOLEAN_WORDS
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
@@ -80,6 +82,72 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      */
     override fun isUndef(): Boolean =
         (this as IsPreprocessorDirective).identifier?.text?.equals("undef", ignoreCase = true) == true
+
+    private fun keywordEquals(vararg keywords: String): Boolean {
+        val kw = (this as IsPreprocessorDirective).identifier?.text ?: return false
+        return keywords.any { kw.equals(it, ignoreCase = true) }
+    }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIf(): Boolean = keywordEquals("if")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isElif(): Boolean = keywordEquals("elif")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isElse(): Boolean = keywordEquals("else")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isEndif(): Boolean = keywordEquals("endif")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfElif(): Boolean = isIf() || isElif()
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isConditionalOpener(): Boolean = keywordEquals("if", "ifdef", "ifndef", "ifexist", "ifnexist")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isConditionalDirective(): Boolean = isConditionalOpener() || isElif() || isElse() || isEndif()
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getConditionExpressionText(): String? = conditionExpression()?.first
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getConditionExpressionOffsetInDirective(): Int = conditionExpression()?.second ?: -1
+
+    /**
+     * The condition of an `#if`/`#elif` (the whole value text, trimmed) together with its start offset
+     * inside the directive's text. `null` when this is not an `#if`/`#elif` or there is no condition.
+     */
+    private fun conditionExpression(): Pair<String, Int>? {
+        if (!isIfElif()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val raw = value.text
+        val leadingWs = raw.length - raw.trimStart().length
+        val trimmed = raw.trim()
+        if (trimmed.isEmpty()) return null
+        return trimmed to (valueOffsetInDirective + leadingWs)
+    }
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -201,6 +269,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Flag-based pragmas (`option`/`parseroption`) carry no references (their `-v+` letters are not names).
      */
     private fun expressionReferenceIdentifiers(): List<ASTNode> {
+        if (isIfElif()) return ifElifReferenceIdentifiers()
         val isExprDefine = isDefine()
         val isExprPragma = isPragma() && pragmaArgumentType().let {
             it == IsPreprocessorPragmaArgument.STR || it == IsPreprocessorPragmaArgument.INT
@@ -213,6 +282,45 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             .filter { it !== name }          // not the define's own name / pragma sub-command
             .filter { it !== visibility }    // not a scope/visibility keyword
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
+    }
+
+    /**
+     * Identifiers in an `#if`/`#elif` condition that reference other #defines. Excludes boolean words
+     * (`true`/`false`/`yes`/`no` — they get a dedicated boolean warning, never an unresolved error),
+     * reserved keywords (`defined`/type keywords from the spec) and the argument of a `defined(...)` call
+     * (which may legitimately be undefined), so neither becomes a reference nor an unresolved error.
+     */
+    private fun ifElifReferenceIdentifiers(): List<ASTNode> {
+        val forbidden = service<IsPreprocessorService>().spec.forbiddenVariableNames
+            .map { it.name.lowercase() }.toSet()
+        val definedArgs = definedCallArgumentNodes()
+        return valueIdentifiers()
+            .filter { it.text.lowercase() !in IS_PREPROCESSOR_BOOLEAN_WORDS }
+            .filter { it.text.lowercase() !in forbidden }
+            .filter { it !in definedArgs }
+    }
+
+    /**
+     * The identifier nodes that are the single argument of a `defined(...)` call in the value, e.g. `X`
+     * in `defined(X)`. Such names may legitimately be undefined, so they are not treated as references.
+     */
+    private fun definedCallArgumentNodes(): Set<ASTNode> {
+        val value = (this as IsPreprocessorDirective).value?.node ?: return emptySet()
+        val tokens = value.getChildren(null).filter { it.elementType != TokenType.WHITE_SPACE }
+        val result = mutableSetOf<ASTNode>()
+        var i = 0
+        while (i < tokens.size) {
+            if (tokens[i].elementType == IsPreprocessorTypes.IDENTIFIER &&
+                tokens[i].text.equals("defined", ignoreCase = true) &&
+                tokens.getOrNull(i + 1)?.elementType == IsPreprocessorTypes.LPAREN
+            ) {
+                tokens.getOrNull(i + 2)
+                    ?.takeIf { it.elementType == IsPreprocessorTypes.IDENTIFIER }
+                    ?.let { result += it }
+            }
+            i++
+        }
+        return result
     }
 
     /**

@@ -7,12 +7,15 @@
 ## 構文
 
 ```ini
-#define Name [Value]
-#define Name(Param1, Param2) Expression
+#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 ```
 
 - `#define Name Value` は定数マクロを定義します（値は省略可能で、その場合は *void* マクロになります）。
 - `#define Name(params) Expression` は関数形式のマクロを定義します。プラグインは式の本体を持たない関数形式マクロをエラーとしてフラグ付けします。
+- 名前の前にオプションの**スコープキーワード**（`public`、`protected`、`private`）を付けられます
+  （例：`#define public MyAppVersion "1.5.0"`）。キーワードとしてハイライト・補完され、付けても付けなくても
+  名前の解決と参照は同じように機能します。
 - `#undef Name` は以前に定義されたマクロを削除します。
 
 ---

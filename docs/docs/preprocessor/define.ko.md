@@ -7,12 +7,15 @@
 ## 구문
 
 ```ini
-#define Name [Value]
-#define Name(Param1, Param2) Expression
+#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 ```
 
 - `#define Name Value`는 상수 매크로를 정의합니다(값을 생략하면 *void* 매크로가 됩니다).
 - `#define Name(params) Expression`은 함수형 매크로를 정의합니다. 플러그인은 표현식 본문이 없는 함수형 매크로를 오류로 표시합니다.
+- 이름 앞에 선택적 **범위 키워드**(`public`, `protected`, `private`)를 붙일 수 있습니다
+  (예: `#define public MyAppVersion "1.5.0"`). 키워드로 강조 표시되고 완성되며, 붙이든 안 붙이든 이름
+  확인과 참조는 동일하게 작동합니다.
 - `#undef Name`은 이전에 정의된 매크로를 제거합니다.
 
 ---

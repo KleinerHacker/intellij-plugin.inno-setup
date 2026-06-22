@@ -30,11 +30,11 @@ using.
 | **Structure view**         | Bird's-eye overview of all sections and their entries                                                                |
 | **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                      |
 | **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                        |
-| **Code folding**           | Sections and long parameter entries fold independently                                                               |
+| **Code folding**           | Sections, long parameter entries, and `#if … #endif` blocks fold independently                                       |
 | **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                           |
 | **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build        |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                            |
-| **ISPP support**           | Preprocessor directives (`#define`, `#include`, …) are parsed, highlighted, and completed                           |
+| **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 
 ### IDE Compatibility
 

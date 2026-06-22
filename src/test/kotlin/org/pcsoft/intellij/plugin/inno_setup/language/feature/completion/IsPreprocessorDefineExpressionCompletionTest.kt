@@ -99,4 +99,31 @@ class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
         assertNotNull("Expected a lookup element for 'First'", presentation)
         assertEquals("A plain value define must be typed as a define", "define", presentation!!.typeText)
     }
+
+    // ── #if / #elif condition is an expression context ────────────────────────
+
+    fun testSuggestionsInIfCondition() {
+        val variants = expressionLookup(
+            "#define First 1\n#if <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered in #if, was: $variants", "First" in variants)
+        assertTrue("Predefined variable must be offered in #if, was: $variants", "PREPROCVER" in variants)
+        assertTrue("Built-in function must be offered in #if, was: $variants", "FileExists" in variants)
+    }
+
+    fun testSuggestionsInElifCondition() {
+        val variants = expressionLookup(
+            "#define First 1\n#if 0\n#elif <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered in #elif, was: $variants", "First" in variants)
+    }
+
+    fun testNoExpressionSuggestionsInIfdefName() {
+        // #ifdef takes a name, not an expression — the expression providers must not fire there.
+        val variants = expressionLookup(
+            "#define First 1\n#ifdef <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertFalse("Predefined variables must not be offered as an #ifdef name, was: $variants", "PREPROCVER" in variants)
+        assertFalse("Built-in functions must not be offered as an #ifdef name, was: $variants", "FileExists" in variants)
+    }
 }

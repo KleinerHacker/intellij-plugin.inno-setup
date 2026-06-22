@@ -120,6 +120,10 @@ class IsPreprocessorAnnotator : Annotator {
             annotateUndef(directive, ex, holder)
             return
         }
+        if (ex.isConditionalDirective()) {
+            annotateConditional(directive, ex, holder)
+            return
+        }
         if (!ex.isDefine()) return
 
         // Optional scope/visibility keyword (#define public Foo …) — highlighted like a keyword.
@@ -227,6 +231,88 @@ class IsPreprocessorAnnotator : Annotator {
                 .withFix(RemoveUselessUndefQuickFix(directive))
                 .create()
         }
+    }
+
+    /**
+     * Validates a conditional directive (`#if`/`#elif`/`#else`/`#endif` and the `#ifdef`-family): checks the
+     * block structure (every opener must be closed by `#endif`; no stray `#elif`/`#else`/`#endif`); for
+     * `#if`/`#elif` it additionally analyses the condition expression (operators, syntax/type errors,
+     * references) and marks a literal boolean (`true`/`false`/`yes`/`no`) yellow with a warning, because
+     * ISPP has no booleans and would treat the word as an undefined identifier (0).
+     */
+    private fun annotateConditional(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        // ── structure ──
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        if (hostFile != null) {
+            val problem = IsPreprocessorConditionalStructure.structureOf(hostFile).problems[directive]
+            if (problem != null) {
+                val keywordNode = directive.identifier
+                val keyword = keywordNode?.text ?: "if"
+                val message = when (problem) {
+                    IsConditionalProblem.UnterminatedOpener -> "Unterminated #$keyword: missing #endif"
+                    IsConditionalProblem.ElifAfterElse -> "#elif cannot appear after #else"
+                    IsConditionalProblem.StrayBranch -> "#$keyword without matching #if"
+                }
+                val hash = directive.node.findChildByType(IsPreprocessorTypes.HASH)
+                val range = if (keywordNode != null)
+                    TextRange(hash?.startOffset ?: keywordNode.textRange.startOffset, keywordNode.textRange.endOffset)
+                else directive.textRange
+                holder.newAnnotation(HighlightSeverity.ERROR, message).range(range).create()
+            }
+        }
+
+        if (!ex.isIfElif()) return
+
+        // ── condition expression ──
+        // #if/#elif require a condition — an empty one is invalid.
+        val exprText = ex.getConditionExpressionText()
+        val exprOffset = ex.getConditionExpressionOffsetInDirective()
+        if (exprText.isNullOrBlank() || exprOffset < 0) {
+            val keyword = directive.identifier?.text ?: "if"
+            holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a condition expression")
+                .range(directive.textRange).create()
+            return
+        }
+        val base = directive.textRange.startOffset + exprOffset
+
+        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+        tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
+            highlight(TextRange(base + token.start, base + token.end), IsPreprocessorSyntaxHighlighting.OPERATOR, holder)
+        }
+
+        // Literal booleans: a bare true/false/yes/no IDENT not used as a function name.
+        tokens.forEachIndexed { i, token ->
+            if (token.type == IsPreprocessorExprTokenType.IDENT &&
+                token.text.lowercase() in IS_PREPROCESSOR_BOOLEAN_WORDS &&
+                tokens.getOrNull(i + 1)?.type != IsPreprocessorExprTokenType.LPAREN
+            ) {
+                val range = TextRange(base + token.start, base + token.end)
+                highlight(range, IsSectionAnnotatorHighlighting.BOOLEAN_LITERAL, holder)
+                holder.newAnnotation(
+                    HighlightSeverity.WEAK_WARNING,
+                    "ISPP has no boolean literals; '${token.text}' is treated as an undefined identifier (0)"
+                ).range(range).textAttributes(IsSectionAnnotatorHighlighting.BOOLEAN_LITERAL).create()
+            }
+        }
+
+        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+        val resolver = buildTypeResolver(hostFile)
+        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+        inference.infer(parseResult.ast)
+
+        (parseResult.errors + inference.errors).forEach { error ->
+            holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                .range(TextRange(base + error.span.start, base + error.span.end))
+                .create()
+        }
+
+        // Identifiers that refer to a non-existent #define are unresolved references (error, like #define).
+        annotateUnresolvedReferences(directive, holder)
     }
 
     /**

@@ -35,6 +35,12 @@
                 <option name="FONT_TYPE" value="2"/>
             </value>
         </option>
+        <!-- Literal boolean (true/false/yes/no) misused in a #if/#elif condition — yellow -->
+        <option name="ISS_BOOLEAN_LITERAL">
+            <value>
+                <option name="FOREGROUND" value="a37a00"/>
+            </value>
+        </option>
         <!-- Unused elements (trailing semicolons, unused #define, empty sections) — gray -->
         <option name="ISS_UNUSED">
             <value>

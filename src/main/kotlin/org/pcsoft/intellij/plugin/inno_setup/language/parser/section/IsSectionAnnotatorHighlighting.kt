@@ -53,6 +53,13 @@ object IsSectionAnnotatorHighlighting {
         TextAttributesKey.createTextAttributesKey("ISS_DEFINE_NAME")
 
     /**
+     * A literal boolean word (`true`/`false`/`yes`/`no`) used directly in a `#if`/`#elif` condition — ISPP
+     * has no booleans, so it is painted yellow to flag it. Default attributes come from the bundled schemes.
+     */
+    val BOOLEAN_LITERAL: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_BOOLEAN_LITERAL")
+
+    /**
      * The `cm` keyword of a `{cm:…}` constant — italic (default attributes provided by the bundled
      * color schemes, layered over the constant's reference colour).
      */

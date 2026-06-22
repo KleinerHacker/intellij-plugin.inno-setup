@@ -6,6 +6,14 @@
 
 ### Added
 
+- **`#if` / `#elif` / `#else` / `#endif` conditional support**: The `#if`/`#elif` condition is now
+  analysed by the ISPP expression engine — operators are highlighted, syntax and type errors are flagged,
+  and identifiers resolve to `#define`s (go-to-definition, Find Usages, rename), with unknown names
+  reported as errors. A directly used boolean literal (`true`/`false`/`yes`/`no`) is highlighted yellow
+  with a warning, since ISPP has no booleans. The block **structure is validated**: a `#if` (or
+  `#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist`) without a matching `#endif`, and a stray
+  `#elif`/`#else`/`#endif`, are flagged. A complete `#if … #endif` block can be **folded** when it lies
+  entirely within one section or entirely outside any section.
 - **`#undef` directive support**: `#undef Name` now resolves to the matching `#define`, with
   go-to-definition, Find Usages and rename across the `#define`, its `{#Name}` uses and the `#undef`.
   Completion after `#undef ` offers the names of the defines declared earlier. An `#undef` without a

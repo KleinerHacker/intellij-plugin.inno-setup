@@ -51,8 +51,25 @@ opening directive and its matching `#endif` is only emitted when the condition h
 
 ## Editor support
 
-All conditional keywords are highlighted, completed (after `#`) and validated against the bundled ISPP
-specification; the controlling expression is parsed and type-checked.
+- **Highlighting & completion** — all conditional keywords are highlighted and completed (after `#`) and
+  validated against the bundled ISPP specification.
+- **Condition expression** — the `#if` / `#elif` condition is the same full ISPP expression as a
+  [`#define`](define.md) value: operators are highlighted, syntax and type errors are reported on the
+  offending token, and the expression providers (other `#define`s, predefined variables and built-in
+  functions) are offered in completion inside the condition.
+- **References** — identifiers in the condition resolve to their `#define` declaration, so
+  go-to-definition (**Ctrl+B** / **Cmd+B**), Find Usages (**Alt+F7**) and rename work; an unknown name
+  is flagged as an *unresolved reference* error (just like in a `#define`). `defined(Name)` is exempt —
+  its argument may legitimately be undefined.
+- **Boolean literals** — ISPP has no booleans, so a literal `true` / `false` / `yes` / `no` used directly
+  in a condition is painted **yellow** and carries a warning (the word is silently treated as an
+  undefined identifier `0`).
+- **Structure validation** — every opener (`#if` / `#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist`) must
+  be closed by an `#endif` before the end of the file; an unterminated opener, a stray
+  `#elif` / `#else` / `#endif` without an open block, and an `#elif` after `#else` are all flagged as
+  errors. A `#if` / `#elif` **without a condition** is an error.
+- **Folding** — a complete `#if … #endif` block can be collapsed when it lies entirely within a single
+  section *or* entirely outside any section (a block that crosses a section header is not folded).
 
 ---
 

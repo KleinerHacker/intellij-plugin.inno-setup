@@ -7,12 +7,15 @@
 ## 语法
 
 ```ini
-#define Name [Value]
-#define Name(Param1, Param2) Expression
+#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 ```
 
 - `#define Name Value` 定义一个常量宏（可省略值，从而定义一个 *void* 宏）。
 - `#define Name(params) Expression` 定义类函数宏。插件会将没有表达式主体的类函数宏标记为错误。
+- 名称前可加可选的**作用域关键字**（`public`、`protected` 或 `private`），
+  例如 `#define public MyAppVersion "1.5.0"`。它会作为关键字被高亮和补全；无论是否使用，名称解析与引用
+  的行为都相同。
 - `#undef Name` 移除先前定义的宏。
 
 ---

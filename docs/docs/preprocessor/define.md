@@ -9,13 +9,16 @@ at compile time. It is the most-used ISPP directive and the one the plugin suppo
 ## Syntax
 
 ```ini
-#define Name [Value]
-#define Name(Param1, Param2) Expression
+#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
 ```
 
 - `#define Name Value` defines a constant macro (the value may be omitted, defining a *void* macro).
 - `#define Name(params) Expression` defines a function-like macro. The plugin flags a function-like macro
   that has no expression body as an error.
+- An optional **scope keyword** — `public`, `protected` or `private` — may precede the name
+  (e.g. `#define public MyAppVersion "1.5.0"`). It is highlighted like a keyword and offered in
+  completion; the name resolution and referencing work the same with or without it.
 - `#undef Name` removes a previously defined macro.
 
 ---

@@ -21,8 +21,12 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorConditionalStructure
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.hostRange
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sectionAtOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
@@ -47,7 +51,25 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
                 entryFold(entry)?.let { descriptors += it }
             }
         }
+
+        if (root is IsScriptFile) {
+            conditionalFolds(root).forEach { descriptors += it }
+        }
         return descriptors.toTypedArray()
+    }
+
+    /**
+     * Folds for `#if … #endif` blocks — only when the whole block lies within a single section or entirely
+     * outside any section (it must not cross a section header). Two offsets share a section iff
+     * [sectionAtOffset] returns the same block (or `null` for both), which also rules out a crossing header.
+     */
+    private fun conditionalFolds(file: IsScriptFile): List<FoldingDescriptor> {
+        return IsPreprocessorConditionalStructure.structureOf(file).blocks.mapNotNull { block ->
+            val range = block.hostRange
+            if (file.sectionAtOffset(range.startOffset) !== file.sectionAtOffset(range.endOffset)) return@mapNotNull null
+            if (range.startOffset >= range.endOffset) return@mapNotNull null
+            FoldingDescriptor(block.openerLine.node, range)
+        }
     }
 
     private fun sectionFold(section: IsSectionBlock): FoldingDescriptor? {
@@ -104,9 +126,10 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
     /**
      * Returns code-folding metadata for Inno Setup sections.
      */
-    override fun getPlaceholderText(node: ASTNode): String = when (node.psi) {
+    override fun getPlaceholderText(node: ASTNode): String = when (val psi = node.psi) {
         is IsSectionBlock -> ""
         is IsSectionParameterEntry -> "; ..."
+        is IsSectionPreprocessorLine -> psi.text.trim().ifEmpty { "#if ..." } + " ... #endif"
         else -> "..."
     }
 
