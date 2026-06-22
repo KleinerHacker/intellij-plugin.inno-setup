@@ -21,9 +21,9 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstantBody
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
 
 // Anchor is IsSectionConstantBody (not the IDENTIFIER leaf) so that getReferences() on the
 // mixin element is the source of truth. TextRange skips the leading '#' character.

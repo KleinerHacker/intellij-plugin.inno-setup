@@ -18,11 +18,11 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorAnnotator
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorAnnotator
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotator
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotator
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
 
 /**
  * Validates a script the way it actually compiles: as the **combined** effective script, with every resolved

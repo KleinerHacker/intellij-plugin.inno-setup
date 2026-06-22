@@ -20,7 +20,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

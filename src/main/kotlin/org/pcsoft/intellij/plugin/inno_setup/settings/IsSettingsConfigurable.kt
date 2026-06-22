@@ -14,12 +14,12 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.SearchableConfigurable
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
+import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
 import javax.swing.event.DocumentEvent

@@ -23,7 +23,7 @@ import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.Generated
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
 
 /**
  * Handles quote typing behavior for Inno Setup string literals.

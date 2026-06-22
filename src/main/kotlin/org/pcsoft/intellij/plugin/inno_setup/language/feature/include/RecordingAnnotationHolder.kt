@@ -13,11 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
 import com.intellij.lang.ASTNode
+import com.intellij.lang.annotation.*
 import com.intellij.lang.annotation.Annotation
-import com.intellij.lang.annotation.AnnotationBuilder
-import com.intellij.lang.annotation.AnnotationHolder
-import com.intellij.lang.annotation.AnnotationSession
-import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile

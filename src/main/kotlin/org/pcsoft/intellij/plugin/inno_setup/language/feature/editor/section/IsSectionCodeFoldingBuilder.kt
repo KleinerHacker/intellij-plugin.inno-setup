@@ -23,7 +23,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
 

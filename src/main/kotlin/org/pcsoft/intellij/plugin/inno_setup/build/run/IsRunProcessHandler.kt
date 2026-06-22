@@ -15,11 +15,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.OSProcessHandler
-import com.intellij.execution.process.ProcessEvent
-import com.intellij.execution.process.ProcessHandler
-import com.intellij.execution.process.ProcessListener
-import com.intellij.execution.process.ProcessOutputTypes
+import com.intellij.execution.process.*
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
@@ -32,7 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.build.IsCompilerService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsService
 import java.io.File
 import java.io.OutputStream
-import java.util.UUID
+import java.util.*
 
 /**
  * A [ProcessHandler] that drives the two-stage pipeline:

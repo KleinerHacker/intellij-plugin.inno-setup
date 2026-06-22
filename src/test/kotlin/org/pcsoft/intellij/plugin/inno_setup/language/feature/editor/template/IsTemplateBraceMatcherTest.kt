@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
 
 class IsTemplateBraceMatcherTest : BasePlatformTestCase() {
 

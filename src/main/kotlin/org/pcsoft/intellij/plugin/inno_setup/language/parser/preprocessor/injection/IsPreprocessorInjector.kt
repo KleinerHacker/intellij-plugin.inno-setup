@@ -16,12 +16,11 @@ import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiLanguageInjectionHost
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplatePreprocessorLine
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplatePreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
 
 /**
  * Provides Inno Setup plugin behavior for the IntelliJ Platform.

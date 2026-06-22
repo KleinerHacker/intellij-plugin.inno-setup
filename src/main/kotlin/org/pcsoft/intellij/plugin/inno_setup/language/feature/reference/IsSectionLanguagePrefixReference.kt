@@ -21,10 +21,10 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclarations
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveKey
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPair
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveKey
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPair
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.valueUnquoted
 
 /**

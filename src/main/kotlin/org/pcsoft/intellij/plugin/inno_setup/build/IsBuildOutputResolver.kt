@@ -15,6 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
+import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver.Companion.computeOutputArg
+import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver.Companion.detectBuildSubdir
 import java.io.File
 
 /**

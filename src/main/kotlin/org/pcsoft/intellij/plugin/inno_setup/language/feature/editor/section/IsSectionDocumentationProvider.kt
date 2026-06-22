@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingParamPair
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sectionAtOffset
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.specSection
 import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService

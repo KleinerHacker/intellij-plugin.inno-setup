@@ -19,9 +19,9 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstantBody
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntryEx
 
 /**
  * Tests for {cm:MessageName} ↔ [CustomMessages] declarations: resolve, unresolved highlighting,

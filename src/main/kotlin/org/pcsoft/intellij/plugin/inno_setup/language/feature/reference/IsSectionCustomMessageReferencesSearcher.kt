@@ -19,8 +19,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Processor
 import com.intellij.util.QueryExecutor
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionConstantBody
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntryEx
 
 /**
  * Finds `{cm:MessageName}` usages of a \[CustomMessages] declaration so Find Usages and Rename

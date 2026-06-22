@@ -16,8 +16,8 @@ import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.psi.PsiManager
 import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.PsiManager
 import com.intellij.util.ui.JBUI
 import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
@@ -25,13 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclarations
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.valueUnquoted
-import java.awt.Component
-import java.awt.Dimension
-import java.awt.FlowLayout
-import java.awt.Font
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
-import java.awt.Insets
+import java.awt.*
 import javax.swing.*
 
 /**

@@ -19,7 +19,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionDefSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionReferenceTypeSpec

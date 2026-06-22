@@ -311,42 +311,42 @@ tasks {
     register<GenerateParserTask>("generateIsSectionParser") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionGrammar.bnf"))
         targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
-        pathToParser.set("$sectionPackage/parsing/parser/IsSectionParser.java")
-        pathToPsiRoot.set("$sectionPackage/parsing/psi")
+        pathToParser.set("$sectionPackage/IsSectionParser.java")
+        pathToPsiRoot.set("$sectionPackage/psi")
         purgeOldFiles.set(true)
     }
 
     register<GenerateLexerTask>("generateIsSectionLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$sectionPackage/parsing"))
+        targetOutputDir.set(file("$generatedRoot/$sectionPackage"))
         purgeOldFiles.set(true)
     }
 
     register<GenerateParserTask>("generateIsPreprocessorParser") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsPreprocessorGrammar.bnf"))
         targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
-        pathToParser.set("$preprocessorPackage/parsing/parser/IsPreprocessorParser.java")
-        pathToPsiRoot.set("$preprocessorPackage/parsing/psi")
+        pathToParser.set("$preprocessorPackage/IsPreprocessorParser.java")
+        pathToPsiRoot.set("$preprocessorPackage/psi")
         purgeOldFiles.set(true)
     }
 
     register<GenerateLexerTask>("generateIsPreprocessorLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsPreprocessorLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$preprocessorPackage/parsing"))
+        targetOutputDir.set(file("$generatedRoot/$preprocessorPackage"))
         purgeOldFiles.set(true)
     }
 
     register<GenerateParserTask>("generateIsTemplateParser") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateGrammar.bnf"))
         targetRootOutputDir.set(layout.projectDirectory.dir(generatedRoot))
-        pathToParser.set("$templatePackage/parsing/parser/IsTemplateParser.java")
-        pathToPsiRoot.set("$templatePackage/parsing/psi")
+        pathToParser.set("$templatePackage/IsTemplateParser.java")
+        pathToPsiRoot.set("$templatePackage/psi")
         purgeOldFiles.set(true)
     }
 
     register<GenerateLexerTask>("generateIsTemplateLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateLexer.flex"))
-        targetOutputDir.set(file("$generatedRoot/$templatePackage/parsing"))
+        targetOutputDir.set(file("$generatedRoot/$templatePackage"))
         purgeOldFiles.set(true)
     }
 

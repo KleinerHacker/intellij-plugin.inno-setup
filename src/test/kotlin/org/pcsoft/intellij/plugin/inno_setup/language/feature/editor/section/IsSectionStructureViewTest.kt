@@ -19,8 +19,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructure
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
 
 /**
  * Tests for the structure-view tree built by [org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewElement] /

@@ -29,7 +29,7 @@ import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.effectiveScriptView
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotatorHighlighting
 
 /**
  * Context-menu action (Project View + editor popup) that opens the fully `#include`-resolved **effective

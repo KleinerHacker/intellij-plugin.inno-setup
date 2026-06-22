@@ -18,9 +18,9 @@ import com.intellij.lang.findUsages.FindUsagesProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.TokenSet
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorLexerAdapter
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLexerAdapter
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

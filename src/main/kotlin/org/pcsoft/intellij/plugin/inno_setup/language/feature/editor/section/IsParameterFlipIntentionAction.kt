@@ -20,8 +20,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nextParam
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPair
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPair
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
 
 /**
  * Intention action that swaps two adjacent parameters in an Inno Setup section entry.

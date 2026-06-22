@@ -20,8 +20,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provide
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDirectiveKeywordProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorIncludeFileProvider
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorLanguage
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 
 /**
  * Registers completion providers for the relevant Inno Setup language context.

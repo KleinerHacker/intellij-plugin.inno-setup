@@ -18,8 +18,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Processor
 import com.intellij.util.QueryExecutor
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPairEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
 
 // Mirrors IsPreprocessorReferencesSearcher for section cross-references.
 // IntelliJ's word-occurrence search calls getReferences() on the leaf IDENTIFIER, which

@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.find
 
 import com.intellij.lang.refactoring.RefactoringSupportProvider
 import com.intellij.psi.PsiElement
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPairEx
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

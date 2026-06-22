@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingD
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.isInCodeSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 
 /**

@@ -16,7 +16,7 @@ import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
 
 /**
  * Brace matching for `.ist` template files: `[ ]` (structural) and `( )`.

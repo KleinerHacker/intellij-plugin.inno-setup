@@ -22,8 +22,8 @@ import com.intellij.util.IconUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.languageId
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPair
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPair
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 import javax.swing.Icon
 import javax.swing.JPanel

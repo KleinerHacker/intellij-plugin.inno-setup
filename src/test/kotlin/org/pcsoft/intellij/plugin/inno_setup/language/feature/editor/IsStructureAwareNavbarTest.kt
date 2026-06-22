@@ -19,8 +19,8 @@ import com.intellij.util.CommonProcessors
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
 
 /**

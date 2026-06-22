@@ -1,15 +1,15 @@
 {
-  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.parser.IsSectionParser"
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionParser"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="IsSection"
   psiImplClassSuffix="Impl"
-  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi"
-  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl"
 
-  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes"
-  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionElementType"
-  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTokenType"
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTokenType"
 
   tokens=[
     COMMENT          = "regexp:(;|//)[^\r\n]*"
@@ -73,8 +73,8 @@ private entry ::= directiveEntry
 // pin=2 commits after "Key ="; no recoverWhile to avoid consuming the next entry.
 directiveEntry ::= directiveKey EQ directiveValue CRLF? {
   pin=2
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionDirectiveEntryMixinImpl"
-  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionDirectiveEntryMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntryEx"
 }
 directiveKey   ::= IDENTIFIER
 
@@ -87,7 +87,7 @@ directiveKey   ::= IDENTIFIER
 directiveValue ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | SEMICOLON | EQ | HASH)* {
   extends="paramValue"
   elementType="paramValue"
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionParamValueMixinImpl"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionParamValueMixinImpl"
 }
 
 // [Files]-style: Key: Value; Key: Value
@@ -98,13 +98,13 @@ parameterEntry ::= paramPair (SEMICOLON paramPair)* SEMICOLON? CRLF? {
 }
 paramPair      ::= paramKey COLON paramValue {
   pin=2
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionParamPairMixinImpl"
-  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionParamPairMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPairEx"
 }
 paramKey       ::= IDENTIFIER
 
 paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)* {
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionParamValueMixinImpl"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionParamValueMixinImpl"
 }
 
 // "..." with optional embedded {constants}
@@ -113,7 +113,7 @@ quotedString   ::= QUOTE (STRING_PART | constant)* QUOTE
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE
 constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionConstantBodyMixinImpl"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionConstantBodyMixinImpl"
 }
 
 private comment ::= COMMENT
@@ -121,6 +121,6 @@ private comment ::= COMMENT
 // Preprocessor line: the entire #... line is captured as a single opaque token.
 // The ISPP language is injected into this element by IsPreprocessorInjector.
 preprocessorLine ::= HASH_LINE {
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.impl.IsSectionPreprocessorLineMixinImpl"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.impl.IsSectionPreprocessorLineMixinImpl"
   implements="com.intellij.psi.PsiLanguageInjectionHost"
 }

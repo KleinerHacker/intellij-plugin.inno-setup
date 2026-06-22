@@ -53,10 +53,10 @@
              completion, typed handler. Deliberately NO annotator/structure view/folding/commenter/
              documentation/findUsages, and the highlighter assigns no colors. -->
         <lang.parserDefinition language="IST"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.IsTemplateParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateParserDefinition"/>
         <!-- Colorless highlighter: tokenizes only so brace matching works; assigns no colors. -->
         <lang.syntaxHighlighterFactory language="IST"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.IsTemplateHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateHighlighterFactory"/>
         <lang.braceMatcher language="IST"
                            implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template.IsTemplateBraceMatcher"/>
         <completion.contributor language="IST"
@@ -66,15 +66,15 @@
 
         <!-- Parser -->
         <lang.parserDefinition language="ISS"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionParserDefinition"/>
 
         <!-- Syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISS"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionHighlighterFactory"/>
 
         <!-- Semantic annotator -->
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotator"/>
         <!-- ISL-only: restrict sections in .isl language files -->
         <annotator language="ISS"
                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.lang.IsLanguageAnnotator"/>
@@ -85,7 +85,7 @@
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionErrorFilter"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionErrorFilter"/>
 
         <!-- Find Usages -->
         <lang.findUsagesProvider language="ISS"
@@ -104,15 +104,15 @@
 
         <!-- ISPP parser (injected language for #define, #include, etc.) -->
         <lang.parserDefinition language="ISPP"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorParserDefinition"/>
 
         <!-- ISPP syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISPP"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorHighlighterFactory"/>
 
         <!-- ISPP semantic annotator -->
         <annotator language="ISPP"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.IsPreprocessorAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorAnnotator"/>
 
         <!-- ISPP completion (directive keywords, #define expression references) -->
         <completion.contributor language="ISPP"
@@ -193,7 +193,7 @@
 
         <!-- Color settings page -->
         <colorSettingsPage
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionColorSettingsPage"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionColorSettingsPage"/>
 
         <!-- Default colors for ISPP preprocessor highlighting (dark/light) -->
         <additionalTextAttributes scheme="Default" file="colorSchemes/IssDefault.xml"/>

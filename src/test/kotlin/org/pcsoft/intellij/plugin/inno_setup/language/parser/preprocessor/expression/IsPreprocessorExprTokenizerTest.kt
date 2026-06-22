@@ -12,7 +12,8 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

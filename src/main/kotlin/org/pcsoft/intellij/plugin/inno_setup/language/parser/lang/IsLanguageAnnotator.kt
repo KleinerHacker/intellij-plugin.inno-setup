@@ -7,15 +7,15 @@ import com.intellij.openapi.components.service
 import com.intellij.psi.PsiElement
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.allowedInLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.isInLanguageFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotatorHighlighting
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionBlock
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionPreprocessorLine
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTitle
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTitle
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.specSection
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 
 /**
- * ISL-specific validation, additive to [org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionAnnotator].
+ * ISL-specific validation, additive to [org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotator].
  * Acts only inside `.isl` files and flags any section that is not permitted in an Inno Setup
  * language file. Unknown (non-spec) sections are left to the ISI annotator's "Unknown section" check.
  */

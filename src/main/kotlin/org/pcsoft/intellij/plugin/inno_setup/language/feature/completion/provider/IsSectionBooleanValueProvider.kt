@@ -24,8 +24,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionSyntaxHighlighting
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeDataType
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeTypeSpec

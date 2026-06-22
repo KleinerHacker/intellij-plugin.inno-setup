@@ -13,7 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.build
 
 import com.intellij.openapi.project.Project
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.lang.reflect.Proxy
 

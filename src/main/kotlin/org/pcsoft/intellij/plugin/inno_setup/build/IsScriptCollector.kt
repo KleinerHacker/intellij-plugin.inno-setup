@@ -18,6 +18,7 @@ import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
+import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector.Companion.parseIncludes
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import java.io.File
 

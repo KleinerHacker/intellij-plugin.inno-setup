@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 
 class IsPreprocessorBraceMatcherTest : BasePlatformTestCase() {
 

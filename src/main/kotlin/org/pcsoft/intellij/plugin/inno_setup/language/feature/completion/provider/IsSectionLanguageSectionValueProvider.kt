@@ -25,8 +25,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsLanguageIconHelp
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamValue
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionQuotedString
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionQuotedString
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 
 /**

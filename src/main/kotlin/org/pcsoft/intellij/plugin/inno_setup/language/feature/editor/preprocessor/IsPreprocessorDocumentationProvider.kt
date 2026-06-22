@@ -27,10 +27,10 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.computeValue
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferParameterTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.precedingDefine
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
 import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpecTarget

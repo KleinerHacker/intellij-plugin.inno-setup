@@ -18,10 +18,10 @@ import com.intellij.lang.findUsages.FindUsagesProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.TokenSet
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.IsSectionLexerAdapter
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionDirectiveEntryEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionParamPairEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.parsing.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionLexerAdapter
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntryEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPairEx
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

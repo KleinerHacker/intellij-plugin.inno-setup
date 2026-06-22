@@ -1,15 +1,15 @@
 {
-  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.parser.IsPreprocessorParser"
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorParser"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="IsPreprocessor"
   psiImplClassSuffix="Impl"
-  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi"
-  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.impl"
 
-  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTypes"
-  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorElementType"
-  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorTokenType"
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTokenType"
 
   tokens=[
     HASH        = "#"
@@ -34,8 +34,8 @@ isppFile ::= directive? CRLF?
 
 directive ::= HASH IDENTIFIER value? {
   pin=1
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.impl.IsPreprocessorDirectiveMixinImpl"
-  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.parsing.psi.IsPreprocessorDirectiveEx"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.impl.IsPreprocessorDirectiveMixinImpl"
+  implements="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx"
 }
 
 value ::= valueToken+

@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature
 
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver.expandValue
 import java.io.File
 
 /** Result of resolving a `MessagesFile` value to a filesystem path. */

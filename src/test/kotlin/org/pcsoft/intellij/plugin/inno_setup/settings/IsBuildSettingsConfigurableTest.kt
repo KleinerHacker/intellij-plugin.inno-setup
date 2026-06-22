@@ -13,8 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.ui.components.JBCheckBox
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import com.intellij.ui.components.JBCheckBox
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 
 /**

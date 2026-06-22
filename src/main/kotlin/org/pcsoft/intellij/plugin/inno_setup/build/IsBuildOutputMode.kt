@@ -12,6 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
+import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode.Companion.DEFAULT
+
+
 /**
  * Where ISCC should write its output when compiling on project build. The three modes are mutually
  * exclusive and are surfaced in the settings as a single combo box so they cannot be combined into

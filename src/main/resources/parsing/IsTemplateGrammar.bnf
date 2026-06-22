@@ -1,15 +1,15 @@
 {
-  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.parser.IsTemplateParser"
+  parserClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateParser"
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
   psiClassPrefix="IsTemplate"
   psiImplClassSuffix="Impl"
-  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi"
-  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.impl"
+  psiPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi"
+  psiImplPackage="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.impl"
 
-  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTypes"
-  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateElementType"
-  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.IsTemplateTokenType"
+  elementTypeHolderClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes"
+  elementTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateElementType"
+  tokenTypeClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTokenType"
 
   tokens=[
     LBRACKET   = "["
@@ -40,6 +40,6 @@ private item ::= preprocessorLine
 // The entire #... line is captured as a single opaque token; the ISPP language is injected into this
 // element by IsPreprocessorInjector (same mechanism as the section preprocessor line).
 preprocessorLine ::= HASH_LINE {
-  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.parsing.psi.impl.IsTemplatePreprocessorLineMixinImpl"
+  mixin="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.impl.IsTemplatePreprocessorLineMixinImpl"
   implements="com.intellij.psi.PsiLanguageInjectionHost"
 }
