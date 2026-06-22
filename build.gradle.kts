@@ -40,6 +40,13 @@ val templatePackage = "$languagePackage/parser/template"
 intellijPlatform {
     instrumentCode = false
 
+    pluginConfiguration {
+        ideaVersion {
+            sinceBuild = "253"
+            untilBuild = provider { null }   // unbounded: covers 2026.1 (261) and future IDEs
+        }
+    }
+
     signing {
         // Sign from a PKCS#12 keystore. Only non-secret values (the keystore path and key alias) go
         // through env; the store password is read from a file (KEYSTORE_PASSWORD_FILE) so no secret
@@ -87,9 +94,6 @@ dependencies {
     intellijPlatform {
         intellijIdea("2025.3.5")
         testFramework(TestFrameworkType.Platform)
-
-        // Kotlin plugin needed for compilation of the optional K2-compatibility extension
-        bundledPlugin("org.jetbrains.kotlin")
     }
 }
 

@@ -15,17 +15,99 @@
     <id>org.pcsoft.ij.plugin.inno-setup</id>
     <name>Inno Setup</name>
     <description><![CDATA[
-        Inno Setup plugin for all JetBrains IDEs, providing support for the Inno Setup scripting language.
-        <br/>
-        Full documentation: <a href="https://kleinerhacker.github.io/intellij-plugin.inno-setup/">https://kleinerhacker.github.io/intellij-plugin.inno-setup/</a>
+        <p>
+            Brings first-class language support for <a href="https://jrsoftware.org/isinfo.php">Inno Setup</a>
+            installer scripts to the whole JetBrains IDE family. Inno Setup scripts (<code>.iss</code>) describe a
+            complete Windows installer &mdash; files, registry keys, shortcuts, tasks, components and optional Pascal
+            scripting. This plugin turns the IDE into a full-featured editor for them, so you no longer have to switch
+            to the Inno Setup Compiler to write, navigate and validate your scripts.
+        </p>
+
+        <h3>Editing &amp; understanding scripts</h3>
+        <ul>
+            <li><b>Syntax highlighting</b> &mdash; sections, directive keys, parameters, constants
+                (<code>{app}</code>, <code>{autopf}</code>, &hellip;) and embedded Pascal <code>[Code]</code> blocks are
+                coloured distinctly. Colours are fully customisable in <i>Settings &rarr; Editor &rarr; Color Scheme</i>.</li>
+            <li><b>Context-aware code completion</b> &mdash; section names, directive keys, parameter keys, known flag
+                values and constants are suggested as you type, with automatic pop-ups after typing <code>[</code> or
+                <code>{</code>.</li>
+            <li><b>Inline documentation</b> &mdash; hover over any section, directive, parameter or preprocessor
+                directive to read its description without leaving the editor.</li>
+            <li><b>Error checking &amp; validation</b> &mdash; unknown sections, invalid directives/parameters and
+                unrecognised constants are flagged directly in the editor, including constants embedded inside quoted
+                strings.</li>
+            <li><b>Structure view &amp; navigation bar</b> &mdash; get a bird&rsquo;s-eye overview of every section and
+                its entries and jump straight to them.</li>
+            <li><b>Code folding</b> &mdash; collapse whole sections and long parameter entries independently.</li>
+            <li><b>Brace &amp; quote matching</b> &mdash; auto-closes and highlights matching <code>{}</code>,
+                <code>[]</code>, <code>()</code> and <code>"</code>.</li>
+            <li><b>Line commenting</b> &mdash; comment and uncomment lines with the usual shortcut.</li>
+            <li><b>Move statements</b> &mdash; move parameter entries up and down with the standard shortcut.</li>
+            <li><b>Inlay hints</b> &mdash; language flag icons are shown inline next to <code>Languages:</code> values
+                and in <code>[Languages]</code> / <code>[LangOptions]</code> entries.</li>
+        </ul>
+
+        <h3>References &amp; refactoring</h3>
+        <ul>
+            <li><b>Reference resolution &amp; go-to</b> &mdash; navigate between <code>Name:</code> declarations and
+                their usages in <code>Tasks:</code>, <code>Components:</code> and <code>Types:</code> parameters, between
+                <code>[CustomMessages]</code> entries and their <code>{cm:&hellip;}</code> usages, and between
+                <code>[Languages]</code> names and their language-specific message keys.</li>
+            <li><b>Find usages</b> &mdash; list every reference to a name, custom message or preprocessor define.</li>
+            <li><b>Rename refactoring</b> &mdash; safely rename a declaration and all of its references in one step,
+                including <code>{#Name}</code> usages of preprocessor defines.</li>
+        </ul>
+
+        <h3>Preprocessor (ISPP)</h3>
+        <ul>
+            <li>Preprocessor directives (<code>#define</code>, <code>#include</code>, <code>#if</code>, &hellip;) are
+                parsed, highlighted, completed and documented just like script code.</li>
+            <li><code>#define</code> constants resolve, can be renamed and have their usages found across the script.</li>
+            <li><b>Include handling</b> &mdash; inline an <code>#include</code> directly into the script, or extract a
+                selection into a new include file, via intention actions. View the fully <code>#include</code>-resolved
+                effective script in a read-only tab from the context menu.</li>
+        </ul>
+
+        <h3>Building &amp; running</h3>
+        <ul>
+            <li><b>Compile from the IDE</b> &mdash; build a single <code>.iss</code> script via ISCC from the context
+                menu, or have scripts compiled automatically when the project is built. Compiler output is shown in the
+                console with foldable detail lines.</li>
+            <li><b>Run installers</b> &mdash; a dedicated run configuration and a gutter icon next to the
+                <code>[Setup]</code> section let you launch a compiled installer directly.</li>
+            <li><b>Settings</b> &mdash; configure the Inno Setup installation location IDE-wide and build options per
+                project under <i>Build, Execution, Deployment &rarr; Inno Setup</i>.</li>
+        </ul>
+
+        <h3>Additional file types</h3>
+        <ul>
+            <li><b>Language files (<code>.isl</code>)</b> &mdash; Inno Setup translation files are recognised,
+                highlighted and validated alongside your scripts, with their own new-file template.</li>
+            <li><b>Template files (<code>.ist</code>)</b> &mdash; free-text fragments for use as alternative
+                <code>#include</code> targets, with brace matching and section completion.</li>
+        </ul>
+
+        <p>
+            Works in IntelliJ IDEA, PyCharm, CLion, Rider, WebStorm, GoLand, RubyMine, DataGrip and every other
+            IntelliJ-platform IDE.
+        </p>
+
+        <p>
+            Full documentation &mdash; including a complete reference for every Inno Setup section and parameter &mdash;
+            is available at
+            <a href="https://kleinerhacker.github.io/intellij-plugin.inno-setup/">https://kleinerhacker.github.io/intellij-plugin.inno-setup/</a>.
+        </p>
+
+        <p>
+            Copyright &copy; KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0.
+        </p>
         ]]></description>
-    <version>1.0.0</version>
+    <version>0.5.0</version>
     <vendor url="https://github.com/KleinerHacker/intellij-plugin.inno-setup">KleinerHacker alias Pfeiffer C Soft</vendor>
 
     <resource-bundle>messages.PluginBundle</resource-bundle>
 
     <depends>com.intellij.modules.lang</depends>
-    <depends optional="true" config-file="plugin-kotlin.xml">org.jetbrains.kotlin</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- File type -->
