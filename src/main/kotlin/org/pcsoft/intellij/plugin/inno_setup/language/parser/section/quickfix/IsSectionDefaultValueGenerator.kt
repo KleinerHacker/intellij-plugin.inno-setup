@@ -46,5 +46,7 @@ internal object IsSectionDefaultValueGenerator {
 
         is IsSectionReferenceTypeSpec -> "ref"
         is IsSectionFlagTypeSpec -> type.flags.firstOrNull { it.deprecated.isEmpty() }?.name ?: "flag"
+        is IsSectionFileTypeSpec -> "MyFile.txt"
+        is IsSectionDirectoryTypeSpec -> "MyDirectory"
     }
 }

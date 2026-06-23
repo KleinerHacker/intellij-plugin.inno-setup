@@ -567,12 +567,134 @@ class IsSectionAnnotator : Annotator {
         when (val type = attr.type) {
             is IsSectionFlagTypeSpec -> annotateFlagValue(value, type, holder)
             is IsSectionNativeTypeSpec -> annotateNativeValue(value, type, holder)
+            is IsSectionFileTypeSpec -> annotatePathValue(value, requireDirectory = false, type.existence, holder)
+            is IsSectionDirectoryTypeSpec -> annotatePathValue(value, requireDirectory = true, type.existence, holder)
             is IsSectionReferenceTypeSpec -> {
                 val pair = value.containingParamPair
                 if (pair?.isReferenceParam() == true) {
                     value.identifiers.forEach {
                         highlight(it.textRange, IsSectionAnnotatorHighlighting.REFERENCE, holder)
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * Default validation for `file`/`directory` typed attributes, dispatching on [existence]:
+     *
+     * - [IsSectionPathExistence.REQUIRED] ([annotatePathExistence]): the value is resolved (expanding
+     *   ISPP defines, env vars, and built-in constants) relative to the script directory and checked to
+     *   exist and be of the expected kind. The `compiler:` prefix and the build-machine installation path
+     *   are honoured via [IsMessagesFileResolver]. Values that cannot be unambiguously checked are skipped
+     *   without an annotation: empty values, wildcard patterns (`*`, `?`), comma-separated lists, and
+     *   values with unresolvable `{…}` placeholders.
+     * - [IsSectionPathExistence.OPTIONAL] ([annotatePathCharacters]): the path need not exist (a
+     *   target/runtime path such as `\[Files]` `DestDir`); only invalid path characters are reported.
+     *
+     * The `\[Languages]` `MessagesFile` directive keeps its dedicated handling
+     * ([annotateMessagesFile] — `compiler:` plus ISL content validation) and is intentionally skipped
+     * here.
+     */
+    private fun annotatePathValue(
+        value: IsSectionParamValue,
+        requireDirectory: Boolean,
+        existence: IsSectionPathExistence,
+        holder: AnnotationHolder
+    ) {
+        // [Languages] MessagesFile is handled exclusively by annotateMessagesFile (the documented exception).
+        val pair = value.containingParamPair
+        if (pair?.keyText().equals("MessagesFile", ignoreCase = true) &&
+            pair?.containingSection?.nameText.equals("Languages", ignoreCase = true)
+        ) return
+
+        val raw = value.singleText.trim()
+        if (raw.isEmpty()) return
+
+        when (existence) {
+            IsSectionPathExistence.OPTIONAL -> annotatePathCharacters(value, raw, holder)
+            IsSectionPathExistence.REQUIRED -> annotatePathExistence(value, raw, requireDirectory, holder)
+        }
+    }
+
+    /**
+     * For `optional` file/directory values (target/runtime paths such as `\[Files]` `DestDir`) the path
+     * need not exist at compile time, so only the literal value is checked for characters that are
+     * invalid in a Windows path. `{…}` constants/ISPP emissions are stripped first (they may legitimately
+     * contain `|`, e.g. `{code:Foo|bar}`), so only user-typed invalid characters are reported.
+     */
+    private fun annotatePathCharacters(value: IsSectionParamValue, raw: String, holder: AnnotationHolder) {
+        val stripped = raw.replace(Regex("\\{[^}]*}"), "")
+        val invalid = stripped.filter { it in INVALID_PATH_CHARS }.toSortedSet()
+        if (invalid.isEmpty()) return
+        holder.newAnnotation(
+            HighlightSeverity.ERROR,
+            "Invalid character(s) in path: " + invalid.joinToString(" ") { "'$it'" }
+        ).range(value.textRange)
+            .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+            .create()
+    }
+
+    /**
+     * For `required` file/directory values the path must exist on the build machine; resolves and checks
+     * existence and kind (see [annotatePathValue] doc).
+     */
+    private fun annotatePathExistence(
+        value: IsSectionParamValue,
+        raw: String,
+        requireDirectory: Boolean,
+        holder: AnnotationHolder
+    ) {
+        // Wildcards (patterns) and comma-separated lists cannot be checked as a single path.
+        if (raw.any { it == '*' || it == '?' } || raw.contains(',')) return
+
+        val scriptVf = value.containingFile?.virtualFile ?: return
+        // Relative paths are resolved against the script's directory on disk. When that directory is not a
+        // real filesystem location (e.g. an in-memory/temp VFS), relative resolution is unreliable, so it
+        // is left to resolveMessagesFile to skip it (scriptDir == null → Unresolvable). Absolute and
+        // `compiler:` paths do not depend on scriptDir and are still validated.
+        val scriptDir = scriptVf.parent?.path?.let { File(it) }?.takeIf { it.isDirectory }
+        val scope = value.issFile?.declarationScope()
+        val defines = scope?.definedConstants ?: emptyList()
+        val installPath = IsSettingsService.getInstance().state.installationPath
+
+        val expanded = IsMessagesFileResolver.expandValue(raw, defines, scriptDir, emptyMap(), installPath)
+            ?: return  // unresolvable placeholder — no annotation
+        if (expanded.any { it == '*' || it == '?' }) return
+
+        val noun = if (requireDirectory) "Directory" else "File"
+        when (val result = IsMessagesFileResolver.resolveMessagesFile(expanded, scriptDir, installPath)) {
+            is IsResolveResult.Missing ->
+                holder.newAnnotation(HighlightSeverity.ERROR, "$noun not found: '${result.resolvedPath}'")
+                    .range(value.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+
+            is IsResolveResult.Unreadable ->
+                holder.newAnnotation(HighlightSeverity.ERROR, "$noun is not readable: '${result.resolvedPath}'")
+                    .range(value.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+
+            IsResolveResult.NotConfigured ->
+                holder.newAnnotation(
+                    HighlightSeverity.WARNING,
+                    "Inno Setup installation path not configured — cannot verify existence of '$raw'"
+                ).range(value.textRange).create()
+
+            IsResolveResult.Unresolvable -> Unit  // no annotation
+
+            is IsResolveResult.Ok -> {
+                if (requireDirectory && !result.file.isDirectory) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "Expected a directory but found a file: '${result.file.absolutePath}'")
+                        .range(value.textRange)
+                        .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                        .create()
+                } else if (!requireDirectory && result.file.isDirectory) {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "Expected a file but found a directory: '${result.file.absolutePath}'")
+                        .range(value.textRange)
+                        .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                        .create()
                 }
             }
         }
@@ -832,4 +954,11 @@ class IsSectionAnnotator : Annotator {
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
+
+    private companion object {
+        // Characters that are never valid in a Windows path or filename. The path separators '\\' and '/'
+        // and the drive ':' are intentionally excluded (they are valid in paths), as are the wildcards
+        // '*'/'?' which legitimately appear in delete/source patterns.
+        val INVALID_PATH_CHARS = setOf('<', '>', '"', '|')
+    }
 }

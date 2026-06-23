@@ -208,6 +208,84 @@ class IsSpecServiceTest {
     }
 
     @Test
+    fun `Source in Files is a required file type`() {
+        val files = spec.sections.find { it.name == "Files" }!!
+        val source = files.attributes.find { it.name == "Source" }!!
+        assertTrue("Source must be a file type", source.type is IsSectionFileTypeSpec)
+        assertEquals(
+            "Source must require existence (build-machine source)",
+            IsSectionPathExistence.REQUIRED, (source.type as IsSectionFileTypeSpec).existence
+        )
+    }
+
+    @Test
+    fun `SourceDir in Setup is a required directory type`() {
+        val setup = spec.sections.find { it.name == "Setup" }!!
+        val sourceDir = setup.attributes.find { it.name == "SourceDir" }!!
+        assertTrue("SourceDir must be a directory type", sourceDir.type is IsSectionDirectoryTypeSpec)
+        assertEquals(
+            "SourceDir must require existence",
+            IsSectionPathExistence.REQUIRED, (sourceDir.type as IsSectionDirectoryTypeSpec).existence
+        )
+    }
+
+    @Test
+    fun `DestDir in Files is an optional directory type`() {
+        val files = spec.sections.find { it.name == "Files" }!!
+        val destDir = files.attributes.find { it.name == "DestDir" }!!
+        assertTrue("DestDir must be a directory type", destDir.type is IsSectionDirectoryTypeSpec)
+        assertEquals(
+            "DestDir is a target path and must be existence-optional",
+            IsSectionPathExistence.OPTIONAL, (destDir.type as IsSectionDirectoryTypeSpec).existence
+        )
+    }
+
+    @Test
+    fun `target path attributes are existence-optional`() {
+        fun existenceOf(section: String, attr: String): IsSectionPathExistence {
+            val a = spec.sections.find { it.name == section }!!.attributes.find { it.name == attr }!!
+            return when (val t = a.type) {
+                is IsSectionFileTypeSpec -> t.existence
+                is IsSectionDirectoryTypeSpec -> t.existence
+                else -> error("$section.$attr is not a path type: $t")
+            }
+        }
+        listOf(
+            "Setup" to "DefaultDirName", "Setup" to "UninstallFilesDir", "Setup" to "UninstallDisplayIcon",
+            "Files" to "DestName", "Icons" to "Filename", "Icons" to "WorkingDir", "Icons" to "IconFilename",
+            "Run" to "Filename", "Run" to "WorkingDir", "UninstallRun" to "Filename"
+        ).forEach { (section, attr) ->
+            assertEquals(
+                "$section.$attr must be existence-optional",
+                IsSectionPathExistence.OPTIONAL, existenceOf(section, attr)
+            )
+        }
+    }
+
+    @Test
+    fun `Setup file-path attributes use the file kind`() {
+        val setup = spec.sections.find { it.name == "Setup" }!!
+        listOf(
+            "SetupIconFile", "LicenseFile", "InfoBeforeFile", "InfoAfterFile",
+            "WizardImageFile", "WizardSmallImageFile",
+            "WizardStyleFile", "WizardStyleFileDynamicDark",
+            "WizardBackImageFile", "WizardBackImageFileDynamicDark"
+        ).forEach { name ->
+            val attr = setup.attributes.find { it.name == name }!!
+            assertTrue("$name must be a file type", attr.type is IsSectionFileTypeSpec)
+        }
+    }
+
+    @Test
+    fun `Languages MessagesFile and override files use the file kind`() {
+        val languages = spec.sections.find { it.name == "Languages" }!!
+        listOf("MessagesFile", "LicenseFile", "InfoBeforeFile", "InfoAfterFile").forEach { name ->
+            val attr = languages.attributes.find { it.name == name }!!
+            assertTrue("Languages.$name must be a file type", attr.type is IsSectionFileTypeSpec)
+        }
+    }
+
+    @Test
     fun `Flags attribute in Files is flag type`() {
         val files = spec.sections.find { it.name == "Files" }!!
         val flags = files.attributes.find { it.name == "Flags" }!!

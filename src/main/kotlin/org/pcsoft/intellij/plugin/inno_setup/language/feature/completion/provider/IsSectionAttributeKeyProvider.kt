@@ -101,6 +101,8 @@ object IsSectionAttributeKeyProvider : CompletionProvider<CompletionParameters>(
                 is IsSectionNativeTypeSpec -> t.dataType.typeName
                 is IsSectionReferenceTypeSpec -> "→ ${t.section}"
                 is IsSectionFlagTypeSpec -> "flags"
+                is IsSectionFileTypeSpec -> "file"
+                is IsSectionDirectoryTypeSpec -> "directory"
             }
             val tail = buildString {
                 if (attr.required.appliesTo(target)) append(" required")

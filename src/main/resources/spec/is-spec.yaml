@@ -42,8 +42,8 @@ sections:
 
       - name: OutputDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Directory where the compiled Setup EXE is written. Relative to the script file location. Default: <code>Output</code>."
@@ -51,8 +51,8 @@ sections:
 
       - name: OutputBaseFilename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Base filename (without <code>.exe</code>) of the compiled installer, e.g. <code>myapp-setup</code>. Default: <code>setup</code>."
@@ -60,8 +60,7 @@ sections:
 
       - name: SourceDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
         required: [ ]
         deprecated: [ ]
         description: "Base directory for relative paths used in <code>[Files]</code> and other sections. Defaults to the directory containing the script."
@@ -69,8 +68,7 @@ sections:
 
       - name: SetupIconFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to an <code>.ico</code> file used as the icon for the compiled Setup EXE."
@@ -125,8 +123,8 @@ sections:
       # --- Install paths ---
       - name: DefaultDirName
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Default installation directory shown on the Select Destination page, e.g. <code>{autopf}\\MyApp</code>. Supports Inno Setup directory constants."
@@ -209,8 +207,7 @@ sections:
 
       - name: LicenseFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> license file shown on the License Agreement page."
@@ -218,8 +215,7 @@ sections:
 
       - name: InfoBeforeFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page before installation begins."
@@ -227,8 +223,7 @@ sections:
 
       - name: InfoAfterFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page after installation completes."
@@ -255,8 +250,8 @@ sections:
 
       - name: UninstallDisplayIcon
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Path to an EXE, DLL, or ICO used as the icon in Add/Remove Programs, e.g. <code>{app}\\MyApp.exe</code>."
@@ -365,8 +360,7 @@ sections:
 
       - name: WizardImageFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a BMP file displayed on the left side of the wizard in classic style."
@@ -374,8 +368,7 @@ sections:
 
       - name: WizardSmallImageFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a BMP file displayed in the top-right corner of the wizard."
@@ -442,8 +435,7 @@ sections:
 
       - name: WizardStyleFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard in light or default mode."
@@ -452,8 +444,7 @@ sections:
 
       - name: WizardStyleFileDynamicDark
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard when the system is in dark mode (requires <code>WizardStyle=dynamic</code>)."
@@ -492,8 +483,7 @@ sections:
 
       - name: WizardBackImageFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to an image file displayed as the wizard background in light or default mode."
@@ -502,8 +492,7 @@ sections:
 
       - name: WizardBackImageFileDynamicDark
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to an image file displayed as the wizard background in dark mode (requires <code>WizardStyle=dynamic</code>)."
@@ -597,8 +586,8 @@ sections:
 
       - name: AppReadmeFile
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Path to a ReadMe file shown via the <i>Readme</i> button in Add/Remove Programs, e.g. <code>{app}\\README.TXT</code>."
@@ -707,8 +696,8 @@ sections:
 
       - name: OutputManifestFile
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "If set, the compiler writes a manifest text file listing all compiled files to this path (relative to <code>OutputDir</code>)."
@@ -953,8 +942,7 @@ sections:
 
       - name: SignedUninstallerDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
         required: [ ]
         deprecated: [ ]
         description: "Directory containing pre-signed uninstaller binaries to embed instead of signing during compilation."
@@ -1430,8 +1418,8 @@ sections:
 
       - name: UninstallFilesDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Directory where the uninstaller (<code>unins???.exe</code>) and its log are stored. Default: <code>{app}</code>."
@@ -1872,8 +1860,8 @@ sections:
 
       - name: Name
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Full path of the directory to create, e.g. <code>{app}\\data</code>. Supports all Inno Setup directory constants."
@@ -2018,8 +2006,7 @@ sections:
 
       - name: Source
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ iss ]
         deprecated: [ ]
         description: "Source file path or wildcard pattern, e.g. <code>MyProg.exe</code> or <code>Plugins\\*</code>. Relative to <code>SourceDir</code>."
@@ -2027,8 +2014,8 @@ sections:
 
       - name: DestDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Destination directory on the target machine, e.g. <code>{app}</code> or <code>{sys}</code>. Supports all Inno Setup constants."
@@ -2036,8 +2023,8 @@ sections:
 
       - name: DestName
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Rename the file when installing. If omitted, the original filename is kept."
@@ -2499,8 +2486,8 @@ sections:
 
       - name: Name
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Full path and name of the shortcut, e.g. <code>{group}\\My Program</code> or <code>{commondesktop}\\My Program</code>."
@@ -2508,8 +2495,8 @@ sections:
 
       - name: Filename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Target of the shortcut — an executable, document, folder, or URL."
@@ -2526,8 +2513,8 @@ sections:
 
       - name: WorkingDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Working directory set when the shortcut is launched. Defaults to the target's directory."
@@ -2553,8 +2540,8 @@ sections:
 
       - name: IconFilename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Path to an <code>.ico</code>, <code>.exe</code>, or <code>.dll</code> containing the icon for this shortcut."
@@ -2920,8 +2907,8 @@ sections:
 
       - name: Filename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "The <code>.INI</code> file to modify (constants are supported). Defaults to <code>WIN.INI</code> in the Windows directory if no path is given."
@@ -3063,8 +3050,8 @@ sections:
 
       - name: Filename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Path to the executable, document, or folder to launch. Use <code>shellexec</code> flag to open non-executables."
@@ -3090,8 +3077,8 @@ sections:
 
       - name: WorkingDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
@@ -3348,8 +3335,8 @@ sections:
 
       - name: Filename
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Path to the executable, document, or folder to launch during uninstallation."
@@ -3375,8 +3362,8 @@ sections:
 
       - name: WorkingDir
         type:
-          kind: native
-          dataType: string
+          kind: directory
+          existence: optional
         required: [ ]
         deprecated: [ ]
         description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
@@ -3642,8 +3629,7 @@ sections:
 
       - name: MessagesFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ iss ]
         deprecated: [ ]
         description: "Path to the ISL message file. Use <code>compiler:Default.isl</code> for the built-in English messages or <code>compiler:Languages\\German.isl</code> for bundled translations."
@@ -3651,8 +3637,7 @@ sections:
 
       - name: LicenseFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a language-specific license file, overriding the <code>[Setup]</code> <code>LicenseFile</code> directive for this language."
@@ -3660,8 +3645,7 @@ sections:
 
       - name: InfoBeforeFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a language-specific 'before installation' info file, overriding the <code>[Setup]</code> <code>InfoBeforeFile</code> directive for this language."
@@ -3669,8 +3653,7 @@ sections:
 
       - name: InfoAfterFile
         type:
-          kind: native
-          dataType: string
+          kind: file
         required: [ ]
         deprecated: [ ]
         description: "Path to a language-specific 'after installation' info file, overriding the <code>[Setup]</code> <code>InfoAfterFile</code> directive for this language."
@@ -6354,8 +6337,8 @@ sections:
 
       - name: Name
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."
@@ -6454,8 +6437,8 @@ sections:
 
       - name: Name
         type:
-          kind: native
-          dataType: string
+          kind: file
+          existence: optional
         required: [ iss ]
         deprecated: [ ]
         description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."

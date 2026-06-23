@@ -215,6 +215,58 @@
             }
           },
           "additionalProperties": false
+        },
+        {
+          "description": "A path to a file. With existence \"required\" it is validated to exist and to be a regular file; with \"optional\" only invalid path characters are reported.",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "description": "Discriminator selecting the file-path value type.",
+              "type": "string",
+              "enum": [
+                "file"
+              ]
+            },
+            "existence": {
+              "description": "Whether the file must exist on the build machine at compile time. \"required\" = check existence (build-machine source file); \"optional\" = do not check existence, only validate for invalid path characters (target/runtime path). Defaults to \"required\".",
+              "type": "string",
+              "enum": [
+                "required",
+                "optional"
+              ],
+              "default": "required"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "A path to a directory. With existence \"required\" it is validated to exist and to be a directory; with \"optional\" only invalid path characters are reported.",
+          "type": "object",
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "description": "Discriminator selecting the directory-path value type.",
+              "type": "string",
+              "enum": [
+                "directory"
+              ]
+            },
+            "existence": {
+              "description": "Whether the directory must exist on the build machine at compile time. \"required\" = check existence (build-machine source directory); \"optional\" = do not check existence, only validate for invalid path characters (target/runtime path). Defaults to \"required\".",
+              "type": "string",
+              "enum": [
+                "required",
+                "optional"
+              ],
+              "default": "required"
+            }
+          },
+          "additionalProperties": false
         }
       ]
     },

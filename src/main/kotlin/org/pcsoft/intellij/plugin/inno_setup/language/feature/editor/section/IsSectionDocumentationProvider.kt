@@ -180,6 +180,8 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
             is IsSectionNativeTypeSpec -> t.dataType.typeName
             is IsSectionReferenceTypeSpec -> "→ ${t.section}"
             is IsSectionFlagTypeSpec -> "flags"
+            is IsSectionFileTypeSpec -> "file"
+            is IsSectionDirectoryTypeSpec -> "directory"
         }
 
         return buildString {
