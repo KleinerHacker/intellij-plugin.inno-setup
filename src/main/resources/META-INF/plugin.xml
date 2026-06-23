@@ -164,6 +164,9 @@
         <!-- Inlay hints: language flags for [Languages] and [LangOptions] LanguageID -->
         <codeInsight.inlayProvider language="ISS"
                                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionLanguageInlayHintsProvider"/>
+        <!-- Inlay hints: resolved content preview of an #include directive -->
+        <codeInsight.inlayProvider language="ISS"
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsIncludeContentInlayHintsProvider"/>
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
@@ -301,6 +304,13 @@
                 id="org.pcsoft.intellij.plugin.inno_setup.settings.build"
                 key="settings.build.display_name" bundle="messages.PluginBundle"
                 instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsConfigurable"/>
+
+        <!-- IDE-wide editor sub-page (Inno Setup > Editor); inlay hint options. -->
+        <applicationConfigurable
+                parentId="org.pcsoft.intellij.plugin.inno_setup.settings"
+                id="org.pcsoft.intellij.plugin.inno_setup.settings.editor"
+                key="settings.editor.display_name" bundle="messages.PluginBundle"
+                instance="org.pcsoft.intellij.plugin.inno_setup.settings.IsEditorSettingsConfigurable"/>
 
         <!-- ═══════════════════════════════ Build ═══════════════════════════════ -->
 

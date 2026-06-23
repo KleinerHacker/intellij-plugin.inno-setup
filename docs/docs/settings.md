@@ -24,6 +24,13 @@ These settings are **IDE-wide** (stored in the global IDE configuration, not per
 
 ---
 
+## Editor Settings
+
+See [Editor Settings](settings-editor.md) for editor-presentation options such as the `#include` content
+inlay hint.
+
+---
+
 ## Build Settings
 
 See [Build Settings](settings-build.md) for the project-scoped build options.

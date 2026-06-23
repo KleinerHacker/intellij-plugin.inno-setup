@@ -28,4 +28,10 @@ class IsSettingsState : BaseState() {
      * Minimum Inno Setup version selected for version-aware validation, or `null` when unset.
      */
     var minInnoVersion: String? by string()
+
+    /**
+     * Whether the resolved content of an `#include "…"` directive is shown as an inlay hint above the
+     * directive line. Enabled by default.
+     */
+    var showIncludeContentInlayHints: Boolean by property(true)
 }

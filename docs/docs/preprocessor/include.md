@@ -24,6 +24,10 @@ and exposes its content for use by the preprocessor. Both bring external content
 The plugin treats `#include` as a first-class reference:
 
 - **Go to file** — **Ctrl+B** / **Cmd+B** jumps to the referenced file; the path is completed as you type.
+- **Inline content preview** — the resolved content of the included file is shown as an inlay hint below the
+  `#include` line (keeping the file's line breaks); clicking it jumps into the file. Toggle it on the
+  [Editor settings](../settings-editor.md) page (on by default). No preview is shown when the file cannot be
+  found or read.
 - **Automatic path updates** — renaming or moving the target file in the IDE updates the `#include` path.
 - **Inline `#include` content** — the **Alt+Enter** intention on an `#include` line replaces it with the
   verbatim content of the file (one level only). You are then asked whether to delete the now-inlined file.

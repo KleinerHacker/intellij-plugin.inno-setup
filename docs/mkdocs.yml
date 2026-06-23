@@ -55,6 +55,7 @@ plugins:
             Structure View: 结构视图
             Settings: 设置
             General: 常规
+            Editor: 编辑器
             Build: 构建
             API Docs: API 文档
             Licences: 许可证
@@ -96,6 +97,7 @@ plugins:
             Structure View: 構造ビュー
             Settings: 設定
             General: 一般
+            Editor: エディター
             Build: ビルド
             API Docs: API ドキュメント
             Licences: ライセンス
@@ -137,6 +139,7 @@ plugins:
             Structure View: 구조 뷰
             Settings: 설정
             General: 일반
+            Editor: 편집기
             Build: 빌드
             API Docs: API 문서
             Licences: 라이선스
@@ -232,6 +235,7 @@ nav:
   - Structure View: structure-view.md
   - Settings:
       - General: settings.md
+      - Editor: settings-editor.md
       - Build: settings-build.md
   - API Docs: dokka/html/index.html
   - Licences: licences/index.html
