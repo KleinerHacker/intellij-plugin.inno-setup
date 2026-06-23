@@ -1941,6 +1941,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../settings-editor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Editor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../settings-build/" class="md-nav__link">
         
   
@@ -2118,6 +2146,10 @@ and exposes its content for use by the preprocessor. Both bring external content
 <p>The plugin treats <code>#include</code> as a first-class reference:</p>
 <ul>
 <li><strong>Go to file</strong> — <strong>Ctrl+B</strong> / <strong>Cmd+B</strong> jumps to the referenced file; the path is completed as you type.</li>
+<li><strong>Inline content preview</strong> — the resolved content of the included file is shown as an inlay hint below the
+  <code>#include</code> line (keeping the file's line breaks); clicking it jumps into the file. Toggle it on the
+  <a href="../../settings-editor/">Editor settings</a> page (on by default). No preview is shown when the file cannot be
+  found or read.</li>
 <li><strong>Automatic path updates</strong> — renaming or moving the target file in the IDE updates the <code>#include</code> path.</li>
 <li><strong>Inline <code>#include</code> content</strong> — the <strong>Alt+Enter</strong> intention on an <code>#include</code> line replaces it with the
   verbatim content of the file (one level only). You are then asked whether to delete the now-inlined file.</li>

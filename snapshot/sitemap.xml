@@ -64,6 +64,15 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-build/"/>
     </url>
     <url>
+        <loc>Nonesettings-editor/</loc>
+        <lastmod>2026-06-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-editor/"/>
+    </url>
+    <url>
         <loc>Nonesettings/</loc>
         <lastmod>2026-06-23</lastmod>
         <changefreq>daily</changefreq>
@@ -422,6 +431,15 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-build/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-build/"/>
         <xhtml:link rel="alternate" hreflang="ko" href="Noneko/settings-build/"/>
+    </url>
+    <url>
+        <loc>Nonezh/settings-editor/</loc>
+        <lastmod>2026-06-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/settings-editor/"/>
     </url>
     <url>
         <loc>Nonezh/settings/</loc>
@@ -784,6 +802,15 @@
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-build/"/>
     </url>
     <url>
+        <loc>Noneja/settings-editor/</loc>
+        <lastmod>2026-06-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-editor/"/>
+    </url>
+    <url>
         <loc>Noneja/settings/</loc>
         <lastmod>2026-06-23</lastmod>
         <changefreq>daily</changefreq>
@@ -1142,6 +1169,15 @@
         <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-build/"/>
         <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-build/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-build/"/>
+    </url>
+    <url>
+        <loc>Noneko/settings-editor/</loc>
+        <lastmod>2026-06-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="ko" href="Noneko/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesettings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="ja" href="Noneja/settings-editor/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="Nonezh/settings-editor/"/>
     </url>
     <url>
         <loc>Noneko/settings/</loc>

@@ -1941,6 +1941,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../settings-editor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    エディター
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../settings-build/" class="md-nav__link">
         
   
@@ -2118,6 +2146,10 @@
 <p>プラグインは <code>#include</code> を第一級の参照として扱います：</p>
 <ul>
 <li><strong>ファイルへ移動</strong> — <strong>Ctrl+B</strong> / <strong>Cmd+B</strong> で参照先ファイルへジャンプ。入力中にパスが補完されます。</li>
+<li><strong>内容のインラインプレビュー</strong> — インクルードファイルの解決済みの内容が <code>#include</code> 行の下に
+  インレイヒントとして（ファイルの改行を保持して）表示され、クリックするとそのファイルへジャンプします。
+  <a href="../../settings-editor/">エディター設定</a>ページで切り替えできます（既定で有効）。ファイルが見つからない、
+  または読み取れない場合はプレビューを表示しません。</li>
 <li><strong>パスの自動更新</strong> — IDE で対象ファイルをリネーム・移動すると <code>#include</code> のパスが更新されます。</li>
 <li><strong><code>#include</code> の内容をインライン化</strong> — <code>#include</code> 行での <strong>Alt+Enter</strong> インテンションが、その行をファイルの
   内容（1 階層のみ）で置き換えます。その後、インライン化したファイルを削除するか尋ねられます。</li>

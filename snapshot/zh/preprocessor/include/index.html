@@ -1941,6 +1941,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../settings-editor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    编辑器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../settings-build/" class="md-nav__link">
         
   
@@ -2117,6 +2145,9 @@
 <p>插件将 <code>#include</code> 视为一等引用：</p>
 <ul>
 <li><strong>转到文件</strong> —— <strong>Ctrl+B</strong> / <strong>Cmd+B</strong> 跳转到被引用的文件；输入时会补全路径。</li>
+<li><strong>内容内联预览</strong> —— 被包含文件解析后的内容会以内嵌提示显示在 <code>#include</code> 行下方（保留文件的换行），
+  点击可跳转到该文件。可在<a href="../../settings-editor/">编辑器设置</a>页面开关（默认启用）。当文件无法找到或
+  无法读取时不显示预览。</li>
 <li><strong>自动路径更新</strong> —— 在 IDE 中重命名或移动目标文件会更新 <code>#include</code> 路径。</li>
 <li><strong>内联 <code>#include</code> 内容</strong> —— <code>#include</code> 行上的 <strong>Alt+Enter</strong> 意图会用文件内容（仅一层）替换该行。随后
   会询问是否删除已内联的文件。</li>
