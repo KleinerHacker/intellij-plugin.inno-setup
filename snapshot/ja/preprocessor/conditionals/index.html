@@ -2150,6 +2150,12 @@
 <li><strong>参照</strong> — 条件内の識別子は <code>#define</code> 宣言に解決されるため、定義へ移動（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）、
   使用箇所の検索（<strong>Alt+F7</strong>）、リネームが機能します。未知の名前は<em>未解決の参照</em>エラーとして
   マークされます（<code>#define</code> と同様）。<code>defined(Name)</code> は例外で、その引数は未定義でも構いません。</li>
+<li><strong><code>#ifdef</code> / <code>#ifndef</code></strong> — 名前はその <code>#define</code> 宣言に解決され（定義へ移動、使用箇所の検索、リネーム）、
+  補完で <code>#define</code> 名が提示されます。<code>#if</code> の条件とは異なり、未知の名前は<strong>エラーになりません</strong>。未定義の
+  マクロを判定することこそが <code>#ifdef</code> / <code>#ifndef</code> の目的だからです。</li>
+<li><strong><code>#ifexist</code> / <code>#ifnexist</code></strong> — ファイル名は完全な ISPP <strong>文字列</strong>式です。演算子と型エラーが検証され
+  （値は文字列でなければなりません）、識別子は <code>#define</code> に解決されます。（これらのディレクティブはスク
+  リプトファイルだけでなくディスク上の<em>任意の</em>ファイルを判定できるため、ファイル名補完は提示されません。）</li>
 <li><strong>真偽値リテラル</strong> — ISPP には真偽値が無いため、条件で直接使用された <code>true</code> / <code>false</code> / <code>yes</code> / <code>no</code>
   は<strong>黄色</strong>で表示され、警告が付きます（その語は未定義の識別子 <code>0</code> として扱われます）。</li>
 <li><strong>構造の検証</strong> — すべての開始ディレクティブ（<code>#if</code> / <code>#ifdef</code> / <code>#ifndef</code> / <code>#ifexist</code> / <code>#ifnexist</code>）は

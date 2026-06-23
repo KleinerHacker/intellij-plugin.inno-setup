@@ -2149,6 +2149,11 @@
 <li><strong>引用</strong> —— 条件中的标识符会解析到其 <code>#define</code> 声明，因此跳转到定义（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）、查找用法
   （<strong>Alt+F7</strong>）和重命名均可用；未知名称会被标记为<em>未解析引用</em>错误（与 <code>#define</code> 相同）。<code>defined(Name)</code>
   例外，其参数允许未定义。</li>
+<li><strong><code>#ifdef</code> / <code>#ifndef</code></strong> —— 名称会解析到其 <code>#define</code> 声明（跳转到定义、查找用法、重命名），补全中会提供
+  <code>#define</code> 名称。与 <code>#if</code> 条件不同，未知名称<strong>不会</strong>报错——判断未定义的宏正是 <code>#ifdef</code> / <code>#ifndef</code> 的用途。</li>
+<li><strong><code>#ifexist</code> / <code>#ifnexist</code></strong> —— 文件名是完整的 ISPP <strong>字符串</strong>表达式：会验证运算符和类型错误（值必须是
+  字符串），标识符会解析到其 <code>#define</code>。（这些指令可以测试磁盘上的<em>任意</em>文件，而不仅是脚本文件，因此不提供
+  文件名补全。）</li>
 <li><strong>布尔字面量</strong> —— ISPP 没有布尔类型，因此在条件中直接使用的 <code>true</code> / <code>false</code> / <code>yes</code> / <code>no</code> 会被显示为
   <strong>黄色</strong>并带有警告（该词会被静默地当作未定义标识符 <code>0</code>）。</li>
 <li><strong>结构验证</strong> —— 每个开启指令（<code>#if</code> / <code>#ifdef</code> / <code>#ifndef</code> / <code>#ifexist</code> / <code>#ifnexist</code>）都必须在文件结束前

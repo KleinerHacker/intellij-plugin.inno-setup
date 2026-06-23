@@ -2152,6 +2152,12 @@ opening directive and its matching <code>#endif</code> is only emitted when the 
   go-to-definition (<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>), Find Usages (<strong>Alt+F7</strong>) and rename work; an unknown name
   is flagged as an <em>unresolved reference</em> error (just like in a <code>#define</code>). <code>defined(Name)</code> is exempt —
   its argument may legitimately be undefined.</li>
+<li><strong><code>#ifdef</code> / <code>#ifndef</code></strong> — the name resolves to its <code>#define</code> declaration (go-to-definition, Find Usages,
+  rename) and <code>#define</code> names are offered in completion. Unlike a <code>#if</code> condition, an unknown name is
+  <strong>not</strong> an error — testing an undefined macro is the whole point of <code>#ifdef</code> / <code>#ifndef</code>.</li>
+<li><strong><code>#ifexist</code> / <code>#ifnexist</code></strong> — the filename is a full ISPP <strong>string</strong> expression: operators and type
+  errors are validated (the value must be a string) and identifiers resolve to their <code>#define</code>. (No
+  file-name completion is offered — these directives may test <em>any</em> file on disk, not just script files.)</li>
 <li><strong>Boolean literals</strong> — ISPP has no booleans, so a literal <code>true</code> / <code>false</code> / <code>yes</code> / <code>no</code> used directly
   in a condition is painted <strong>yellow</strong> and carries a warning (the word is silently treated as an
   undefined identifier <code>0</code>).</li>
