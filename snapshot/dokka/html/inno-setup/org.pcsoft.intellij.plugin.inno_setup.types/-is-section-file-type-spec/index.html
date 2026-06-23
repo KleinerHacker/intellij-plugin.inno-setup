@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>IsSectionAttributeTypeSpec</title>
+    <title>IsSectionFileTypeSpec</title>
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
         <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
@@ -103,15 +103,54 @@ snapshot        </div>
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.types/IsSectionAttributeTypeSpec///PointingToDeclaration//-251573632">
-  <div class="breadcrumbs"><a href="../../../index.html">inno-setup</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.types</a><span class="delimiter">/</span><span class="current">IsSectionAttributeTypeSpec</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.types/IsSectionFileTypeSpec///PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../../index.html">inno-setup</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.types</a><span class="delimiter">/</span><span class="current">IsSectionFileTypeSpec</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Is</span><wbr></wbr><span>Section</span><wbr></wbr><span>Attribute</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Spec</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">sealed </span><span class="token keyword">class </span><a href="index.html">IsSectionAttributeTypeSpec</a></div><p class="paragraph">Base type for the value model of a section attribute.</p><p class="paragraph">The concrete subtype is selected from the <code class="lang-kotlin">kind</code> property in the bundled section specification.</p><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-is-section-native-type-spec/index.html">IsSectionNativeTypeSpec</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-is-section-reference-type-spec/index.html">IsSectionReferenceTypeSpec</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-is-section-flag-type-spec/index.html">IsSectionFlagTypeSpec</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-is-section-file-type-spec/index.html">IsSectionFileTypeSpec</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-is-section-directory-type-spec/index.html">IsSectionDirectoryTypeSpec</a></div></span></div><div></div></div></div></div></div></div>
+    <h1 class="cover"><span>Is</span><wbr></wbr><span>Section</span><wbr></wbr><span>File</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Spec</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">IsSectionFileTypeSpec</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>existence<span class="token operator">: </span><a href="../-is-section-path-existence/index.html">IsSectionPathExistence</a><span class="token operator"> = </span>IsSectionPathExistence.REQUIRED</span></span><span class="token punctuation">)</span> : <a href="../-is-section-attribute-type-spec/index.html">IsSectionAttributeTypeSpec</a></div><p class="paragraph">Value type denoting a path to a file. When <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.types/IsSectionFileTypeSpec//#org.pcsoft.intellij.plugin.inno_setup.types.IsSectionPathExistence/PointingToCallableParameters(0)/">existence</span> is <a href="../-is-section-path-existence/-r-e-q-u-i-r-e-d/index.html">IsSectionPathExistence.REQUIRED</a> the resolved path is checked to exist and to be a regular file (wildcards, comma-separated lists, and unresolvable <code class="lang-kotlin">{…}</code> placeholders are skipped). When <a href="../-is-section-path-existence/-o-p-t-i-o-n-a-l/index.html">IsSectionPathExistence.OPTIONAL</a> only invalid path characters are reported.</p></div></div>
   </div>
   <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"></div>
-    <div class="tabs-section-body"></div>
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1233338163%2FConstructors%2F-251573632" anchor-label="IsSectionFileTypeSpec" id="1233338163%2FConstructors%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-section-file-type-spec.html"><span>Is</span><wbr></wbr><span>Section</span><wbr></wbr><span>File</span><wbr></wbr><span>Type</span><wbr></wbr><span><span>Spec</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1233338163%2FConstructors%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">existence<span class="token operator">: </span><a href="../-is-section-path-existence/index.html">IsSectionPathExistence</a><span class="token operator"> = </span>IsSectionPathExistence.REQUIRED</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1445766739%2FProperties%2F-251573632" anchor-label="existence" id="1445766739%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="existence.html"><span><span>existence</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1445766739%2FProperties%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="existence.html">existence</a><span class="token operator">: </span><a href="../-is-section-path-existence/index.html">IsSectionPathExistence</a></div><div class="brief "><p class="paragraph">Whether the file must exist at compile time. Defaults to                      <a href="../-is-section-path-existence/-r-e-q-u-i-r-e-d/index.html">IsSectionPathExistence.REQUIRED</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
     <div class="footer">
