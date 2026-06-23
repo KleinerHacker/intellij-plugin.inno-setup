@@ -59,7 +59,7 @@ class IsIncludeFileReference(
      * of the path changes, the directory part is kept.
      */
     override fun handleElementRename(newElementName: String): PsiElement {
-        val current = element.getIncludePath() ?: return element
+        val current = element.getIncludePath() ?: element.getExistPath() ?: return element
         val dirPart = current.substringBeforeLast('/', "")
             .ifEmpty { current.substringBeforeLast('\\', "") }
         val separator = if (current.contains('\\') && !current.contains('/')) '\\' else '/'
@@ -86,7 +86,7 @@ class IsIncludeFileReference(
      * Replaces the quoted-string literal of the directive with a `"<newPath>"` literal.
      */
     private fun rewritePath(newPath: String) {
-        val literal = element.getIncludeLiteralString() ?: return
+        val literal = element.getIncludeLiteralString() ?: element.getExistLiteralString() ?: return
         val dummy = PsiFileFactory.getInstance(element.project)
             .createFileFromText("d.ispp", IsPreprocessorFileType.INSTANCE, "#include \"$newPath\"")
         val newLiteral = PsiTreeUtil.findChildOfType(dummy, IsPreprocessorQuotedString::class.java) ?: return

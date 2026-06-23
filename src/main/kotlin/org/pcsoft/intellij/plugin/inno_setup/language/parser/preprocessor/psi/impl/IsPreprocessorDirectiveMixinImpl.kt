@@ -22,6 +22,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsIncludeFileReference
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IS_PREPROCESSOR_BOOLEAN_WORDS
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
@@ -107,6 +108,36 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Returns or performs the public behavior represented by this member.
      */
     override fun isEndif(): Boolean = keywordEquals("endif")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfdef(): Boolean = keywordEquals("ifdef")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfndef(): Boolean = keywordEquals("ifndef")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfdefFamily(): Boolean = keywordEquals("ifdef", "ifndef")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfExist(): Boolean = keywordEquals("ifexist")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfNexist(): Boolean = keywordEquals("ifnexist")
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isIfExistFamily(): Boolean = keywordEquals("ifexist", "ifnexist")
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -269,7 +300,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Flag-based pragmas (`option`/`parseroption`) carry no references (their `-v+` letters are not names).
      */
     private fun expressionReferenceIdentifiers(): List<ASTNode> {
-        if (isIfElif()) return ifElifReferenceIdentifiers()
+        // `#if`/`#elif` conditions and `#ifexist`/`#ifnexist` filenames are full ISPP expressions whose
+        // identifiers reference other #defines (boolean words / reserved keywords / defined(...) excluded).
+        if (isIfElif() || isIfExistFamily()) return ifElifReferenceIdentifiers()
         val isExprDefine = isDefine()
         val isExprPragma = isPragma() && pragmaArgumentType().let {
             it == IsPreprocessorPragmaArgument.STR || it == IsPreprocessorPragmaArgument.INT
@@ -333,11 +366,26 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             return arrayOf(IsIncludeFileReference(this as IsPreprocessorDirective, range, path))
         }
         // `#undef Name` references the nearest preceding `#define Name` (for navigation/rename/find-usages).
-        if (isUndef()) {
+        // `#ifdef`/`#ifndef Name` reference it likewise, but a missing #define is *not* an error here.
+        if (isUndef() || isIfdefFamily()) {
             val name = nameNode() ?: return PsiReference.EMPTY_ARRAY
             val directive = this as IsPreprocessorDirective
             val offset = name.startOffset - directive.textRange.startOffset
             return arrayOf(IsPreprocessorExpressionReference(directive, offset, name.text))
+        }
+        // `#ifexist "file"`/`#ifnexist "file"` carry a literal-path file reference (like #include) in addition
+        // to any #define references contained in the filename expression.
+        if (isIfExistFamily()) {
+            val fileRefs: Array<PsiReference> = existPathRangeInDirective()?.let { range ->
+                getExistPath()?.let { path ->
+                    arrayOf<PsiReference>(IsIncludeFileReference(this as IsPreprocessorDirective, range, path))
+                }
+            } ?: emptyArray()
+            val exprRefs = expressionReferenceIdentifiers().map { id ->
+                val directive = this as IsPreprocessorDirective
+                IsPreprocessorExpressionReference(directive, id.startOffset - directive.textRange.startOffset, id.text)
+            }
+            return fileRefs + exprRefs
         }
         val ids = expressionReferenceIdentifiers()
         if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
@@ -422,12 +470,53 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         getIncludeLiteralString()?.text?.trim()?.removeSurrounding("\"")
 
     /** The path span of [getIncludeLiteralString] relative to this directive's text, or `null`. */
-    private fun includePathRangeInDirective(): TextRange? {
-        val string = getIncludeLiteralString() ?: return null
-        val path = getIncludePath() ?: return null
+    private fun includePathRangeInDirective(): TextRange? = literalPathRange(getIncludeLiteralString(), getIncludePath())
+
+    /** The single quoted-string literal of the value (no constants, no surrounding expression), or `null`. */
+    private fun singleLiteralString(): IsPreprocessorQuotedString? {
+        val value = (this as IsPreprocessorDirective).value ?: return null
+        if (value.constantList.isNotEmpty()) return null
+        val string = value.quotedStringList.singleOrNull() ?: return null
+        return if (value.text.trim() == string.text.trim()) string else null
+    }
+
+    /** The path span of [string]/[path] (inside the quotes) relative to this directive's text, or `null`. */
+    private fun literalPathRange(string: IsPreprocessorQuotedString?, path: String?): TextRange? {
+        if (string == null || path == null) return null
         val base = (this as IsPreprocessorDirective).textRange.startOffset
         val start = string.textRange.startOffset - base + 1  // after the opening quote
         return TextRange(start, start + path.length)
+    }
+
+    // ── #ifexist / #ifnexist ──────────────────────────────────────────────────
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getExistLiteralString(): IsPreprocessorQuotedString? {
+        if (!isIfExistFamily()) return null
+        return singleLiteralString()
+    }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getExistPath(): String? =
+        getExistLiteralString()?.text?.trim()?.removeSurrounding("\"")
+
+    /** The path span of [getExistLiteralString] relative to this directive's text, or `null`. */
+    private fun existPathRangeInDirective(): TextRange? = literalPathRange(getExistLiteralString(), getExistPath())
+
+    /**
+     * Resolves the literal `#ifexist`/`#ifnexist` filename to the file it points at (host-relative), or
+     * `null`. Foundation for a future existence diagnostic; reuses the shared `#include` path semantics.
+     */
+    override fun resolveExistFile(): com.intellij.openapi.vfs.VirtualFile? {
+        val path = getExistPath() ?: return null
+        val injMgr = InjectedLanguageManager.getInstance(project)
+        val hostFile = injMgr.getTopLevelFile(containingFile)
+        val baseDir = hostFile?.virtualFile?.parent ?: return null
+        return IsIncludePaths.resolve(baseDir, path)
     }
 
     // ── PsiNameIdentifierOwner ────────────────────────────────────────────────

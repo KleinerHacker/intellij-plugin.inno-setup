@@ -228,7 +228,9 @@ Legend: ✅ implemented · ⚠️ partial · — not applicable.
 | `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
 | `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
 | `#if` / `#elif` | ✅ | ✅ expr + type + structure + boolean-literal | ✅ keyword | ✅ → `#define` | `conditionals.md` |
-| `#else` / `#endif` / `#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist` | ✅ | ✅ keyword + structure (opener↔#endif) | ✅ keyword | — | `conditionals.md` |
+| `#else` / `#endif` | ✅ | ✅ keyword + structure (opener↔#endif) | ✅ keyword | — | `conditionals.md` |
+| `#ifdef` / `#ifndef` | ✅ | ✅ name + structure (no error if undefined) | ✅ keyword + name | ✅ → `#define` | `conditionals.md` |
+| `#ifexist` / `#ifnexist` | ✅ | ✅ string expr + type + structure (file existence prepared) | ✅ keyword + expr | ✅ → `#define` + file | `conditionals.md` |
 | `#for` | ✅ | ✅ keyword | ✅ keyword | — | `for.md` |
 | `#sub` / `#endsub` | ✅ | ✅ keyword | ✅ keyword | — | `sub.md` |
 | `#pragma` | ✅ | ✅ sub-command + flags + expr/type | ✅ keyword + sub-command + flags | ✅ in expr args | `pragma.md` |

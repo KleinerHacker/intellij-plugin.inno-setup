@@ -39,6 +39,30 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
     /** Whether this directive is an `#endif` (case-insensitive). */
     fun isEndif(): Boolean
 
+    /** Whether this directive is an `#ifdef` (case-insensitive). */
+    fun isIfdef(): Boolean
+
+    /** Whether this directive is an `#ifndef` (case-insensitive). */
+    fun isIfndef(): Boolean
+
+    /**
+     * Whether this directive is `#ifdef` or `#ifndef` — the two openers whose argument is a single
+     * identifier naming a (possibly non-existent) `#define`.
+     */
+    fun isIfdefFamily(): Boolean
+
+    /** Whether this directive is an `#ifexist` (case-insensitive). */
+    fun isIfExist(): Boolean
+
+    /** Whether this directive is an `#ifnexist` (case-insensitive). */
+    fun isIfNexist(): Boolean
+
+    /**
+     * Whether this directive is `#ifexist` or `#ifnexist` — the two openers whose argument is a string
+     * expression naming a file.
+     */
+    fun isIfExistFamily(): Boolean
+
     /** Whether this directive is `#if` or `#elif` — the two that carry a boolean condition expression. */
     fun isIfElif(): Boolean
 
@@ -130,4 +154,21 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
 
     /** The inner text (path) of [getIncludeLiteralString], or `null`. */
     fun getIncludePath(): String?
+
+    /**
+     * For an `#ifexist`/`#ifnexist` whose value is exactly a single quoted-string literal, that string PSI;
+     * `null` when this is not an `#ifexist`/`#ifnexist` or its value is an expression / not a single literal.
+     */
+    fun getExistLiteralString(): IsPreprocessorQuotedString?
+
+    /** The inner text (path) of [getExistLiteralString], or `null`. */
+    fun getExistPath(): String?
+
+    /**
+     * Resolves the literal `#ifexist`/`#ifnexist` filename to the file it points at, relative to the host
+     * script's directory, or `null` when this is not an `#ifexist`/`#ifnexist`, the value is not a single
+     * literal path, or the file does not exist. This is the foundation for a future "file (not) found"
+     * diagnostic — no annotation consumes it yet.
+     */
+    fun resolveExistFile(): com.intellij.openapi.vfs.VirtualFile?
 }

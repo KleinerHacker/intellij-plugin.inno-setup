@@ -43,6 +43,19 @@ class IsPreprocessorIncludeFileCompletionTest : BasePlatformTestCase() {
         )
     }
 
+    fun testNoFileCompletionInIfExistString() {
+        // #ifexist tests for *any* file on disk, not just script/template include targets, so the .iss/.isl
+        // file list must not be offered inside its "…" string (unlike #include).
+        myFixture.addFileToProject("lib/dep.iss", "[Files]\n")
+        val main = myFixture.addFileToProject("main.iss", "#ifexist \"\"\n#endif\n")
+        myFixture.configureFromExistingVirtualFile(main.virtualFile)
+        myFixture.editor.caretModel.moveToOffset(main.text.indexOf("\"\"") + 1)
+
+        val items = myFixture.completeBasic()
+        val strings = items?.map { it.lookupString } ?: emptyList()
+        assertFalse("Script files must not be offered inside an #ifexist string, was: $strings", "dep.iss" in strings)
+    }
+
     fun testTemplateFilesAreOffered() {
         myFixture.addFileToProject("lib/part.ist", "[Files]\n")
         myFixture.addFileToProject("lib/other.iss", "[Files]\n")

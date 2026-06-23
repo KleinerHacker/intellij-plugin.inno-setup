@@ -46,7 +46,9 @@ object IsPreprocessorIncludeFileProvider : CompletionProvider<CompletionParamete
         result: CompletionResultSet
     ) {
         val position = parameters.position
-        // Only on the value of an #include directive (typically inside its "…" string).
+        // Only on the value of an #include directive (typically inside its "…" string). #ifexist/#ifnexist
+        // test for *any* file on disk, not just script/template include targets, so the .iss/.isl list would
+        // be misleading there — no file completion is offered for them.
         val directive = PsiTreeUtil.getParentOfType(position, IsPreprocessorDirectiveEx::class.java) ?: return
         if (!directive.isInclude()) return
         val inString = PsiTreeUtil.getParentOfType(position, IsPreprocessorQuotedString::class.java) != null

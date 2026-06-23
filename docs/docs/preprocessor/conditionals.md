@@ -61,6 +61,12 @@ opening directive and its matching `#endif` is only emitted when the condition h
   go-to-definition (**Ctrl+B** / **Cmd+B**), Find Usages (**Alt+F7**) and rename work; an unknown name
   is flagged as an *unresolved reference* error (just like in a `#define`). `defined(Name)` is exempt —
   its argument may legitimately be undefined.
+- **`#ifdef` / `#ifndef`** — the name resolves to its `#define` declaration (go-to-definition, Find Usages,
+  rename) and `#define` names are offered in completion. Unlike a `#if` condition, an unknown name is
+  **not** an error — testing an undefined macro is the whole point of `#ifdef` / `#ifndef`.
+- **`#ifexist` / `#ifnexist`** — the filename is a full ISPP **string** expression: operators and type
+  errors are validated (the value must be a string) and identifiers resolve to their `#define`. (No
+  file-name completion is offered — these directives may test *any* file on disk, not just script files.)
 - **Boolean literals** — ISPP has no booleans, so a literal `true` / `false` / `yes` / `no` used directly
   in a condition is painted **yellow** and carries a warning (the word is silently treated as an
   undefined identifier `0`).

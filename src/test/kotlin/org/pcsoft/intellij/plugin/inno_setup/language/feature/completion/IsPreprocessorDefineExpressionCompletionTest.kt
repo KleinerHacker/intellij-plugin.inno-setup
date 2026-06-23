@@ -119,11 +119,34 @@ class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
     }
 
     fun testNoExpressionSuggestionsInIfdefName() {
-        // #ifdef takes a name, not an expression — the expression providers must not fire there.
+        // #ifdef takes a name, not an expression — the expression providers (predefined variables, built-in
+        // functions) must not fire there; only existing #define names are offered (see below).
         val variants = expressionLookup(
             "#define First 1\n#ifdef <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertFalse("Predefined variables must not be offered as an #ifdef name, was: $variants", "PREPROCVER" in variants)
         assertFalse("Built-in functions must not be offered as an #ifdef name, was: $variants", "FileExists" in variants)
+    }
+
+    fun testDefineNamesOfferedInIfdefName() {
+        // #ifdef/#ifndef reference an existing #define, so earlier define names are offered as the argument.
+        val ifdef = expressionLookup(
+            "#define First 1\n#ifdef <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Earlier #define must be offered as an #ifdef name, was: $ifdef", "First" in ifdef)
+
+        val ifndef = expressionLookup(
+            "#define First 1\n#ifndef <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Earlier #define must be offered as an #ifndef name, was: $ifndef", "First" in ifndef)
+    }
+
+    fun testSuggestionsInIfExistFilename() {
+        // #ifexist takes a string expression, so the expression providers fire (defines + builtins).
+        val variants = expressionLookup(
+            "#define First 1\n#ifexist <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered in #ifexist, was: $variants", "First" in variants)
+        assertTrue("Built-in function must be offered in #ifexist, was: $variants", "FileExists" in variants)
     }
 }

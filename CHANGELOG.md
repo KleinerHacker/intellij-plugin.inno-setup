@@ -14,6 +14,11 @@
   `#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist`) without a matching `#endif`, and a stray
   `#elif`/`#else`/`#endif`, are flagged. A complete `#if … #endif` block can be **folded** when it lies
   entirely within one section or entirely outside any section.
+- **`#ifdef` / `#ifndef` / `#ifexist` / `#ifnexist` argument support**: The identifier of an
+  `#ifdef`/`#ifndef` now resolves to its `#define` (go-to-definition, Find Usages, rename) and `#define`
+  names are offered in completion — an unknown name is intentionally **not** an error here. The filename of
+  an `#ifexist`/`#ifnexist` is analysed as an ISPP string expression (type-checked, references to `#define`s
+  resolved) with file-name completion inside its `"…"` string.
 - **`#undef` directive support**: `#undef Name` now resolves to the matching `#define`, with
   go-to-definition, Find Usages and rename across the `#define`, its `{#Name}` uses and the `#undef`.
   Completion after `#undef ` offers the names of the defines declared earlier. An `#undef` without a

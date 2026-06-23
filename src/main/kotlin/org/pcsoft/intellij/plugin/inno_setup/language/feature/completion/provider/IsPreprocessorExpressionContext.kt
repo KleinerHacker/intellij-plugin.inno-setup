@@ -36,6 +36,9 @@ internal object IsPreprocessorExpressionContext {
     // `#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist` (which take a name/filename, not an expression) out.
     private val IF_EXPR_PREFIX = Regex("^#\\s*(?:if|elif)\\s+.*$", RegexOption.IGNORE_CASE)
 
+    // The caret sits in the filename argument of `#ifexist`/`#ifnexist` (a string expression).
+    private val IFEXIST_EXPR_PREFIX = Regex("^#\\s*(?:ifexist|ifnexist)\\s+.*$", RegexOption.IGNORE_CASE)
+
     private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
 
     /**
@@ -53,7 +56,8 @@ internal object IsPreprocessorExpressionContext {
         val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
         if (!EXPR_PREFIX.matches(linePrefix) &&
             !PRAGMA_EXPR_PREFIX.matches(linePrefix) &&
-            !IF_EXPR_PREFIX.matches(linePrefix)
+            !IF_EXPR_PREFIX.matches(linePrefix) &&
+            !IFEXIST_EXPR_PREFIX.matches(linePrefix)
         ) return null
         if (linePrefix.count { it == '"' } % 2 == 1) return null
 

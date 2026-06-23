@@ -59,6 +59,18 @@ class IsPreprocessorConditionalStructureAnnotatorTest : BasePlatformTestCase() {
         assertTrue(structureErrors("#ifdef FOO\n#endif\n$setupTail").isEmpty())
     }
 
+    fun testIfndefEndifIsValid() {
+        assertTrue(structureErrors("#ifndef FOO\n#endif\n$setupTail").isEmpty())
+    }
+
+    fun testIfExistEndifIsValid() {
+        assertTrue(structureErrors("#ifexist \"f.iss\"\n#endif\n$setupTail").isEmpty())
+    }
+
+    fun testIfNexistEndifIsValid() {
+        assertTrue(structureErrors("#ifnexist \"f.iss\"\n#endif\n$setupTail").isEmpty())
+    }
+
     // ── invalid blocks ────────────────────────────────────────────────────────
 
     fun testUnterminatedIfProducesError() {
@@ -69,6 +81,11 @@ class IsPreprocessorConditionalStructureAnnotatorTest : BasePlatformTestCase() {
     fun testUnterminatedIfdefProducesError() {
         val errors = structureErrors("#ifdef FOO\n$setupTail")
         assertTrue("An #ifdef without #endif must be flagged: $errors", errors.any { it.contains("missing #endif") })
+    }
+
+    fun testUnterminatedIfExistProducesError() {
+        val errors = structureErrors("#ifexist \"f.iss\"\n$setupTail")
+        assertTrue("An #ifexist without #endif must be flagged: $errors", errors.any { it.contains("missing #endif") })
     }
 
     fun testStrayEndifProducesError() {

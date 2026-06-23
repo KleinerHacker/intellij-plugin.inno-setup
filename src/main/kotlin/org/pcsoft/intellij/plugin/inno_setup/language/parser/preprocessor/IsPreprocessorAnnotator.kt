@@ -67,6 +67,9 @@ class IsPreprocessorAnnotator : Annotator {
 
         /** Splits a flag argument into its whitespace-separated tokens (with their positions). */
         val NON_WHITESPACE = Regex("\\S+")
+
+        /** A single ISPP identifier (the `#ifdef`/`#ifndef` argument), mirroring the lexer's IDENTIFIER rule. */
+        val IDENTIFIER = Regex("[A-Za-z_][A-Za-z0-9_.\\-]*")
     }
 
     /**
@@ -264,6 +267,77 @@ class IsPreprocessorAnnotator : Annotator {
                 else directive.textRange
                 holder.newAnnotation(HighlightSeverity.ERROR, message).range(range).create()
             }
+        }
+
+        // ── #ifdef / #ifndef: a single identifier naming a (possibly non-existent) #define ──
+        if (ex.isIfdefFamily()) {
+            val keyword = directive.identifier?.text ?: "ifdef"
+            val value = directive.value
+            val argument = value?.text?.trim()
+            if (value == null || argument.isNullOrEmpty()) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires an identifier")
+                    .range(directive.textRange).create()
+                return
+            }
+            // The argument must be exactly one identifier — an expression, a literal or several tokens
+            // (e.g. `Foo+Bar`, `1`, `"x"`, `Foo Bar`) is not a macro name and cannot be tested.
+            if (!IDENTIFIER.matches(argument)) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a single identifier")
+                    .range(value.textRange).create()
+                return
+            }
+            // Highlight the name like a define only when it resolves; a missing #define is legitimate here
+            // (no error, unlike an unresolved reference in a #if condition).
+            val ref = directive.references.filterIsInstance<IsPreprocessorExpressionReference>().firstOrNull()
+            if (ref?.resolve() != null) {
+                highlight(
+                    ref.rangeInElement.shiftRight(directive.textRange.startOffset),
+                    IsSectionAnnotatorHighlighting.DEFINE_NAME,
+                    holder,
+                )
+            }
+            return
+        }
+
+        // ── #ifexist / #ifnexist: a string expression naming a file (existence not yet checked) ──
+        if (ex.isIfExistFamily()) {
+            val keyword = directive.identifier?.text ?: "ifexist"
+            val value = directive.value
+            if (value == null || value.text.isBlank()) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a string value")
+                    .range(directive.textRange).create()
+                return
+            }
+
+            val exprText = value.text
+            val base = value.textRange.startOffset
+            val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+            tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
+                highlight(
+                    TextRange(base + token.start, base + token.end),
+                    IsPreprocessorSyntaxHighlighting.OPERATOR,
+                    holder,
+                )
+            }
+
+            val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+            val resolver = buildTypeResolver(hostFile)
+            val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
+            val type = inference.infer(parseResult.ast)
+
+            (parseResult.errors + inference.errors).forEach { error ->
+                holder.newAnnotation(HighlightSeverity.ERROR, error.message)
+                    .range(TextRange(base + error.span.start, base + error.span.end))
+                    .create()
+            }
+
+            annotateUnresolvedReferences(directive, holder)
+
+            if (!type.strCompatible) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a string value")
+                    .range(value.textRange).create()
+            }
+            return
         }
 
         if (!ex.isIfElif()) return

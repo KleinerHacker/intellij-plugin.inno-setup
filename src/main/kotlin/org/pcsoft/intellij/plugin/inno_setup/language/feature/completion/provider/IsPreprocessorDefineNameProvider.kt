@@ -37,12 +37,16 @@ import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
  */
 object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameters>() {
 
-    // Caret sits in the name position of #define/#undef: the directive keyword, optionally a scope
-    // keyword, then the (partial) word being typed with no following whitespace.
+    // Caret sits in the name position of #define/#undef/#ifdef/#ifndef: the directive keyword, optionally a
+    // scope keyword (only #define/#undef carry one), then the (partial) word being typed with no following
+    // whitespace.
     private val NAME_PREFIX = Regex(
-        "^#\\s*(define|undef)\\s+(?:(public|protected|private)\\s+)?([A-Za-z0-9_.\\-]*)$",
+        "^#\\s*(define|undef|ifdef|ifndef)\\s+(?:(public|protected|private)\\s+)?([A-Za-z0-9_.\\-]*)$",
         RegexOption.IGNORE_CASE,
     )
+
+    // Directives whose name argument refers to an existing #define (so earlier names are offered).
+    private val NAME_REFERENCE_DIRECTIVES = setOf("undef", "ifdef", "ifndef")
 
     /**
      * Adds lookup elements for the current completion request.
@@ -68,8 +72,8 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
             .getTopLevelFile(position.containingFile)
         if (hostFile is IsLanguageFile) return
 
-        // Scope/visibility keywords — only when none has been chosen yet.
-        if (!scopePresent) {
+        // Scope/visibility keywords — only for #define/#undef and only when none has been chosen yet.
+        if (!scopePresent && (directive == "define" || directive == "undef")) {
             service<IsPreprocessorService>().spec.visibilityKeywords.forEach { keyword ->
                 adjusted.addElement(
                     LookupElementBuilder.create(keyword.name)
@@ -83,8 +87,9 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
             }
         }
 
-        // For #undef: the names of earlier #defines (a #define name is a new declaration → none offered).
-        if (directive == "undef" && hostFile is IsScriptFile) {
+        // For #undef/#ifdef/#ifndef: the names of earlier #defines (a #define name is a new declaration →
+        // none offered).
+        if (directive in NAME_REFERENCE_DIRECTIVES && hostFile is IsScriptFile) {
             val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
             val lineOffset = host?.textRange?.startOffset ?: Int.MAX_VALUE
             hostFile.isppDirectivesWithHostOffset
