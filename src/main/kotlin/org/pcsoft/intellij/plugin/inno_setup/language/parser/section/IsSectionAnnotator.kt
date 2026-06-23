@@ -622,10 +622,20 @@ class IsSectionAnnotator : Annotator {
      * need not exist at compile time, so only the literal value is checked for characters that are
      * invalid in a Windows path. `{…}` constants/ISPP emissions are stripped first (they may legitimately
      * contain `|`, e.g. `{code:Foo|bar}`), so only user-typed invalid characters are reported.
+     *
+     * A `:` is only valid as a drive specifier — directly before the first `/` or `\` (e.g. `C:\App`) —
+     * or as a URL scheme separator (`scheme://…`, since e.g. `\[Icons]` `Filename` may be a URL). Any
+     * other colon is reported as invalid.
      */
     private fun annotatePathCharacters(value: IsSectionParamValue, raw: String, holder: AnnotationHolder) {
         val stripped = raw.replace(Regex("\\{[^}]*}"), "")
-        val invalid = stripped.filter { it in INVALID_PATH_CHARS }.toSortedSet()
+        val invalid = sortedSetOf<Char>()
+        stripped.forEachIndexed { i, c ->
+            when {
+                c in INVALID_PATH_CHARS -> invalid.add(c)
+                c == ':' && !isValidColon(stripped, i) -> invalid.add(':')
+            }
+        }
         if (invalid.isEmpty()) return
         holder.newAnnotation(
             HighlightSeverity.ERROR,
@@ -633,6 +643,18 @@ class IsSectionAnnotator : Annotator {
         ).range(value.textRange)
             .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
             .create()
+    }
+
+    /**
+     * Whether the `:` at [index] in [path] is a legal Windows colon: a drive letter (`X:` at the start,
+     * immediately followed by `/` or `\`) or a URL scheme separator (`://`).
+     */
+    private fun isValidColon(path: String, index: Int): Boolean {
+        // URL scheme: "://"
+        if (index + 2 <= path.lastIndex && path[index + 1] == '/' && path[index + 2] == '/') return true
+        // Drive letter: single letter, then ':' directly before the first '/' or '\'.
+        return index == 1 && path[0].isLetter() &&
+                index + 1 <= path.lastIndex && (path[index + 1] == '/' || path[index + 1] == '\\')
     }
 
     /**

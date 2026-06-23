@@ -6,14 +6,23 @@
 
 ### Added
 
-- **File & directory path validation**: Attributes that point to a file or directory on the build
-  machine are now checked automatically — e.g. `[Setup]` `SetupIconFile`, `LicenseFile`,
-  `InfoBeforeFile`/`InfoAfterFile`, the wizard image/style files, `SourceDir`, `SignedUninstallerDir`,
-  `[Files]` `Source`, and the `[Languages]` override files. A path that does not exist, or that points to
-  the wrong kind (a directory where a file is expected, or vice versa), is flagged as an error. Wildcard
-  patterns (`*`, `?`), comma-separated lists, and paths containing unresolvable `{…}` constants are left
-  unchecked so no false errors appear. The `[Languages]` `MessagesFile` keeps its dedicated handling for
-  `compiler:` paths and ISL content validation.
+- **File & directory path validation**: File- and directory-valued parameters across all sections are now
+  validated. Two cases are distinguished:
+    - **Must exist at compile time** (build-machine source paths, e.g. `[Setup]` `SetupIconFile`,
+      `LicenseFile`, `InfoBeforeFile`/`InfoAfterFile`, the wizard image/style files, `SourceDir`,
+      `SignedUninstallerDir`, `[Files]` `Source`, and the `[Languages]` override files): a path that does
+      not exist, or that points to the wrong kind (a directory where a file is expected, or vice versa),
+      is flagged as an error. Wildcard patterns (`*`, `?`), comma-separated lists, and paths containing
+      unresolvable `{…}` constants are left unchecked so no false errors appear.
+    - **Need not exist at compile time** (target/runtime paths, e.g. `[Files]` `DestDir`/`DestName`,
+      `[Dirs]` `Name`, `[Icons]` `Name`/`Filename`/`WorkingDir`/`IconFilename`, `[Run]`/`[UninstallRun]`
+      `Filename`/`WorkingDir`, `[INI]` `Filename`, `[InstallDelete]`/`[UninstallDelete]` `Name`,
+      `[Setup]` `DefaultDirName`/`UninstallFilesDir`/`UninstallDisplayIcon`/output paths): the value is
+      checked for characters that are invalid in a Windows path (`< > " |`, and a `:` that is not a drive
+      specifier such as `C:\…` or a URL scheme).
+
+  The `[Languages]` `MessagesFile` keeps its dedicated handling for `compiler:` paths and ISL content
+  validation.
 
 - **`#if` / `#elif` / `#else` / `#endif` conditional support**: The `#if`/`#elif` condition is now
   analysed by the ISPP expression engine — operators are highlighted, syntax and type errors are flagged,

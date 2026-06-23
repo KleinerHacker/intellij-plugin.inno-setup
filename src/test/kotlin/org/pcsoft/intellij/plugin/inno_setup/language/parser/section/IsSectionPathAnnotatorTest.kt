@@ -140,6 +140,31 @@ class IsSectionPathAnnotatorTest : BasePlatformTestCase() {
         )
     }
 
+    fun testOptionalPathMisplacedColonProducesError() {
+        val text = "[Files]\nSource: \"${fwd(tempFile)}\"; DestDir: \"{app}\\foo:bar\"\n"
+        assertTrue(
+            "A colon that is not a drive specifier must be flagged",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
+    fun testOptionalPathDriveColonProducesNoError() {
+        val text = "[Files]\nSource: \"${fwd(tempFile)}\"; DestDir: \"D:\\stuff\"\n"
+        assertFalse(
+            "A drive-letter colon must be allowed",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
+    fun testOptionalPathUrlSchemeColonProducesNoError() {
+        // [Icons] Filename may legitimately be a URL.
+        val text = "[Icons]\nName: \"{group}\\X\"; Filename: \"https://example.com\"\n"
+        assertFalse(
+            "A URL scheme colon must be allowed",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
     fun testDeleteWildcardNameProducesNoError() {
         val text = "[InstallDelete]\nType: files; Name: \"{app}\\*.log\"\n"
         assertFalse(
