@@ -29,10 +29,12 @@
     NUMBER      = "regexp:[0-9]+(\.[0-9]+)*"
     QUOTE       = "\""
     STRING_PART = "regexp:[^\"{\r\n]+"
-    VALUE_CHAR  = "regexp:[^\r\n{};:=\"()#\t ]"
+    VALUE_CHAR  = "regexp:[^\r\n\[\]{};:=\"()#\t ]"
     CRLF        = "regexp:\r?\n"
     LPAREN      = "("
     RPAREN      = ")"
+    LBRACKET    = "["
+    RBRACKET    = "]"
     LBRACE      = "{"
     RBRACE      = "}"
     EQ          = "="
@@ -58,6 +60,7 @@ private valueToken ::= constant
                      | IDENTIFIER
                      | VALUE_CHAR
                      | LPAREN | RPAREN
+                     | LBRACKET | RBRACKET
                      | EQ | COLON | SEMICOLON
                      | HASH
 

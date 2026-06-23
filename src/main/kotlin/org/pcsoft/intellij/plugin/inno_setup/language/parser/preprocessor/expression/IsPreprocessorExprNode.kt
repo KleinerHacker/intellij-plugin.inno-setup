@@ -43,6 +43,17 @@ data class IsPreprocessorExprCall(
     override val span: IsPreprocessorExprSpan,
 ) : IsPreprocessorExprNode()
 
+/**
+ * An array element access such as `arr[0]`. [nameSpan] is the array-name token (used for error highlighting
+ * and reference resolution); [index] is the index expression between the brackets.
+ */
+data class IsPreprocessorExprIndex(
+    val name: String,
+    val nameSpan: IsPreprocessorExprSpan,
+    val index: IsPreprocessorExprNode,
+    override val span: IsPreprocessorExprSpan,
+) : IsPreprocessorExprNode()
+
 /** A prefix unary operation such as `-x`. [opSpan] is the operator token. */
 data class IsPreprocessorExprUnary(
     val operator: IsPreprocessorExprUnaryOperator,

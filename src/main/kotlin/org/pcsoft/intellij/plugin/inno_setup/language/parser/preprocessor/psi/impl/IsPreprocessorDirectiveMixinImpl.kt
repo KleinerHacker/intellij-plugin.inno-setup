@@ -52,7 +52,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * (forbidden) name, while `#define public Foo 1` treats `public` as the scope and `Foo` as the name.
      */
     private fun visibilityNode(): ASTNode? {
-        if (!isDefine() && !isUndef()) return null
+        if (!isDefine() && !isUndef() && !isArrayDeclaration()) return null
         val ids = valueIdentifiers()
         val first = ids.firstOrNull() ?: return null
         if (first.text.lowercase() in visibilityKeywords() && ids.size >= 2) return first
@@ -209,6 +209,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         if (!isDefine()) return null
         val after = rawAfterName() ?: return null
         if (after.startsWith("(")) return null  // function-like macro: no simple constant value
+        if (after.startsWith("[")) return null  // array element assignment: not a scalar constant
         val expr = after.trim()
         if (expr.isEmpty()) return null
         return expr.removeSurrounding("\"").ifEmpty { null }
@@ -249,11 +250,17 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         val after = rawAfterName() ?: return null
         val afterOffsetInValue = value.text.length - after.length // start of `after` within the value text
 
-        val (raw, rawOffsetInValue) = if (after.startsWith("(")) {
-            val close = matchingParen(after) ?: return null
-            (after.substring(close + 1) to afterOffsetInValue + close + 1)
-        } else {
-            (after to afterOffsetInValue)
+        val (raw, rawOffsetInValue) = when {
+            after.startsWith("(") -> {
+                val close = matchingParen(after) ?: return null
+                (after.substring(close + 1) to afterOffsetInValue + close + 1)
+            }
+            // Array element assignment `#define Name[Index] Value`: the expression is the value after `]`.
+            after.startsWith("[") -> {
+                val close = matchingBracket(after) ?: return null
+                (after.substring(close + 1) to afterOffsetInValue + close + 1)
+            }
+            else -> (after to afterOffsetInValue)
         }
 
         val leadingWs = raw.length - raw.trimStart().length
@@ -263,18 +270,104 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     }
 
     /** Index of the `)` matching the `(` at index 0, or `null` if unbalanced. */
-    private fun matchingParen(text: String): Int? {
+    private fun matchingParen(text: String): Int? = matchingDelimiter(text, '(', ')')
+
+    /** Index of the `]` matching the `[` at index 0, or `null` if unbalanced. */
+    private fun matchingBracket(text: String): Int? = matchingDelimiter(text, '[', ']')
+
+    /** Index of the `}` matching the `{` at index 0, or `null` if unbalanced. */
+    private fun matchingBrace(text: String): Int? = matchingDelimiter(text, '{', '}')
+
+    /** Index of the closing [close] matching the [open] at index 0, or `null` if unbalanced. */
+    private fun matchingDelimiter(text: String, open: Char, close: Char): Int? {
+        if (text.firstOrNull() != open) return null
         var depth = 0
         for (i in text.indices) {
             when (text[i]) {
-                '(' -> depth++
-                ')' -> {
+                open -> depth++
+                close -> {
                     depth--; if (depth == 0) return i
                 }
             }
         }
         return null
     }
+
+    // ── #dim / #redim arrays ──────────────────────────────────────────────────
+
+    override fun isDim(): Boolean = keywordEquals("dim")
+
+    override fun isRedim(): Boolean = keywordEquals("redim")
+
+    override fun isArrayDeclaration(): Boolean = isDim() || isRedim()
+
+    override fun getArrayName(): String? {
+        if (!isArrayDeclaration()) return null
+        return nameNode()?.text
+    }
+
+    /**
+     * The parsed pieces of a `#dim`/`#redim` value `Name[Size] [{init}]`: the size text and the optional inline
+     * initialiser body, each with its offset inside the directive's text. `null` when this is not an array
+     * declaration or there is no `[…]`.
+     */
+    private fun arrayDeclParts(): ArrayDeclParts? {
+        if (!isArrayDeclaration()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val after = rawAfterName() ?: return null
+        val afterOffsetInValue = value.text.length - after.length
+        val leading = after.length - after.trimStart().length
+        val fromBracket = after.substring(leading)
+        if (!fromBracket.startsWith("[")) return null
+        val close = matchingBracket(fromBracket) ?: return null
+        val bracketBase = valueOffsetInDirective + afterOffsetInValue + leading
+        val sizeText = fromBracket.substring(1, close)
+        val sizeOffset = bracketBase + 1
+
+        val rest = fromBracket.substring(close + 1)
+        val restLeading = rest.length - rest.trimStart().length
+        val initBlock = rest.substring(restLeading)
+        var initText: String? = null
+        var initOffset = -1
+        if (initBlock.startsWith("{")) {
+            val initClose = matchingBrace(initBlock)
+            if (initClose != null) {
+                initText = initBlock.substring(1, initClose)
+                initOffset = bracketBase + close + 1 + restLeading + 1
+            }
+        }
+        return ArrayDeclParts(sizeText, sizeOffset, initText, initOffset)
+    }
+
+    override fun getArraySizeText(): String? = arrayDeclParts()?.sizeText
+    override fun getArraySizeOffsetInDirective(): Int = arrayDeclParts()?.sizeOffset ?: -1
+    override fun getArrayInitializerText(): String? = arrayDeclParts()?.initText
+    override fun getArrayInitializerOffsetInDirective(): Int = arrayDeclParts()?.initOffset ?: -1
+
+    override fun isArrayElementDefine(): Boolean = isDefine() && rawAfterName()?.startsWith("[") == true
+
+    /**
+     * The parsed pieces of an array element `#define Name[Index] Value`: the index text and the value text, each
+     * with its offset inside the directive's text. `null` when this is not an array element assignment.
+     */
+    private fun arrayElementParts(): ArrayElementParts? {
+        if (!isArrayElementDefine()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val after = rawAfterName() ?: return null
+        val afterOffsetInValue = value.text.length - after.length
+        val close = matchingBracket(after) ?: return null
+        val indexText = after.substring(1, close)
+        val indexOffset = valueOffsetInDirective + afterOffsetInValue + 1
+        return ArrayElementParts(indexText, indexOffset)
+    }
+
+    override fun getDefineArrayName(): String? = if (isArrayElementDefine()) nameNode()?.text else null
+    override fun getDefineArrayIndexText(): String? = arrayElementParts()?.indexText
+    override fun getDefineArrayIndexOffsetInDirective(): Int = arrayElementParts()?.indexOffset ?: -1
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -315,6 +408,19 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             .filter { it !== name }          // not the define's own name / pragma sub-command
             .filter { it !== visibility }    // not a scope/visibility keyword
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
+    }
+
+    /**
+     * The value identifiers of a `#dim`/`#redim` that act as references to other #defines: every identifier of
+     * the size expression and the inline initialiser, excluding the array name itself and the scope keyword.
+     */
+    private fun arrayDeclReferenceIdentifiers(): List<ASTNode> {
+        if (!isArrayDeclaration()) return emptyList()
+        val name = nameNode()
+        val visibility = visibilityNode()
+        return valueIdentifiers()
+            .filter { it !== name }
+            .filter { it !== visibility }
     }
 
     /**
@@ -372,6 +478,37 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             val directive = this as IsPreprocessorDirective
             val offset = name.startOffset - directive.textRange.startOffset
             return arrayOf(IsPreprocessorExpressionReference(directive, offset, name.text))
+        }
+        // `#redim Name[Size]`: the name references the preceding `#dim Name` (missing #dim *is* an error, flagged
+        // by the annotator), plus the size-expression references.
+        if (isRedim()) {
+            val directive = this as IsPreprocessorDirective
+            val base = directive.textRange.startOffset
+            val refs = mutableListOf<PsiReference>()
+            nameNode()?.let { refs += IsPreprocessorExpressionReference(directive, it.startOffset - base, it.text) }
+            arrayDeclReferenceIdentifiers().forEach { id ->
+                refs += IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
+            }
+            return refs.toTypedArray()
+        }
+        // `#dim Name[Size] {init…}`: the size and inline-initialiser identifiers reference other #defines.
+        if (isDim()) {
+            val directive = this as IsPreprocessorDirective
+            val base = directive.textRange.startOffset
+            return arrayDeclReferenceIdentifiers().map { id ->
+                IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
+            }.toTypedArray()
+        }
+        // `#define Name[Index] Value`: the name references the `#dim`, plus the index/value expression refs.
+        if (isArrayElementDefine()) {
+            val directive = this as IsPreprocessorDirective
+            val base = directive.textRange.startOffset
+            val refs = mutableListOf<PsiReference>()
+            nameNode()?.let { refs += IsPreprocessorExpressionReference(directive, it.startOffset - base, it.text) }
+            expressionReferenceIdentifiers().forEach { id ->
+                refs += IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
+            }
+            return refs.toTypedArray()
         }
         // `#ifexist "file"`/`#ifnexist "file"` carry a literal-path file reference (like #include) in addition
         // to any #define references contained in the filename expression.
@@ -547,7 +684,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Returns the PSI element that carries the renameable name.
      */
     override fun getNameIdentifier(): PsiElement? {
-        if (!isDefine() && !isUndef()) return null
+        // An array element `#define Name[i]` is a *usage* of the array, not a declaration — handled via references.
+        if (isArrayElementDefine()) return null
+        if (!isDefine() && !isUndef() && !isArrayDeclaration()) return null
         return nameNode()?.psi
     }
 
@@ -555,4 +694,15 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Returns the editor offset used for navigation to this PSI element.
      */
     override fun getTextOffset(): Int = getNameIdentifier()?.textOffset ?: super.getTextOffset()
+
+    /** Parsed pieces of a `#dim`/`#redim` value (size + optional inline initialiser), with directive offsets. */
+    private data class ArrayDeclParts(
+        val sizeText: String,
+        val sizeOffset: Int,
+        val initText: String?,
+        val initOffset: Int,
+    )
+
+    /** Parsed pieces of an array element `#define Name[Index] Value` (the index), with its directive offset. */
+    private data class ArrayElementParts(val indexText: String, val indexOffset: Int)
 }

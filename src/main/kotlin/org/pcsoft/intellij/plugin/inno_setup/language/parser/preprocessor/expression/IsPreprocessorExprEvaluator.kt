@@ -29,6 +29,7 @@ class IsPreprocessorExprEvaluator(
     private val text: String,
     private val referenceValue: (String) -> IsPreprocessorExprValue? = { null },
     private val callValue: (String, List<IsPreprocessorExprValue?>) -> IsPreprocessorExprValue? = { _, _ -> null },
+    private val arrayElementValue: (String, Long) -> IsPreprocessorExprValue? = { _, _ -> null },
 ) {
 
     /** Evaluates [node], or returns `null` when it has no statically computable value. */
@@ -36,6 +37,7 @@ class IsPreprocessorExprEvaluator(
         is IsPreprocessorExprIntLiteral -> literal(node).toLongOrNull()?.let { IntValue(it) }
         is IsPreprocessorExprStrLiteral -> StrValue(unquote(literal(node)))
         is IsPreprocessorExprReference -> referenceValue(node.name)
+        is IsPreprocessorExprIndex -> (evaluate(node.index) as? IntValue)?.let { arrayElementValue(node.name, it.value) }
         is IsPreprocessorExprCall -> callValue(node.name, node.arguments.map { evaluate(it) })
         is IsPreprocessorExprParen -> evaluate(node.inner)
         is IsPreprocessorExprUnary -> unary(node)

@@ -9,12 +9,18 @@ directives:
     description: "Undefines a previously defined identifier. An optional scope keyword (public/protected/private) may precede the name."
     deprecated: [ ]
   - name: dim
-    syntax: "#dim Name[Size]"
-    description: "Declares an array variable of the given size."
+    syntax: "#dim [Scope] Name[Size] [{Init, ...}]"
+    description: >
+      Declares a zero-based array variable of the given size; unset elements are void. An optional scope
+      keyword (public/protected/private) may precede the name, and an optional <code>{...}</code> list
+      initialises the leading elements. Elements are assigned with <code>#define Name[Index] Value</code> and
+      read as <code>Name[Index]</code>; <code>DimOf(Name)</code> returns the element count.
     deprecated: [ ]
   - name: redim
-    syntax: "#redim Name[NewSize]"
-    description: "Resizes an existing array."
+    syntax: "#redim [Scope] Name[NewSize]"
+    description: >
+      Resizes an existing array declared with #dim; existing elements within the new bounds are preserved and
+      new elements are void. An optional scope keyword (public/protected/private) may precede the name.
     deprecated: [ ]
   - name: include
     syntax: "#include Filename"

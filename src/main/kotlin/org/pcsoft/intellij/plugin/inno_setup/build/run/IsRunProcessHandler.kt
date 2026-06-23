@@ -123,6 +123,7 @@ class IsRunProcessHandler(
         )
         printOut("Launching ${exeFile.name}…\n")
         val launchCmd = GeneralCommandLine(launchArgs)
+        config.envData.configureCommandLine(launchCmd, true)
         val success = runProcess(launchCmd)
 
         // Stream log file content after process finishes.

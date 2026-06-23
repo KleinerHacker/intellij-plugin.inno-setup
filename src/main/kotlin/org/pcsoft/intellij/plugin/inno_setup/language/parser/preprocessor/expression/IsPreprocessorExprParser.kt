@@ -120,10 +120,10 @@ class IsPreprocessorExprParser private constructor(
             IsPreprocessorExprTokenType.CONSTANT -> { advance(); IsPreprocessorExprConstant(token.span) }
             IsPreprocessorExprTokenType.IDENT -> {
                 advance()
-                if (peek()?.type == IsPreprocessorExprTokenType.LPAREN) {
-                    parseCall(token)
-                } else {
-                    IsPreprocessorExprReference(token.text, token.span)
+                when (peek()?.type) {
+                    IsPreprocessorExprTokenType.LPAREN -> parseCall(token)
+                    IsPreprocessorExprTokenType.LBRACKET -> parseIndex(token)
+                    else -> IsPreprocessorExprReference(token.text, token.span)
                 }
             }
             IsPreprocessorExprTokenType.LPAREN -> parseParen(token)
@@ -170,6 +170,20 @@ class IsPreprocessorExprParser private constructor(
             arguments.lastOrNull()?.span?.end ?: name.end
         }
         return IsPreprocessorExprCall(name.text, name.span, arguments, IsPreprocessorExprSpan(name.start, end))
+    }
+
+    private fun parseIndex(name: IsPreprocessorExprToken): IsPreprocessorExprNode {
+        advance() // consume '['
+        val index = parseExpression(IsPreprocessorExprBinaryOperator.MIN_PRECEDENCE)
+        val close = peek()
+        val end = if (close?.type == IsPreprocessorExprTokenType.RBRACKET) {
+            advance()
+            close.end
+        } else {
+            errors += IsPreprocessorExprError(name.span, "Unbalanced bracket: ']' expected")
+            index.span.end
+        }
+        return IsPreprocessorExprIndex(name.text, name.span, index, IsPreprocessorExprSpan(name.start, end))
     }
 
     private fun binaryOperatorAt(token: IsPreprocessorExprToken): IsPreprocessorExprBinaryOperator? =

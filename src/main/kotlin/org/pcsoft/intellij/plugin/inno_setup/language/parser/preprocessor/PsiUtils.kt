@@ -94,6 +94,7 @@ val PsiFile.isppDirectivesWithHostOffset: List<Pair<IsPreprocessorDirective, Int
 val PsiFile.definedConstants: List<Pair<String, String?>>
     get() = isppDirectives
         .filter { (it as? IsPreprocessorDirectiveEx)?.isDefine() == true }
+        .filter { (it as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true }
         .mapNotNull { directive ->
             val ex = directive as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
             val name = ex.getDefineName()?.ifEmpty { null } ?: return@mapNotNull null
@@ -118,7 +119,7 @@ private fun IsPreprocessorVariableType.toExprType(): IsPreprocessorExprType = wh
 private fun PsiFile.simpleDefineInfos(): List<IsPreprocessorExprDefineInfo> =
     isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
         val dex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
-        if (!dex.isDefine() || dex.isFunctionMacro()) return@mapNotNull null
+        if (!dex.isDefine() || dex.isFunctionMacro() || dex.isArrayElementDefine()) return@mapNotNull null
         val name = dex.getDefineName() ?: return@mapNotNull null
         val text = dex.getDefineExpressionText() ?: return@mapNotNull null
         IsPreprocessorExprDefineInfo(name, text, offset)
@@ -133,7 +134,76 @@ private fun PsiFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMacroIn
         IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameters(), body, offset)
     }
 
-/** A type resolver over all `#define`s and function-like macros of this file plus the bundled ISPP spec. */
+/** Evaluates [expr] (as seen at host offset [order]) to a constant integer over this file's scalar #defines. */
+private fun PsiFile.staticInt(expr: String, order: Int): Long? {
+    if (expr.isBlank()) return null
+    expr.trim().toLongOrNull()?.let { return it }
+    val value = IsPreprocessorExprValueResolver(simpleDefineInfos(), functionMacroInfos()).evaluate(expr, order)
+    return (value as? IsPreprocessorExprValue.IntValue)?.value
+}
+
+/** All `#dim`/`#redim` array declarations of this file (size resolved to a constant where possible). */
+private fun PsiFile.arrayInfos(): List<IsPreprocessorExprArrayInfo> =
+    isppDirectivesWithHostOffset.mapNotNull { (dir, offset) ->
+        val ex = dir as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
+        if (!ex.isArrayDeclaration()) return@mapNotNull null
+        val name = ex.getArrayName() ?: return@mapNotNull null
+        IsPreprocessorExprArrayInfo(name, ex.getArraySizeText()?.let { staticInt(it, offset) }, offset)
+    }
+
+/**
+ * All array element assignments of this file: explicit `#define Name[Index] Value` plus the positional elements
+ * of a `#dim Name[..] {v0, v1, …}` inline initialiser (index = position). Only assignments with a statically
+ * resolvable integer index are kept.
+ */
+private fun PsiFile.arrayElementInfos(): List<IsPreprocessorExprArrayElementInfo> {
+    val result = mutableListOf<IsPreprocessorExprArrayElementInfo>()
+    isppDirectivesWithHostOffset.forEach { (dir, offset) ->
+        val ex = dir as? IsPreprocessorDirectiveEx ?: return@forEach
+        if (ex.isArrayElementDefine()) {
+            val name = ex.getDefineArrayName()
+            val index = ex.getDefineArrayIndexText()?.let { staticInt(it, offset) }
+            val expr = ex.getDefineExpressionText()
+            if (name != null && index != null && expr != null) {
+                result += IsPreprocessorExprArrayElementInfo(name, index, expr, offset)
+            }
+        }
+        if (ex.isDim()) {
+            val name = ex.getArrayName()
+            val init = ex.getArrayInitializerText()
+            if (name != null && init != null) {
+                splitTopLevelCommas(init).forEachIndexed { i, element ->
+                    if (element.isNotBlank()) {
+                        result += IsPreprocessorExprArrayElementInfo(name, i.toLong(), element.trim(), offset)
+                    }
+                }
+            }
+        }
+    }
+    return result
+}
+
+/** Splits [text] on top-level commas, ignoring commas nested in `()`/`[]`/`{}` or inside `"…"` strings. */
+private fun splitTopLevelCommas(text: String): List<String> {
+    val parts = mutableListOf<String>()
+    val sb = StringBuilder()
+    var depth = 0
+    var inString = false
+    for (c in text) {
+        when {
+            inString -> { sb.append(c); if (c == '"') inString = false }
+            c == '"' -> { sb.append(c); inString = true }
+            c == '(' || c == '[' || c == '{' -> { depth++; sb.append(c) }
+            c == ')' || c == ']' || c == '}' -> { depth--; sb.append(c) }
+            c == ',' && depth == 0 -> { parts += sb.toString(); sb.clear() }
+            else -> sb.append(c)
+        }
+    }
+    parts += sb.toString()
+    return parts
+}
+
+/** A type resolver over all `#define`s, function-like macros and arrays of this file plus the bundled ISPP spec. */
 fun PsiFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
     val spec = service<IsPreprocessorService>().spec
     val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
@@ -143,12 +213,35 @@ fun PsiFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
     val variableType: (String) -> IsPreprocessorExprType? = { name ->
         spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
     }
-    return IsPreprocessorExprTypeResolver(simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType)
+    return IsPreprocessorExprTypeResolver(
+        simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType, arrayInfos(),
+    )
 }
 
-/** A value resolver over all simple `#define`s and function-like macros of this file. */
+/** A value resolver over all simple `#define`s, function-like macros and array elements of this file. */
 fun PsiFile.preprocessorValueResolver(): IsPreprocessorExprValueResolver =
-    IsPreprocessorExprValueResolver(simpleDefineInfos(), functionMacroInfos())
+    IsPreprocessorExprValueResolver(simpleDefineInfos(), functionMacroInfos(), arrayElementInfos())
+
+/** The statically computed value of the array element `name[index]` as visible before host offset [beforeOffset]. */
+fun PsiFile.computeArrayElementValue(name: String, index: Long, beforeOffset: Int = Int.MAX_VALUE): IsPreprocessorExprValue? =
+    preprocessorValueResolver().arrayElementValue(name, index, beforeOffset)
+
+/** The statically known element count of the array [name] as visible before host offset [beforeOffset], or `null`. */
+fun PsiFile.arraySize(name: String, beforeOffset: Int = Int.MAX_VALUE): Long? =
+    arrayInfos()
+        .filter { it.order < beforeOffset && it.name.equals(name, ignoreCase = true) }
+        .maxByOrNull { it.order }
+        ?.size
+
+/** The nearest `#dim`/`#redim` array named [name] declared before host offset [beforeOffset], or `null`. */
+fun PsiFile.precedingArray(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =
+    isppDirectivesWithHostOffset
+        .filter { (d, off) ->
+            val ex = d as? IsPreprocessorDirectiveEx
+            off < beforeOffset && ex?.isArrayDeclaration() == true && ex.getArrayName().equals(name, ignoreCase = true)
+        }
+        .maxByOrNull { it.second }
+        ?.first as? IsPreprocessorDirectiveEx
 
 /** The nearest `#define` named [name] declared before host offset [beforeOffset], or `null`. */
 fun PsiFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =

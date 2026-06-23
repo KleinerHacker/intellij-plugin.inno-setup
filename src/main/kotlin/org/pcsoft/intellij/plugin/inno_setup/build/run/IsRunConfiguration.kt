@@ -13,6 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.Executor
+import com.intellij.execution.configuration.EnvironmentVariablesData
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.RunConfigurationBase
 import com.intellij.execution.configurations.RuntimeConfigurationException
@@ -35,6 +36,9 @@ class IsRunConfiguration(
     var scriptPath: String = ""
     var languageOverride: String = ""
     var debugOutput: Boolean = true
+
+    /** Environment variables passed to the launched installer (setup.exe). */
+    var envData: EnvironmentVariablesData = EnvironmentVariablesData.DEFAULT
 
     /**
      * Hidden (not shown in the editor) — persistent temporary output directory, used only when the
@@ -63,6 +67,7 @@ class IsRunConfiguration(
         languageOverride = element.getAttributeValue("languageOverride") ?: ""
         debugOutput = element.getAttributeValue("debugOutput")?.toBoolean() ?: true
         persistentTempOutputDir = element.getAttributeValue("persistentTempOutputDir") ?: ""
+        envData = EnvironmentVariablesData.readExternal(element)
     }
 
     override fun writeExternal(element: Element) {
@@ -71,5 +76,6 @@ class IsRunConfiguration(
         element.setAttribute("languageOverride", languageOverride)
         element.setAttribute("debugOutput", debugOutput.toString())
         element.setAttribute("persistentTempOutputDir", persistentTempOutputDir)
+        envData.writeExternal(element)
     }
 }

@@ -39,7 +39,8 @@ class IsPreprocessorReferencesSearcher : QueryExecutor<PsiReference, ReferencesS
         consumer: Processor<in PsiReference>,
     ): Boolean {
         val element = queryParameters.elementToSearch as? IsPreprocessorDirectiveEx ?: return true
-        if (!element.isDefine()) return true
+        // Targets that own a renameable name and can be referenced: scalar #define and #dim/#redim arrays.
+        if (!element.isDefine() && !element.isArrayDeclaration()) return true
 
         // The IsPreprocessorDirective lives in an injected fragment; find the top-level host file
         // (a .iss/.isl script or a .ist template).

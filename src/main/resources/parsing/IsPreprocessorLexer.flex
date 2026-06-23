@@ -21,7 +21,7 @@ IDENTIFIER = {ALPHA}{IDENT_CHAR}*
 NUMBER     = [0-9]+(\.[0-9]+)*
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
-VALUE_CHAR = [^\r\n{};:=\"()#\t ]
+VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
 
 %state IN_STRING
 %state IN_STRING_CONSTANT
@@ -37,6 +37,8 @@ VALUE_CHAR = [^\r\n{};:=\"()#\t ]
     "}"           { return IsPreprocessorTypes.RBRACE; }
     "("           { return IsPreprocessorTypes.LPAREN; }
     ")"           { return IsPreprocessorTypes.RPAREN; }
+    "["           { return IsPreprocessorTypes.LBRACKET; }
+    "]"           { return IsPreprocessorTypes.RBRACKET; }
     "="           { return IsPreprocessorTypes.EQ; }
     ":"           { return IsPreprocessorTypes.COLON; }
     ";"           { return IsPreprocessorTypes.SEMICOLON; }
@@ -61,6 +63,8 @@ VALUE_CHAR = [^\r\n{};:=\"()#\t ]
     "#"           { return IsPreprocessorTypes.HASH; }
     ":"           { return IsPreprocessorTypes.COLON; }
     "="           { return IsPreprocessorTypes.EQ; }
+    "["           { return IsPreprocessorTypes.VALUE_CHAR; }
+    "]"           { return IsPreprocessorTypes.VALUE_CHAR; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {VALUE_CHAR}+ { return IsPreprocessorTypes.VALUE_CHAR; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsPreprocessorTypes.CRLF; }
