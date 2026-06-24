@@ -88,9 +88,10 @@ jobs:
       - name: Build docs
         run: ./gradlew buildDocs --stacktrace --info
 
-  # Publish the docs via mike under the release tag as the version. Real releases
-  # also get the 'latest' alias; pre-releases (tag starting with 0 or a letter) do
-  # not, so 'latest' keeps pointing at the last stable release.
+  # Publish the docs via mike under the release tag as the version. Stable releases
+  # (tag like x.y or x.y.z, optionally v-prefixed) also get the 'latest' alias;
+  # pre-releases (tag with a -alpha/-beta/-rc suffix or any non-version tag such as
+  # 'snapshot') do not, so 'latest' keeps pointing at the last stable release.
   deploy-docs:
     runs-on: ubuntu-latest
     needs: validate-docs
@@ -126,10 +127,10 @@ jobs:
       - name: Deploy docs
         run: |
           TAG="${{ github.ref_name }}"
-          if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then
-            ./gradlew deployDocs -Pversion="$TAG" -PsetLatest=false --stacktrace --info
-          else
+          if [[ "$TAG" =~ ^v?[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
             ./gradlew deployDocs -Pversion="$TAG" --stacktrace --info
+          else
+            ./gradlew deployDocs -Pversion="$TAG" -PsetLatest=false --stacktrace --info
           fi
 
   # Sign the plugin and upload it to the JetBrains Marketplace. This is the last step
