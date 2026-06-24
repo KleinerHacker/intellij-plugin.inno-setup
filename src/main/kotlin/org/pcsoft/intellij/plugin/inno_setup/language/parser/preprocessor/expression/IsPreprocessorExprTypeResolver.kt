@@ -28,6 +28,23 @@ data class IsPreprocessorExprFunctionMacroInfo(
 )
 
 /**
+ * An array declaration `#dim Name[Size]` (or `#redim`) as seen by the resolver, ordered by [order].
+ * [size] is the statically known element count, or `null` when the size expression is not constant.
+ */
+data class IsPreprocessorExprArrayInfo(val name: String, val size: Long?, val order: Int)
+
+/**
+ * An array element assignment `#define Name[Index] Expression` (or a positional inline-initialiser element of a
+ * `#dim`), ordered by [order]. [index] is the resolved constant index.
+ */
+data class IsPreprocessorExprArrayElementInfo(
+    val name: String,
+    val index: Long,
+    val expression: String,
+    val order: Int,
+)
+
+/**
  * Resolves the [IsPreprocessorExprType] of a referenced identifier by recursively inferring the type of the
  * `#define` it points at — so a type error like `str * int` is detected even when the operands are
  * themselves other `#define`s (e.g. `#define A "x"` / `#define B 5` / `#define C A * B`).
@@ -53,10 +70,16 @@ class IsPreprocessorExprTypeResolver(
     functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = emptyList(),
     private val variableType: (String) -> IsPreprocessorExprType? = { null },
     private val builtinReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
+    arrays: List<IsPreprocessorExprArrayInfo> = emptyList(),
 ) {
 
     private val defines: List<IsPreprocessorExprDefineInfo> = defines.sortedBy { it.order }
     private val functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = functionMacros.sortedBy { it.order }
+    private val arrays: List<IsPreprocessorExprArrayInfo> = arrays.sortedBy { it.order }
+
+    /** Whether an array named [name] is declared before [beforeOrder] (declaration-order aware). */
+    fun isArray(name: String, beforeOrder: Int): Boolean =
+        arrays.any { it.order < beforeOrder && it.name.equals(name, ignoreCase = true) }
     private val cache = HashMap<String, IsPreprocessorExprType>()
     private val visiting = HashSet<String>()
     private val visitingMacros = HashSet<String>()
@@ -156,6 +179,7 @@ class IsPreprocessorExprTypeResolver(
             referenceType = { bound[it] ?: typeOfReference(it, macro.order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
             functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
+            isArray = { it !in bound && isArray(it, macro.order) },
         )
         inference.infer(ast)
         return inference.errors.isNotEmpty()
@@ -167,6 +191,7 @@ class IsPreprocessorExprTypeResolver(
             referenceType = { typeOfReference(it, order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, order) },
             functionMacroParameterTypes = { macroParameterTypesOrNull(it) },
+            isArray = { isArray(it, order) },
         )
 
     /**
@@ -206,6 +231,7 @@ class IsPreprocessorExprTypeResolver(
             referenceType = { bound[it] ?: typeOfReference(it, macro.order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
             functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
+            isArray = { it !in bound && isArray(it, macro.order) },
         ).infer(ast)
     }
 

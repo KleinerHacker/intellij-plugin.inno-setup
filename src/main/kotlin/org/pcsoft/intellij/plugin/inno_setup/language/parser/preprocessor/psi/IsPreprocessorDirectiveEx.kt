@@ -125,6 +125,56 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      */
     fun getDefineExpressionOffsetInDirective(): Int
 
+    // ── #dim / #redim arrays ──────────────────────────────────────────────────
+
+    /** Whether this directive is a `#dim` (case-insensitive). */
+    fun isDim(): Boolean
+
+    /** Whether this directive is a `#redim` (case-insensitive). */
+    fun isRedim(): Boolean
+
+    /** Whether this directive is `#dim` or `#redim` — an array declaration. */
+    fun isArrayDeclaration(): Boolean
+
+    /** For a `#dim`/`#redim`: the array name (after the optional scope keyword), or `null`. */
+    fun getArrayName(): String?
+
+    /**
+     * For a `#dim`/`#redim`: the size expression text between the `[…]`, or `null` when absent. For the offset
+     * of this text within the directive use [getArraySizeOffsetInDirective].
+     */
+    fun getArraySizeText(): String?
+
+    /** Offset of [getArraySizeText] within this directive's text, or `-1`. */
+    fun getArraySizeOffsetInDirective(): Int
+
+    /**
+     * For a `#dim` with an inline initialiser `{v0, v1, …}`: the raw body between the outer braces (without the
+     * braces), or `null` when there is none. For the offset use [getArrayInitializerOffsetInDirective].
+     */
+    fun getArrayInitializerText(): String?
+
+    /** Offset of [getArrayInitializerText] within this directive's text, or `-1`. */
+    fun getArrayInitializerOffsetInDirective(): Int
+
+    /**
+     * Whether this directive is a `#define Name[Index] Value` — an array element assignment (a `#define` whose
+     * name is immediately followed by `[`).
+     */
+    fun isArrayElementDefine(): Boolean
+
+    /** For an array element `#define Name[Index] …`: the array name `Name`, or `null`. */
+    fun getDefineArrayName(): String?
+
+    /**
+     * For an array element `#define Name[Index] …`: the index expression text between the `[…]`, or `null`. For
+     * the offset use [getDefineArrayIndexOffsetInDirective].
+     */
+    fun getDefineArrayIndexText(): String?
+
+    /** Offset of [getDefineArrayIndexText] within this directive's text, or `-1`. */
+    fun getDefineArrayIndexOffsetInDirective(): Int
+
     /** Whether this directive is a `#pragma` (case-insensitive). */
     fun isPragma(): Boolean
 

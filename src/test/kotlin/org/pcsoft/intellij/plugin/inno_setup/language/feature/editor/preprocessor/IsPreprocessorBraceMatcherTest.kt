@@ -18,13 +18,19 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
 class IsPreprocessorBraceMatcherTest : BasePlatformTestCase() {
 
     fun testBracePairsCount() {
-        assertEquals(1, IsPreprocessorBraceMatcher.PAIRS.size)
+        assertEquals(2, IsPreprocessorBraceMatcher.PAIRS.size)
     }
 
     fun testParenPair() {
         val pair = IsPreprocessorBraceMatcher.PAIRS.first { it.leftBraceType == IsPreprocessorTypes.LPAREN }
         assertEquals(IsPreprocessorTypes.RPAREN, pair.rightBraceType)
         assertFalse("() must not be structural", pair.isStructural)
+    }
+
+    fun testBracketPair() {
+        val pair = IsPreprocessorBraceMatcher.PAIRS.first { it.leftBraceType == IsPreprocessorTypes.LBRACKET }
+        assertEquals(IsPreprocessorTypes.RBRACKET, pair.rightBraceType)
+        assertFalse("[] must not be structural", pair.isStructural)
     }
 
     fun testIsPairedBracesAllowedBeforeTypeAlwaysTrue() {

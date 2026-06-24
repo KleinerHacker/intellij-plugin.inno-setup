@@ -21,6 +21,8 @@ enum class IsPreprocessorExprTokenType {
     OPERATOR,
     LPAREN,
     RPAREN,
+    LBRACKET,
+    RBRACKET,
     COMMA,
     QUESTION,
     COLON,

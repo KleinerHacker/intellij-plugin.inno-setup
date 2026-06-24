@@ -37,6 +37,7 @@ class IsPreprocessorExprTypeInference(
     private val functionCallType: (String, List<IsPreprocessorExprType>) -> IsPreprocessorExprType =
         { _, _ -> IsPreprocessorExprType.ANY },
     private val functionMacroParameterTypes: (String) -> List<IsPreprocessorExprType>? = { null },
+    private val isArray: (String) -> Boolean = { false },
 ) {
 
     private companion object {
@@ -61,6 +62,7 @@ class IsPreprocessorExprTypeInference(
         is IsPreprocessorExprEmpty -> IsPreprocessorExprType.VOID
         is IsPreprocessorExprErrorNode -> IsPreprocessorExprType.ANY
         is IsPreprocessorExprReference -> referenceTypeChecked(node)
+        is IsPreprocessorExprIndex -> indexType(node)
         is IsPreprocessorExprParen -> infer(node.inner)
         is IsPreprocessorExprCall -> callType(node)
         is IsPreprocessorExprUnary -> unaryType(node)
@@ -79,7 +81,30 @@ class IsPreprocessorExprTypeInference(
                 "Function-like macro '${node.name}' must be called with an argument list",
             )
         }
+        if (isArray(node.name)) {
+            errorList += IsPreprocessorExprError(
+                node.span,
+                "Array '${node.name}' must be indexed with '[…]'",
+            )
+        }
         return referenceType(node.name)
+    }
+
+    /**
+     * Type of an array element access `name[index]`. The base name must be an array (else an error) and the
+     * index must be integer-compatible. Array elements are heterogeneous in ISPP (each can hold any type), so
+     * the element type is [IsPreprocessorExprType.ANY]; static out-of-bounds checking lives in the annotator,
+     * which has the source text.
+     */
+    private fun indexType(node: IsPreprocessorExprIndex): IsPreprocessorExprType {
+        val indexType = infer(node.index)
+        if (!indexType.intCompatible) {
+            errorList += IsPreprocessorExprError(node.index.span, "Array index must be an integer")
+        }
+        if (!isArray(node.name)) {
+            errorList += IsPreprocessorExprError(node.nameSpan, "'${node.name}' is not an array")
+        }
+        return IsPreprocessorExprType.ANY
     }
 
     /**

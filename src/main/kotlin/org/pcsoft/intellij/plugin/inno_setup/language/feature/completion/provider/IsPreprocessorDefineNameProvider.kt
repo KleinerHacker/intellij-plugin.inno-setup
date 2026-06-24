@@ -41,12 +41,15 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
     // scope keyword (only #define/#undef carry one), then the (partial) word being typed with no following
     // whitespace.
     private val NAME_PREFIX = Regex(
-        "^#\\s*(define|undef|ifdef|ifndef)\\s+(?:(public|protected|private)\\s+)?([A-Za-z0-9_.\\-]*)$",
+        "^#\\s*(define|undef|ifdef|ifndef|dim|redim)\\s+(?:(public|protected|private)\\s+)?([A-Za-z0-9_.\\-]*)$",
         RegexOption.IGNORE_CASE,
     )
 
     // Directives whose name argument refers to an existing #define (so earlier names are offered).
     private val NAME_REFERENCE_DIRECTIVES = setOf("undef", "ifdef", "ifndef")
+
+    // Directives that carry a scope/visibility keyword.
+    private val SCOPE_DIRECTIVES = setOf("define", "undef", "dim", "redim")
 
     /**
      * Adds lookup elements for the current completion request.
@@ -72,8 +75,8 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
             .getTopLevelFile(position.containingFile)
         if (hostFile is IsLanguageFile) return
 
-        // Scope/visibility keywords — only for #define/#undef and only when none has been chosen yet.
-        if (!scopePresent && (directive == "define" || directive == "undef")) {
+        // Scope/visibility keywords — only for #define/#undef/#dim/#redim and only when none chosen yet.
+        if (!scopePresent && directive in SCOPE_DIRECTIVES) {
             service<IsPreprocessorService>().spec.visibilityKeywords.forEach { keyword ->
                 adjusted.addElement(
                     LookupElementBuilder.create(keyword.name)
@@ -93,7 +96,10 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
             val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
             val lineOffset = host?.textRange?.startOffset ?: Int.MAX_VALUE
             hostFile.isppDirectivesWithHostOffset
-                .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true }
+                .filter { (d, off) ->
+                    off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
+                        (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
+                }
                 .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
                 .filter { !it.getDefineName().isNullOrEmpty() }
                 .distinctBy { it.getDefineName() }
@@ -101,6 +107,48 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
                     adjusted.addElement(
                         LookupElementBuilder.create(dex.getDefineName()!!)
                             .withTypeText("define")
+                            .withIcon(IsIcons.Variable)
+                    )
+                }
+        }
+
+        // For #define: the names of earlier #dim arrays — a `#define Name[i]` assigns an array element, so the
+        // array name is completable in the name position (inserted with `[]` and the caret placed inside).
+        if (directive == "define" && hostFile is IsScriptFile) {
+            val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
+            val lineOffset = host?.textRange?.startOffset ?: Int.MAX_VALUE
+            hostFile.isppDirectivesWithHostOffset
+                .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDim() == true }
+                .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+                .filter { !it.getArrayName().isNullOrEmpty() }
+                .distinctBy { it.getArrayName() }
+                .forEach { dex ->
+                    adjusted.addElement(
+                        LookupElementBuilder.create(dex.getArrayName()!!)
+                            .withTailText("[]", true)
+                            .withTypeText("array")
+                            .withIcon(IsIcons.Variable)
+                            .withInsertHandler { ctx, _ ->
+                                ctx.document.insertString(ctx.tailOffset, "[]")
+                                ctx.editor.caretModel.moveToOffset(ctx.tailOffset - 1)
+                            }
+                    )
+                }
+        }
+
+        // For #redim: the names of earlier #dim arrays (declaration-order aware).
+        if (directive == "redim" && hostFile is IsScriptFile) {
+            val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
+            val lineOffset = host?.textRange?.startOffset ?: Int.MAX_VALUE
+            hostFile.isppDirectivesWithHostOffset
+                .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDim() == true }
+                .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+                .filter { !it.getArrayName().isNullOrEmpty() }
+                .distinctBy { it.getArrayName() }
+                .forEach { dex ->
+                    adjusted.addElement(
+                        LookupElementBuilder.create(dex.getArrayName()!!)
+                            .withTypeText("array")
                             .withIcon(IsIcons.Variable)
                     )
                 }

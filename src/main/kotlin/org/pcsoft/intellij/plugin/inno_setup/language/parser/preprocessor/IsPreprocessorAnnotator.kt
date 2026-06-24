@@ -29,9 +29,17 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiv
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprBinary
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprCall
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprIndex
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprNode
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParen
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprParser
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTernary
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprUnary
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTypeResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
@@ -57,6 +65,8 @@ class IsPreprocessorAnnotator : Annotator {
             IsPreprocessorExprTokenType.OPERATOR,
             IsPreprocessorExprTokenType.LPAREN,
             IsPreprocessorExprTokenType.RPAREN,
+            IsPreprocessorExprTokenType.LBRACKET,
+            IsPreprocessorExprTokenType.RBRACKET,
             IsPreprocessorExprTokenType.COMMA,
             IsPreprocessorExprTokenType.QUESTION,
             IsPreprocessorExprTokenType.COLON,
@@ -127,7 +137,18 @@ class IsPreprocessorAnnotator : Annotator {
             annotateConditional(directive, ex, holder)
             return
         }
+        if (ex.isArrayDeclaration()) {
+            annotateArrayDeclaration(directive, ex, holder)
+            return
+        }
         if (!ex.isDefine()) return
+
+        // An array element assignment `#define Name[Index] Value` has its own validation (array existence,
+        // index type, bounds) and does not participate in the scalar #define checks below.
+        if (ex.isArrayElementDefine()) {
+            annotateArrayElementDefine(directive, ex, holder)
+            return
+        }
 
         // Optional scope/visibility keyword (#define public Foo …) — highlighted like a keyword.
         highlightVisibility(ex, holder)
@@ -218,21 +239,33 @@ class IsPreprocessorAnnotator : Annotator {
         }
 
         // Resolve against a preceding #define (declaration-order aware, via the directive's reference).
-        val resolved = directive.references
+        val resolvedTarget = directive.references
             .filterIsInstance<IsPreprocessorExpressionReference>()
-            .any { it.resolve() != null }
+            .firstNotNullOfOrNull { it.resolve() }
 
-        if (resolved) {
-            highlight(nameIdentifier.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
-        } else {
-            holder.newAnnotation(
-                HighlightSeverity.WEAK_WARNING,
-                "#undef '${nameIdentifier.text}' has no matching #define"
-            )
-                .range(nameIdentifier.textRange)
-                .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
-                .withFix(RemoveUselessUndefQuickFix(directive))
-                .create()
+        when {
+            // An array declared with #dim/#redim is not a plain macro and cannot be removed with #undef.
+            (resolvedTarget as? IsPreprocessorDirectiveEx)?.isDim() == true -> {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "#undef cannot be applied to the #dim array '${nameIdentifier.text}'"
+                ).range(nameIdentifier.textRange).create()
+            }
+
+            resolvedTarget != null -> {
+                highlight(nameIdentifier.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+            }
+
+            else -> {
+                holder.newAnnotation(
+                    HighlightSeverity.WEAK_WARNING,
+                    "#undef '${nameIdentifier.text}' has no matching #define"
+                )
+                    .range(nameIdentifier.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
+                    .withFix(RemoveUselessUndefQuickFix(directive))
+                    .create()
+            }
         }
     }
 
@@ -684,7 +717,11 @@ class IsPreprocessorAnnotator : Annotator {
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
         val definedNames = hostFile?.isppDirectives
-            ?.mapNotNull { (it as? IsPreprocessorDirectiveEx)?.getDefineName() }
+            ?.mapNotNull { d ->
+                val dex = d as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
+                // An array element `#define Name[i]` is a usage, not a declaration; the `#dim` declares the name.
+                if (dex.isArrayElementDefine()) null else dex.getArrayName() ?: dex.getDefineName()
+            }
             ?.toSet() ?: emptySet()
         val spec = service<IsPreprocessorService>().spec
 
@@ -716,29 +753,251 @@ class IsPreprocessorAnnotator : Annotator {
         val exprText = ex.getDefineExpressionText() ?: return
         val exprOffset = ex.getDefineExpressionOffsetInDirective()
         if (exprOffset < 0) return
-        val base = directive.textRange.startOffset + exprOffset
-
-        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
-        tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
-            highlight(
-                TextRange(base + token.start, base + token.end),
-                IsPreprocessorSyntaxHighlighting.OPERATOR,
-                holder,
-            )
-        }
-
-        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
-
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
-        val resolver = buildTypeResolver(hostFile)
-        val inference = resolver.inferenceAt(currentDirectiveOrder(directive, hostFile))
-        inference.infer(parseResult.ast)
+        // Shared expression validation: operators, syntax/type errors, array-read bounds.
+        validateExpr(directive, exprText, exprOffset, hostFile, holder)
+    }
 
+    /**
+     * Validates a `#dim`/`#redim` array declaration: highlights the optional scope keyword and the array name,
+     * rejects a reserved/digit-leading name, requires and type-checks the `\[Size]` expression (integer, positive
+     * when static), requires a preceding `#dim` for a `#redim`, and validates an optional inline initialiser
+     * (each element expression plus a count-vs-size check).
+     */
+    private fun annotateArrayDeclaration(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        highlightVisibility(ex, holder)
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        val order = currentDirectiveOrder(directive, hostFile)
+        val keyword = directive.identifier?.text ?: if (ex.isDim()) "dim" else "redim"
+
+        digitLeadingNameRange(directive)?.let { range ->
+            holder.newAnnotation(HighlightSeverity.ERROR, "An array name must not start with a digit")
+                .range(range).create()
+            return
+        }
+
+        val nameId = ex.nameIdentifier
+        if (nameId != null) {
+            val forbidden = service<IsPreprocessorService>().spec.forbiddenVariableNames
+                .firstOrNull { it.name.equals(nameId.text, ignoreCase = true) }
+            if (forbidden != null) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "'${nameId.text}' is a reserved preprocessor keyword and cannot be used as an array name"
+                ).range(nameId.textRange).create()
+                return
+            }
+            highlight(nameId.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+        }
+
+        // #redim requires an existing array of that name declared earlier.
+        val name = ex.getArrayName()
+        if (ex.isRedim() && name != null && hostFile?.precedingArray(name, order) == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#redim '$name' has no matching #dim")
+                .range(nameId?.textRange ?: directive.textRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
+
+        val sizeText = ex.getArraySizeText()
+        val sizeOffset = ex.getArraySizeOffsetInDirective()
+        if (sizeText == null || sizeText.isBlank() || sizeOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a size in '[…]'")
+                .range(directive.textRange).create()
+            return
+        }
+        val sizeBase = directive.textRange.startOffset + sizeOffset
+        val sizeRange = TextRange(sizeBase, sizeBase + sizeText.length)
+        val sizeType = validateExpr(directive, sizeText, sizeOffset, hostFile, holder)
+        if (!sizeType.intCompatible) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "Array size must be an integer").range(sizeRange).create()
+        }
+        sizeText.trim().toLongOrNull()?.let { staticSize ->
+            if (staticSize <= 0) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Array size must be positive").range(sizeRange).create()
+            }
+        }
+
+        // Optional inline initialiser `{v0, v1, …}`: validate each element and the count against a static size.
+        val initText = ex.getArrayInitializerText()
+        val initOffset = ex.getArrayInitializerOffsetInDirective()
+        if (initText != null && initOffset >= 0) {
+            val elements = splitInitializerElements(initText)
+            var elementStart = 0
+            elements.forEach { element ->
+                val trimmedLeading = element.length - element.trimStart().length
+                val trimmed = element.trim()
+                if (trimmed.isNotEmpty()) {
+                    validateExpr(directive, trimmed, initOffset + elementStart + trimmedLeading, hostFile, holder)
+                }
+                elementStart += element.length + 1 // +1 for the consumed comma
+            }
+            sizeText.trim().toLongOrNull()?.let { staticSize ->
+                if (elements.size.toLong() != staticSize) {
+                    val initBase = directive.textRange.startOffset + initOffset
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "${elements.size} initializer${if (elements.size == 1) "" else "s"} given, " +
+                            "but array '$name' has $staticSize element${if (staticSize == 1L) "" else "s"}"
+                    ).range(TextRange(initBase, initBase + initText.length)).create()
+                }
+            }
+        }
+
+        annotateUnresolvedReferences(directive, holder)
+    }
+
+    /**
+     * Validates an array element assignment `#define Name\[Index] Value`: the name must resolve to a `#dim`, the
+     * index must be an integer (and in bounds when both index and size are static constants), and the value is
+     * type-checked like any `#define` expression.
+     */
+    private fun annotateArrayElementDefine(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: AnnotationHolder,
+    ) {
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        val order = currentDirectiveOrder(directive, hostFile)
+        val name = ex.getDefineArrayName() ?: return
+        val base = directive.textRange.startOffset
+        val idxOffset = ex.getDefineArrayIndexOffsetInDirective()
+        val nameRange =
+            if (idxOffset >= 0) TextRange(base + idxOffset - 1 - name.length, base + idxOffset - 1)
+            else directive.textRange
+
+        if (hostFile?.precedingArray(name, order) == null) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "'$name' is not declared as an array")
+                .range(nameRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+            return
+        }
+        highlight(nameRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+
+        val indexText = ex.getDefineArrayIndexText()
+        if (indexText.isNullOrBlank() || idxOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "An array index is required in '[…]'")
+                .range(nameRange).create()
+        } else {
+            val indexBase = base + idxOffset
+            val indexRange = TextRange(indexBase, indexBase + indexText.length)
+            val indexType = validateExpr(directive, indexText, idxOffset, hostFile, holder)
+            if (!indexType.intCompatible) {
+                holder.newAnnotation(HighlightSeverity.ERROR, "Array index must be an integer")
+                    .range(indexRange).create()
+            }
+            val staticIndex = indexText.trim().toLongOrNull()
+            val size = hostFile?.arraySize(name, order)
+            if (staticIndex != null && size != null && (staticIndex < 0 || staticIndex >= size)) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Index $staticIndex out of bounds for array '$name' of size $size"
+                ).range(indexRange).create()
+            }
+        }
+
+        // An array element assignment requires a value — unlike a plain `#define X` which may be valueless.
+        val valueText = ex.getDefineExpressionText()
+        val valueOffset = ex.getDefineExpressionOffsetInDirective()
+        if (valueText == null || valueOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "An array element assignment requires a value")
+                .range(directive.textRange).create()
+        } else {
+            validateExpr(directive, valueText, valueOffset, hostFile, holder)
+        }
+
+        annotateUnresolvedReferences(directive, holder)
+    }
+
+    /**
+     * Splits an inline-initialiser body on top-level commas (ignoring commas nested in brackets/parens/braces or
+     * inside strings), preserving each raw element text so per-element offsets can be reconstructed.
+     */
+    private fun splitInitializerElements(text: String): List<String> {
+        val parts = mutableListOf<String>()
+        val sb = StringBuilder()
+        var depth = 0
+        var inString = false
+        for (c in text) {
+            when {
+                inString -> { sb.append(c); if (c == '"') inString = false }
+                c == '"' -> { sb.append(c); inString = true }
+                c == '(' || c == '[' || c == '{' -> { depth++; sb.append(c) }
+                c == ')' || c == ']' || c == '}' -> { depth--; sb.append(c) }
+                c == ',' && depth == 0 -> { parts += sb.toString(); sb.clear() }
+                else -> sb.append(c)
+            }
+        }
+        parts += sb.toString()
+        return parts
+    }
+
+    /**
+     * Highlights the operators of [exprText] and reports its syntax and type errors at [offsetInDirective],
+     * returning the inferred type. Shared by the array size/index/value and inline-initialiser checks.
+     */
+    private fun validateExpr(
+        directive: IsPreprocessorDirective,
+        exprText: String,
+        offsetInDirective: Int,
+        hostFile: PsiFile?,
+        holder: AnnotationHolder,
+    ): IsPreprocessorExprType {
+        val base = directive.textRange.startOffset + offsetInDirective
+        val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
+        tokens.filter { it.type in OPERATOR_TOKEN_TYPES }.forEach { token ->
+            highlight(TextRange(base + token.start, base + token.end), IsPreprocessorSyntaxHighlighting.OPERATOR, holder)
+        }
+        val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
+        val order = currentDirectiveOrder(directive, hostFile)
+        val resolver = buildTypeResolver(hostFile)
+        val inference = resolver.inferenceAt(order)
+        val type = inference.infer(parseResult.ast)
         (parseResult.errors + inference.errors).forEach { error ->
             holder.newAnnotation(HighlightSeverity.ERROR, error.message)
                 .range(TextRange(base + error.span.start, base + error.span.end))
                 .create()
+        }
+        // Static out-of-bounds reads (`arr[9]` on an array of size 3) — only when index and size are constant.
+        forEachIndexNode(parseResult.ast) { node ->
+            val idxText = exprText.substring(node.index.span.start, node.index.span.end).trim()
+            val idx = idxText.toLongOrNull() ?: return@forEachIndexNode
+            val size = hostFile?.arraySize(node.name, order) ?: return@forEachIndexNode
+            if (idx < 0 || idx >= size) {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "Index $idx out of bounds for array '${node.name}' of size $size"
+                ).range(TextRange(base + node.index.span.start, base + node.index.span.end)).create()
+            }
+        }
+        return type
+    }
+
+    /** Visits every array index-access node in the [node] tree, applying [action] to each. */
+    private fun forEachIndexNode(
+        node: IsPreprocessorExprNode,
+        action: (IsPreprocessorExprIndex) -> Unit,
+    ) {
+        when (node) {
+            is IsPreprocessorExprIndex -> { action(node); forEachIndexNode(node.index, action) }
+            is IsPreprocessorExprParen -> forEachIndexNode(node.inner, action)
+            is IsPreprocessorExprUnary -> forEachIndexNode(node.operand, action)
+            is IsPreprocessorExprBinary -> { forEachIndexNode(node.left, action); forEachIndexNode(node.right, action) }
+            is IsPreprocessorExprTernary -> {
+                forEachIndexNode(node.condition, action)
+                forEachIndexNode(node.whenTrue, action)
+                forEachIndexNode(node.whenFalse, action)
+            }
+            is IsPreprocessorExprCall -> node.arguments.forEach { forEachIndexNode(it, action) }
+            else -> {}
         }
     }
 

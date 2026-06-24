@@ -51,11 +51,24 @@ class IsPreprocessorExpressionReference(
         val hostLine = injMgr.getInjectionHost(element) ?: return null
         val currentOffset = hostLine.textRange.startOffset
 
+        // An array name resolves to its **canonical** declaration: the earliest preceding `#dim` of that name.
+        // (`#redim`s only modify the array; treating the `#dim` as the single target keeps every usage —
+        // reads, element assignments, `#redim`, `DimOf` — pointing at the same symbol for navigation/rename.)
+        val canonicalDim = hostFile.isppDirectivesWithHostOffset
+            .filter { (d, offset) ->
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isDim() && ex.getArrayName() == name
+            }
+            .minByOrNull { it.second }
+            ?.first
+        if (canonicalDim != null) return canonicalDim
+
+        // Otherwise a scalar `#define Name` (an array element `#define Name[i]` is a usage, not a declaration);
+        // the nearest preceding declaration wins (a later #define shadows an earlier one).
         return hostFile.isppDirectivesWithHostOffset
             .filter { (d, offset) ->
-                offset < currentOffset &&
-                        (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
-                        (d as? IsPreprocessorDirectiveEx)?.getDefineName() == name
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isDefine() && !ex.isArrayElementDefine() && ex.getDefineName() == name
             }
             .maxByOrNull { it.second }   // nearest preceding declaration
             ?.first

@@ -63,6 +63,12 @@ class IsPreprocessorDefineNameCompletionTest : BasePlatformTestCase() {
         assertFalse("Existing define names must not be offered as a new #define name, was: $variants", "Foo" in variants)
     }
 
+    fun testDefineNameOffersPrecedingDimArrays() {
+        // `#define Arr[i]` assigns an array element, so an earlier #dim array is completable in the name position.
+        val variants = lookup("#dim Arr[3]\n#define <caret>\n$setupTail")
+        assertTrue("Expected preceding #dim array 'Arr' as a #define name, was: $variants", "Arr" in variants)
+    }
+
     fun testVisibilityKeywordsNotOfferedInExpression() {
         val variants = lookup("#define Second <caret>\n$setupTail")
         assertFalse("Scope keywords must not be offered in the expression position, was: $variants", "public" in variants)

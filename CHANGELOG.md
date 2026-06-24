@@ -6,6 +6,16 @@
 
 ### Added
 
+- **ISPP arrays (`#dim` / `#redim`)**: Arrays are now fully supported. Declare them with `#dim Name[Size]`
+  (optionally with a `private`/`protected`/`public` scope and an inline `{...}` initialiser), resize with
+  `#redim`, assign elements via `#define Name[Index] Value`, and read them as `Name[Index]` in any
+  expression; `DimOf(Name)` returns the element count. Array names are completed (after `#redim ` and inside
+  expressions), navigate and rename together across the `#dim`, every `Name[Index]` use, `#redim` and
+  `DimOf`, and element values are statically evaluated across `#dim`/`#define`. Errors are reported for
+  indexing a non-array, using an array without an index, a non-integer index or size, a `#redim` without a
+  matching `#dim`, a mismatched inline-initialiser count, and statically out-of-bounds indices. The `[` and
+  `]` brackets are matched as a brace pair.
+
 - **File & directory path validation**: File- and directory-valued parameters across all sections are now
   validated. Two cases are distinguished:
     - **Must exist at compile time** (build-machine source paths, e.g. `[Setup]` `SetupIconFile`,

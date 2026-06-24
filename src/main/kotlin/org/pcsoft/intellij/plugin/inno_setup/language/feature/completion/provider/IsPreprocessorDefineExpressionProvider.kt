@@ -51,7 +51,10 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
         val lineOffset = host.textRange.startOffset
 
         val precedingDefines = hostFile.isppDirectivesWithHostOffset
-            .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true }
+            .filter { (d, off) ->
+                off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
+                    (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
+            }
             .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
             .filter { !it.getDefineName().isNullOrEmpty() }
             .distinctBy { it.getDefineName() }
@@ -72,6 +75,21 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
             }
             adjusted.addElement(element)
         }
+
+        // Array names declared by an earlier #dim — offered with a trailing `[]` so the index can be typed.
+        hostFile.isppDirectivesWithHostOffset
+            .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDim() == true }
+            .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+            .filter { !it.getArrayName().isNullOrEmpty() }
+            .distinctBy { it.getArrayName() }
+            .forEach { dex ->
+                adjusted.addElement(
+                    LookupElementBuilder.create(dex.getArrayName()!!)
+                        .withTailText("[]", true)
+                        .withTypeText("array")
+                        .withIcon(IsIcons.Variable)
+                )
+            }
 
         // Predefined ISPP variables are always available in an expression.
         service<IsPreprocessorService>().spec.predefinedVariables.forEach { variable ->

@@ -27,12 +27,15 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expre
 class IsPreprocessorExprValueResolver(
     defines: List<IsPreprocessorExprDefineInfo>,
     functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = emptyList(),
+    arrayElements: List<IsPreprocessorExprArrayElementInfo> = emptyList(),
 ) {
 
     private val defines: List<IsPreprocessorExprDefineInfo> = defines.sortedBy { it.order }
     private val functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = functionMacros.sortedBy { it.order }
+    private val arrayElements: List<IsPreprocessorExprArrayElementInfo> = arrayElements.sortedBy { it.order }
     private val visiting = HashSet<String>()
     private val visitingMacros = HashSet<String>()
+    private val visitingElements = HashSet<String>()
 
     /** Value of [expression] evaluated as if it appeared on a line at position [order]. */
     fun evaluate(expression: String, order: Int): IsPreprocessorExprValue? =
@@ -53,6 +56,28 @@ class IsPreprocessorExprValueResolver(
             evaluate(target.expression, target.order)
         } finally {
             visiting -= key
+        }
+    }
+
+    /**
+     * Value of the array element `name[index]` read from a line at [beforeOrder]: the nearest preceding
+     * `#define name[index]` (or inline-initialiser element) of that exact index is evaluated. `null` when there
+     * is no such assignment, the value is not computable, or a cycle is detected.
+     */
+    fun arrayElementValue(name: String, index: Long, beforeOrder: Int): IsPreprocessorExprValue? {
+        val target = arrayElements
+            .filter { it.order < beforeOrder && it.name.equals(name, ignoreCase = true) && it.index == index }
+            .maxByOrNull { it.order }
+            ?: return null
+
+        val key = "${name.lowercase()}[$index]"
+        if (key in visitingElements) return null // residual cycle guard
+
+        visitingElements += key
+        return try {
+            evaluate(target.expression, target.order)
+        } finally {
+            visitingElements -= key
         }
     }
 
@@ -99,5 +124,6 @@ class IsPreprocessorExprValueResolver(
             text = text,
             referenceValue = { name -> boundParams[name] ?: valueOfReference(name, order) },
             callValue = { name, args -> callValue(name, args, order) },
+            arrayElementValue = { name, index -> arrayElementValue(name, index, order) },
         )
 }

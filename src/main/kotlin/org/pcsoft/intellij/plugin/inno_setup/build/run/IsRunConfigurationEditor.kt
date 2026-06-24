@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
+import com.intellij.execution.configuration.EnvironmentVariablesComponent
 import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
@@ -48,6 +49,9 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     }
 
     private val debugOutputCheck = JCheckBox(PluginBundle.message("run.config.editor.debug_output"))
+        .apply { alignmentX = Component.LEFT_ALIGNMENT }
+
+    private val envVarsComponent = EnvironmentVariablesComponent()
         .apply { alignmentX = Component.LEFT_ALIGNMENT }
 
     private val panel: JPanel = buildPanel()
@@ -89,6 +93,8 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
             add(languageRow)
             add(Box.createVerticalStrut(4))
             add(debugOutputCheck)
+            add(Box.createVerticalStrut(4))
+            add(envVarsComponent)
         }
         p.add(options, gc(2, 0, HORIZONTAL, gridwidth = 2, insets = JBUI.insets(0, 4, 2, 4)))
 
@@ -141,6 +147,7 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     override fun resetEditorFrom(config: IsRunConfiguration) {
         loadScripts(config.scriptPath)
         debugOutputCheck.isSelected = config.debugOutput
+        envVarsComponent.envData = config.envData
         loadLanguages(config.scriptPath)
         val idx =
             (0 until languageCombo.itemCount).firstOrNull { languageCombo.getItemAt(it) == config.languageOverride }
@@ -151,6 +158,7 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     override fun applyEditorTo(config: IsRunConfiguration) {
         config.scriptPath = selectedScriptPath()
         config.debugOutput = debugOutputCheck.isSelected
+        config.envData = envVarsComponent.envData
         val selLang = languageCombo.selectedItem as? String ?: ""
         config.languageOverride =
             if (selLang == PluginBundle.message("run.config.editor.language.default")) "" else selLang

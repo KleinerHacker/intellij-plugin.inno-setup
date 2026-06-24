@@ -224,7 +224,7 @@ Legend: ✅ implemented · ⚠️ partial · — not applicable.
 |-----------|:-------:|:----------:|:----------:|:----------:|-------------|
 | `#define` | ✅ | ✅ expr + type + unused + scope kw | ✅ keyword + scope kw + names + funcs | ✅ | `define.md` |
 | `#undef` | ✅ | ✅ keyword + scope kw + no-match warning | ✅ keyword + scope kw + define names | ✅ → `#define` | `undef.md` |
-| `#dim` / `#redim` | ✅ | ✅ keyword | ✅ keyword | — | `arrays.md` |
+| `#dim` / `#redim` | ✅ | ✅ name + size/index type + bounds + scope kw + inline init + redim-needs-dim | ✅ keyword + scope kw + array names (redim/expr) | ✅ `#dim` ↔ `arr[i]` / `#redim` / `#define arr[i]` / `DimOf` | `arrays.md` |
 | `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
 | `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
 | `#if` / `#elif` | ✅ | ✅ expr + type + structure + boolean-literal | ✅ keyword | ✅ → `#define` | `conditionals.md` |

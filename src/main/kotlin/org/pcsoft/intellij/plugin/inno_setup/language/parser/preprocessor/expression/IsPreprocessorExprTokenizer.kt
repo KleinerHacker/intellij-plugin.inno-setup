@@ -57,6 +57,8 @@ object IsPreprocessorExprTokenizer {
 
                 c == '(' -> { tokens += token(IsPreprocessorExprTokenType.LPAREN, text, i, i + 1); i++ }
                 c == ')' -> { tokens += token(IsPreprocessorExprTokenType.RPAREN, text, i, i + 1); i++ }
+                c == '[' -> { tokens += token(IsPreprocessorExprTokenType.LBRACKET, text, i, i + 1); i++ }
+                c == ']' -> { tokens += token(IsPreprocessorExprTokenType.RBRACKET, text, i, i + 1); i++ }
                 c == ',' -> { tokens += token(IsPreprocessorExprTokenType.COMMA, text, i, i + 1); i++ }
                 c == '?' -> { tokens += token(IsPreprocessorExprTokenType.QUESTION, text, i, i + 1); i++ }
                 c == ':' -> { tokens += token(IsPreprocessorExprTokenType.COLON, text, i, i + 1); i++ }
