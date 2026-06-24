@@ -88,10 +88,12 @@ jobs:
       - name: Build docs
         run: ./gradlew buildDocs --stacktrace --info
 
-  # Publish the docs via mike under the release tag as the version. Stable releases
-  # (tag like x.y or x.y.z, optionally v-prefixed) also get the 'latest' alias;
-  # pre-releases (tag with a -alpha/-beta/-rc suffix or any non-version tag such as
-  # 'snapshot') do not, so 'latest' keeps pointing at the last stable release.
+  # Publish the docs via mike under the release tag as the version. This is the only
+  # place the gh-pages site is updated — pushes to the default branch merely build
+  # the docs for verification (see ci.yml). Stable releases (tag like x.y or x.y.z,
+  # optionally v-prefixed) also get the 'latest' alias; pre-releases (tag with a
+  # -alpha/-beta/-rc suffix) do not, so 'latest' keeps pointing at the last stable
+  # release.
   deploy-docs:
     runs-on: ubuntu-latest
     needs: validate-docs
