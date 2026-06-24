@@ -107,7 +107,7 @@ snapshot        </div>
   <div class="breadcrumbs"><a href="../../../index.html">inno-setup</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.language.feature.include</a><span class="delimiter">/</span><span class="current">RecordingAnnotationBuilder</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Recording</span><wbr></wbr><span>Annotation</span><wbr></wbr><span><span>Builder</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RecordingAnnotationBuilder</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">severity<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/HighlightSeverity///PointingToDeclaration/">HighlightSeverity</span><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">sink<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-recorded-problem/index.html">RecordedProblem</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div><p class="paragraph">An <span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span> that records nothing visually: its fluent calls are no-ops returning <code class="lang-kotlin">this</code>. Only the range, an optional explicit message and the file-level flag are tracked. On <a href="create.html">create</a> a non-file-level ERROR or WARNING with a known range and message is handed to <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.feature.include/RecordingAnnotationBuilder//#com.intellij.lang.annotation.HighlightSeverity#kotlin.String?#kotlin.Function1[org.pcsoft.intellij.plugin.inno_setup.language.feature.include.RecordedProblem,kotlin.Unit]/PointingToCallableParameters(2)/">sink</span>; everything else (highlighting/INFORMATION, weak warnings, file-level problems) is discarded.</p><p class="paragraph">Used to replay the real annotators over an in-memory effective script and harvest their problems without touching any editor markup. See <a href="../-is-effective-script-problems/index.html">IsEffectiveScriptProblems</a>.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RecordingAnnotationBuilder</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">severity<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/HighlightSeverity///PointingToDeclaration/">HighlightSeverity</span><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">sink<span class="token operator">: </span><span class="token punctuation">(</span><a href="../-recorded-problem/index.html">RecordedProblem</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span> : <a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div><p class="paragraph">An <a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a> that records nothing visually: its fluent calls are no-ops returning <code class="lang-kotlin">this</code>. Only the range, an optional explicit message and the file-level flag are tracked. On <a href="create.html">create</a> a non-file-level ERROR or WARNING with a known range and message is handed to <span data-unresolved-link="org.pcsoft.intellij.plugin.inno_setup.language.feature.include/RecordingAnnotationBuilder//#com.intellij.lang.annotation.HighlightSeverity#kotlin.String?#kotlin.Function1[org.pcsoft.intellij.plugin.inno_setup.language.feature.include.RecordedProblem,kotlin.Unit]/PointingToCallableParameters(2)/">sink</span>; everything else (highlighting/INFORMATION, weak warnings, file-level problems) is discarded.</p><p class="paragraph">Used to replay the real annotators over an in-memory effective script and harvest their problems without touching any editor markup. See <a href="../-is-effective-script-problems/index.html">IsEffectiveScriptProblems</a>. Deliberately implements only the plugin-owned <a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a> façade — never the platform's <code class="lang-kotlin">@NonExtendable</code> <code class="lang-kotlin">AnnotationBuilder</code>.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -133,22 +133,7 @@ snapshot        </div>
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="139562229%2FFunctions%2F-251573632" anchor-label="afterEndOfLine" id="139562229%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="after-end-of-line.html"><span>after</span><wbr></wbr><span>End</span><wbr></wbr><span>Of</span><wbr></wbr><span><span>Line</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="139562229%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="after-end-of-line.html"><span class="token function">afterEndOfLine</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1429450013%2FFunctions%2F-251573632" anchor-label="create" id="-1429450013%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+        <div class="table"><a data-name="-1429450013%2FFunctions%2F-251573632" anchor-label="create" id="-1429450013%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
@@ -163,36 +148,6 @@ snapshot        </div>
               </div>
             </div>
           </div>
-<a data-name="-660808972%2FFunctions%2F-251573632" anchor-label="createAnnotation" id="-660808972%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="create-annotation.html"><span>create</span><wbr></wbr><span><span>Annotation</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-660808972%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="create-annotation.html"><span class="token function">createAnnotation</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/Annotation///PointingToDeclaration/">Annotation</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1263789096%2FFunctions%2F-251573632" anchor-label="enforcedTextAttributes" id="-1263789096%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="enforced-text-attributes.html"><span>enforced</span><wbr></wbr><span>Text</span><wbr></wbr><span><span>Attributes</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1263789096%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="enforced-text-attributes.html"><span class="token function">enforcedTextAttributes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">enforcedAttributes<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.editor.markup/TextAttributes///PointingToDeclaration/">TextAttributes</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
 <a data-name="-171332237%2FFunctions%2F-251573632" anchor-label="fileLevel" id="-171332237%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
@@ -203,97 +158,7 @@ snapshot        </div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="file-level.html"><span class="token function">fileLevel</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1701217066%2FFunctions%2F-251573632" anchor-label="gutterIconRenderer" id="-1701217066%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="gutter-icon-renderer.html"><span>gutter</span><wbr></wbr><span>Icon</span><wbr></wbr><span><span>Renderer</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1701217066%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="gutter-icon-renderer.html"><span class="token function">gutterIconRenderer</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">renderer<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.editor.markup/GutterIconRenderer///PointingToDeclaration/">GutterIconRenderer</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-2079441637%2FFunctions%2F-251573632" anchor-label="highlightType" id="-2079441637%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="highlight-type.html"><span>highlight</span><wbr></wbr><span><span>Type</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2079441637%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="highlight-type.html"><span class="token function">highlightType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">highlightType<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInspection/ProblemHighlightType///PointingToDeclaration/">ProblemHighlightType</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-2037415241%2FFunctions%2F-251573632" anchor-label="needsUpdateOnTyping" id="-2037415241%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="needs-update-on-typing.html"><span>needs</span><wbr></wbr><span>Update</span><wbr></wbr><span>On</span><wbr></wbr><span><span>Typing</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2037415241%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="needs-update-on-typing.html"><span class="token function">needsUpdateOnTyping</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="needs-update-on-typing.html"><span class="token function">needsUpdateOnTyping</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1481449857%2FFunctions%2F-251573632" anchor-label="newFix" id="1481449857%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="new-fix.html"><span>new</span><wbr></wbr><span><span>Fix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1481449857%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new-fix.html"><span class="token function">newFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.intention/CommonIntentionAction///PointingToDeclaration/">CommonIntentionAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder.FixBuilder///PointingToDeclaration/">AnnotationBuilder.FixBuilder</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new-fix.html"><span class="token function">newFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder.FixBuilder///PointingToDeclaration/">AnnotationBuilder.FixBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1497101730%2FFunctions%2F-251573632" anchor-label="newLocalQuickFix" id="-1497101730%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="new-local-quick-fix.html"><span>new</span><wbr></wbr><span>Local</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1497101730%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new-local-quick-fix.html"><span class="token function">newLocalQuickFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInspection/LocalQuickFix///PointingToDeclaration/">LocalQuickFix</span><span class="token punctuation">, </span></span><span class="parameter ">descriptor<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInspection/ProblemDescriptor///PointingToDeclaration/">ProblemDescriptor</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder.FixBuilder///PointingToDeclaration/">AnnotationBuilder.FixBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1305783174%2FFunctions%2F-251573632" anchor-label="problemGroup" id="-1305783174%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="problem-group.html"><span>problem</span><wbr></wbr><span><span>Group</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1305783174%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="problem-group.html"><span class="token function">problemGroup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">problemGroup<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/ProblemGroup///PointingToDeclaration/">ProblemGroup</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="file-level.html"><span class="token function">fileLevel</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -308,7 +173,7 @@ snapshot        </div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang/ASTNode///PointingToDeclaration/">ASTNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">node<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang/ASTNode///PointingToDeclaration/">ASTNode</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">range<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="range.html"><span class="token function">range</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -323,52 +188,22 @@ snapshot        </div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="text-attributes.html"><span class="token function">textAttributes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">enforcedAttributes<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.editor.colors/TextAttributesKey///PointingToDeclaration/">TextAttributesKey</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="text-attributes.html"><span class="token function">textAttributes</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.editor.colors/TextAttributesKey///PointingToDeclaration/">TextAttributesKey</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1818323124%2FFunctions%2F-251573632" anchor-label="tooltip" id="-1818323124%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="tooltip.html"><span><span>tooltip</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1818323124%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="tooltip.html"><span class="token function">tooltip</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">tooltip<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1289635407%2FFunctions%2F-251573632" anchor-label="withFix" id="-1289635407%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+<a data-name="-1044264583%2FFunctions%2F-251573632" anchor-label="withFix" id="-1044264583%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="with-fix.html"><span>with</span><wbr></wbr><span><span>Fix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1289635407%2FFunctions%2F-251573632"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1044264583%2FFunctions%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="with-fix.html"><span class="token function">withFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.intention/CommonIntentionAction///PointingToDeclaration/">CommonIntentionAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="with-fix.html"><span class="token function">withFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-559953309%2FFunctions%2F-251573632" anchor-label="withLazyQuickFix" id="-559953309%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="with-lazy-quick-fix.html"><span>with</span><wbr></wbr><span>Lazy</span><wbr></wbr><span>Quick</span><wbr></wbr><span><span>Fix</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-559953309%2FFunctions%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="with-lazy-quick-fix.html"><span class="token function">withLazyQuickFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">quickFixComputer<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html">Consumer</a><span class="token operator">&lt;</span><span class="token keyword">in </span><span data-unresolved-link="com.intellij.codeInsight.daemon/QuickFixActionRegistrar///PointingToDeclaration/">QuickFixActionRegistrar</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/AnnotationBuilder///PointingToDeclaration/">AnnotationBuilder</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="with-fix.html"><span class="token function">withFix</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fix<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.intention/IntentionAction///PointingToDeclaration/">IntentionAction</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
                 </div>
               </div>
             </div>

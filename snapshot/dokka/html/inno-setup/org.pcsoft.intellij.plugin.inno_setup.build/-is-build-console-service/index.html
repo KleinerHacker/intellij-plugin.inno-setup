@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>RecordingAnnotationHolder</title>
+    <title>IsBuildConsoleService</title>
     <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
         <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
@@ -103,47 +103,28 @@ snapshot        </div>
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.language.feature.include/RecordingAnnotationHolder///PointingToDeclaration//-251573632">
-  <div class="breadcrumbs"><a href="../../../index.html">inno-setup</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.language.feature.include</a><span class="delimiter">/</span><span class="current">RecordingAnnotationHolder</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageIds="inno-setup::org.pcsoft.intellij.plugin.inno_setup.build/IsBuildConsoleService///PointingToDeclaration//-251573632">
+  <div class="breadcrumbs"><a href="../../../index.html">inno-setup</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.build</a><span class="delimiter">/</span><span class="current">IsBuildConsoleService</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Recording</span><wbr></wbr><span>Annotation</span><wbr></wbr><span><span>Holder</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RecordingAnnotationHolder</a> : <a href="../-is-annotation-sink/index.html">IsAnnotationSink</a></div><p class="paragraph">An <a href="../-is-annotation-sink/index.html">IsAnnotationSink</a> that captures the problems the real annotators would raise — without producing any editor markup. Every <code class="lang-kotlin">newAnnotation</code>/<code class="lang-kotlin">newSilentAnnotation</code> is routed into a <a href="../-recording-annotation-builder/index.html">RecordingAnnotationBuilder</a>; the collected ERROR/WARNING <a href="../-recorded-problem/index.html">RecordedProblem</a>s are exposed via <a href="problems.html">problems</a>.</p><p class="paragraph">Deliberately implements only the plugin-owned <a href="../-is-annotation-sink/index.html">IsAnnotationSink</a> façade — never the platform's <code class="lang-kotlin">@NonExtendable</code> <code class="lang-kotlin">AnnotationHolder</code> — so the effective-script analysis can replay the annotators safely.</p></div></div>
+    <h1 class="cover"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Console</span><wbr></wbr><span><span>Service</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">IsBuildConsoleService</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.openapi/Disposable///PointingToDeclaration/">Disposable</span></div><p class="paragraph">Owns the single <span data-unresolved-link="com.intellij.execution.ui/ConsoleView///PointingToDeclaration/">ConsoleView</span> that shows Inno Setup compiler output, hosted in the &quot;Inno Setup&quot; tool window. Uses only public platform APIs (console builder, tool window manager, content factory) — no internal Build-tool-window/event APIs. The console is created lazily on the EDT and disposed with the project (this service). In headless/unit-test mode no UI is created and all output is dropped.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="tableheader">Constructors</h2>
-        <div class="table"><a data-name="-2141020566%2FConstructors%2F-251573632" anchor-label="RecordingAnnotationHolder" id="-2141020566%2FConstructors%2F-251573632" data-filterable-set=":/main"></a>
+        <div class="table"><a data-name="71359852%2FConstructors%2F-251573632" anchor-label="IsBuildConsoleService" id="71359852%2FConstructors%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-recording-annotation-holder.html"><span>Recording</span><wbr></wbr><span>Annotation</span><wbr></wbr><span><span>Holder</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2141020566%2FConstructors%2F-251573632"></span>
+                  <div><a href="-is-build-console-service.html"><span>Is</span><wbr></wbr><span>Build</span><wbr></wbr><span>Console</span><wbr></wbr><span><span>Service</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="71359852%2FConstructors%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div data-togglable="PROPERTY">
-        <h2 class="tableheader">Properties</h2>
-        <div class="table"><a data-name="-1207767920%2FProperties%2F-251573632" anchor-label="problems" id="-1207767920%2FProperties%2F-251573632" data-filterable-set=":/main"></a>
-          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="problems.html"><span><span>problems</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1207767920%2FProperties%2F-251573632"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="problems.html">problems</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-recorded-problem/index.html">RecordedProblem</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The ERROR/WARNING problems recorded so far, in encounter order.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -152,32 +133,62 @@ snapshot        </div>
       </div>
       <div data-togglable="FUNCTION">
         <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="-2121020892%2FFunctions%2F-251573632" anchor-label="newAnnotation" id="-2121020892%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+        <div class="table"><a data-name="-1681526773%2FFunctions%2F-251573632" anchor-label="dispose" id="-1681526773%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="new-annotation.html"><span>new</span><wbr></wbr><span><span>Annotation</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2121020892%2FFunctions%2F-251573632"></span>
+                  <div><a href="dispose.html"><span><span>dispose</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1681526773%2FFunctions%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new-annotation.html"><span class="token function">newAnnotation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">severity<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/HighlightSeverity///PointingToDeclaration/">HighlightSeverity</span><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="dispose.html"><span class="token function">dispose</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-275835670%2FFunctions%2F-251573632" anchor-label="newSilentAnnotation" id="-275835670%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+<a data-name="-1094815016%2FFunctions%2F-251573632" anchor-label="obtainConsole" id="-1094815016%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="new-silent-annotation.html"><span>new</span><wbr></wbr><span>Silent</span><wbr></wbr><span><span>Annotation</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-275835670%2FFunctions%2F-251573632"></span>
+                  <div><a href="obtain-console.html"><span>obtain</span><wbr></wbr><span><span>Console</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1094815016%2FFunctions%2F-251573632"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new-silent-annotation.html"><span class="token function">newSilentAnnotation</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">severity<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/HighlightSeverity///PointingToDeclaration/">HighlightSeverity</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-is-annotation-draft/index.html">IsAnnotationDraft</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="obtain-console.html"><span class="token function">obtainConsole</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.execution.ui/ConsoleView///PointingToDeclaration/">ConsoleView</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Lazily creates the console on the EDT, wiring in the navigation filter; returns <code class="lang-kotlin">null</code> when headless.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1803919103%2FFunctions%2F-251573632" anchor-label="print" id="1803919103%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="print.html"><span><span>print</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1803919103%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="print.html"><span class="token function">print</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">view<span class="token operator">: </span><span data-unresolved-link="com.intellij.execution.ui/ConsoleView///PointingToDeclaration/">ConsoleView</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">error<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Prints a line to the build console, routed to stderr (errors) or stdout (everything else).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1800655464%2FFunctions%2F-251573632" anchor-label="start" id="1800655464%2FFunctions%2F-251573632" data-filterable-set=":/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":/main" data-filterable-set=":/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="start.html"><span><span>start</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1800655464%2FFunctions%2F-251573632"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="start.html"><span class="token function">start</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.execution.ui/ConsoleView///PointingToDeclaration/">ConsoleView</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Clears the console and brings the &quot;Inno Setup&quot; tool window to the front for a fresh build run. Returns the console (or <code class="lang-kotlin">null</code> when headless), so the caller can stream output into it.</p></div></div></div>
                 </div>
               </div>
             </div>
