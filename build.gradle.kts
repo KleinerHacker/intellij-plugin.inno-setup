@@ -42,7 +42,7 @@ intellijPlatform {
 
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "253"
+            sinceBuild = "261"
             untilBuild = provider { null }   // unbounded: covers 2026.1 (261) and future IDEs
         }
     }
@@ -92,7 +92,17 @@ dependencies {
 
     // IntelliJ Platform Gradle Plugin Dependencies Extension - read more: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-dependencies-extension.html
     intellijPlatform {
-        intellijIdea("2025.3.5")
+        // Compile/test against a local IDE installation when one is configured, otherwise download the
+        // default SDK. The local path is kept out of the repository: set it per machine via the Gradle
+        // property `localIdePath` (e.g. in ~/.gradle/gradle.properties or `-PlocalIdePath=…`) or the
+        // env var `LOCAL_IDE_PATH`. Point it at an IDE install root (the folder with lib/, plugins/, bin/).
+        val localIdePath = (providers.gradleProperty("localIdePath").orNull
+            ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
+        if (localIdePath != null) {
+            local(localIdePath)
+        } else {
+            intellijIdea("2025.3.5")
+        }
         testFramework(TestFrameworkType.Platform)
     }
 }

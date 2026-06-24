@@ -12,60 +12,26 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
-import com.intellij.lang.ASTNode
-import com.intellij.lang.annotation.*
-import com.intellij.lang.annotation.Annotation
-import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
+import com.intellij.lang.annotation.HighlightSeverity
 
 /**
- * An [AnnotationHolder] that captures the problems the real annotators would raise — without producing any
+ * An [IsAnnotationSink] that captures the problems the real annotators would raise — without producing any
  * editor markup. Every `newAnnotation`/`newSilentAnnotation` is routed into a [RecordingAnnotationBuilder]; the
  * collected ERROR/WARNING [RecordedProblem]s are exposed via [problems].
  *
- * Deliberately implements only the modern builder entry points; the deprecated `createXxxAnnotation` factory
- * methods are unused by the annotators replayed here and throw if called.
+ * Deliberately implements only the plugin-owned [IsAnnotationSink] façade — never the platform's
+ * `@NonExtendable` `AnnotationHolder` — so the effective-script analysis can replay the annotators safely.
  */
-class RecordingAnnotationHolder(private val file: PsiFile) : AnnotationHolder {
+class RecordingAnnotationHolder : IsAnnotationSink {
 
     private val collected = mutableListOf<RecordedProblem>()
 
     /** The ERROR/WARNING problems recorded so far, in encounter order. */
     val problems: List<RecordedProblem> get() = collected
 
-    override fun newAnnotation(severity: HighlightSeverity, message: String): AnnotationBuilder =
+    override fun newAnnotation(severity: HighlightSeverity, message: String): IsAnnotationDraft =
         RecordingAnnotationBuilder(severity, message) { collected += it }
 
-    override fun newSilentAnnotation(severity: HighlightSeverity): AnnotationBuilder =
+    override fun newSilentAnnotation(severity: HighlightSeverity): IsAnnotationDraft =
         RecordingAnnotationBuilder(severity, null) { collected += it }
-
-    override fun getCurrentAnnotationSession(): AnnotationSession = AnnotationSession(file)
-
-    override fun isBatchMode(): Boolean = false
-
-    // ── Deprecated factory API — not used by the replayed annotators. ──────────────────────────────────
-    private fun unsupported(): Nothing =
-        throw UnsupportedOperationException("RecordingAnnotationHolder only supports newAnnotation/newSilentAnnotation")
-
-    override fun createErrorAnnotation(elt: PsiElement, message: String?): Annotation = unsupported()
-    override fun createErrorAnnotation(node: ASTNode, message: String?): Annotation = unsupported()
-    override fun createErrorAnnotation(range: TextRange, message: String?): Annotation = unsupported()
-    override fun createWarningAnnotation(elt: PsiElement, message: String?): Annotation = unsupported()
-    override fun createWarningAnnotation(node: ASTNode, message: String?): Annotation = unsupported()
-    override fun createWarningAnnotation(range: TextRange, message: String?): Annotation = unsupported()
-    override fun createWeakWarningAnnotation(elt: PsiElement, message: String?): Annotation = unsupported()
-    override fun createWeakWarningAnnotation(range: TextRange, message: String?): Annotation = unsupported()
-    override fun createInfoAnnotation(elt: PsiElement, message: String?): Annotation = unsupported()
-    override fun createInfoAnnotation(node: ASTNode, message: String?): Annotation = unsupported()
-    override fun createInfoAnnotation(range: TextRange, message: String?): Annotation = unsupported()
-    override fun createAnnotation(severity: HighlightSeverity, range: TextRange, message: String?): Annotation =
-        unsupported()
-
-    override fun createAnnotation(
-        severity: HighlightSeverity,
-        range: TextRange,
-        message: String?,
-        htmlTooltip: String?,
-    ): Annotation = unsupported()
 }

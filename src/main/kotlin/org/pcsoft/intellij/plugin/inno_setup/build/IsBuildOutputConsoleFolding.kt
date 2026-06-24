@@ -17,13 +17,10 @@ import com.intellij.execution.ui.ConsoleView
 import com.intellij.openapi.project.Project
 
 /**
- * Folds the indented detail lines of the ISCC compiler output in the Build tool window console
+ * Folds the indented detail lines of the ISCC compiler output in the "Inno Setup" tool-window console
  * (e.g. the `   Reading file: …` / `   Messages in script file` lines below a `\[Languages]`
  * section). Consecutive indented lines are merged by the platform into a single, collapsed-by-default
  * region whose placeholder shows the number of hidden lines.
- *
- * Section-level grouping (one tree node per `\[Section]`) is produced separately by
- * [IsBuildOutputGrouper]; this folding only handles the in-console detail lines.
  */
 class IsBuildOutputConsoleFolding : ConsoleFolding() {
 

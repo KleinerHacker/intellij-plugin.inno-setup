@@ -28,6 +28,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsAnnotationSink
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.PlatformAnnotationSink
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.declarationScope
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.toEffectiveScript
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
@@ -52,7 +54,10 @@ class IsSectionAnnotator : Annotator {
     /**
      * Annotates the supplied PSI element when it matches this component's checks.
      */
-    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
+    override fun annotate(element: PsiElement, annotationHolder: AnnotationHolder) =
+        annotate(element, PlatformAnnotationSink(annotationHolder))
+
+    fun annotate(element: PsiElement, holder: IsAnnotationSink) {
         val spec = service<IsSpecService>().spec
         when (element) {
             is IsScriptFile -> annotateFile(element, holder, spec)
@@ -81,7 +86,7 @@ class IsSectionAnnotator : Annotator {
      * locale identifier ([IsLanguageDataService.validIds]). Malformed (non-integer) values are left to
      * the native integer type check, which reports them as errors.
      */
-    private fun annotateLanguageId(value: IsSectionParamValue, holder: AnnotationHolder) {
+    private fun annotateLanguageId(value: IsSectionParamValue, holder: IsAnnotationSink) {
         if (value.isInCodeSection) return
         val directive = value.containingDirectiveEntry ?: return
         if (!directive.keyText().equals("LanguageID", ignoreCase = true)) return
@@ -103,7 +108,7 @@ class IsSectionAnnotator : Annotator {
      * structurally valid ISL file. Emits ERROR for missing/unreadable/incomplete files and WARNING
      * when the Inno Setup installation path is not configured (so `compiler:` paths cannot be checked).
      */
-    private fun annotateMessagesFile(value: IsSectionParamValue, holder: AnnotationHolder) {
+    private fun annotateMessagesFile(value: IsSectionParamValue, holder: IsAnnotationSink) {
         if (value.isInCodeSection) return
         val pair = value.containingParamPair ?: return
         if (!pair.keyText().equals("MessagesFile", ignoreCase = true)) return
@@ -152,7 +157,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateIslContent(file: File, value: IsSectionParamValue, holder: AnnotationHolder) {
+    private fun annotateIslContent(file: File, value: IsSectionParamValue, holder: IsAnnotationSink) {
         val vf = LocalFileSystem.getInstance().findFileByIoFile(file) ?: return
         val psiFile = PsiManager.getInstance(value.project).findFile(vf) as? IsScriptFile ?: run {
             holder.newAnnotation(HighlightSeverity.ERROR, "ISL file cannot be parsed: '${file.absolutePath}'")
@@ -183,7 +188,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateFile(file: IsScriptFile, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateFile(file: IsScriptFile, holder: IsAnnotationSink, spec: IsSectionSpec) {
         // Required sections are file-type specific: \[Setup] in scripts, \[LangOptions] in .isl files.
         val target = file.specTarget
 
@@ -242,7 +247,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateRequiredDirectives(
         file: IsScriptFile,
         effective: IsScriptFile,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
         spec: IsSectionSpec,
         target: IsSectionSpecTarget,
     ) {
@@ -282,7 +287,7 @@ class IsSectionAnnotator : Annotator {
      * explicitly to `no`; otherwise the compiler rejects the script. `AppId` defaults to `AppName` when
      * omitted, so the `AppName` value is checked in that case. Reported at file level.
      */
-    private fun annotateUsePreviousLanguage(file: IsScriptFile, holder: AnnotationHolder) {
+    private fun annotateUsePreviousLanguage(file: IsScriptFile, holder: IsAnnotationSink) {
         if (file.specTarget != IsSectionSpecTarget.ISS) return
         val setup = file.findSection("Setup") ?: return
 
@@ -302,7 +307,7 @@ class IsSectionAnnotator : Annotator {
         ).fileLevel().withFix(SetUsePreviousLanguageNoQuickFix(file)).create()
     }
 
-    private fun annotateSectionName(name: IsSectionTitle, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateSectionName(name: IsSectionTitle, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (name.isInCodeSection) return
         val section = name.parent?.parent as? IsSectionBlock ?: return
         val specSection = section.specSection(spec)
@@ -316,7 +321,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateSection(section: IsSectionBlock, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateSection(section: IsSectionBlock, holder: IsAnnotationSink, spec: IsSectionSpec) {
         // \[Code] is free-form Pascal — no ISI-level checks apply.
         if (section.nameText.equals("Code", ignoreCase = true)) return
 
@@ -333,7 +338,7 @@ class IsSectionAnnotator : Annotator {
         // includes.
     }
 
-    private fun annotateTrailingSemicolon(entry: IsSectionParameterEntry, holder: AnnotationHolder) {
+    private fun annotateTrailingSemicolon(entry: IsSectionParameterEntry, holder: IsAnnotationSink) {
         if (entry.isInCodeSection) return
         var node = entry.node.lastChildNode
         if (node?.elementType == IsSectionTypes.CRLF) node = node.treePrev
@@ -346,7 +351,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateParameterEntry(entry: IsSectionParameterEntry, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateParameterEntry(entry: IsSectionParameterEntry, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (entry.isInCodeSection) return
         val section = entry.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
@@ -370,7 +375,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateParamKey(key: IsSectionParamKey, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateParamKey(key: IsSectionParamKey, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (key.isInCodeSection) return
         val pair = key.parent as? IsSectionParamPair ?: return
         val section = pair.containingSection ?: return
@@ -389,7 +394,7 @@ class IsSectionAnnotator : Annotator {
         annotateKey(key.textRange, attr, holder, key.specTarget, pair.keyText())
     }
 
-    private fun annotateDirectiveKey(key: IsSectionDirectiveKey, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateDirectiveKey(key: IsSectionDirectiveKey, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (key.isInCodeSection) return
         val entry = key.parent as? IsSectionDirectiveEntry ?: return
         val section = entry.containingSection ?: return
@@ -426,7 +431,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateLanguagePrefix(
         key: IsSectionDirectiveKey,
         entry: IsSectionDirectiveEntry,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         val full = entry.keyText()
         val dot = full.indexOf('.')
@@ -453,7 +458,7 @@ class IsSectionAnnotator : Annotator {
      * Flags a `Key: Value` pair sitting in a directive section (`\[Setup]`, `\[Messages]`, `\[CustomMessages]`,
      * `\[LangOptions]`), where entries must instead use `Key=Value`. The red mark covers the wrong ':'.
      */
-    private fun annotateParamPairSeparator(pair: IsSectionParamPair, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateParamPairSeparator(pair: IsSectionParamPair, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (pair.isInCodeSection) return
         val section = pair.containingSection ?: return
         val specSection = section.specSection(spec) ?: return
@@ -471,7 +476,7 @@ class IsSectionAnnotator : Annotator {
      */
     private fun annotateDirectiveEntrySeparator(
         entry: IsSectionDirectiveEntry,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
         spec: IsSectionSpec
     ) {
         if (entry.isInCodeSection) return
@@ -496,7 +501,7 @@ class IsSectionAnnotator : Annotator {
         wrong: String,
         example: String,
         fix: IntentionAction,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         // No custom text attributes: the default ERROR highlight draws a red wavy underline under
         // the separator, rather than recolouring the character (UNKNOWN_REFERENCE would paint it red).
@@ -512,7 +517,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateKey(
         range: TextRange,
         attr: IsSectionAttributeSpec?,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
         target: IsSectionSpecTarget,
         keyName: String
     ) {
@@ -539,7 +544,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateVersion(
         range: TextRange, name: String,
         since: String?, until: String?,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         val minVersion = IsSettingsService.getInstance().state.minInnoVersion ?: return
         until?.let {
@@ -561,7 +566,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateParamValue(value: IsSectionParamValue, holder: AnnotationHolder, spec: IsSectionSpec) {
+    private fun annotateParamValue(value: IsSectionParamValue, holder: IsAnnotationSink, spec: IsSectionSpec) {
         if (value.isInCodeSection) return
         val attr = resolveAttr(value, spec) ?: return
         when (val type = attr.type) {
@@ -600,7 +605,7 @@ class IsSectionAnnotator : Annotator {
         value: IsSectionParamValue,
         requireDirectory: Boolean,
         existence: IsSectionPathExistence,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         // [Languages] MessagesFile is handled exclusively by annotateMessagesFile (the documented exception).
         val pair = value.containingParamPair
@@ -627,7 +632,7 @@ class IsSectionAnnotator : Annotator {
      * or as a URL scheme separator (`scheme://…`, since e.g. `\[Icons]` `Filename` may be a URL). Any
      * other colon is reported as invalid.
      */
-    private fun annotatePathCharacters(value: IsSectionParamValue, raw: String, holder: AnnotationHolder) {
+    private fun annotatePathCharacters(value: IsSectionParamValue, raw: String, holder: IsAnnotationSink) {
         val stripped = raw.replace(Regex("\\{[^}]*}"), "")
         val invalid = sortedSetOf<Char>()
         stripped.forEachIndexed { i, c ->
@@ -665,7 +670,7 @@ class IsSectionAnnotator : Annotator {
         value: IsSectionParamValue,
         raw: String,
         requireDirectory: Boolean,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         // Wildcards (patterns) and comma-separated lists cannot be checked as a single path.
         if (raw.any { it == '*' || it == '?' } || raw.contains(',')) return
@@ -736,7 +741,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateFlagValue(
         value: IsSectionParamValue,
         flagType: IsSectionFlagTypeSpec,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         val target = value.specTarget
         val flagMap = flagType.flags.associateBy { it.name.lowercase() }
@@ -839,7 +844,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateNativeValue(
         value: IsSectionParamValue,
         type: IsSectionNativeTypeSpec,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         val text = value.singleText
         when (type.dataType) {
@@ -868,7 +873,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun annotateConstant(constant: IsSectionConstant, holder: AnnotationHolder) {
+    private fun annotateConstant(constant: IsSectionConstant, holder: IsAnnotationSink) {
         if (constant.isInCodeSection) return
         val body = constant.constantBody
         val bodyText = body.text.trimStart()
@@ -953,7 +958,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotateCustomMessage(
         constant: IsSectionConstant,
         body: IsSectionConstantBody,
-        holder: AnnotationHolder
+        holder: IsAnnotationSink
     ) {
         val (msgName, nameRange) = body.customMessageNameRange() ?: return
 
@@ -973,7 +978,7 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
-    private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
+    private fun highlight(range: TextRange, key: TextAttributesKey, holder: IsAnnotationSink) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
 

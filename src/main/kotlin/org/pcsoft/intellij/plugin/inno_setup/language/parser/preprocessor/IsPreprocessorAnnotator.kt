@@ -25,6 +25,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.TokenType
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.EFFECTIVE_SCRIPT_MARKER
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsAnnotationSink
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.PlatformAnnotationSink
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiveScriptProblems
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
@@ -85,7 +87,10 @@ class IsPreprocessorAnnotator : Annotator {
     /**
      * Annotates the supplied PSI element when it matches this component's checks.
      */
-    override fun annotate(element: PsiElement, holder: AnnotationHolder) {
+    override fun annotate(element: PsiElement, annotationHolder: AnnotationHolder) =
+        annotate(element, PlatformAnnotationSink(annotationHolder))
+
+    fun annotate(element: PsiElement, holder: IsAnnotationSink) {
         // Token-level syntax highlighting (strings/numbers). Inside the ISPP injection the injected
         // SyntaxHighlighter lexer does not paint reliably in the host editor, so the colours are applied
         // here through the annotator pass — the same path the directive keyword highlighting uses.
@@ -100,7 +105,7 @@ class IsPreprocessorAnnotator : Annotator {
         if (element is IsPreprocessorDirective) annotateDirective(element, holder)
     }
 
-    private fun annotateDirective(directive: IsPreprocessorDirective, holder: AnnotationHolder) {
+    private fun annotateDirective(directive: IsPreprocessorDirective, holder: IsAnnotationSink) {
         val hash = directive.node.findChildByType(IsPreprocessorTypes.HASH) ?: return
         val keyword = directive.node.findChildByType(IsPreprocessorTypes.IDENTIFIER) ?: return
         val keywordRange = TextRange(hash.startOffset, keyword.textRange.endOffset)
@@ -208,7 +213,7 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Highlights the optional scope/visibility keyword of a `#define`/`#undef` like a keyword. */
-    private fun highlightVisibility(ex: IsPreprocessorDirectiveEx, holder: AnnotationHolder) {
+    private fun highlightVisibility(ex: IsPreprocessorDirectiveEx, holder: IsAnnotationSink) {
         val visibility = ex.getVisibilityIdentifier() ?: return
         highlight(visibility.textRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
     }
@@ -222,7 +227,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateUndef(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         highlightVisibility(ex, holder)
 
@@ -279,7 +284,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateConditional(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         // ── structure ──
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
@@ -430,7 +435,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateInclude(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val value = directive.value
         if (value == null || value.text.isBlank()) {
@@ -536,7 +541,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotatePragma(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val value = directive.value
         val subName = ex.getPragmaSubCommand()
@@ -593,7 +598,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun pragmaMissingArgument(
         directive: IsPreprocessorDirective,
         spec: IsPreprocessorPragmaSpec,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         holder.newAnnotation(HighlightSeverity.ERROR, "#pragma ${spec.name} requires an argument")
             .range(directive.textRange).create()
@@ -605,7 +610,7 @@ class IsPreprocessorAnnotator : Annotator {
         spec: IsPreprocessorPragmaSpec,
         argText: String,
         argOffset: Int,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val base = directive.textRange.startOffset + argOffset
         val allowed = spec.flagLetters.map { it.letter.lowercase() }.toSet()
@@ -637,7 +642,7 @@ class IsPreprocessorAnnotator : Annotator {
         argText: String,
         argOffset: Int,
         argRange: TextRange?,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val base = directive.textRange.startOffset + argOffset
 
@@ -710,7 +715,7 @@ class IsPreprocessorAnnotator : Annotator {
         return first.textRange
     }
 
-    private fun annotateUnresolvedReferences(directive: IsPreprocessorDirective, holder: AnnotationHolder) {
+    private fun annotateUnresolvedReferences(directive: IsPreprocessorDirective, holder: IsAnnotationSink) {
         val refs = directive.references.filterIsInstance<IsPreprocessorExpressionReference>()
         if (refs.isEmpty()) return
 
@@ -748,7 +753,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateExpression(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val exprText = ex.getDefineExpressionText() ?: return
         val exprOffset = ex.getDefineExpressionOffsetInDirective()
@@ -768,7 +773,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateArrayDeclaration(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         highlightVisibility(ex, holder)
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
@@ -861,7 +866,7 @@ class IsPreprocessorAnnotator : Annotator {
     private fun annotateArrayElementDefine(
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ) {
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
@@ -949,7 +954,7 @@ class IsPreprocessorAnnotator : Annotator {
         exprText: String,
         offsetInDirective: Int,
         hostFile: PsiFile?,
-        holder: AnnotationHolder,
+        holder: IsAnnotationSink,
     ): IsPreprocessorExprType {
         val base = directive.textRange.startOffset + offsetInDirective
         val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
@@ -1028,7 +1033,7 @@ class IsPreprocessorAnnotator : Annotator {
             .any { other -> other.references.any { ref -> ref.canonicalText.equals(name, ignoreCase = true) } }
     }
 
-    private fun highlight(range: TextRange, key: TextAttributesKey, holder: AnnotationHolder) =
+    private fun highlight(range: TextRange, key: TextAttributesKey, holder: IsAnnotationSink) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
 
