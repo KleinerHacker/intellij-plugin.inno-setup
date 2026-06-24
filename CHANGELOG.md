@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.5.2]
+
 ### Added
 
 - **ISPP arrays (`#dim` / `#redim`)**: Arrays are now fully supported. Declare them with `#dim Name[Size]`
