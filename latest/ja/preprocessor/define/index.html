@@ -1,0 +1,3209 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="JetBrains plugin providing language support for Inno Setup scripts (.iss) in all IntelliJ-platform IDEs">
+      
+      
+        <meta name="author" content="PCSoft">
+      
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../undef/">
+      
+      
+        
+          <link rel="alternate" href="../../../preprocessor/define/" hreflang="en">
+        
+          <link rel="alternate" href="../../../zh/preprocessor/define/" hreflang="zh">
+        
+          <link rel="alternate" href="./" hreflang="ja">
+        
+          <link rel="alternate" href="../../../ko/preprocessor/define/" hreflang="ko">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>#define - Inno Setup – JetBrains Plugin</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#define" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../../" title="Inno Setup – JetBrains Plugin" class="md-header__button md-logo" aria-label="Inno Setup – JetBrains Plugin" data-md-component="logo">
+      
+  <img src="../../../assets/images/inno-setup-icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Inno Setup – JetBrains Plugin
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              #define
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="言語切り替え">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../preprocessor/define/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../zh/preprocessor/define/" hreflang="zh" class="md-select__link">
+              简体中文
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="ja" class="md-select__link">
+              日本語
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../../../ko/preprocessor/define/" hreflang="ko" class="md-select__link">
+              한국어
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="Inno Setup – JetBrains Plugin" class="md-nav__button md-logo" aria-label="Inno Setup – JetBrains Plugin" data-md-component="logo">
+      
+  <img src="../../../assets/images/inno-setup-icon.png" alt="logo">
+
+    </a>
+    Inno Setup – JetBrains Plugin
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../file-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ファイルタイプ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup スクリプト
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup スクリプト
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../script-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    スクリプトファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    セクション
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    セクション
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    セットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    タイプ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    コンポーネント
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    タスク
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/dirs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ディレクトリ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/icons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アイコン
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/ini/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    INI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    レジストリ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    実行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/uninstall-run/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アンインストール実行
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/languages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    言語
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/langoptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    言語オプション
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    メッセージ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/custom-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    カスタムメッセージ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/install-delete/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    インストール削除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/uninstall-delete/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    アンインストール削除
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/issigkeys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ISSig キー
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/code/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    コード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup 言語ファイル
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup 言語ファイル
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../language-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    言語ファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    セクション
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    セクション
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/langoptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    言語オプション
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    メッセージ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sections/custom-messages/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    カスタムメッセージ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup テンプレート
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup テンプレート
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../template-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    テンプレートファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inno Setup プリプロセッサー
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inno Setup プリプロセッサー
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    概要
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #define
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #define
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        マクロの使用：{#Name}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #define における式と演算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="#define における式と演算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        型システム
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        演算子
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関数呼び出しが型を供給する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        再帰的な参照解決
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        プラグインがエラーとしてフラグ付けするもの
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関数形式マクロの本体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        組み込み関数リファレンス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        定義済み変数
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../undef/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #undef
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #dim / #redim
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../include/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #include / #file
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #emit / #expr / #insert / #append
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #if / #ifdef / …
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../for/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sub/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #sub / #endsub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pragma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #pragma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    #error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ビルド統合
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../run-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    実行構成
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../structure-view/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    構造ビュー
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    設定
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    設定
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    一般
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../settings-editor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    エディター
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../settings-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ビルド
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../dokka/html/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API ドキュメント
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../licences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ライセンス
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        構文
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        マクロの使用：{#Name}
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        #define における式と演算
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="#define における式と演算">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        型システム
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        演算子
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関数呼び出しが型を供給する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        再帰的な参照解決
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        プラグインがエラーとしてフラグ付けするもの
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        関数形式マクロの本体
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        組み込み関数リファレンス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        定義済み変数
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="define"><code>#define</code></h1>
+<p><code>#define</code> はプリプロセッサーマクロ——コンパイル時にスクリプトへ置き換えられる名前付きの値または式——を宣言します。最もよく使われる ISPP ディレクティブであり、プラグインが完全なセマンティクス（参照解決、リネーム、使用箇所検索）でサポートするディレクティブです。</p>
+<hr />
+<h2 id="_1">構文</h2>
+<pre><code class="language-ini">#define [Scope] Name [Value]
+#define [Scope] Name(Param1, Param2) Expression
+</code></pre>
+<ul>
+<li><code>#define Name Value</code> は定数マクロを定義します（値は省略可能で、その場合は <em>void</em> マクロになります）。</li>
+<li><code>#define Name(params) Expression</code> は関数形式のマクロを定義します。プラグインは式の本体を持たない関数形式マクロをエラーとしてフラグ付けします。</li>
+<li>名前の前にオプションの<strong>スコープキーワード</strong>（<code>public</code>、<code>protected</code>、<code>private</code>）を付けられます
+  （例：<code>#define public MyAppVersion "1.5.0"</code>）。キーワードとしてハイライト・補完され、付けても付けなくても
+  名前の解決と参照は同じように機能します。</li>
+<li><code>#undef Name</code> は以前に定義されたマクロを削除します。</li>
+</ul>
+<hr />
+<h2 id="name">マクロの使用：<code>{#Name}</code></h2>
+<p>通常のスクリプト行内では、<code>{#Name}</code>（<code>{#emit Name}</code> の短縮形）がマクロの値を出力します：</p>
+<pre><code class="language-ini">#define MyAppVersion &quot;1.5.0&quot;
+
+[Setup]
+AppVersion={#MyAppVersion}
+OutputBaseFilename=setup-{#MyAppVersion}
+</code></pre>
+<ul>
+<li><code>{#Name}</code> はその <code>#define</code> 宣言に解決されます——定義へ移動（<strong>Ctrl+B</strong> / <strong>Cmd+B</strong>）と使用箇所検索（<strong>Alt+F7</strong>）が機能し、リネームは宣言とすべての使用箇所を同期させます。</li>
+<li><code>{</code> の直後と <code>{#</code> の後の両方で補完に提示されます。</li>
+<li>一度も使用されない <code>#define</code> はフラグ付けされ、削除のクイックフィックスが提供されます。</li>
+</ul>
+<hr />
+<h2 id="define_1"><code>#define</code> における式と演算</h2>
+<p><code>#define</code> の値は単なるリテラルではなく、完全な<strong>式</strong>です。ISPP は C/C++ 風の式文法を用いてコンパイル時に評価し、プラグインはそれを解析・型チェック・ハイライトします。単一のリテラルは最も単純なケースであり、複数の値を組み合わせる場合は<strong>演算子</strong>で結合する必要があります。</p>
+<pre><code class="language-ini">#define Major     1
+#define Minor     5
+#define Build     100
+#define Version   Str(Major) + &quot;.&quot; + Str(Minor)   ; 文字列連結
+#define NextBuild (Build + 1)                      ; 算術、括弧でグループ化
+#define OutputDir &quot;Builds\\&quot; + Version             ; 別のマクロとの連結
+#define IsBeta    Build &lt; 200                       ; 比較 → 整数 0/1
+</code></pre>
+<h3 id="_2">型システム</h3>
+<p>すべての式は次のいずれかの型を持ち、プラグインは演算を検証するためにそれを推論します：</p>
+<table>
+<thead>
+<tr>
+<th>型</th>
+<th>生成元</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td>整数リテラル（<code>100</code>）、算術/比較/論理の結果</td>
+<td></td>
+</tr>
+<tr>
+<td><code>str</code></td>
+<td>文字列リテラル（<code>"x"</code>、<code>'x'</code>）、文字列を返す関数</td>
+<td>単一引用符または二重引用符。二重化した引用符 <code>""</code> はリテラルの引用符</td>
+</tr>
+<tr>
+<td><code>void</code></td>
+<td><strong>値を持たない</strong> <code>#define</code></td>
+<td><code>int</code>（<code>0</code> として）と <code>str</code>（<code>""</code> として）の両方に互換</td>
+</tr>
+<tr>
+<td><code>any</code></td>
+<td>未解決の参照、マクロ引数、未知の関数の結果、<code>{…}</code> 定数</td>
+<td>型チェックを抑制——誤ったエラーを発生させない</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">演算子</h3>
+<p>ISPP は C/C++ 風の完全な演算子セットをサポートします。プラグインはすべての演算子トークンをハイライトし、以下の型規則を適用します。</p>
+<table>
+<thead>
+<tr>
+<th>グループ</th>
+<th>演算子</th>
+<th>被演算子の型</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>算術</td>
+<td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code></td>
+<td><code>int</code>（<code>+</code> は <code>str</code> + <code>str</code> も可）</td>
+<td><code>int</code>（連結の場合は <code>str</code>）</td>
+</tr>
+<tr>
+<td>文字列連結</td>
+<td><code>+</code></td>
+<td><code>str</code> + <code>str</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td>比較</td>
+<td><code>&lt;</code> <code>&gt;</code> <code>&lt;=</code> <code>&gt;=</code> <code>==</code> <code>!=</code></td>
+<td>両方 <code>int</code> <strong>または</strong>両方 <code>str</code></td>
+<td><code>int</code>（<code>0</code>/<code>1</code>）</td>
+</tr>
+<tr>
+<td>論理</td>
+<td><code>&amp;&amp;</code> <code>\|\|</code> <code>!</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>ビット</td>
+<td><code>&amp;</code> <code>\|</code> <code>^</code> <code>~</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>シフト</td>
+<td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>三項</td>
+<td><code>cond ? a : b</code></td>
+<td>条件は <code>int</code></td>
+<td>分岐の型</td>
+</tr>
+<tr>
+<td>単項（前置）</td>
+<td><code>+</code> <code>-</code> <code>~</code> <code>!</code></td>
+<td><code>int</code></td>
+<td><code>int</code></td>
+</tr>
+<tr>
+<td>グループ化</td>
+<td><code>( … )</code></td>
+<td>—</td>
+<td>内側の式の型</td>
+</tr>
+<tr>
+<td>カンマ</td>
+<td><code>a , b</code></td>
+<td>—</td>
+<td>右側の被演算子の型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>優先順位</strong>（高いほど強く結合、C/C++ に準拠）：
+<code>( )</code> と関数呼び出し → 単項 <code>+ - ~ !</code> → <code>* / %</code> → <code>+ -</code> → <code>&lt;&lt; &gt;&gt;</code> → <code>&lt; &gt; &lt;= &gt;=</code> → <code>== !=</code> →
+<code>&amp;</code> → <code>^</code> → <code>|</code> → <code>&amp;&amp;</code> → <code>||</code> → <code>?:</code> → <code>,</code>。
+迷ったら括弧を使ってください——<code>#define X 1 + 2 * 3</code> は <code>7</code>、<code>#define X (1 + 2) * 3</code> は <code>9</code> です。</p>
+<h3 id="_4">関数呼び出しが型を供給する</h3>
+<p><code>#define</code> の値は任意の ISPP <strong>組み込み関数</strong>を呼び出すことができ（公式の完全なセットがプラグインに同梱されています）、その戻り値の型が周囲の式に流れ込みます——例えば <code>Str(...)</code> は <code>str</code>、<code>Int(...)</code> と <code>Power(...)</code> は <code>int</code>、<code>FileExists(...)</code> は <code>int</code> です。したがって <code>Str(Major) + "."</code> は有効（<code>str</code> + <code>str</code>）ですが、<code>Str(Major) * 2</code> は拒否されます。</p>
+<pre><code class="language-ini">#define FullVer  GetFileVersionString(&quot;app.exe&quot;)      ; str
+#define Padded   &quot;v&quot; + Str(Build)                       ; str + str → str
+#define Doubled  Power(2, 10) * 2                        ; int * int → int
+</code></pre>
+<h3 id="_5">再帰的な参照解決</h3>
+<p>別のマクロへの参照は<strong>そのマクロ</strong>の型を取り、名前を通じて再帰的に解決されます——そのため、被演算子自体が <code>#define</code> であっても型エラーが検出されます：</p>
+<pre><code class="language-ini">#define A &quot;x&quot;
+#define B 5
+#define C A * B     ; A は str、B は int → &quot;str * int&quot; が * にフラグ付けされる
+</code></pre>
+<p>解決は<strong>後方</strong>参照のみをたどります（マクロは前の行で既に宣言されている必要があります）。これにより、正しく記述されたスクリプトでは参照の循環が不可能になります。残存する循環（例：自己参照 <code>#define P P + 1</code>、または順序が乱れた相互参照）は安全に断ち切られます：参照は <code>any</code> に縮退するため、無限ループも誤ったエラーも発生しません。</p>
+<h3 id="_6">プラグインがエラーとしてフラグ付けするもの</h3>
+<p>各問題は、行全体ではなく<strong>正確な原因トークン</strong>を指す<strong>エラー</strong>として報告されます：</p>
+<table>
+<thead>
+<tr>
+<th>例</th>
+<th>マークされるトークン</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#define X "a" * "b"</code></td>
+<td><code>*</code></td>
+<td>文字列被演算子に対する算術演算子</td>
+</tr>
+<tr>
+<td><code>#define X 1 + "s"</code></td>
+<td><code>+</code></td>
+<td><code>+</code> での整数と文字列の混在</td>
+</tr>
+<tr>
+<td><code>#define X "a" &lt; 1</code></td>
+<td><code>&lt;</code></td>
+<td>文字列と整数の比較</td>
+</tr>
+<tr>
+<td><code>#define X -"s"</code></td>
+<td><code>"s"</code></td>
+<td>文字列被演算子に対する単項マイナス</td>
+</tr>
+<tr>
+<td><code>#define X 5 6</code></td>
+<td><code>6</code></td>
+<td>演算子のない 2 つの被演算子</td>
+</tr>
+<tr>
+<td><code>#define X (1 + 2</code></td>
+<td><code>(</code></td>
+<td>括弧の不均衡</td>
+</tr>
+</tbody>
+</table>
+<p><code>any</code> の被演算子（未解決の参照、マクロ引数、未知の関数、<code>{…}</code> 定数）を含む式は、有効なスクリプトでの誤検出を避けるため、意図的にフラグ付け<strong>されません</strong>。</p>
+<h3 id="_7">関数形式マクロの本体</h3>
+<p>式の規則は関数形式マクロの本体にも適用されます。引数は <code>any</code> として扱われるため、型エラーを引き起こすことはありません：</p>
+<pre><code class="language-ini">#define Max(a, b) a &gt; b ? a : b
+#define Clamp(x)  x &lt; 0 ? 0 : x
+</code></pre>
+<hr />
+<h2 id="_8">組み込み関数リファレンス</h2>
+<p>ISPP は <code>#define</code> 式の中で呼び出せる多数の<strong>組み込み関数</strong>を提供します。プラグインには公式の完全なセットが同梱されており、各関数の戻り値の型は式の型チェッカーに供給され（上記参照）、補完にも提示されます。以下のリストは網羅的で、（公式 ISPP 関数インデックスに合わせて）アルファベット順に並んでいます。</p>
+<div class="admonition note">
+<p class="admonition-title">記法</p>
+<p><code>Name: int*</code> / <code>Name: str*</code> と示された引数は<strong>参照渡し</strong>で、関数は渡された変数に書き戻します。末尾の <code>= value</code> はデフォルト値を持つ<strong>省略可能</strong>な引数を表します。</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>関数</th>
+<th>戻り値</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AddBackslash(S: str): str</code></td>
+<td><code>str</code></td>
+<td>S の末尾にバックスラッシュがなければ追加します。</td>
+</tr>
+<tr>
+<td><code>AddQuotes(S: str): str</code></td>
+<td><code>str</code></td>
+<td>S に空白が含まれる場合、二重引用符で囲みます。</td>
+</tr>
+<tr>
+<td><code>ChangeFileExt(Filename: str, Extension: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename の拡張子を Extension に置き換えて返します。</td>
+</tr>
+<tr>
+<td><code>ComparePackedVersion(Version1: int, Version2: int): int</code></td>
+<td><code>int</code></td>
+<td>2 つのパック（エンコード済み）バージョン番号を比較し、-1・0・1 を返します。</td>
+</tr>
+<tr>
+<td><code>Copy(S: str, Index: int, Count: int): str</code></td>
+<td><code>str</code></td>
+<td>S の部分文字列を返します。Index は 1 始まりです。</td>
+</tr>
+<tr>
+<td><code>CopyFile(ExistingFile: str, NewFile: str): int</code></td>
+<td><code>int</code></td>
+<td>コンパイル時に既存ファイルをコピーします。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>DecodeVer(Version: int): str</code></td>
+<td><code>str</code></td>
+<td>パックされたバージョン番号をドット区切りのバージョン文字列に変換します。</td>
+</tr>
+<tr>
+<td><code>Defined(Ident): int</code></td>
+<td><code>int</code></td>
+<td>識別子が定義済みなら 1、そうでなければ 0 を返します。</td>
+</tr>
+<tr>
+<td><code>Delete(S: str*, Index: int, Count: int)</code></td>
+<td><code>void</code></td>
+<td>S の Index から Count 文字を削除します（S を参照で変更）。</td>
+</tr>
+<tr>
+<td><code>DeleteFile(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>コンパイル時にファイルを削除します。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>DeleteFileNow(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>前処理中に直ちにファイルを削除します。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>DimOf(Array): int</code></td>
+<td><code>int</code></td>
+<td>配列変数の要素数を返します。</td>
+</tr>
+<tr>
+<td><code>DirExists(Path: str): int</code></td>
+<td><code>int</code></td>
+<td>ディレクトリが存在すれば 1、そうでなければ 0 を返します。</td>
+</tr>
+<tr>
+<td><code>EmitLanguagesSection()</code></td>
+<td><code>void</code></td>
+<td>同梱の言語ファイルから [Languages] セクションを出力します。</td>
+</tr>
+<tr>
+<td><code>EncodeVer(Major: int, Minor: int, Revision: int = 0, Build: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>バージョン構成要素を 1 つのパックされたバージョン番号にエンコードします。</td>
+</tr>
+<tr>
+<td><code>EntryCount(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>指定したスクリプトセクション内のエントリ数を返します。</td>
+</tr>
+<tr>
+<td><code>Error(Message: str)</code></td>
+<td><code>void</code></td>
+<td>指定したメッセージでコンパイル時エラーを発生させます。</td>
+</tr>
+<tr>
+<td><code>Exec(CmdLine: str, Params: str = "", WorkingDir: str = "", ShowCmd: int = 0, Wait: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>コンパイル時にプログラムを実行し、プロセスの終了コードを返します。</td>
+</tr>
+<tr>
+<td><code>ExecAndGetFirstLine(CmdLine: str, Params: str = "", WorkingDir: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>プログラムを実行し、標準出力の最初の行を返します。</td>
+</tr>
+<tr>
+<td><code>ExtractFileDir(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename のディレクトリ部分を返します（末尾のバックスラッシュなし）。</td>
+</tr>
+<tr>
+<td><code>ExtractFileExt(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename の拡張子を返します（先頭のドットを含む）。</td>
+</tr>
+<tr>
+<td><code>ExtractFileName(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename の名前と拡張子の部分を返します。</td>
+</tr>
+<tr>
+<td><code>ExtractFilePath(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename のドライブとディレクトリの部分を返します（末尾のバックスラッシュ付き）。</td>
+</tr>
+<tr>
+<td><code>FileClose(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>FileOpen で開いたファイルを閉じます。</td>
+</tr>
+<tr>
+<td><code>FileEof(Handle: int): int</code></td>
+<td><code>int</code></td>
+<td>開いているファイルの末尾に達すると非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>FileExists(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>ファイルが存在すれば 1、そうでなければ 0 を返します。</td>
+</tr>
+<tr>
+<td><code>FileOpen(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>テキストファイルを読み取り用に開き、ファイルハンドルを返します。</td>
+</tr>
+<tr>
+<td><code>FileRead(Handle: int): str</code></td>
+<td><code>str</code></td>
+<td>開いているファイルから次の行を読み取ります。</td>
+</tr>
+<tr>
+<td><code>FileReset(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>開いているファイルの読み取り位置を先頭に戻します。</td>
+</tr>
+<tr>
+<td><code>FileSize(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>ファイルのサイズをバイト単位で返します。</td>
+</tr>
+<tr>
+<td><code>Find(S: str, Substr: str, Index: int = 1): int</code></td>
+<td><code>int</code></td>
+<td>Index から始めて S 内の Substr の位置を返します。なければ 0。</td>
+</tr>
+<tr>
+<td><code>FindClose(Handle: int)</code></td>
+<td><code>void</code></td>
+<td>FindFirst で開いた検索ハンドルを閉じます。</td>
+</tr>
+<tr>
+<td><code>FindCode(): int</code></td>
+<td><code>int</code></td>
+<td>[Code] セクションが始まる行インデックスを返します。</td>
+</tr>
+<tr>
+<td><code>FindFirst(Pattern: str, Attributes: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>ファイル検索を開始してハンドルを返します。見つからなければ負の値。</td>
+</tr>
+<tr>
+<td><code>FindGetFileName(Handle: int): str</code></td>
+<td><code>str</code></td>
+<td>現在の FindFirst/FindNext で見つかったファイル名を返します。</td>
+</tr>
+<tr>
+<td><code>FindNext(Handle: int): int</code></td>
+<td><code>int</code></td>
+<td>ファイル検索を次の一致へ進めます。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>FindSection(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>指定したセクションヘッダーの行インデックスを返します。</td>
+</tr>
+<tr>
+<td><code>FindSectionEnd(Section: str): int</code></td>
+<td><code>int</code></td>
+<td>指定したセクションの最後のエントリの次の行インデックスを返します。</td>
+</tr>
+<tr>
+<td><code>ForceDirectories(Dir: str): int</code></td>
+<td><code>int</code></td>
+<td>コンパイル時にディレクトリツリーを作成します。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>GetDateTimeString(Format: str, DateSep: str, TimeSep: str): str</code></td>
+<td><code>str</code></td>
+<td>現在の日時を Format に従って整形して返します。</td>
+</tr>
+<tr>
+<td><code>GetEnv(Name: str): str</code></td>
+<td><code>str</code></td>
+<td>環境変数の値を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileCompanyString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から CompanyName 文字列を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileCopyrightString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から LegalCopyright 文字列を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileDateTimeString(Filename: str, Format: str, DateSep: str, TimeSep: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルの最終更新日時を Format に従って整形して返します。</td>
+</tr>
+<tr>
+<td><code>GetFileDescriptionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から FileDescription 文字列を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileOriginalFilenameString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から OriginalFilename 文字列を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileProductVersionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から ProductVersion 文字列を返します。</td>
+</tr>
+<tr>
+<td><code>GetFileVersionString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>実行ファイルや DLL のファイルバージョンをドット区切り文字列で返します（例 <code>1.2.3.4</code>）。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルの MD5 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>ANSI 文字列の MD5 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetMD5OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>Unicode 文字列の MD5 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetPackedVersion(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>ファイルのパック（エンコード済み）バージョン番号を返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルの SHA-1 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>ANSI 文字列の SHA-1 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA1OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>Unicode 文字列の SHA-1 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfFile(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルの SHA-256 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>ANSI 文字列の SHA-256 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetSHA256OfUnicodeString(S: str): str</code></td>
+<td><code>str</code></td>
+<td>Unicode 文字列の SHA-256 ハッシュを 16 進文字列で返します。</td>
+</tr>
+<tr>
+<td><code>GetStringFileInfo(Filename: str, Key: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョン情報から文字列を返します。一般的なキー：<code>FileVersion</code>、<code>ProductVersion</code>、<code>CompanyName</code>。</td>
+</tr>
+<tr>
+<td><code>GetVersionComponents(Filename: str, Major: int*, Minor: int*, Revision: int*, Build: int*): int</code></td>
+<td><code>int</code></td>
+<td>ファイルのバージョン構成要素を参照変数に読み込みます。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>GetVersionNumbers(Filename: str, VersionMS: int*, VersionLS: int*): int</code></td>
+<td><code>int</code></td>
+<td>ファイルのバージョンを参照する上位/下位ワードに読み込みます。成功時は非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>GetVersionNumbersString(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>ファイルのバージョンをドット区切り文字列で返します（例 <code>1.2.3.4</code>）。</td>
+</tr>
+<tr>
+<td><code>Insert(Source: str, S: str*, Index: int)</code></td>
+<td><code>void</code></td>
+<td>Source を S の Index に挿入します（S を参照で変更）。</td>
+</tr>
+<tr>
+<td><code>Int(Value: any, Default: int = 0): int</code></td>
+<td><code>int</code></td>
+<td>値を整数に変換します。変換に失敗した場合は Default を使用します。</td>
+</tr>
+<tr>
+<td><code>Is64BitPEImage(Filename: str): int</code></td>
+<td><code>int</code></td>
+<td>指定した PE イメージが 64 ビットなら非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>IsWin64(): int</code></td>
+<td><code>int</code></td>
+<td>コンパイラーが 64 ビット Windows 上で動作している場合に非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>Len(S: str): int</code></td>
+<td><code>int</code></td>
+<td>文字列の長さを返します。</td>
+</tr>
+<tr>
+<td><code>LowerCase(S: str): str</code></td>
+<td><code>str</code></td>
+<td>文字列を小文字に変換して返します。</td>
+</tr>
+<tr>
+<td><code>Max(A: int, B: int): int</code></td>
+<td><code>int</code></td>
+<td>2 つの整数のうち大きい方を返します。</td>
+</tr>
+<tr>
+<td><code>Message(S: str)</code></td>
+<td><code>void</code></td>
+<td>コンパイラーログに情報メッセージを出力します。</td>
+</tr>
+<tr>
+<td><code>Min(A: int, B: int): int</code></td>
+<td><code>int</code></td>
+<td>2 つの整数のうち小さい方を返します。</td>
+</tr>
+<tr>
+<td><code>PackVersionComponents(Major: int, Minor: int, Revision: int, Build: int): int</code></td>
+<td><code>int</code></td>
+<td>バージョン構成要素を 1 つのパックされたバージョン番号にまとめます。</td>
+</tr>
+<tr>
+<td><code>PackVersionNumbers(VersionMS: int, VersionLS: int): int</code></td>
+<td><code>int</code></td>
+<td>上位/下位バージョンワードを 1 つのパックされたバージョン番号にまとめます。</td>
+</tr>
+<tr>
+<td><code>Pos(Substr: str, S: str): int</code></td>
+<td><code>int</code></td>
+<td>S 内の Substr の 1 始まりの位置を返します。なければ 0。</td>
+</tr>
+<tr>
+<td><code>Power(Base: int, Exponent: int): int</code></td>
+<td><code>int</code></td>
+<td>Base の Exponent 乗を返します。</td>
+</tr>
+<tr>
+<td><code>ReadIni(Filename: str, Section: str, Key: str, Default: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>コンパイル時に INI ファイルから値を読み取ります。</td>
+</tr>
+<tr>
+<td><code>ReadReg(RootKey: int, SubKeyName: str, ValueName: str = "", Default: str = ""): str</code></td>
+<td><code>str</code></td>
+<td>コンパイル時にレジストリ値を読み取ります。</td>
+</tr>
+<tr>
+<td><code>RemoveBackslashUnlessRoot(S: str): str</code></td>
+<td><code>str</code></td>
+<td>S がドライブのルートでない限り、末尾のバックスラッシュを削除します。</td>
+</tr>
+<tr>
+<td><code>RemoveFileExt(Filename: str): str</code></td>
+<td><code>str</code></td>
+<td>Filename から拡張子を除いて返します。</td>
+</tr>
+<tr>
+<td><code>RPos(Substr: str, S: str): int</code></td>
+<td><code>int</code></td>
+<td>S 内の Substr の最後の出現位置を 1 始まりで返します。なければ 0。</td>
+</tr>
+<tr>
+<td><code>SamePackedVersion(Version1: int, Version2: int): int</code></td>
+<td><code>int</code></td>
+<td>2 つのパックされたバージョン番号が等しければ非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>SameStr(S1: str, S2: str): int</code></td>
+<td><code>int</code></td>
+<td>2 つの文字列が等しければ（大文字小文字を無視）非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>SameText(S1: str, S2: str): int</code></td>
+<td><code>int</code></td>
+<td>2 つの文字列が等しければ（大文字小文字を無視）非ゼロを返します。</td>
+</tr>
+<tr>
+<td><code>SaveStringToFile(Filename: str, S: str, Append: int = 0)</code></td>
+<td><code>void</code></td>
+<td>文字列をファイルに書き込みます。任意で追記します。</td>
+</tr>
+<tr>
+<td><code>SaveToFile(Filename: str)</code></td>
+<td><code>void</code></td>
+<td>これまでに収集した前処理出力をファイルに書き込みます（デバッグ用）。</td>
+</tr>
+<tr>
+<td><code>SetSetupSetting(Name: str, Value: str)</code></td>
+<td><code>void</code></td>
+<td>コンパイル時に [Setup] セクションのディレクティブを設定します。</td>
+</tr>
+<tr>
+<td><code>SetupSetting(Name: str): str</code></td>
+<td><code>str</code></td>
+<td>名前で [Setup] セクションのディレクティブの値を返します。</td>
+</tr>
+<tr>
+<td><code>Str(Value: any): str</code></td>
+<td><code>str</code></td>
+<td>値を文字列に変換します。整数はテキストに、void は空文字列になります。</td>
+</tr>
+<tr>
+<td><code>StringChange(S: str*, FromStr: str, ToStr: str): int</code></td>
+<td><code>int</code></td>
+<td>S 内の FromStr をすべて ToStr に置換します。置換回数を返します。</td>
+</tr>
+<tr>
+<td><code>StrToVersion(S: str): int</code></td>
+<td><code>int</code></td>
+<td>ドット区切りのバージョン文字列をパックされたバージョン番号に解析します。</td>
+</tr>
+<tr>
+<td><code>Trim(S: str): str</code></td>
+<td><code>str</code></td>
+<td>S の先頭と末尾の空白を除いて返します。</td>
+</tr>
+<tr>
+<td><code>TypeOf(Ident): int</code></td>
+<td><code>int</code></td>
+<td>識別子の型を返します：0=void、1=int、2=str。</td>
+</tr>
+<tr>
+<td><code>UnpackVersionComponents(Version: int, Major: int*, Minor: int*, Revision: int*, Build: int*)</code></td>
+<td><code>void</code></td>
+<td>パックされたバージョン番号を参照構成要素に分割します。</td>
+</tr>
+<tr>
+<td><code>UnpackVersionNumbers(Version: int, VersionMS: int*, VersionLS: int*)</code></td>
+<td><code>void</code></td>
+<td>パックされたバージョン番号を参照する上位/下位ワードに分割します。</td>
+</tr>
+<tr>
+<td><code>UpperCase(S: str): str</code></td>
+<td><code>str</code></td>
+<td>文字列を大文字に変換して返します。</td>
+</tr>
+<tr>
+<td><code>VersionToStr(Version: int): str</code></td>
+<td><code>str</code></td>
+<td>パックされたバージョン番号をドット区切りのバージョン文字列に変換します。</td>
+</tr>
+<tr>
+<td><code>Warning(Message: str)</code></td>
+<td><code>void</code></td>
+<td>指定したメッセージでコンパイル時警告を発行します。</td>
+</tr>
+<tr>
+<td><code>WriteIni(Filename: str, Section: str, Key: str, Value: str)</code></td>
+<td><code>void</code></td>
+<td>コンパイル時に INI ファイルへ値を書き込みます。</td>
+</tr>
+<tr>
+<td><code>YesNo(S: str): int</code></td>
+<td><code>int</code></td>
+<td>文字列が肯定（yes/true）を表す場合に非ゼロを返します。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_9">定義済み変数</h2>
+<p>独自の <code>#define</code> に加えて、ISPP は宣言なしで使用できる<strong>定義済み変数</strong>のセットを提供します。<strong>値を持つ</strong>もの（<code>int</code> / <code>str</code>）は、ユーザー定義と同様に <code>{#…}</code> でインライン出力でき、式でも使用できます。<strong>値を持たない</strong>もの（<code>void</code>）は条件付きコンパイル専用です。以下のリストは完全です：</p>
+<table>
+<thead>
+<tr>
+<th>変数</th>
+<th>型</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__COUNTER__</code></td>
+<td><code>int</code></td>
+<td>自動増加カウンター。使用するたびに増加します。</td>
+</tr>
+<tr>
+<td><code>__LINE__</code></td>
+<td><code>int</code></td>
+<td>現在のファイル内の現在の行番号。</td>
+</tr>
+<tr>
+<td><code>__FILENAME__</code></td>
+<td><code>str</code></td>
+<td>現在のインクルードファイルパスのファイル名部分。</td>
+</tr>
+<tr>
+<td><code>__PATHFILENAME__</code></td>
+<td><code>str</code></td>
+<td>現在のインクルードファイルのフルパス。</td>
+</tr>
+<tr>
+<td><code>__DIR__</code></td>
+<td><code>str</code></td>
+<td>現在のインクルードファイルパスのディレクトリ部分。</td>
+</tr>
+<tr>
+<td><code>__INCLUDE__</code></td>
+<td><code>str</code></td>
+<td>現在のインクルードパス（複数のパスはセミコロンで区切られる）。</td>
+</tr>
+<tr>
+<td><code>__WIN32__</code></td>
+<td><code>void</code></td>
+<td>常に定義済み。#ifdef で ISPP 環境の検出に使用できます。</td>
+</tr>
+<tr>
+<td><code>ISPP_INVOKED</code></td>
+<td><code>void</code></td>
+<td>ISPP が有効なときは常に定義済み。</td>
+</tr>
+<tr>
+<td><code>ISCC_INVOKED</code></td>
+<td><code>void</code></td>
+<td>コンソールモードコンパイラー（ISCC.exe）でコンパイルする場合に定義済み。</td>
+</tr>
+<tr>
+<td><code>PREPROCVER</code></td>
+<td><code>int</code></td>
+<td>Inno Setup プリプロセッサーの 32 ビットパックバージョン番号。</td>
+</tr>
+<tr>
+<td><code>Ver</code></td>
+<td><code>int</code></td>
+<td>PREPROCVER の別名。</td>
+</tr>
+<tr>
+<td><code>WINDOWS</code></td>
+<td><code>void</code></td>
+<td>常に定義済み。</td>
+</tr>
+<tr>
+<td><code>UNICODE</code></td>
+<td><code>void</code></td>
+<td>常に定義済み（ISPP は Unicode 専用）。</td>
+</tr>
+<tr>
+<td><code>CompilerPath</code></td>
+<td><code>str</code></td>
+<td>Inno Setup コンパイラー（ISCC.exe）があるディレクトリ。</td>
+</tr>
+<tr>
+<td><code>SourcePath</code></td>
+<td><code>str</code></td>
+<td>ルートスクリプトファイルを含むディレクトリ。</td>
+</tr>
+<tr>
+<td><code>SysPath</code></td>
+<td><code>str</code></td>
+<td>コンパイラーの種類に応じたシステムディレクトリ。</td>
+</tr>
+<tr>
+<td><code>NewLine</code></td>
+<td><code>str</code></td>
+<td>改行文字シーケンス。</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td><code>str</code></td>
+<td>タブ文字。</td>
+</tr>
+</tbody>
+</table>
+<p>これらは <code>{#…}</code> 補完に表示され、検証で受け入れられます。パスに関連するもの（<code>{#SourcePath}</code>、<code>{#__DIR__}</code>、<code>{#CompilerPath}</code>、<code>{#SysPath}</code>）は、プラグインが <code>[Languages]</code> の <code>MessagesFile</code> パスを解決する際にも展開されます。残りの動的なものは、誤ったエラーを生成せずに未解決のままになります。</p>
+<div class="admonition note">
+<p class="admonition-title">値を持たないシンボル</p>
+<p><code>__WIN32__</code>、<code>ISPP_INVOKED</code>、<code>ISCC_INVOKED</code>、<code>WINDOWS</code>、<code>UNICODE</code> は<strong>値を持ちません</strong>。これらは条件付きコンパイル（<code>#ifdef</code> / <code>#if defined(...)</code>）のために<em>定義される</em>だけで、<code>{#…}</code> で出力<strong>できません</strong>。<code>{#…}</code> 補完から除外され、インライン出力として受け入れられません。</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": {"alias": true, "provider": "mike"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
