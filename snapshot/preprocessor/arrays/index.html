@@ -2132,32 +2132,66 @@
 contents. Arrays let you store an indexed list of values that you can iterate over with <a href="../for/"><code>#for</code></a>.</p>
 <hr />
 <h2 id="syntax">Syntax</h2>
-<pre><code class="language-ini">#dim Name[Size]
-#redim Name[NewSize]
+<pre><code class="language-ini">#dim [private | protected | public] Name[Size] [{ Init, Init, ... }]
+#redim [private | protected | public] Name[NewSize]
 </code></pre>
 <ul>
-<li><code>#dim</code> creates the array <code>Name</code> with the given number of elements.</li>
-<li><code>#redim</code> resizes a previously declared array; existing elements within the new bounds are preserved.</li>
+<li><code>Size</code> / <code>NewSize</code> are integer expressions (literals, other <code>#define</code>s, <code>DimOf(...)</code>, …).</li>
+<li><code>#dim</code> creates the array <code>Name</code> with that many elements; every element starts out <strong>void</strong> (empty).</li>
+<li>The optional <code>{ ... }</code> list initialises the leading elements in order (<code>{1, 2, 3}</code> fills indices <code>0</code>–<code>2</code>).</li>
+<li><code>#redim</code> resizes a previously declared array; existing elements within the new bounds are preserved and any
+  newly added elements are void.</li>
+<li>The optional scope keyword (<code>private</code> / <code>protected</code> / <code>public</code>) controls visibility, exactly as for
+  <a href="../define/"><code>#define</code></a>.</li>
 </ul>
 <hr />
 <h2 id="description">Description</h2>
-<p>Elements are addressed with <code>Name[Index]</code> and assigned with <a href="../define/"><code>#define</code></a>. A typical pattern fills
-an array and then walks it:</p>
+<p>Arrays are <strong>zero-based</strong>: an array of size <code>N</code> has valid indices <code>0 … N-1</code>. Elements are addressed with
+<code>Name[Index]</code> and assigned with <a href="../define/"><code>#define</code></a>. A typical pattern fills an array and then walks it:</p>
 <pre><code class="language-ini">#dim Servers[3]
 #define Servers[0] &quot;alpha&quot;
 #define Servers[1] &quot;beta&quot;
 #define Servers[2] &quot;gamma&quot;
 
-#for {i = 0; i &lt; 3; i++} \
+#for {i = 0; i &lt; DimOf(Servers); i++} \
   #pragma message Servers[i]
+</code></pre>
+<p>The same can be written more compactly with an inline initialiser:</p>
+<pre><code class="language-ini">#dim Servers[3] {&quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;}
+</code></pre>
+<p>Element values participate in expressions like any other value — they can be read, combined and even reference
+other macros:</p>
+<pre><code class="language-ini">#define Base 10
+#dim Offsets[2] {Base, Base + 5}
+#if Offsets[1] &gt; Offsets[0]
+  ; ...
+#endif
 </code></pre>
 <p>Use <code>#redim</code> when the number of elements is only known later, for example after counting items:</p>
 <pre><code class="language-ini">#redim Servers[5]   ; grow the array, keeping the first three values
 </code></pre>
+<p><code>DimOf(Name)</code> returns the current element count of an array.</p>
 <hr />
 <h2 id="editor-support">Editor support</h2>
-<p>Both directive keywords are highlighted, completed (after <code>#</code>) and validated against the bundled ISPP
-specification.</p>
+<ul>
+<li>The <code>#dim</code> / <code>#redim</code> keywords, scope keywords and array names are highlighted and validated against the
+  bundled ISPP specification; <code>[</code> and <code>]</code> are matched as a brace pair.</li>
+<li>Array names are offered in completion: after <code>#redim</code> (existing arrays) and inside any expression
+  (declared arrays, shown with a trailing <code>[]</code>).</li>
+<li><code>Name[Index]</code>, <code>#redim Name</code>, <code>#define Name[Index]</code> and <code>DimOf(Name)</code> all navigate (Ctrl/Cmd-click) and
+  rename together with their originating <code>#dim</code>.</li>
+<li>Element values can be statically evaluated across <code>#dim</code>/<code>#define</code> (e.g. for documentation popups).</li>
+</ul>
+<p>The following mistakes are reported as errors:</p>
+<ul>
+<li>indexing a name that is <strong>not</strong> an array (<code>Foo[0]</code> where <code>Foo</code> is a plain <code>#define</code>);</li>
+<li>using an array name <strong>without</strong> an index in an expression (<code>Servers</code> instead of <code>Servers[i]</code>);</li>
+<li>a <strong>non-integer</strong> array index or size;</li>
+<li><code>#redim</code> of an array that was never <code>#dim</code>-declared;</li>
+<li>an inline initialiser whose element count does not match the declared size;</li>
+<li>a statically <strong>out-of-bounds</strong> index (<code>#define Servers[9]</code> or <code>Servers[9]</code> on an array of size 3).</li>
+</ul>
+<p>Dynamic indices (e.g. a loop variable) are intentionally <strong>not</strong> flagged, to avoid false positives.</p>
 <hr />
 <p>See the official <a href="https://jrsoftware.org/ispphelp/topic_dim.htm"><code>#dim</code> / <code>#redim</code> documentation <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>.</p>
 

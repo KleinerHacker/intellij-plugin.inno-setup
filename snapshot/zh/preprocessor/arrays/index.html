@@ -2129,35 +2129,67 @@
 
 <h1 id="dim-redim"><code>#dim</code> / <code>#redim</code></h1>
 <p><code>#dim</code> 声明一个<strong>数组</strong>宏，<code>#redim</code> 在保留内容的同时更改现有数组的大小。数组让你存储一个带索引的值列表，
-可以用 <a href="../for/"><code>#for</code></a> 遍历。</p>
+可以用 <a href="../for/"><code>#for</code></a> 进行遍历。</p>
 <hr />
 <h2 id="_1">语法</h2>
-<pre><code class="language-ini">#dim Name[Size]
-#redim Name[NewSize]
+<pre><code class="language-ini">#dim [private | protected | public] Name[Size] [{ Init, Init, ... }]
+#redim [private | protected | public] Name[NewSize]
 </code></pre>
 <ul>
-<li><code>#dim</code> 以给定的元素数量创建数组 <code>Name</code>。</li>
-<li><code>#redim</code> 调整先前声明的数组的大小；新边界内的现有元素会被保留。</li>
+<li><code>Size</code> / <code>NewSize</code> 是整数表达式（字面量、其他 <code>#define</code>、<code>DimOf(...)</code> 等）。</li>
+<li><code>#dim</code> 以该元素数量创建数组 <code>Name</code>；每个元素初始为 <strong>void</strong>（空）。</li>
+<li>可选的 <code>{ ... }</code> 列表按顺序初始化前面的元素（<code>{1, 2, 3}</code> 填充索引 <code>0</code>–<code>2</code>）。</li>
+<li><code>#redim</code> 调整先前声明的数组大小；新范围内的现有元素被保留，新增元素为 void。</li>
+<li>可选的作用域关键字（<code>private</code> / <code>protected</code> / <code>public</code>）控制可见性，与 <a href="../define/"><code>#define</code></a> 相同。</li>
 </ul>
 <hr />
 <h2 id="_2">说明</h2>
-<p>元素通过 <code>Name[Index]</code> 寻址，并用 <a href="../define/"><code>#define</code></a> 赋值。典型模式是先填充数组再遍历它：</p>
+<p>数组是<strong>从零开始</strong>的：大小为 <code>N</code> 的数组有效索引为 <code>0 … N-1</code>。元素用 <code>Name[Index]</code> 寻址，并用
+<a href="../define/"><code>#define</code></a> 赋值。典型的模式是填充数组然后遍历：</p>
 <pre><code class="language-ini">#dim Servers[3]
 #define Servers[0] &quot;alpha&quot;
 #define Servers[1] &quot;beta&quot;
 #define Servers[2] &quot;gamma&quot;
 
-#for {i = 0; i &lt; 3; i++} \
+#for {i = 0; i &lt; DimOf(Servers); i++} \
   #pragma message Servers[i]
 </code></pre>
-<p>当元素数量只有稍后才能确定时（例如在计数项目之后），使用 <code>#redim</code>：</p>
-<pre><code class="language-ini">#redim Servers[5]   ; 扩大数组，保留前三个值
+<p>使用内联初始化器可以写得更简洁：</p>
+<pre><code class="language-ini">#dim Servers[3] {&quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;}
 </code></pre>
+<p>元素值像其他值一样参与表达式——可以读取、组合，甚至引用其他宏：</p>
+<pre><code class="language-ini">#define Base 10
+#dim Offsets[2] {Base, Base + 5}
+#if Offsets[1] &gt; Offsets[0]
+  ; ...
+#endif
+</code></pre>
+<p>当元素数量只有稍后才知道时（例如在统计项数之后），使用 <code>#redim</code>：</p>
+<pre><code class="language-ini">#redim Servers[5]   ; 扩展数组，保留前三个值
+</code></pre>
+<p><code>DimOf(Name)</code> 返回数组的当前元素数量。</p>
 <hr />
 <h2 id="_3">编辑器支持</h2>
-<p>两个指令关键字都会被高亮、补全（<code>#</code> 之后）并根据内置 ISPP 规范验证。</p>
+<ul>
+<li><code>#dim</code> / <code>#redim</code> 关键字、作用域关键字和数组名会被高亮并根据内置的 ISPP 规范进行校验；<code>[</code> 和 <code>]</code> 作为
+  括号对进行匹配。</li>
+<li>数组名在补全中提供：在 <code>#redim</code> 之后（现有数组）以及任意表达式中（已声明的数组，带尾随 <code>[]</code>）。</li>
+<li><code>Name[Index]</code>、<code>#redim Name</code>、<code>#define Name[Index]</code> 和 <code>DimOf(Name)</code> 都会与其来源 <code>#dim</code> 一起导航
+  （Ctrl/Cmd-单击）和重命名。</li>
+<li>元素值可以跨 <code>#dim</code>/<code>#define</code> 进行静态求值（例如用于文档弹窗）。</li>
+</ul>
+<p>以下错误会被报告：</p>
+<ul>
+<li>对<strong>非数组</strong>名称建立索引（<code>Foo</code> 是普通 <code>#define</code> 时的 <code>Foo[0]</code>）；</li>
+<li>在表达式中<strong>不带</strong>索引使用数组名（用 <code>Servers</code> 而非 <code>Servers[i]</code>）；</li>
+<li><strong>非整数</strong>的数组索引或大小；</li>
+<li>对从未 <code>#dim</code> 声明的数组使用 <code>#redim</code>；</li>
+<li>内联初始化器的元素数量与声明的大小不一致；</li>
+<li>静态<strong>越界</strong>索引（大小为 3 的数组上的 <code>#define Servers[9]</code> 或 <code>Servers[9]</code>）。</li>
+</ul>
+<p>动态索引（例如循环变量）有意<strong>不</strong>标记，以避免误报。</p>
 <hr />
-<p>参阅官方 <a href="https://jrsoftware.org/ispphelp/topic_dim.htm"><code>#dim</code> / <code>#redim</code> 文档 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>。</p>
+<p>参见官方 <a href="https://jrsoftware.org/ispphelp/topic_dim.htm"><code>#dim</code> / <code>#redim</code> 文档 <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2m6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.75.75 0 0 1-1.042-.018.75.75 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1"/></svg></span></a>。</p>
 
 
 
