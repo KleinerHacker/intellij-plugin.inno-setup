@@ -302,7 +302,10 @@ tasks {
         val setLatest = (project.findProperty("setLatest") as String?) != "false"
         val args = buildList {
             add("python"); add("-c"); add("from mike.driver import main; main()"); add("deploy"); add("--push")
-            if (setLatest) { add("--update-aliases"); add(ver); add("latest") } else add(ver)
+            // Materialise the 'latest' alias as a full copy, not mike's default symlink:
+            // GitHub Pages does not resolve git symlinks reliably, and the gh-pages root
+            // redirect points at latest/, so it must be a real directory.
+            if (setLatest) { add("--alias-type"); add("copy"); add("--update-aliases"); add(ver); add("latest") } else add(ver)
         }
         commandLine(args)
         withMikePath()
