@@ -110,6 +110,13 @@
     <depends>com.intellij.modules.lang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Build output: dedicated tool-window console + balloon notifications (public APIs, no internal Build view) -->
+        <toolWindow id="Inno Setup"
+                    anchor="bottom"
+                    canCloseContents="false"
+                    factoryClass="org.pcsoft.intellij.plugin.inno_setup.build.IsBuildToolWindowFactory"/>
+        <notificationGroup id="Inno Setup" displayType="BALLOON"/>
+
         <!-- File type -->
         <fileType name="Inno Setup Script"
                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"

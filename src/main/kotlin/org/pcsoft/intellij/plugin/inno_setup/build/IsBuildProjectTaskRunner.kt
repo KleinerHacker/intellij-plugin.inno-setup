@@ -31,8 +31,10 @@ import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
  */
 class IsBuildProjectTaskRunner : ProjectTaskRunner() {
 
-    // Obsolete project-less overload: cannot evaluate the project-specific toggle, so opt out here
-    // and rely on the project-aware canRun below (which the platform actually calls).
+    // Obsolete project-less overload: still abstract on the 253 baseline we compile against, so the
+    // override is mandatory. Opt out here and rely on the project-aware canRun below (which the
+    // platform actually calls). Scheduled for removal in newer platforms.
+    @Suppress("OVERRIDE_DEPRECATION")
     override fun canRun(projectTask: ProjectTask): Boolean = false
 
     /**

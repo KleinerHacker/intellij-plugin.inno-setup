@@ -12,11 +12,6 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
-import com.intellij.build.events.MessageEvent
-import com.intellij.build.events.impl.FileMessageEventImpl
-import com.intellij.build.events.impl.MessageEventImpl
-import com.intellij.build.events.impl.OutputBuildEventImpl
-import com.intellij.execution.process.ProcessOutputType
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileDocumentManager
@@ -27,21 +22,9 @@ import java.io.File
 
 /**
  * Tests [IsCompilerService] behaviour that does not require a real ISCC process: command-line
- * assembly, build-event construction, document saving, and graceful failure when unconfigured.
+ * assembly, document saving, and graceful failure when unconfigured.
  */
 class IsCompilerServiceTest : BasePlatformTestCase() {
-
-    private val group = "Inno Setup"
-
-    private fun problem(warning: Boolean = false, withPos: Boolean = true) =
-        IsBuildOutputParser.Line.Problem(
-            message = "Unknown directive",
-            detail = "Error on line 5 in a.iss: Unknown directive",
-            file = if (withPos) "a.iss" else null,
-            line = if (withPos) 4 else null,
-            column = null,
-            warning = warning
-        )
 
     // ── command line ─────────────────────────────────────────────────────────────
 
@@ -54,39 +37,6 @@ class IsCompilerServiceTest : BasePlatformTestCase() {
     fun testCommandLineWithOutputArgComesFirst() {
         val cmd = IsCompilerService.buildCommandLine(File("ISCC.exe"), "setup.iss", null, "/O-")
         assertEquals(listOf("/O-", "setup.iss"), cmd.parametersList.parameters)
-    }
-
-    // ── problemEvents ────────────────────────────────────────────────────────────
-
-    fun testProblemEventsWithFileEmitsNavigableMessageAndOutput() {
-        val p = problem()
-        val events = IsCompilerService.problemEvents("id", group, p, File(p.file!!))
-        assertEquals(2, events.size)
-
-        val output = events[0] as OutputBuildEventImpl
-        assertEquals(p.detail + "\n", output.message)
-        assertEquals("errors go to stderr", ProcessOutputType.STDERR, output.outputType)
-
-        val msg = events[1] as FileMessageEventImpl
-        assertEquals("tree node shows the error text", p.message, msg.message)
-        assertEquals("console shows the full raw line", p.detail, msg.description)
-        assertEquals(MessageEvent.Kind.ERROR, msg.kind)
-    }
-
-    fun testProblemEventsWithoutFileEmitsPositionlessMessage() {
-        val p = problem(withPos = false)
-        val events = IsCompilerService.problemEvents("id", group, p, null)
-        assertTrue(events[0] is OutputBuildEventImpl)
-        val msg = events[1] as MessageEventImpl
-        assertEquals(p.message, msg.message)
-        assertEquals(p.detail, msg.description)
-    }
-
-    fun testProblemEventsWarningUsesWarningKindAndStdout() {
-        val p = problem(warning = true)
-        val events = IsCompilerService.problemEvents("id", group, p, File(p.file!!))
-        assertEquals(ProcessOutputType.STDOUT, (events[0] as OutputBuildEventImpl).outputType)
-        assertEquals(MessageEvent.Kind.WARNING, (events[1] as FileMessageEventImpl).kind)
     }
 
     // ── document saving & graceful failure ───────────────────────────────────────

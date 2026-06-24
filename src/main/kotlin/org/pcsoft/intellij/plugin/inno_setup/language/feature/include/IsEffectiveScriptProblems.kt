@@ -61,7 +61,7 @@ object IsEffectiveScriptProblems {
 
     /** Replays [IsSectionAnnotator] over every element of [effective] except the file node itself. */
     private fun collectSectionProblems(effective: IsScriptFile): List<RecordedProblem> {
-        val holder = RecordingAnnotationHolder(effective)
+        val holder = RecordingAnnotationHolder()
         val annotator = IsSectionAnnotator()
         // The file-level element triggers mandatory-section/effective-script checks that don't belong here (and
         // would recurse into the effective machinery); its problems are file-level and dropped anyway — skip it.
@@ -84,7 +84,7 @@ object IsEffectiveScriptProblems {
         PsiTreeUtil.getChildrenOfTypeAsList(effective, IsSectionPreprocessorLine::class.java).forEach { line ->
             injMgr.enumerate(line) { injectedPsi, _ ->
                 if (injectedPsi !is IsPreprocessorFile) return@enumerate
-                val holder = RecordingAnnotationHolder(injectedPsi)
+                val holder = RecordingAnnotationHolder()
                 PsiTreeUtil.processElements(injectedPsi) { element ->
                     safeAnnotate { annotator.annotate(element, holder) }
                     true

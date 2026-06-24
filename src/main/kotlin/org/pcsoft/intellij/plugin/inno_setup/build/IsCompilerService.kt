@@ -10,19 +10,15 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-@file:Suppress("UnstableApiUsage")
-
 package org.pcsoft.intellij.plugin.inno_setup.build
 
-import com.intellij.build.BuildDescriptor
-import com.intellij.build.BuildViewManager
-import com.intellij.build.DefaultBuildDescriptor
-import com.intellij.build.FilePosition
-import com.intellij.build.events.*
-import com.intellij.build.events.impl.FailureResultImpl
-import com.intellij.build.events.impl.SuccessResultImpl
 import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.execution.process.*
+import com.intellij.execution.process.OSProcessHandler
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
+import com.intellij.execution.process.ProcessOutputTypes
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
@@ -43,14 +39,17 @@ import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import java.io.File
 
 /**
- * Compiles Inno Setup scripts with ISCC and streams the output into the IDE Build tool window as a
- * dedicated "Inno Setup" build session. Shared by the project-build hook ([compileProject]) and the
- * per-file context-menu action ([compileScript]).
+ * Compiles Inno Setup scripts with ISCC and streams the output into the dedicated "Inno Setup" tool window
+ * console ([IsBuildConsoleService]), reporting the final result as a balloon notification. Shared by the
+ * project-build hook ([compileProject]) and the per-file context-menu action ([compileScript]).
+ *
+ * Uses only public platform APIs (console view, notifications) — deliberately not the internal Build
+ * tool-window/event APIs.
  */
 @Service(Service.Level.PROJECT)
 class IsCompilerService(private val project: Project) {
 
-    private val group = "Inno Setup"
+    private val group = IS_BUILD_TOOL_WINDOW_ID
 
     /**
      * Compiles all top-level scripts in the project. Blocking — intended to be called off the EDT
@@ -92,8 +91,8 @@ class IsCompilerService(private val project: Project) {
      * [IsBuildOutputMode.DRY] (which on its own suppresses output). The rebuild decision stays with
      * the build: the compile is skipped only when the participating files are unchanged since the
      * last successful build to the same output *and* [hasArtifact] reports the produced installer is
-     * still present. Blocking — intended to be called off the EDT. Streams to the Build tool window
-     * and returns the aggregate task-runner result.
+     * still present. Blocking — intended to be called off the EDT. Streams to the build console and
+     * returns the aggregate task-runner result.
      */
     fun compileScriptForRun(
         scriptFile: VirtualFile,
@@ -127,33 +126,23 @@ class IsCompilerService(private val project: Project) {
             FileDocumentManager.getInstance().saveAllDocuments()
         }
 
-        val buildId = Any()
-        val view = project.service<BuildViewManager>()
-        val now = System.currentTimeMillis()
-        val descriptor = DefaultBuildDescriptor(buildId, group, project.basePath ?: ".", now)
-            .withExecutionFilter(IsBuildOutputFilter(project))
-        view.onEvent(buildId, startBuildEvent(descriptor, "$group: $title"))
+        val consoleService = project.service<IsBuildConsoleService>()
+        val console = consoleService.start()
+        consoleService.print(console, "$group: $title\n", error = false)
 
         var hasErrors = false
-        var firstError: Pair<VirtualFile, FilePosition>? = null
+        var firstError: ErrorLocation? = null
 
         val iscc = isccExecutable()
         if (iscc == null) {
-            view.onEvent(
-                buildId,
-                messageEvent(
-                    buildId, MessageEvent.Kind.ERROR, group,
-                    PluginBundle.message("build.not_configured.title"),
-                    PluginBundle.message("build.not_configured.detail")
-                )
-            )
-            view.onEvent(buildId, finishBuildEvent(buildId, System.currentTimeMillis(), PluginBundle.message("build.finish.failed"), FailureResultImpl()))
+            consoleService.print(console, PluginBundle.message("build.not_configured.detail") + "\n", error = true)
+            notify(PluginBundle.message("build.not_configured.title"), NotificationType.ERROR)
             openSettings()
             return TaskRunnerResults.FAILURE
         }
 
         if (scripts.isEmpty()) {
-            view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.no_scripts") + "\n", true))
+            consoleService.print(console, PluginBundle.message("build.no_scripts") + "\n", error = false)
         }
 
         val resolver = IsBuildOutputResolver(project)
@@ -168,15 +157,12 @@ class IsCompilerService(private val project: Project) {
             val scriptKey = hashKey(script.path, outputArg)
             val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
             if (!force && buildHashes[scriptKey] == currentHash && artifactPresent(script)) {
-                view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.up_to_date", script.name) + "\n", true))
+                consoleService.print(console, PluginBundle.message("build.up_to_date", script.name) + "\n", error = false)
                 continue
             }
 
-            view.onEvent(buildId, outputEvent(buildId, PluginBundle.message("build.compiling", script.name) + "\n", true))
+            consoleService.print(console, PluginBundle.message("build.compiling", script.name) + "\n", error = false)
             val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg)
-
-            // Groups consecutive output lines per section into a Build-tree message node.
-            val grouper = IsBuildOutputGrouper { section -> emitSection(view, buildId, section) }
 
             try {
                 val handler = OSProcessHandler(commandLine)
@@ -186,23 +172,17 @@ class IsCompilerService(private val project: Project) {
                         for (rawLine in event.text.split('\n')) {
                             if (rawLine.isBlank()) continue
                             when (val parsed = IsBuildOutputParser.parseLine(rawLine)) {
-                                is IsBuildOutputParser.Line.Output -> {
-                                    // Full log in the root console (indented lines folded by the
-                                    // console-folding); per-section nodes are added on flush.
-                                    view.onEvent(buildId, outputEvent(buildId, parsed.text + "\n", stdout))
-                                    grouper.accept(parsed.text)
-                                }
+                                is IsBuildOutputParser.Line.Output ->
+                                    consoleService.print(console, parsed.text + "\n", error = !stdout)
 
                                 is IsBuildOutputParser.Line.Problem -> {
-                                    // Keep diagnostics in order relative to grouped output and emit
-                                    // them live (navigable) at the build root.
-                                    grouper.flush()
                                     if (!parsed.warning) hasErrors = true
+                                    // Print the raw problem line; IsBuildOutputFilter turns its "line XX"
+                                    // token into a navigable hyperlink.
+                                    consoleService.print(console, parsed.detail + "\n", error = !parsed.warning)
                                     val vFile = parsed.file?.let { resolvePath(it) }
-                                    problemEvents(buildId, group, parsed, vFile?.let { File(it.path) })
-                                        .forEach { view.onEvent(buildId, it) }
                                     if (!parsed.warning && firstError == null && vFile != null && parsed.line != null) {
-                                        firstError = vFile to FilePosition(File(vFile.path), parsed.line, parsed.column ?: 0)
+                                        firstError = ErrorLocation(vFile, parsed.line, parsed.column ?: 0)
                                     }
                                 }
                             }
@@ -211,51 +191,41 @@ class IsCompilerService(private val project: Project) {
                 })
                 handler.startNotify()
                 handler.waitFor()
-                grouper.flush()
                 if (handler.exitCode != 0) hasErrors = true
                 else buildHashes[scriptKey] = currentHash
             } catch (e: Exception) {
                 thisLogger().warn("Failed to run ISCC for ${script.path}", e)
                 hasErrors = true
-                view.onEvent(
-                    buildId,
-                    messageEvent(buildId, MessageEvent.Kind.ERROR, group, PluginBundle.message("build.run_failed", e.message ?: ""), null)
-                )
+                consoleService.print(console, PluginBundle.message("build.run_failed", e.message ?: "") + "\n", error = true)
             }
         }
 
-        firstError?.let { (vFile, pos) -> navigateTo(vFile, pos) }
+        firstError?.let { navigateTo(it) }
 
-        val result = if (hasErrors) FailureResultImpl() else SuccessResultImpl()
-        view.onEvent(
-            buildId,
-            finishBuildEvent(
-                buildId, System.currentTimeMillis(),
-                if (hasErrors) PluginBundle.message("build.finish.failed") else PluginBundle.message("build.finish.success"),
-                result
-            )
-        )
+        if (hasErrors) {
+            consoleService.print(console, PluginBundle.message("build.finish.failed") + "\n", error = true)
+            notify(PluginBundle.message("build.finish.failed"), NotificationType.ERROR)
+        } else {
+            consoleService.print(console, PluginBundle.message("build.finish.success") + "\n", error = false)
+            notify(PluginBundle.message("build.finish.success"), NotificationType.INFORMATION)
+        }
         return if (hasErrors) TaskRunnerResults.FAILURE else TaskRunnerResults.SUCCESS
     }
 
-    /**
-     * Emits a completed [section][IsBuildOutputGrouper.OutputSection] as a Build-tree node. A
-     * [MessageEvent] is always shown regardless of the overall build status; its severity reflects
-     * whether the section's lines mention an error or warning (otherwise [MessageEvent.Kind.INFO]).
-     * The section's raw lines become the node's detail.
-     */
-    private fun emitSection(view: BuildViewManager, buildId: Any, section: IsBuildOutputGrouper.OutputSection) {
-        view.onEvent(
-            buildId,
-            messageEvent(buildId, severityOf(section.lines), group, section.title, section.lines.joinToString("\n"))
-        )
-    }
+    /** A navigable error position in a source file (0-based line/column). */
+    private data class ErrorLocation(val file: VirtualFile, val line: Int, val column: Int)
 
-    /** Picks the node severity from the section's content: ERROR wins over WARNING over INFO. */
-    private fun severityOf(lines: List<String>): MessageEvent.Kind = when {
-        lines.any { it.contains("error", ignoreCase = true) } -> MessageEvent.Kind.ERROR
-        lines.any { it.contains("warning", ignoreCase = true) } -> MessageEvent.Kind.WARNING
-        else -> MessageEvent.Kind.INFO
+    /** Shows a balloon notification in the "Inno Setup" group (no-op in headless/unit-test mode). */
+    private fun notify(message: String, type: NotificationType) {
+        val application = ApplicationManager.getApplication()
+        if (application.isUnitTestMode || application.isHeadlessEnvironment) return
+        application.invokeLater {
+            if (project.isDisposed) return@invokeLater
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup(group)
+                .createNotification(message, type)
+                .notify(project)
+        }
     }
 
     private fun openSettings() {
@@ -282,43 +252,15 @@ class IsCompilerService(private val project: Project) {
     private fun resolvePath(path: String): VirtualFile? =
         LocalFileSystem.getInstance().findFileByPath(path.replace('\\', '/'))
 
-    private fun navigateTo(file: VirtualFile, pos: FilePosition) {
+    private fun navigateTo(location: ErrorLocation) {
         ApplicationManager.getApplication().invokeLater {
-            if (project.isDisposed || !file.isValid) return@invokeLater
-            OpenFileDescriptor(project, file, pos.startLine.coerceAtLeast(0), pos.startColumn.coerceAtLeast(0))
+            if (project.isDisposed || !location.file.isValid) return@invokeLater
+            OpenFileDescriptor(project, location.file, location.line.coerceAtLeast(0), location.column.coerceAtLeast(0))
                 .navigate(true)
         }
     }
 
     companion object {
-        /**
-         * Builds the Build-window events for a single ISCC problem line. Pure (no project/VFS), so it
-         * is unit-testable. Returns, in order:
-         *  1. an [OutputBuildEvent] carrying the full raw line — keeps the text in the root
-         *     overview console (stderr for errors, stdout for warnings);
-         *  2. a [FileMessageEvent] (navigable, with [FilePosition]) when [resolvedFile] and the
-         *     line number are known, otherwise a positionless [MessageEvent].
-         * Both message events use the short error text as title and the full raw line as detail.
-         */
-        fun problemEvents(
-            buildId: Any,
-            group: String,
-            parsed: IsBuildOutputParser.Line.Problem,
-            resolvedFile: File?
-        ): List<BuildEvent> {
-            val kind = if (parsed.warning) MessageEvent.Kind.WARNING else MessageEvent.Kind.ERROR
-            val output = outputEvent(buildId, parsed.detail + "\n", parsed.warning)
-            val message: BuildEvent = if (resolvedFile != null && parsed.line != null) {
-                fileMessageEvent(
-                    buildId, kind, group, parsed.message, parsed.detail,
-                    FilePosition(resolvedFile, parsed.line, parsed.column ?: 0)
-                )
-            } else {
-                messageEvent(buildId, kind, group, parsed.message, parsed.detail)
-            }
-            return listOf(output, message)
-        }
-
         /**
          * Builds the ISCC command line. Pure with respect to IntelliJ project state so it can be
          * unit-tested: the script path, optional working directory and optional `/O…` argument are
@@ -336,65 +278,5 @@ class IsCompilerService(private val project: Project) {
             if (workDir != null) cmd.withWorkDirectory(workDir)
             return cmd
         }
-
-        // ── Build-event factories ────────────────────────────────────────────────────
-        // Created via the stable BuildEvents factory + builder API instead of the now-internal,
-        // deprecated com.intellij.build.events.impl.*Impl constructors.
-
-        private fun buildEvents(): BuildEvents = BuildEvents.getInstance()
-
-        private fun startBuildEvent(descriptor: BuildDescriptor, message: String): StartBuildEvent =
-            buildEvents().startBuild()
-                .withBuildDescriptor(descriptor)
-                .withMessage(message)
-                .build()
-
-        private fun finishBuildEvent(buildId: Any, time: Long, message: String, result: EventResult): FinishBuildEvent =
-            buildEvents().finishBuild()
-                .withStartBuildId(buildId)
-                .withTime(time)
-                .withMessage(message)
-                .withResult(result)
-                .build()
-
-        /** [stdOut] keeps the text on stdout (warnings/info), otherwise it is routed to stderr (errors). */
-        private fun outputEvent(parentId: Any, message: String, stdOut: Boolean): OutputBuildEvent =
-            buildEvents().output()
-                .withParentId(parentId)
-                .withMessage(message)
-                .withOutputType(if (stdOut) ProcessOutputType.STDOUT else ProcessOutputType.STDERR)
-                .build()
-
-        private fun messageEvent(
-            parentId: Any,
-            kind: MessageEvent.Kind,
-            group: String,
-            message: String,
-            detail: String?
-        ): MessageEvent =
-            buildEvents().message()
-                .withParentId(parentId)
-                .withKind(kind)
-                .withGroup(group)
-                .withMessage(message)
-                .also { if (detail != null) it.withDescription(detail) }
-                .build()
-
-        private fun fileMessageEvent(
-            parentId: Any,
-            kind: MessageEvent.Kind,
-            group: String,
-            message: String,
-            detail: String,
-            position: FilePosition
-        ): FileMessageEvent =
-            buildEvents().fileMessage()
-                .withParentId(parentId)
-                .withKind(kind)
-                .withGroup(group)
-                .withMessage(message)
-                .withDescription(detail)
-                .withFilePosition(position)
-                .build()
     }
 }

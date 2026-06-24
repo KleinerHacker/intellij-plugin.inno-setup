@@ -28,6 +28,13 @@ class IsScriptFileType : LanguageFileType(IsScriptLanguage) {
      * Returns the logical name exposed by this PSI element.
      */
     override fun getName() = "Inno Setup Script"
+
+    /**
+     * User-visible presentation name (Settings ▸ Editor ▸ File Types). Must be unique across file types
+     * that share the same language; the platform (since 2026.1) rejects duplicate display names.
+     */
+    override fun getDisplayName() = "Inno Setup Script"
+
     /**
      * Returns user-visible presentation text for this IntelliJ extension.
      */

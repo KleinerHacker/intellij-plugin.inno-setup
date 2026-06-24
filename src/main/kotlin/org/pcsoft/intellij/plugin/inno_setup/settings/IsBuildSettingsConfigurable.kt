@@ -52,7 +52,7 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         val compileCheck = JBCheckBox("Compile .iss files on project build")
         compileOnBuildCheck = compileCheck
         val outputCombo = ComboBox(DefaultComboBoxModel(IsBuildOutputMode.entries.toTypedArray()))
-        outputCombo.renderer = SimpleListCellRenderer.create("") { it.label }
+        outputCombo.renderer = SimpleListCellRenderer.create { label, value, _ -> label.text = value?.label ?: "" }
         outputModeCombo = outputCombo
 
         // The output mode only matters when compilation on build is enabled.
