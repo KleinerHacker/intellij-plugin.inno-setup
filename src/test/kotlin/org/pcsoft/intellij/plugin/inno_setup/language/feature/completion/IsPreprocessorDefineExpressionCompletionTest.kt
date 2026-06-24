@@ -17,7 +17,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
- * Tests for the `#define` expression completion ([IsPreprocessorDefineExpressionProvider]): inside the
+ * Tests for the `#define` expression completion ([org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider]): inside the
  * value of a `#define`, earlier `#define` names and the predefined ISPP variables are offered.
  */
 class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
@@ -98,6 +98,41 @@ class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
         val presentation = presentationOf(content, "First")
         assertNotNull("Expected a lookup element for 'First'", presentation)
         assertEquals("A plain value define must be typed as a define", "define", presentation!!.typeText)
+    }
+
+    fun testSuggestionsInsideArrayElementIndex() {
+        // The `[Index]` of an array element assignment is an expression — references must be offered inside it.
+        val variants = expressionLookup(
+            "#define First 1\n#dim Arr[3]\n#define Arr[<caret>]\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered inside an array index, was: $variants", "First" in variants)
+        assertTrue("Predefined variable must be offered inside an array index, was: $variants", "PREPROCVER" in variants)
+    }
+
+    fun testSuggestionsInArrayElementValue() {
+        // The value after `#define Name[0]` is an expression — references must be offered there.
+        val variants = expressionLookup(
+            "#define First 1\n#dim Arr[3]\n#define Arr[0] <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered as an array element value, was: $variants", "First" in variants)
+        assertTrue("Predefined variable must be offered as an array element value, was: $variants", "PREPROCVER" in variants)
+    }
+
+    fun testSuggestionsInDimInitializer() {
+        // Each element of a `#dim Name[Size] { … }` inline initialiser is an expression — references apply.
+        val variants = expressionLookup(
+            "#define First 1\n#dim Arr[3] { <caret> }\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered in a #dim initializer, was: $variants", "First" in variants)
+        assertTrue("Predefined variable must be offered in a #dim initializer, was: $variants", "PREPROCVER" in variants)
+    }
+
+    fun testSuggestionsAfterDimSizeBeforeBrace() {
+        // Right after `#dim Name[Size]` (before the `{` of the initialiser is typed) references must still come.
+        val variants = expressionLookup(
+            "#define First 1\n#dim Arr[3] <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Preceding define must be offered after a #dim size, was: $variants", "First" in variants)
     }
 
     // ── #if / #elif condition is an expression context ────────────────────────

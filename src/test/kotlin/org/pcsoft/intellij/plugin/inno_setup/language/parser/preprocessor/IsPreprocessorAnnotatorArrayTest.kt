@@ -126,6 +126,31 @@ class IsPreprocessorAnnotatorArrayTest : BasePlatformTestCase() {
         assertTrue("A zero/negative size must error", errors.isNotEmpty())
     }
 
+    fun testUndefOfDimArrayProducesError() {
+        val errors = errorsContaining("#dim A[3]\n#undef A\n$setupTail", "#undef cannot be applied")
+        assertTrue("A #undef of a #dim array must error", errors.isNotEmpty())
+    }
+
+    fun testEmptyElementIndexProducesError() {
+        val errors = errorsContaining("#dim A[3]\n#define A[] 1\n$setupTail", "index is required")
+        assertTrue("An empty element index '[]' must error", errors.isNotEmpty())
+    }
+
+    fun testElementAssignmentWithoutValueProducesError() {
+        val errors = errorsContaining("#dim A[3]\n#define A[0]\n$setupTail", "requires a value")
+        assertTrue("An array element assignment without a value must error", errors.isNotEmpty())
+    }
+
+    fun testEmptySizeProducesError() {
+        val errors = errorsContaining("#dim A[]\n$setupTail", "requires a size")
+        assertTrue("An empty '[]' size must error", errors.isNotEmpty())
+    }
+
+    fun testBlankSizeProducesError() {
+        val errors = errorsContaining("#dim A[  ]\n$setupTail", "requires a size")
+        assertTrue("A blank '[ ]' size must error", errors.isNotEmpty())
+    }
+
     fun testInitializerCountMismatchProducesError() {
         val errors = errorsContaining("#dim A[3] {1, 2}\n$setupTail", "initializer")
         assertTrue("An initialiser count not matching the size must error", errors.isNotEmpty())

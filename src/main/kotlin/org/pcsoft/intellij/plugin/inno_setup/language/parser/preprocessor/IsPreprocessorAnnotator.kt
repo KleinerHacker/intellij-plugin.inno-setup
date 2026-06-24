@@ -239,21 +239,33 @@ class IsPreprocessorAnnotator : Annotator {
         }
 
         // Resolve against a preceding #define (declaration-order aware, via the directive's reference).
-        val resolved = directive.references
+        val resolvedTarget = directive.references
             .filterIsInstance<IsPreprocessorExpressionReference>()
-            .any { it.resolve() != null }
+            .firstNotNullOfOrNull { it.resolve() }
 
-        if (resolved) {
-            highlight(nameIdentifier.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
-        } else {
-            holder.newAnnotation(
-                HighlightSeverity.WEAK_WARNING,
-                "#undef '${nameIdentifier.text}' has no matching #define"
-            )
-                .range(nameIdentifier.textRange)
-                .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
-                .withFix(RemoveUselessUndefQuickFix(directive))
-                .create()
+        when {
+            // An array declared with #dim/#redim is not a plain macro and cannot be removed with #undef.
+            (resolvedTarget as? IsPreprocessorDirectiveEx)?.isDim() == true -> {
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "#undef cannot be applied to the #dim array '${nameIdentifier.text}'"
+                ).range(nameIdentifier.textRange).create()
+            }
+
+            resolvedTarget != null -> {
+                highlight(nameIdentifier.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+            }
+
+            else -> {
+                holder.newAnnotation(
+                    HighlightSeverity.WEAK_WARNING,
+                    "#undef '${nameIdentifier.text}' has no matching #define"
+                )
+                    .range(nameIdentifier.textRange)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNUSED)
+                    .withFix(RemoveUselessUndefQuickFix(directive))
+                    .create()
+            }
         }
     }
 
@@ -749,7 +761,7 @@ class IsPreprocessorAnnotator : Annotator {
 
     /**
      * Validates a `#dim`/`#redim` array declaration: highlights the optional scope keyword and the array name,
-     * rejects a reserved/digit-leading name, requires and type-checks the `[Size]` expression (integer, positive
+     * rejects a reserved/digit-leading name, requires and type-checks the `\[Size]` expression (integer, positive
      * when static), requires a preceding `#dim` for a `#redim`, and validates an optional inline initialiser
      * (each element expression plus a count-vs-size check).
      */
@@ -795,7 +807,7 @@ class IsPreprocessorAnnotator : Annotator {
 
         val sizeText = ex.getArraySizeText()
         val sizeOffset = ex.getArraySizeOffsetInDirective()
-        if (sizeText == null || sizeOffset < 0) {
+        if (sizeText == null || sizeText.isBlank() || sizeOffset < 0) {
             holder.newAnnotation(HighlightSeverity.ERROR, "#$keyword requires a size in '[…]'")
                 .range(directive.textRange).create()
             return
@@ -842,7 +854,7 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /**
-     * Validates an array element assignment `#define Name[Index] Value`: the name must resolve to a `#dim`, the
+     * Validates an array element assignment `#define Name\[Index] Value`: the name must resolve to a `#dim`, the
      * index must be an integer (and in bounds when both index and size are static constants), and the value is
      * type-checked like any `#define` expression.
      */
@@ -871,7 +883,10 @@ class IsPreprocessorAnnotator : Annotator {
         highlight(nameRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
 
         val indexText = ex.getDefineArrayIndexText()
-        if (indexText != null && idxOffset >= 0) {
+        if (indexText.isNullOrBlank() || idxOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "An array index is required in '[…]'")
+                .range(nameRange).create()
+        } else {
             val indexBase = base + idxOffset
             val indexRange = TextRange(indexBase, indexBase + indexText.length)
             val indexType = validateExpr(directive, indexText, idxOffset, hostFile, holder)
@@ -889,9 +904,13 @@ class IsPreprocessorAnnotator : Annotator {
             }
         }
 
+        // An array element assignment requires a value — unlike a plain `#define X` which may be valueless.
         val valueText = ex.getDefineExpressionText()
         val valueOffset = ex.getDefineExpressionOffsetInDirective()
-        if (valueText != null && valueOffset >= 0) {
+        if (valueText == null || valueOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "An array element assignment requires a value")
+                .range(directive.textRange).create()
+        } else {
             validateExpr(directive, valueText, valueOffset, hostFile, holder)
         }
 

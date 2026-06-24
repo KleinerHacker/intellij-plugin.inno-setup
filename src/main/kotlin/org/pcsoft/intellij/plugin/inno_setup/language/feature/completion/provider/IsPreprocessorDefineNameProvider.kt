@@ -112,6 +112,30 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
                 }
         }
 
+        // For #define: the names of earlier #dim arrays — a `#define Name[i]` assigns an array element, so the
+        // array name is completable in the name position (inserted with `[]` and the caret placed inside).
+        if (directive == "define" && hostFile is IsScriptFile) {
+            val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
+            val lineOffset = host?.textRange?.startOffset ?: Int.MAX_VALUE
+            hostFile.isppDirectivesWithHostOffset
+                .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDim() == true }
+                .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+                .filter { !it.getArrayName().isNullOrEmpty() }
+                .distinctBy { it.getArrayName() }
+                .forEach { dex ->
+                    adjusted.addElement(
+                        LookupElementBuilder.create(dex.getArrayName()!!)
+                            .withTailText("[]", true)
+                            .withTypeText("array")
+                            .withIcon(IsIcons.Variable)
+                            .withInsertHandler { ctx, _ ->
+                                ctx.document.insertString(ctx.tailOffset, "[]")
+                                ctx.editor.caretModel.moveToOffset(ctx.tailOffset - 1)
+                            }
+                    )
+                }
+        }
+
         // For #redim: the names of earlier #dim arrays (declaration-order aware).
         if (directive == "redim" && hostFile is IsScriptFile) {
             val host = InjectedLanguageManager.getInstance(position.project).getInjectionHost(position)
