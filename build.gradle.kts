@@ -17,12 +17,12 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.tasks.SignPluginTask
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.2.20"
+    id("org.jetbrains.kotlin.jvm") version "2.4.0"
     id("org.jetbrains.changelog") version "2.5.0"
     id("org.jetbrains.grammarkit") version "2023.3.0.3"
     id("org.jetbrains.intellij.platform")  // version managed by settings plugin
     id("org.jetbrains.dokka") version "2.2.0"
-    id("org.jetbrains.kotlinx.kover") version "0.9.1"
+    id("org.jetbrains.kotlinx.kover") version "0.9.8"
     id("com.github.jk1.dependency-license-report") version "3.1.4"
     id("org.cyclonedx.bom") version "3.2.4"
     id("app.cash.licensee") version "1.14.1"
