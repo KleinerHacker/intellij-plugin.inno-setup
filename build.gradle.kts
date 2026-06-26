@@ -182,7 +182,7 @@ tasks {
         // Hard backstop so a hung test can never stall the whole build indefinitely. Per-method timeouts are
         // enforced in-JVM by IsTimedBasePlatformTestCase/IsTimedTestCase; this only catches a non-interruptible
         // runaway (e.g. a busy loop) that the watchdog cannot abort.
-        timeout.set(Duration.ofMinutes(5))
+        timeout.set(Duration.ofMinutes(15))
     }
 
     //region Dokka

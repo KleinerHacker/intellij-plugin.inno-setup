@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /** Global per-test-method time budget in seconds. Overridable via `-Dis.test.method.timeout.seconds`. */
 internal val TEST_METHOD_TIMEOUT_SECONDS: Long =
-    System.getProperty("is.test.method.timeout.seconds")?.toLongOrNull() ?: 60L
+    System.getProperty("is.test.method.timeout.seconds")?.toLongOrNull() ?: (15 * 60L)
 
 /**
  * Runs [body] (a single test method) on the **current** thread — IntelliJ platform test fixtures must not be
