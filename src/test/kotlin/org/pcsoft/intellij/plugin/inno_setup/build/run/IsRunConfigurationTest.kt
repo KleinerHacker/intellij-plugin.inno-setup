@@ -13,10 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.RuntimeConfigurationException
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import java.io.File.createTempFile
 
-class IsRunConfigurationTest : BasePlatformTestCase() {
+class IsRunConfigurationTest : IsTimedBasePlatformTestCase() {
 
     private fun config(): IsRunConfiguration {
         val type = IsRunConfigurationType()

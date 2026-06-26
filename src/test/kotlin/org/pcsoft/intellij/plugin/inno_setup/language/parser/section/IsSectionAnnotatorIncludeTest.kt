@@ -13,14 +13,14 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.psi.PsiFile
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests that file-level mandatory checks run on the effective, `#include`-resolved script: required sections
  * and directives may be spread across the main file and its includes, and fragments are not flagged on their
  * own.
  */
-class IsSectionAnnotatorIncludeTest : BasePlatformTestCase() {
+class IsSectionAnnotatorIncludeTest : IsTimedBasePlatformTestCase() {
 
     private fun open(file: PsiFile) = myFixture.run {
         configureFromExistingVirtualFile(file.virtualFile); doHighlighting()

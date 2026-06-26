@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests for `#if`/`#elif` condition-expression analysis in [IsPreprocessorAnnotator]: type errors,
  * reference resolution (unresolved identifiers are errors, like in `#define`) and the `defined(...)` escape.
  */
-class IsPreprocessorConditionalExpressionTest : BasePlatformTestCase() {
+class IsPreprocessorConditionalExpressionTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

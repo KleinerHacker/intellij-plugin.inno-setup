@@ -16,11 +16,11 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.impl.DebugUtil
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
-class IsSectionParserTest : BasePlatformTestCase() {
+class IsSectionParserTest : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath() = "src/test/resources"
 

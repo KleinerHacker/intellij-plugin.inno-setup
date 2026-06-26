@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 
 /**
  * Tests for [IsEffectiveScriptProblems]: problems of the combined effective script are attributed to the
  * topmost host `#include` that introduced the offending line; problems of the host file itself are dropped.
  */
-class IsEffectiveScriptProblemsTest : BasePlatformTestCase() {
+class IsEffectiveScriptProblemsTest : IsTimedBasePlatformTestCase() {
 
     private fun open(name: String, content: String): IsScriptFile {
         val file = myFixture.addFileToProject(name, content)

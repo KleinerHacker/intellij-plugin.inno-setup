@@ -43,6 +43,7 @@ class IsPreprocessorBraceMatcher : PairedBraceMatcher {
         val PAIRS: Array<BracePair> = arrayOf(
             BracePair(IsPreprocessorTypes.LPAREN, IsPreprocessorTypes.RPAREN, false),
             BracePair(IsPreprocessorTypes.LBRACKET, IsPreprocessorTypes.RBRACKET, false),
+            BracePair(IsPreprocessorTypes.LBRACE, IsPreprocessorTypes.RBRACE, false),
         )
     }
 }

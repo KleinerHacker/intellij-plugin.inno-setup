@@ -13,10 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.services
 
 import com.intellij.openapi.components.service
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /** Tests for the Windows-LCID reference data (is-lang-code.yaml) backing LanguageID completion/validation/inlays. */
-class IsLanguageDataServiceTest : BasePlatformTestCase() {
+class IsLanguageDataServiceTest : IsTimedBasePlatformTestCase() {
 
     private val service get() = service<IsLanguageDataService>()
 

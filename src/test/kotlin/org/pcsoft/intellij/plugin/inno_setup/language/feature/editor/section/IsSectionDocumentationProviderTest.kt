@@ -12,10 +12,10 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
-class IsSectionDocumentationProviderTest : BasePlatformTestCase() {
+class IsSectionDocumentationProviderTest : IsTimedBasePlatformTestCase() {
 
     private val provider = IsSectionDocumentationProvider()
 

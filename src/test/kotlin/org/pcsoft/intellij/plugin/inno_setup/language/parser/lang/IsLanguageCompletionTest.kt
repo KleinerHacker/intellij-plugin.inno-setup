@@ -12,13 +12,13 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 
 /**
  * Section-name completion must only offer the language-file sections inside `.isl` files.
  */
-class IsLanguageCompletionTest : BasePlatformTestCase() {
+class IsLanguageCompletionTest : IsTimedBasePlatformTestCase() {
 
     private fun sectionVariants(): List<String> {
         myFixture.configureByText(IsLanguageFileType.INSTANCE, "[<caret>")

@@ -14,11 +14,11 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.impl.DebugUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 
-class IsLanguageParserTest : BasePlatformTestCase() {
+class IsLanguageParserTest : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath() = "src/test/resources"
 

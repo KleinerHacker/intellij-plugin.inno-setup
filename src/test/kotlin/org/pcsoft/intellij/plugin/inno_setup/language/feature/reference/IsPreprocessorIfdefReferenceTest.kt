@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -28,7 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * and Find Usages) — but, unlike a `#if` condition, a missing `#define` produces **no error** (an `#ifdef`
  * on an undefined macro is legitimate).
  */
-class IsPreprocessorIfdefReferenceTest : BasePlatformTestCase() {
+class IsPreprocessorIfdefReferenceTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

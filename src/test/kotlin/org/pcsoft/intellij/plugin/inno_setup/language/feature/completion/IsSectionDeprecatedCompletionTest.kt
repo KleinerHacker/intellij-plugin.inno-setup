@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * bundled spec, so deprecation is asserted there; for the other element kinds the same wiring is
  * exercised by asserting non-deprecated members are *not* struck out.
  */
-class IsSectionDeprecatedCompletionTest : BasePlatformTestCase() {
+class IsSectionDeprecatedCompletionTest : IsTimedBasePlatformTestCase() {
 
     private val VALID_SETUP = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

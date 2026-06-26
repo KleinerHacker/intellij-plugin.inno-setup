@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorSyntaxHighlighting
 
@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPrep
  * HighlightInfo.forcedTextAttributesKey carries the key set via
  * AnnotationHolder.newSilentAnnotation().textAttributes(key).
  */
-class IsSectionHighlightingTest : BasePlatformTestCase() {
+class IsSectionHighlightingTest : IsTimedBasePlatformTestCase() {
 
     private fun highlights(content: String) =
         myFixture.run {

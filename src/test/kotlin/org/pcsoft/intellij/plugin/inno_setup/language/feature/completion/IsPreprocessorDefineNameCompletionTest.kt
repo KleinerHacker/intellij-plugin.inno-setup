@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests for [org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineNameProvider]:
  * the scope/visibility keywords and (for `#undef`) existing define names offered in the name position.
  */
-class IsPreprocessorDefineNameCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorDefineNameCompletionTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.psi.tree.IElementType
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
 
 /**
@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
  * The tests drive the same highlighting lexer the editor uses for the injected ISPP fragment, so
  * they verify both that the lexer produces the expected tokens and that they map to the right color.
  */
-class IsPreprocessorTokenHighlighterTest : BasePlatformTestCase() {
+class IsPreprocessorTokenHighlighterTest : IsTimedBasePlatformTestCase() {
 
     private val highlighter = IsPreprocessorTokenHighlighter()
 

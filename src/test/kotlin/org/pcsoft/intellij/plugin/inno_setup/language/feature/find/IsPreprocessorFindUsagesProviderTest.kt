@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.find
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests for [IsPreprocessorFindUsagesProvider] — find-usages is only enabled for `#define`
  * directives, and the descriptive name/type strings come from the define.
  */
-class IsPreprocessorFindUsagesProviderTest : BasePlatformTestCase() {
+class IsPreprocessorFindUsagesProviderTest : IsTimedBasePlatformTestCase() {
 
     private val provider = IsPreprocessorFindUsagesProvider()
 

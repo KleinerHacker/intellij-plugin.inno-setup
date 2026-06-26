@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests that a literal boolean (`true`/`false`/`yes`/`no`) directly used in a `#if`/`#elif` condition is
  * flagged with the weak "boolean literal" warning — and never additionally as a red unresolved error.
  */
-class IsPreprocessorConditionalBooleanTest : BasePlatformTestCase() {
+class IsPreprocessorConditionalBooleanTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

@@ -12,13 +12,13 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Validates the real-world `#include` example scripts under `src/test/resources/include`: each `base.iss`
  * must highlight without ERROR-level problems, because its effective (`#include`-resolved) script is complete.
  */
-class IsIncludeExampleResourcesTest : BasePlatformTestCase() {
+class IsIncludeExampleResourcesTest : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = "src/test/resources/include"
 

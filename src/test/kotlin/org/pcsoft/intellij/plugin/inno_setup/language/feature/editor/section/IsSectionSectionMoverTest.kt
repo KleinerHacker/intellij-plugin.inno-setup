@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * (including the trailing blank line each section owns) instead of single lines, and must
  * be blocked at the first/last section boundary.
  */
-class IsSectionSectionMoverTest : BasePlatformTestCase() {
+class IsSectionSectionMoverTest : IsTimedBasePlatformTestCase() {
 
     private fun move(action: String, before: String, after: String) {
         myFixture.configureByText(IsScriptFileType.INSTANCE, before)

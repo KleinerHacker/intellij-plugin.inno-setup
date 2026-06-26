@@ -152,7 +152,7 @@ private fun PsiFile.arrayInfos(): List<IsPreprocessorExprArrayInfo> =
     }
 
 /**
- * All array element assignments of this file: explicit `#define Name[Index] Value` plus the positional elements
+ * All array element assignments of this file: explicit `#define Name\[Index] Value` plus the positional elements
  * of a `#dim Name[..] {v0, v1, …}` inline initialiser (index = position). Only assignments with a statically
  * resolvable integer index are kept.
  */
@@ -203,15 +203,22 @@ private fun splitTopLevelCommas(text: String): List<String> {
     return parts
 }
 
-/** A type resolver over all `#define`s, function-like macros and arrays of this file plus the bundled ISPP spec. */
-fun PsiFile.preprocessorTypeResolver(): IsPreprocessorExprTypeResolver {
+/**
+ * A type resolver over all `#define`s, function-like macros and arrays of this file plus the bundled ISPP spec.
+ * [extraVariables] are additional in-scope variable types (e.g. a `#for` loop variable) that take precedence
+ * over the predefined ISPP variables; matched case-insensitively.
+ */
+fun PsiFile.preprocessorTypeResolver(
+    extraVariables: Map<String, IsPreprocessorExprType> = emptyMap(),
+): IsPreprocessorExprTypeResolver {
     val spec = service<IsPreprocessorService>().spec
     val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
         spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
             ?.returnType?.toExprType() ?: IsPreprocessorExprType.ANY
     }
     val variableType: (String) -> IsPreprocessorExprType? = { name ->
-        spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
+        extraVariables.entries.firstOrNull { it.key.equals(name, ignoreCase = true) }?.value
+            ?: spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
     }
     return IsPreprocessorExprTypeResolver(
         simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType, arrayInfos(),
@@ -249,6 +256,16 @@ fun PsiFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDire
         .filter { (d, off) ->
             off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
                 (d as? IsPreprocessorDirectiveEx)?.getDefineName().equals(name, ignoreCase = true)
+        }
+        .maxByOrNull { it.second }
+        ?.first as? IsPreprocessorDirectiveEx
+
+/** The nearest `#sub` named [name] declared before host offset [beforeOffset], or `null`. */
+fun PsiFile.precedingSub(name: String, beforeOffset: Int): IsPreprocessorDirectiveEx? =
+    isppDirectivesWithHostOffset
+        .filter { (d, off) ->
+            off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isSub() == true &&
+                (d as? IsPreprocessorDirectiveEx)?.getSubroutineName().equals(name, ignoreCase = true)
         }
         .maxByOrNull { it.second }
         ?.first as? IsPreprocessorDirectiveEx

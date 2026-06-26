@@ -67,6 +67,9 @@ private valueToken ::= constant
 // "..." with optional embedded {constants}
 quotedString ::= QUOTE (STRING_PART | constant)* QUOTE
 
-// {app}, {#Name}, {reg:...}, etc. within ISPP values
+// {app}, {#Name}, {reg:...}, etc. within ISPP values — and the `#for {Init; Cond; Incr}` header group.
+// The body accepts arbitrary balanced expression tokens so a `#for {i = 0; i < 10; i++}` brace group does
+// not produce spurious parse errors; nested `{…}` and quoted strings are matched recursively.
 constant     ::= LBRACE constantBody RBRACE
-constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)*
+constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ | SEMICOLON
+                 | LPAREN | RPAREN | LBRACKET | RBRACKET | quotedString | constant)*

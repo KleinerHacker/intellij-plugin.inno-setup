@@ -12,13 +12,13 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 
 /**
  * Section-name completion after `[` in a free-text `.ist` template file.
  */
-class IsTemplateSectionCompletionTest : BasePlatformTestCase() {
+class IsTemplateSectionCompletionTest : IsTimedBasePlatformTestCase() {
 
     fun testSectionNamesOfferedAfterBracket() {
         myFixture.configureByText(IsTemplateFileType.INSTANCE, "[<caret>")

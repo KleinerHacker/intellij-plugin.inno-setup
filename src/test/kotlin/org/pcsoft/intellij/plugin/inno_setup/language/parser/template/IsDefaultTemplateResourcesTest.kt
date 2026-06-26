@@ -16,7 +16,7 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
 import java.io.File
 
@@ -24,7 +24,7 @@ import java.io.File
  * Validates every `*.ist` template under `src/test/resources/default`: each must parse without any
  * [PsiErrorElement]. New example templates dropped into that directory are picked up automatically.
  */
-class IsDefaultTemplateResourcesTest : BasePlatformTestCase() {
+class IsDefaultTemplateResourcesTest : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = TEST_DATA_PATH
 

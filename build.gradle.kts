@@ -13,6 +13,7 @@
 import com.github.jk1.license.render.ReportRenderer
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
+import java.time.Duration
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.tasks.SignPluginTask
 
@@ -174,9 +175,14 @@ tasks {
 
     test {
         jvmArgs(
+            "-Djava.awt.headless=true",
             "-Didea.log.config.file=idea/log4j.xml",
             "-Didea.log.level=OFF",
         )
+        // Hard backstop so a hung test can never stall the whole build indefinitely. Per-method timeouts are
+        // enforced in-JVM by IsTimedBasePlatformTestCase/IsTimedTestCase; this only catches a non-interruptible
+        // runaway (e.g. a busy loop) that the watchdog cannot abort.
+        timeout.set(Duration.ofMinutes(5))
     }
 
     //region Dokka

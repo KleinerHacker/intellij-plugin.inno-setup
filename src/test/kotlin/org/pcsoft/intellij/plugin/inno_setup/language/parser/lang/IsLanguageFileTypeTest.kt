@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
@@ -22,7 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptL
  * Tests that `.isl` files are recognised as a distinct file type that reuses the ISS language and
  * parses into an [org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile] (which is also an [IsScriptFile], so all ISS tooling keeps working).
  */
-class IsLanguageFileTypeTest : BasePlatformTestCase() {
+class IsLanguageFileTypeTest : IsTimedBasePlatformTestCase() {
 
     fun testFileTypeMetadata() {
         assertEquals("isl", IsLanguageFileType.INSTANCE.defaultExtension)

@@ -12,10 +12,10 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
-class IsCommenterTest : BasePlatformTestCase() {
+class IsCommenterTest : IsTimedBasePlatformTestCase() {
 
     fun testLineCommentPrefix() {
         assertEquals(";", IsCommenter().lineCommentPrefix)

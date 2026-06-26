@@ -82,6 +82,9 @@ class IsPreprocessorAnnotator : Annotator {
 
         /** A single ISPP identifier (the `#ifdef`/`#ifndef` argument), mirroring the lexer's IDENTIFIER rule. */
         val IDENTIFIER = Regex("[A-Za-z_][A-Za-z0-9_.\\-]*")
+
+        /** A `#for` increment/decrement statement: `i++`, `i--`, `++i` or `--i`. */
+        val FOR_INCREMENT = Regex("""(\+\+|--)\s*[A-Za-z_]\w*|[A-Za-z_]\w*\s*(\+\+|--)""")
     }
 
     /**
@@ -140,6 +143,14 @@ class IsPreprocessorAnnotator : Annotator {
         }
         if (ex.isConditionalDirective()) {
             annotateConditional(directive, ex, holder)
+            return
+        }
+        if (ex.isSubroutineDirective()) {
+            annotateSubroutine(directive, ex, holder)
+            return
+        }
+        if (ex.isFor()) {
+            annotateFor(directive, ex, holder)
             return
         }
         if (ex.isArrayDeclaration()) {
@@ -425,6 +436,179 @@ class IsPreprocessorAnnotator : Annotator {
 
         // Identifiers that refer to a non-existent #define are unresolved references (error, like #define).
         annotateUnresolvedReferences(directive, holder)
+    }
+
+    /**
+     * Validates a subroutine directive (`#sub`/`#endsub`): highlights the `#sub` name like a declaration and
+     * checks block structure (every `#sub` must be closed by `#endsub`; no stray `#endsub`) — mirroring
+     * [annotateConditional].
+     */
+    private fun annotateSubroutine(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: IsAnnotationSink,
+    ) {
+        if (ex.isSub()) {
+            val nameId = ex.nameIdentifier
+            if (nameId != null) {
+                highlight(nameId.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
+            } else {
+                holder.newAnnotation(HighlightSeverity.ERROR, "#sub requires a name")
+                    .range(directive.textRange).create()
+            }
+        }
+
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile() ?: return
+        val problem = IsPreprocessorSubroutineStructure.structureOf(hostFile).problems[directive] ?: return
+        val keywordNode = directive.identifier
+        val message = when (problem) {
+            IsSubroutineProblem.UnterminatedSub -> "Unterminated #sub: missing #endsub"
+            IsSubroutineProblem.StrayEndsub -> "#endsub without matching #sub"
+        }
+        val hash = directive.node.findChildByType(IsPreprocessorTypes.HASH)
+        val range = if (keywordNode != null)
+            TextRange(hash?.startOffset ?: keywordNode.textRange.startOffset, keywordNode.textRange.endOffset)
+        else directive.textRange
+        holder.newAnnotation(HighlightSeverity.ERROR, message).range(range).create()
+    }
+
+    /**
+     * Validates a `#for {Init; Cond; Incr} Body`: requires the brace group and a loop variable declared in the
+     * initializer, type-checks the condition (must be integer-compatible), validates the init/increment
+     * statements and the single same-line body expression, and reports unresolved references. The loop
+     * variable is in scope only within these slots (its type is the type of the initializer's value).
+     */
+    private fun annotateFor(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: IsAnnotationSink,
+    ) {
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        val base = directive.textRange.startOffset
+
+        val initText = ex.getForInitText()
+        val initOffset = ex.getForInitOffsetInDirective()
+        val condText = ex.getForConditionText()
+        val condOffset = ex.getForConditionOffsetInDirective()
+        val incrText = ex.getForIncrementText()
+        val incrOffset = ex.getForIncrementOffsetInDirective()
+        val bodyText = ex.getForBodyText()
+        val bodyOffset = ex.getForBodyOffsetInDirective()
+
+        if (initOffset < 0 || condOffset < 0 || incrOffset < 0) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#for requires '{Init; Condition; Increment} Body'")
+                .range(directive.textRange).create()
+            return
+        }
+
+        // ── loop variable ──
+        val varName = ex.getForVariableName()
+        if (varName == null) {
+            val initBase = base + initOffset
+            val range = if (!initText.isNullOrEmpty()) TextRange(initBase, initBase + initText.length)
+            else directive.textRange
+            holder.newAnnotation(HighlightSeverity.ERROR, "#for initializer must define a loop variable (e.g. 'i = 0')")
+                .range(range).create()
+        } else {
+            ex.getForVariableNameNode()?.let { highlight(it.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder) }
+        }
+        val varType = forInitValueType(directive, ex, hostFile)
+        val extra = if (varName != null) mapOf(varName to varType) else emptyMap()
+
+        // ── init / increment statements ──
+        validateForStatement(directive, initText, initOffset, hostFile, holder, extra)
+        validateForStatement(directive, incrText, incrOffset, hostFile, holder, extra)
+
+        // ── condition: must be an integer-compatible expression ──
+        if (condText.isNullOrBlank()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#for requires a condition").range(directive.textRange).create()
+        } else {
+            val type = validateExpr(directive, condText, condOffset, hostFile, holder, extra)
+            if (!type.intCompatible) {
+                val condBase = base + condOffset
+                holder.newAnnotation(HighlightSeverity.ERROR, "#for condition must be an integer expression")
+                    .range(TextRange(condBase, condBase + condText.length)).create()
+            }
+        }
+
+        // ── body: exactly one expression on the same line ──
+        if (bodyText.isNullOrBlank()) {
+            holder.newAnnotation(HighlightSeverity.ERROR, "#for requires a body expression on the same line")
+                .range(directive.textRange).create()
+        } else {
+            validateExpr(directive, bodyText, bodyOffset, hostFile, holder, extra)
+        }
+
+        annotateUnresolvedReferences(directive, holder)
+    }
+
+    /**
+     * Validates one `#for` init/increment slot, which may be an assignment (`Name = Expr`, possibly chained),
+     * an increment/decrement (`i++`/`i--`/`++i`/`--i`) or a plain side-effect expression. Assignment targets
+     * and the `++`/`--` operand are not full expressions, so only the value expression is type-checked.
+     */
+    private fun validateForStatement(
+        directive: IsPreprocessorDirective,
+        text: String?,
+        offset: Int,
+        hostFile: PsiFile?,
+        holder: IsAnnotationSink,
+        extraVariables: Map<String, IsPreprocessorExprType>,
+    ) {
+        if (text == null || offset < 0) return
+        if (text.isBlank()) return
+        if (FOR_INCREMENT.matches(text.trim())) return
+        val eq = topLevelAssignmentIndex(text)
+        if (eq != null) {
+            val rhsStart = eq + 1
+            validateForStatement(directive, text.substring(rhsStart), offset + rhsStart, hostFile, holder, extraVariables)
+            return
+        }
+        validateExpr(directive, text, offset, hostFile, holder, extraVariables)
+    }
+
+    /** The type of a `#for` initializer's value (the final right-hand side after stripping assignments). */
+    private fun forInitValueType(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        hostFile: PsiFile?,
+    ): IsPreprocessorExprType {
+        var text = ex.getForInitText() ?: return IsPreprocessorExprType.INT
+        var eq = topLevelAssignmentIndex(text)
+        while (eq != null) {
+            text = text.substring(eq + 1)
+            eq = topLevelAssignmentIndex(text)
+        }
+        val rhs = text.trim()
+        if (rhs.isEmpty() || FOR_INCREMENT.matches(rhs)) return IsPreprocessorExprType.INT
+        val order = currentDirectiveOrder(directive, hostFile)
+        return buildTypeResolver(hostFile).inferenceAt(order).infer(IsPreprocessorExprParser.parse(rhs).ast)
+    }
+
+    /**
+     * Index of the first top-level assignment `=` in [text] (not part of `==`/`<=`/`>=`/`!=`), ignoring
+     * `()`/`[]`/`{}` nesting and string literals, or `null` when there is no plain assignment.
+     */
+    private fun topLevelAssignmentIndex(text: String): Int? {
+        var depth = 0
+        var quote: Char? = null
+        for (i in text.indices) {
+            val c = text[i]
+            when {
+                quote != null -> if (c == quote) quote = null
+                c == '"' || c == '\'' -> quote = c
+                c == '(' || c == '[' || c == '{' -> depth++
+                c == ')' || c == ']' || c == '}' -> depth--
+                c == '=' && depth == 0 -> {
+                    val prev = text.getOrNull(i - 1)
+                    val next = text.getOrNull(i + 1)
+                    if (prev != '=' && prev != '<' && prev != '>' && prev != '!' && next != '=') return i
+                }
+            }
+        }
+        return null
     }
 
     /**
@@ -725,7 +909,8 @@ class IsPreprocessorAnnotator : Annotator {
             ?.mapNotNull { d ->
                 val dex = d as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
                 // An array element `#define Name[i]` is a usage, not a declaration; the `#dim` declares the name.
-                if (dex.isArrayElementDefine()) null else dex.getArrayName() ?: dex.getDefineName()
+                if (dex.isArrayElementDefine()) null
+                else dex.getArrayName() ?: dex.getDefineName() ?: dex.getSubroutineName()
             }
             ?.toSet() ?: emptySet()
         val spec = service<IsPreprocessorService>().spec
@@ -900,7 +1085,7 @@ class IsPreprocessorAnnotator : Annotator {
                     .range(indexRange).create()
             }
             val staticIndex = indexText.trim().toLongOrNull()
-            val size = hostFile?.arraySize(name, order)
+            val size = hostFile.arraySize(name, order)
             if (staticIndex != null && size != null && (staticIndex < 0 || staticIndex >= size)) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,
@@ -955,6 +1140,7 @@ class IsPreprocessorAnnotator : Annotator {
         offsetInDirective: Int,
         hostFile: PsiFile?,
         holder: IsAnnotationSink,
+        extraVariables: Map<String, IsPreprocessorExprType> = emptyMap(),
     ): IsPreprocessorExprType {
         val base = directive.textRange.startOffset + offsetInDirective
         val tokens = IsPreprocessorExprTokenizer.tokenize(exprText)
@@ -963,7 +1149,7 @@ class IsPreprocessorAnnotator : Annotator {
         }
         val parseResult = IsPreprocessorExprParser.parse(tokens, exprText.length)
         val order = currentDirectiveOrder(directive, hostFile)
-        val resolver = buildTypeResolver(hostFile)
+        val resolver = buildTypeResolver(hostFile, extraVariables)
         val inference = resolver.inferenceAt(order)
         val type = inference.infer(parseResult.ast)
         (parseResult.errors + inference.errors).forEach { error ->
@@ -1007,8 +1193,11 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Builds a resolver over the simple #defines and function-like macros of [hostFile] plus the ISPP spec. */
-    private fun buildTypeResolver(hostFile: PsiFile?): IsPreprocessorExprTypeResolver =
-        hostFile?.preprocessorTypeResolver() ?: IsPreprocessorExprTypeResolver(emptyList())
+    private fun buildTypeResolver(
+        hostFile: PsiFile?,
+        extraVariables: Map<String, IsPreprocessorExprType> = emptyMap(),
+    ): IsPreprocessorExprTypeResolver =
+        hostFile?.preprocessorTypeResolver(extraVariables) ?: IsPreprocessorExprTypeResolver(emptyList())
 
     /** Host-file offset (declaration order) of [directive], or [Int.MAX_VALUE] when it cannot be located. */
     private fun currentDirectiveOrder(directive: IsPreprocessorDirective, hostFile: PsiFile?): Int =

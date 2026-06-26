@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
 /**
  * Tests for [toEffectiveScript]: the fully `#include`-resolved view of a script.
  */
-class IsEffectiveScriptTest : BasePlatformTestCase() {
+class IsEffectiveScriptTest : IsTimedBasePlatformTestCase() {
 
     private fun script(name: String, content: String): IsScriptFile =
         myFixture.addFileToProject(name, content) as IsScriptFile

@@ -13,14 +13,14 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include.action
 
 import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 
 /**
  * Tests for [IsShowEffectiveScriptAction]: opening the effective script produces a read-only, in-memory tab
  * whose content is the fully `#include`-resolved script.
  */
-class IsShowEffectiveScriptActionTest : BasePlatformTestCase() {
+class IsShowEffectiveScriptActionTest : IsTimedBasePlatformTestCase() {
 
     fun testEffectiveScriptOpensReadOnlyWithMergedContent() {
         myFixture.addFileToProject("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")

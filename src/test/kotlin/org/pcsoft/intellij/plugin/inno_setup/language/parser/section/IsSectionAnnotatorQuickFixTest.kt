@@ -13,10 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.codeInsight.intention.IntentionAction
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
-class IsSectionAnnotatorQuickFixTest : BasePlatformTestCase() {
+class IsSectionAnnotatorQuickFixTest : IsTimedBasePlatformTestCase() {
 
     private fun configure(content: String) {
         myFixture.configureByText(IsScriptFileType.INSTANCE, content)

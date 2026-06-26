@@ -12,12 +12,12 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Project-level tests for [IsScriptCollector]'s top-level detection and include graph.
  */
-class IsScriptCollectorTest : BasePlatformTestCase() {
+class IsScriptCollectorTest : IsTimedBasePlatformTestCase() {
 
     fun testTopLevelExcludesIncludedFragment() {
         myFixture.addFileToProject("main.iss", "[Setup]\n#include \"part.iss\"\n")

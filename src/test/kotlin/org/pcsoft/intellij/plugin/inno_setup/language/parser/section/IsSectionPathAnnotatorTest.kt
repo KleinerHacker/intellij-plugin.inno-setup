@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import java.io.File
 import kotlin.io.path.createTempDirectory
@@ -23,7 +23,7 @@ import kotlin.io.path.createTempDirectory
  * ([IsSectionAnnotator.annotatePathValue]). Absolute paths to real temporary files/directories are
  * used so resolution does not depend on the in-memory test filesystem of the script under test.
  */
-class IsSectionPathAnnotatorTest : BasePlatformTestCase() {
+class IsSectionPathAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private lateinit var tempFile: File
     private lateinit var tempDir: File

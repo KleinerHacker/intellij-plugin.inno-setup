@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests that [IsPreprocessorAnnotator] validates the `#pragma` directive: the sub-command must be known and
  * its argument must match the declared kind (flags / string expression / integer expression).
  */
-class IsPreprocessorPragmaAnnotatorTest : BasePlatformTestCase() {
+class IsPreprocessorPragmaAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests for {cm:MessageName} ↔ `\[CustomMessages]` declarations: resolve, unresolved highlighting,
  * find usages and rename (including keeping language variants in sync).
  */
-class IsSectionCustomMessageReferenceTest : BasePlatformTestCase() {
+class IsSectionCustomMessageReferenceTest : IsTimedBasePlatformTestCase() {
 
     private fun cmBody(file: IsScriptFile): IsSectionConstantBody =
         PsiTreeUtil.findChildrenOfType(file, IsSectionConstantBody::class.java)

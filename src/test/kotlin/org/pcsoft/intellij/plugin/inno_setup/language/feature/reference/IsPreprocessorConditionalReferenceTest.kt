@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests that identifiers in a `#if`/`#elif` condition reference the matching `#define` (navigation, rename
  * and Find Usages), reusing [IsPreprocessorExpressionReference] like the `#define` expression path.
  */
-class IsPreprocessorConditionalReferenceTest : BasePlatformTestCase() {
+class IsPreprocessorConditionalReferenceTest : IsTimedBasePlatformTestCase() {
 
     private fun setup(content: String): IsScriptFile {
         val file = myFixture.configureByText(IsScriptFileType.INSTANCE, content)

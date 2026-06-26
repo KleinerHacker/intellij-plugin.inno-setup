@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import java.io.File
 
 /**
  * Validates every `*.iss` script under `src/test/resources/default`: each must highlight without any
  * ERROR-level problem. New example scripts dropped into that directory are picked up automatically.
  */
-class IsDefaultScriptResourcesTest : BasePlatformTestCase() {
+class IsDefaultScriptResourcesTest : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = TEST_DATA_PATH
 

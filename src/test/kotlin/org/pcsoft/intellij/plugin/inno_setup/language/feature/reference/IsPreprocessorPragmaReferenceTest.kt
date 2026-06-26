@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests that identifiers inside a `#pragma` expression argument behave like references to `#define`s:
  * they resolve, take part in Find Usages and rename, exactly like references inside a `#define` body.
  */
-class IsPreprocessorPragmaReferenceTest : BasePlatformTestCase() {
+class IsPreprocessorPragmaReferenceTest : IsTimedBasePlatformTestCase() {
 
     private fun setup(content: String): IsScriptFile {
         val file = myFixture.configureByText(IsScriptFileType.INSTANCE, content)

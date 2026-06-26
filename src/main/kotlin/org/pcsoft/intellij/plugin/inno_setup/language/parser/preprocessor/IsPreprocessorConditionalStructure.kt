@@ -67,7 +67,7 @@ object IsPreprocessorConditionalStructure {
     )
 
     fun structureOf(hostFile: PsiFile): IsConditionalStructure {
-        val directivesWithLine = directivesWithHostLine(hostFile)
+        val directivesWithLine = preprocessorDirectivesWithHostLine(hostFile)
         val stack = ArrayDeque<Open>()
         val blocks = mutableListOf<IsConditionalBlock>()
         val problems = mutableMapOf<IsPreprocessorDirective, IsConditionalProblem>()
@@ -103,23 +103,23 @@ object IsPreprocessorConditionalStructure {
 
         return IsConditionalStructure(blocks, problems)
     }
+}
 
-    /** The conditional directives of [hostFile] paired with the host preprocessor line they live on, in order. */
-    private fun directivesWithHostLine(hostFile: PsiFile): List<Pair<IsPreprocessorDirective, PsiElement>> {
-        val mgr = InjectedLanguageManager.getInstance(hostFile.project)
-        return hostFile.children
-            .filter { it is IsSectionPreprocessorLine || it is IsTemplatePreprocessorLine }
-            .flatMap { line ->
-                val result = mutableListOf<Pair<IsPreprocessorDirective, PsiElement>>()
-                mgr.enumerate(line) { injectedPsi, _ ->
-                    if (injectedPsi is IsPreprocessorFile) {
-                        PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsPreprocessorDirective::class.java)
-                            .forEach { result += it to line }
-                    }
+/** The ISPP directives of [hostFile] paired with the host preprocessor line they live on, in document order. */
+internal fun preprocessorDirectivesWithHostLine(hostFile: PsiFile): List<Pair<IsPreprocessorDirective, PsiElement>> {
+    val mgr = InjectedLanguageManager.getInstance(hostFile.project)
+    return hostFile.children
+        .filter { it is IsSectionPreprocessorLine || it is IsTemplatePreprocessorLine }
+        .flatMap { line ->
+            val result = mutableListOf<Pair<IsPreprocessorDirective, PsiElement>>()
+            mgr.enumerate(line) { injectedPsi, _ ->
+                if (injectedPsi is IsPreprocessorFile) {
+                    PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsPreprocessorDirective::class.java)
+                        .forEach { result += it to line }
                 }
-                result
             }
-    }
+            result
+        }
 }
 
 /** The host text range spanned by a conditional block, from the opener line start to the `#endif` line end. */

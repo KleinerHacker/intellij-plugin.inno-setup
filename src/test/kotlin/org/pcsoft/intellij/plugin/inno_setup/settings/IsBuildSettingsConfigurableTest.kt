@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import com.intellij.ui.components.JBCheckBox
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 
@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
  * Tests the project-level [IsBuildSettingsConfigurable] UI model: combo population, enabled-state,
  * and the isModified/apply/reset round-trip against the per-project [IsBuildSettingsService].
  */
-class IsBuildSettingsConfigurableTest : BasePlatformTestCase() {
+class IsBuildSettingsConfigurableTest : IsTimedBasePlatformTestCase() {
 
     private lateinit var configurable: IsBuildSettingsConfigurable
     private var previousCompile: Boolean = true

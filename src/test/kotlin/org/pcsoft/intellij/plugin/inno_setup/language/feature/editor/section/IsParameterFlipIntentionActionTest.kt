@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * following one inside a parameter section entry. The caret is expected to sit directly behind the
  * `;` separating the two pairs.
  */
-class IsParameterFlipIntentionActionTest : BasePlatformTestCase() {
+class IsParameterFlipIntentionActionTest : IsTimedBasePlatformTestCase() {
 
     private val action = IsParameterFlipIntentionAction()
 

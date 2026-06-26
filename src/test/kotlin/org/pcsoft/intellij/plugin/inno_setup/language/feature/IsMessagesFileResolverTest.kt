@@ -13,11 +13,11 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature
 
 import com.intellij.openapi.util.SystemInfo
-import junit.framework.TestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedTestCase
 import java.io.File
 import java.nio.file.Files
 
-class IsMessagesFileResolverTest : TestCase() {
+class IsMessagesFileResolverTest : IsTimedTestCase() {
 
     // ── expandValue ───────────────────────────────────────────────────────────
 

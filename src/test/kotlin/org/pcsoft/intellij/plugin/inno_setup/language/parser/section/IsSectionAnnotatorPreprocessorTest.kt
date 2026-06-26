@@ -13,10 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
-class IsSectionAnnotatorPreprocessorTest : BasePlatformTestCase() {
+class IsSectionAnnotatorPreprocessorTest : IsTimedBasePlatformTestCase() {
 
     fun testKnownIsppConstantProducesNoError() {
         myFixture.configureByText(

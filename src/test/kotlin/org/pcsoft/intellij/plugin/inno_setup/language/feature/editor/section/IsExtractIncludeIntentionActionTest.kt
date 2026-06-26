@@ -16,13 +16,13 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialogManager
 import com.intellij.openapi.ui.TestInputDialog
 import com.intellij.openapi.vfs.VfsUtilCore
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests for [IsExtractIncludeIntentionAction], which moves the selected full lines into a new file and
  * replaces them with an `#include` of that file.
  */
-class IsExtractIncludeIntentionActionTest : BasePlatformTestCase() {
+class IsExtractIncludeIntentionActionTest : IsTimedBasePlatformTestCase() {
 
     private val action = IsExtractIncludeIntentionAction()
 

@@ -13,14 +13,14 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.LookupElementPresentation
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests for the `#define` expression completion ([org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsPreprocessorDefineExpressionProvider]): inside the
  * value of a `#define`, earlier `#define` names and the predefined ISPP variables are offered.
  */
-class IsPreprocessorDefineExpressionCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase() {
 
     private fun expressionLookup(content: String): List<String> {
         myFixture.configureByText(IsScriptFileType.INSTANCE, content)

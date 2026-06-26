@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
@@ -22,7 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * Tests for the ISL section restriction ([IsLanguageAnnotator])
  * plus the .isl-specific relaxations in the shared ISI annotator (no required `\[Setup]`).
  */
-class IsLanguageAnnotatorTest : BasePlatformTestCase() {
+class IsLanguageAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private fun islHighlights(content: String) =
         myFixture.run { configureByText(IsLanguageFileType.INSTANCE, content); doHighlighting() }
