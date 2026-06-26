@@ -175,7 +175,6 @@ tasks {
 
     test {
         jvmArgs(
-            "-Djava.awt.headless=true",
             "-Didea.log.config.file=idea/log4j.xml",
             "-Didea.log.level=OFF",
         )

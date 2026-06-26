@@ -18,7 +18,13 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
 class IsPreprocessorBraceMatcherTest : IsTimedBasePlatformTestCase() {
 
     fun testBracePairsCount() {
-        assertEquals(2, IsPreprocessorBraceMatcher.PAIRS.size)
+        assertEquals(3, IsPreprocessorBraceMatcher.PAIRS.size)
+    }
+
+    fun testBracePair() {
+        val pair = IsPreprocessorBraceMatcher.PAIRS.first { it.leftBraceType == IsPreprocessorTypes.LBRACE }
+        assertEquals(IsPreprocessorTypes.RBRACE, pair.rightBraceType)
+        assertFalse("{} must not be structural", pair.isStructural)
     }
 
     fun testParenPair() {
