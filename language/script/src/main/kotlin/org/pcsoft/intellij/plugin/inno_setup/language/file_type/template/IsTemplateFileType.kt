@@ -28,5 +28,5 @@ class IsTemplateFileType private constructor() : LanguageFileType(IsTemplateLang
     override fun getName(): String = "Inno Setup Template"
     override fun getDescription(): String = "Inno Setup template (free-text include) file"
     override fun getDefaultExtension(): String = "ist"
-    override fun getIcon(): Icon = IsIcons.ScriptFile
+    override fun getIcon(): Icon = IsIcons.TemplateFile
 }

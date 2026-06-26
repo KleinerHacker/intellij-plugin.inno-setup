@@ -234,17 +234,17 @@
     <actions>
         <action id="Iss.NewFile"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action.IsScriptCreateFileAction"
-                icon="/icons/inno-setup-script-icon@16.png">
+                icon="/icons/inno-setup-script-icon.svg">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
         <action id="Isl.NewFile"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action.IsLanguageCreateFileAction"
-                icon="/icons/inno-setup-script-icon@16.png">
+                icon="/icons/inno-setup-lang-icon.svg">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Iss.NewFile"/>
         </action>
         <action id="Ist.NewFile"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.action.IsTemplateCreateFileAction"
-                icon="/icons/inno-setup-script-icon@16.png">
+                icon="/icons/inno-setup-template-icon.svg">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Isl.NewFile"/>
         </action>
 

@@ -30,28 +30,34 @@ object IsIcons {
      * Represents the PSI script file for this Inno Setup language.
      */
     @JvmField
-    val ScriptFile: Icon = IconLoader.getIcon("/icons/inno-setup-script-icon@16.png", IsIcons::class.java)
+    val ScriptFile: Icon = IconLoader.getIcon("/icons/inno-setup-script-icon.svg", IsIcons::class.java)
 
     /**
      * Represents the PSI language file for this Inno Setup language.
      */
     @JvmField
-    val LanguageFile: Icon = IconLoader.getIcon("/icons/inno-setup-lang-icon@16.png", IsIcons::class.java)
+    val LanguageFile: Icon = IconLoader.getIcon("/icons/inno-setup-lang-icon.svg", IsIcons::class.java)
 
     /**
-     * Icon for the Inno Setup run configuration: the script icon (from `inno-setup-script-icon.png`,
-     * scaled to 16px) with the standard green "run" play arrow overlaid as a badge that covers 50% of
+     * Represents the PSI template file for this Inno Setup language.
+     */
+    @JvmField
+    val TemplateFile: Icon = IconLoader.getIcon("/icons/inno-setup-template-icon.svg", IsIcons::class.java)
+
+    /**
+     * Icon for the Inno Setup run configuration: the script icon with the standard green "run" play arrow overlaid as a badge that covers 50% of
      * the base icon's area in the lower-right corner.
      */
     @JvmField
     val RunConfiguration: Icon = run {
-        val base = IconLoader.getIcon("/icons/inno-setup-script-icon@16.png", IsIcons::class.java)
+        val base = IconLoader.getIcon("/icons/inno-setup-script-icon.svg", IsIcons::class.java)
         // 50% of the base area -> each side is scaled by sqrt(0.5) of the base side.
         val targetSide = (base.iconWidth * sqrt(0.5)).roundToInt()
         val badge = ScaledIcon(AllIcons.RunConfigurations.TestState.Run, targetSide)
         LayeredIcon(2).apply {
             setIcon(base, 0)
-            setIcon(badge, 1, (base.iconWidth - badge.iconWidth / 1.5).toInt(),
+            setIcon(
+                badge, 1, (base.iconWidth - badge.iconWidth / 1.5).toInt(),
                 (base.iconHeight - badge.iconHeight / 1.5).toInt()
             )
         }

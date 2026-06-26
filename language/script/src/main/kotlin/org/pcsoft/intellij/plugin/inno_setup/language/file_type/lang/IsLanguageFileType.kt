@@ -50,5 +50,5 @@ class IsLanguageFileType private constructor() : LanguageFileType(IsScriptLangua
     /**
      * Returns the icon shown for this element or file type.
      */
-    override fun getIcon(): Icon = IsIcons.ScriptFile
+    override fun getIcon(): Icon = IsIcons.LanguageFile
 }
