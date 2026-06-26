@@ -63,15 +63,15 @@ Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **W
 git clone https://github.com/KleinerHacker/inno-setup.git
 cd inno-setup
 
-# Generate parser and lexer, then compile
-./gradlew compileKotlin
+# Generate parsers/lexers and compile every module
+./gradlew assemble
 
-# Run all tests
-./gradlew test
+# Run all tests (they live in the :plugin module)
+./gradlew :plugin:test
 
 # Build the distributable plugin ZIP
-./gradlew buildPlugin
-# → build/distributions/inno-setup-<version>.zip
+./gradlew :plugin:buildPlugin
+# → plugin/build/distributions/inno-setup-<version>.zip
 ```
 
 ### Run in a sandboxed IDE
@@ -95,26 +95,32 @@ Preconfigured run configurations are included in `.run/`:
 
 ### Project Structure
 
+A **Gradle multi-module** build with the dependency chain `:plugin → :language:script → :language:preprocessor`.
+The root project is a pure aggregator (no code, no `plugin.xml`).
+
 ```
 .
-├── src/
-│   ├── main/
-│   │   ├── kotlin/          Plugin sources (Kotlin)
-│   │   └── resources/
-│   │       ├── META-INF/    plugin.xml, optional config files
-│   │       ├── parsing/     Grammar (.bnf) and lexer (.flex) sources
-│   │       └── spec/        Inno Setup spec data (YAML)
-│   └── test/
-│       ├── kotlin/          Unit and integration tests
-│       └── resources/       Test scripts and expected PSI trees
-├── build/parsing/gen/       Generated parser, lexer, and PSI classes (auto-generated)
+├── language/
+│   ├── preprocessor/        ISPP preprocessor language (lexer/parser/PSI, highlighter, annotator,
+│   │                        brace matcher, references, expression engine, ISPP spec, PluginBundle)
+│   │   └── src/main/{kotlin, resources/{META-INF, parsing, spec, messages}}
+│   └── script/              Inno Setup language: section/INI grammar (.iss/.isl/.ist), file types,
+│       │                    highlighter, folding, annotator, references, include infra, ISPP injector,
+│       │                    spec/settings services
+│       └── src/main/{kotlin, resources/{META-INF, parsing, spec, icons}}
+├── plugin/                  Publishable plugin: IDE features, build/run, settings UI, main plugin.xml,
+│   │                        color schemes, icons — and ALL tests
+│   └── src/{main, test}/
+├── buildSrc/                Shared Gradle convention (inno-setup.platform-module)
+├── <module>/build/generated/  Generated parser/lexer/PSI per module (auto-generated)
 ├── docs/                    MkDocs documentation site
-├── build.gradle.kts
+├── build.gradle.kts         Root aggregator (Dokka over all modules, kover merge, MkDocs, generateSources)
 └── settings.gradle.kts
 ```
 
-> **Note:** The files under `build/parsing/gen/` are generated automatically before compilation via
-`./gradlew generateSources` (or `generateLexers` / `generateParsers` individually). Never edit them by hand — they are overwritten on every build.
+> **Note:** Generated sources live per-module under `<module>/build/generated/`. Regenerate them via
+`./gradlew generateSources` (root umbrella) or the per-module `generateIs*Parser`/`generateIs*Lexer` tasks.
+Never edit them by hand — they are overwritten on every build.
 
 ---
 

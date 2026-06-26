@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026.
+  ~ This work is licensed under the Apache License, Version 2.0.
+  ~ You may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at:
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and limitations.
+  -->
+
+<!-- ISPP preprocessor language fragment (:language:preprocessor). Pulled into the main plugin.xml via
+     <xi:include>. Contains only the language-level ISPP registrations. -->
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- ISPP parser (injected language for #define, #include, etc.) -->
+        <lang.parserDefinition language="ISPP"
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorParserDefinition"/>
+
+        <!-- ISPP syntax highlighting -->
+        <lang.syntaxHighlighterFactory language="ISPP"
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorHighlighterFactory"/>
+
+        <!-- ISPP semantic annotator -->
+        <annotator language="ISPP"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorAnnotator"/>
+
+        <!-- ISPP brace matching: () for preprocessor directives -->
+        <lang.braceMatcher language="ISPP"
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsPreprocessorBraceMatcher"/>
+    </extensions>
+</idea-plugin>

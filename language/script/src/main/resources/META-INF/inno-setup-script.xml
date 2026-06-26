@@ -1,0 +1,89 @@
+<!--
+  ~ Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026.
+  ~ This work is licensed under the Apache License, Version 2.0.
+  ~ You may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at:
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and limitations.
+  -->
+
+<!-- Inno Setup language fragment (:language:script): the .iss/.isl/.ist file types and their language-level
+     registrations (parser, highlighter, folding, brace matching, basic annotator, commenter, injector).
+     Pulled into the main plugin.xml via <xi:include>. -->
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- File types -->
+        <fileType name="Inno Setup Script"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
+                  language="ISS"
+                  extensions="iss"/>
+        <fileType name="Inno Setup Language"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
+                  language="ISS"
+                  extensions="isl"/>
+        <fileType name="Inno Setup Template"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType"
+                  language="IST"
+                  extensions="ist"/>
+
+        <!-- ISL file icon: base icon + language-flag overlay -->
+        <fileIconProvider implementation="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileIconProvider"/>
+
+        <!-- Parser / highlighting -->
+        <lang.parserDefinition language="ISS"
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="ISS"
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionHighlighterFactory"/>
+        <lang.parserDefinition language="IST"
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="IST"
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateHighlighterFactory"/>
+
+        <!-- Semantic annotators -->
+        <annotator language="ISS"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotator"/>
+        <annotator language="ISS"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.lang.IsLanguageAnnotator"/>
+
+        <!-- Error filter for [Code] -->
+        <highlightErrorFilter
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionErrorFilter"/>
+
+        <!-- ISPP injector: injects ISPP language into IsSectionPreprocessorLine / template elements -->
+        <multiHostInjector
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.injection.IsPreprocessorInjector"/>
+
+        <!-- Brace matching -->
+        <lang.braceMatcher language="ISS"
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsSectionBraceMatcher"/>
+        <lang.braceMatcher language="IST"
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template.IsTemplateBraceMatcher"/>
+
+        <!-- Code folding -->
+        <lang.foldingBuilder language="ISS"
+                             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionCodeFoldingBuilder"/>
+
+        <!-- Commenter (Ctrl+/) -->
+        <lang.commenter language="ISS"
+                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsCommenter"/>
+
+        <!-- Typed handlers: auto-popup after '[' and '{', quote handling, template typing -->
+        <typedHandler
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionTypedHandler"/>
+        <typedHandler
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsQuoteHandler"/>
+        <typedHandler
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template.IsTemplateTypedHandler"/>
+
+        <!-- Color settings page -->
+        <colorSettingsPage
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionColorSettingsPage"/>
+
+        <!-- Persistent state storage for the Inno Setup installation path -->
+        <applicationService
+                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService"/>
+    </extensions>
+</idea-plugin>

@@ -14,6 +14,10 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 
 rootProject.name = "inno-setup"
 
+include(":language:preprocessor")
+include(":language:script")
+include(":plugin")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()

@@ -1,0 +1,75 @@
+/*
+ * Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026.
+ * This work is licensed under the Apache License, Version 2.0.
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations.
+ */
+
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
+import org.jetbrains.grammarkit.tasks.GenerateParserTask
+
+// :language:script — the Inno Setup language (section/INI grammar shared by .iss/.isl/.ist, file types,
+// highlighter, folding, brace matching, basic annotator + quickfixes, references, include infrastructure,
+// the ISPP injector). Depends on :language:preprocessor and is pulled in by :plugin. Carries its own
+// plugin.xml fragment (META-INF/inno-setup-script.xml).
+plugins {
+    id("inno-setup.platform-module")
+    id("org.jetbrains.grammarkit") version "2023.3.0.3"
+    id("org.jetbrains.dokka") version "2.2.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.8"
+}
+
+dependencies {
+    implementation(project(":language:preprocessor"))
+}
+
+val parsingRoot = "src/main/resources/parsing"
+val languagePackage = "org/pcsoft/intellij/plugin/inno_setup/language"
+val sectionPackage = "$languagePackage/parser/section"
+val templatePackage = "$languagePackage/parser/template"
+
+tasks {
+    register<GenerateParserTask>("generateIsSectionParser") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionGrammar.bnf"))
+        targetRootOutputDir.set(layout.buildDirectory.dir("generated"))
+        pathToParser.set("$sectionPackage/IsSectionParser.java")
+        pathToPsiRoot.set("$sectionPackage/psi")
+        purgeOldFiles.set(true)
+    }
+
+    register<GenerateLexerTask>("generateIsSectionLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionLexer.flex"))
+        targetOutputDir.set(layout.buildDirectory.dir("generated/$sectionPackage"))
+        purgeOldFiles.set(true)
+    }
+
+    register<GenerateParserTask>("generateIsTemplateParser") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateGrammar.bnf"))
+        targetRootOutputDir.set(layout.buildDirectory.dir("generated"))
+        pathToParser.set("$templatePackage/IsTemplateParser.java")
+        pathToPsiRoot.set("$templatePackage/psi")
+        purgeOldFiles.set(true)
+    }
+
+    register<GenerateLexerTask>("generateIsTemplateLexer") {
+        sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateLexer.flex"))
+        targetOutputDir.set(layout.buildDirectory.dir("generated/$templatePackage"))
+        purgeOldFiles.set(true)
+    }
+
+    val generators = listOf(
+        "generateIsSectionLexer", "generateIsSectionParser",
+        "generateIsTemplateLexer", "generateIsTemplateParser",
+    )
+    compileJava { dependsOn(generators) }
+    compileKotlin { dependsOn(generators) }
+}
+
+sourceSets.main {
+    java.srcDir(layout.buildDirectory.dir("generated"))
+}
