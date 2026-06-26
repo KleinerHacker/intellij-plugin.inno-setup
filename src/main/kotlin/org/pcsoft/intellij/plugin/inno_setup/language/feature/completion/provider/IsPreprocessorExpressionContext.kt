@@ -61,7 +61,26 @@ internal object IsPreprocessorExpressionContext {
     // The caret sits in the filename argument of `#ifexist`/`#ifnexist` (a string expression).
     private val IFEXIST_EXPR_PREFIX = Regex("^#\\s*(?:ifexist|ifnexist)\\s+.*$", RegexOption.IGNORE_CASE)
 
+    // The caret sits in a `#for {Init; Cond; Incr} Body` after the opening `{` — i.e. in one of the three
+    // semicolon-separated slots or in the same-line body after the closing `}`. Each slot is an expression
+    // (the condition/increment reference the loop variable and other #defines, the body is usually a #sub
+    // call), so references/built-ins/the loop variable are completable throughout.
+    private val FOR_EXPR_PREFIX = Regex("^#\\s*for\\s+\\{.*$", RegexOption.IGNORE_CASE)
+
+    // The caret sits in the *body* of a `#for {…} <caret>` — after the closing `}`. A #sub call is only
+    // legitimate here (a subroutine may not be used anywhere else), so #sub names are offered only in this slot.
+    private val FOR_BODY_PREFIX = Regex("^#\\s*for\\s+\\{[^}]*\\}\\s*[A-Za-z0-9_.\\-]*$", RegexOption.IGNORE_CASE)
+
     private val WORD_TAIL = Regex("[A-Za-z0-9_.\\-]*$")
+
+    /** Whether the caret sits in the body slot of a `#for {…} <body>` (the only place a #sub may be called). */
+    fun isForBodyContext(params: CompletionParameters): Boolean {
+        val offset = params.offset
+        val doc = params.editor.document
+        val lineStart = doc.getLineStartOffset(doc.getLineNumber(offset))
+        val linePrefix = doc.charsSequence.subSequence(lineStart, offset).toString()
+        return FOR_BODY_PREFIX.matches(linePrefix)
+    }
 
     /**
      * The result set re-bound to the word being typed when the caret sits in a `#define` expression, or
@@ -81,7 +100,8 @@ internal object IsPreprocessorExpressionContext {
             !DIM_INIT_PREFIX.matches(linePrefix) &&
             !PRAGMA_EXPR_PREFIX.matches(linePrefix) &&
             !IF_EXPR_PREFIX.matches(linePrefix) &&
-            !IFEXIST_EXPR_PREFIX.matches(linePrefix)
+            !IFEXIST_EXPR_PREFIX.matches(linePrefix) &&
+            !FOR_EXPR_PREFIX.matches(linePrefix)
         ) return null
         if (linePrefix.count { it == '"' } % 2 == 1) return null
 

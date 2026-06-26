@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * `IsPreprocessorDirectiveKeywordProvider` inside [IsPreprocessorCompletionContributor]:
  * after `#`, the ISPP directive names from the spec are offered.
  */
-class IsPreprocessorDirectiveCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorDirectiveCompletionTest : IsTimedBasePlatformTestCase() {
 
     private fun directiveLookup(content: String, fileType: FileType = IsScriptFileType.INSTANCE): List<String> {
         myFixture.configureByText(fileType, content)

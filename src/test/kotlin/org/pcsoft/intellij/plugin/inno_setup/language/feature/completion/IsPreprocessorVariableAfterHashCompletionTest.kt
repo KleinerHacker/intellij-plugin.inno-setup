@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests that value-bearing ISPP predefined variables are offered after `{#` (inline emission),
  * while user `#define`s still appear and the valueless `void` symbols are excluded.
  */
-class IsPreprocessorVariableAfterHashCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorVariableAfterHashCompletionTest : IsTimedBasePlatformTestCase() {
 
     private fun lookup(content: String): List<String> {
         myFixture.configureByText(IsScriptFileType.INSTANCE, content)

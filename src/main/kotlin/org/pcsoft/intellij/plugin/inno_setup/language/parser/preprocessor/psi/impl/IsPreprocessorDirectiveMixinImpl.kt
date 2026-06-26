@@ -26,6 +26,9 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludeP
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsIncludeFileReference
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IS_PREPROCESSOR_BOOLEAN_WORDS
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorForVariableReference
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenizer
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorQuotedString
@@ -307,7 +310,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     }
 
     /**
-     * The parsed pieces of a `#dim`/`#redim` value `Name[Size] [{init}]`: the size text and the optional inline
+     * The parsed pieces of a `#dim`/`#redim` value `Name\[Size] [{init}]`: the size text and the optional inline
      * initialiser body, each with its offset inside the directive's text. `null` when this is not an array
      * declaration or there is no `[…]`.
      */
@@ -349,7 +352,7 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     override fun isArrayElementDefine(): Boolean = isDefine() && rawAfterName()?.startsWith("[") == true
 
     /**
-     * The parsed pieces of an array element `#define Name[Index] Value`: the index text and the value text, each
+     * The parsed pieces of an array element `#define Name\[Index] Value`: the index text and the value text, each
      * with its offset inside the directive's text. `null` when this is not an array element assignment.
      */
     private fun arrayElementParts(): ArrayElementParts? {
@@ -524,6 +527,32 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             }
             return fileRefs + exprRefs
         }
+        // `#for {Var = Init; Cond; Incr} Body`: identifiers in all four slots reference symbols. The loop
+        // variable name resolves locally to its own declaration (scope = this #for); every other identifier
+        // resolves globally to a preceding #define/#dim/#sub.
+        if (isFor()) {
+            val directive = this as IsPreprocessorDirective
+            val varName = getForVariableName()
+            val varOffset = forVariable()?.second
+            val forbidden = service<IsPreprocessorService>().spec.forbiddenVariableNames
+                .map { it.name.lowercase() }.toSet()
+            val refs = mutableListOf<PsiReference>()
+            forReferenceSlots().forEach { (slotText, slotOffset) ->
+                IsPreprocessorExprTokenizer.tokenize(slotText)
+                    .filter { it.type == IsPreprocessorExprTokenType.IDENT }
+                    .forEach { tok ->
+                        val lower = tok.text.lowercase()
+                        if (lower in IS_PREPROCESSOR_BOOLEAN_WORDS || lower in forbidden) return@forEach
+                        val offsetInDirective = slotOffset + tok.start
+                        if (offsetInDirective == varOffset) return@forEach // the loop-variable declaration itself
+                        refs += if (varName != null && tok.text.equals(varName, ignoreCase = true))
+                            IsPreprocessorForVariableReference(directive, offsetInDirective, tok.text)
+                        else
+                            IsPreprocessorExpressionReference(directive, offsetInDirective, tok.text)
+                    }
+            }
+            return refs.toTypedArray()
+        }
         val ids = expressionReferenceIdentifiers()
         if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
         val directive = this as IsPreprocessorDirective
@@ -531,6 +560,109 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         return ids.map { id ->
             IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
         }.toTypedArray()
+    }
+
+    /** The non-empty `#for` slots (init/cond/incr/body) paired with their offset inside the directive's text. */
+    private fun forReferenceSlots(): List<Pair<String, Int>> {
+        val parts = forParts() ?: return emptyList()
+        return listOfNotNull(
+            parts.initText?.takeIf { parts.initOffset >= 0 }?.let { it to parts.initOffset },
+            parts.condText?.takeIf { parts.condOffset >= 0 }?.let { it to parts.condOffset },
+            parts.incrText?.takeIf { parts.incrOffset >= 0 }?.let { it to parts.incrOffset },
+            parts.bodyText?.takeIf { parts.bodyOffset >= 0 }?.let { it to parts.bodyOffset },
+        )
+    }
+
+    // ── #sub / #endsub ────────────────────────────────────────────────────────
+
+    override fun isSub(): Boolean = keywordEquals("sub")
+
+    override fun isEndsub(): Boolean = keywordEquals("endsub")
+
+    override fun isSubroutineOpener(): Boolean = isSub()
+
+    override fun isSubroutineDirective(): Boolean = isSub() || isEndsub()
+
+    override fun getSubroutineName(): String? {
+        if (!isSub()) return null
+        return nameNode()?.text
+    }
+
+    // ── #for loops ──────────────────────────────────────────────────────────────
+
+    override fun isFor(): Boolean = keywordEquals("for")
+
+    override fun getForInitText(): String? = forParts()?.initText
+    override fun getForInitOffsetInDirective(): Int = forParts()?.initOffset ?: -1
+    override fun getForConditionText(): String? = forParts()?.condText
+    override fun getForConditionOffsetInDirective(): Int = forParts()?.condOffset ?: -1
+    override fun getForIncrementText(): String? = forParts()?.incrText
+    override fun getForIncrementOffsetInDirective(): Int = forParts()?.incrOffset ?: -1
+    override fun getForBodyText(): String? = forParts()?.bodyText
+    override fun getForBodyOffsetInDirective(): Int = forParts()?.bodyOffset ?: -1
+
+    override fun getForVariableName(): String? = forVariable()?.first
+
+    override fun getForVariableNameNode(): PsiElement? {
+        val offset = forVariable()?.second ?: return null
+        val leaf = (this as IsPreprocessorDirective).findElementAt(offset) ?: return null
+        return if (leaf.node.elementType == IsPreprocessorTypes.IDENTIFIER) leaf else null
+    }
+
+    /**
+     * The loop variable of a `#for`: its name plus the offset of its identifier within the directive's text.
+     * The variable is the outermost left-hand side of the first assignment in the initializer (`Name = …`,
+     * also the first link of a chained `a = b = …`). `null` when this is not a `#for` or the initializer
+     * contains no `Name =` assignment.
+     */
+    private fun forVariable(): Pair<String, Int>? {
+        val parts = forParts() ?: return null
+        val initText = parts.initText ?: return null
+        if (parts.initOffset < 0) return null
+        val eq = topLevelAssignmentIndex(initText) ?: return null
+        val lhs = initText.substring(0, eq)
+        val leading = lhs.length - lhs.trimStart().length
+        val name = lhs.trim()
+        if (name.isEmpty() || !IS_PREPROCESSOR_IDENTIFIER.matches(name)) return null
+        return name to (parts.initOffset + leading)
+    }
+
+    /** Parsed `{Init; Cond; Incr} Body` pieces of a `#for`, each with its offset inside the directive's text. */
+    private fun forParts(): ForParts? {
+        if (!isFor()) return null
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return null
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        val raw = value.text
+        val open = raw.indexOf('{')
+        if (open < 0) {
+            // No brace group: the whole value is treated as the (invalid) body — the annotator reports it.
+            val bodyLeading = raw.length - raw.trimStart().length
+            val body = raw.trim()
+            return ForParts(null, -1, null, -1, null, -1,
+                body.ifEmpty { null }, if (body.isEmpty()) -1 else valueOffsetInDirective + bodyLeading)
+        }
+        val rel = matchingBrace(raw.substring(open)) ?: return ForParts(
+            null, -1, null, -1, null, -1, null, -1
+        )
+        val close = open + rel
+        val inner = raw.substring(open + 1, close)
+        val sections = splitTopLevelSemicolons(inner)
+        fun section(i: Int): Pair<String, Int>? = sections.getOrNull(i)?.let { (text, startInInner) ->
+            text to (valueOffsetInDirective + open + 1 + startInInner)
+        }
+        val init = section(0)
+        val cond = section(1)
+        val incr = section(2)
+        val after = raw.substring(close + 1)
+        val bodyLeading = after.length - after.trimStart().length
+        val body = after.trim()
+        return ForParts(
+            init?.first, init?.second ?: -1,
+            cond?.first, cond?.second ?: -1,
+            incr?.first, incr?.second ?: -1,
+            body.ifEmpty { null }, if (body.isEmpty()) -1 else valueOffsetInDirective + close + 1 + bodyLeading,
+        )
     }
 
     // ── #pragma ───────────────────────────────────────────────────────────────
@@ -686,6 +818,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     override fun getNameIdentifier(): PsiElement? {
         // An array element `#define Name[i]` is a *usage* of the array, not a declaration — handled via references.
         if (isArrayElementDefine()) return null
+        // A `#sub Name` declares the subroutine name; a `#for {Var = …}` declares its loop variable.
+        if (isSub()) return nameNode()?.psi
+        if (isFor()) return getForVariableNameNode()
         if (!isDefine() && !isUndef() && !isArrayDeclaration()) return null
         return nameNode()?.psi
     }
@@ -703,6 +838,68 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         val initOffset: Int,
     )
 
-    /** Parsed pieces of an array element `#define Name[Index] Value` (the index), with its directive offset. */
+    /** Parsed pieces of an array element `#define Name\[Index] Value` (the index), with its directive offset. */
     private data class ArrayElementParts(val indexText: String, val indexOffset: Int)
+
+    /** Parsed `{Init; Cond; Incr} Body` pieces of a `#for`, each text with its offset inside the directive. */
+    private data class ForParts(
+        val initText: String?, val initOffset: Int,
+        val condText: String?, val condOffset: Int,
+        val incrText: String?, val incrOffset: Int,
+        val bodyText: String?, val bodyOffset: Int,
+    )
+
+    /**
+     * Splits [text] on top-level `;`, ignoring semicolons nested in `()`/`[]`/`{}` or inside `"…"`/`'…'`
+     * strings. Returns each section's raw text together with its start offset inside [text].
+     */
+    private fun splitTopLevelSemicolons(text: String): List<Pair<String, Int>> {
+        val parts = mutableListOf<Pair<String, Int>>()
+        val sb = StringBuilder()
+        var start = 0
+        var depth = 0
+        var quote: Char? = null
+        for (i in text.indices) {
+            val c = text[i]
+            when {
+                quote != null -> { sb.append(c); if (c == quote) quote = null }
+                c == '"' || c == '\'' -> { sb.append(c); quote = c }
+                c == '(' || c == '[' || c == '{' -> { depth++; sb.append(c) }
+                c == ')' || c == ']' || c == '}' -> { depth--; sb.append(c) }
+                c == ';' && depth == 0 -> { parts += sb.toString() to start; sb.clear(); start = i + 1 }
+                else -> sb.append(c)
+            }
+        }
+        parts += sb.toString() to start
+        return parts
+    }
+
+    /**
+     * Index of the first top-level assignment `=` in [text] (not part of `==`/`<=`/`>=`/`!=`), ignoring
+     * `()`/`[]`/`{}` nesting and string literals, or `null` when there is no plain assignment.
+     */
+    private fun topLevelAssignmentIndex(text: String): Int? {
+        var depth = 0
+        var quote: Char? = null
+        for (i in text.indices) {
+            val c = text[i]
+            when {
+                quote != null -> if (c == quote) quote = null
+                c == '"' || c == '\'' -> quote = c
+                c == '(' || c == '[' || c == '{' -> depth++
+                c == ')' || c == ']' || c == '}' -> depth--
+                c == '=' && depth == 0 -> {
+                    val prev = text.getOrNull(i - 1)
+                    val next = text.getOrNull(i + 1)
+                    if (prev != '=' && prev != '<' && prev != '>' && prev != '!' && next != '=') return i
+                }
+            }
+        }
+        return null
+    }
+
+    private companion object {
+        /** A plain ISPP identifier (loop-variable name); letters/underscore start, then letters/digits/underscore. */
+        val IS_PREPROCESSOR_IDENTIFIER = Regex("[A-Za-z_][A-Za-z0-9_]*")
+    }
 }

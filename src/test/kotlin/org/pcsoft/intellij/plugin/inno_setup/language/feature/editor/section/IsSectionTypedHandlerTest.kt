@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate.Result
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiFile
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * an auto-popup is scheduled. The handler is invoked directly so the assertion
  * is on the returned [Result], independent of the asynchronous popup machinery.
  */
-class IsSectionTypedHandlerTest : BasePlatformTestCase() {
+class IsSectionTypedHandlerTest : IsTimedBasePlatformTestCase() {
 
     private val handler = IsSectionTypedHandler()
 

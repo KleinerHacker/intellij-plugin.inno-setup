@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * ISPP rename integration is also exercised in IsSectionPreprocessorReferenceTest.
  * This file focuses on section-level cross-reference rename.
  */
-class IsSectionRenameTest : BasePlatformTestCase() {
+class IsSectionRenameTest : IsTimedBasePlatformTestCase() {
 
     // ═══════════════════════════════════════════════════════════════════════════
     // ISPP constant rename  (#define Name → {#Name})

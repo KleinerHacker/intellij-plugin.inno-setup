@@ -15,12 +15,12 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import com.intellij.ui.JBColor
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 
-class IsSectionCompletionTest : BasePlatformTestCase() {
+class IsSectionCompletionTest : IsTimedBasePlatformTestCase() {
 
     /** Foreground color the completion popup would render for the given key, or null if absent. */
     private fun foregroundOf(name: String): java.awt.Color? =

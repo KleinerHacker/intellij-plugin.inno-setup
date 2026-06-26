@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiReference
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -29,7 +29,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  *   1. ISPP constant references  {#Name} → #define Name  (now in injected ISPP PSI)
  *   2. Section cross-references  Tasks: name → `\[Tasks]` Name: name
  */
-class IsSectionReferenceSystemTest : BasePlatformTestCase() {
+class IsSectionReferenceSystemTest : IsTimedBasePlatformTestCase() {
 
     private fun ref(content: String): PsiReference? {
         myFixture.configureByText(IsScriptFileType.INSTANCE, content)

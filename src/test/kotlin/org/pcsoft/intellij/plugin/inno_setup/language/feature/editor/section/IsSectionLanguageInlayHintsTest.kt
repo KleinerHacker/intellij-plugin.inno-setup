@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Integration tests for [IsSectionLanguageInlayHintsProvider]: drives the provider over real PSI and
  * inspects the editor's inlay model after a highlighting pass.
  */
-class IsSectionLanguageInlayHintsTest : BasePlatformTestCase() {
+class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
 
     private val VALID_SETUP = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

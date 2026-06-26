@@ -16,7 +16,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.task.TaskRunnerResults
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import java.io.File
 
@@ -24,7 +24,7 @@ import java.io.File
  * Tests [IsCompilerService] behaviour that does not require a real ISCC process: command-line
  * assembly, document saving, and graceful failure when unconfigured.
  */
-class IsCompilerServiceTest : BasePlatformTestCase() {
+class IsCompilerServiceTest : IsTimedBasePlatformTestCase() {
 
     // ── command line ─────────────────────────────────────────────────────────────
 

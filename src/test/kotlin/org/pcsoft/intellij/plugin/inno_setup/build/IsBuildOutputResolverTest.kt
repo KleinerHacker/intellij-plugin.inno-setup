@@ -12,12 +12,12 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests [IsBuildOutputResolver]'s end-to-end resolution, including reading `\[Setup] OutputDir` via PSI.
  */
-class IsBuildOutputResolverTest : BasePlatformTestCase() {
+class IsBuildOutputResolverTest : IsTimedBasePlatformTestCase() {
 
     fun testBuildDirMapsRelativeOutputDir() {
         val file = myFixture.addFileToProject("setup.iss", "[Setup]\nOutputDir=Release\n")

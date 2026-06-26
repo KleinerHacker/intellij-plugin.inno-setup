@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests for the `#if`/`#elif`/`#else`/`#endif` block-structure validation in [IsPreprocessorAnnotator].
  * `#elif`/`#else` are optional, so the matched/valid cases are tested with and without them.
  */
-class IsPreprocessorConditionalStructureAnnotatorTest : BasePlatformTestCase() {
+class IsPreprocessorConditionalStructureAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

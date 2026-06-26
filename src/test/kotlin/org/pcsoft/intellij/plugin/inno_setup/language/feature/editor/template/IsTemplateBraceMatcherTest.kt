@@ -12,11 +12,11 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
 
-class IsTemplateBraceMatcherTest : BasePlatformTestCase() {
+class IsTemplateBraceMatcherTest : IsTimedBasePlatformTestCase() {
 
     fun testBracePairsCount() {
         assertEquals(2, IsTemplateBraceMatcher.PAIRS.size)

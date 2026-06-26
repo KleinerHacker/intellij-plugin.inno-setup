@@ -63,14 +63,24 @@ class IsPreprocessorExpressionReference(
             ?.first
         if (canonicalDim != null) return canonicalDim
 
-        // Otherwise a scalar `#define Name` (an array element `#define Name[i]` is a usage, not a declaration);
+        // A scalar `#define Name` (an array element `#define Name[i]` is a usage, not a declaration);
         // the nearest preceding declaration wins (a later #define shadows an earlier one).
-        return hostFile.isppDirectivesWithHostOffset
+        hostFile.isppDirectivesWithHostOffset
             .filter { (d, offset) ->
                 val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
                 offset < currentOffset && ex.isDefine() && !ex.isArrayElementDefine() && ex.getDefineName() == name
             }
             .maxByOrNull { it.second }   // nearest preceding declaration
+            ?.first
+            ?.let { return it }
+
+        // Otherwise a `#sub Name` subroutine (e.g. referenced as a `#for` body); nearest preceding wins.
+        return hostFile.isppDirectivesWithHostOffset
+            .filter { (d, offset) ->
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isSub() && ex.getSubroutineName().equals(name, ignoreCase = true)
+            }
+            .maxByOrNull { it.second }
             ?.first
     }
 

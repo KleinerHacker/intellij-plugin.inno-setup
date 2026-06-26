@@ -16,7 +16,7 @@ import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests folding of `#if … #endif` blocks: a fold is offered only when the whole range lies within one
  * section or entirely outside any section — never when it crosses a section header.
  */
-class IsPreprocessorConditionalFoldingTest : BasePlatformTestCase() {
+class IsPreprocessorConditionalFoldingTest : IsTimedBasePlatformTestCase() {
 
     private fun conditionalFolds(content: String): List<FoldingDescriptor> {
         val file = myFixture.configureByText(IsScriptFileType.INSTANCE, content)

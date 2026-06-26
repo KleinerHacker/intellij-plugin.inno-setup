@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action
 import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.util.Disposer
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import com.intellij.ui.components.JBTextField
 import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
 import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
  * Tests for [IsLanguageCreateFileDialog]'s exposed input properties (the values consumed by
  * [IsLanguageCreateFileAction.buildTemplate]). The dialog is never shown; only its model is exercised.
  */
-class IsLanguageCreateFileDialogTest : BasePlatformTestCase() {
+class IsLanguageCreateFileDialogTest : IsTimedBasePlatformTestCase() {
 
     private fun withDialog(block: (IsLanguageCreateFileDialog) -> Unit) {
         val dialog = IsLanguageCreateFileDialog(project)

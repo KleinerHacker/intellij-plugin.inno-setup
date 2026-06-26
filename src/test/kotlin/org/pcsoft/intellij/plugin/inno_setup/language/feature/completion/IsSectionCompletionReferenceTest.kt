@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -22,7 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * does not hide any names.  Two or more names are always defined so IntelliJ shows
  * a popup (single-item completion would be auto-applied, making lookupElementStrings null).
  */
-class IsSectionCompletionReferenceTest : BasePlatformTestCase() {
+class IsSectionCompletionReferenceTest : IsTimedBasePlatformTestCase() {
 
     // ── Tasks cross-reference completion ─────────────────────────────────────
 

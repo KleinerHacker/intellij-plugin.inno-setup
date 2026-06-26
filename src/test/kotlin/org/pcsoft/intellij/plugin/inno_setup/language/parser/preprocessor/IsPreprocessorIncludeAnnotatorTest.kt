@@ -14,13 +14,13 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiFile
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests for the `#include` validation in [IsPreprocessorAnnotator]: the value must be a string and a literal
  * path must point to an existing file (its content is not parser-checked).
  */
-class IsPreprocessorIncludeAnnotatorTest : BasePlatformTestCase() {
+class IsPreprocessorIncludeAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private fun open(name: String, content: String): PsiFile {
         val file = myFixture.addFileToProject(name, content)

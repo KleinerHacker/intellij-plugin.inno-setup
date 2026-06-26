@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewElement
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewFactory
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewModel
@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests for the structure-view tree built by [org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewElement] /
  * [org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewModel] / [org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewFactory].
  */
-class IsSectionStructureViewTest : BasePlatformTestCase() {
+class IsSectionStructureViewTest : IsTimedBasePlatformTestCase() {
 
     private val script =
         "[Setup]\nAppName=My App\nAppVersion=1.0\n\n[Files]\nSource: \"app.exe\"; DestDir: \"{app}\"\n"

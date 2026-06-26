@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -28,7 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * Tests `#dim`/`#redim` parsing, the `#dim`/`#define` interplay, static element value resolution and
  * `#dim` ↔ usage reference resolution / rename.
  */
-class IsSectionPreprocessorArrayTest : BasePlatformTestCase() {
+class IsSectionPreprocessorArrayTest : IsTimedBasePlatformTestCase() {
 
     private fun setup(content: String): IsScriptFile {
         val file = myFixture.configureByText(IsScriptFileType.INSTANCE, content)

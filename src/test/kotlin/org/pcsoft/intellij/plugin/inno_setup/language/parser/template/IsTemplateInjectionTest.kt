@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.template
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplatePreprocessorLine
@@ -22,7 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemp
 /**
  * The ISPP language must be injected into preprocessor lines of `.ist` template files, just like in `.iss`.
  */
-class IsTemplateInjectionTest : BasePlatformTestCase() {
+class IsTemplateInjectionTest : IsTimedBasePlatformTestCase() {
 
     private fun isppFilesIn(text: String): List<IsPreprocessorFile> {
         myFixture.configureByText(IsTemplateFileType.INSTANCE, text)

@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.injection.InjectedLanguageManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * reference scripts highlight without error, while syntax/type violations are flagged as ERROR at the
  * precise offending token.
  */
-class IsPreprocessorExpressionAnnotatorTest : BasePlatformTestCase() {
+class IsPreprocessorExpressionAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

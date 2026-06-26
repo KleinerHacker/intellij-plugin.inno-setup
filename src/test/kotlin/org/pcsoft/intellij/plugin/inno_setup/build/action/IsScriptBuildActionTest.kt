@@ -17,12 +17,12 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.testFramework.TestActionEvent
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests the visibility/enabled state computed by [IsScriptBuildAction.update].
  */
-class IsScriptBuildActionTest : BasePlatformTestCase() {
+class IsScriptBuildActionTest : IsTimedBasePlatformTestCase() {
 
     private val action = IsScriptBuildAction()
 

@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
@@ -22,7 +22,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * Tests for the `#pragma` completion contributed by `IsPreprocessorPragmaProvider`: after `#pragma ` the
  * sub-commands are offered, and after `#pragma option|parseroption ` the accepted option flags.
  */
-class IsPreprocessorPragmaCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorPragmaCompletionTest : IsTimedBasePlatformTestCase() {
 
     private fun lookup(content: String, fileType: FileType = IsScriptFileType.INSTANCE): List<String> {
         myFixture.configureByText(fileType, content)

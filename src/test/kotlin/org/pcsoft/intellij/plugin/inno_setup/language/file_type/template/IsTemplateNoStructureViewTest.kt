@@ -13,13 +13,13 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.file_type.template
 
 import com.intellij.ide.structureView.StructureViewBuilder
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * A `.ist` template must have no structure view: no `psiStructureViewFactory` is registered for IST, so
  * the platform must not produce a structure-view builder for it.
  */
-class IsTemplateNoStructureViewTest : BasePlatformTestCase() {
+class IsTemplateNoStructureViewTest : IsTimedBasePlatformTestCase() {
 
     fun testNoStructureViewBuilder() {
         val file = myFixture.configureByText(IsTemplateFileType.INSTANCE, "[Setup]\nfoo\n")

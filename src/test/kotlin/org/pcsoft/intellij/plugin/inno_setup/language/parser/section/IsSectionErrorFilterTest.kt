@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * An unclosed section header (`\[Name` without `]`) pins after `[` and yields a
  * [PsiErrorElement] inside that section, giving a deterministic in-section error.
  */
-class IsSectionErrorFilterTest : BasePlatformTestCase() {
+class IsSectionErrorFilterTest : IsTimedBasePlatformTestCase() {
 
     private val filter = IsSectionErrorFilter()
 

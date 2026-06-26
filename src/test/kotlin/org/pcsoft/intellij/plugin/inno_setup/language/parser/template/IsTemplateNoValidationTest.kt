@@ -13,13 +13,13 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.template
 
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * A `.ist` template is free text: even content that would be invalid `.iss` must not produce any
  * ERROR/WARNING highlights, because no annotator/validator is registered for IST.
  */
-class IsTemplateNoValidationTest : BasePlatformTestCase() {
+class IsTemplateNoValidationTest : IsTimedBasePlatformTestCase() {
 
     fun testBrokenIssContentHasNoHighlights() {
         myFixture.configureByText(

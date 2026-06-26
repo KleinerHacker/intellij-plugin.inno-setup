@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
@@ -33,7 +33,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  *   - rename (name + all {#Name} usages updated)
  *   - annotator validation: function-like macros require an expression
  */
-class IsSectionPreprocessorDefineTest : BasePlatformTestCase() {
+class IsSectionPreprocessorDefineTest : IsTimedBasePlatformTestCase() {
 
     // ── helpers ───────────────────────────────────────────────────────────────
 

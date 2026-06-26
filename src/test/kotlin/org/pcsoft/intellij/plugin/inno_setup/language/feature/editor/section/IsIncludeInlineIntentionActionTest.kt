@@ -15,13 +15,13 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
 import com.intellij.openapi.ui.TestDialogManager
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests for [IsIncludeInlineIntentionAction], which replaces an `#include "file"` line with the verbatim
  * content of the referenced file (one level only) and optionally deletes the now-inlined include file.
  */
-class IsIncludeInlineIntentionActionTest : BasePlatformTestCase() {
+class IsIncludeInlineIntentionActionTest : IsTimedBasePlatformTestCase() {
 
     private val action = IsIncludeInlineIntentionAction()
 

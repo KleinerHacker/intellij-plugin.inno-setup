@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
 import com.intellij.ide.navigationToolbar.StructureAwareNavBarModelExtension
 import com.intellij.ide.ui.UISettings
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import com.intellij.util.CommonProcessors
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
@@ -27,7 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
  * Tests for [IsStructureAwareNavbar] — the navigation-bar model extension that reuses the
  * structure view. Verifies presentation, parent resolution and child enumeration.
  */
-class IsStructureAwareNavbarTest : BasePlatformTestCase() {
+class IsStructureAwareNavbarTest : IsTimedBasePlatformTestCase() {
 
     private val navbar = IsStructureAwareNavbar()
 

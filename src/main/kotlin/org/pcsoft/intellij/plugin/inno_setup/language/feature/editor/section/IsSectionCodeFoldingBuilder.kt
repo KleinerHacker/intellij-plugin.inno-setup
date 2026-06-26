@@ -23,6 +23,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorConditionalStructure
+import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorSubroutineStructure
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.hostRange
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
@@ -54,6 +55,7 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
 
         if (root is IsScriptFile) {
             conditionalFolds(root).forEach { descriptors += it }
+            subroutineFolds(root).forEach { descriptors += it }
         }
         return descriptors.toTypedArray()
     }
@@ -65,6 +67,19 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
      */
     private fun conditionalFolds(file: IsScriptFile): List<FoldingDescriptor> {
         return IsPreprocessorConditionalStructure.structureOf(file).blocks.mapNotNull { block ->
+            val range = block.hostRange
+            if (file.sectionAtOffset(range.startOffset) !== file.sectionAtOffset(range.endOffset)) return@mapNotNull null
+            if (range.startOffset >= range.endOffset) return@mapNotNull null
+            FoldingDescriptor(block.openerLine.node, range)
+        }
+    }
+
+    /**
+     * Folds for `#sub … #endsub` blocks — same single-section rule as [conditionalFolds]: the whole block must
+     * lie within one section or entirely outside any section (it must not cross a section header).
+     */
+    private fun subroutineFolds(file: IsScriptFile): List<FoldingDescriptor> {
+        return IsPreprocessorSubroutineStructure.structureOf(file).blocks.mapNotNull { block ->
             val range = block.hostRange
             if (file.sectionAtOffset(range.startOffset) !== file.sectionAtOffset(range.endOffset)) return@mapNotNull null
             if (range.startOffset >= range.endOffset) return@mapNotNull null
@@ -129,7 +144,11 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
     override fun getPlaceholderText(node: ASTNode): String = when (val psi = node.psi) {
         is IsSectionBlock -> ""
         is IsSectionParameterEntry -> "; ..."
-        is IsSectionPreprocessorLine -> psi.text.trim().ifEmpty { "#if ..." } + " ... #endif"
+        is IsSectionPreprocessorLine -> {
+            val text = psi.text.trim()
+            if (text.startsWith("#sub", ignoreCase = true)) text.ifEmpty { "#sub ..." } + " ... #endsub"
+            else text.ifEmpty { "#if ..." } + " ... #endif"
+        }
         else -> "..."
     }
 

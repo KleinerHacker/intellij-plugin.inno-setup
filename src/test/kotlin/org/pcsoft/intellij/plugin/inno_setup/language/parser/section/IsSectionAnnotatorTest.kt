@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 
@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
  * Existing tests in IsSectionAnnotatorPreprocessorTest and IsSectionHighlightingTest cover ISPP constant
  * and section-name highlighting; this file covers the remaining annotator branches.
  */
-class IsSectionAnnotatorTest : BasePlatformTestCase() {
+class IsSectionAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     private fun highlights(content: String) =
         myFixture.run { configureByText(IsScriptFileType.INSTANCE, content); doHighlighting() }

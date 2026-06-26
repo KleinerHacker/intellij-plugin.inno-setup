@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesProcessor
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.Is
 /**
  * Tests for [IsIncludeFileReference]: an `#include "…"` path resolving to the referenced `*.iss` file.
  */
-class IsIncludeFileReferenceTest : BasePlatformTestCase() {
+class IsIncludeFileReferenceTest : IsTimedBasePlatformTestCase() {
 
     private fun includeReference(main: IsScriptFile) =
         main.isppDirectives

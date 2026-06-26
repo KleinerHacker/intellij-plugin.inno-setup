@@ -16,7 +16,7 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplatePreprocessorLine
@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemp
  * A `.ist` template is free text: it must always parse without [PsiErrorElement]s, regardless of content,
  * while still recognizing preprocessor lines as the only structured element.
  */
-class IsTemplateParserTest : BasePlatformTestCase() {
+class IsTemplateParserTest : IsTimedBasePlatformTestCase() {
 
     /** The host template file, even when a leading `#` line caused the ISPP injection to be returned. */
     private fun templateFile(): PsiFile {

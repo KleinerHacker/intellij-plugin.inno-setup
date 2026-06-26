@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 import com.intellij.execution.filters.OpenFileHyperlinkInfo
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests [IsBuildOutputFilter]: the `line XX` token of an ISCC error line becomes a file hyperlink.
@@ -23,7 +23,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
  * Uses a real on-disk file because ISCC reports local paths and the filter resolves them via
  * [LocalFileSystem] (the in-memory fixture VFS would not be found there).
  */
-class IsBuildOutputFilterTest : BasePlatformTestCase() {
+class IsBuildOutputFilterTest : IsTimedBasePlatformTestCase() {
 
     private val filter get() = IsBuildOutputFilter(project)
 

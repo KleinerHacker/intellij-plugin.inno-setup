@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
@@ -26,7 +26,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * references to `#define`s resolved) and the prepared on-disk resolution ([IsPreprocessorDirectiveEx.resolveExistFile]).
  * The existence *diagnostic* itself is a follow-up and is intentionally not asserted here.
  */
-class IsPreprocessorIfExistTest : BasePlatformTestCase() {
+class IsPreprocessorIfExistTest : IsTimedBasePlatformTestCase() {
 
     private val setupTail = "[Setup]\nAppName=Test\nAppVersion=1.0\n"
 

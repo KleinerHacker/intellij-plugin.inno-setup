@@ -13,10 +13,10 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature
 
 import com.intellij.openapi.util.SystemInfo
-import junit.framework.TestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedTestCase
 import java.io.File
 
-class IsConstantResolverTest : TestCase() {
+class IsConstantResolverTest : IsTimedTestCase() {
 
     fun testSrcResolvesToScriptDir() {
         val dir = File(System.getProperty("java.io.tmpdir"))

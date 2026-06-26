@@ -158,22 +158,78 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
     fun getArrayInitializerOffsetInDirective(): Int
 
     /**
-     * Whether this directive is a `#define Name[Index] Value` — an array element assignment (a `#define` whose
+     * Whether this directive is a `#define Name\[Index] Value` — an array element assignment (a `#define` whose
      * name is immediately followed by `[`).
      */
     fun isArrayElementDefine(): Boolean
 
-    /** For an array element `#define Name[Index] …`: the array name `Name`, or `null`. */
+    /** For an array element `#define Name\[Index] …`: the array name `Name`, or `null`. */
     fun getDefineArrayName(): String?
 
     /**
-     * For an array element `#define Name[Index] …`: the index expression text between the `[…]`, or `null`. For
+     * For an array element `#define Name\[Index] …`: the index expression text between the `[…]`, or `null`. For
      * the offset use [getDefineArrayIndexOffsetInDirective].
      */
     fun getDefineArrayIndexText(): String?
 
     /** Offset of [getDefineArrayIndexText] within this directive's text, or `-1`. */
     fun getDefineArrayIndexOffsetInDirective(): Int
+
+    // ── #sub / #endsub subroutines ────────────────────────────────────────────
+
+    /** Whether this directive is a `#sub` (case-insensitive). */
+    fun isSub(): Boolean
+
+    /** Whether this directive is an `#endsub` (case-insensitive). */
+    fun isEndsub(): Boolean
+
+    /** Whether this directive opens a subroutine block (`#sub`) that must be closed by `#endsub`. */
+    fun isSubroutineOpener(): Boolean
+
+    /** Whether this directive is part of the subroutine family (`#sub` or `#endsub`). */
+    fun isSubroutineDirective(): Boolean
+
+    /** For a `#sub`: the subroutine name (the value identifier), or `null`. */
+    fun getSubroutineName(): String?
+
+    // ── #for loops ──────────────────────────────────────────────────────────────
+
+    /** Whether this directive is a `#for` (case-insensitive). */
+    fun isFor(): Boolean
+
+    /** For a `#for {Init; Cond; Incr} Body`: the raw initializer text (first `;`-section), or `null`. */
+    fun getForInitText(): String?
+
+    /** Offset of [getForInitText] within this directive's text, or `-1`. */
+    fun getForInitOffsetInDirective(): Int
+
+    /** For a `#for`: the raw condition text (second `;`-section), or `null`. */
+    fun getForConditionText(): String?
+
+    /** Offset of [getForConditionText] within this directive's text, or `-1`. */
+    fun getForConditionOffsetInDirective(): Int
+
+    /** For a `#for`: the raw increment text (third `;`-section), or `null`. */
+    fun getForIncrementText(): String?
+
+    /** Offset of [getForIncrementText] within this directive's text, or `-1`. */
+    fun getForIncrementOffsetInDirective(): Int
+
+    /** For a `#for`: the raw body text following the `{…}` on the same line, or `null`. */
+    fun getForBodyText(): String?
+
+    /** Offset of [getForBodyText] within this directive's text, or `-1`. */
+    fun getForBodyOffsetInDirective(): Int
+
+    /**
+     * For a `#for`: the name of the loop variable declared by the first assignment in the initializer
+     * (`Name = …`, the outermost left-hand side of a chained assignment), or `null` when the initializer
+     * declares no variable.
+     */
+    fun getForVariableName(): String?
+
+    /** For a `#for`: the PSI identifier element of [getForVariableName] (for rename/navigation), or `null`. */
+    fun getForVariableNameNode(): PsiElement?
 
     /** Whether this directive is a `#pragma` (case-insensitive). */
     fun isPragma(): Boolean

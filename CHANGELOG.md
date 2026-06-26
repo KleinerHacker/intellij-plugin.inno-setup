@@ -4,6 +4,21 @@
 
 ## [Unreleased]
 
+### Added
+
+- **ISPP subroutines (`#sub` / `#endsub`)**: `#sub Name … #endsub` blocks are now fully supported. The
+  subroutine name navigates and renames together with its uses (e.g. a `#for` body that calls it) and is
+  offered in completion. `#sub … #endsub` blocks fold like `#if … #endif`, and an unterminated `#sub` or a
+  stray `#endsub` is flagged as an error.
+
+- **ISPP loops (`#for`)**: `#for {Init; Cond; Incr} Body` is now validated. The loop variable declared in
+  the initializer (e.g. `i = 0`) navigates, renames and is offered in completion within the loop's condition,
+  increment and body — just like a `#define`/`#dim` symbol — while staying scoped to its loop. The condition,
+  increment and the single same-line body expression are checked with the full ISPP expression engine
+  (operators, functions, references and result types), the body resolves a referenced `#sub`/`#define`, and
+  errors are reported for a missing loop variable, a non-integer condition or an ill-typed expression. The
+  `{` and `}` of the loop header are matched as a brace pair.
+
 ## [0.5.2]
 
 ### Added

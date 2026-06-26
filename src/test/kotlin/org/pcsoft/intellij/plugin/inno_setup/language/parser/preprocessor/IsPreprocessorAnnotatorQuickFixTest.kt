@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveIncludeQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickfix.RemoveUnusedDefineQuickFix
@@ -33,7 +33,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.quickf
  * injection entirely) inside a [WriteCommandAction], and read the document text synchronously
  * before the fixture teardown can observe the stale VF.
  */
-class IsPreprocessorAnnotatorQuickFixTest : BasePlatformTestCase() {
+class IsPreprocessorAnnotatorQuickFixTest : IsTimedBasePlatformTestCase() {
 
     // ── Fix: Remove unused #define ────────────────────────────────────────────
 

@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.action
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
 
@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTempl
  * a modal dialog and cannot run headless). This test verifies the resulting artifact: an empty file that is
  * recognized as an [IsTemplateFile].
  */
-class IsTemplateCreateFileActionTest : BasePlatformTestCase() {
+class IsTemplateCreateFileActionTest : IsTimedBasePlatformTestCase() {
 
     fun testCreatedTemplateFileIsEmptyAndRecognized() {
         val file = myFixture.addFileToProject("part.ist", "")

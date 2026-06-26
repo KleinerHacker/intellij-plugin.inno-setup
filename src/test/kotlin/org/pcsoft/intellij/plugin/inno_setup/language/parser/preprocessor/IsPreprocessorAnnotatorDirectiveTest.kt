@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests that [IsPreprocessorAnnotator] validates the directive keyword against the ISPP spec
  * ([org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService], the single source of truth).
  */
-class IsPreprocessorAnnotatorDirectiveTest : BasePlatformTestCase() {
+class IsPreprocessorAnnotatorDirectiveTest : IsTimedBasePlatformTestCase() {
 
     private fun unknownDirectiveErrors(text: String) =
         myFixture.also { it.configureByText(IsScriptFileType.INSTANCE, text) }

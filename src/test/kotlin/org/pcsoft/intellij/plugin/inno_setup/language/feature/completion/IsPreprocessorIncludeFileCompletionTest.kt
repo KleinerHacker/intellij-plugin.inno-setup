@@ -13,13 +13,13 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.Lookup
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
  * Tests the `#include` file-name completion: project `*.iss` files are offered by name and inserted as the
  * path relative to the directory of the edited script.
  */
-class IsPreprocessorIncludeFileCompletionTest : BasePlatformTestCase() {
+class IsPreprocessorIncludeFileCompletionTest : IsTimedBasePlatformTestCase() {
 
     fun testIncludeCompletionInsertsRelativePath() {
         myFixture.addFileToProject("lib/dep.iss", "[Files]\n")

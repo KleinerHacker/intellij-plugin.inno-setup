@@ -13,14 +13,14 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 
 /**
  * Tests for [IsQuoteHandler] — auto-closing and skip-over behaviour of `"`.
  * Co-located with the handler (which lives in the `editor` package).
  */
-class IsQuoteHandlerTest : BasePlatformTestCase() {
+class IsQuoteHandlerTest : IsTimedBasePlatformTestCase() {
 
     // ── Auto-close ────────────────────────────────────────────────────────────
 

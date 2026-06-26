@@ -12,14 +12,14 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 
 /**
  * Integration tests for [IsIncludeContentInlayHintsProvider]: drives the provider over real PSI (including a
  * resolved `#include` target) and inspects the editor's block-inlay model after a highlighting pass.
  */
-class IsIncludeContentInlayHintsTest : BasePlatformTestCase() {
+class IsIncludeContentInlayHintsTest : IsTimedBasePlatformTestCase() {
 
     override fun tearDown() {
         try {

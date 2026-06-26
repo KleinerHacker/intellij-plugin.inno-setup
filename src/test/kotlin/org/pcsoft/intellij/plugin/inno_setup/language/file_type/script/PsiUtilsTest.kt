@@ -12,9 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
-class PsiUtilsTest : BasePlatformTestCase() {
+class PsiUtilsTest : IsTimedBasePlatformTestCase() {
 
     fun testRelativeMessagesFileIsParsed() {
         myFixture.addFileToProject("MyLang.isl", "[LangOptions]\nLanguageID=\$0407\n")

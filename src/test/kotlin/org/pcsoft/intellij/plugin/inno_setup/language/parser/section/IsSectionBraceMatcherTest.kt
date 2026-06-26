@@ -12,12 +12,12 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
 
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
+import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsSectionBraceMatcher
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
 
-class IsSectionBraceMatcherTest : BasePlatformTestCase() {
+class IsSectionBraceMatcherTest : IsTimedBasePlatformTestCase() {
 
     // --- Unit tests on getBracePairs() ---
 
