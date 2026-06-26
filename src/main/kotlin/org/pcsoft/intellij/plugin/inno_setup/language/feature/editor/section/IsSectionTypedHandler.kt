@@ -23,6 +23,50 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
  * Provides Inno Setup plugin behavior for the IntelliJ Platform.
  */
 class IsSectionTypedHandler : TypedHandlerDelegate() {
+
+    /**
+     * Auto-closes paired braces inside a preprocessor directive line (`#define meth(` → `(|)`, `#dim arr[` →
+     * `[|]`, `#for {` → `{|}`).
+     *
+     * In the section host the whole `#…` line is a single opaque `HASH_LINE` token, so the platform's
+     * token-driven paired-brace insertion cannot see the braces there — it works only via the (timing-sensitive)
+     * injected ISPP fragment. This handler inserts the matching closing brace directly and is **idempotent**:
+     * when the platform/injection already inserted it (the next character is already the closing brace) nothing
+     * is added, so no double brace ever results. Insertion only happens in "safe" spots (end of line, before
+     * whitespace or before another closing brace), mirroring the platform's own behaviour.
+     */
+    override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
+        if (file !is IsScriptFile) return Result.CONTINUE
+        val close = when (c) {
+            '(' -> ')'
+            '[' -> ']'
+            '{' -> '}'
+            else -> return Result.CONTINUE
+        }
+        val offset = editor.caretModel.offset
+        val chars = editor.document.charsSequence
+        if (!isInPreprocessorLine(chars, offset)) return Result.CONTINUE
+
+        val next = if (offset < chars.length) chars[offset] else null
+        if (next == close) return Result.CONTINUE // already closed (by the platform/injection) — avoid doubling
+        if (next != null && next != '\n' && next != '\r' && next != ' ' && next != '\t' &&
+            next != ')' && next != ']' && next != '}'
+        ) return Result.CONTINUE
+
+        editor.document.insertString(offset, close.toString())
+        editor.caretModel.moveToOffset(offset) // keep the caret between the braces
+        return Result.STOP
+    }
+
+    /** Whether [offset] lies on a line whose first non-whitespace character is `#` (a preprocessor directive). */
+    private fun isInPreprocessorLine(chars: CharSequence, offset: Int): Boolean {
+        var i = offset - 1
+        while (i >= 0 && chars[i] != '\n') i--
+        var j = i + 1
+        while (j < chars.length && (chars[j] == ' ' || chars[j] == '\t')) j++
+        return j < chars.length && chars[j] == '#'
+    }
+
     /**
      * Handles typed-character behavior for the current editor context.
      */

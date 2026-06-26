@@ -93,19 +93,22 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
                 )
             }
 
-        // #sub subroutine names declared on an earlier line — callable (notably as a #for body).
-        hostFile.isppDirectivesWithHostOffset
-            .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isSub() == true }
-            .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
-            .filter { !it.getSubroutineName().isNullOrEmpty() }
-            .distinctBy { it.getSubroutineName() }
-            .forEach { dex ->
-                adjusted.addElement(
-                    LookupElementBuilder.create(dex.getSubroutineName()!!)
-                        .withTypeText("sub")
-                        .withIcon(IsIcons.Function)
-                )
-            }
+        // #sub subroutine names declared on an earlier line — a subroutine may *only* be called as a #for body,
+        // so its name is offered exclusively in that slot (never in a #define/#if/… expression).
+        if (IsPreprocessorExpressionContext.isForBodyContext(params)) {
+            hostFile.isppDirectivesWithHostOffset
+                .filter { (d, off) -> off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isSub() == true }
+                .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
+                .filter { !it.getSubroutineName().isNullOrEmpty() }
+                .distinctBy { it.getSubroutineName() }
+                .forEach { dex ->
+                    adjusted.addElement(
+                        LookupElementBuilder.create(dex.getSubroutineName()!!)
+                            .withTypeText("sub")
+                            .withIcon(IsIcons.Function)
+                    )
+                }
+        }
 
         // The loop variable of the enclosing #for is in scope within that loop's own slots.
         (PsiTreeUtil.getParentOfType(position, IsPreprocessorDirective::class.java) as? IsPreprocessorDirectiveEx)

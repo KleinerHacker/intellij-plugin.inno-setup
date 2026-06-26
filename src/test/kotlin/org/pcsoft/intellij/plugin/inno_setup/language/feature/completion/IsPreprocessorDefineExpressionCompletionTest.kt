@@ -176,6 +176,53 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
         assertTrue("Earlier #define must be offered as an #ifndef name, was: $ifndef", "First" in ifndef)
     }
 
+    // ── #for {Init; Cond; Incr} Body slots are expression contexts ────────────
+
+    fun testSuggestionsInForCondition() {
+        // The condition (2nd slot) references the loop variable and earlier #defines.
+        val variants = expressionLookup(
+            "#define Limit 10\n#sub Body\n#endsub\n#for {i = 0; i < <caret>; i++} Body\n" +
+                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Loop variable must be offered in the #for condition, was: $variants", "i" in variants)
+        assertTrue("Preceding define must be offered in the #for condition, was: $variants", "Limit" in variants)
+        assertTrue("Built-in function must be offered in the #for condition, was: $variants", "Len" in variants)
+    }
+
+    fun testSuggestionsInForIncrement() {
+        // The increment (3rd slot) references the loop variable.
+        val variants = expressionLookup(
+            "#sub Body\n#endsub\n#for {i = 200; i > 0; i = <caret>} Body\n" +
+                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Loop variable must be offered in the #for increment, was: $variants", "i" in variants)
+    }
+
+    fun testSuggestionsInForBodyOfferSubroutine() {
+        // The body is usually a #sub call — earlier #sub names must be offered there.
+        val variants = expressionLookup(
+            "#sub AddFile\n#endsub\n#for {i = 200; i > 0; i--} <caret>\n" +
+                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertTrue("Subroutine name must be offered as the #for body, was: $variants", "AddFile" in variants)
+    }
+
+    fun testSubroutineNotOfferedInDefineExpression() {
+        // A #sub may only be called as a #for body — it must not be offered in a #define expression.
+        val variants = expressionLookup(
+            "#sub AddFile\n#endsub\n#define X <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertFalse("Subroutine must not be offered in a #define expression, was: $variants", "AddFile" in variants)
+    }
+
+    fun testSubroutineNotOfferedInForCondition() {
+        // The condition slot is not the body — a #sub must not be offered there.
+        val variants = expressionLookup(
+            "#sub AddFile\n#endsub\n#for {i = 0; <caret>; i++} AddFile\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertFalse("Subroutine must not be offered in the #for condition, was: $variants", "AddFile" in variants)
+    }
+
     fun testSuggestionsInIfExistFilename() {
         // #ifexist takes a string expression, so the expression providers fire (defines + builtins).
         val variants = expressionLookup(

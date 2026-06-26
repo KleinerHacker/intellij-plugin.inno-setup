@@ -30,6 +30,7 @@ import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.PlatformAn
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsEffectiveScriptProblems
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorExpressionReference
+import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsPreprocessorForVariableReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprBinary
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.expression.IsPreprocessorExprCall
@@ -85,6 +86,9 @@ class IsPreprocessorAnnotator : Annotator {
 
         /** A `#for` increment/decrement statement: `i++`, `i--`, `++i` or `--i`. */
         val FOR_INCREMENT = Regex("""(\+\+|--)\s*[A-Za-z_]\w*|[A-Za-z_]\w*\s*(\+\+|--)""")
+
+        /** A valid `#sub` name: a plain identifier (letters/underscore start, then letters/digits/underscore). */
+        val SUBROUTINE_NAME = Regex("^[A-Za-z_][A-Za-z0-9_]*$")
     }
 
     /**
@@ -450,11 +454,26 @@ class IsPreprocessorAnnotator : Annotator {
     ) {
         if (ex.isSub()) {
             val nameId = ex.nameIdentifier
-            if (nameId != null) {
-                highlight(nameId.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
-            } else {
-                holder.newAnnotation(HighlightSeverity.ERROR, "#sub requires a name")
-                    .range(directive.textRange).create()
+            val rawName = directive.value?.text?.trim().orEmpty()
+            when {
+                rawName.isEmpty() ->
+                    holder.newAnnotation(HighlightSeverity.ERROR, "#sub requires a name")
+                        .range(directive.textRange).create()
+
+                // A #sub name must be a plain identifier: letters/digits/underscore, not starting with a digit
+                // and with no trailing characters (e.g. `#sub My-Name`, `#sub 1x`, `#sub a b` are invalid). A
+                // digit-leading name is lexed as a single VALUE_CHAR token (no IDENTIFIER), so this catches it.
+                !SUBROUTINE_NAME.matches(rawName) ->
+                    holder.newAnnotation(
+                        HighlightSeverity.ERROR,
+                        "Invalid #sub name '$rawName': only letters, digits and underscore are allowed " +
+                            "(and the name must not start with a digit)"
+                    )
+                        .range(directive.value?.textRange ?: directive.textRange)
+                        .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                        .create()
+
+                nameId != null -> highlight(nameId.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder)
             }
         }
 
@@ -513,6 +532,15 @@ class IsPreprocessorAnnotator : Annotator {
                 .range(range).create()
         } else {
             ex.getForVariableNameNode()?.let { highlight(it.textRange, IsSectionAnnotatorHighlighting.DEFINE_NAME, holder) }
+            // Paint every *use* of the loop variable (in the condition/increment/body) like the declaration —
+            // italic define-name colour — so it is visually recognizable as the loop variable throughout.
+            directive.references.filterIsInstance<IsPreprocessorForVariableReference>().forEach { ref ->
+                highlight(
+                    ref.rangeInElement.shiftRight(directive.textRange.startOffset),
+                    IsSectionAnnotatorHighlighting.DEFINE_NAME,
+                    holder,
+                )
+            }
         }
         val varType = forInitValueType(directive, ex, hostFile)
         val extra = if (varName != null) mapOf(varName to varType) else emptyMap()
@@ -905,24 +933,51 @@ class IsPreprocessorAnnotator : Annotator {
 
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        // #define/#dim names are referenceable everywhere; #sub names are *not* — a subroutine may only be
+        // invoked as the body of a #for loop, so its name is tracked separately and validated below.
         val definedNames = hostFile?.isppDirectives
             ?.mapNotNull { d ->
                 val dex = d as? IsPreprocessorDirectiveEx ?: return@mapNotNull null
                 // An array element `#define Name[i]` is a usage, not a declaration; the `#dim` declares the name.
                 if (dex.isArrayElementDefine()) null
-                else dex.getArrayName() ?: dex.getDefineName() ?: dex.getSubroutineName()
+                else dex.getArrayName() ?: dex.getDefineName()
             }
+            ?.toSet() ?: emptySet()
+        val subNames = hostFile?.isppDirectives
+            ?.mapNotNull { (it as? IsPreprocessorDirectiveEx)?.getSubroutineName() }
             ?.toSet() ?: emptySet()
         val spec = service<IsPreprocessorService>().spec
 
+        // The directive-relative range of the #for body slot (where a #sub call is legitimate), or null.
+        val ex = directive as? IsPreprocessorDirectiveEx
+        val forBodyRange = if (ex?.isFor() == true) {
+            val bodyText = ex.getForBodyText()
+            val bodyOffset = ex.getForBodyOffsetInDirective()
+            if (!bodyText.isNullOrEmpty() && bodyOffset >= 0) bodyOffset until (bodyOffset + bodyText.length)
+            else null
+        } else null
+
         refs.forEach { ref ->
             val name = ref.canonicalText
-            if (name in definedNames) return@forEach
+            val range = ref.rangeInElement.shiftRight(directive.textRange.startOffset)
+            if (definedNames.any { it.equals(name, ignoreCase = true) }) return@forEach
             val knownBuiltin = spec.builtinFunctions.any { it.name.equals(name, ignoreCase = true) } ||
                     spec.predefinedVariables.any { it.name.equals(name, ignoreCase = true) }
             if (knownBuiltin) return@forEach
 
-            val range = ref.rangeInElement.shiftRight(directive.textRange.startOffset)
+            // A #sub name: valid only when it is the #for body; anywhere else it is a misuse, not a value.
+            if (subNames.any { it.equals(name, ignoreCase = true) }) {
+                if (forBodyRange != null && ref.rangeInElement.startOffset in forBodyRange) return@forEach
+                holder.newAnnotation(
+                    HighlightSeverity.ERROR,
+                    "'$name' is a #sub and can only be called as the body of a #for loop"
+                )
+                    .range(range)
+                    .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                    .create()
+                return@forEach
+            }
+
             holder.newAnnotation(HighlightSeverity.ERROR, "Unresolved preprocessor reference: '$name'")
                 .range(range)
                 .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
