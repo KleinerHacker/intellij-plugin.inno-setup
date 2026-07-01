@@ -49,10 +49,10 @@ The project is a **Gradle multi-module build**. The root is a pure aggregator (n
   `IsPreprocessorHostLine` interfaces (defined here, implemented in `:language:script`). Also hosts the shared
   `PluginBundle` (+ `.properties`×4), `Generated` annotation and `IsSectionSpecTarget` (lowest common types).
 - **`:language:script`** (`language/script/`) — the Inno Setup language: section/INI grammar (shared by
-  `.iss`/`.isl`/`.ist`), file types, highlighter, folding, brace matching, commenter, basic annotator +
+  `.iss`/`.isl`/`.ist`), highlighter, folding, brace matching, commenter, basic annotator +
   quickfixes, section references, include infrastructure, the ISPP **injector**, and `IsSpecService`/
   `IsConstantService`/`IsLanguageDataService`/`IsSettingsService`. Depends on `:language:preprocessor`.
-- **`:plugin`** (`plugin/`) — the publishable plugin: all **IDE features** (completion, find-usages,
+- **`:plugin`** (`plugin/`) — the publishable plugin: all **IDE features** (completion, find-usages, file types,
   refactoring, structure view, documentation, intentions, inlay hints, reference searchers), build/run
   integration, settings **UI**, the main `plugin.xml`, color schemes and icons. Depends on `:language:script`.
 
@@ -60,8 +60,14 @@ The project is a **Gradle multi-module build**. The root is a pure aggregator (n
 (`META-INF/inno-setup-preprocessor.xml`, `…-script.xml`) with its language-level registrations; the main
 `plugin/…/META-INF/plugin.xml` pulls them in via `<xi:include>`. The language modules are bundled as regular
 `implementation(project(...))` libraries (one shared classloader), so there are no split-package/classloader
-pitfalls. **All tests live in `:plugin`** (`plugin/src/test/`) because platform tests need the assembled
-`plugin.xml`; pure helper/shared config lives in `buildSrc` (`inno-setup.platform-module` convention).
+pitfalls. **Tests are distributed per module:** `:language:preprocessor/src/test/` holds the pure expression-engine
+and service tests (plain JUnit, no platform fixture); `:language:script/src/test/` holds all ISS/ISL/IST
+grammar, annotator and include-infrastructure tests (they use `IsTimedBasePlatformTestCase` against the module's
+own plugin XML fragment); `:plugin/src/test/` holds all IDE-feature tests (completion, references, editor,
+build/run, settings) that need the fully assembled `plugin.xml`. The test-infra base classes
+(`IsTimedBasePlatformTestCase`, `IsTimedTestCase`, `IsTestMethodTimeout`) are duplicated into each
+module's `src/test/kotlin/…/test/` so they require no cross-module test dependencies. Pure helper/shared
+build config lives in `buildSrc` (`inno-setup.platform-module` convention).
 
 ## Build
 

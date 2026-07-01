@@ -18,7 +18,7 @@ import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorHostLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplatePreprocessorLine
 
@@ -29,7 +29,7 @@ abstract class IsTemplatePreprocessorLineMixinImpl(node: ASTNode) : ASTWrapperPs
 
     override fun updateText(text: String): PsiLanguageInjectionHost {
         val factory = PsiFileFactory.getInstance(project)
-        val newFile = factory.createFileFromText("d.ist", IsTemplateFileType.INSTANCE, "$text\n")
+        val newFile = factory.createFileFromText("d.ist", IsTemplateLanguage, "$text\n")
         val newLine = PsiTreeUtil.findChildOfType(newFile, IsTemplatePreprocessorLine::class.java) ?: return this
         return replace(newLine) as? PsiLanguageInjectionHost ?: this
     }

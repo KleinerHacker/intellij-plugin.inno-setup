@@ -18,12 +18,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptF
 /**
  * PSI file for Inno Setup language files (`.isl`). Syntactically identical to [IsScriptFile] — it reuses
  * the same ISS language, lexer, parser and PSI — so every `as? IsScriptFile` consumer keeps working.
- * Only the reported file type differs, which lets the ISL-specific tooling (allowed-section
- * restriction in `language/isl/parsing`) distinguish `.isl` from `.iss`.
+ * Only the reported file type differs (delegated to `viewProvider.fileType`, which is `IsLanguageFileType`
+ * for `.isl` files), which lets the ISL-specific tooling (allowed-section restriction in
+ * `language/isl/parsing`) distinguish `.isl` from `.iss`.
  */
-class IsLanguageFile(viewProvider: FileViewProvider) : IsScriptFile(viewProvider) {
-    /**
-     * Returns or performs the public behavior represented by this member.
-     */
-    override fun getFileType() = IsLanguageFileType.INSTANCE
-}
+class IsLanguageFile(viewProvider: FileViewProvider) : IsScriptFile(viewProvider)

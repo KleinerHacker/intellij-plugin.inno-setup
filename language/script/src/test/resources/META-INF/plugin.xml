@@ -1,0 +1,32 @@
+<!--
+  ~ Test-only plugin descriptor for :language:script module tests.
+  ~ Assembles the preprocessor + script fragments so BasePlatformTestCase tests have all needed
+  ~ registrations (parser, highlighter, annotators, injector, file types).
+  ~ This file is NOT shipped in the production JAR.
+  -->
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+    <id>org.pcsoft.intellij.plugin.inno_setup.script.test</id>
+    <name>Inno Setup Script (test)</name>
+    <vendor>KleinerHacker</vendor>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <xi:include href="/META-INF/inno-setup-preprocessor.xml" xpointer="xpointer(/idea-plugin/*)"/>
+    <xi:include href="/META-INF/inno-setup-script.xml" xpointer="xpointer(/idea-plugin/*)"/>
+
+    <!-- File type registrations needed for test fixtures (not in production inno-setup-script.xml) -->
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="Inno Setup Script"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
+                  language="ISS"
+                  extensions="iss"/>
+        <fileType name="Inno Setup Language"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
+                  language="ISS"
+                  extensions="isl"/>
+        <fileType name="Inno Setup Template"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType"
+                  language="IST"
+                  extensions="ist"/>
+    </extensions>
+</idea-plugin>

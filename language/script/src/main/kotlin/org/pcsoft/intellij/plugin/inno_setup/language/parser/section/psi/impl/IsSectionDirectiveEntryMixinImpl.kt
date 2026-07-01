@@ -21,7 +21,7 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.reference.IsSectionLanguagePrefixReference
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
@@ -120,7 +120,7 @@ abstract class IsSectionDirectiveEntryMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         val dot = full.lastIndexOf('.')
         val newFull = if (dot >= 0) full.substring(0, dot + 1) + newName else newName
         val dummy = PsiFileFactory.getInstance(project)
-            .createFileFromText("dummy.iss", IsScriptFileType.INSTANCE, "[CustomMessages]\n$newFull=x\n")
+            .createFileFromText("dummy.iss", IsScriptLanguage, "[CustomMessages]\n$newFull=x\n")
         val newId = PsiTreeUtil.findChildOfType(dummy, IsSectionDirectiveKey::class.java)
             ?.node?.findChildByType(IsSectionTypes.IDENTIFIER)?.psi ?: return
         idNode.psi.replace(newId)

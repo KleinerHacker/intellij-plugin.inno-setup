@@ -19,7 +19,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclarations
@@ -70,7 +70,7 @@ class IsSectionReference(paramValue: IsSectionParamValue, range: TextRange, priv
             .firstOrNull { it.startOffset - element.textOffset == rangeInElement.startOffset }
             ?: return element
         val dummy = PsiFileFactory.getInstance(element.project)
-            .createFileFromText("dummy.iss", IsScriptFileType.INSTANCE, "[Tasks]\nName: $newElementName\n")
+            .createFileFromText("dummy.iss", IsScriptLanguage, "[Tasks]\nName: $newElementName\n")
         val newId = PsiTreeUtil.findChildOfType(dummy, IsSectionParamValue::class.java)
             ?.node?.findChildByType(IsSectionTypes.IDENTIFIER)?.psi ?: return element
         idNode.psi.replace(newId)

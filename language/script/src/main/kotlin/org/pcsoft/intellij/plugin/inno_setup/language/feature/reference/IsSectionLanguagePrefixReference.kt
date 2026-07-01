@@ -18,7 +18,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclarations
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
@@ -75,7 +75,7 @@ class IsSectionLanguagePrefixReference(entry: IsSectionDirectiveEntry, private v
         val dot = full.indexOf('.')
         val newFull = if (dot >= 0) newElementName + full.substring(dot) else newElementName
         val dummy = PsiFileFactory.getInstance(element.project)
-            .createFileFromText("dummy.iss", IsScriptFileType.INSTANCE, "[Messages]\n$newFull=x\n")
+            .createFileFromText("dummy.iss", IsScriptLanguage, "[Messages]\n$newFull=x\n")
         val newId = PsiTreeUtil.findChildOfType(dummy, IsSectionDirectiveKey::class.java)
             ?.node?.findChildByType(IsSectionTypes.IDENTIFIER)?.psi ?: return element
         keyNode.psi.replace(newId)

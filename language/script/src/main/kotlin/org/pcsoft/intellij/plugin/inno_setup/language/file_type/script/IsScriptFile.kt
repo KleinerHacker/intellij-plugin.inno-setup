@@ -27,10 +27,8 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSecti
  * preprocessor module can ask the script for its two host-aware behaviours without depending on section PSI.
  */
 open class IsScriptFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, IsScriptLanguage), IsPreprocessorHost {
-    /**
-     * Returns or performs the public behavior represented by this member.
-     */
-    override fun getFileType(): FileType = IsScriptFileType.INSTANCE
+
+    override fun getFileType(): FileType = viewProvider.fileType
 
     /** A `#define`/`#dim` name is "used" when referenced as a `{#Name}` constant anywhere in this script. */
     override fun isPreprocessorNameReferencedAsConstant(name: String): Boolean =

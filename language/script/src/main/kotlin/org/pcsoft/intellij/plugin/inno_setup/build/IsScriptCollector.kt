@@ -16,10 +16,9 @@ import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.search.FileTypeIndex
+import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector.Companion.parseIncludes
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
 import java.io.File
 
 /**
@@ -36,7 +35,7 @@ class IsScriptCollector(private val project: Project) {
      */
     fun allScripts(): List<VirtualFile> =
         ReadAction.compute<List<VirtualFile>, RuntimeException> {
-            FileTypeIndex.getFiles(IsScriptFileType.INSTANCE, GlobalSearchScope.projectScope(project)).toList()
+            FilenameIndex.getAllFilesByExt(project, "iss", GlobalSearchScope.projectScope(project)).toList()
         }
 
     /**

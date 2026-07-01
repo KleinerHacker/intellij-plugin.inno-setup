@@ -10,28 +10,13 @@
   ~ See the License for the specific language governing permissions and limitations.
   -->
 
-<!-- Inno Setup language fragment (:language:script): the .iss/.isl/.ist file types and their language-level
+<!-- Inno Setup language fragment (:language:script): the .iss/.isl/.ist language-level
      registrations (parser, highlighter, folding, brace matching, basic annotator, commenter, injector).
+     File type registrations (<fileType>) and file icon providers live only in :plugin (plugin.xml) so
+     that third-party plugins embedding :language:script do not inherit Inno Setup extension mappings.
      Pulled into the main plugin.xml via <xi:include>. -->
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <!-- File types -->
-        <fileType name="Inno Setup Script"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
-                  language="ISS"
-                  extensions="iss"/>
-        <fileType name="Inno Setup Language"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
-                  language="ISS"
-                  extensions="isl"/>
-        <fileType name="Inno Setup Template"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType"
-                  language="IST"
-                  extensions="ist"/>
-
-        <!-- ISL file icon: base icon + language-flag overlay -->
-        <fileIconProvider implementation="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileIconProvider"/>
-
         <!-- Parser / highlighting -->
         <lang.parserDefinition language="ISS"
                                implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionParserDefinition"/>

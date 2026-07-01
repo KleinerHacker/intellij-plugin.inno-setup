@@ -18,7 +18,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.referenceTargetSection
 
@@ -62,7 +62,7 @@ abstract class IsSectionParamPairMixinImpl(node: ASTNode) : ASTWrapperPsiElement
         // Build the new leaf in a known-valid context (quoted vs. bare) so quotes are preserved.
         val dummyValue = if (quoted) "\"$name\"" else name
         val dummy = PsiFileFactory.getInstance(project)
-            .createFileFromText("dummy.iss", IsScriptFileType.INSTANCE, "[Tasks]\nName: $dummyValue\n")
+            .createFileFromText("dummy.iss", IsScriptLanguage, "[Tasks]\nName: $dummyValue\n")
         val newLeaf =
             nameLeafOf(PsiTreeUtil.findChildOfType(dummy, IsSectionParamValue::class.java))?.psi ?: return this
         oldLeaf.psi.replace(newLeaf)

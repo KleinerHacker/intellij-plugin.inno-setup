@@ -115,6 +115,22 @@
     <xi:include href="/META-INF/inno-setup-script.xml" xpointer="xpointer(/idea-plugin/*)"/>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- File types (.iss/.isl/.ist) — registered here in :plugin so language modules stay embeddable -->
+        <fileType name="Inno Setup Script"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
+                  language="ISS"
+                  extensions="iss"/>
+        <fileType name="Inno Setup Language"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
+                  language="ISS"
+                  extensions="isl"/>
+        <fileType name="Inno Setup Template"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType"
+                  language="IST"
+                  extensions="ist"/>
+
+        <!-- ISL file icon: base icon + language-flag overlay -->
+        <fileIconProvider implementation="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileIconProvider"/>
         <!-- Build output: dedicated tool-window console + balloon notifications -->
         <toolWindow id="Inno Setup"
                     anchor="bottom"

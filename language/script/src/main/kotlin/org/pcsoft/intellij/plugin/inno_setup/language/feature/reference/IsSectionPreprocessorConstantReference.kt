@@ -19,7 +19,7 @@ import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
@@ -69,7 +69,7 @@ class IsSectionPreprocessorConstantReference(constantBody: IsSectionConstantBody
         // Create a dummy ISS file with {#Name} in value context to get an IsSectionTypes.IDENTIFIER node.
         val dummy = PsiFileFactory.getInstance(element.project)
             .createFileFromText(
-                "dummy.iss", IsScriptFileType.INSTANCE,
+                "dummy.iss", IsScriptLanguage,
                 "[Setup]\nAppName={#$newElementName}\n"
             )
         val newId = PsiTreeUtil.findChildOfType(dummy, IsSectionConstantBody::class.java)

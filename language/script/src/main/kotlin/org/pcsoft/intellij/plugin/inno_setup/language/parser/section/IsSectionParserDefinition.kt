@@ -23,7 +23,6 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
@@ -69,11 +68,7 @@ class IsSectionParserDefinition : ParserDefinition {
      * Creates the PSI file instance for the supplied view provider.
      */
     override fun createFile(viewProvider: FileViewProvider): PsiFile =
-        if (viewProvider.fileType == IsLanguageFileType.INSTANCE || viewProvider.virtualFile.extension.equals(
-                "isl",
-                ignoreCase = true
-            )
-        )
+        if (viewProvider.virtualFile.extension.equals("isl", ignoreCase = true))
             IsLanguageFile(viewProvider)
         else
             IsScriptFile(viewProvider)

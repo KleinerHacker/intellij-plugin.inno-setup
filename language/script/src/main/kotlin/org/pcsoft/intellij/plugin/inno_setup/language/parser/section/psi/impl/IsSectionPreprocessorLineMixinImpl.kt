@@ -18,7 +18,7 @@ import com.intellij.psi.LiteralTextEscaper
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiLanguageInjectionHost
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorHostLine
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
 
@@ -35,7 +35,7 @@ abstract class IsSectionPreprocessorLineMixinImpl(node: ASTNode) : ASTWrapperPsi
      */
     override fun updateText(text: String): PsiLanguageInjectionHost {
         val factory = PsiFileFactory.getInstance(project)
-        val newFile = factory.createFileFromText("d.iss", IsScriptFileType.INSTANCE, "$text\n")
+        val newFile = factory.createFileFromText("d.iss", IsScriptLanguage, "$text\n")
         val newLine = PsiTreeUtil.findChildOfType(newFile, IsSectionPreprocessorLine::class.java) ?: return this
         return replace(newLine) as? PsiLanguageInjectionHost ?: this
     }

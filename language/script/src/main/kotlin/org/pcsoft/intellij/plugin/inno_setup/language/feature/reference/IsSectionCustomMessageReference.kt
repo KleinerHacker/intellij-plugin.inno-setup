@@ -20,7 +20,7 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
@@ -78,7 +78,7 @@ class IsSectionCustomMessageReference(constantBody: IsSectionConstantBody, priva
             .firstOrNull { it.startOffset - element.textRange.startOffset == rangeInElement.startOffset }
             ?.psi ?: return element
         val dummy = PsiFileFactory.getInstance(element.project)
-            .createFileFromText("dummy.iss", IsScriptFileType.INSTANCE, "[Setup]\nAppName={cm:$newElementName}\n")
+            .createFileFromText("dummy.iss", IsScriptLanguage, "[Setup]\nAppName={cm:$newElementName}\n")
         val newId = PsiTreeUtil.findChildOfType(dummy, IsSectionConstantBody::class.java)
             ?.node?.getChildren(TokenSet.create(IsSectionTypes.IDENTIFIER))
             ?.lastOrNull()?.psi ?: return element

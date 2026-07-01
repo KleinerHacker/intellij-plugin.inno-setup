@@ -22,7 +22,6 @@ import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPrep
  * but it has no section constants or effective-script analysis, so it uses the [IsPreprocessorHost] defaults.
  */
 class IsTemplateFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, IsTemplateLanguage), IsPreprocessorHost {
-    override fun getFileType(): FileType = IsTemplateFileType.INSTANCE
-
+    override fun getFileType(): FileType = viewProvider.fileType
     override fun toString(): String = "Inno Setup Template File"
 }
