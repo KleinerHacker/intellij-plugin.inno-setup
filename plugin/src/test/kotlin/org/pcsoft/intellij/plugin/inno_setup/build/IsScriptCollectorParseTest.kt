@@ -15,6 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
 
 /**
  * Tests the pure `#include` extraction of [IsScriptCollector].

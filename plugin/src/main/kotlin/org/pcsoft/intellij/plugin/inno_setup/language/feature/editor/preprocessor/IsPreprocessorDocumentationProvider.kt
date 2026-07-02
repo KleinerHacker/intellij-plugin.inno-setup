@@ -22,19 +22,19 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.computeValue
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferParameterTypes
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.inferType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.precedingDefine
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsPreprocessorSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpecTarget
-import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.computeValue
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.inferParameterTypes
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.inferType
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.precedingDefine
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorSpec
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 
 private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
     if (since == null && until == null) return
@@ -142,7 +142,8 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             if (define.isFunctionMacro()) {
-                val params = define.inferParameterTypes().joinToString(", ") { "${it.first}: ${it.second.name.lowercase()}" }
+                val params =
+                    define.inferParameterTypes().joinToString(", ") { "${it.first}: ${it.second.name.lowercase()}" }
                 append("<b>$name</b>($params) · macro · ${define.inferType().name.lowercase()}")
             } else {
                 append("<b>$name</b> · define · ${define.inferType().name.lowercase()}")

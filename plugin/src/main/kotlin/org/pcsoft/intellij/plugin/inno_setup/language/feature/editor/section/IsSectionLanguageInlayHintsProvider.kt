@@ -19,12 +19,12 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.util.IconUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.languageId
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPair
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.languageId
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamPair
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
 import javax.swing.Icon
 import javax.swing.JPanel
 
@@ -45,10 +45,12 @@ class IsSectionLanguageInlayHintsProvider : InlayHintsProvider<NoSettings> {
      * Returns or performs the public behavior represented by this member.
      */
     override val key: SettingsKey<NoSettings> = SettingsKey("inno.iss.language.flags")
+
     /**
      * Returns or performs the public behavior represented by this member.
      */
     override val name: String = "Language flags"
+
     /**
      * Returns or performs the public behavior represented by this member.
      */

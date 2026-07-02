@@ -16,9 +16,10 @@ import com.intellij.lang.folding.FoldingDescriptor
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.section.IsSectionCodeFoldingBuilder
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionPreprocessorLine
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

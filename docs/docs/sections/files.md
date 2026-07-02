@@ -1,6 +1,7 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=filessection){
+.md-button .md-button--primary }
 
 The `[Files]` section is where you declare every file your installer should copy to the target machine. It supports
 wildcards, recursive directory trees, font installation, .NET GAC registration, file integrity hashing, and even

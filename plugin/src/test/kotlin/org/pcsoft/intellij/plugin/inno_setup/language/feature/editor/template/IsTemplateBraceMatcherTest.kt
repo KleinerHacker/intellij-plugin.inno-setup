@@ -12,8 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.template.IsTemplateBraceMatcher
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.template.psi.IsTemplateTypes
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 class IsTemplateBraceMatcherTest : IsTimedBasePlatformTestCase() {

@@ -14,14 +14,14 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
 import com.intellij.ide.navigationToolbar.StructureAwareNavBarModelExtension
 import com.intellij.lang.Language
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptLanguage
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.displayName
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptLanguage
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.displayName
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParameterEntry
 import javax.swing.Icon
 
 /**

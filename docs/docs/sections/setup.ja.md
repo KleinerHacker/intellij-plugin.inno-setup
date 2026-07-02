@@ -1,8 +1,11 @@
 # [Setup]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=setupsection){
+.md-button .md-button--primary }
 
-`[Setup]` セクションはすべての Inno Setup スクリプトの骨格です。シンプルな `Directive=Value` 形式を使用し、Windows の追加と削除に表示されるアプリケーションメタデータから圧縮アルゴリズム、ウィザードの外観、権限要件まですべてを制御します。厳密に必須なのは `AppName` と `AppVersion` のみで、他のすべてのディレクティブには適切なデフォルト値があります。
+`[Setup]` セクションはすべての Inno Setup スクリプトの骨格です。シンプルな `Directive=Value` 形式を使用し、Windows
+の追加と削除に表示されるアプリケーションメタデータから圧縮アルゴリズム、ウィザードの外観、権限要件まですべてを制御します。厳密に必須なのは
+`AppName` と `AppVersion` のみで、他のすべてのディレクティブには適切なデフォルト値があります。
 
 ---
 
@@ -74,7 +77,8 @@
 
 `string`
 
-インストーラーのペイロードをパックするために使用する圧縮アルゴリズム。有効な値：`lzma2/ultra64`（デフォルト、最高圧縮率）、`bzip2`、`deflate`、`none`。
+インストーラーのペイロードをパックするために使用する圧縮アルゴリズム。有効な値：`lzma2/ultra64`（デフォルト、最高圧縮率）、
+`bzip2`、`deflate`、`none`。
 
 [:octicons-link-external-16: リファレンス](https://jrsoftware.org/ishelp/index.php?topic=setup_compression)
 
@@ -136,7 +140,8 @@
 
 `string`
 
-インストール先の選択ページに表示されるデフォルトのインストールディレクトリ（例：`{autopf}\MyApp`）。すべての Inno Setup ディレクトリ定数をサポートします。
+インストール先の選択ページに表示されるデフォルトのインストールディレクトリ（例：`{autopf}\MyApp`）。すべての Inno Setup
+ディレクトリ定数をサポートします。
 
 [:octicons-link-external-16: リファレンス](https://jrsoftware.org/ishelp/index.php?topic=setup_defaultdirname)
 
@@ -294,7 +299,8 @@
 
 `boolean`
 
-`HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall` の下にアンインストールレジストリキーを作成するかどうかを制御します。デフォルトは `yes`。
+`HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall` の下にアンインストールレジストリキーを作成するかどうかを制御します。デフォルトは
+`yes`。
 
 [:octicons-link-external-16: リファレンス](https://jrsoftware.org/ishelp/index.php?topic=setup_createuninstallregkey)
 

@@ -1,8 +1,10 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button
+.md-button--primary }
 
-`[Registry]` 섹션은 설치 중에 Windows 레지스트리 키와 값을 생성, 수정 또는 삭제합니다. 모든 주요 레지스트리 값 유형을 지원하며 `uninsdeletekey` 및 `uninsdeletekeyifempty` 같은 플래그를 통해 제거 시 레지스트리 데이터 처리를 세밀하게 제어합니다. 32비트 및 64비트 레지스트리 보기를 명시적으로 대상으로 지정할 수 있습니다.
+`[Registry]` 섹션은 설치 중에 Windows 레지스트리 키와 값을 생성, 수정 또는 삭제합니다. 모든 주요 레지스트리 값 유형을 지원하며 `uninsdeletekey` 및
+`uninsdeletekeyifempty` 같은 플래그를 통해 제거 시 레지스트리 데이터 처리를 세밀하게 제어합니다. 32비트 및 64비트 레지스트리 보기를 명시적으로 대상으로 지정할 수 있습니다.
 
 ---
 
@@ -10,7 +12,8 @@
 
 `string` · **필수**
 
-레지스트리 루트 하이브: `HKCU`, `HKLM`, `HKCR`, `HKU`, `HKCC`, 또는 `HKA`(설치 모드에 따라 자동). `32` 또는 `64`를 추가하면 특정 레지스트리 보기가 강제됩니다(예: `HKLM64`).
+레지스트리 루트 하이브: `HKCU`, `HKLM`, `HKCR`, `HKU`, `HKCC`, 또는 `HKA`(설치 모드에 따라 자동). `32` 또는 `64`를 추가하면 특정 레지스트리 보기가 강제됩니다(예:
+`HKLM64`).
 
 ---
 
@@ -58,7 +61,8 @@
 
 `string` · **여러 값**
 
-동작 플래그: `createvalueifdoesntexist`, `deletekey`, `deletevalue`, `dontcreatekey`, `noerror`, `preservestringtype`, `uninsclearvalue`, `uninsdeletekey`, `uninsdeletekeyifempty`, `uninsdeletevalue`.
+동작 플래그: `createvalueifdoesntexist`, `deletekey`, `deletevalue`, `dontcreatekey`, `noerror`, `preservestringtype`,
+`uninsclearvalue`, `uninsdeletekey`, `uninsdeletekeyifempty`, `uninsdeletevalue`.
 
 ---
 

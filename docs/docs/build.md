@@ -35,11 +35,11 @@ script gets its own child node showing its name and the number of errors or warn
 The right-hand panel shows the raw ISCC output line by line — progress messages, section parsing notes,
 and any compiler diagnostics:
 
-| Line type   | Appearance        | Example                                                          |
-|-------------|-------------------|------------------------------------------------------------------|
-| **Progress** | plain white text  | `Parsing [Files] section, line 22`                               |
-| **Error**   | red text          | `Error on line 22 in C:\...\demo.iss: Source file "..." not found` |
-| **Warning** | yellow text       | `Warning on line 5 in C:\...\demo.iss: ...`                      |
+| Line type    | Appearance       | Example                                                            |
+|--------------|------------------|--------------------------------------------------------------------|
+| **Progress** | plain white text | `Parsing [Files] section, line 22`                                 |
+| **Error**    | red text         | `Error on line 22 in C:\...\demo.iss: Source file "..." not found` |
+| **Warning**  | yellow text      | `Warning on line 5 in C:\...\demo.iss: ...`                        |
 
 ### Structured Section Output & Folding
 
@@ -78,8 +78,8 @@ The left-hand tree in the Build tool window summarises the result:
 The output location for the compiled installer can be controlled per project via the
 [Build Settings](settings-build.md):
 
-| Mode                                     | ISCC flag | Description                                                                       |
-|------------------------------------------|-----------|-----------------------------------------------------------------------------------|
-| **As defined in script** *(script)*      | *(none)*  | Uses the `OutputDir` from `[Setup]` unchanged                                     |
-| **Into project build directory** *(default)* | `/O`  | Redirects a relative `OutputDir` into the project's build folder (`out`/`target`/`build`) |
-| **Dry build — validate only, no output** | `/O-`     | Validates the script without producing a setup file; useful for CI checks         |
+| Mode                                         | ISCC flag | Description                                                                               |
+|----------------------------------------------|-----------|-------------------------------------------------------------------------------------------|
+| **As defined in script** *(script)*          | *(none)*  | Uses the `OutputDir` from `[Setup]` unchanged                                             |
+| **Into project build directory** *(default)* | `/O`      | Redirects a relative `OutputDir` into the project's build folder (`out`/`target`/`build`) |
+| **Dry build — validate only, no output**     | `/O-`     | Validates the script without producing a setup file; useful for CI checks                 |

@@ -19,7 +19,8 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBLabel
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
 import javax.swing.event.DocumentEvent

@@ -18,7 +18,7 @@ import com.intellij.openapi.ui.ValidationInfo
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import java.awt.Dimension
 import javax.swing.JComponent
 

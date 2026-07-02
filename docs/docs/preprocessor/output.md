@@ -44,4 +44,5 @@ specification; the expression is parsed and type-checked.
 
 ---
 
-See the official [`#emit` / `#expr` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_emit.htm).
+See the official [`#emit` /
+`#expr` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_emit.htm).

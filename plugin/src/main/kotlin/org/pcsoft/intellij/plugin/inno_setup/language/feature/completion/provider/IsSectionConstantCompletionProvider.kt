@@ -19,13 +19,13 @@ import com.intellij.codeInsight.completion.PrioritizedLookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.definedConstants
-import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsConstantService
 
 /**
  * Provides context-aware completion variants for Inno Setup PSI elements.

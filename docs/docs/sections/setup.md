@@ -1,6 +1,7 @@
 # [Setup]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=setupsection){
+.md-button .md-button--primary }
 
 The `[Setup]` section is the backbone of every Inno Setup script. It uses a simple `Directive=Value` format and controls
 everything from the application metadata shown in Windows' Add/Remove Programs to the compression algorithm, wizard

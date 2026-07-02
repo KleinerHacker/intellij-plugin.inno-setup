@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor
 
 import com.intellij.lang.injection.InjectedLanguageManager
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 class IsPreprocessorDocumentationProviderTest : IsTimedBasePlatformTestCase() {
@@ -137,7 +137,7 @@ class IsPreprocessorDocumentationProviderTest : IsTimedBasePlatformTestCase() {
         // hello = demo + anyany("y") = "test" + ("demo.isl" + "y") = "testdemo.isly"
         val doc = docFor(
             "#define demo \"test\"\n#define lang \"demo.isl\"\n#define anyany(x) lang + x\n" +
-                "#define hel<caret>lo demo + anyany(\"y\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+                    "#define hel<caret>lo demo + anyany(\"y\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertNotNull(doc)
         assertTrue("Computed value must resolve through the macro call", doc!!.contains("testdemo.isly"))

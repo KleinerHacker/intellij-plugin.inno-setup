@@ -20,7 +20,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 
 /**
  * Creates a new Inno Setup file from the IDE New File action. Name and description are localized via

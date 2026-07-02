@@ -25,11 +25,11 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.IsIncludePaths
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionPreprocessorLine
 
 /**
  * Intention action that replaces an `#include "file"` line with the verbatim content of the included
@@ -97,7 +97,11 @@ class IsIncludeInlineIntentionAction : IntentionAction {
     /**
      * Resolves the `#include` line at the caret together with its existing target file, or `null`.
      */
-    private fun resolveTarget(project: Project, editor: Editor?, file: PsiFile?): Pair<IsSectionPreprocessorLine, VirtualFile>? {
+    private fun resolveTarget(
+        project: Project,
+        editor: Editor?,
+        file: PsiFile?
+    ): Pair<IsSectionPreprocessorLine, VirtualFile>? {
         if (file == null) return null
         // The caret may sit inside the injected ISPP fragment of a `#` line, so recover the host script.
         val hostFile = file as? IsScriptFile

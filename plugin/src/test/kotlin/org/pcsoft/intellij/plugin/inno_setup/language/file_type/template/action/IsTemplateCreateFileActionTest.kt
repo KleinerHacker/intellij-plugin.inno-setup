@@ -12,8 +12,8 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.action
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

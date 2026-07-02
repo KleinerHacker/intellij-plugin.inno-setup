@@ -33,10 +33,10 @@ contains the current position, keeping the tree in sync with the editor at all t
 
 Each entry is annotated with an icon that indicates its kind:
 
-| Icon | Meaning                                              |
-|------|------------------------------------------------------|
+| Icon | Meaning                                                              |
+|------|----------------------------------------------------------------------|
 | `f`  | A field-like entry — a directive key or parameter key with its value |
-| `C`  | A section container node                            |
+| `C`  | A section container node                                             |
 
 The file-type icon on the root node matches the `.iss` file icon used throughout the IDE.
 

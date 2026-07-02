@@ -19,18 +19,18 @@ sub-command is flagged as an error, as is a missing or ill-typed argument.
 
 ## Sub-commands
 
-| Sub-command | Argument | Purpose |
-|-------------|----------|---------|
-| `option` | option flags | General reading/output options of the preprocessor |
-| `parseroption` | option flags | Options that control expression parsing |
-| `message` | string | Print an informational message to the compiler window |
-| `warning` | string | Print a warning to the compiler window |
-| `error` | string | Show an error message in a dialog box |
-| `verboselevel` | integer (0–10) | Set the verbosity threshold for messages |
-| `inlinestart` | string | Set the opening delimiter for inline directives (default `{#`) |
-| `inlineend` | string | Set the closing delimiter for inline directives (default `}`) |
-| `include` | string | Set the semicolon-separated search paths for included files |
-| `spansymbol` | string | Set the line-continuation character (first character only) |
+| Sub-command    | Argument       | Purpose                                                        |
+|----------------|----------------|----------------------------------------------------------------|
+| `option`       | option flags   | General reading/output options of the preprocessor             |
+| `parseroption` | option flags   | Options that control expression parsing                        |
+| `message`      | string         | Print an informational message to the compiler window          |
+| `warning`      | string         | Print a warning to the compiler window                         |
+| `error`        | string         | Show an error message in a dialog box                          |
+| `verboselevel` | integer (0–10) | Set the verbosity threshold for messages                       |
+| `inlinestart`  | string         | Set the opening delimiter for inline directives (default `{#`) |
+| `inlineend`    | string         | Set the closing delimiter for inline directives (default `}`)  |
+| `include`      | string         | Set the semicolon-separated search paths for included files    |
+| `spansymbol`   | string         | Set the line-continuation character (first character only)     |
 
 ---
 
@@ -42,20 +42,20 @@ A `+` turns the option on, a `-` turns it off. The plugin reports an unknown let
 
 ### `option` flags
 
-| Flag | Default | Meaning |
-|------|---------|---------|
-| `c` | on | Output to compiler |
-| `e` | on | Emit empty lines |
-| `v` | off | Verbose mode |
+| Flag | Default | Meaning            |
+|------|---------|--------------------|
+| `c`  | on      | Output to compiler |
+| `e`  | on      | Emit empty lines   |
+| `v`  | off     | Verbose mode       |
 
 ### `parseroption` flags
 
-| Flag | Default | Meaning |
-|------|---------|---------|
-| `b` | on | Short-circuit boolean evaluation |
-| `m` | off | Short-circuit multiplication evaluation |
-| `p` | on | Pascal-style string literals |
-| `u` | off | Allow undeclared identifiers |
+| Flag | Default | Meaning                                 |
+|------|---------|-----------------------------------------|
+| `b`  | on      | Short-circuit boolean evaluation        |
+| `m`  | off     | Short-circuit multiplication evaluation |
+| `p`  | on      | Pascal-style string literals            |
+| `u`  | off     | Allow undeclared identifiers            |
 
 ```ini
 #pragma option -v+            ; enable verbose output

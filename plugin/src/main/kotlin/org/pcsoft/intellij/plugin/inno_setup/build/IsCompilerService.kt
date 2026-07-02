@@ -32,10 +32,11 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.task.ProjectTaskRunner
 import com.intellij.task.TaskRunnerResults
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsConfigurable
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 import java.io.File
 
 /**
@@ -67,7 +68,11 @@ class IsCompilerService(private val project: Project) {
      */
     fun compileScript(scriptFile: VirtualFile) {
         ApplicationManager.getApplication().executeOnPooledThread {
-            runCompilation(listOf(scriptFile), PluginBundle.message("build.title.script", scriptFile.name), force = true)
+            runCompilation(
+                listOf(scriptFile),
+                PluginBundle.message("build.title.script", scriptFile.name),
+                force = true
+            )
         }
     }
 
@@ -157,7 +162,11 @@ class IsCompilerService(private val project: Project) {
             val scriptKey = hashKey(script.path, outputArg)
             val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
             if (!force && buildHashes[scriptKey] == currentHash && artifactPresent(script)) {
-                consoleService.print(console, PluginBundle.message("build.up_to_date", script.name) + "\n", error = false)
+                consoleService.print(
+                    console,
+                    PluginBundle.message("build.up_to_date", script.name) + "\n",
+                    error = false
+                )
                 continue
             }
 
@@ -196,7 +205,11 @@ class IsCompilerService(private val project: Project) {
             } catch (e: Exception) {
                 thisLogger().warn("Failed to run ISCC for ${script.path}", e)
                 hasErrors = true
-                consoleService.print(console, PluginBundle.message("build.run_failed", e.message ?: "") + "\n", error = true)
+                consoleService.print(
+                    console,
+                    PluginBundle.message("build.run_failed", e.message ?: "") + "\n",
+                    error = true
+                )
             }
         }
 

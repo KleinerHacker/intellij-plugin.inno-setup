@@ -16,7 +16,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.task.TaskRunnerResults
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import java.io.File
 

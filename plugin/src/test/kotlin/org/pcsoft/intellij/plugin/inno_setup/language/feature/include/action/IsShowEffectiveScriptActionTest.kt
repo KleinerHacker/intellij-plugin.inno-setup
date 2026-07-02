@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.include.action
 
 import com.intellij.openapi.fileEditor.FileEditorManager
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

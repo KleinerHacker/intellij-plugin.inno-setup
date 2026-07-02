@@ -43,7 +43,8 @@ class IsRunProcessHandler(
     private val config: IsRunConfiguration
 ) : ProcessHandler() {
 
-    @Volatile private var activeHandler: OSProcessHandler? = null
+    @Volatile
+    private var activeHandler: OSProcessHandler? = null
 
     override fun startNotify() {
         super.startNotify()
@@ -143,6 +144,7 @@ class IsRunProcessHandler(
                 override fun onTextAvailable(event: ProcessEvent, outputType: Key<*>) {
                     notifyTextAvailable(event.text, outputType)
                 }
+
                 override fun processTerminated(event: ProcessEvent) {}
             })
             handler.startNotify()

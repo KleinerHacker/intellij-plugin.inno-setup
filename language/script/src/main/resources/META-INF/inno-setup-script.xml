@@ -19,56 +19,56 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Parser / highlighting -->
         <lang.parserDefinition language="ISS"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionParserDefinition"/>
         <lang.syntaxHighlighterFactory language="ISS"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionHighlighterFactory"/>
         <lang.parserDefinition language="IST"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.template.IsTemplateParserDefinition"/>
         <lang.syntaxHighlighterFactory language="IST"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.template.IsTemplateHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.template.IsTemplateHighlighterFactory"/>
 
         <!-- Semantic annotators -->
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionAnnotator"/>
         <annotator language="ISS"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.lang.IsLanguageAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.lang.IsLanguageAnnotator"/>
 
         <!-- Error filter for [Code] -->
         <highlightErrorFilter
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionErrorFilter"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionErrorFilter"/>
 
         <!-- ISPP injector: injects ISPP language into IsSectionPreprocessorLine / template elements -->
         <multiHostInjector
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.injection.IsPreprocessorInjector"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.preprocessor.injection.IsPreprocessorInjector"/>
 
         <!-- Brace matching -->
         <lang.braceMatcher language="ISS"
-                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsSectionBraceMatcher"/>
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.IsSectionBraceMatcher"/>
         <lang.braceMatcher language="IST"
-                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template.IsTemplateBraceMatcher"/>
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.template.IsTemplateBraceMatcher"/>
 
         <!-- Code folding -->
         <lang.foldingBuilder language="ISS"
-                             implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionCodeFoldingBuilder"/>
+                             implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.section.IsSectionCodeFoldingBuilder"/>
 
         <!-- Commenter (Ctrl+/) -->
         <lang.commenter language="ISS"
-                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsCommenter"/>
+                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.IsCommenter"/>
 
         <!-- Typed handlers: auto-popup after '[' and '{', quote handling, template typing -->
         <typedHandler
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionTypedHandler"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.section.IsSectionTypedHandler"/>
         <typedHandler
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsQuoteHandler"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.IsQuoteHandler"/>
         <typedHandler
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.template.IsTemplateTypedHandler"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.template.IsTemplateTypedHandler"/>
 
         <!-- Color settings page -->
         <colorSettingsPage
-                implementation="org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionColorSettingsPage"/>
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionColorSettingsPage"/>
 
         <!-- Persistent state storage for the Inno Setup installation path -->
         <applicationService
-                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService"/>
+                serviceImplementation="org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService"/>
     </extensions>
 </idea-plugin>

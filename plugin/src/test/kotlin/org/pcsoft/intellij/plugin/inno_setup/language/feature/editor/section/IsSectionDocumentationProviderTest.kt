@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 class IsSectionDocumentationProviderTest : IsTimedBasePlatformTestCase() {
@@ -161,7 +161,10 @@ class IsSectionDocumentationProviderTest : IsTimedBasePlatformTestCase() {
     fun testNonDeprecatedConstantHasNoDeprecatedMarker() {
         val doc = docFor("[Files]\nSource: \"app.exe\"; DestDir: \"{a<caret>pp}\"\n")
         assertNotNull("Expected doc for {app}", doc)
-        assertFalse("Doc for {app} must not contain a deprecated marker", doc!!.contains("deprecated", ignoreCase = true))
+        assertFalse(
+            "Doc for {app} must not contain a deprecated marker",
+            doc!!.contains("deprecated", ignoreCase = true)
+        )
     }
 
     fun testFlagWithSinceShowsVersionSection() {

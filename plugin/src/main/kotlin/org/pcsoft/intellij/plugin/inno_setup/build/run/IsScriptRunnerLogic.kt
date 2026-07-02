@@ -44,8 +44,18 @@ object IsScriptRunnerLogic {
     ): String = when (projectOutputMode) {
         IsBuildOutputMode.DRY -> outputArg(persistentTempDir?.takeIf { it.isNotBlank() }
             ?: File(tempBase, "inno-run-${UUID.randomUUID()}").path)
-        IsBuildOutputMode.SCRIPT -> outputArg(scriptOutputDir?.let { if (File(it).isAbsolute) it else File(buildRoot, it).path } ?: File(buildRoot, "Output").path)
-        IsBuildOutputMode.BUILD_DIR -> outputArg(File(buildRoot, scriptOutputDir?.takeIf { !File(it).isAbsolute } ?: "Output").path)
+
+        IsBuildOutputMode.SCRIPT -> outputArg(scriptOutputDir?.let {
+            if (File(it).isAbsolute) it else File(
+                buildRoot,
+                it
+            ).path
+        } ?: File(buildRoot, "Output").path)
+
+        IsBuildOutputMode.BUILD_DIR -> outputArg(
+            File(
+                buildRoot,
+                scriptOutputDir?.takeIf { !File(it).isAbsolute } ?: "Output").path)
     }
 
     /** Formats an ISCC `/O` argument; the path is wrapped in double quotes as ISCC expects. */
@@ -73,8 +83,8 @@ object IsScriptRunnerLogic {
     fun findSetupExe(outputDir: File): File? =
         outputDir.listFiles { f ->
             f.isFile &&
-            f.extension.equals("exe", ignoreCase = true) &&
-            !f.name.startsWith("unins", ignoreCase = true)
+                    f.extension.equals("exe", ignoreCase = true) &&
+                    !f.name.startsWith("unins", ignoreCase = true)
         }?.firstOrNull()
 
     /**

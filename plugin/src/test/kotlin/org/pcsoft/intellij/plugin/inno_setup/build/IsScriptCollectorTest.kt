@@ -12,6 +12,8 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
+
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

@@ -20,14 +20,16 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveKey
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamKey
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
-import org.pcsoft.intellij.plugin.inno_setup.types.*
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveKey
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamKey
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.*
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

@@ -1,8 +1,11 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
+.md-button--primary }
 
-`[Run]` 节列出了 Inno Setup 在成功安装后、显示最终向导页面之前执行的程序或文件。条目按出现顺序依次运行。您可以在后台静默启动可执行文件、用关联应用程序打开文档，或通过完成页面上的复选框向用户呈现可选的安装后操作（如*启动 MyApp*）。
+`[Run]` 节列出了 Inno Setup
+在成功安装后、显示最终向导页面之前执行的程序或文件。条目按出现顺序依次运行。您可以在后台静默启动可执行文件、用关联应用程序打开文档，或通过完成页面上的复选框向用户呈现可选的安装后操作（如
+*启动 MyApp*）。
 
 ---
 
@@ -74,7 +77,8 @@
 
 `string` · **多个值**
 
-行为标志：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
+行为标志：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、
+`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
 
 ---
 

@@ -24,7 +24,7 @@ plugins {
 }
 
 val parsingRoot = "src/main/resources/parsing"
-val preprocessorPackage = "org/pcsoft/intellij/plugin/inno_setup/language/parser/preprocessor"
+val preprocessorPackage = "org/pcsoft/intellij/plugin/inno_setup/preprocessor/language/parser"
 
 tasks {
     register<GenerateParserTask>("generateIsPreprocessorParser") {

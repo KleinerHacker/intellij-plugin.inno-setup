@@ -1,8 +1,10 @@
 # [Tasks]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=taskssection){ .md-button
+.md-button--primary }
 
-`[Tasks]` 섹션은 사용자가 *추가 작업 선택* 마법사 페이지에서 활성화하거나 비활성화할 수 있는 선택적 작업을 정의합니다——바탕화면 바로 가기 만들기나 컨텍스트 메뉴 항목 추가 등. 태스크는 체크박스로 표시되거나 그룹 내에서 `exclusive`로 표시된 경우 라디오 버튼으로 표시됩니다. 다른 섹션의 항목은 `Tasks` 매개변수를 통해 태스크에 연결됩니다.
+`[Tasks]` 섹션은 사용자가 *추가 작업 선택* 마법사 페이지에서 활성화하거나 비활성화할 수 있는 선택적 작업을 정의합니다——바탕화면 바로 가기 만들기나 컨텍스트 메뉴 항목 추가 등. 태스크는 체크박스로
+표시되거나 그룹 내에서 `exclusive`로 표시된 경우 라디오 버튼으로 표시됩니다. 다른 섹션의 항목은 `Tasks` 매개변수를 통해 태스크에 연결됩니다.
 
 ---
 

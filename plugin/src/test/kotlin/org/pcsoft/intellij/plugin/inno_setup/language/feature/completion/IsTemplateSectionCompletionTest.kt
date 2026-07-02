@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

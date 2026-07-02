@@ -9,11 +9,11 @@ icon, language infrastructure, and editor feature set.
 
 ## Overview
 
-| File type                  | Extension | Purpose                                                        |
-|----------------------------|-----------|----------------------------------------------------------------|
-| **Inno Setup Script**      | `.iss`    | Main installer definition — sections, files, registry, code   |
-| **Inno Setup Language**    | `.isl`    | Translated messages and locale options for a single language   |
-| **Inno Setup Template**    | `.ist`    | Reusable free-text fragment pulled into a script via `#include` |
+| File type               | Extension | Purpose                                                         |
+|-------------------------|-----------|-----------------------------------------------------------------|
+| **Inno Setup Script**   | `.iss`    | Main installer definition — sections, files, registry, code     |
+| **Inno Setup Language** | `.isl`    | Translated messages and locale options for a single language    |
+| **Inno Setup Template** | `.ist`    | Reusable free-text fragment pulled into a script via `#include` |
 
 All file types are automatically recognised by their extension. No manual association is required.
 

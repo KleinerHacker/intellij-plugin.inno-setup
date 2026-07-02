@@ -13,8 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.ConfigurationTypeBase
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
 
 class IsRunConfigurationType : ConfigurationTypeBase(
     "IssRunConfiguration",

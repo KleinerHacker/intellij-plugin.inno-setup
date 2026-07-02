@@ -13,6 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.file_type.template
 
 import com.intellij.ide.structureView.StructureViewBuilder
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

@@ -1,8 +1,10 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button
+.md-button--primary }
 
-`[Files]` 섹션은 설치 프로그램이 대상 컴퓨터에 복사해야 하는 모든 파일을 선언하는 곳입니다. 와일드카드, 재귀 디렉토리 트리, 글꼴 설치, .NET GAC 등록, 파일 무결성 해싱, 심지어 설치 시 인터넷에서 파일 다운로드도 지원합니다. 나열된 파일에 필요한 디렉토리는 자동으로 생성됩니다——`[Dirs]` 항목이 필요하지 않습니다.
+`[Files]` 섹션은 설치 프로그램이 대상 컴퓨터에 복사해야 하는 모든 파일을 선언하는 곳입니다. 와일드카드, 재귀 디렉토리 트리, 글꼴 설치, .NET GAC 등록, 파일 무결성 해싱, 심지어 설치 시
+인터넷에서 파일 다운로드도 지원합니다. 나열된 파일에 필요한 디렉토리는 자동으로 생성됩니다——`[Dirs]` 항목이 필요하지 않습니다.
 
 ---
 
@@ -130,7 +132,9 @@
 
 `string` · **여러 값**
 
-동작 플래그: `32bit`, `64bit`, `comparetimestamp`, `confirmoverwrite`, `deleteafterinstall`, `dontcopy`, `download`, `external`, `extractarchive`, `ignoreversion`, `isreadme`, `nocompression`, `onlyifdoesntexist`, `recursesubdirs`, `createallsubdirs`, `regserver`, `regtypelib`, `restartreplace`, `sharedfile`.
+동작 플래그: `32bit`, `64bit`, `comparetimestamp`, `confirmoverwrite`, `deleteafterinstall`, `dontcopy`, `download`,
+`external`, `extractarchive`, `ignoreversion`, `isreadme`, `nocompression`, `onlyifdoesntexist`, `recursesubdirs`,
+`createallsubdirs`, `regserver`, `regtypelib`, `restartreplace`, `sharedfile`.
 
 ---
 

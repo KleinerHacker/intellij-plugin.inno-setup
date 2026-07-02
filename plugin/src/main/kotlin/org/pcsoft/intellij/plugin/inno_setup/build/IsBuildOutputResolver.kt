@@ -60,7 +60,8 @@ class IsBuildOutputResolver(private val project: Project) {
     companion object {
         // Matches an "OutputDir=..." directive anywhere in the script text. Read from raw text rather
         // than PSI because the section lexer splits values on ':' and would truncate Windows paths.
-        private val OUTPUT_DIR = Regex("""^\s*OutputDir\s*=\s*(.+?)\s*$""", setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE))
+        private val OUTPUT_DIR =
+            Regex("""^\s*OutputDir\s*=\s*(.+?)\s*$""", setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE))
 
         /**
          * Extracts the `\[Setup] OutputDir` value from raw script [text], or `null` when absent.

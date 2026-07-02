@@ -15,12 +15,12 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionPreprocessorLine
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
@@ -45,7 +45,12 @@ class IsPreprocessorIfdefReferenceTest : IsTimedBasePlatformTestCase() {
                 val dirs = mutableListOf<IsPreprocessorDirective>()
                 mgr.enumerate(line) { injectedPsi, _ ->
                     if (injectedPsi is IsPreprocessorFile)
-                        dirs.addAll(PsiTreeUtil.getChildrenOfTypeAsList(injectedPsi, IsPreprocessorDirective::class.java))
+                        dirs.addAll(
+                            PsiTreeUtil.getChildrenOfTypeAsList(
+                                injectedPsi,
+                                IsPreprocessorDirective::class.java
+                            )
+                        )
                 }
                 dirs
             }
@@ -72,11 +77,14 @@ class IsPreprocessorIfdefReferenceTest : IsTimedBasePlatformTestCase() {
     }
 
     fun testIfdefOnUndefinedNameIsNotAnError() {
-        val errors = myFixture.also { it.configureByText(IsScriptFileType.INSTANCE, "#ifdef Missing\n#endif\n$setupTail") }
-            .doHighlighting()
-            .filter { it.severity.name == "ERROR" }
-        assertTrue("#ifdef on an undefined macro must not produce an error, was: ${errors.map { it.description }}",
-            errors.isEmpty())
+        val errors =
+            myFixture.also { it.configureByText(IsScriptFileType.INSTANCE, "#ifdef Missing\n#endif\n$setupTail") }
+                .doHighlighting()
+                .filter { it.severity.name == "ERROR" }
+        assertTrue(
+            "#ifdef on an undefined macro must not produce an error, was: ${errors.map { it.description }}",
+            errors.isEmpty()
+        )
     }
 
     fun testIfdefWithoutNameIsError() {
@@ -92,28 +100,45 @@ class IsPreprocessorIfdefReferenceTest : IsTimedBasePlatformTestCase() {
             .filter { it.severity.name == "ERROR" && it.description?.contains("requires a single identifier") == true }
 
     fun testIfdefWithExpressionIsError() {
-        assertTrue("#ifdef with an expression must be flagged", singleIdentifierErrors("#ifdef Foo+Bar\n#endif\n$setupTail").isNotEmpty())
+        assertTrue(
+            "#ifdef with an expression must be flagged",
+            singleIdentifierErrors("#ifdef Foo+Bar\n#endif\n$setupTail").isNotEmpty()
+        )
     }
 
     fun testIfdefWithNumberLiteralIsError() {
-        assertTrue("#ifdef with a number must be flagged", singleIdentifierErrors("#ifdef 1+1\n#endif\n$setupTail").isNotEmpty())
+        assertTrue(
+            "#ifdef with a number must be flagged",
+            singleIdentifierErrors("#ifdef 1+1\n#endif\n$setupTail").isNotEmpty()
+        )
     }
 
     fun testIfdefWithStringLiteralIsError() {
-        assertTrue("#ifdef with a string must be flagged", singleIdentifierErrors("#ifdef \"x\"\n#endif\n$setupTail").isNotEmpty())
+        assertTrue(
+            "#ifdef with a string must be flagged",
+            singleIdentifierErrors("#ifdef \"x\"\n#endif\n$setupTail").isNotEmpty()
+        )
     }
 
     fun testIfdefWithMultipleTokensIsError() {
-        assertTrue("#ifdef with two names must be flagged", singleIdentifierErrors("#ifdef Foo Bar\n#endif\n$setupTail").isNotEmpty())
+        assertTrue(
+            "#ifdef with two names must be flagged",
+            singleIdentifierErrors("#ifdef Foo Bar\n#endif\n$setupTail").isNotEmpty()
+        )
     }
 
     fun testIfndefWithExpressionIsError() {
-        assertTrue("#ifndef with an expression must be flagged", singleIdentifierErrors("#ifndef Foo*2\n#endif\n$setupTail").isNotEmpty())
+        assertTrue(
+            "#ifndef with an expression must be flagged",
+            singleIdentifierErrors("#ifndef Foo*2\n#endif\n$setupTail").isNotEmpty()
+        )
     }
 
     fun testIfdefWithPlainIdentifierIsNotASingleIdentifierError() {
-        assertTrue("A plain identifier must not raise the single-identifier error",
-            singleIdentifierErrors("#ifdef Foo\n#endif\n$setupTail").isEmpty())
+        assertTrue(
+            "A plain identifier must not raise the single-identifier error",
+            singleIdentifierErrors("#ifdef Foo\n#endif\n$setupTail").isEmpty()
+        )
     }
 
     fun testReferencesSearchFindsIfdefUsage() {

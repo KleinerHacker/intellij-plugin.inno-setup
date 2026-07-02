@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

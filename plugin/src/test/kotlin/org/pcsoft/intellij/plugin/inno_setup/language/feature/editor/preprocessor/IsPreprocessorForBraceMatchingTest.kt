@@ -15,8 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocess
 import com.intellij.codeInsight.highlighting.BraceMatchingUtil
 import com.intellij.openapi.editor.ex.util.LexerEditorHighlighter
 import com.intellij.openapi.editor.highlighter.HighlighterIterator
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorTokenHighlighter
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorTokenHighlighter
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

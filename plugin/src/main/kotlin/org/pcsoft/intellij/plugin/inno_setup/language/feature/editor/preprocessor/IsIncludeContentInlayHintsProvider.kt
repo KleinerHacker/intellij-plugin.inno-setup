@@ -22,14 +22,14 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.IsIncludePaths
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionPreprocessorLine
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.IsIncludePaths
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionPreprocessorLine
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import javax.swing.JPanel
 
 /**
@@ -92,7 +92,7 @@ class IsIncludeContentInlayHintsProvider : InlayHintsProvider<NoSettings> {
             InjectedLanguageManager.getInstance(project).enumerate(this) { injected, _ ->
                 if (found == null && injected is IsPreprocessorFile) {
                     val directive = PsiTreeUtil.findChildOfType(injected, IsPreprocessorDirective::class.java)
-                        as? IsPreprocessorDirectiveEx
+                            as? IsPreprocessorDirectiveEx
                     if (directive != null && directive.isInclude()) found = directive
                 }
             }

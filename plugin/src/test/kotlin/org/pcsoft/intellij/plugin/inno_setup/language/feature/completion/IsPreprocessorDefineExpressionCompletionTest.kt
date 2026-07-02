@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.LookupElementPresentation
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
@@ -52,7 +52,10 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
     fun testPredefinedVariablesNotSuggestedOutsideExpression() {
         // Caret right after the directive keyword (still typing the name) — not the expression part.
         val variants = expressionLookup("#define <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
-        assertFalse("Predefined variables must not be offered as a #define name, was: $variants", "__LINE__" in variants)
+        assertFalse(
+            "Predefined variables must not be offered as a #define name, was: $variants",
+            "__LINE__" in variants
+        )
     }
 
     fun testBuiltinFunctionsSuggestedInDefineExpression() {
@@ -106,7 +109,10 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
             "#define First 1\n#dim Arr[3]\n#define Arr[<caret>]\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Preceding define must be offered inside an array index, was: $variants", "First" in variants)
-        assertTrue("Predefined variable must be offered inside an array index, was: $variants", "PREPROCVER" in variants)
+        assertTrue(
+            "Predefined variable must be offered inside an array index, was: $variants",
+            "PREPROCVER" in variants
+        )
     }
 
     fun testSuggestionsInArrayElementValue() {
@@ -115,7 +121,10 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
             "#define First 1\n#dim Arr[3]\n#define Arr[0] <caret>\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Preceding define must be offered as an array element value, was: $variants", "First" in variants)
-        assertTrue("Predefined variable must be offered as an array element value, was: $variants", "PREPROCVER" in variants)
+        assertTrue(
+            "Predefined variable must be offered as an array element value, was: $variants",
+            "PREPROCVER" in variants
+        )
     }
 
     fun testSuggestionsInDimInitializer() {
@@ -124,7 +133,10 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
             "#define First 1\n#dim Arr[3] { <caret> }\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Preceding define must be offered in a #dim initializer, was: $variants", "First" in variants)
-        assertTrue("Predefined variable must be offered in a #dim initializer, was: $variants", "PREPROCVER" in variants)
+        assertTrue(
+            "Predefined variable must be offered in a #dim initializer, was: $variants",
+            "PREPROCVER" in variants
+        )
     }
 
     fun testSuggestionsAfterDimSizeBeforeBrace() {
@@ -159,8 +171,14 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
         val variants = expressionLookup(
             "#define First 1\n#ifdef <caret>\n#endif\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
-        assertFalse("Predefined variables must not be offered as an #ifdef name, was: $variants", "PREPROCVER" in variants)
-        assertFalse("Built-in functions must not be offered as an #ifdef name, was: $variants", "FileExists" in variants)
+        assertFalse(
+            "Predefined variables must not be offered as an #ifdef name, was: $variants",
+            "PREPROCVER" in variants
+        )
+        assertFalse(
+            "Built-in functions must not be offered as an #ifdef name, was: $variants",
+            "FileExists" in variants
+        )
     }
 
     fun testDefineNamesOfferedInIfdefName() {
@@ -182,7 +200,7 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
         // The condition (2nd slot) references the loop variable and earlier #defines.
         val variants = expressionLookup(
             "#define Limit 10\n#sub Body\n#endsub\n#for {i = 0; i < <caret>; i++} Body\n" +
-                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+                    "[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Loop variable must be offered in the #for condition, was: $variants", "i" in variants)
         assertTrue("Preceding define must be offered in the #for condition, was: $variants", "Limit" in variants)
@@ -193,7 +211,7 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
         // The increment (3rd slot) references the loop variable.
         val variants = expressionLookup(
             "#sub Body\n#endsub\n#for {i = 200; i > 0; i = <caret>} Body\n" +
-                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+                    "[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Loop variable must be offered in the #for increment, was: $variants", "i" in variants)
     }
@@ -202,7 +220,7 @@ class IsPreprocessorDefineExpressionCompletionTest : IsTimedBasePlatformTestCase
         // The body is usually a #sub call — earlier #sub names must be offered there.
         val variants = expressionLookup(
             "#sub AddFile\n#endsub\n#for {i = 200; i > 0; i--} <caret>\n" +
-                "[Setup]\nAppName=Test\nAppVersion=1.0\n"
+                    "[Setup]\nAppName=Test\nAppVersion=1.0\n"
         )
         assertTrue("Subroutine name must be offered as the #for body, was: $variants", "AddFile" in variants)
     }

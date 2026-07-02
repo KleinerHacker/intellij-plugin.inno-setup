@@ -19,17 +19,17 @@ import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.issFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.languageId
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveKey
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionDefSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionSpecTarget
-import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.issFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.languageId
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveKey
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionDefSpec
 import javax.swing.Icon
 
 /**

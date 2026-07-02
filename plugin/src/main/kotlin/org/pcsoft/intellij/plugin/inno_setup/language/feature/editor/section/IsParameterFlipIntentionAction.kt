@@ -19,9 +19,9 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nextParam
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamPair
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nextParam
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamPair
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParameterEntry
 
 /**
  * Intention action that swaps two adjacent parameters in an Inno Setup section entry.
@@ -45,7 +45,7 @@ class IsParameterFlipIntentionAction : IntentionAction {
     override fun isAvailable(project: Project, editor: Editor?, file: PsiFile?): Boolean {
         val offset = editor?.caretModel?.offset ?: return false
         val sign = file?.text?.elementAt(0.coerceAtLeast(offset - 1)) ?: return false
-        val elementAt = file?.findElementAt(offset) ?: return false
+        val elementAt = file.findElementAt(offset) ?: return false
 
         return PsiTreeUtil.getParentOfType(elementAt, IsSectionParameterEntry::class.java) != null && sign == ';'
     }

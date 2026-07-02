@@ -20,7 +20,8 @@ import java.io.File
 
 class IsScriptHasherTest {
 
-    @get:Rule val tmp = TemporaryFolder()
+    @get:Rule
+    val tmp = TemporaryFolder()
 
     // ── hashFiles ─────────────────────────────────────────────────────────────
 

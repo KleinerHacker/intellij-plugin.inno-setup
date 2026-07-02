@@ -18,8 +18,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
 
 /**
  * Inside a `#define` expression, suggest the built-in ISPP functions (e.g. `Len`, `Copy`, `FileExists`) from

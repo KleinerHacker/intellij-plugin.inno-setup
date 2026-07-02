@@ -15,7 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action
 import com.intellij.openapi.components.service
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.components.JBTextField
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

@@ -15,7 +15,8 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 import com.intellij.openapi.options.SearchableConfigurable
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import javax.swing.JComponent
 
 /**

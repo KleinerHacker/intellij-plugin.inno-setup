@@ -16,8 +16,8 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 class IsSectionCompletionTest : IsTimedBasePlatformTestCase() {

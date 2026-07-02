@@ -14,8 +14,8 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.openapi.fileTypes.FileType
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**

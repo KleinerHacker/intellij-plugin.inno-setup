@@ -12,7 +12,8 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor
 
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor.IsPreprocessorBraceMatcher
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 class IsPreprocessorBraceMatcherTest : IsTimedBasePlatformTestCase() {

@@ -1,6 +1,7 @@
 # [InstallDelete]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=installdeletesection){
+.md-button .md-button--primary }
 
 The `[InstallDelete]` section lists files and directories that Inno Setup removes at the *beginning* of installation,
 before any new files are copied. This is useful for cleaning up stale files or old directory structures left behind by

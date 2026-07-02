@@ -20,10 +20,10 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VirtualFile
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfiguration
 import org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationType
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
 
 /**
  * Context-menu action that compiles and runs a single `.iss` script. It creates a ghost run

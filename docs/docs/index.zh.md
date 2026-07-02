@@ -6,9 +6,12 @@
 
 ## 什么是 Inno Setup？
 
-[Inno Setup](https://jrsoftware.org/isinfo.php) 是由 Jordan Russell 和 Martijn Laan 创建的免费开源 Windows 安装程序构建工具。自 1997 年首次发布以来，它已成为 Windows 生态系统中使用最广泛的安装程序工具之一——为 **Visual Studio Code**、**Git for Windows** 和 **Embarcadero Delphi** 等项目的安装程序提供支持。
+[Inno Setup](https://jrsoftware.org/isinfo.php) 是由 Jordan Russell 和 Martijn Laan 创建的免费开源 Windows 安装程序构建工具。自
+1997 年首次发布以来，它已成为 Windows 生态系统中使用最广泛的安装程序工具之一——为 **Visual Studio Code**、**Git for Windows
+** 和 **Embarcadero Delphi** 等项目的安装程序提供支持。
 
-Inno Setup 脚本（`.iss`）描述完整的安装程序配置：安装哪些文件、创建哪些注册表项、添加哪些快捷方式，以及安装向导的行为方式。语言文件（`.isl`）提供本地化的向导文本和语言元数据。它们共同支持丰富的节、参数、消息集，以及用于完整运行时自定义的集成 Pascal 脚本引擎。
+Inno Setup 脚本（`.iss`）描述完整的安装程序配置：安装哪些文件、创建哪些注册表项、添加哪些快捷方式，以及安装向导的行为方式。语言文件（
+`.isl`）提供本地化的向导文本和语言元数据。它们共同支持丰富的节、参数、消息集，以及用于完整运行时自定义的集成 Pascal 脚本引擎。
 
 !!! tip "官方 Inno Setup 资源"
 
@@ -36,19 +39,20 @@ Inno Setup 脚本（`.iss`）描述完整的安装程序配置：安装哪些文
 
 ## IDE 兼容性
 
-该插件基于 `com.intellij.modules.lang` 构建，该语言支持模块存在于每个完整的 JetBrains IDE 中。它**不**特别要求 IntelliJ IDEA，并自带 YAML 解析基础设施，因此对宿主 IDE 没有隐藏的运行时依赖。
+该插件基于 `com.intellij.modules.lang` 构建，该语言支持模块存在于每个完整的 JetBrains IDE 中。它**不**特别要求 IntelliJ
+IDEA，并自带 YAML 解析基础设施，因此对宿主 IDE 没有隐藏的运行时依赖。
 
-| IDE                                  | 支持情况 |
-|--------------------------------------|----------|
-| IntelliJ IDEA（社区版和旗舰版）      | ✔        |
-| PyCharm（社区版和专业版）            | ✔        |
-| CLion / CLion Nova                   | ✔        |
-| Rider                                | ✔        |
-| WebStorm                             | ✔        |
-| GoLand                               | ✔        |
-| RubyMine                             | ✔        |
-| DataGrip                             | ✔        |
-| 其他 IntelliJ 平台 IDE               | ✔        |
+| IDE                    | 支持情况 |
+|------------------------|------|
+| IntelliJ IDEA（社区版和旗舰版） | ✔    |
+| PyCharm（社区版和专业版）       | ✔    |
+| CLion / CLion Nova     | ✔    |
+| Rider                  | ✔    |
+| WebStorm               | ✔    |
+| GoLand                 | ✔    |
+| RubyMine               | ✔    |
+| DataGrip               | ✔    |
+| 其他 IntelliJ 平台 IDE     | ✔    |
 
 ---
 

@@ -29,7 +29,7 @@ dependencies {
 }
 
 val parsingRoot = "src/main/resources/parsing"
-val languagePackage = "org/pcsoft/intellij/plugin/inno_setup/language"
+val languagePackage = "org/pcsoft/intellij/plugin/inno_setup/script/language"
 val sectionPackage = "$languagePackage/parser/section"
 val templatePackage = "$languagePackage/parser/template"
 

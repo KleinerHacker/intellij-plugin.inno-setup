@@ -18,10 +18,10 @@ import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.Processor
 import com.intellij.util.QueryExecutor
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.asIsppHostFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectives
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionConstantBody
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.asIsppHostFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectives
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionConstantBody
 
 // When an IsPreprocessorDirective (#define) is renamed, this searcher finds all references so they are
 // renamed too: both {#Name} references in the host ISS file and free-text references inside the

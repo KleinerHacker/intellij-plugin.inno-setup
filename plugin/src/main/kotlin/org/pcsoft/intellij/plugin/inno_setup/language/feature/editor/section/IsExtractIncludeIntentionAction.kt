@@ -22,8 +22,8 @@ import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 
 /**
  * Intention action that extracts the selected lines of an `.iss` file into a new file and replaces them

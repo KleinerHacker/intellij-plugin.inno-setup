@@ -13,6 +13,8 @@
 package org.pcsoft.intellij.plugin.inno_setup.language.feature
 
 import com.intellij.openapi.util.SystemInfo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsMessagesFileResolver
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsResolveResult
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedTestCase
 import java.io.File
 import java.nio.file.Files

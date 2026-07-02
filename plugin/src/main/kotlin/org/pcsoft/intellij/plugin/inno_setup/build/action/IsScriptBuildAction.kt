@@ -18,9 +18,9 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.components.service
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VirtualFile
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.IsCompilerService
-import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
 
 /**
  * Context-menu action that compiles a single `.iss` script with ISCC. It is shown only on a single

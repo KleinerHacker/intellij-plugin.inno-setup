@@ -20,12 +20,12 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirective
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectivesWithHostOffset
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 
 /**
  * Inside a `#define` expression, suggest the names of all `#define`s declared on an earlier line, plus the
@@ -55,7 +55,7 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
         val precedingDefines = hostFile.isppDirectivesWithHostOffset
             .filter { (d, off) ->
                 off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
-                    (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
+                        (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
             }
             .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
             .filter { !it.getDefineName().isNullOrEmpty() }

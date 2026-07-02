@@ -21,9 +21,9 @@ import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.markup.GutterIconRenderer
 import com.intellij.psi.PsiElement
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTitle
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTitle
 
 /**
  * Renders a play icon in the gutter next to the `\[Setup]` section header. Clicking it triggers a

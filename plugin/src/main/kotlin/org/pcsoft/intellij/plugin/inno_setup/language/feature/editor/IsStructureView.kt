@@ -19,15 +19,15 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.displayName
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.isParameterSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParameterEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.displayName
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isParameterSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParameterEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.sections
 import javax.swing.Icon
 
 /**
@@ -135,6 +135,7 @@ private class SimpleItemPresentation(
      * Returns presentation metadata used by IntelliJ navigation UI.
      */
     override fun getPresentableText(): String = text
+
     /**
      * Returns the icon shown for this element or file type.
      */

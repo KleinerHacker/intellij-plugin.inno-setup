@@ -47,4 +47,5 @@ Undefining a name that was never defined has no effect. `#undef` is most useful 
 
 ---
 
-See the official [`#define` / `#undef` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_define.htm).
+See the official [`#define` /
+`#undef` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_define.htm).

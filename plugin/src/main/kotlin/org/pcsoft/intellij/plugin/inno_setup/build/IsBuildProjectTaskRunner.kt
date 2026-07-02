@@ -21,8 +21,8 @@ import com.intellij.task.ProjectTaskContext
 import com.intellij.task.ProjectTaskRunner
 import org.jetbrains.concurrency.AsyncPromise
 import org.jetbrains.concurrency.Promise
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsService
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
 
 /**
  * Hooks Inno Setup compilation into the IDE's *Build Project* pipeline. Participates in module build

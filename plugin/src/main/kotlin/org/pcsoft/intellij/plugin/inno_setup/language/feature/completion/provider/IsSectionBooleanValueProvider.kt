@@ -23,11 +23,11 @@ import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeDataType
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionNativeTypeSpec
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionNativeDataType
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionNativeTypeSpec
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

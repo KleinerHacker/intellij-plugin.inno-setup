@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action
 
 import org.junit.Assert
 import org.junit.Test
-import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsLanguageDataSpec
 
 /**
  * Unit tests for the pure template-generation logic of [IsScriptCreateFileAction].

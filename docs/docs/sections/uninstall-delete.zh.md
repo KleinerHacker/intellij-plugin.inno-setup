@@ -1,8 +1,10 @@
 # [UninstallDelete]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=uninstalldeletesection){
+.md-button .md-button--primary }
 
-`[UninstallDelete]` 节列出了 Inno Setup 在卸载期间（除了它最初跟踪的文件之外）额外删除的文件和目录。使用它来清理在运行时创建的、因此从未在 `[Files]` 中列出的生成文件、缓存、日志文件或用户数据目录。
+`[UninstallDelete]` 节列出了 Inno Setup 在卸载期间（除了它最初跟踪的文件之外）额外删除的文件和目录。使用它来清理在运行时创建的、因此从未在
+`[Files]` 中列出的生成文件、缓存、日志文件或用户数据目录。
 
 ---
 

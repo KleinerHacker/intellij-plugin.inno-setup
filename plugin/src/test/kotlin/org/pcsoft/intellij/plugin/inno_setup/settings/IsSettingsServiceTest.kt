@@ -16,6 +16,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 
 class IsSettingsServiceTest {
 

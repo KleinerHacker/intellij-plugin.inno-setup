@@ -1,6 +1,7 @@
 # Inno Setup 脚本文件
 
-该插件支持 Inno Setup 脚本文件（`.iss`）作为主要的安装程序定义格式。脚本文件描述安装程序构建什么、安装什么、提供哪些语言，以及 Setup 和 Uninstall 执行哪些运行时操作。
+该插件支持 Inno Setup 脚本文件（`.iss`）作为主要的安装程序定义格式。脚本文件描述安装程序构建什么、安装什么、提供哪些语言，以及
+Setup 和 Uninstall 执行哪些运行时操作。
 
 ![Inno Setup 脚本编辑器](assets/images/iss.png)
 
@@ -12,7 +13,8 @@
 
 - `[Setup]` — 安装程序元数据、输出设置、向导行为、权限、签名、压缩和版本要求
 - `[Types]`、`[Components]` 和 `[Tasks]` — 可选安装模式、功能组和可选操作
-- `[Dirs]`、`[Files]`、`[Icons]`、`[Registry]`、`[INI]`、`[InstallDelete]` 和 `[UninstallDelete]` — 文件系统、快捷方式、注册表、INI 和清理操作
+- `[Dirs]`、`[Files]`、`[Icons]`、`[Registry]`、`[INI]`、`[InstallDelete]` 和 `[UninstallDelete]` — 文件系统、快捷方式、注册表、INI
+  和清理操作
 - `[Run]` 和 `[UninstallRun]` — 安装或卸载时执行的命令
 - `[Languages]`、`[LangOptions]`、`[Messages]` 和 `[CustomMessages]` — 多语言安装程序和本地化文本
 - `[ISSigKeys]` — `.issig` 签名验证使用的公钥
@@ -52,18 +54,19 @@
 
 该插件解析声明和用法之间的交叉引用：
 
-| 引用类型                   | 声明                                                  | 用法                                                   |
-|----------------------------|-------------------------------------------------------|--------------------------------------------------------|
-| 任务 / 组件 / 类型         | `[Tasks]` / `[Components]` / `[Types]` 中的 `Name:`  | `Tasks:`、`Components:`、`Types:` 参数                 |
-| ISPP 定义                  | `#define Name`                                        | 值和字符串中的 `{#Name}`                               |
-| 语言前缀                   | `[Languages]` 中的 `Name:`                            | `[Messages]` 中的 `german.MessageKey`                  |
-| 自定义消息                 | `[CustomMessages]` 中的 `Key=`                        | 值中的 `{cm:Key}` 常量                                 |
+| 引用类型         | 声明                                                | 用法                                  |
+|--------------|---------------------------------------------------|-------------------------------------|
+| 任务 / 组件 / 类型 | `[Tasks]` / `[Components]` / `[Types]` 中的 `Name:` | `Tasks:`、`Components:`、`Types:` 参数  |
+| ISPP 定义      | `#define Name`                                    | 值和字符串中的 `{#Name}`                   |
+| 语言前缀         | `[Languages]` 中的 `Name:`                          | `[Messages]` 中的 `german.MessageKey` |
+| 自定义消息        | `[CustomMessages]` 中的 `Key=`                      | 值中的 `{cm:Key}` 常量                   |
 
 所有支持的引用类型均支持转到定义（**Ctrl+B** / **Cmd+B**）和查找用法（**Alt+F7**）。重命名重构保持所有用法一致。
 
 ### 内嵌提示
 
-语言国旗图标内联显示在 `[Languages]` 条目的 `MessagesFile:` 值旁边。提示显示区域名称（如 *English (United States)*），无需打开 `.isl` 文件即可立即看到引用的语言。
+语言国旗图标内联显示在 `[Languages]` 条目的 `MessagesFile:` 值旁边。提示显示区域名称（如 *English (United States)*），无需打开
+`.isl` 文件即可立即看到引用的语言。
 
 ### 验证与快速修复
 
@@ -98,9 +101,11 @@
 
 ## 预处理器（ISPP）
 
-ISPP 预处理器指令被注入到脚本文件中，并为 `#define` 名称提供独立的高亮、补全、重命名和查找用法支持。节值内的内联 `{#Name}` 引用解析到其 `#define` 声明，并参与相同的重命名/查找用法流程。
+ISPP 预处理器指令被注入到脚本文件中，并为 `#define` 名称提供独立的高亮、补全、重命名和查找用法支持。节值内的内联 `{#Name}`
+引用解析到其 `#define` 声明，并参与相同的重命名/查找用法流程。
 
-`#include` 路径会解析到所引用的文件，并提供两个意图操作（**Alt+Enter**）：在原处内联被包含文件的内容，或将选定的行提取到新文件并用 `#include` 替换它们。重命名或移动被包含的文件会保持 `#include` 路径一致。
+`#include` 路径会解析到所引用的文件，并提供两个意图操作（**Alt+Enter**）：在原处内联被包含文件的内容，或将选定的行提取到新文件并用
+`#include` 替换它们。重命名或移动被包含的文件会保持 `#include` 路径一致。
 
 有关支持的指令、标准预定义变量和内联 `{#…}` 输出，请参阅 [Inno Setup 预处理器](preprocessor/overview.md)。
 

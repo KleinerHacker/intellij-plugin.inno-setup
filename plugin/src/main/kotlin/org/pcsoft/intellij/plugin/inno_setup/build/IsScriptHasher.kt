@@ -12,8 +12,10 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsMessagesFileResolver
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsResolveResult
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
+
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsMessagesFileResolver
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsResolveResult
 import java.io.File
 import java.security.MessageDigest
 

@@ -16,9 +16,9 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.util.Disposer
 import com.intellij.ui.components.JBTextField
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsLanguageDataSpec
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
-import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
 
 /**
  * Tests for [IsLanguageCreateFileDialog]'s exposed input properties (the values consumed by

@@ -18,8 +18,8 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFile
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFile
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
 
 /**
  * Section-name completion after `[` in free-text `.ist` template files. Unlike the ISS/ISL provider

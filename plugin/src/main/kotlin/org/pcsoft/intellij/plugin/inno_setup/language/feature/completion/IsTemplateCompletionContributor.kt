@@ -16,7 +16,7 @@ import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.provider.IsTemplateSectionNameProvider
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.template.psi.IsTemplateTypes
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.template.psi.IsTemplateTypes
 
 /**
  * Registers the (only) completion provider for free-text `.ist` template files: section-name

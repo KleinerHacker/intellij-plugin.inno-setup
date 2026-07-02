@@ -20,15 +20,15 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.allowedInLanguageFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sections
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.settings.IsSettingsService
-import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.allowedInLanguageFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.sections
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

@@ -21,13 +21,13 @@ import com.intellij.openapi.components.service
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsSectionFlagTypeSpec
-import org.pcsoft.intellij.plugin.inno_setup.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionFlagTypeSpec
 
 /**
  * Offers the available flags of a `kind: flags` attribute as completion suggestions.

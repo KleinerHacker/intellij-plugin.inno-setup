@@ -20,11 +20,11 @@ When researching Inno Setup / ISPP behavior, use these URLs directly (instead of
 `index.php` / root pages are pure framesets without content — **always fetch the individual `topic_*.htm`
 pages** (those provide full text and are readable via WebFetch).
 
-| Area | Base URL | Content |
-|---|---|---|
-| Inno Setup (ISS) | `https://jrsoftware.org/ishelp/topic_<name>.htm` | Sections, constants, Setup directives, `[Code]` (Pascal Script) |
-| Preprocessor (ISPP) | `https://jrsoftware.org/ispphelp/topic_<name>.htm` | `#define`/`#include`/`#if`…, expressions, built-in functions |
-| Full-text mirror | `https://documentation.help/Inno-Setup-Preprocessor/topic_<name>.htm` | Alternative without frameset (sometimes HTTP 403) |
+| Area                | Base URL                                                              | Content                                                         |
+|---------------------|-----------------------------------------------------------------------|-----------------------------------------------------------------|
+| Inno Setup (ISS)    | `https://jrsoftware.org/ishelp/topic_<name>.htm`                      | Sections, constants, Setup directives, `[Code]` (Pascal Script) |
+| Preprocessor (ISPP) | `https://jrsoftware.org/ispphelp/topic_<name>.htm`                    | `#define`/`#include`/`#if`…, expressions, built-in functions    |
+| Full-text mirror    | `https://documentation.help/Inno-Setup-Preprocessor/topic_<name>.htm` | Alternative without frameset (sometimes HTTP 403)               |
 
 Frequently used ISPP topics (`topic_<name>`):
 
@@ -135,19 +135,19 @@ Three orthogonal axes, recognizable from the `Is`+role class prefix and the pack
 > IDE features, build/run, settings UI, `colorSchemes/`, icons and the main `plugin.xml` under `plugin/`.
 > Generated sources are per-module under `<module>/build/generated/` (no longer `build/parsing/gen`).
 
-| Path                                                                                | Content                                                                                                                                                     |
-|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `src/main/resources/parsing/IsSectionGrammar.bnf`                                   | GrammarKit grammar of the sections (parser + `IsSection…` PSI). Rules: `block`/`header`/`title`/`directiveEntry`/`paramPair`/`constant`/`preprocessorLine` |
-| `src/main/resources/parsing/IsSectionLexer.flex`                                    | JFlex lexer with states (`YYINITIAL`, `VALUE`, `IN_STRING`, `IN_STRING_CONSTANT`)                                                                          |
-| `src/main/resources/parsing/IsPreprocessorGrammar.bnf` / `IsPreprocessorLexer.flex` | GrammarKit grammar + lexer of the preprocessor                                                                                                              |
-| `src/main/resources/spec/`                                                          | YAML specs for sections, attributes, flags, constants, ISPP directives                                                                                      |
-| `src/main/kotlin/…/language/file_type/script/`                                      | Host (`IsScriptFile`/`IsScriptLanguage`/`IsScriptFileType`) + `IsIcons` + shared `PsiUtils`, `action/`                                                       |
-| `src/main/kotlin/…/language/file_type/lang/`                                        | `.isl` file type + policy (`IsLanguageSections`) + `parsing/IsLanguageAnnotator` + `action/`                                                                 |
+| Path                                                                                | Content                                                                                                                                                                             |
+|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `src/main/resources/parsing/IsSectionGrammar.bnf`                                   | GrammarKit grammar of the sections (parser + `IsSection…` PSI). Rules: `block`/`header`/`title`/`directiveEntry`/`paramPair`/`constant`/`preprocessorLine`                          |
+| `src/main/resources/parsing/IsSectionLexer.flex`                                    | JFlex lexer with states (`YYINITIAL`, `VALUE`, `IN_STRING`, `IN_STRING_CONSTANT`)                                                                                                   |
+| `src/main/resources/parsing/IsPreprocessorGrammar.bnf` / `IsPreprocessorLexer.flex` | GrammarKit grammar + lexer of the preprocessor                                                                                                                                      |
+| `src/main/resources/spec/`                                                          | YAML specs for sections, attributes, flags, constants, ISPP directives                                                                                                              |
+| `src/main/kotlin/…/language/file_type/script/`                                      | Host (`IsScriptFile`/`IsScriptLanguage`/`IsScriptFileType`) + `IsIcons` + shared `PsiUtils`, `action/`                                                                              |
+| `src/main/kotlin/…/language/file_type/lang/`                                        | `.isl` file type + policy (`IsLanguageSections`) + `parsing/IsLanguageAnnotator` + `action/`                                                                                        |
 | `src/main/kotlin/…/language/parser/section/`                                        | Section parsing (flat, kein `parsing/`-Unterpaket): `PsiUtils`, Lexer-Adapter/ParserDefinition/Highlighting + generierter `IsSectionParser` + `psi/` (`impl/` mixins) + `quickfix/` |
-| `src/main/kotlin/…/language/parser/section/psi/impl/`                               | Hand-written mixins (e.g. `IsSectionParamPairMixinImpl`, `IsSectionPreprocessorLineMixinImpl`)                                                               |
-| `src/main/kotlin/…/language/parser/preprocessor/`                                   | Preprocessor (flach wie `section/`): Lexer/Parser/Highlighting + `expression/` + `injection/IsPreprocessorInjector` + Host-Dateien                            |
-| `src/main/kotlin/…/language/feature/{reference,findusage,completion,editor}/`       | Cross-cutting: references/searcher, find-usages/refactoring, completion, editor/structure/doc                                                                |
-| `src/main/kotlin/…/services/`                                                       | Spec services (singleton, lazy-loaded)                                                                                                                       |
+| `src/main/kotlin/…/language/parser/section/psi/impl/`                               | Hand-written mixins (e.g. `IsSectionParamPairMixinImpl`, `IsSectionPreprocessorLineMixinImpl`)                                                                                      |
+| `src/main/kotlin/…/language/parser/preprocessor/`                                   | Preprocessor (flach wie `section/`): Lexer/Parser/Highlighting + `expression/` + `injection/IsPreprocessorInjector` + Host-Dateien                                                  |
+| `src/main/kotlin/…/language/feature/{reference,findusage,completion,editor}/`       | Cross-cutting: references/searcher, find-usages/refactoring, completion, editor/structure/doc                                                                                       |
+| `src/main/kotlin/…/services/`                                                       | Spec services (singleton, lazy-loaded)                                                                                                                                              |
 
 > **Note:** the section token for `#…` lines is called `HASH_LINE` (not `PREPROCESSOR_LINE`), because the
 > rule `preprocessorLine` would otherwise collide its element-type constant `PREPROCESSOR_LINE` with the token.
@@ -163,12 +163,12 @@ Three orthogonal axes, recognizable from the `Is`+role class prefix and the pack
 
 ## Lexer states
 
-| State                | Context                                          |
-|----------------------|--------------------------------------------------|
+| State                | Context                                             |
+|----------------------|-----------------------------------------------------|
 | `YYINITIAL`          | Start of line (keys, section headers, preprocessor) |
-| `VALUE`              | After `=` or `:` (value area)                    |
-| `IN_STRING`          | Inside `"…"`                                     |
-| `IN_STRING_CONSTANT` | Inside `{…}` within a string                     |
+| `VALUE`              | After `=` or `:` (value area)                       |
+| `IN_STRING`          | Inside `"…"`                                        |
+| `IN_STRING_CONSTANT` | Inside `{…}` within a string                        |
 
 `VALUE_CHAR = [^\r\n{};:=\"()#\t ]` — `#` is deliberately excluded so that HASH tokens are recognized correctly.
 

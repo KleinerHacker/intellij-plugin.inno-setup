@@ -21,19 +21,19 @@ using.
 
 ### Features
 
-| Feature                    | Description                                                                                                          |
-|----------------------------|----------------------------------------------------------------------------------------------------------------------|
-| **Syntax highlighting**    | Sections, directives, parameters, constants (`{app}`, `{autopf}`, …), and Pascal code blocks are coloured distinctly |
-| **Code completion**        | Section names, directive keys, parameter keys, and known flag values are suggested as you type                       |
-| **Inline documentation**   | Hover over any directive or parameter to read its description without leaving the IDE                                |
-| **Reference resolution**   | Navigate between `Name:` declarations and their usages in `Tasks:`, `Components:`, and `Types:` parameters           |
-| **Structure view**         | Bird's-eye overview of all sections and their entries                                                                |
-| **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                      |
-| **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                        |
-| **Code folding**           | Sections, long parameter entries, and `#if … #endif` blocks fold independently                                       |
-| **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                           |
-| **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build        |
-| **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                            |
+| Feature                    | Description                                                                                                                                                                           |
+|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Syntax highlighting**    | Sections, directives, parameters, constants (`{app}`, `{autopf}`, …), and Pascal code blocks are coloured distinctly                                                                  |
+| **Code completion**        | Section names, directive keys, parameter keys, and known flag values are suggested as you type                                                                                        |
+| **Inline documentation**   | Hover over any directive or parameter to read its description without leaving the IDE                                                                                                 |
+| **Reference resolution**   | Navigate between `Name:` declarations and their usages in `Tasks:`, `Components:`, and `Types:` parameters                                                                            |
+| **Structure view**         | Bird's-eye overview of all sections and their entries                                                                                                                                 |
+| **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                                                                                       |
+| **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                                                                                         |
+| **Code folding**           | Sections, long parameter entries, and `#if … #endif` blocks fold independently                                                                                                        |
+| **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                                                                                            |
+| **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build                                                                         |
+| **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 
 ### IDE Compatibility
@@ -120,7 +120,7 @@ The root project is a pure aggregator (no code, no `plugin.xml`).
 
 > **Note:** Generated sources live per-module under `<module>/build/generated/`. Regenerate them via
 `./gradlew generateSources` (root umbrella) or the per-module `generateIs*Parser`/`generateIs*Lexer` tasks.
-Never edit them by hand — they are overwritten on every build.
+> Never edit them by hand — they are overwritten on every build.
 
 ---
 

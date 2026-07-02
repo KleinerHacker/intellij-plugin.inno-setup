@@ -21,17 +21,20 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.specTarget
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingParamPair
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.sectionAtOffset
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.specSection
-import org.pcsoft.intellij.plugin.inno_setup.services.IsConstantService
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.services.IsSpecService
-import org.pcsoft.intellij.plugin.inno_setup.types.*
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorVariableSpec
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingParamPair
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.sectionAtOffset
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.specSection
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsConstantService
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.*
 
 private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
     if (since == null && until == null) return

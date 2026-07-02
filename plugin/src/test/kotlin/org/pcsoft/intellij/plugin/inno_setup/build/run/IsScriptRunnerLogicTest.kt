@@ -21,7 +21,8 @@ import java.io.File
 
 class IsScriptRunnerLogicTest {
 
-    @get:Rule val tmp = TemporaryFolder()
+    @get:Rule
+    val tmp = TemporaryFolder()
 
     // ── buildOutputArg ────────────────────────────────────────────────────────
 

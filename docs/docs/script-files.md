@@ -58,12 +58,12 @@ list of accepted values and remarks, without leaving the editor.
 
 The plugin resolves cross-references between declarations and their usages:
 
-| Reference type         | Declaration                      | Usage                                          |
-|------------------------|----------------------------------|------------------------------------------------|
-| Tasks / Components / Types | `Name:` in `[Tasks]` / `[Components]` / `[Types]` | `Tasks:`, `Components:`, `Types:` parameters   |
-| ISPP definitions       | `#define Name`                   | `{#Name}` inside values and strings            |
-| Language prefixes      | `Name:` in `[Languages]`         | `german.MessageKey` in `[Messages]`            |
-| Custom messages        | `Key=` in `[CustomMessages]`     | `{cm:Key}` constants inside values             |
+| Reference type             | Declaration                                       | Usage                                        |
+|----------------------------|---------------------------------------------------|----------------------------------------------|
+| Tasks / Components / Types | `Name:` in `[Tasks]` / `[Components]` / `[Types]` | `Tasks:`, `Components:`, `Types:` parameters |
+| ISPP definitions           | `#define Name`                                    | `{#Name}` inside values and strings          |
+| Language prefixes          | `Name:` in `[Languages]`                          | `german.MessageKey` in `[Messages]`          |
+| Custom messages            | `Key=` in `[CustomMessages]`                      | `{cm:Key}` constants inside values           |
 
 Go-to-definition (**Ctrl+B** / **Cmd+B**) and Find Usages (**Alt+F7**) work for all supported reference types.
 Rename refactoring keeps all usages consistent.

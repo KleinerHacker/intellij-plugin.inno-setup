@@ -28,27 +28,27 @@
 
 ## Sections
 
-| Section             | Type      | Status | Notes                                                                                   |
-|---------------------|-----------|--------|-----------------------------------------------------------------------------------------|
-| `[Setup]`           | directive | ✅      | All ~158 current attributes covered                                                     |
+| Section             | Type      | Status | Notes                                                                                                                |
+|---------------------|-----------|--------|----------------------------------------------------------------------------------------------------------------------|
+| `[Setup]`           | directive | ✅      | All ~158 current attributes covered                                                                                  |
 | `[Types]`           | parameter | ✅      | Attributes + `iscustom` flag + common params (`Languages`/`Check`/`MinVersion`/`OnlyBelowVersion`, added 2026-06-15) |
-| `[Components]`      | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)   |
-| `[Tasks]`           | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)   |
-| `[Dirs]`            | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Files]`           | parameter | ✅      | All attributes + flags covered (18 missing flags added 2026-06-15, see below)           |
-| `[Icons]`           | parameter | ✅      | All attributes + flags covered (`excludefromshowinnewinstall`/`uninsneveruninstall`/`useapppaths` added 2026-06-15) |
-| `[INI]`             | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Registry]`        | parameter | ✅      | All attributes + flags covered                                                          |
-| `[Run]`             | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15, see below)            |
-| `[UninstallRun]`    | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15)                       |
-| `[Languages]`       | parameter | ✅      | All attributes covered (`LicenseFile`/`InfoBeforeFile`/`InfoAfterFile` added 2026-06-15) |
-| `[Messages]`        | directive | ✅      | Full standard `Default.isl` message set; `lang.` prefix completion                      |
-| `[CustomMessages]`  | directive | ✅      | No predefined names; `lang.` prefix completion + `{cm:}` reference/find-usages/rename   |
-| `[LangOptions]`     | directive | ✅      | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion |
-| `[InstallDelete]`   | parameter | ✅      | All attributes covered                                                                  |
-| `[UninstallDelete]` | parameter | ✅      | All attributes covered                                                                  |
-| `[ISSigKeys]`       | parameter | ✅      | All attributes covered (IS 6.5+)                                                        |
-| `[Code]`            | code      | ✅      | Treated as injected Pascal, no spec needed                                              |
+| `[Components]`      | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)                                |
+| `[Tasks]`           | parameter | ✅      | Attributes + flags + common params (`MinVersion`/`OnlyBelowVersion` added 2026-06-15)                                |
+| `[Dirs]`            | parameter | ✅      | All attributes + flags covered                                                                                       |
+| `[Files]`           | parameter | ✅      | All attributes + flags covered (18 missing flags added 2026-06-15, see below)                                        |
+| `[Icons]`           | parameter | ✅      | All attributes + flags covered (`excludefromshowinnewinstall`/`uninsneveruninstall`/`useapppaths` added 2026-06-15)  |
+| `[INI]`             | parameter | ✅      | All attributes + flags covered                                                                                       |
+| `[Registry]`        | parameter | ✅      | All attributes + flags covered                                                                                       |
+| `[Run]`             | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15, see below)                                         |
+| `[UninstallRun]`    | parameter | ✅      | All attributes + flags covered (8 missing flags added 2026-06-15)                                                    |
+| `[Languages]`       | parameter | ✅      | All attributes covered (`LicenseFile`/`InfoBeforeFile`/`InfoAfterFile` added 2026-06-15)                             |
+| `[Messages]`        | directive | ✅      | Full standard `Default.isl` message set; `lang.` prefix completion                                                   |
+| `[CustomMessages]`  | directive | ✅      | No predefined names; `lang.` prefix completion + `{cm:}` reference/find-usages/rename                                |
+| `[LangOptions]`     | directive | ✅      | All directives covered; TitleFont*/CopyrightFont* removed in 6.4; LanguageID completion                              |
+| `[InstallDelete]`   | parameter | ✅      | All attributes covered                                                                                               |
+| `[UninstallDelete]` | parameter | ✅      | All attributes covered                                                                                               |
+| `[ISSigKeys]`       | parameter | ✅      | All attributes covered (IS 6.5+)                                                                                     |
+| `[Code]`            | code      | ✅      | Treated as injected Pascal, no spec needed                                                                           |
 
 ---
 
@@ -80,13 +80,13 @@ A full re-check against the official section pages found several gaps that were 
 
 These five parameters are not section-specific; their applicability is governed by dedicated doc pages:
 
-| Parameter(s)                         | Supported by                                                        | Source |
-|--------------------------------------|---------------------------------------------------------------------|--------|
-| `Languages`, `MinVersion`, `OnlyBelowVersion` | all parameter sections                                     | `topic_commonparams.htm` |
-| `Check`                              | all parameter sections                                              | `topic_scriptcheck.htm` |
-| `Components`                         | all **except** `[Types]`, `[Components]`                            | `topic_componentstasksparams.htm` |
-| `Tasks`                              | all **except** `[Types]`, `[Components]`, `[Tasks]`                 | `topic_componentstasksparams.htm` |
-| `BeforeInstall`, `AfterInstall`      | all **except** `[Languages]`, `[Types]`, `[Components]`, `[Tasks]`  | `topic_scriptinstall.htm` |
+| Parameter(s)                                  | Supported by                                                       | Source                            |
+|-----------------------------------------------|--------------------------------------------------------------------|-----------------------------------|
+| `Languages`, `MinVersion`, `OnlyBelowVersion` | all parameter sections                                             | `topic_commonparams.htm`          |
+| `Check`                                       | all parameter sections                                             | `topic_scriptcheck.htm`           |
+| `Components`                                  | all **except** `[Types]`, `[Components]`                           | `topic_componentstasksparams.htm` |
+| `Tasks`                                       | all **except** `[Types]`, `[Components]`, `[Tasks]`                | `topic_componentstasksparams.htm` |
+| `BeforeInstall`, `AfterInstall`               | all **except** `[Languages]`, `[Types]`, `[Components]`, `[Tasks]` | `topic_scriptinstall.htm`         |
 
 (`[Languages]` itself only exposes `Name`, `MessagesFile`, `LicenseFile`, `InfoBeforeFile`,
 `InfoAfterFile` — it does not take the common/conditional parameters.)
@@ -220,21 +220,21 @@ Completion offers the sub-commands after `#pragma ` and the option flags after `
 
 Legend: ✅ implemented · ⚠️ partial · — not applicable.
 
-| Directive | Parsing | Validation | Completion | References | MkDocs page |
-|-----------|:-------:|:----------:|:----------:|:----------:|-------------|
-| `#define` | ✅ | ✅ expr + type + unused + scope kw | ✅ keyword + scope kw + names + funcs | ✅ | `define.md` |
-| `#undef` | ✅ | ✅ keyword + scope kw + no-match warning | ✅ keyword + scope kw + define names | ✅ → `#define` | `undef.md` |
-| `#dim` / `#redim` | ✅ | ✅ name + size/index type + bounds + scope kw + inline init + redim-needs-dim | ✅ keyword + scope kw + array names (redim/expr) | ✅ `#dim` ↔ `arr[i]` / `#redim` / `#define arr[i]` / `DimOf` | `arrays.md` |
-| `#include` / `#file` | ✅ | ✅ path + effective script | ✅ keyword + file path | ✅ file | `include.md` |
-| `#emit` / `#expr` / `#insert` / `#append` | ✅ | ✅ keyword | ✅ keyword | — | `output.md` |
-| `#if` / `#elif` | ✅ | ✅ expr + type + structure + boolean-literal | ✅ keyword | ✅ → `#define` | `conditionals.md` |
-| `#else` / `#endif` | ✅ | ✅ keyword + structure (opener↔#endif) | ✅ keyword | — | `conditionals.md` |
-| `#ifdef` / `#ifndef` | ✅ | ✅ name + structure (no error if undefined) | ✅ keyword + name | ✅ → `#define` | `conditionals.md` |
-| `#ifexist` / `#ifnexist` | ✅ | ✅ string expr + type + structure (file existence prepared) | ✅ keyword + expr | ✅ → `#define` + file | `conditionals.md` |
-| `#for` | ✅ | ✅ structure (`{init;cond;incr} body`) + loop var required + cond int-type + slot expr/type | ✅ keyword + loop var + names/subs | ✅ loop var (local) + `#define`/`#dim`/`#sub` | `for.md` |
-| `#sub` / `#endsub` | ✅ | ✅ name + structure (`#sub`↔`#endsub`) | ✅ keyword + sub names | ✅ name ↔ `#for` body / expr | `sub.md` |
-| `#pragma` | ✅ | ✅ sub-command + flags + expr/type | ✅ keyword + sub-command + flags | ✅ in expr args | `pragma.md` |
-| `#error` | ✅ | ✅ keyword | ✅ keyword | — | `error.md` |
+| Directive                                 | Parsing |                                         Validation                                         |                   Completion                    |                         References                          | MkDocs page       |
+|-------------------------------------------|:-------:|:------------------------------------------------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------------------:|-------------------|
+| `#define`                                 |    ✅    |                             ✅ expr + type + unused + scope kw                              |      ✅ keyword + scope kw + names + funcs       |                              ✅                              | `define.md`       |
+| `#undef`                                  |    ✅    |                          ✅ keyword + scope kw + no-match warning                           |       ✅ keyword + scope kw + define names       |                        ✅ → `#define`                        | `undef.md`        |
+| `#dim` / `#redim`                         |    ✅    |        ✅ name + size/index type + bounds + scope kw + inline init + redim-needs-dim        | ✅ keyword + scope kw + array names (redim/expr) | ✅ `#dim` ↔ `arr[i]` / `#redim` / `#define arr[i]` / `DimOf` | `arrays.md`       |
+| `#include` / `#file`                      |    ✅    |                                 ✅ path + effective script                                  |              ✅ keyword + file path              |                           ✅ file                            | `include.md`      |
+| `#emit` / `#expr` / `#insert` / `#append` |    ✅    |                                         ✅ keyword                                          |                    ✅ keyword                    |                              —                              | `output.md`       |
+| `#if` / `#elif`                           |    ✅    |                        ✅ expr + type + structure + boolean-literal                         |                    ✅ keyword                    |                        ✅ → `#define`                        | `conditionals.md` |
+| `#else` / `#endif`                        |    ✅    |                           ✅ keyword + structure (opener↔#endif)                            |                    ✅ keyword                    |                              —                              | `conditionals.md` |
+| `#ifdef` / `#ifndef`                      |    ✅    |                         ✅ name + structure (no error if undefined)                         |                ✅ keyword + name                 |                        ✅ → `#define`                        | `conditionals.md` |
+| `#ifexist` / `#ifnexist`                  |    ✅    |                 ✅ string expr + type + structure (file existence prepared)                 |                ✅ keyword + expr                 |                    ✅ → `#define` + file                     | `conditionals.md` |
+| `#for`                                    |    ✅    | ✅ structure (`{init;cond;incr} body`) + loop var required + cond int-type + slot expr/type |        ✅ keyword + loop var + names/subs        |        ✅ loop var (local) + `#define`/`#dim`/`#sub`         | `for.md`          |
+| `#sub` / `#endsub`                        |    ✅    |                           ✅ name + structure (`#sub`↔`#endsub`)                            |              ✅ keyword + sub names              |                 ✅ name ↔ `#for` body / expr                 | `sub.md`          |
+| `#pragma`                                 |    ✅    |                             ✅ sub-command + flags + expr/type                              |         ✅ keyword + sub-command + flags         |                       ✅ in expr args                        | `pragma.md`       |
+| `#error`                                  |    ✅    |                                         ✅ keyword                                          |                    ✅ keyword                    |                              —                              | `error.md`        |
 
 **Predefined variables via `{#…}`:** Inline emission `{#expr}` (short for `{#emit expr}`) replaces
 itself with the value of an expression, so the **value-bearing** predefined variables (`type` `int`/`str`
@@ -270,36 +270,36 @@ table above in sync whenever a directive's semantics change.
 
 ## IDE Features
 
-| Feature                                         | Status | Notes                                                                                                                                                                                             |
-|-------------------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Syntax highlighting (Section)                   | ✅      |                                                                                                                                                                                                   |
-| Syntax highlighting (ISPP)                      | ✅      |                                                                                                                                                                                                   |
-| Code completion — sections                      | ✅      |                                                                                                                                                                                                   |
-| Code completion — attributes                    | ✅      |                                                                                                                                                                                                   |
-| Code completion — flags                         | ✅      |                                                                                                                                                                                                   |
-| Code completion — constants                     | ✅      |                                                                                                                                                                                                   |
-| Code completion — ISPP directives               | ✅      |                                                                                                                                                                                                   |
-| Code completion — `{#…}` ISPP variables         | ✅      | After `{` and `{#`: user `#define`s + value-bearing predefined variables; valueless `void` symbols excluded                                                                                       |
-| Code completion — `[Languages]`                 | ✅      | Built-in names + MessagesFile, with flag icons                                                                                                                                                    |
-| Code completion — `LanguageID`                  | ✅      | Windows LCIDs: name + flag + greyed `$hex` id                                                                                                                                                     |
-| Code completion — message i18n prefix           | ✅      | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only; flag + name from LanguageID) + message ids                                                                     |
-| Code completion — `{cm:…}`                      | ✅      | Declared custom-message names                                                                                                                                                                     |
-| `{cm:…}` reference / find usages / rename       | ✅      | Resolves to `[CustomMessages]`; red when unresolved; rename keeps language variants in sync; `cm` rendered italic                                                                                 |
-| `lang.` prefix reference / find usages / rename | ✅      | Prefix resolves to a `[Languages] Name`; red when undeclared; renaming the Name updates all prefixes                                                                                              |
-| Inlay hints — language flags                    | ✅      | Flag + English name (from the LanguageID in the referenced `.isl`) before `[Languages] MessagesFile` and `[LangOptions] LanguageID`; flag of the referenced language before a `lang.` message key |
-| Brace matching `[]`, `{}`, `()`                 | ✅      |                                                                                                                                                                                                   |
-| Code folding                                    | ✅      | Sections, multi-pair entries, and `#if … #endif` / `#sub … #endsub` blocks (when wholly inside one section or wholly outside)                                                                       |
-| Structure view                                  | ✅      |                                                                                                                                                                                                   |
-| Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                         |
+| Feature                                         | Status | Notes                                                                                                                                                                                                                   |
+|-------------------------------------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Syntax highlighting (Section)                   | ✅      |                                                                                                                                                                                                                         |
+| Syntax highlighting (ISPP)                      | ✅      |                                                                                                                                                                                                                         |
+| Code completion — sections                      | ✅      |                                                                                                                                                                                                                         |
+| Code completion — attributes                    | ✅      |                                                                                                                                                                                                                         |
+| Code completion — flags                         | ✅      |                                                                                                                                                                                                                         |
+| Code completion — constants                     | ✅      |                                                                                                                                                                                                                         |
+| Code completion — ISPP directives               | ✅      |                                                                                                                                                                                                                         |
+| Code completion — `{#…}` ISPP variables         | ✅      | After `{` and `{#`: user `#define`s + value-bearing predefined variables; valueless `void` symbols excluded                                                                                                             |
+| Code completion — `[Languages]`                 | ✅      | Built-in names + MessagesFile, with flag icons                                                                                                                                                                          |
+| Code completion — `LanguageID`                  | ✅      | Windows LCIDs: name + flag + greyed `$hex` id                                                                                                                                                                           |
+| Code completion — message i18n prefix           | ✅      | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only; flag + name from LanguageID) + message ids                                                                                           |
+| Code completion — `{cm:…}`                      | ✅      | Declared custom-message names                                                                                                                                                                                           |
+| `{cm:…}` reference / find usages / rename       | ✅      | Resolves to `[CustomMessages]`; red when unresolved; rename keeps language variants in sync; `cm` rendered italic                                                                                                       |
+| `lang.` prefix reference / find usages / rename | ✅      | Prefix resolves to a `[Languages] Name`; red when undeclared; renaming the Name updates all prefixes                                                                                                                    |
+| Inlay hints — language flags                    | ✅      | Flag + English name (from the LanguageID in the referenced `.isl`) before `[Languages] MessagesFile` and `[LangOptions] LanguageID`; flag of the referenced language before a `lang.` message key                       |
+| Brace matching `[]`, `{}`, `()`                 | ✅      |                                                                                                                                                                                                                         |
+| Code folding                                    | ✅      | Sections, multi-pair entries, and `#if … #endif` / `#sub … #endsub` blocks (when wholly inside one section or wholly outside)                                                                                           |
+| Structure view                                  | ✅      |                                                                                                                                                                                                                         |
+| Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                                              |
 | Documentation popup (ISPP)                      | ✅      | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until` |
-| Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages)                                                                                                                                             |
-| Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                              |
-| Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                   |
-| Quote handler                                   | ✅      |                                                                                                                                                                                                   |
-| ISPP language injection                         | ✅      | Preprocessor lines injected into ISI                                                                                                                                                              |
-| Semantic annotations / errors                   | ✅      |                                                                                                                                                                                                   |
-| ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `ispp-spec.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                          |
-| `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s + value-bearing predefined variables; valueless `void` symbols stay flagged as invalid emissions                                                            |
-| `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                 |
-| Completion — deprecated members struck through  | ✅      | Deprecated sections/attributes/flags/constants/message-keys are rendered with strikethrough in the lookup (`withStrikeoutness`, target-aware); no extra "deprecated" tail text — it follows from the strikethrough |
-| [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                     |
+| Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages)                                                                                                                                                                   |
+| Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                                                    |
+| Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                                         |
+| Quote handler                                   | ✅      |                                                                                                                                                                                                                         |
+| ISPP language injection                         | ✅      | Preprocessor lines injected into ISI                                                                                                                                                                                    |
+| Semantic annotations / errors                   | ✅      |                                                                                                                                                                                                                         |
+| ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `ispp-spec.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                                               |
+| `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s + value-bearing predefined variables; valueless `void` symbols stay flagged as invalid emissions                                                                                 |
+| `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                                      |
+| Completion — deprecated members struck through  | ✅      | Deprecated sections/attributes/flags/constants/message-keys are rendered with strikethrough in the lookup (`withStrikeoutness`, target-aware); no extra "deprecated" tail text — it follows from the strikethrough      |
+| [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                                           |

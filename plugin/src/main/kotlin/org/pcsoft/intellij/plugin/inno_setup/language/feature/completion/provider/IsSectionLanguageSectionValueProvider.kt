@@ -21,13 +21,13 @@ import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.IsLanguageIconHelper
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.*
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionQuotedString
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsLanguageIconHelper
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.*
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionQuotedString
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

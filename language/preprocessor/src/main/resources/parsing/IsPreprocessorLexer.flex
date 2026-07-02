@@ -1,8 +1,8 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor;
+package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorTypes;
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorTypes;
 import com.intellij.psi.TokenType;
 
 %%

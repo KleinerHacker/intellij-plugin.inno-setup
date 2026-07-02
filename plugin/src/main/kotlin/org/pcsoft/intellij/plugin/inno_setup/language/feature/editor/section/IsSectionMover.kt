@@ -17,9 +17,9 @@ import com.intellij.codeInsight.editorActions.moveUpDown.StatementUpDownMover
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nextSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.prevSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionBlock
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nextSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.prevSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionBlock
 
 /**
  * Provides Inno Setup plugin behavior for the IntelliJ Platform.

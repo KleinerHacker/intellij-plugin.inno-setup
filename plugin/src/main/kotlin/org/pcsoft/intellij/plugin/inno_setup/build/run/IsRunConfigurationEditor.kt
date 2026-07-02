@@ -20,12 +20,12 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
 import com.intellij.util.ui.JBUI
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.build.IsScriptCollector
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.findSections
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameDeclarations
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.valueUnquoted
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.findSections
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameDeclarations
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.valueUnquoted
 import java.awt.*
 import javax.swing.*
 

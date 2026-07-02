@@ -1,8 +1,8 @@
-package org.pcsoft.intellij.plugin.inno_setup.language.parser.section;
+package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionTypes;
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes;
 import com.intellij.psi.TokenType;
 
 %%

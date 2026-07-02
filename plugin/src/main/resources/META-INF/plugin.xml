@@ -104,7 +104,8 @@
         </p>
         ]]></description>
     <version>0.5.0</version>
-    <vendor url="https://github.com/KleinerHacker/intellij-plugin.inno-setup">KleinerHacker alias Pfeiffer C Soft</vendor>
+    <vendor url="https://github.com/KleinerHacker/intellij-plugin.inno-setup">KleinerHacker alias Pfeiffer C Soft
+    </vendor>
 
     <resource-bundle>messages.PluginBundle</resource-bundle>
 
@@ -117,20 +118,21 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- File types (.iss/.isl/.ist) — registered here in :plugin so language modules stay embeddable -->
         <fileType name="Inno Setup Script"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType"
                   language="ISS"
                   extensions="iss"/>
         <fileType name="Inno Setup Language"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileType"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType"
                   language="ISS"
                   extensions="isl"/>
         <fileType name="Inno Setup Template"
-                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.IsTemplateFileType"
+                  implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.template.IsTemplateFileType"
                   language="IST"
                   extensions="ist"/>
 
         <!-- ISL file icon: base icon + language-flag overlay -->
-        <fileIconProvider implementation="org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFileIconProvider"/>
+        <fileIconProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileIconProvider"/>
         <!-- Build output: dedicated tool-window console + balloon notifications -->
         <toolWindow id="Inno Setup"
                     anchor="bottom"
@@ -267,7 +269,8 @@
         <action id="Iss.RunScript"
                 class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction"
                 icon="AllIcons.RunConfigurations.TestState.Run">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="before" relative-to-action="ProjectViewPopupMenuRunGroup"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
+                          relative-to-action="ProjectViewPopupMenuRunGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu.Run"/>
         </action>
 

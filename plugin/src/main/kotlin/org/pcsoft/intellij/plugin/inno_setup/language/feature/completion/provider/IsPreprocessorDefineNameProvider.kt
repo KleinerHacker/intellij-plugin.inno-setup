@@ -19,12 +19,12 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.IsLanguageFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsIcons
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.isppDirectivesWithHostOffset
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.psi.IsPreprocessorDirectiveEx
-import org.pcsoft.intellij.plugin.inno_setup.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectivesWithHostOffset
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFile
 
 /**
  * Completion for the name position of a `#define`/`#undef`:
@@ -98,7 +98,7 @@ object IsPreprocessorDefineNameProvider : CompletionProvider<CompletionParameter
             hostFile.isppDirectivesWithHostOffset
                 .filter { (d, off) ->
                     off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
-                        (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
+                            (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
                 }
                 .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
                 .filter { !it.getDefineName().isNullOrEmpty() }

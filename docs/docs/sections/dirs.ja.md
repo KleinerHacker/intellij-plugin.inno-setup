@@ -1,8 +1,11 @@
 # [Dirs]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=dirssection){
+.md-button .md-button--primary }
 
-`[Dirs]` セクションはインストール中にターゲットマシンに追加のディレクトリを作成します。ほとんどの場合、このセクションはまったく必要ありません——`[Files]` に列挙されたファイルに必要なディレクトリは自動的に作成されます。空のディレクトリ構造を作成する必要がある場合、特定の NTFS 属性を設定する場合、またはディレクトリの ACL 権限を設定する場合に `[Dirs]` を使用します。
+`[Dirs]` セクションはインストール中にターゲットマシンに追加のディレクトリを作成します。ほとんどの場合、このセクションはまったく必要ありません——
+`[Files]` に列挙されたファイルに必要なディレクトリは自動的に作成されます。空のディレクトリ構造を作成する必要がある場合、特定の
+NTFS 属性を設定する場合、またはディレクトリの ACL 権限を設定する場合に `[Dirs]` を使用します。
 
 ---
 
@@ -26,7 +29,8 @@
 
 `string` · **複数の値**
 
-ディレクトリに付与する ACL 権限（例：`users-modify`、`everyone-readexec`）。`{sys}` や `{commonpf}` などのトップレベルシステムディレクトリへの ACL 設定は避けてください。
+ディレクトリに付与する ACL 権限（例：`users-modify`、`everyone-readexec`）。`{sys}` や `{commonpf}` などのトップレベルシステムディレクトリへの
+ACL 設定は避けてください。
 
 ---
 
@@ -34,7 +38,8 @@
 
 `string` · **複数の値**
 
-動作フラグ：`deleteafterinstall`、`setntfscompression`、`uninsalwaysuninstall`、`uninsneveruninstall`、`unsetntfscompression`。
+動作フラグ：`deleteafterinstall`、`setntfscompression`、`uninsalwaysuninstall`、`uninsneveruninstall`、
+`unsetntfscompression`。
 
 ---
 

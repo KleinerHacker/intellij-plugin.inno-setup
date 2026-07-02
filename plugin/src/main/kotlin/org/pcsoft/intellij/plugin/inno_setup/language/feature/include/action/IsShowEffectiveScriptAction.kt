@@ -25,11 +25,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiManager
 import com.intellij.testFramework.LightVirtualFile
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.language.feature.include.effectiveScriptView
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFile
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.IsSectionAnnotatorHighlighting
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.include.effectiveScriptView
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.IsSectionAnnotatorHighlighting
 
 /**
  * Context-menu action (Project View + editor popup) that opens the fully `#include`-resolved **effective
@@ -68,7 +68,7 @@ class IsShowEffectiveScriptAction : DumbAwareAction({ PluginBundle.message("acti
          * Builds the effective script of [host] and opens it in a read-only, in-memory editor tab, tinting the
          * `#include`-pulled ranges. Returns the created [LightVirtualFile] (or `null` when no editor opened).
          */
-        fun openEffectiveScript(project: Project, host: IsScriptFile): LightVirtualFile? {
+        fun openEffectiveScript(project: Project, host: IsScriptFile): LightVirtualFile {
             val view = host.effectiveScriptView()
 
             val vFile = LightVirtualFile("effective_${host.name}", IsScriptFileType.INSTANCE, view.text)

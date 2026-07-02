@@ -16,18 +16,18 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- ISPP parser (injected language for #define, #include, etc.) -->
         <lang.parserDefinition language="ISPP"
-                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorParserDefinition"/>
+                               implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorParserDefinition"/>
 
         <!-- ISPP syntax highlighting -->
         <lang.syntaxHighlighterFactory language="ISPP"
-                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorHighlighterFactory"/>
+                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorHighlighterFactory"/>
 
         <!-- ISPP semantic annotator -->
         <annotator language="ISPP"
-                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.parser.preprocessor.IsPreprocessorAnnotator"/>
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorAnnotator"/>
 
         <!-- ISPP brace matching: () for preprocessor directives -->
         <lang.braceMatcher language="ISPP"
-                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsPreprocessorBraceMatcher"/>
+                           implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor.IsPreprocessorBraceMatcher"/>
     </extensions>
 </idea-plugin>

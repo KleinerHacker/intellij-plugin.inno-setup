@@ -21,8 +21,8 @@ import com.intellij.ui.components.JBScrollPane
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.panel
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
-import org.pcsoft.intellij.plugin.inno_setup.types.IsLanguageDataSpec
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsLanguageDataSpec
 import java.awt.Dimension
 import javax.swing.JComponent
 
@@ -46,14 +46,17 @@ class IsScriptCreateFileDialog(project: Project) : DialogWrapper(project) {
      * Returns or performs the public behavior represented by this member.
      */
     val fileName: String get() = fileNameField.text.trim()
+
     /**
      * Returns or performs the public behavior represented by this member.
      */
     val appName: String get() = appNameField.text.trim()
+
     /**
      * Returns or performs the public behavior represented by this member.
      */
     val appVersion: String get() = appVersionField.text.trim()
+
     /**
      * Returns or performs the public behavior represented by this member.
      */

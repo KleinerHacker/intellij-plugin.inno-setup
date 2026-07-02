@@ -20,12 +20,12 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingDirectiveEntry
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.containingSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.isInCodeSection
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.nameText
-import org.pcsoft.intellij.plugin.inno_setup.language.parser.section.psi.IsSectionParamValue
-import org.pcsoft.intellij.plugin.inno_setup.services.IsLanguageDataService
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingDirectiveEntry
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInCodeSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
+import org.pcsoft.intellij.plugin.inno_setup.script.services.IsLanguageDataService
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.

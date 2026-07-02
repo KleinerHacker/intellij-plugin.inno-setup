@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.IsScriptFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
 /**
@@ -43,7 +43,10 @@ class IsPreprocessorDefineNameCompletionTest : IsTimedBasePlatformTestCase() {
 
     fun testVisibilityKeywordsNotOfferedAfterScopeAlreadyPresent() {
         val variants = lookup("#define public <caret>\n$setupTail")
-        assertFalse("Scope keywords must not be re-offered once a scope is present, was: $variants", "public" in variants)
+        assertFalse(
+            "Scope keywords must not be re-offered once a scope is present, was: $variants",
+            "public" in variants
+        )
     }
 
     fun testUndefOffersPrecedingDefineNames() {
@@ -60,7 +63,10 @@ class IsPreprocessorDefineNameCompletionTest : IsTimedBasePlatformTestCase() {
     fun testDefineNameDoesNotOfferExistingDefineNames() {
         // A #define name is a new declaration — existing names must not be offered (only scope keywords).
         val variants = lookup("#define Foo 1\n#define <caret>\n$setupTail")
-        assertFalse("Existing define names must not be offered as a new #define name, was: $variants", "Foo" in variants)
+        assertFalse(
+            "Existing define names must not be offered as a new #define name, was: $variants",
+            "Foo" in variants
+        )
     }
 
     fun testDefineNameOffersPrecedingDimArrays() {
@@ -71,6 +77,9 @@ class IsPreprocessorDefineNameCompletionTest : IsTimedBasePlatformTestCase() {
 
     fun testVisibilityKeywordsNotOfferedInExpression() {
         val variants = lookup("#define Second <caret>\n$setupTail")
-        assertFalse("Scope keywords must not be offered in the expression position, was: $variants", "public" in variants)
+        assertFalse(
+            "Scope keywords must not be offered in the expression position, was: $variants",
+            "public" in variants
+        )
     }
 }

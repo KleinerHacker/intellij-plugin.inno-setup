@@ -18,8 +18,8 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
-import org.pcsoft.intellij.plugin.inno_setup.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
 

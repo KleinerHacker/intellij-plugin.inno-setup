@@ -1,8 +1,11 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=registrysection){
+.md-button .md-button--primary }
 
-`[Registry]` セクションはインストール中に Windows レジストリキーと値を作成、変更、または削除します。すべての主要なレジストリ値タイプをサポートし、`uninsdeletekey` や `uninsdeletekeyifempty` などのフラグを通じてアンインストール時のレジストリデータの処理を細かく制御します。32 ビットおよび 64 ビットレジストリビューを明示的にターゲットにできます。
+`[Registry]` セクションはインストール中に Windows レジストリキーと値を作成、変更、または削除します。すべての主要なレジストリ値タイプをサポートし、
+`uninsdeletekey` や `uninsdeletekeyifempty` などのフラグを通じてアンインストール時のレジストリデータの処理を細かく制御します。32
+ビットおよび 64 ビットレジストリビューを明示的にターゲットにできます。
 
 ---
 
@@ -10,7 +13,8 @@
 
 `string` · **必須**
 
-レジストリルートハイブ：`HKCU`、`HKLM`、`HKCR`、`HKU`、`HKCC`、または `HKA`（インストールモードに応じて自動）。`32` または `64` を追加すると特定のレジストリビューが強制されます（例：`HKLM64`）。
+レジストリルートハイブ：`HKCU`、`HKLM`、`HKCR`、`HKU`、`HKCC`、または `HKA`（インストールモードに応じて自動）。`32` または `64`
+を追加すると特定のレジストリビューが強制されます（例：`HKLM64`）。
 
 ---
 
@@ -58,7 +62,8 @@
 
 `string` · **複数の値**
 
-動作フラグ：`createvalueifdoesntexist`、`deletekey`、`deletevalue`、`dontcreatekey`、`noerror`、`preservestringtype`、`uninsclearvalue`、`uninsdeletekey`、`uninsdeletekeyifempty`、`uninsdeletevalue`。
+動作フラグ：`createvalueifdoesntexist`、`deletekey`、`deletevalue`、`dontcreatekey`、`noerror`、`preservestringtype`、
+`uninsclearvalue`、`uninsdeletekey`、`uninsdeletekeyifempty`、`uninsdeletevalue`。
 
 ---
 
