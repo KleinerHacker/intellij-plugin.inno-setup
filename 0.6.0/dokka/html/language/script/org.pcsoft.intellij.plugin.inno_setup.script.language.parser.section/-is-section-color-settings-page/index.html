@@ -1,0 +1,419 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>IsSectionColorSettingsPage</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    inno-setup
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.6.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":language:script/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":language:script/main" data-filter=":language:script/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="script::org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section/IsSectionColorSettingsPage///PointingToDeclaration//972396635">
+  <div class="breadcrumbs"><a href="../../index.html">script</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section</a><span class="delimiter">/</span><span class="current">IsSectionColorSettingsPage</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Is</span><wbr><span>Section</span><wbr><span>Color</span><wbr><span>Settings</span><wbr><span><span>Page</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">IsSectionColorSettingsPage</a> : <span data-unresolved-link="com.intellij.openapi.options.colors/ColorSettingsPage///PointingToDeclaration/">ColorSettingsPage</span></div><p class="paragraph">Exposes syntax-highlighting colors in the IntelliJ color settings UI.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-76540747%2FConstructors%2F972396635" anchor-label="IsSectionColorSettingsPage" id="-76540747%2FConstructors%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-section-color-settings-page.html"><span>Is</span><wbr><span>Section</span><wbr><span>Color</span><wbr><span>Settings</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-76540747%2FConstructors%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="534678140%2FProperties%2F972396635" anchor-label="additionalHighlightingTagToColorKeyMap" id="534678140%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#534678140%2FProperties%2F972396635"><span>additional</span><wbr><span>Highlighting</span><wbr><span>Tag</span><wbr><span>To</span><wbr><span>Color</span><wbr><span>Key</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="534678140%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#534678140%2FProperties%2F972396635">additionalHighlightingTagToColorKeyMap</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span><span data-unresolved-link="com.intellij.openapi.editor.colors/ColorKey///PointingToDeclaration/">ColorKey</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2031616226%2FProperties%2F972396635" anchor-label="additionalHighlightingTagToDescriptorMap" id="2031616226%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="additional-highlighting-tag-to-descriptor-map.html"><span>additional</span><wbr><span>Highlighting</span><wbr><span>Tag</span><wbr><span>To</span><wbr><span>Descriptor</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2031616226%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="additional-highlighting-tag-to-descriptor-map.html">additionalHighlightingTagToDescriptorMap</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="com.intellij.openapi.editor.colors/TextAttributesKey///PointingToDeclaration/">TextAttributesKey</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1817594170%2FProperties%2F972396635" anchor-label="additionalInlineElementToDescriptorMap" id="-1817594170%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1817594170%2FProperties%2F972396635"><span>additional</span><wbr><span>Inline</span><wbr><span>Element</span><wbr><span>To</span><wbr><span>Descriptor</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1817594170%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#-1817594170%2FProperties%2F972396635">additionalInlineElementToDescriptorMap</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span><span data-unresolved-link="com.intellij.openapi.editor.colors/TextAttributesKey///PointingToDeclaration/">TextAttributesKey</span><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-852040025%2FProperties%2F972396635" anchor-label="attributeDescriptors" id="-852040025%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="attribute-descriptors.html"><span>attribute</span><wbr><span><span>Descriptors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-852040025%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="attribute-descriptors.html">attributeDescriptors</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.openapi.options.colors/AttributesDescriptor///PointingToDeclaration/">AttributesDescriptor</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1039068398%2FProperties%2F972396635" anchor-label="colorDescriptors" id="1039068398%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="color-descriptors.html"><span>color</span><wbr><span><span>Descriptors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1039068398%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="color-descriptors.html">colorDescriptors</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.openapi.options.colors/ColorDescriptor///PointingToDeclaration/">ColorDescriptor</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1739864991%2FProperties%2F972396635" anchor-label="demoText" id="1739864991%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="demo-text.html"><span>demo</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1739864991%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="demo-text.html">demoText</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1129770722%2FProperties%2F972396635" anchor-label="displayName" id="-1129770722%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="display-name.html"><span>display</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1129770722%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="display-name.html">displayName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1146190422%2FProperties%2F972396635" anchor-label="highlighter" id="-1146190422%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="highlighter.html"><span><span>highlighter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1146190422%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="highlighter.html">highlighter</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.fileTypes/SyntaxHighlighter///PointingToDeclaration/">SyntaxHighlighter</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1336497674%2FProperties%2F972396635" anchor-label="icon" id="-1336497674%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="icon.html"><span><span>icon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1336497674%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="icon.html">icon</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/javax/swing/Icon.html">Icon</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1784673850%2FProperties%2F972396635" anchor-label="previewEditorCustomizer" id="1784673850%2FProperties%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1784673850%2FProperties%2F972396635"><span>preview</span><wbr><span>Editor</span><wbr><span><span>Customizer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1784673850%2FProperties%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="index.html#1784673850%2FProperties%2F972396635">previewEditorCustomizer</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.openapi.options.colors/ColorSettingsPage.PreviewCustomizer///PointingToDeclaration/">ColorSettingsPage.PreviewCustomizer</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="740942980%2FFunctions%2F972396635" anchor-label="customizeColorScheme" id="740942980%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#740942980%2FFunctions%2F972396635"><span>customize</span><wbr><span>Color</span><wbr><span><span>Scheme</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="740942980%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#740942980%2FFunctions%2F972396635"><span class="token function">customizeColorScheme</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span>scheme<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.openapi.editor.colors/EditorColorsScheme///PointingToDeclaration/">EditorColorsScheme</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.openapi.editor.colors/EditorColorsScheme///PointingToDeclaration/">EditorColorsScheme</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-80618552%2FFunctions%2F972396635" anchor-label="getAdditionalHighlightingTagToDescriptorMap" id="-80618552%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-additional-highlighting-tag-to-descriptor-map.html"><span>get</span><wbr><span>Additional</span><wbr><span>Highlighting</span><wbr><span>Tag</span><wbr><span>To</span><wbr><span>Descriptor</span><wbr><span><span>Map</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-80618552%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-additional-highlighting-tag-to-descriptor-map.html"><span class="token function">getAdditionalHighlightingTagToDescriptorMap</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span data-unresolved-link="com.intellij.openapi.editor.colors/TextAttributesKey///PointingToDeclaration/">TextAttributesKey</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-928862067%2FFunctions%2F972396635" anchor-label="getAttributeDescriptors" id="-928862067%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-attribute-descriptors.html"><span>get</span><wbr><span>Attribute</span><wbr><span><span>Descriptors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-928862067%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-attribute-descriptors.html"><span class="token function">getAttributeDescriptors</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.openapi.options.colors/AttributesDescriptor///PointingToDeclaration/">AttributesDescriptor</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-253257260%2FFunctions%2F972396635" anchor-label="getColorDescriptors" id="-253257260%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-color-descriptors.html"><span>get</span><wbr><span>Color</span><wbr><span><span>Descriptors</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-253257260%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-color-descriptors.html"><span class="token function">getColorDescriptors</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.openapi.options.colors/ColorDescriptor///PointingToDeclaration/">ColorDescriptor</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1572655483%2FFunctions%2F972396635" anchor-label="getDemoText" id="-1572655483%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-demo-text.html"><span>get</span><wbr><span>Demo</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1572655483%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-demo-text.html"><span class="token function">getDemoText</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1036348536%2FFunctions%2F972396635" anchor-label="getDisplayName" id="1036348536%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-display-name.html"><span>get</span><wbr><span>Display</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1036348536%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-display-name.html"><span class="token function">getDisplayName</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns user-visible presentation text for this IntelliJ extension.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1019928836%2FFunctions%2F972396635" anchor-label="getHighlighter" id="1019928836%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-highlighter.html"><span>get</span><wbr><span><span>Highlighter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1019928836%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-highlighter.html"><span class="token function">getHighlighter</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.fileTypes/SyntaxHighlighter///PointingToDeclaration/">SyntaxHighlighter</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-59834404%2FFunctions%2F972396635" anchor-label="getIcon" id="-59834404%2FFunctions%2F972396635" data-filterable-set=":language:script/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:script/main" data-filterable-set=":language:script/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-icon.html"><span>get</span><wbr><span><span>Icon</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-59834404%2FFunctions%2F972396635"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:script/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="get-icon.html"><span class="token function">getIcon</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.desktop/javax/swing/Icon.html">Icon</a></div><div class="brief "><p class="paragraph">Returns the icon shown for this element or file type.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    inno-setup
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.6.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":language:preprocessor/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":language:preprocessor/main" data-filter=":language:preprocessor/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="preprocessor::org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser////PointingToDeclaration//1138120223">
+  <div class="breadcrumbs"><a href="../index.html">preprocessor</a><span class="delimiter">/</span><span class="current">org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="752109606%2FClasslikes%2F1138120223" anchor-label="IsConditionalBlock" id="752109606%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-conditional-block/index.html"><span>Is</span><wbr><span>Conditional</span><wbr><span><span>Block</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="752109606%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-conditional-block/index.html">IsConditionalBlock</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>openerLine<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>endifLine<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A matched <code class="lang-kotlin">#if … #endif</code> block at host-file level (used for folding).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="943518164%2FClasslikes%2F1138120223" anchor-label="IsConditionalProblem" id="943518164%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-conditional-problem/index.html"><span>Is</span><wbr><span>Conditional</span><wbr><span><span>Problem</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="943518164%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-conditional-problem/index.html">IsConditionalProblem</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-conditional-problem/index.html">IsConditionalProblem</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Why a conditional directive is structurally invalid.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-202978048%2FClasslikes%2F1138120223" anchor-label="IsConditionalStructure" id="-202978048%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-conditional-structure/index.html"><span>Is</span><wbr><span>Conditional</span><wbr><span><span>Structure</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-202978048%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-conditional-structure/index.html">IsConditionalStructure</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>blocks<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-conditional-block/index.html">IsConditionalBlock</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>problems<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span><a href="-is-conditional-problem/index.html">IsConditionalProblem</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Result of analysing the conditional structure of a host file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1535424840%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorAnnotator" id="1535424840%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-annotator/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span><span>Annotator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1535424840%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-annotator/index.html">IsPreprocessorAnnotator</a> : <span data-unresolved-link="com.intellij.lang.annotation/Annotator///PointingToDeclaration/">Annotator</span></div><div class="brief "><p class="paragraph">Annotates Inno Setup PSI elements with validation and highlighting information.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-925024326%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorAnnotatorHighlighting" id="-925024326%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-annotator-highlighting/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Annotator</span><wbr><span><span>Highlighting</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-925024326%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-annotator-highlighting/index.html">IsPreprocessorAnnotatorHighlighting</a></div><div class="brief "><p class="paragraph">Editor highlighting attribute keys used by the ISPP annotator. These intentionally reuse the <strong>same external string IDs</strong> as the script module's <code class="lang-kotlin">IsSectionAnnotatorHighlighting</code> (e.g. <code class="lang-kotlin">ISS_PREPROCESSOR_DIRECTIVE</code>): <code class="lang-kotlin">TextAttributesKey.createTextAttributesKey(id)</code> is keyed solely by that string, so both modules resolve to the identical attributes (defined by the bundled colour schemes in the <code class="lang-kotlin">:plugin</code> module) without either module depending on the other.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="791164401%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorConditionalStructure" id="791164401%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-conditional-structure/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Conditional</span><wbr><span><span>Structure</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="791164401%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-conditional-structure/index.html">IsPreprocessorConditionalStructure</a></div><div class="brief "><p class="paragraph">Analyses the <code class="lang-kotlin">#if</code>/<code class="lang-kotlin">#elif</code>/<code class="lang-kotlin">#else</code>/<code class="lang-kotlin">#endif</code> (and <code class="lang-kotlin">#ifdef</code>/<code class="lang-kotlin">#ifndef</code>/<code class="lang-kotlin">#ifexist</code>/<code class="lang-kotlin">#ifnexist</code>) structure of an ISPP host file: matches openers to their <code class="lang-kotlin">#endif</code>, and flags unterminated openers, stray branches and <code class="lang-kotlin">#elif</code>-after-<code class="lang-kotlin">#else</code>. Shared by the annotator (per-directive validity) and the folding builder (ranges).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="238312162%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorFile" id="238312162%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-file/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="238312162%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-file/index.html">IsPreprocessorFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewProvider<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/FileViewProvider///PointingToDeclaration/">FileViewProvider</span></span></span><span class="token punctuation">)</span> : <span data-unresolved-link="com.intellij.extapi.psi/PsiFileBase///PointingToDeclaration/">PsiFileBase</span></div><div class="brief "><p class="paragraph">PSI file root of an injected ISPP fragment.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1250504776%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorFileType" id="1250504776%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-file-type/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>File</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1250504776%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-file-type/index.html">IsPreprocessorFileType</a> : <span data-unresolved-link="com.intellij.openapi.fileTypes/LanguageFileType///PointingToDeclaration/">LanguageFileType</span></div><div class="brief "><p class="paragraph">File type for the injected ISPP preprocessor language.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-202283819%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorHighlighterFactory" id="-202283819%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-highlighter-factory/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Highlighter</span><wbr><span><span>Factory</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-202283819%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-highlighter-factory/index.html">IsPreprocessorHighlighterFactory</a> : <span data-unresolved-link="com.intellij.openapi.fileTypes/SyntaxHighlighterFactory///PointingToDeclaration/">SyntaxHighlighterFactory</span></div><div class="brief "><p class="paragraph">Creates syntax highlighters for this Inno Setup language.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1297243082%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorHost" id="-1297243082%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-host/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span><span>Host</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1297243082%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-is-preprocessor-host/index.html">IsPreprocessorHost</a></div><div class="brief "><p class="paragraph">Host-side abstraction the ISPP preprocessor module talks to, instead of depending on the concrete script/section/template PSI of the :language:script module. The host files that ISPP <code class="lang-kotlin">#…</code> fragments are injected into (the <code class="lang-kotlin">.iss</code>/<code class="lang-kotlin">.isl</code> script and the <code class="lang-kotlin">.ist</code> template) implement this interface and supply the few host-aware behaviours the preprocessor needs. This keeps the dependency direction <code class="lang-kotlin">script → preprocessor</code> and the preprocessor module free of any section/script type.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1235481634%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorHostLine" id="1235481634%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-host-line/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Host</span><wbr><span><span>Line</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1235481634%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-is-preprocessor-host-line/index.html">IsPreprocessorHostLine</a></div><div class="brief "><p class="paragraph">Marker for a host line element that carries an injected ISPP <code class="lang-kotlin">#…</code> fragment (a section preprocessor line of a script or the preprocessor line of a template). The preprocessor enumerates these without knowing the concrete host grammar.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2106363815%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorIncludeProblem" id="2106363815%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-include-problem/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Include</span><wbr><span><span>Problem</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2106363815%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-preprocessor-include-problem/index.html">IsPreprocessorIncludeProblem</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>severity<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.annotation/HighlightSeverity///PointingToDeclaration/">HighlightSeverity</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A single problem surfaced on an <code class="lang-kotlin">#include</code>, decoupled from the script-side effective-script analysis.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-484790778%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorLanguage" id="-484790778%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-language/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span><span>Language</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-484790778%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-language/index.html">IsPreprocessorLanguage</a> : <span data-unresolved-link="com.intellij.lang/Language///PointingToDeclaration/">Language</span></div><div class="brief "><p class="paragraph">Defines the IntelliJ language instance for this Inno Setup language.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-596161893%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorLexerAdapter" id="-596161893%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-lexer-adapter/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Lexer</span><wbr><span><span>Adapter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-596161893%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-lexer-adapter/index.html">IsPreprocessorLexerAdapter</a> : <span data-unresolved-link="com.intellij.lexer/FlexAdapter///PointingToDeclaration/">FlexAdapter</span></div><div class="brief "><p class="paragraph">Adapts the generated lexer to IntelliJ lexer APIs.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="206196428%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorParserDefinition" id="206196428%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-parser-definition/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Parser</span><wbr><span><span>Definition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="206196428%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-parser-definition/index.html">IsPreprocessorParserDefinition</a> : <span data-unresolved-link="com.intellij.lang/ParserDefinition///PointingToDeclaration/">ParserDefinition</span></div><div class="brief "><p class="paragraph">Defines lexer, parser, PSI file, and token sets for this Inno Setup language.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1587097461%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorSubroutineStructure" id="1587097461%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-subroutine-structure/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Subroutine</span><wbr><span><span>Structure</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1587097461%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-subroutine-structure/index.html">IsPreprocessorSubroutineStructure</a></div><div class="brief "><p class="paragraph">Analyses the <code class="lang-kotlin">#sub</code>/<code class="lang-kotlin">#endsub</code> structure of an ISPP host file: matches each <code class="lang-kotlin">#sub</code> to its <code class="lang-kotlin">#endsub</code> and flags unterminated <code class="lang-kotlin">#sub</code>s and stray <code class="lang-kotlin">#endsub</code>s. Shared by the annotator (per-directive validity) and the folding builder (block ranges) — mirroring <a href="-is-preprocessor-conditional-structure/index.html">IsPreprocessorConditionalStructure</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1423950093%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorSyntaxHighlighting" id="1423950093%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-syntax-highlighting/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Syntax</span><wbr><span><span>Highlighting</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1423950093%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-is-preprocessor-syntax-highlighting/index.html">IsPreprocessorSyntaxHighlighting</a></div><div class="brief "><p class="paragraph">Holds editor highlighting attributes for Inno Setup inspections.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2066777674%2FClasslikes%2F1138120223" anchor-label="IsPreprocessorTokenHighlighter" id="-2066777674%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-token-highlighter/index.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Token</span><wbr><span><span>Highlighter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2066777674%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-is-preprocessor-token-highlighter/index.html">IsPreprocessorTokenHighlighter</a> : <span data-unresolved-link="com.intellij.openapi.fileTypes/SyntaxHighlighterBase///PointingToDeclaration/">SyntaxHighlighterBase</span></div><div class="brief "><p class="paragraph">Maps lexer token types to editor text attributes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1479616684%2FClasslikes%2F1138120223" anchor-label="IsSubroutineBlock" id="1479616684%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-subroutine-block/index.html"><span>Is</span><wbr><span>Subroutine</span><wbr><span><span>Block</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1479616684%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-subroutine-block/index.html">IsSubroutineBlock</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>openerLine<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>endsubLine<span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A matched <code class="lang-kotlin">#sub … #endsub</code> block at host-file level (used for folding).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1849126%2FClasslikes%2F1138120223" anchor-label="IsSubroutineProblem" id="-1849126%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-subroutine-problem/index.html"><span>Is</span><wbr><span>Subroutine</span><wbr><span><span>Problem</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1849126%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-is-subroutine-problem/index.html">IsSubroutineProblem</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-is-subroutine-problem/index.html">IsSubroutineProblem</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Why a subroutine directive (<code class="lang-kotlin">#sub</code>/<code class="lang-kotlin">#endsub</code>) is structurally invalid.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1832123014%2FClasslikes%2F1138120223" anchor-label="IsSubroutineStructure" id="1832123014%2FClasslikes%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-subroutine-structure/index.html"><span>Is</span><wbr><span>Subroutine</span><wbr><span><span>Structure</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1832123014%2FClasslikes%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="-is-subroutine-structure/index.html">IsSubroutineStructure</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>blocks<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-is-subroutine-block/index.html">IsSubroutineBlock</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>problems<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span><a href="-is-subroutine-problem/index.html">IsSubroutineProblem</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Result of analysing the subroutine structure of a host file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-308029390%2FProperties%2F1138120223" anchor-label="definedConstants" id="-308029390%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="defined-constants.html"><span>defined</span><wbr><span><span>Constants</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-308029390%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="defined-constants.html">definedConstants</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-404353892%2FProperties%2F1138120223" anchor-label="EFFECTIVE_SCRIPT_MARKER" id="-404353892%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-e-f-f-e-c-t-i-v-e_-s-c-r-i-p-t_-m-a-r-k-e-r.html"><span>EFFECTIVE_</span><wbr><span>SCRIPT_</span><wbr><span>MARKER</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-404353892%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-e-f-f-e-c-t-i-v-e_-s-c-r-i-p-t_-m-a-r-k-e-r.html">EFFECTIVE_SCRIPT_MARKER</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/Key///PointingToDeclaration/">Key</span><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Marks the in-memory <i>effective script</i> (the script-module builds it by inlining every <code class="lang-kotlin">#include</code>). The ISPP annotator checks this key to stop the effective-script analysis from recursing when it replays over the effective file. Defined here (the lowest module) so both the annotator and the script-side builder share it.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-205405792%2FProperties%2F1138120223" anchor-label="hostRange" id="-205405792%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="host-range.html"><span>host</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-205405792%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-is-conditional-block/index.html">IsConditionalBlock</a><span class="token punctuation">.</span><a href="host-range.html">hostRange</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></div><div class="brief "><p class="paragraph">The host text range spanned by a conditional block, from the opener line start to the <code class="lang-kotlin">#endif</code> line end.</p></div><div class="symbol monospace"><span class="token keyword">val </span><a href="-is-subroutine-block/index.html">IsSubroutineBlock</a><span class="token punctuation">.</span><a href="host-range.html">hostRange</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></div><div class="brief "><p class="paragraph">The host text range spanned by a subroutine block, from the <code class="lang-kotlin">#sub</code> line start to the <code class="lang-kotlin">#endsub</code> line end.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="165646491%2FProperties%2F1138120223" anchor-label="IS_PREPROCESSOR_BOOLEAN_WORDS" id="165646491%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-i-s_-p-r-e-p-r-o-c-e-s-s-o-r_-b-o-o-l-e-a-n_-w-o-r-d-s.html"><span>IS_</span><wbr><span>PREPROCESSOR_</span><wbr><span>BOOLEAN_</span><wbr><span>WORDS</span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="165646491%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-i-s_-p-r-e-p-r-o-c-e-s-s-o-r_-b-o-o-l-e-a-n_-w-o-r-d-s.html">IS_PREPROCESSOR_BOOLEAN_WORDS</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-set/index.html">Set</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Boolean words that ISPP does not actually support (they degrade to undefined identifiers = 0).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2068778262%2FProperties%2F1138120223" anchor-label="isppDirectives" id="-2068778262%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ispp-directives.html"><span>ispp</span><wbr><span><span>Directives</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2068778262%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="ispp-directives.html">isppDirectives</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Returns or performs the public behavior represented by this member.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2143986793%2FProperties%2F1138120223" anchor-label="isppDirectivesWithHostOffset" id="2143986793%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_PROPERTY" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ispp-directives-with-host-offset.html"><span>ispp</span><wbr><span>Directives</span><wbr><span>With</span><wbr><span>Host</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2143986793%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">val </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="ispp-directives-with-host-offset.html">isppDirectivesWithHostOffset</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">All ISPP directives paired with the host-file offset of the line they live on. Because each <code class="lang-kotlin">#define</code> line is injected as its own fragment, the host offset (the start of the containing preprocessor line, a direct child of this file) is the authority for declaration order.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="280017953%2FFunctions%2F1138120223" anchor-label="arraySize" id="280017953%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="array-size.html"><span>array</span><wbr><span><span>Size</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="280017953%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="array-size.html"><span class="token function">arraySize</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">beforeOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The statically known element count of the array <a href="array-size.html">name</a> as visible before host offset <a href="array-size.html">beforeOffset</a>, or <code class="lang-kotlin">null</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1771856509%2FFunctions%2F1138120223" anchor-label="asIsppHostFile" id="-1771856509%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-ispp-host-file.html"><span>as</span><wbr><span>Ispp</span><wbr><span>Host</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1771856509%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token operator">?</span><span class="token punctuation">.</span><a href="as-ispp-host-file.html"><span class="token function">asIsppHostFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token operator">?</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">this</code> if it is an ISPP host file (script or template), otherwise <code class="lang-kotlin">null</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1758743808%2FFunctions%2F1138120223" anchor-label="computeArrayElementValue" id="1758743808%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="compute-array-element-value.html"><span>compute</span><wbr><span>Array</span><wbr><span>Element</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1758743808%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="compute-array-element-value.html"><span class="token function">computeArrayElementValue</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">index<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">beforeOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>Int.MAX_VALUE</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The statically computed value of the array element <code class="lang-kotlin">name[index]</code> as visible before host offset <a href="compute-array-element-value.html">beforeOffset</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2092316522%2FFunctions%2F1138120223" anchor-label="computeValue" id="-2092316522%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="compute-value.html"><span>compute</span><wbr><span><span>Value</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2092316522%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token punctuation">.</span><a href="compute-value.html"><span class="token function">computeValue</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-value/index.html">IsPreprocessorExprValue</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The statically computed value of a simple <code class="lang-kotlin">#define</code>, or <code class="lang-kotlin">null</code> (function-like macro / not computable).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1459043721%2FFunctions%2F1138120223" anchor-label="inferParameterType" id="1459043721%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="infer-parameter-type.html"><span>infer</span><wbr><span>Parameter</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1459043721%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token punctuation">.</span><a href="infer-parameter-type.html"><span class="token function">inferParameterType</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parameterName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a></div><div class="brief "><p class="paragraph">Probable type of the parameter named <a href="infer-parameter-type.html">parameterName</a> of a function-like macro, or <a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/-a-n-y/index.html">IsPreprocessorExprType.ANY</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1412218660%2FFunctions%2F1138120223" anchor-label="inferParameterTypes" id="-1412218660%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="infer-parameter-types.html"><span>infer</span><wbr><span>Parameter</span><wbr><span><span>Types</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1412218660%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token punctuation">.</span><a href="infer-parameter-types.html"><span class="token function">inferParameterTypes</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Probable parameter types of a function-like macro, paired with their names; empty for a simple <code class="lang-kotlin">#define</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1335359646%2FFunctions%2F1138120223" anchor-label="inferReturnType" id="-1335359646%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="infer-return-type.html"><span>infer</span><wbr><span>Return</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1335359646%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token punctuation">.</span><a href="infer-return-type.html"><span class="token function">inferReturnType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a></div><div class="brief "><p class="paragraph">The probable return type of this <code class="lang-kotlin">#define</code>: for a function-like macro the type of its body with the parameters bound to their probable types; for a simple <code class="lang-kotlin">#define</code> the same as <a href="infer-type.html">inferType</a>. <a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/-a-n-y/index.html">IsPreprocessorExprType.ANY</a> when it cannot be determined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1969561586%2FFunctions%2F1138120223" anchor-label="inferType" id="1969561586%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="infer-type.html"><span>infer</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1969561586%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token punctuation">.</span><a href="infer-type.html"><span class="token function">inferType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a></div><div class="brief "><p class="paragraph">The inferred type of this <code class="lang-kotlin">#define</code>: for a simple macro the type of its value expression, for a function- like macro its probable return type. <a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/-v-o-i-d/index.html">IsPreprocessorExprType.VOID</a> for a value-less <code class="lang-kotlin">#define</code>, <a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/-a-n-y/index.html">IsPreprocessorExprType.ANY</a> when it cannot be determined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1989428101%2FFunctions%2F1138120223" anchor-label="isIsppHostFile" id="-1989428101%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-ispp-host-file.html"><span>is</span><wbr><span>Ispp</span><wbr><span>Host</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1989428101%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token operator">?</span><span class="token punctuation">.</span><a href="is-ispp-host-file.html"><span class="token function">isIsppHostFile</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Whether <code class="lang-kotlin">this</code> is a file ISPP directives can be injected into: a script (.iss/.isl) or template (.ist).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="399592123%2FFunctions%2F1138120223" anchor-label="precedingArray" id="399592123%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preceding-array.html"><span>preceding</span><wbr><span><span>Array</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="399592123%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="preceding-array.html"><span class="token function">precedingArray</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">beforeOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The nearest <code class="lang-kotlin">#dim</code>/<code class="lang-kotlin">#redim</code> array named <a href="preceding-array.html">name</a> declared before host offset <a href="preceding-array.html">beforeOffset</a>, or <code class="lang-kotlin">null</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2141061507%2FFunctions%2F1138120223" anchor-label="precedingDefine" id="-2141061507%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preceding-define.html"><span>preceding</span><wbr><span><span>Define</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2141061507%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="preceding-define.html"><span class="token function">precedingDefine</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">beforeOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The nearest <code class="lang-kotlin">#define</code> named <a href="preceding-define.html">name</a> declared before host offset <a href="preceding-define.html">beforeOffset</a>, or <code class="lang-kotlin">null</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1726976460%2FFunctions%2F1138120223" anchor-label="precedingSub" id="-1726976460%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preceding-sub.html"><span>preceding</span><wbr><span><span>Sub</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1726976460%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="preceding-sub.html"><span class="token function">precedingSub</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">beforeOffset<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive-ex/index.html">IsPreprocessorDirectiveEx</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The nearest <code class="lang-kotlin">#sub</code> named <a href="preceding-sub.html">name</a> declared before host offset <a href="preceding-sub.html">beforeOffset</a>, or <code class="lang-kotlin">null</code>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-208770076%2FFunctions%2F1138120223" anchor-label="preprocessorTypeResolver" id="-208770076%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preprocessor-type-resolver.html"><span>preprocessor</span><wbr><span>Type</span><wbr><span><span>Resolver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-208770076%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="preprocessor-type-resolver.html"><span class="token function">preprocessorTypeResolver</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">extraVariables<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type/index.html">IsPreprocessorExprType</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyMap()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-type-resolver/index.html">IsPreprocessorExprTypeResolver</a></div><div class="brief "><p class="paragraph">A type resolver over all <code class="lang-kotlin">#define</code>s, function-like macros and arrays of this file plus the bundled ISPP spec. <a href="preprocessor-type-resolver.html">extraVariables</a> are additional in-scope variable types (e.g. a <code class="lang-kotlin">#for</code> loop variable) that take precedence over the predefined ISPP variables; matched case-insensitively.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1046816890%2FFunctions%2F1138120223" anchor-label="preprocessorValueResolver" id="1046816890%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preprocessor-value-resolver.html"><span>preprocessor</span><wbr><span>Value</span><wbr><span><span>Resolver</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1046816890%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span><span class="token punctuation">.</span><a href="preprocessor-value-resolver.html"><span class="token function">preprocessorValueResolver</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/-is-preprocessor-expr-value-resolver/index.html">IsPreprocessorExprValueResolver</a></div><div class="brief "><p class="paragraph">A value resolver over all simple <code class="lang-kotlin">#define</code>s, function-like macros and array elements of this file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
