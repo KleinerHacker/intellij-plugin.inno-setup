@@ -29,6 +29,9 @@ jobs:
       - name: Check licences
         run: ./gradlew licensee --stacktrace --info
 
+      - name: Generate SBOM
+        run: ./gradlew cyclonedxBom --stacktrace
+
   build:
     runs-on: ubuntu-latest
     env:

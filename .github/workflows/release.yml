@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: sbom
-          path: build/reports/cyclonedx/bom.xml
+          path: plugin/build/reports/cyclonedx/bom.xml
 
   build:
     runs-on: ubuntu-latest

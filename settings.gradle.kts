@@ -24,6 +24,22 @@ pluginManagement {
     }
 }
 
+// Jackson alignment on the SETTINGS plugin classpath — the top-most (parent-first) classloader of the whole
+// build. The IntelliJ Platform settings plugin applied below pulls jackson-databind 2.20.x here, a version
+// where the `_anyGetterWriter` field was removed. Because this classloader is the parent of every module's
+// plugin classloader, that databind wins for all plugins — including CycloneDX, whose jackson-dataformat-xml
+// still references the removed field ⇒ `NoSuchFieldError` in :plugin:cyclonedxBom. Pin the whole jackson
+// family to the last release that still carries the field so databind and dataformat-xml stay compatible.
+buildscript {
+    configurations.classpath {
+        resolutionStrategy.eachDependency {
+            if (requested.group.startsWith("com.fasterxml.jackson")) {
+                useVersion("2.18.6")
+            }
+        }
+    }
+}
+
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("org.jetbrains.intellij.platform.settings") version "2.17.0"
