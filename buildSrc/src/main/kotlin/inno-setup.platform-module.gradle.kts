@@ -39,7 +39,10 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/KleinerHacker/inno-setup")
+            // GitHub Packages requires the URL path to match the actual owner/repo; GITHUB_REPOSITORY is
+            // set by CI ("owner/repo"), otherwise fall back to the known repository name.
+            val repository = System.getenv("GITHUB_REPOSITORY") ?: "KleinerHacker/intellij-plugin.inno-setup"
+            url = uri("https://maven.pkg.github.com/$repository")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
