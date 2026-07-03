@@ -181,6 +181,7 @@ jobs:
           TAG="${{ github.ref_name }}"
           if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then CHANNEL="eap"; else CHANNEL="default"; fi
           ./gradlew publishPlugin -Pversion="$TAG" -PpublishChannel="$CHANNEL" --stacktrace
+        continue-on-error: true
 
   # Publish the language modules (:language:script, :language:preprocessor) as Maven artifacts to the
   # GitHub Packages registry. Runs after every other release step (build, licences, docs, marketplace)
@@ -191,7 +192,6 @@ jobs:
       - build
       - licences
       - deploy-docs
-      - publish-marketplace
 
     permissions:
       contents: read
@@ -214,6 +214,7 @@ jobs:
           GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pversion=${{ github.ref_name }} --stacktrace
+        continue-on-error: true
 
   release:
     runs-on: ubuntu-latest
