@@ -182,13 +182,47 @@ jobs:
           if [[ "$TAG" =~ ^(0|[a-zA-Z]) ]]; then CHANNEL="eap"; else CHANNEL="default"; fi
           ./gradlew publishPlugin -Pversion="$TAG" -PpublishChannel="$CHANNEL" --stacktrace
 
+  # Publish the language modules (:language:script, :language:preprocessor) as Maven artifacts to the
+  # GitHub Packages registry. Runs after every other release step (build, licences, docs, marketplace)
+  # but before the GitHub release page is created (the release job depends on this one).
+  publish-packages:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - licences
+      - deploy-docs
+      - publish-marketplace
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Publish language modules to GitHub Packages
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pversion=${{ github.ref_name }} --stacktrace
+
   release:
     runs-on: ubuntu-latest
     needs:
       - build
       - licences
       - deploy-docs
-      - publish-marketplace   # GitHub release only after a successful Marketplace upload
+      - publish-marketplace
+      - publish-packages   # GitHub release only after the language artifacts are published
 
     steps:
       - uses: actions/checkout@v7

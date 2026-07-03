@@ -19,10 +19,33 @@ import java.time.Duration
 plugins {
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.intellij.platform.module")
+    `maven-publish`
 }
 
 kotlin {
     jvmToolchain(21)
+}
+
+// Publish the language modules (:language:script, :language:preprocessor) as regular Maven artifacts to
+// the GitHub Packages registry. Wired into the release workflow after all other release steps but before
+// the GitHub release page is created. Credentials come from the CI environment (GITHUB_ACTOR/GITHUB_TOKEN).
+publishing {
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+            artifactId = "inno-setup-${project.name}"
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/KleinerHacker/inno-setup")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 
 intellijPlatform {
