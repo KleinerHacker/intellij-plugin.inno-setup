@@ -38,7 +38,13 @@ tasks {
     register<GenerateLexerTask>("generateIsPreprocessorLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsPreprocessorLexer.flex"))
         targetOutputDir.set(layout.buildDirectory.dir("generated/$preprocessorPackage"))
-        purgeOldFiles.set(true)
+        // NOTE: purgeOldFiles MUST stay false. The lexer shares its output directory
+        // (…/parser) with the parser task, whose PSI classes live in the …/parser/psi
+        // subdirectory. A purging lexer deletes that subdirectory recursively, and since
+        // there is no ordering between the two generate tasks the parser's PSI output is
+        // wiped whenever the lexer happens to run last (order differs between machines/CI),
+        // producing "Unresolved reference" compile errors for the generated PSI types.
+        purgeOldFiles.set(false)
     }
 
     compileJava {

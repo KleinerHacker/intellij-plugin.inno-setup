@@ -45,7 +45,11 @@ tasks {
     register<GenerateLexerTask>("generateIsSectionLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionLexer.flex"))
         targetOutputDir.set(layout.buildDirectory.dir("generated/$sectionPackage"))
-        purgeOldFiles.set(true)
+        // See preprocessor build: purgeOldFiles MUST stay false — the lexer shares its output
+        // directory with the parser task, whose PSI classes live in the …/psi subdirectory. A
+        // purging lexer wipes that subdirectory recursively; with no ordering between the two
+        // generate tasks this deletes the parser's PSI output whenever the lexer runs last.
+        purgeOldFiles.set(false)
     }
 
     register<GenerateParserTask>("generateIsTemplateParser") {
@@ -59,7 +63,8 @@ tasks {
     register<GenerateLexerTask>("generateIsTemplateLexer") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsTemplateLexer.flex"))
         targetOutputDir.set(layout.buildDirectory.dir("generated/$templatePackage"))
-        purgeOldFiles.set(true)
+        // See above: purgeOldFiles MUST stay false to avoid wiping the parser's …/psi output.
+        purgeOldFiles.set(false)
     }
 
     val generators = listOf(
