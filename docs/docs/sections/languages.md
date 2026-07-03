@@ -1,6 +1,7 @@
 # [Languages]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=languagessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=languagessection){
+.md-button .md-button--primary }
 
 The `[Languages]` section declares all languages available in the installer. Each entry points to an ISL message file
 that provides the translated strings for the wizard UI. The first entry in the list becomes the default language.

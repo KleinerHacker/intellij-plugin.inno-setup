@@ -1,6 +1,7 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
+.md-button .md-button--primary }
 
 The `[UninstallRun]` section works exactly like `[Run]`, but its entries are executed at the *start* of uninstallation
 rather than after installation. Use it to stop services, kill running processes, or clean up state that cannot be

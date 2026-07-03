@@ -9,8 +9,8 @@ in the editor.
 
 ## Inlay Hints
 
-| Option                                       | Description                                                                                                                                                                                                                                                                                              |
-|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Option                                  | Description                                                                                                                                                                                                                                                                             |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Show #include content as inlay hint** | Shows the resolved content of an `#include "…"` directive as an inlay hint **below** the directive line, keeping the included file's line breaks. Click the hint to jump into the included file. No hint is shown when the target file cannot be found or read. **Enabled by default.** |
 
 These settings are **IDE-wide** (stored in the global IDE configuration, not per project).

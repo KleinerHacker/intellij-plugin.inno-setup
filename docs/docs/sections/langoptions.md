@@ -1,6 +1,7 @@
 # [LangOptions]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){
+.md-button .md-button--primary }
 
 The `[LangOptions]` section defines language-specific display settings. It is required in `.isl` language files and can
 also be used in scripts to override options for a declared language. In scripts, directive names may be prefixed with a

@@ -19,6 +19,11 @@
   errors are reported for a missing loop variable, a non-integer condition or an ill-typed expression. The
   `{` and `}` of the loop header are matched as a brace pair.
 
+### Changed
+
+- Internal restructuring: the plugin is now organised into separate Gradle modules (`language:script` and
+  `language:preprocessor`, pulled in by the main plugin). This has no effect on plugin behaviour.
+
 ## [0.5.2]
 
 ### Added

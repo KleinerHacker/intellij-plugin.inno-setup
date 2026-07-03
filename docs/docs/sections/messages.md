@@ -1,6 +1,7 @@
 # [Messages]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=messagessection){
+.md-button .md-button--primary }
 
 The `[Messages]` section overrides built-in installer UI strings from `Default.isl` or the selected language file. Each
 entry uses directive syntax:

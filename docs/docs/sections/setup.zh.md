@@ -1,8 +1,11 @@
 # [Setup]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=setupsection){ .md-button
+.md-button--primary }
 
-`[Setup]` 节是每个 Inno Setup 脚本的骨干。它使用简单的 `Directive=Value` 格式，控制从 Windows 添加/删除程序中显示的应用程序元数据到压缩算法、向导外观和权限要求的一切。只有 `AppName` 和 `AppVersion` 是严格必需的——所有其他指令都有合理的默认值。
+`[Setup]` 节是每个 Inno Setup 脚本的骨干。它使用简单的 `Directive=Value` 格式，控制从 Windows
+添加/删除程序中显示的应用程序元数据到压缩算法、向导外观和权限要求的一切。只有 `AppName` 和 `AppVersion`
+是严格必需的——所有其他指令都有合理的默认值。
 
 ---
 

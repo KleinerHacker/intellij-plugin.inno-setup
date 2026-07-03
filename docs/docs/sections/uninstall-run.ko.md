@@ -1,8 +1,10 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
+.md-button .md-button--primary }
 
-`[UninstallRun]` 섹션은 `[Run]`과 동일하게 작동하지만 항목은 설치 후가 아니라 제거 *시작* 시에 실행됩니다. 서비스 중지, 실행 중인 프로세스 종료, 또는 파일 및 레지스트리 키 삭제로는 처리할 수 없는 상태 정리에 사용합니다. 항목은 표시된 순서대로 실행됩니다.
+`[UninstallRun]` 섹션은 `[Run]`과 동일하게 작동하지만 항목은 설치 후가 아니라 제거 *시작* 시에 실행됩니다. 서비스 중지, 실행 중인 프로세스 종료, 또는 파일 및 레지스트리 키 삭제로는 처리할
+수 없는 상태 정리에 사용합니다. 항목은 표시된 순서대로 실행됩니다.
 
 ---
 
@@ -74,7 +76,8 @@
 
 `string` · **여러 값**
 
-동작 플래그: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`, `waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
+동작 플래그: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`,
+`waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
 
 ---
 

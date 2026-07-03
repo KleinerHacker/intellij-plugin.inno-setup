@@ -1,8 +1,10 @@
 # [Dirs]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=dirssection){ .md-button
+.md-button--primary }
 
-`[Dirs]` 섹션은 설치 중에 대상 컴퓨터에 추가 디렉토리를 만듭니다. 대부분의 경우 이 섹션은 전혀 필요하지 않습니다——`[Files]`에 나열된 파일에 필요한 디렉토리는 자동으로 생성됩니다. 빈 디렉토리 구조를 만들거나, 특정 NTFS 속성을 설정하거나, 디렉토리에 ACL 권한을 구성할 때 `[Dirs]`를 사용하세요.
+`[Dirs]` 섹션은 설치 중에 대상 컴퓨터에 추가 디렉토리를 만듭니다. 대부분의 경우 이 섹션은 전혀 필요하지 않습니다——`[Files]`에 나열된 파일에 필요한 디렉토리는 자동으로 생성됩니다. 빈 디렉토리
+구조를 만들거나, 특정 NTFS 속성을 설정하거나, 디렉토리에 ACL 권한을 구성할 때 `[Dirs]`를 사용하세요.
 
 ---
 
@@ -34,7 +36,8 @@
 
 `string` · **여러 값**
 
-동작 플래그: `deleteafterinstall`, `setntfscompression`, `uninsalwaysuninstall`, `uninsneveruninstall`, `unsetntfscompression`.
+동작 플래그: `deleteafterinstall`, `setntfscompression`, `uninsalwaysuninstall`, `uninsneveruninstall`,
+`unsetntfscompression`.
 
 ---
 

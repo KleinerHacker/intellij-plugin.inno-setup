@@ -1,8 +1,10 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button
+.md-button--primary }
 
-`[Run]` 섹션은 성공적인 설치 후 마지막 마법사 페이지가 표시되기 직전에 Inno Setup이 실행하는 프로그램 또는 파일을 나열합니다. 항목은 표시된 순서대로 실행됩니다. 백그라운드에서 실행 파일을 자동으로 시작하거나, 관련 애플리케이션으로 문서를 열거나, 완료 페이지의 체크박스를 통해 사용자에게 선택적 설치 후 작업(*MyApp 시작* 등)을 제공할 수 있습니다.
+`[Run]` 섹션은 성공적인 설치 후 마지막 마법사 페이지가 표시되기 직전에 Inno Setup이 실행하는 프로그램 또는 파일을 나열합니다. 항목은 표시된 순서대로 실행됩니다. 백그라운드에서 실행 파일을 자동으로
+시작하거나, 관련 애플리케이션으로 문서를 열거나, 완료 페이지의 체크박스를 통해 사용자에게 선택적 설치 후 작업(*MyApp 시작* 등)을 제공할 수 있습니다.
 
 ---
 
@@ -74,7 +76,8 @@
 
 `string` · **여러 값**
 
-동작 플래그: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`, `waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
+동작 플래그: `postinstall`, `shellexec`, `nowait`, `runhidden`, `skipifsilent`, `skipifnotsilent`, `unchecked`,
+`waituntilterminated`, `waituntilidle`, `logoutput`, `runasoriginaluser`.
 
 ---
 

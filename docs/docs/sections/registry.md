@@ -1,6 +1,7 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=registrysection){
+.md-button .md-button--primary }
 
 The `[Registry]` section creates, modifies, or deletes Windows registry keys and values during installation. It supports
 all major registry value types and gives fine-grained control over what happens to registry data on uninstall via flags

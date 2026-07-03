@@ -1,8 +1,10 @@
 # [LangOptions]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=langoptionssection){
+.md-button .md-button--primary }
 
-`[LangOptions]` 섹션은 언어별 표시 설정을 정의합니다. `.isl` 언어 파일에서는 필수이며 스크립트에서 선언된 언어의 옵션을 재정의하는 데도 사용할 수 있습니다. 스크립트에서 지시문 이름에 언어 이름을 접두사로 붙일 수 있습니다(예: `german.DialogFontName=Segoe UI`).
+`[LangOptions]` 섹션은 언어별 표시 설정을 정의합니다. `.isl` 언어 파일에서는 필수이며 스크립트에서 선언된 언어의 옵션을 재정의하는 데도 사용할 수 있습니다. 스크립트에서 지시문 이름에 언어 이름을
+접두사로 붙일 수 있습니다(예: `german.DialogFontName=Segoe UI`).
 
 ---
 
@@ -18,7 +20,8 @@
 
 `integer` · **.isl에서 필수**
 
-자동 언어 감지에 사용되는 Windows 언어 식별자. 일반적으로 Pascal 스타일 16진수로 작성됩니다(예: 영어(미국)는 `$0409`, 독일어(독일)는 `$0407`). 완성 기능은 번들된 Windows LCID 목록을 사용합니다.
+자동 언어 감지에 사용되는 Windows 언어 식별자. 일반적으로 Pascal 스타일 16진수로 작성됩니다(예: 영어(미국)는 `$0409`, 독일어(독일)는 `$0407`). 완성 기능은 번들된 Windows
+LCID 목록을 사용합니다.
 
 ---
 
@@ -88,4 +91,5 @@
 
 ## 제거된 지시문
 
-`TitleFontName`, `TitleFontSize`, `CopyrightFontName`, `CopyrightFontSize`는 Inno Setup 6.4에서 제거되었습니다. 플러그인은 이전 스크립트와의 호환성을 위해 제거 버전과 함께 표시하여 보존합니다.
+`TitleFontName`, `TitleFontSize`, `CopyrightFontName`, `CopyrightFontSize`는 Inno Setup 6.4에서 제거되었습니다. 플러그인은 이전 스크립트와의
+호환성을 위해 제거 버전과 함께 표시하여 보존합니다.

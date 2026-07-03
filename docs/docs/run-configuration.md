@@ -17,11 +17,11 @@ click **+**, and select **Inno Setup**.
 
 ## Configuration Options
 
-| Option             | Description                                                                                                                                    |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Script**         | Path to the top-level `.iss` script to compile. The drop-down lists all top-level scripts found in the project; any path may also be typed in. |
-| **Language**       | Selects the installer language at launch time. Only shown when the script's `[Languages]` section contains two or more entries.                |
-| **Debug output**   | When enabled, passes `/DBGMSG` to the installer so diagnostic messages are printed to the console during installation.                         |
+| Option           | Description                                                                                                                                    |
+|------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Script**       | Path to the top-level `.iss` script to compile. The drop-down lists all top-level scripts found in the project; any path may also be typed in. |
+| **Language**     | Selects the installer language at launch time. Only shown when the script's `[Languages]` section contains two or more entries.                |
+| **Debug output** | When enabled, passes `/DBGMSG` to the installer so diagnostic messages are printed to the console during installation.                         |
 
 ---
 

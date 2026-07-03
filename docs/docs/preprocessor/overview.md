@@ -19,14 +19,14 @@ unknown-section/flag/constant checks.
 
 ## Supported directives
 
-| Group | Directives |
-|-------|------------|
-| Definition | `#define`, `#undef`, `#dim`, `#redim` |
-| Inclusion | `#include`, `#file` |
-| Output | `#emit`, `#expr`, `#insert`, `#append` |
-| Conditionals | `#if`, `#elif`, `#else`, `#endif`, `#ifdef`, `#ifndef`, `#ifexist`, `#ifnexist` |
-| Loops & macros | `#for`, `#sub`, `#endsub` |
-| Misc | `#pragma`, `#error` |
+| Group          | Directives                                                                      |
+|----------------|---------------------------------------------------------------------------------|
+| Definition     | `#define`, `#undef`, `#dim`, `#redim`                                           |
+| Inclusion      | `#include`, `#file`                                                             |
+| Output         | `#emit`, `#expr`, `#insert`, `#append`                                          |
+| Conditionals   | `#if`, `#elif`, `#else`, `#endif`, `#ifdef`, `#ifndef`, `#ifexist`, `#ifnexist` |
+| Loops & macros | `#for`, `#sub`, `#endsub`                                                       |
+| Misc           | `#pragma`, `#error`                                                             |
 
 All directive keywords are highlighted, completed (after `#`) and validated against the spec. Every
 directive has its own page:

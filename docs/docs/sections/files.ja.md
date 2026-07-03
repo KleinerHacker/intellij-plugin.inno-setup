@@ -1,8 +1,11 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=filessection){
+.md-button .md-button--primary }
 
-`[Files]` セクションは、インストーラーがターゲットマシンにコピーすべきすべてのファイルを宣言する場所です。ワイルドカード、再帰的ディレクトリツリー、フォントインストール、.NET GAC 登録、ファイル整合性ハッシュ、さらにはインストール時にインターネットからファイルをダウンロードすることもサポートします。リストされたファイルに必要なディレクトリは自動的に作成されます——`[Dirs]` エントリーは不要です。
+`[Files]` セクションは、インストーラーがターゲットマシンにコピーすべきすべてのファイルを宣言する場所です。ワイルドカード、再帰的ディレクトリツリー、フォントインストール、.NET
+GAC 登録、ファイル整合性ハッシュ、さらにはインストール時にインターネットからファイルをダウンロードすることもサポートします。リストされたファイルに必要なディレクトリは自動的に作成されます——
+`[Dirs]` エントリーは不要です。
 
 ---
 
@@ -130,7 +133,9 @@
 
 `string` · **複数の値**
 
-動作フラグ：`32bit`、`64bit`、`comparetimestamp`、`confirmoverwrite`、`deleteafterinstall`、`dontcopy`、`download`、`external`、`extractarchive`、`ignoreversion`、`isreadme`、`nocompression`、`onlyifdoesntexist`、`recursesubdirs`、`createallsubdirs`、`regserver`、`regtypelib`、`restartreplace`、`sharedfile`。
+動作フラグ：`32bit`、`64bit`、`comparetimestamp`、`confirmoverwrite`、`deleteafterinstall`、`dontcopy`、`download`、`external`、
+`extractarchive`、`ignoreversion`、`isreadme`、`nocompression`、`onlyifdoesntexist`、`recursesubdirs`、`createallsubdirs`、
+`regserver`、`regtypelib`、`restartreplace`、`sharedfile`。
 
 ---
 

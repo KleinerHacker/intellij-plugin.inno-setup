@@ -47,4 +47,5 @@
 
 ---
 
-公式の [`#define` / `#undef` ドキュメント :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_define.htm)。
+公式の [`#define` /
+`#undef` ドキュメント :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_define.htm)。

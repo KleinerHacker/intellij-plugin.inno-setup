@@ -1,8 +1,10 @@
 # [UninstallRun]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=uninstallrunsection){
+.md-button .md-button--primary }
 
-`[UninstallRun]` セクションは `[Run]` と全く同じように機能しますが、エントリーはインストール後ではなくアンインストールの*開始*時に実行されます。サービスの停止、実行中のプロセスの終了、またはファイルとレジストリキーの削除だけでは処理できない状態のクリーンアップに使用します。エントリーは表示順に実行されます。
+`[UninstallRun]` セクションは `[Run]` と全く同じように機能しますが、エントリーはインストール後ではなくアンインストールの
+*開始*時に実行されます。サービスの停止、実行中のプロセスの終了、またはファイルとレジストリキーの削除だけでは処理できない状態のクリーンアップに使用します。エントリーは表示順に実行されます。
 
 ---
 
@@ -74,7 +76,8 @@
 
 `string` · **複数の値**
 
-動作フラグ：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
+動作フラグ：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、
+`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
 
 ---
 

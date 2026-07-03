@@ -1,8 +1,10 @@
 # [Files]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=filessection){ .md-button
+.md-button--primary }
 
-`[Files]` 节是您声明安装程序应复制到目标机器的每个文件的地方。它支持通配符、递归目录树、字体安装、.NET GAC 注册、文件完整性哈希，甚至在安装时从互联网下载文件。列出文件所需的目录会自动创建——无需 `[Dirs]` 条目。
+`[Files]` 节是您声明安装程序应复制到目标机器的每个文件的地方。它支持通配符、递归目录树、字体安装、.NET GAC
+注册、文件完整性哈希，甚至在安装时从互联网下载文件。列出文件所需的目录会自动创建——无需 `[Dirs]` 条目。
 
 ---
 
@@ -130,7 +132,9 @@
 
 `string` · **多个值**
 
-行为标志：`32bit`、`64bit`、`comparetimestamp`、`confirmoverwrite`、`deleteafterinstall`、`dontcopy`、`download`、`external`、`extractarchive`、`ignoreversion`、`isreadme`、`nocompression`、`onlyifdoesntexist`、`recursesubdirs`、`createallsubdirs`、`regserver`、`regtypelib`、`restartreplace`、`sharedfile`。
+行为标志：`32bit`、`64bit`、`comparetimestamp`、`confirmoverwrite`、`deleteafterinstall`、`dontcopy`、`download`、`external`、
+`extractarchive`、`ignoreversion`、`isreadme`、`nocompression`、`onlyifdoesntexist`、`recursesubdirs`、`createallsubdirs`、
+`regserver`、`regtypelib`、`restartreplace`、`sharedfile`。
 
 ---
 

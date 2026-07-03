@@ -1,6 +1,7 @@
 # [ISSigKeys]
 
-[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup Reference](https://jrsoftware.org/ishelp/index.php?topic=issigkeyssection){
+.md-button .md-button--primary }
 
 The `[ISSigKeys]` section defines public keys used to verify `.issig` file signatures. These keys are referenced by the
 `ISSigAllowedKeys` parameter and the `issigverify` flag in `[Files]`.

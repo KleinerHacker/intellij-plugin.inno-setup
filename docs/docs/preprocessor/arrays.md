@@ -87,4 +87,5 @@ Dynamic indices (e.g. a loop variable) are intentionally **not** flagged, to avo
 
 ---
 
-See the official [`#dim` / `#redim` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_dim.htm).
+See the official [`#dim` /
+`#redim` documentation :octicons-link-external-16:](https://jrsoftware.org/ispphelp/topic_dim.htm).

@@ -1,11 +1,13 @@
 # [INI]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=inissection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=inissection){
+.md-button .md-button--primary }
 
 !!! warning "プラグインサポート"
 `[INI]` は現在のプラグイン仕様では未実装としてマークされています。このセクションはドキュメントカバレッジのためにここに記載されていますが、仕様が実装されるまで補完と検証のサポートが不完全な場合があります。
 
-`[INI]` セクションはインストール中にユーザーのシステムの `.ini` ファイルのエントリーを作成または更新します。設定をレジストリやアプリケーションデータファイルではなく INI ファイルに保存するレガシーアプリケーションに便利です。
+`[INI]` セクションはインストール中にユーザーのシステムの `.ini` ファイルのエントリーを作成または更新します。設定をレジストリやアプリケーションデータファイルではなく
+INI ファイルに保存するレガシーアプリケーションに便利です。
 
 ---
 

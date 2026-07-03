@@ -1,6 +1,7 @@
 # [Messages]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button
+.md-button--primary }
 
 `[Messages]` 节覆盖来自 `Default.isl` 或所选语言文件的内置安装程序 UI 字符串。每个条目使用指令语法：
 

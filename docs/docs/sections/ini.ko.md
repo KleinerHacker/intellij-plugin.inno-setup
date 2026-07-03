@@ -1,6 +1,7 @@
 # [INI]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=inissection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=inissection){ .md-button
+.md-button--primary }
 
 !!! warning "플러그인 지원"
 `[INI]`는 현재 플러그인 사양에서 누락된 것으로 표시됩니다. 이 섹션은 문서 커버리지를 위해 여기에 나열되어 있지만 사양이 구현될 때까지 완성 및 유효성 검사 지원이 불완전할 수 있습니다.

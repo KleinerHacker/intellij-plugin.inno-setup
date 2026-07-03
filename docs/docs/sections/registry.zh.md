@@ -1,8 +1,10 @@
 # [Registry]
 
-[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 参考](https://jrsoftware.org/ishelp/index.php?topic=registrysection){ .md-button
+.md-button--primary }
 
-`[Registry]` 节在安装期间创建、修改或删除 Windows 注册表键和值。它支持所有主要的注册表值类型，并通过 `uninsdeletekey` 和 `uninsdeletekeyifempty` 等标志对卸载时注册表数据的处理提供精细控制。可以明确定向 32 位和 64 位注册表视图。
+`[Registry]` 节在安装期间创建、修改或删除 Windows 注册表键和值。它支持所有主要的注册表值类型，并通过 `uninsdeletekey` 和
+`uninsdeletekeyifempty` 等标志对卸载时注册表数据的处理提供精细控制。可以明确定向 32 位和 64 位注册表视图。
 
 ---
 
@@ -10,7 +12,8 @@
 
 `string` · **必需**
 
-注册表根配置单元：`HKCU`、`HKLM`、`HKCR`、`HKU`、`HKCC` 或 `HKA`（自动，取决于安装模式）。附加 `32` 或 `64` 可强制特定注册表视图，例如 `HKLM64`。
+注册表根配置单元：`HKCU`、`HKLM`、`HKCR`、`HKU`、`HKCC` 或 `HKA`（自动，取决于安装模式）。附加 `32` 或 `64` 可强制特定注册表视图，例如
+`HKLM64`。
 
 ---
 
@@ -58,7 +61,8 @@
 
 `string` · **多个值**
 
-行为标志：`createvalueifdoesntexist`、`deletekey`、`deletevalue`、`dontcreatekey`、`noerror`、`preservestringtype`、`uninsclearvalue`、`uninsdeletekey`、`uninsdeletekeyifempty`、`uninsdeletevalue`。
+行为标志：`createvalueifdoesntexist`、`deletekey`、`deletevalue`、`dontcreatekey`、`noerror`、`preservestringtype`、
+`uninsclearvalue`、`uninsdeletekey`、`uninsdeletekeyifempty`、`uninsdeletevalue`。
 
 ---
 

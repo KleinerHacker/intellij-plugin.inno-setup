@@ -1,0 +1,121 @@
+/*
+ * Copyright (c) KleinerHacker alias Pfeiffer C Soft 2026.
+ * This work is licensed under the Apache License, Version 2.0.
+ * You may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, this software is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations.
+ */
+
+package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference
+
+import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiNameIdentifierOwner
+import com.intellij.psi.PsiReferenceBase
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.asIsppHostFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectivesWithHostOffset
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+
+/**
+ * A free-text identifier inside a `#define` expression that refers to another `#define`.
+ *
+ * Resolution is **declaration-order aware**: only `#define`s declared on a line *before* the line
+ * holding this reference are considered (forward references do not resolve). The reference is `soft`
+ * so unresolved identifiers (e.g. ISPP built-in functions) do not produce an error.
+ *
+ * Anchored on the [IsPreprocessorDirective]; [rangeInElement] points at the identifier within the directive.
+ */
+class IsPreprocessorExpressionReference(
+    directive: IsPreprocessorDirective,
+    rangeStartInDirective: Int,
+    private val name: String,
+) : PsiReferenceBase<IsPreprocessorDirective>(
+    directive,
+    TextRange(rangeStartInDirective, rangeStartInDirective + name.length),
+    /* soft = */ true,
+) {
+
+    /**
+     * Resolves this reference to its target PSI element, or `null` when unresolved.
+     */
+    override fun resolve(): PsiElement? {
+        val injMgr = InjectedLanguageManager.getInstance(element.project)
+        val hostFile = injMgr.getTopLevelFile(element.containingFile).asIsppHostFile() ?: return null
+        val hostLine = injMgr.getInjectionHost(element) ?: return null
+        val currentOffset = hostLine.textRange.startOffset
+
+        // An array name resolves to its **canonical** declaration: the earliest preceding `#dim` of that name.
+        // (`#redim`s only modify the array; treating the `#dim` as the single target keeps every usage —
+        // reads, element assignments, `#redim`, `DimOf` — pointing at the same symbol for navigation/rename.)
+        val canonicalDim = hostFile.isppDirectivesWithHostOffset
+            .filter { (d, offset) ->
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isDim() && ex.getArrayName() == name
+            }
+            .minByOrNull { it.second }
+            ?.first
+        if (canonicalDim != null) return canonicalDim
+
+        // A scalar `#define Name` (an array element `#define Name[i]` is a usage, not a declaration);
+        // the nearest preceding declaration wins (a later #define shadows an earlier one).
+        hostFile.isppDirectivesWithHostOffset
+            .filter { (d, offset) ->
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isDefine() && !ex.isArrayElementDefine() && ex.getDefineName() == name
+            }
+            .maxByOrNull { it.second }   // nearest preceding declaration
+            ?.first
+            ?.let { return it }
+
+        // Otherwise a `#sub Name` subroutine (e.g. referenced as a `#for` body); nearest preceding wins.
+        return hostFile.isppDirectivesWithHostOffset
+            .filter { (d, offset) ->
+                val ex = d as? IsPreprocessorDirectiveEx ?: return@filter false
+                offset < currentOffset && ex.isSub() && ex.getSubroutineName().equals(name, ignoreCase = true)
+            }
+            .maxByOrNull { it.second }
+            ?.first
+    }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun isReferenceTo(element: PsiElement): Boolean {
+        val resolved = resolve() ?: return false
+        val mgr = element.manager
+        if (mgr.areElementsEquivalent(resolved, element)) return true
+
+        val nameId = (resolved as? PsiNameIdentifierOwner)?.nameIdentifier
+
+        return nameId != null && mgr.areElementsEquivalent(nameId, element)
+    }
+
+    /**
+     * Returns completion variants available from this reference.
+     */
+    override fun getVariants(): Array<Any> = emptyArray()
+
+    /**
+     * Updates the referenced text after the target element has been renamed.
+     */
+    override fun handleElementRename(newElementName: String): PsiElement {
+        val injMgr = InjectedLanguageManager.getInstance(element.project)
+        val range = rangeInElement.shiftRight(element.textRange.startOffset) // injected coords
+        val hostRange = injMgr.injectedToHost(element, range)
+        val hostFile = injMgr.getTopLevelFile(element.containingFile)
+        val docManager = PsiDocumentManager.getInstance(element.project)
+        val doc = docManager.getDocument(hostFile) ?: return element
+        docManager.doPostponedOperationsAndUnblockDocument(doc)
+        doc.replaceString(hostRange.startOffset, hostRange.endOffset, newElementName)
+        docManager.commitDocument(doc)
+
+        return element
+    }
+}

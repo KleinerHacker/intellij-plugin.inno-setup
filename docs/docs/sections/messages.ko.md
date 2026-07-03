@@ -1,6 +1,7 @@
 # [Messages]
 
-[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup 참조](https://jrsoftware.org/ishelp/index.php?topic=messagessection){ .md-button
+.md-button--primary }
 
 `[Messages]` 섹션은 `Default.isl` 또는 선택된 언어 파일의 내장 설치 프로그램 UI 문자열을 재정의합니다. 각 항목은 지시문 구문을 사용합니다:
 

@@ -1,8 +1,11 @@
 # [Run]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=runsection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=runsection){
+.md-button .md-button--primary }
 
-`[Run]` セクションは、インストールが成功した後、最終ウィザードページが表示される直前に Inno Setup が実行するプログラムまたはファイルを一覧表示します。エントリーは表示順に実行されます。バックグラウンドで実行可能ファイルをサイレント起動したり、関連アプリケーションでドキュメントを開いたり、完了ページのチェックボックスを通じてユーザーにオプションのインストール後アクション（*MyApp を起動*など）を提示したりできます。
+`[Run]` セクションは、インストールが成功した後、最終ウィザードページが表示される直前に Inno Setup
+が実行するプログラムまたはファイルを一覧表示します。エントリーは表示順に実行されます。バックグラウンドで実行可能ファイルをサイレント起動したり、関連アプリケーションでドキュメントを開いたり、完了ページのチェックボックスを通じてユーザーにオプションのインストール後アクション（
+*MyApp を起動*など）を提示したりできます。
 
 ---
 
@@ -10,7 +13,8 @@
 
 `string` · **必須**
 
-起動する実行可能ファイル、ドキュメント、またはフォルダーへのパス。非実行可能ファイルを関連アプリケーションで開くには `shellexec` フラグを使用します。
+起動する実行可能ファイル、ドキュメント、またはフォルダーへのパス。非実行可能ファイルを関連アプリケーションで開くには
+`shellexec` フラグを使用します。
 
 ---
 
@@ -74,7 +78,8 @@
 
 `string` · **複数の値**
 
-動作フラグ：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
+動作フラグ：`postinstall`、`shellexec`、`nowait`、`runhidden`、`skipifsilent`、`skipifnotsilent`、`unchecked`、
+`waituntilterminated`、`waituntilidle`、`logoutput`、`runasoriginaluser`。
 
 ---
 

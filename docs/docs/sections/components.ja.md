@@ -1,8 +1,11 @@
 # [Components]
 
-[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=componentssection){ .md-button .md-button--primary }
+[:octicons-link-external-16: Inno Setup リファレンス](https://jrsoftware.org/ishelp/index.php?topic=componentssection){
+.md-button .md-button--primary }
 
-`[Components]` セクションはウィザードのコンポーネント選択ページに表示される選択可能な機能を定義します。コンポーネントはバックスラッシュ表記を使用して親/子階層に整理できます（例：`extra\plugins`）。`[Files]`、`[Icons]` などのセクションのエントリーは `Components` パラメーターを通じてコンポーネントにリンクされるため、選択されたコンポーネントに属するファイルのみがインストールされます。
+`[Components]` セクションはウィザードのコンポーネント選択ページに表示される選択可能な機能を定義します。コンポーネントはバックスラッシュ表記を使用して親/子階層に整理できます（例：
+`extra\plugins`）。`[Files]`、`[Icons]` などのセクションのエントリーは `Components`
+パラメーターを通じてコンポーネントにリンクされるため、選択されたコンポーネントに属するファイルのみがインストールされます。
 
 ---
 
