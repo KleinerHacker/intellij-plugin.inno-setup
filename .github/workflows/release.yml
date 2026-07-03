@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: plugin-distribution
-          path: build/distributions/*.zip
+          path: plugin/build/distributions/*.zip
 
   # Build the docs as a generation test (mkdocs --strict) before they get deployed.
   validate-docs:
