@@ -4,7 +4,11 @@
 
 ## [Unreleased]
 
+## [0.6.0]
+
 ### Added
+
+- add deployment for language support libs for custom usage into the GitHub package registry
 
 - **ISPP subroutines (`#sub` / `#endsub`)**: `#sub Name … #endsub` blocks are now fully supported. The
   subroutine name navigates and renames together with its uses (e.g. a `#for` body that calls it) and is
