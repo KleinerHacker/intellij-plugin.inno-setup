@@ -23,5 +23,5 @@ repositories {
 // Versions mirror gradle/libs.versions.toml (buildSrc cannot consume the root version catalog by default).
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.0")
-    implementation("org.jetbrains.intellij.platform:intellij-platform-gradle-plugin:2.16.0")
+    implementation("org.jetbrains.intellij.platform:intellij-platform-gradle-plugin:2.17.0")
 }
