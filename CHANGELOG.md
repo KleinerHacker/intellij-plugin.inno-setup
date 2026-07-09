@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Code formatting**: **Reformat Code** (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd>) now formats `.iss` /
+  `.isl` scripts — one space around `=`, `key: value` / `; ` spacing in parameter lines, tight section
+  brackets (`[Setup]`), exactly one blank line between sections, no leading indentation before a key, and one
+  space around the arithmetic operators (`+ - * / %`) of preprocessor expressions. Each rule is configurable
+  under **Settings ▸ Editor ▸ Code Style ▸ Inno Setup**; the `[Code]` (Pascal Script) section is left
+  untouched.
+
 ## [0.6.0]
 
 ### Added

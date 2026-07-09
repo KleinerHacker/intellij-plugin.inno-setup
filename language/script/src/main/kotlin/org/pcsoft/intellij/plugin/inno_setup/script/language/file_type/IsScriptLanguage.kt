@@ -19,4 +19,10 @@ import com.intellij.lang.Language
  */
 object IsScriptLanguage : Language("ISS") {
     private fun readResolve(): Any = IsScriptLanguage
+
+    /**
+     * User-visible language name (e.g. the *Code Style ▸ Inno Setup* page title). The internal language id
+     * stays `ISS`; only the presentation name is "Inno Setup".
+     */
+    override fun getDisplayName(): String = "Inno Setup"
 }

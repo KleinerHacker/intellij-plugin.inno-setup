@@ -56,6 +56,7 @@ plugins:
             Settings: 设置
             General: 常规
             Editor: 编辑器
+            Code Style: 代码样式
             Build: 构建
             API Docs: API 文档
             Licences: 许可证
@@ -98,6 +99,7 @@ plugins:
             Settings: 設定
             General: 一般
             Editor: エディター
+            Code Style: コードスタイル
             Build: ビルド
             API Docs: API ドキュメント
             Licences: ライセンス
@@ -140,6 +142,7 @@ plugins:
             Settings: 설정
             General: 일반
             Editor: 편집기
+            Code Style: 코드 스타일
             Build: 빌드
             API Docs: API 문서
             Licences: 라이선스
@@ -236,6 +239,7 @@ nav:
   - Settings:
       - General: settings.md
       - Editor: settings-editor.md
+      - Code Style: settings-code-style.md
       - Build: settings-build.md
   - API Docs: dokka/html/index.html
   - Licences: licences/index.html

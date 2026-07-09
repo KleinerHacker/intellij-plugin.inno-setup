@@ -50,7 +50,12 @@ The project is a **Gradle multi-module build**. The root is a pure aggregator (n
   `PluginBundle` (+ `.properties`×4), `Generated` annotation and `IsSectionSpecTarget` (lowest common types).
 - **`:language:script`** (`language/script/`) — the Inno Setup language: section/INI grammar (shared by
   `.iss`/`.isl`/`.ist`), highlighter, folding, brace matching, commenter, basic annotator +
-  quickfixes, section references, include infrastructure, the ISPP **injector**, and `IsSpecService`/
+  quickfixes, the **code formatter** and its Code Style page (under `parser/section/formatter/`: a no-op
+  `FormattingModelBuilder` plus `IsFormatterPostFormatProcessor` doing the actual PSI-guided reformatting —
+  spacing around `=`/`:`/`;`/`[]`, one blank line between sections, leading-key trimming, preprocessor
+  arithmetic-operator spacing; the `[Code]` section is left untouched — plus `IsSectionCodeStyleSettingsProvider`
+  + `…Factory` + `IsSectionCodeStyleSettings`), section references, include infrastructure, the ISPP
+  **injector**, and `IsSpecService`/
   `IsConstantService`/`IsLanguageDataService`/`IsSettingsService`. Depends on `:language:preprocessor`.
 - **`:plugin`** (`plugin/`) — the publishable plugin: all **IDE features** (completion, find-usages, file types,
   refactoring, structure view, documentation, intentions, inlay hints, reference searchers), build/run

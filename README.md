@@ -38,6 +38,7 @@ using.
 | **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                                                                                       |
 | **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                                                                                         |
 | **Code folding**           | Sections, long parameter entries, and `#if … #endif` blocks fold independently                                                                                                        |
+| **Code formatting**        | Reformat Code normalises spacing around `=` / `:` / `;` and `[ ]`, keeps one blank line between sections, and spaces preprocessor arithmetic operators; configurable under Code Style  |
 | **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                                                                                            |
 | **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build                                                                         |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
