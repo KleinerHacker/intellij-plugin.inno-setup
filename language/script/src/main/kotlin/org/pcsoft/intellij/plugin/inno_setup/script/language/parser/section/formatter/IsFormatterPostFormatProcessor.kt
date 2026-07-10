@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter
 
+import com.intellij.lang.ASTNode
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
@@ -33,8 +34,10 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expres
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprSpan
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprTernary
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprUnary
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorConstant
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorTypes
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptLanguage
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionDirectiveEntry
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionHeader
@@ -53,9 +56,13 @@ import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.
  * - **Rule 4.1** — no space before / one after `;`; **Rule 4.2** — no leading indentation;
  *   **Rule 4.3** — no space before / one after `:`.
  * - **Rule 5** — one space around the arithmetic operators (`+ - * / %`) of preprocessor expressions.
+ * - **Rule 6** — no spaces inside preprocessor `()` / `[]` and the `#for {…}` header braces (mirrors Rule 2).
+ * - **Rule 7** — one space around the assignment `=` of a `#for` header (mirrors Rule 3.1).
+ * - **Rule 8** — no space before / one after the `;` separators of a `#for` header (mirrors Rule 4.1).
  *
- * The `[Code]` section (Pascal Script) and everything after it are left untouched, since it must be the last
- * section in the script.
+ * Rules 5–8 parse each `#…` directive as a standalone ISPP tree (not via injected PSI, which does not resolve
+ * in the non-physical Code Style live preview). The `[Code]` section (Pascal Script) and everything after it
+ * are left untouched, since it must be the last section in the script.
  */
 class IsFormatterPostFormatProcessor : PostFormatProcessor {
 
@@ -88,7 +95,11 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         if (custom.SPACE_AFTER_COLON) collectColonEdits(file, text, edits)
         if (custom.SPACE_AFTER_SEMICOLON) collectSemicolonEdits(file, text, edits)
         if (custom.TRIM_LEADING_KEY_SPACE) collectLeadingTrimEdits(file, text, edits)
-        if (custom.SPACE_AROUND_PP_OPERATORS) collectPreprocessorOperatorEdits(file, text, edits)
+        if (custom.SPACE_AROUND_PP_OPERATORS || custom.PP_NO_SPACE_INSIDE_BRACKETS ||
+            custom.PP_SPACE_AROUND_ASSIGN || custom.PP_SPACE_AFTER_SEMICOLON
+        ) {
+            collectPreprocessorEdits(file, text, custom, edits)
+        }
         if (custom.BLANK_LINE_BETWEEN_SECTIONS) collectBlankLineEdits(file, document, edits)
 
         val applicable = edits
@@ -167,45 +178,147 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         }
     }
 
-    // ── Rule 5: preprocessor arithmetic operator spacing ──────────────────────
+    // ── Rules 5–8: preprocessor spacing ───────────────────────────────────────
 
-    private fun collectPreprocessorOperatorEdits(file: PsiFile, text: CharSequence, edits: MutableList<Edit>) {
+    /**
+     * Formats each `#…` directive line. The directive text is parsed as a standalone ISPP tree instead of
+     * going through injected PSI: the injection is identity-mapped over the HASH_LINE range (see
+     * [org.pcsoft.intellij.plugin.inno_setup.script.language.parser.preprocessor.injection.IsPreprocessorInjector]),
+     * but it does not resolve on non-physical files (the Code Style live preview). Parsing the raw text works
+     * in both cases, and host offsets map directly (HASH_LINE start + offset within the directive text).
+     */
+    private fun collectPreprocessorEdits(
+        file: PsiFile, text: CharSequence, custom: IsSectionCodeStyleSettings, edits: MutableList<Edit>,
+    ) {
         val lines = PsiTreeUtil.findChildrenOfType(file, IsSectionPreprocessorLine::class.java)
         if (lines.isEmpty()) return
         val psiFileFactory = PsiFileFactory.getInstance(file.project)
 
         for (line in lines) {
-            // Parse the directive text as a standalone ISPP tree instead of going through injected PSI. The
-            // injection is identity-mapped over the HASH_LINE range (see IsPreprocessorInjector), but it does
-            // not resolve on non-physical files (the Code Style live preview) — parsing the raw text works in
-            // both cases, and host offsets map directly (HASH_LINE start + offset within the directive text).
             val hashNode = line.node.findChildByType(IsSectionTypes.HASH_LINE) ?: continue
             val hashStart = hashNode.startOffset
+            val hashText = hashNode.text
             // ISPP has no registered <fileType>, so pass the file type explicitly (the language overload would
             // return null). eventSystemEnabled = false keeps this throwaway parse out of the PSI event system.
             val ppFile = psiFileFactory.createFileFromText(
-                "a.ispp", IsPreprocessorFileType.INSTANCE, hashNode.text, 0L, false,
+                "a.ispp", IsPreprocessorFileType.INSTANCE, hashText, 0L, false,
             )
             val directive = PsiTreeUtil.findChildOfType(ppFile, IsPreprocessorDirective::class.java)
                 as? IsPreprocessorDirectiveEx ?: continue
-            val base = (directive as IsPreprocessorDirective).textRange.startOffset
 
-            for ((exprText, offsetInDirective) in expressionRegions(directive)) {
-                val ast = IsPreprocessorExprParser.parse(exprText).ast
-                val ops = mutableListOf<IsPreprocessorExprSpan>()
-                collectArithmeticOperators(ast, ops)
-                for (op in ops) {
-                    // Exception: leave the increment/decrement operators `++` / `--` untouched. The engine
-                    // has no `++`/`--` operator, so they tokenise as two adjacent `+`/`-`; a `+`/`-` that
-                    // directly abuts an identical operator in the source must not get spaces around it.
-                    if (isPartOfIncrementDecrement(exprText, op)) continue
-                    val hostStart = hashStart + base + offsetInDirective + op.start
-                    val hostEnd = hashStart + base + offsetInDirective + op.end
-                    setSpacesBefore(text, hostStart, 1, edits)
-                    setSpacesAfter(text, hostEnd, 1, edits)
+            if (custom.SPACE_AROUND_PP_OPERATORS) collectPreprocessorOperatorEdits(directive, hashStart, text, edits)
+            if (custom.PP_NO_SPACE_INSIDE_BRACKETS || custom.PP_SPACE_AROUND_ASSIGN || custom.PP_SPACE_AFTER_SEMICOLON) {
+                collectPreprocessorTokenEdits(directive, hashStart, hashText, text, custom, edits)
+            }
+        }
+    }
+
+    // ── Rule 5: arithmetic operator spacing ───────────────────────────────────
+
+    private fun collectPreprocessorOperatorEdits(
+        directive: IsPreprocessorDirectiveEx, hashStart: Int, text: CharSequence, edits: MutableList<Edit>,
+    ) {
+        val base = (directive as IsPreprocessorDirective).textRange.startOffset
+        for ((exprText, offsetInDirective) in expressionRegions(directive)) {
+            val ast = IsPreprocessorExprParser.parse(exprText).ast
+            val ops = mutableListOf<IsPreprocessorExprSpan>()
+            collectArithmeticOperators(ast, ops)
+            for (op in ops) {
+                // Exception: leave the increment/decrement operators `++` / `--` untouched. The engine
+                // has no `++`/`--` operator, so they tokenise as two adjacent `+`/`-`; a `+`/`-` that
+                // directly abuts an identical operator in the source must not get spaces around it.
+                if (isPartOfIncrementDecrement(exprText, op)) continue
+                val hostStart = hashStart + base + offsetInDirective + op.start
+                val hostEnd = hashStart + base + offsetInDirective + op.end
+                setSpacesBefore(text, hostStart, 1, edits)
+                setSpacesAfter(text, hostEnd, 1, edits)
+            }
+        }
+    }
+
+    // ── Rules 6–8: brackets, `=` and `;` (mirrors the section rules 2 / 3.1 / 4.1) ─────────────────────
+
+    private fun collectPreprocessorTokenEdits(
+        directive: IsPreprocessorDirectiveEx, hashStart: Int, hashText: String, text: CharSequence,
+        custom: IsSectionCodeStyleSettings, edits: MutableList<Edit>,
+    ) {
+        val directivePsi = directive as IsPreprocessorDirective
+        // The `#for` header is the first `{…}` of a #for directive; only its braces / `;` / `=` are
+        // structural. Every other `{…}` is an Inno Setup constant (`{app}`, `{reg:…}`) and stays untouched.
+        val forHeader = if (directive.isFor()) {
+            directivePsi.value?.let { PsiTreeUtil.findChildOfType(it, IsPreprocessorConstant::class.java)?.node }
+        } else null
+
+        for (leaf in leafNodes(directivePsi.node)) {
+            val start = hashStart + leaf.startOffset
+            val end = start + leaf.textLength
+            // Brackets are handled at value top level or inside the `#for` header, never inside another
+            // Inno constant (so `{code:Func( x )}` and the like are left alone).
+            val constant = nearestConstant(leaf, directivePsi.node)
+            val inHandledBrackets = constant == null || constant === forHeader
+
+            if (custom.PP_NO_SPACE_INSIDE_BRACKETS) {
+                when (leaf.elementType) {
+                    IsPreprocessorTypes.LPAREN, IsPreprocessorTypes.LBRACKET ->
+                        if (inHandledBrackets) setSpacesAfter(text, end, 0, edits)
+
+                    IsPreprocessorTypes.RPAREN, IsPreprocessorTypes.RBRACKET ->
+                        if (inHandledBrackets) setSpacesBefore(text, start, 0, edits)
+
+                    IsPreprocessorTypes.LBRACE -> if (leaf.treeParent === forHeader) setSpacesAfter(text, end, 0, edits)
+                    IsPreprocessorTypes.RBRACE -> if (leaf.treeParent === forHeader) setSpacesBefore(text, start, 0, edits)
+                }
+            }
+            // `;` and `=` are only meaningful inside the `#for` header.
+            if (forHeader != null && constant === forHeader) {
+                if (custom.PP_SPACE_AFTER_SEMICOLON && leaf.elementType == IsPreprocessorTypes.SEMICOLON) {
+                    setSpacesBefore(text, start, 0, edits)
+                    setSpacesAfter(text, end, 1, edits)
+                }
+                // Skip the `=` that belongs to a comparison operator (`==`, `<=`, `>=`, `!=`).
+                if (custom.PP_SPACE_AROUND_ASSIGN && leaf.elementType == IsPreprocessorTypes.EQ &&
+                    !isComparisonEquals(hashText, leaf.startOffset)
+                ) {
+                    setSpacesBefore(text, start, 1, edits)
+                    setSpacesAfter(text, end, 1, edits)
                 }
             }
         }
+    }
+
+    /** All leaf AST nodes under [root], in document order. */
+    private fun leafNodes(root: ASTNode): List<ASTNode> {
+        val out = mutableListOf<ASTNode>()
+        fun visit(node: ASTNode) {
+            var child = node.firstChildNode
+            if (child == null) {
+                out += node
+                return
+            }
+            while (child != null) {
+                visit(child)
+                child = child.treeNext
+            }
+        }
+        visit(root)
+        return out
+    }
+
+    /** The nearest enclosing ISPP `{…}` constant of [leaf] below [stop], or `null` if there is none. */
+    private fun nearestConstant(leaf: ASTNode, stop: ASTNode): ASTNode? {
+        var parent = leaf.treeParent
+        while (parent != null && parent !== stop) {
+            if (parent.elementType == IsPreprocessorTypes.CONSTANT) return parent
+            parent = parent.treeParent
+        }
+        return null
+    }
+
+    /** True when the `=` at index [i] in [s] is part of `==` / `<=` / `>=` / `!=` rather than an assignment. */
+    private fun isComparisonEquals(s: String, i: Int): Boolean {
+        val prev = if (i > 0) s[i - 1] else ' '
+        val next = if (i + 1 < s.length) s[i + 1] else ' '
+        return prev == '<' || prev == '>' || prev == '!' || prev == '=' || next == '='
     }
 
     /** True when the single-char `+`/`-` operator [op] directly abuts an identical one (`++` / `--`). */

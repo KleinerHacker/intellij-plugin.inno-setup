@@ -62,6 +62,18 @@ class IsSectionCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
                     IsSectionCodeStyleSettings::class.java, "SPACE_AROUND_PP_OPERATORS",
                     PluginBundle.message("code_style.space_around_pp_operators"), ppGroup,
                 )
+                consumer.showCustomOption(
+                    IsSectionCodeStyleSettings::class.java, "PP_NO_SPACE_INSIDE_BRACKETS",
+                    PluginBundle.message("code_style.pp_no_space_inside_brackets"), ppGroup,
+                )
+                consumer.showCustomOption(
+                    IsSectionCodeStyleSettings::class.java, "PP_SPACE_AROUND_ASSIGN",
+                    PluginBundle.message("code_style.pp_space_around_assign"), ppGroup,
+                )
+                consumer.showCustomOption(
+                    IsSectionCodeStyleSettings::class.java, "PP_SPACE_AFTER_SEMICOLON",
+                    PluginBundle.message("code_style.pp_space_after_semicolon"), ppGroup,
+                )
             }
 
             SettingsType.BLANK_LINES_SETTINGS -> {
@@ -85,6 +97,8 @@ class IsSectionCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
             | AppVersion=1.5
             |
             |#define FeatureCount 2+3
+            |#define GetName( s ) "App "+s
+            |#for {i=0; i<FeatureCount; i++} FileEntry( i )
             |
             |[ Files ]
             | Source:"app.exe";DestDir:"{app}";Flags:ignoreversion

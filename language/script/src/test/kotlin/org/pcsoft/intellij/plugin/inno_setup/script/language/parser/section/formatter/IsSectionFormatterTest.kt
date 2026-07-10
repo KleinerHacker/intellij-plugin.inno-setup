@@ -86,6 +86,26 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
     fun testPreprocessorDecrementIsNotSpaced() =
         assertReformat("[Setup]\n#define X i--\n", "[Setup]\n#define X i--\n")
 
+    // ── Rules 6–8: preprocessor brackets / '=' / ';' ──────────────────────────
+
+    fun testForLoopHeaderIsFormatted() =
+        assertReformat("[Setup]\n#for {i=0;i<3;i++} X\n", "[Setup]\n#for {i = 0; i<3; i++} X\n")
+
+    fun testForLoopBracesAndSpacesAreTightened() =
+        assertReformat("[Setup]\n#for { i=0; i<3; i++ } X\n", "[Setup]\n#for {i = 0; i<3; i++} X\n")
+
+    fun testForLoopEqualityOperatorIsNotBrokenByAssignRule() =
+        assertReformat("[Setup]\n#for {i=0; i==n; i++} X\n", "[Setup]\n#for {i = 0; i==n; i++} X\n")
+
+    fun testFunctionMacroParenthesesAreTightened() =
+        assertReformat("[Setup]\n#define Add( a,b ) a+b\n", "[Setup]\n#define Add(a,b) a + b\n")
+
+    fun testArrayBracketsAreTightened() =
+        assertReformat("[Setup]\n#define Arr[ 0 ] 5\n", "[Setup]\n#define Arr[0] 5\n")
+
+    fun testInnoConstantBracesInStringAreLeftUntouched() =
+        assertReformat("[Setup]\n#define P \"{app}\\x\"\n", "[Setup]\n#define P \"{app}\\x\"\n")
+
     fun testPreprocessorConditionOperators() =
         assertReformat("[Setup]\n#if A>1+2\n#endif\n", "[Setup]\n#if A>1 + 2\n#endif\n")
 

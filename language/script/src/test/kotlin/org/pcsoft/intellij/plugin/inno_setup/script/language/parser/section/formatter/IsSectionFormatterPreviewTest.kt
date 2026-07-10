@@ -57,4 +57,19 @@ class IsSectionFormatterPreviewTest : IsTimedBasePlatformTestCase() {
 
         assertEquals("[Setup]\n#define X 2 + 3 * 4\n", file.text)
     }
+
+    /** Preprocessor bracket / `=` / `;` spacing must also apply in the preview. */
+    fun testNonPhysicalPreviewFileFormatsForLoopHeader() {
+        val file = PsiFileFactory.getInstance(project).createFileFromText(
+            "a.iss", IsScriptFileType.INSTANCE, "[Setup]\n#for { i=0; i<3; i++ } X\n",
+            LocalTimeCounter.currentTime(), false,
+        )
+        assertFalse(file.isPhysical)
+
+        WriteCommandAction.runWriteCommandAction(project) {
+            CodeStyleManager.getInstance(project).reformat(file)
+        }
+
+        assertEquals("[Setup]\n#for {i = 0; i<3; i++} X\n", file.text)
+    }
 }

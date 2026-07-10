@@ -56,6 +56,18 @@ class IsSectionCodeStyleSettings(container: CodeStyleSettings) :
     @JvmField
     var SPACE_AROUND_PP_OPERATORS: Boolean = true
 
+    /** Rule 6 — no spaces inside preprocessor `()` / `[]` and the `#for {…}` header braces (mirrors Rule 2). */
+    @JvmField
+    var PP_NO_SPACE_INSIDE_BRACKETS: Boolean = true
+
+    /** Rule 7 — one space around the assignment `=` in a `#for` header (mirrors Rule 3.1). */
+    @JvmField
+    var PP_SPACE_AROUND_ASSIGN: Boolean = true
+
+    /** Rule 8 — no space before, one after the `;` separators of a `#for` header (mirrors Rule 4.1). */
+    @JvmField
+    var PP_SPACE_AFTER_SEMICOLON: Boolean = true
+
     companion object {
         /** Serialization tag under which these options are stored inside the shared code-style settings. */
         const val TAG = "IsSectionCodeStyleSettings"
