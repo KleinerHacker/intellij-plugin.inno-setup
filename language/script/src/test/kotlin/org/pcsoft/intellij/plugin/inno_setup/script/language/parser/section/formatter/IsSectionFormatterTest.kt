@@ -38,6 +38,12 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
     fun testLeadingIndentationIsRemoved() =
         assertReformat("[Setup]\n    AppName = A\n", "[Setup]\nAppName = A\n")
 
+    fun testLeadingIndentationIsRemovedForEveryKeyNotJustTheFirst() =
+        assertReformat(
+            "[Setup]\n    AppName = A\n    AppVersion = B\n    AppId = C\n",
+            "[Setup]\nAppName = A\nAppVersion = B\nAppId = C\n",
+        )
+
     // ── Rule 4: parameter pairs ───────────────────────────────────────────────
 
     fun testParameterPairSpacingIsNormalized() =
@@ -73,6 +79,12 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
 
     fun testPreprocessorMinusInsideStringIsPreserved() =
         assertReformat("[Setup]\n#define V \"1.2-beta\"\n", "[Setup]\n#define V \"1.2-beta\"\n")
+
+    fun testPreprocessorIncrementIsNotSpaced() =
+        assertReformat("[Setup]\n#define X i++\n", "[Setup]\n#define X i++\n")
+
+    fun testPreprocessorDecrementIsNotSpaced() =
+        assertReformat("[Setup]\n#define X i--\n", "[Setup]\n#define X i--\n")
 
     fun testPreprocessorConditionOperators() =
         assertReformat("[Setup]\n#if A>1+2\n#endif\n", "[Setup]\n#if A>1 + 2\n#endif\n")

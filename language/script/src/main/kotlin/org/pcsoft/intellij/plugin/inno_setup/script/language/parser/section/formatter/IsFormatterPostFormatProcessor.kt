@@ -86,7 +86,7 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         if (custom.SPACE_AROUND_ASSIGN) collectAssignEdits(file, text, edits)
         if (custom.SPACE_AFTER_COLON) collectColonEdits(file, text, edits)
         if (custom.SPACE_AFTER_SEMICOLON) collectSemicolonEdits(file, text, edits)
-        if (custom.TRIM_LEADING_KEY_SPACE) collectLeadingTrimEdits(file, edits)
+        if (custom.TRIM_LEADING_KEY_SPACE) collectLeadingTrimEdits(file, text, edits)
         // The injected-PSI ISPP lookup below is unsafe on non-physical files (e.g. the Code Style live
         // preview), where it would stall the preview panel — so this rule is gated to physical files.
         if (custom.SPACE_AROUND_PP_OPERATORS && file.isPhysical) collectPreprocessorOperatorEdits(file, text, edits)
@@ -187,6 +187,10 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
                     val ops = mutableListOf<IsPreprocessorExprSpan>()
                     collectArithmeticOperators(ast, ops)
                     for (op in ops) {
+                        // Exception: leave the increment/decrement operators `++` / `--` untouched. The engine
+                        // has no `++`/`--` operator, so they tokenise as two adjacent `+`/`-`; a `+`/`-` that
+                        // directly abuts an identical operator in the source must not get spaces around it.
+                        if (isPartOfIncrementDecrement(exprText, op)) continue
                         // Map operator bounds from the injected ISPP document back into the host file.
                         val hostStart = injectionManager.injectedToHost(directive, base + offsetInDirective + op.start)
                         val hostEnd = injectionManager.injectedToHost(directive, base + offsetInDirective + op.end)
@@ -196,6 +200,16 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
                 }
             }
         }
+    }
+
+    /** True when the single-char `+`/`-` operator [op] directly abuts an identical one (`++` / `--`). */
+    private fun isPartOfIncrementDecrement(exprText: String, op: IsPreprocessorExprSpan): Boolean {
+        if (op.end - op.start != 1) return false
+        val ch = exprText[op.start]
+        if (ch != '+' && ch != '-') return false
+        val abutsBefore = op.start > 0 && exprText[op.start - 1] == ch
+        val abutsAfter = op.end < exprText.length && exprText[op.end] == ch
+        return abutsBefore || abutsAfter
     }
 
     /** All expression sub-ranges of a directive, as `(text, offsetWithinTheDirectiveLine)` pairs. */
@@ -239,7 +253,7 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
 
     // ── Rules 3.2 / 4.2: no leading indentation before a key/parameter/header line ────────────────────
 
-    private fun collectLeadingTrimEdits(file: PsiFile, edits: MutableList<Edit>) {
+    private fun collectLeadingTrimEdits(file: PsiFile, text: CharSequence, edits: MutableList<Edit>) {
         val elements = buildList {
             addAll(PsiTreeUtil.findChildrenOfType(file, IsSectionHeader::class.java))
             addAll(PsiTreeUtil.findChildrenOfType(file, IsSectionDirectiveEntry::class.java))
@@ -247,10 +261,19 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         }
         for (element in elements) {
             val ws = element.prevSibling as? PsiWhiteSpace ?: continue
-            if (ws.text.any { it == '\n' || it == '\r' }) continue // spans a line break — not a pure indent
-            val before = ws.prevSibling
-            val atLineStart = before == null || before.node?.elementType == IsSectionTypes.CRLF
-            if (atLineStart && ws.textLength > 0) edits += Edit(ws.textRange.startOffset, ws.textRange.endOffset, "")
+            val lastBreak = ws.text.indexOfLast { it == '\n' || it == '\r' }
+            if (lastBreak >= 0) {
+                // The whitespace itself spans line break(s): keep the newlines, trim only the indent after the
+                // last one. (A preceding entry may carry its trailing CRLF, so the break can live in this ws.)
+                val indentStart = ws.textRange.startOffset + lastBreak + 1
+                if (ws.textRange.endOffset > indentStart) edits += Edit(indentStart, ws.textRange.endOffset, "")
+            } else {
+                // Pure indentation: it is leading only if the preceding document character is a line break. The
+                // sibling before it is not reliably a CRLF token — a previous entry ends with its own newline.
+                val start = ws.textRange.startOffset
+                val atLineStart = start == 0 || text[start - 1] == '\n' || text[start - 1] == '\r'
+                if (atLineStart && ws.textLength > 0) edits += Edit(start, ws.textRange.endOffset, "")
+            }
         }
     }
 
