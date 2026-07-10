@@ -25,7 +25,7 @@ class IsTemplateNoStructureViewTest : IsTimedBasePlatformTestCase() {
     fun testNoStructureViewBuilder() {
         val file = myFixture.configureByText(IsTemplateFileType.INSTANCE, "[Setup]\nfoo\n")
         val builder: StructureViewBuilder? =
-            com.intellij.lang.LanguageStructureViewBuilder.INSTANCE
+            com.intellij.lang.LanguageStructureViewBuilder.getInstance()
                 .getStructureViewBuilder(file)
         assertNull("IST must not provide a structure view builder", builder)
     }

@@ -124,7 +124,7 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
     // ── Option toggles ────────────────────────────────────────────────────────
 
     fun testDisablingAssignSpacingKeepsAssignUntouched() {
-        val settings = CodeStyle.getSettings(project).clone()
+        val settings = CodeStyle.createTestSettings(CodeStyle.getSettings(project))
         settings.getCustomSettings(IsSectionCodeStyleSettings::class.java).SPACE_AROUND_ASSIGN = false
         CodeStyle.doWithTemporarySettings(project, settings, Runnable {
             assertReformat("[Setup]\nAppName=A\n", "[Setup]\nAppName=A\n")
@@ -132,7 +132,7 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
     }
 
     fun testDisablingPreprocessorOperatorSpacingKeepsExpressionUntouched() {
-        val settings = CodeStyle.getSettings(project).clone()
+        val settings = CodeStyle.createTestSettings(CodeStyle.getSettings(project))
         settings.getCustomSettings(IsSectionCodeStyleSettings::class.java).SPACE_AROUND_PP_OPERATORS = false
         CodeStyle.doWithTemporarySettings(project, settings, Runnable {
             assertReformat("[Setup]\n#define X 2+3\n", "[Setup]\n#define X 2+3\n")
