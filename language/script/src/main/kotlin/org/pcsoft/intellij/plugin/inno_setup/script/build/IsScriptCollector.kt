@@ -12,8 +12,9 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.script.build
 
-import com.intellij.openapi.application.ReadAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Computable
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.FilenameIndex
@@ -34,9 +35,9 @@ class IsScriptCollector(private val project: Project) {
      * Returns every `.iss` file indexed in the project.
      */
     fun allScripts(): List<VirtualFile> =
-        ReadAction.compute<List<VirtualFile>, RuntimeException> {
+        ApplicationManager.getApplication().runReadAction(Computable {
             FilenameIndex.getAllFilesByExt(project, "iss", GlobalSearchScope.projectScope(project)).toList()
-        }
+        })
 
     /**
      * Returns the top-level scripts (all scripts minus those included by another script).
@@ -64,7 +65,7 @@ class IsScriptCollector(private val project: Project) {
         return result
     }
 
-    private fun resolveInclude(baseDir: String, includePath: String): String? {
+    private fun resolveInclude(baseDir: String, includePath: String): String {
         val file = File(includePath)
         val resolved = if (file.isAbsolute) file else File(baseDir, includePath)
         return norm(resolved.path)

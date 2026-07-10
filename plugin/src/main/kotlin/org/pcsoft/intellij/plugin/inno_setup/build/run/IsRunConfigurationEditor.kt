@@ -13,10 +13,11 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configuration.EnvironmentVariablesComponent
-import com.intellij.openapi.application.ReadAction
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.util.Computable
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
 import com.intellij.util.ui.JBUI
@@ -114,9 +115,9 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
 
     private fun loadScripts(current: String) {
         scriptCombo.removeAllItems()
-        val paths = ReadAction.compute<List<String>, RuntimeException> {
+        val paths = ApplicationManager.getApplication().runReadAction(Computable {
             IsScriptCollector(project).allScripts().map { it.path }.sorted()
-        }
+        })
         paths.forEach { scriptCombo.addItem(it) }
         // For an editable combo this also sets the editor text even if the path is not in the list.
         scriptCombo.selectedItem = current
@@ -131,15 +132,15 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
             languageRow.isVisible = false
             return
         }
-        val names = ReadAction.compute<List<String>, RuntimeException> {
+        val names = ApplicationManager.getApplication().runReadAction(Computable {
             val vf = LocalFileSystem.getInstance().findFileByPath(scriptPath.replace('\\', '/'))
-                ?: return@compute emptyList()
-            val psi = PsiManager.getInstance(project).findFile(vf) as? IsScriptFile ?: return@compute emptyList()
+                ?: return@Computable emptyList()
+            val psi = PsiManager.getInstance(project).findFile(vf) as? IsScriptFile ?: return@Computable emptyList()
             psi.findSections("Languages")
                 .flatMap { it.nameDeclarations }
                 .map { it.valueUnquoted }
                 .filter { it.isNotBlank() }
-        }
+        })
         names.forEach { languageCombo.addItem(it) }
         languageRow.isVisible = names.size >= 2
     }

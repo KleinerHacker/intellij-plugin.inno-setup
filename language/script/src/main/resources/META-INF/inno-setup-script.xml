@@ -55,6 +55,19 @@
         <lang.commenter language="ISS"
                         implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.IsCommenter"/>
 
+        <!-- Code formatter (Reformat Code): inline spacing around = : ; and [ ] -->
+        <lang.formatter language="ISS"
+                        implementationClass="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter.IsSectionFormattingModelBuilder"/>
+        <!-- Post-format pass: blank line between sections, leading-key trimming, preprocessor operator spacing -->
+        <postFormatProcessor
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter.IsFormatterPostFormatProcessor"/>
+        <!-- Custom code-style settings factory (materialises IsSectionCodeStyleSettings on every settings) -->
+        <codeStyleSettingsProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter.IsSectionCodeStyleSettingsFactory"/>
+        <!-- Code Style page + options (Settings ▸ Editor ▸ Code Style ▸ Inno Setup) -->
+        <langCodeStyleSettingsProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter.IsSectionCodeStyleSettingsProvider"/>
+
         <!-- Typed handlers: auto-popup after '[' and '{', quote handling, template typing -->
         <typedHandler
                 implementation="org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.section.IsSectionTypedHandler"/>
