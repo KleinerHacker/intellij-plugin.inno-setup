@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.6.1]
+
 ### Added
 
 - **Code formatting**: **Reformat Code** (<kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>L</kbd>) now formats `.iss` /
