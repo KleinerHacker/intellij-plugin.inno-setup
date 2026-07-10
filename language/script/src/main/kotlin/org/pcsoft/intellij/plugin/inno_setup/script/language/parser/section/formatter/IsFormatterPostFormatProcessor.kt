@@ -69,9 +69,6 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
 
     private fun process(file: PsiFile, range: TextRange, settings: CodeStyleSettings): TextRange {
         if (file.language != IsScriptLanguage) return range
-        // Skip non-physical files (e.g. the Code Style settings live preview): raw document edits plus an
-        // injected-PSI lookup are neither meaningful nor safe there and would stall the preview panel.
-        if (!file.isPhysical) return range
         val document = PsiDocumentManager.getInstance(file.project).getDocument(file) ?: return range
         val custom = settings.getCustomSettings(IsSectionCodeStyleSettings::class.java)
         val text = document.charsSequence
@@ -85,7 +82,9 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         if (custom.SPACE_AFTER_COLON) collectColonEdits(file, text, edits)
         if (custom.SPACE_AFTER_SEMICOLON) collectSemicolonEdits(file, text, edits)
         if (custom.TRIM_LEADING_KEY_SPACE) collectLeadingTrimEdits(file, edits)
-        if (custom.SPACE_AROUND_PP_OPERATORS) collectPreprocessorOperatorEdits(file, text, edits)
+        // The injected-PSI ISPP lookup below is unsafe on non-physical files (e.g. the Code Style live
+        // preview), where it would stall the preview panel — so this rule is gated to physical files.
+        if (custom.SPACE_AROUND_PP_OPERATORS && file.isPhysical) collectPreprocessorOperatorEdits(file, text, edits)
         if (custom.BLANK_LINE_BETWEEN_SECTIONS) collectBlankLineEdits(file, document, edits)
 
         val applicable = edits

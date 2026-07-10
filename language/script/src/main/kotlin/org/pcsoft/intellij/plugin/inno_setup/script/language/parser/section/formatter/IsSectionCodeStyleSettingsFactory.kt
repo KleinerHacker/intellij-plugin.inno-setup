@@ -12,25 +12,49 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter
 
+import com.intellij.application.options.CodeStyleAbstractConfigurable
+import com.intellij.application.options.CodeStyleAbstractPanel
+import com.intellij.application.options.TabbedLanguageCodeStylePanel
+import com.intellij.lang.Language
+import com.intellij.psi.codeStyle.CodeStyleConfigurable
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider
 import com.intellij.psi.codeStyle.CustomCodeStyleSettings
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptLanguage
 
 /**
- * Registers the [IsSectionCodeStyleSettings] instance on every [CodeStyleSettings] (via the primary
- * `codeStyleSettingsProvider` extension point, which the platform always consults when materialising custom
- * settings).
+ * The `codeStyleSettingsProvider` half of the *Settings ▸ Editor ▸ Code Style ▸ Inno Setup* page. Binding a
+ * [CodeStyleSettingsProvider] to the language via [getLanguage] and returning a real [createConfigurable] is
+ * what promotes Inno Setup to its **own top-level node** — without it the platform would file the language's
+ * options under the generic *Other Languages* group.
  *
- * It deliberately does **not** declare a language and provides no configurable: the visible
- * *Code Style ▸ Inno Setup* page, its options and preview are contributed by
- * [IsSectionCodeStyleSettingsProvider]. Binding this factory to a language would make the platform build a
- * second, page-less code-style node for it.
+ * It also materialises the [IsSectionCodeStyleSettings] instance on every [CodeStyleSettings]
+ * ([createCustomSettings]). The actual option checkboxes and the live-preview code sample are contributed by
+ * the companion [IsSectionCodeStyleSettingsProvider] ([com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider]),
+ * which feeds the *Spaces* and *Blank Lines* tabs of the panel built here.
  */
 class IsSectionCodeStyleSettingsFactory : CodeStyleSettingsProvider() {
 
     override fun createCustomSettings(settings: CodeStyleSettings): CustomCodeStyleSettings =
         IsSectionCodeStyleSettings(settings)
 
-    /** No standalone page — the visible page is [IsSectionCodeStyleSettingsProvider]'s language page. */
-    override fun hasSettingsPage(): Boolean = false
+    override fun getLanguage(): Language = IsScriptLanguage
+
+    override fun getConfigurableDisplayName(): String = PluginBundle.message("code_style.display_name")
+
+    override fun createConfigurable(
+        baseSettings: CodeStyleSettings,
+        modelSettings: CodeStyleSettings,
+    ): CodeStyleConfigurable =
+        object : CodeStyleAbstractConfigurable(baseSettings, modelSettings, getConfigurableDisplayName()) {
+            override fun createPanel(settings: CodeStyleSettings): CodeStyleAbstractPanel =
+                object : TabbedLanguageCodeStylePanel(IsScriptLanguage, currentSettings, settings) {
+                    // Only the two tabs that actually carry Inno Setup options.
+                    override fun initTabs(settings: CodeStyleSettings) {
+                        addSpacesTab(settings)
+                        addBlankLinesTab(settings)
+                    }
+                }
+        }
 }
