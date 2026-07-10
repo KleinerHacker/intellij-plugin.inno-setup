@@ -43,4 +43,18 @@ class IsSectionFormatterPreviewTest : IsTimedBasePlatformTestCase() {
 
         assertEquals("[Setup]\nAppName = A\n", file.text)
     }
+
+    /** Preprocessor operator spacing must also apply in the preview (injection does not resolve there). */
+    fun testNonPhysicalPreviewFileFormatsPreprocessorOperators() {
+        val file = PsiFileFactory.getInstance(project).createFileFromText(
+            "a.iss", IsScriptFileType.INSTANCE, "[Setup]\n#define X 2+3*4\n", LocalTimeCounter.currentTime(), false,
+        )
+        assertFalse(file.isPhysical)
+
+        WriteCommandAction.runWriteCommandAction(project) {
+            CodeStyleManager.getInstance(project).reformat(file)
+        }
+
+        assertEquals("[Setup]\n#define X 2 + 3 * 4\n", file.text)
+    }
 }

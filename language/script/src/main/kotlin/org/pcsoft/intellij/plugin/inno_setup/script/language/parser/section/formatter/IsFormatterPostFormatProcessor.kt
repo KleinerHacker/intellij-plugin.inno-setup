@@ -12,16 +12,17 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.formatter
 
-import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFileType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprBinary
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprCall
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprIndex
@@ -87,9 +88,7 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         if (custom.SPACE_AFTER_COLON) collectColonEdits(file, text, edits)
         if (custom.SPACE_AFTER_SEMICOLON) collectSemicolonEdits(file, text, edits)
         if (custom.TRIM_LEADING_KEY_SPACE) collectLeadingTrimEdits(file, text, edits)
-        // The injected-PSI ISPP lookup below is unsafe on non-physical files (e.g. the Code Style live
-        // preview), where it would stall the preview panel — so this rule is gated to physical files.
-        if (custom.SPACE_AROUND_PP_OPERATORS && file.isPhysical) collectPreprocessorOperatorEdits(file, text, edits)
+        if (custom.SPACE_AROUND_PP_OPERATORS) collectPreprocessorOperatorEdits(file, text, edits)
         if (custom.BLANK_LINE_BETWEEN_SECTIONS) collectBlankLineEdits(file, document, edits)
 
         val applicable = edits
@@ -173,30 +172,37 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
     private fun collectPreprocessorOperatorEdits(file: PsiFile, text: CharSequence, edits: MutableList<Edit>) {
         val lines = PsiTreeUtil.findChildrenOfType(file, IsSectionPreprocessorLine::class.java)
         if (lines.isEmpty()) return
-        val injectionManager = InjectedLanguageManager.getInstance(file.project)
+        val psiFileFactory = PsiFileFactory.getInstance(file.project)
 
         for (line in lines) {
-            val injected = injectionManager.getInjectedPsiFiles(line) ?: continue
-            for (pair in injected) {
-                val directive = PsiTreeUtil.findChildOfType(pair.first, IsPreprocessorDirective::class.java)
-                    as? IsPreprocessorDirectiveEx ?: continue
-                val base = (directive as IsPreprocessorDirective).textRange.startOffset
+            // Parse the directive text as a standalone ISPP tree instead of going through injected PSI. The
+            // injection is identity-mapped over the HASH_LINE range (see IsPreprocessorInjector), but it does
+            // not resolve on non-physical files (the Code Style live preview) — parsing the raw text works in
+            // both cases, and host offsets map directly (HASH_LINE start + offset within the directive text).
+            val hashNode = line.node.findChildByType(IsSectionTypes.HASH_LINE) ?: continue
+            val hashStart = hashNode.startOffset
+            // ISPP has no registered <fileType>, so pass the file type explicitly (the language overload would
+            // return null). eventSystemEnabled = false keeps this throwaway parse out of the PSI event system.
+            val ppFile = psiFileFactory.createFileFromText(
+                "a.ispp", IsPreprocessorFileType.INSTANCE, hashNode.text, 0L, false,
+            )
+            val directive = PsiTreeUtil.findChildOfType(ppFile, IsPreprocessorDirective::class.java)
+                as? IsPreprocessorDirectiveEx ?: continue
+            val base = (directive as IsPreprocessorDirective).textRange.startOffset
 
-                for ((exprText, offsetInDirective) in expressionRegions(directive)) {
-                    val ast = IsPreprocessorExprParser.parse(exprText).ast
-                    val ops = mutableListOf<IsPreprocessorExprSpan>()
-                    collectArithmeticOperators(ast, ops)
-                    for (op in ops) {
-                        // Exception: leave the increment/decrement operators `++` / `--` untouched. The engine
-                        // has no `++`/`--` operator, so they tokenise as two adjacent `+`/`-`; a `+`/`-` that
-                        // directly abuts an identical operator in the source must not get spaces around it.
-                        if (isPartOfIncrementDecrement(exprText, op)) continue
-                        // Map operator bounds from the injected ISPP document back into the host file.
-                        val hostStart = injectionManager.injectedToHost(directive, base + offsetInDirective + op.start)
-                        val hostEnd = injectionManager.injectedToHost(directive, base + offsetInDirective + op.end)
-                        setSpacesBefore(text, hostStart, 1, edits)
-                        setSpacesAfter(text, hostEnd, 1, edits)
-                    }
+            for ((exprText, offsetInDirective) in expressionRegions(directive)) {
+                val ast = IsPreprocessorExprParser.parse(exprText).ast
+                val ops = mutableListOf<IsPreprocessorExprSpan>()
+                collectArithmeticOperators(ast, ops)
+                for (op in ops) {
+                    // Exception: leave the increment/decrement operators `++` / `--` untouched. The engine
+                    // has no `++`/`--` operator, so they tokenise as two adjacent `+`/`-`; a `+`/`-` that
+                    // directly abuts an identical operator in the source must not get spaces around it.
+                    if (isPartOfIncrementDecrement(exprText, op)) continue
+                    val hostStart = hashStart + base + offsetInDirective + op.start
+                    val hostEnd = hashStart + base + offsetInDirective + op.end
+                    setSpacesBefore(text, hostStart, 1, edits)
+                    setSpacesAfter(text, hostEnd, 1, edits)
                 }
             }
         }
