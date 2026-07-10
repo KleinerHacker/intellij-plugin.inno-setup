@@ -69,7 +69,12 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
 
     private fun process(file: PsiFile, range: TextRange, settings: CodeStyleSettings): TextRange {
         if (file.language != IsScriptLanguage) return range
-        val document = PsiDocumentManager.getInstance(file.project).getDocument(file) ?: return range
+        // Non-physical files (the Code Style live preview) have no document in PsiDocumentManager; fall back to
+        // the view provider's document so the preview reflects the formatting too. Editing that document and
+        // committing it is reflected back into the file's PSI text.
+        val document = PsiDocumentManager.getInstance(file.project).getDocument(file)
+            ?: file.viewProvider.document
+            ?: return range
         val custom = settings.getCustomSettings(IsSectionCodeStyleSettings::class.java)
         val text = document.charsSequence
 
@@ -96,13 +101,17 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
 
         var previousStart = Int.MAX_VALUE
         var delta = 0
+        var changed = false
         for (edit in applicable) {
             if (edit.end > previousStart) continue // skip overlaps defensively
             document.replaceString(edit.start, edit.end, edit.replacement)
             delta += edit.replacement.length - (edit.end - edit.start)
+            changed = true
             previousStart = edit.start
         }
-        if (delta != 0) PsiDocumentManager.getInstance(file.project).commitDocument(document)
+        // Commit whenever any edit was applied — an edit can change content without changing overall length
+        // (e.g. tightening brackets while adding spaces around '='), so this must not be gated on `delta`.
+        if (changed) PsiDocumentManager.getInstance(file.project).commitDocument(document)
         return TextRange(range.startOffset, range.endOffset + delta)
     }
 

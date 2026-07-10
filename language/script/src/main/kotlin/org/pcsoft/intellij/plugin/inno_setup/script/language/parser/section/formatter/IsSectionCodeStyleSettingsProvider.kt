@@ -80,15 +80,15 @@ class IsSectionCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
 
     private companion object {
         val CODE_SAMPLE = """
-            [Setup]
-            AppName = My Program
-            AppVersion = 1.5
-
-            #define FeatureCount 2 + 3
-
-            [Files]
-            Source: "app.exe"; DestDir: "{app}"; Flags: ignoreversion
-            Source: "readme.txt"; DestDir: "{app}"
-        """.trimIndent()
+            |[ Setup ]
+            | AppName=My Program
+            | AppVersion=1.5
+            |
+            |#define FeatureCount 2+3
+            |
+            |[ Files ]
+            | Source:"app.exe";DestDir:"{app}";Flags:ignoreversion
+            | Source:"readme.txt";DestDir:"{app}"
+        """.trimMargin("|")
     }
 }
