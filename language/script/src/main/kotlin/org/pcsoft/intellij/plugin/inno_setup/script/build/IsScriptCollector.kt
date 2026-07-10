@@ -65,7 +65,7 @@ class IsScriptCollector(private val project: Project) {
         return result
     }
 
-    private fun resolveInclude(baseDir: String, includePath: String): String? {
+    private fun resolveInclude(baseDir: String, includePath: String): String {
         val file = File(includePath)
         val resolved = if (file.isAbsolute) file else File(baseDir, includePath)
         return norm(resolved.path)
