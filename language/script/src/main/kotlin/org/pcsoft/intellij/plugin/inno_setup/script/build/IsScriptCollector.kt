@@ -19,7 +19,6 @@ import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
-import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector.Companion.parseIncludes
 import java.io.File
 
 /**
@@ -59,7 +58,7 @@ class IsScriptCollector(private val project: Project) {
             val baseDir = script.parent?.path ?: continue
             val text = runCatching { VfsUtilCore.loadText(script) }.getOrNull() ?: continue
             for (raw in parseIncludes(text)) {
-                resolveInclude(baseDir, raw)?.let { result.add(it) }
+                resolveInclude(baseDir, raw).let { result.add(it) }
             }
         }
         return result
