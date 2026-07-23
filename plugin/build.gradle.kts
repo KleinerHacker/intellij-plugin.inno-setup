@@ -33,7 +33,16 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(21)
+    // See the convention plugin (inno-setup.platform-module): compile on JDK 25 for the Java 25 platform
+    // jars of IntelliJ 2026.2, but emit Java 21 bytecode for load compatibility across the supported range.
+    jvmToolchain(25)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
 }
 
 intellijPlatform {
@@ -84,9 +93,13 @@ dependencies {
         if (localIdePath != null) {
             local(localIdePath)
         } else {
-            intellijIdea("2025.3.5")
+            intellijIdea(libs.versions.idea.get())
         }
         testFramework(TestFrameworkType.Platform)
+        // Since 2026.2 the platform is split into content modules: StructureAwareNavBarModelExtension
+        // (used by IsStructureAwareNavbar) now ships in the separate intellij.platform.structureView
+        // module, which must be requested explicitly instead of coming in via the monolithic classpath.
+        bundledModule("intellij.platform.structureView")
     }
 
     // Bundle the language modules as regular libraries into the plugin (one shared classloader). Each

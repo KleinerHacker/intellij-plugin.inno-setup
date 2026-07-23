@@ -10,8 +10,15 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.Duration
+
+// Target IDE version — single source of truth in gradle/libs.versions.toml (registered as the "libs"
+// catalog via buildSrc/settings.gradle.kts).
+val ideaVersion = extensions.getByType<VersionCatalogsExtension>()
+    .named("libs").findVersion("idea").get().requiredVersion
 
 // Convention for the language sub-modules (:language:script, :language:preprocessor): an IntelliJ
 // Platform *module* (not a publishable plugin) sharing the Kotlin/Jackson/IDE/test setup. The actual
@@ -23,7 +30,17 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(21)
+    // Compile with JDK 25: since IntelliJ 2026.2 the platform jars are Java 25 (class file 69), so an
+    // older javac/kotlinc cannot even read them. The emitted bytecode is pinned to Java 21 below so the
+    // plugin still loads on the whole supported IDE range (sinceBuild 261).
+    jvmToolchain(25)
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_21)
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
 }
 
 // Publish the language modules (:language:script, :language:preprocessor) as regular Maven artifacts to
@@ -63,13 +80,13 @@ dependencies {
     intellijPlatform {
         // Single source of truth for the target IDE across all modules: a local IDE when configured
         // (Gradle property `localIdePath` or env `LOCAL_IDE_PATH`), otherwise the downloaded SDK. Pointing
-        // this at a non-2025.3 IDE makes the platform tests hang during app boot.
+        // this at an IDE whose build differs from the target version makes the platform tests hang during app boot.
         val localIdePath = (providers.gradleProperty("localIdePath").orNull
             ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
         if (localIdePath != null) {
             local(localIdePath)
         } else {
-            intellijIdea("2025.3.5")
+            intellijIdea(ideaVersion)
         }
         testFramework(TestFrameworkType.Platform)
     }

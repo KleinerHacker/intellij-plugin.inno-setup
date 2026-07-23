@@ -1,11 +1,11 @@
 [versions]
 junit = "4.13.2"
 jackson = "2.22.1"
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 changelog = "2.5.0"
 foojay-resolver = "1.0.0"
 intellij-platform = "2.17.0"
-idea = "2025.3.5"
+idea = "2026.2"
 grammarkit = "2023.3.0.3"
 
 [libraries]

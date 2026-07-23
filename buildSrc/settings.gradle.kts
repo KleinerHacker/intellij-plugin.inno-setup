@@ -10,18 +10,13 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-plugins {
-    `kotlin-dsl`
-}
-
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-}
-
-// Plugin artifacts needed so the precompiled convention scripts can apply these plugins by id.
-// Versions mirror gradle/libs.versions.toml (buildSrc cannot consume the root version catalog by default).
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.10")
-    implementation("org.jetbrains.intellij.platform:intellij-platform-gradle-plugin:2.17.0")
+// Register the root version catalog inside buildSrc so the precompiled convention scripts
+// (inno-setup.platform-module.gradle.kts) can read versions (e.g. the target IDE) from the
+// single source of truth in gradle/libs.versions.toml instead of hardcoding them.
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("../gradle/libs.versions.toml"))
+        }
+    }
 }
