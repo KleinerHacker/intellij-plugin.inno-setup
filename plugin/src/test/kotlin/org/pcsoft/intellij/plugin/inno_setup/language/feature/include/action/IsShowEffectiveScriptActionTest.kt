@@ -31,7 +31,7 @@ class IsShowEffectiveScriptActionTest : IsTimedBasePlatformTestCase() {
 
         val vFile = IsShowEffectiveScriptAction.openEffectiveScript(project, host)
         assertNotNull("An effective-script tab must be opened", vFile)
-        assertFalse("The effective-script tab must be read-only", vFile!!.isWritable)
+        assertFalse("The effective-script tab must be read-only", vFile.isWritable)
 
         val text = String(vFile.contentsToByteArray(), vFile.charset)
         assertTrue("Effective content must keep the host [Setup]", text.contains("[Setup]"))
@@ -48,7 +48,7 @@ class IsShowEffectiveScriptActionTest : IsTimedBasePlatformTestCase() {
 
         val vFile = IsShowEffectiveScriptAction.openEffectiveScript(project, host)
         assertNotNull(vFile)
-        assertFalse(vFile!!.isWritable)
+        assertFalse(vFile.isWritable)
         assertEquals(host.text, String(vFile.contentsToByteArray(), vFile.charset))
     }
 }

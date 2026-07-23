@@ -270,7 +270,7 @@ fun PsiFile.precedingDefine(name: String, beforeOffset: Int): IsPreprocessorDire
     isppDirectivesWithHostOffset
         .filter { (d, off) ->
             off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
-                    (d as? IsPreprocessorDirectiveEx)?.getDefineName().equals(name, ignoreCase = true)
+                    d.getDefineName().equals(name, ignoreCase = true)
         }
         .maxByOrNull { it.second }
         ?.first as? IsPreprocessorDirectiveEx
@@ -280,7 +280,7 @@ fun PsiFile.precedingSub(name: String, beforeOffset: Int): IsPreprocessorDirecti
     isppDirectivesWithHostOffset
         .filter { (d, off) ->
             off < beforeOffset && (d as? IsPreprocessorDirectiveEx)?.isSub() == true &&
-                    (d as? IsPreprocessorDirectiveEx)?.getSubroutineName().equals(name, ignoreCase = true)
+                    d.getSubroutineName().equals(name, ignoreCase = true)
         }
         .maxByOrNull { it.second }
         ?.first as? IsPreprocessorDirectiveEx

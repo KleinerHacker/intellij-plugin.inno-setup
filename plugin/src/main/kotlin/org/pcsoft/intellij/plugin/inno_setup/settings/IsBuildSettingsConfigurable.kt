@@ -15,13 +15,14 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 import com.intellij.openapi.options.SearchableConfigurable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
-import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.panel
+import com.intellij.ui.dsl.listCellRenderer.listCellRenderer
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComponent
+import javax.swing.ListCellRenderer
 
 /**
  * Project-specific settings sub-page ("Inno Setup | Build") for how `.iss` scripts are compiled on
@@ -52,7 +53,10 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         val compileCheck = JBCheckBox("Compile .iss files on project build")
         compileOnBuildCheck = compileCheck
         val outputCombo = ComboBox(DefaultComboBoxModel(IsBuildOutputMode.entries.toTypedArray()))
-        outputCombo.renderer = SimpleListCellRenderer.create { label, value, _ -> label.text = value?.label ?: "" }
+        // listCellRenderer(defaultText, …) yields a ListCellRenderer<T?>; cast to the combo's non-null
+        // element type so the assignment matches the JComboBox.setRenderer(ListCellRenderer<? super E>) bound.
+        @Suppress("UNCHECKED_CAST")
+        outputCombo.renderer = listCellRenderer<IsBuildOutputMode>("") { text(value.label) } as ListCellRenderer<IsBuildOutputMode>
         outputModeCombo = outputCombo
 
         // The output mode only matters when compilation on build is enabled.

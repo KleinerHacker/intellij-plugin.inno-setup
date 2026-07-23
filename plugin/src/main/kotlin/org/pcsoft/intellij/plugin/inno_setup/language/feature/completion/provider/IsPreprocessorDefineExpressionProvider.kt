@@ -54,8 +54,7 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
 
         val precedingDefines = hostFile.isppDirectivesWithHostOffset
             .filter { (d, off) ->
-                off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true &&
-                        (d as? IsPreprocessorDirectiveEx)?.isArrayElementDefine() != true
+                off < lineOffset && (d as? IsPreprocessorDirectiveEx)?.isDefine() == true && !d.isArrayElementDefine()
             }
             .mapNotNull { it.first as? IsPreprocessorDirectiveEx }
             .filter { !it.getDefineName().isNullOrEmpty() }
