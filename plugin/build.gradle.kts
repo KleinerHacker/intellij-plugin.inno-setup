@@ -108,6 +108,11 @@ dependencies {
         // (used by IsStructureAwareNavbar) now ships in the separate intellij.platform.structureView
         // module, which must be requested explicitly instead of coming in via the monolithic classpath.
         bundledModule("intellij.platform.structureView")
+        // Also since 2026.2: core intellij.spellchecker(.xml) — pulled in transitively via
+        // com.intellij.modules.lang — now needs intellij.libraries.lucene.common, which was moved into the
+        // bundled intellij.libraries.misc.plugin. Without it the test plugin is excluded and every feature
+        // test fails with no language support. (See the same note in the :language convention.)
+        bundledPlugin("intellij.libraries.misc.plugin")
     }
 
     // Bundle the language modules as regular libraries into the plugin (one shared classloader). Each
@@ -168,10 +173,11 @@ tasks {
     }
 
     test {
-        jvmArgs(
-            "-Didea.log.config.file=idea/log4j.xml",
-            "-Didea.log.level=OFF",
-        )
+        // Platform tests log through java.util.logging (JUL) via TestLoggerFactory — NOT log4j. See the
+        // detailed explanation in the :language convention (inno-setup.platform-module.gradle.kts).
+        systemProperty("intellij.console.log.level", "off")
+        systemProperty("idea.log.config.file", "${rootDir}/gradle/test-logging.properties")
+        systemProperty("idea.split.test.logs", "true")
         timeout.set(Duration.ofMinutes(15))
     }
 }

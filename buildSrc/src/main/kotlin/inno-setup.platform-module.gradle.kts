@@ -105,14 +105,33 @@ dependencies {
             intellijIdea(ideaVersion)
         }
         testFramework(TestFrameworkType.Platform)
+
+        // Since the platform bump to 2026.2 the core `intellij.spellchecker` module (which our plugin
+        // transitively pulls via com.intellij.modules.lang) depends on `intellij.libraries.lucene.common`,
+        // which was moved out of core `lib/` into the bundled `intellij.libraries.misc.plugin`. Without it
+        // on the test classpath the lucene module is unresolved, spellchecker(.xml) is excluded, and the
+        // whole test plugin gets excluded ("dependency on 'IDEA CORE' which cannot be loaded") — which made
+        // every platform feature test fail with no language support. Pull the bundled plugin in for tests.
+        bundledPlugin("intellij.libraries.misc.plugin")
     }
 }
 
 tasks.withType<Test>().configureEach {
-    jvmArgs(
-        "-Didea.log.config.file=idea/log4j.xml",
-        "-Didea.log.level=OFF",
-    )
+    // Platform tests log through java.util.logging (JUL) via TestLoggerFactory — NOT log4j. The old
+    // idea/log4j.xml + idea.log.level were silently ignored. Two independent knobs actually matter:
+    //   1. intellij.console.log.level — the IntelliJ Platform Gradle plugin sets this to "warning" by
+    //      default; it is the threshold of the JUL console handler that echoes WARN+ records to stdout.
+    //      Override it to "off" to silence the console entirely (records still go to the per-test idea.log).
+    //   2. idea.log.config.file — read as a JUL .properties file and loaded into the LogManager.
+    // Note: on a FAILED test the framework additionally dumps the full buffered debug log (down to FINE/
+    // TRACE) to stderr for diagnostics — that is independent of the above and only appears for failures.
+    systemProperty("intellij.console.log.level", "off")
+    systemProperty("idea.log.config.file", "${rootDir}/gradle/test-logging.properties")
+    // On a FAILED test the framework dumps the full buffered debug log (down to FINE/TRACE) somewhere.
+    // Default target is stderr (floods the console); with this flag it goes to a per-test file under the
+    // sandbox log dir and only a short "Log saved to: …" line is printed. Keeps the console quiet even
+    // while tests are failing.
+    systemProperty("idea.split.test.logs", "true")
     // Hard backstop so a hung test cannot stall the build indefinitely (mirrors the former root config).
     timeout.set(Duration.ofMinutes(15))
 }
