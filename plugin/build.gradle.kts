@@ -83,6 +83,14 @@ intellijPlatform {
 }
 
 dependencies {
+    // See inno-setup.platform-module: pin transitive Kotlin artifacts to the catalog version so an older
+    // stdlib (pulled via jackson-module-kotlin → kotlin-reflect) cannot crash the platform's coroutine
+    // debug probes with a "Debug metadata version mismatch" and hang the tests.
+    constraints {
+        implementation(libs.kotlin.stdlib)
+        implementation(libs.kotlin.reflect)
+    }
+
     testImplementation("junit:junit:4.13.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.0")

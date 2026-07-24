@@ -20,6 +20,17 @@ import java.time.Duration
 val ideaVersion = extensions.getByType<VersionCatalogsExtension>()
     .named("libs").findVersion("idea").get().requiredVersion
 
+// The IntelliJ Platform ships its own kotlin-stdlib as an IDE jar (not a resolved Gradle module), so it
+// does NOT participate in dependency conflict resolution. Transitive dependencies (jackson-module-kotlin
+// pulls kotlin-reflect → kotlin-stdlib) therefore decide the version on the test/runtime classpath. If
+// that resolves to a stdlib older than the compiler (2.2.20+ emits @DebugMetadata version 2), the
+// platform's coroutine debug probes crash with "Debug metadata version mismatch. Expected: 1, got 2",
+// which kills the plugin-descriptor-loading workers and hangs every platform test until the Gradle
+// timeout. Pin the Kotlin artifacts to the catalog version (matching both the compiler and the bundled
+// 2.4.0 stdlib) so the running stdlib understands the metadata the compiler emits.
+val kotlinVersion = extensions.getByType<VersionCatalogsExtension>()
+    .named("libs").findVersion("kotlin").get().requiredVersion
+
 // Convention for the language sub-modules (:language:script, :language:preprocessor): an IntelliJ
 // Platform *module* (not a publishable plugin) sharing the Kotlin/Jackson/IDE/test setup. The actual
 // publishable plugin (:plugin) configures org.jetbrains.intellij.platform itself.
@@ -73,6 +84,11 @@ intellijPlatform {
 }
 
 dependencies {
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    }
+
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.0")
     testImplementation("junit:junit:4.13.2")
