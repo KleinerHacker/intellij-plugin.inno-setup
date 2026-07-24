@@ -39,5 +39,6 @@ class IsPreprocessorDirectiveBraceTypingTest : IsTimedBasePlatformTestCase() {
         myFixture.configureByText(IsScriptFileType.INSTANCE, "#for <caret>$tail")
         myFixture.type("{")
         myFixture.checkResult("#for {<caret>}$tail")
+        myFixture.checkResult("#for {<caret>}$tail")
     }
 }
