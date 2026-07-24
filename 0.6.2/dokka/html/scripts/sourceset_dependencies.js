@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":plugin/main":[],":language:preprocessor/main":[],":language:script/main":[]}'
