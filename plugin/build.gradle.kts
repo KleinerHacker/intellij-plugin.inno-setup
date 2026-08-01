@@ -92,8 +92,8 @@ dependencies {
     }
 
     testImplementation("junit:junit:4.13.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
 
     intellijPlatform {
         val localIdePath = (providers.gradleProperty("localIdePath").orNull
