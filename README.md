@@ -7,6 +7,35 @@
 A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php)
 scripts (`.iss`) to the entire IntelliJ platform family.
 
+The plugin turns any IntelliJ-platform IDE into a full editor for Inno Setup installer scripts — with syntax
+highlighting, context-aware completion, inline documentation, reference resolution and validation for `.iss`, `.isl`
+and preprocessor (ISPP) code. It also integrates the Inno Setup compiler, so scripts can be built and run straight
+from the IDE.
+
+---
+
+## Documentation
+
+[Full documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/) — including a complete reference for
+every Inno Setup section and its parameters — is available at
+the project's MkDocs site, hosted on GitHub Pages.
+
+To run the documentation site locally:
+
+```bash
+# Install dependencies (once)
+cd docs
+pip install mkdocs mkdocs-material
+
+# Serve locally
+mkdocs serve
+```
+
+Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
+
+> [API Documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/dokka/html/index.html) is
+> available, too.
+
 ---
 
 ## About
@@ -146,29 +175,6 @@ The output is written to `build/distributions/inno-setup-<version>.zip`.
 5. Click **OK**, then **Restart IDE** when prompted
 
 After the restart, any file with the `.iss` extension will be handled by the plugin automatically.
-
----
-
-## Documentation
-
-[Full documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/) — including a complete reference for
-every Inno Setup section and its parameters — is available at
-the project's MkDocs site, hosted on GitHub Pages.
-
-To run the documentation site locally:
-
-```bash
-# Install dependencies (once)
-cd docs
-pip install mkdocs mkdocs-material
-
-# Serve locally
-mkdocs serve
-```
-
-Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
-
-> [API Documentation](https://kleinerhacker.github.io/intellij-plugin.inno-setup/dokka/html/) is availabe, too.
 
 ---
 
