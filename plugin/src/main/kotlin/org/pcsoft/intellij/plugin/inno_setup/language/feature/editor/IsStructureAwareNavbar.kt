@@ -14,6 +14,10 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
 import com.intellij.ide.navigationToolbar.StructureAwareNavBarModelExtension
 import com.intellij.lang.Language
+import com.intellij.lang.injection.InjectedLanguageManager
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptLanguage
 import javax.swing.Icon
 
@@ -30,10 +34,35 @@ class IsStructureAwareNavbar : StructureAwareNavBarModelExtension() {
     /**
      * Returns presentation metadata used by IntelliJ navigation UI.
      */
-    override fun getPresentableText(obj: Any?): String? = IsElementPresentation.textOf(obj)
+    override fun getPresentableText(obj: Any?): String? =
+        IsElementPresentation.textOf(hostOf(obj) ?: obj)
 
     /**
      * Returns the icon shown for this element or file type.
      */
     override fun getIcon(obj: Any?): Icon? = IsElementPresentation.iconOf(obj)
+
+    /**
+     * Keeps the navigation bar inside the host script when the caret sits on a `#…` line.
+     *
+     * ISPP is injected into the preprocessor lines, so the element at the caret belongs to the injected file
+     * whose virtual file is a window into the host — and the platform's default extension presents a file by
+     * its virtual file name, which for such a window is `<Injected ISPP file>`. Mapping the fragment back to
+     * its host script makes a preprocessor line behave like every other line of the script.
+     */
+    override fun adjustElement(psiElement: PsiElement): PsiElement = hostOf(psiElement) ?: psiElement
+
+    /**
+     * The host script element of [obj] if it belongs to an ISPP fragment injected into an Inno Setup script,
+     * `null` for anything else (including elements that already live in the host).
+     */
+    private fun hostOf(obj: Any?): PsiElement? {
+        val element = obj as? PsiElement ?: return null
+        val file = element.containingFile ?: return null
+        val manager = InjectedLanguageManager.getInstance(element.project)
+        if (!manager.isInjectedFragment(file)) return null
+
+        val hostFile = manager.getTopLevelFile(element) as? IsScriptFile ?: return null
+        return if (element is PsiFile) hostFile else manager.getInjectionHost(element) ?: hostFile
+    }
 }
