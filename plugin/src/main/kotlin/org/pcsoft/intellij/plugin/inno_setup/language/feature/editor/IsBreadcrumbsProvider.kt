@@ -30,8 +30,8 @@ import javax.swing.Icon
  * Sticky lines are collected by the platform from the breadcrumbs infrastructure, but through a separate
  * accept method, so both features can differ: only section blocks are sticky (entries are single-line and
  * would be useless as a sticky line), while the breadcrumbs bar also shows the entry below the section.
- * The preprocessor blocks (`#if`/`#sub`) have no spanning PSI element and are therefore contributed as plain
- * ranges by [IsFileBreadcrumbsCollector] — they are sticky, but deliberately never breadcrumbs.
+ * The preprocessor blocks (`#if`/`#sub`) have no spanning PSI element, so they can be neither breadcrumbs nor
+ * sticky lines — the plain-range alternative is `@ApiStatus.Internal` (see [IsFileBreadcrumbsCollector]).
  */
 class IsBreadcrumbsProvider : BreadcrumbsProvider {
 

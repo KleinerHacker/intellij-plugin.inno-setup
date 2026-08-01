@@ -4,12 +4,10 @@
 
 ## [Unreleased]
 
-E### Added
+### Added
 
-- **Sticky lines**: while scrolling, the enclosing section header (`[Setup]`, `[Files]`, …) and the enclosing
-  preprocessor block (`#if …`, `#sub …`) stay pinned at the top of the editor. Conditional blocks follow the
-  active branch: inside an `#elif` branch the `#elif` line replaces the `#if` line, and inside the `#else`
-  branch the `#else` line is pinned below the header it belongs to.
+- **Sticky lines**: while scrolling, the enclosing section header (`[Setup]`, `[Files]`, …) stays pinned at
+  the top of the editor.
 - **Breadcrumbs**: the editor now shows the breadcrumbs of the current line (`setup.iss › [Files] › Source`);
   preprocessor blocks are deliberately left out of the breadcrumbs bar.
 

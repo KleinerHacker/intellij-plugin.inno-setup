@@ -12,9 +12,11 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
+import com.intellij.codeInsight.breadcrumbs.FileBreadcrumbsCollector
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.ui.components.breadcrumbs.StickyLineInfo
+import com.intellij.xml.breadcrumbs.PsiFileBreadcrumbsCollector
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
@@ -26,7 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 /**
  * Tests for [IsBreadcrumbsProvider] and [IsFileBreadcrumbsCollector] — the breadcrumbs bar and the editor's
  * sticky lines are driven by the same infrastructure, so both are asserted on **one and the same** script:
- * the preprocessor blocks must appear as sticky lines (branch-aware), but never as a breadcrumb.
+ * sections are breadcrumb *and* sticky, entries are breadcrumb only, preprocessor lines are neither.
  */
 class IsBreadcrumbsAndStickyLinesTest : IsTimedBasePlatformTestCase() {
 
@@ -75,10 +77,6 @@ class IsBreadcrumbsAndStickyLinesTest : IsTimedBasePlatformTestCase() {
 
     private fun hostDocument() = myFixture.getDocument(issFile())
 
-    private fun stickyOffsets(offset: Int): List<Int> =
-        collector.computeStickyLineInfos(hostVirtualFile(), hostDocument(), offset)
-            .map(StickyLineInfo::textOffset)
-
     private fun crumbTexts(offset: Int): List<String> =
         collector.computeCrumbs(hostVirtualFile(), hostDocument(), offset, true)
             .map { it.text }
@@ -107,8 +105,17 @@ class IsBreadcrumbsAndStickyLinesTest : IsTimedBasePlatformTestCase() {
         assertEquals(section("Files"), provider.getParent(sourceEntry()))
     }
 
-    fun testCollectorHandlesIssFiles() {
-        assertTrue(collector.handlesFile(hostVirtualFile()))
+    /**
+     * The plugin's collector must **not** claim a plain script file: only the platform's own collector turns
+     * [IsBreadcrumbsProvider.acceptStickyElement] into sticky lines, and it is registered `order="last"`, so
+     * claiming the file here would silence them.
+     */
+    fun testCollectorLeavesPlainScriptFilesToThePlatform() {
+        assertFalse(collector.handlesFile(hostVirtualFile()))
+        assertEquals(
+            PsiFileBreadcrumbsCollector::class.java,
+            FileBreadcrumbsCollector.findBreadcrumbsCollector(project, hostVirtualFile()).javaClass
+        )
     }
 
     // --- breadcrumbs --------------------------------------------------------------------------------------
@@ -130,44 +137,42 @@ class IsBreadcrumbsAndStickyLinesTest : IsTimedBasePlatformTestCase() {
         }
     }
 
-    // --- sticky lines: branch aware -----------------------------------------------------------------------
+    // --- sticky lines -------------------------------------------------------------------------------------
 
-    fun testIfBranchSticksWithIfLine() {
-        val offsets = stickyOffsets(offsetOf("debug.exe"))
+    /**
+     * End-to-end: the section header must actually reach the editor as a sticky line. This asserts the whole
+     * chain — the platform picks its own collector, that collector asks [IsBreadcrumbsProvider], and
+     * `acceptStickyElement` reports the section.
+     *
+     * `StickyLineInfo` is `@ApiStatus.Internal`; using it is fine **here** because test code is not part of
+     * the published plugin, and this is the only way to assert the feature end to end.
+     */
+    @Suppress("UnstableApiUsage")
+    fun testSectionReachesTheEditorAsStickyLine() {
+        val offset = offsetOf("debug.exe")
+        val offsets = FileBreadcrumbsCollector.findBreadcrumbsCollector(project, hostVirtualFile())
+            .computeStickyLineInfos(hostVirtualFile(), hostDocument(), offset)
+            .map(StickyLineInfo::textOffset)
 
-        assertTrue("The [Files] section must stick", offsets.contains(section("Files").textRange.startOffset))
-        assertTrue("The #if line must stick", offsets.contains(offsetOf("#if")))
-        assertFalse("The #elif line must not stick here", offsets.contains(offsetOf("#elif")))
-        assertFalse("The #else line must not stick here", offsets.contains(offsetOf("#else")))
+        assertTrue(
+            "The [Files] section must stick: $offsets",
+            offsets.contains(section("Files").textRange.startOffset)
+        )
     }
 
-    fun testElifBranchReplacesIfLine() {
-        val offsets = stickyOffsets(offsetOf("beta.exe"))
-
-        assertTrue("The [Files] section must stick", offsets.contains(section("Files").textRange.startOffset))
-        assertTrue("The #elif line must stick", offsets.contains(offsetOf("#elif")))
-        assertFalse("The #elif replaces the #if line", offsets.contains(offsetOf("#if")))
-        assertFalse("The #else line must not stick here", offsets.contains(offsetOf("#else")))
-    }
-
-    fun testElseBranchSticksBelowItsHeader() {
-        val offsets = stickyOffsets(offsetOf("app.exe"))
-
-        assertTrue("The #else line must stick", offsets.contains(offsetOf("#else")))
-        assertTrue("The preceding #elif header must stick as well", offsets.contains(offsetOf("#elif")))
-        assertFalse("The #if line is replaced by the #elif header", offsets.contains(offsetOf("#if")))
-    }
-
-    fun testStickyLinesOutsidePreprocessorBlockHaveNoBlock() {
-        val offsets = stickyOffsets(offsetOf("AppName"))
-
-        assertFalse("No #if block encloses the [Setup] entries", offsets.contains(offsetOf("#if")))
-        assertTrue("The [Setup] section must stick", offsets.contains(section("Setup").textRange.startOffset))
-    }
-
-    fun testSubroutineBlockIsSticky() {
-        val offsets = stickyOffsets(offsetOf("#endsub"))
-
-        assertTrue("The enclosing #sub line must stick", offsets.contains(offsetOf("#sub")))
+    /**
+     * Sticky lines are PSI-based only. A preprocessor line is *not* an [IsSectionBlock] (it ends the section
+     * block in the grammar), so nothing on it can be sticky — the plain-range API that would allow it is
+     * `@ApiStatus.Internal`.
+     */
+    fun testPreprocessorLinesAreNotStickyElements() {
+        listOf("#if", "#elif", "#else", "#sub").forEach { directive ->
+            val element = issFile().findElementAt(offsetOf(directive) + 1)!!
+            assertFalse(
+                "A preprocessor line ($directive) has no sticky PSI element",
+                generateSequence(element) { it.parent }.takeWhile { it !is IsScriptFile }
+                    .any { provider.acceptStickyElement(it) }
+            )
+        }
     }
 }

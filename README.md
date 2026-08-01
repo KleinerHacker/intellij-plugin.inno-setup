@@ -2,13 +2,6 @@
   <img src="docs/docs/assets/images/inno-setup-logo.png" alt="Inno Setup Logo" width="256"/>
 </p>
 
-<p align="center">
-  <b>English</b> ·
-  <a href="README.zh.md">简体中文</a> ·
-  <a href="README.ja.md">日本語</a> ·
-  <a href="README.ko.md">한국어</a>
-</p>
-
 # Inno Setup – JetBrains Plugin
 
 A JetBrains IDE plugin that brings first-class language support for [Inno Setup](https://jrsoftware.org/isinfo.php)

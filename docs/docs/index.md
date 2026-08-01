@@ -39,6 +39,8 @@ This plugin brings first-class editor support for `.iss` and `.isl` files to any
 - **Language metadata** — Windows LCID completion, built-in Inno Setup language suggestions, and flag inlays for
   language references
 - **Structure view** — get a bird's-eye view of all sections and their entries in the project tool window
+- **Breadcrumbs & sticky lines** — the breadcrumb bar shows the path to the caret (`setup.iss › [Files] ›
+  Source`), and the enclosing section header stays pinned at the top of the editor while scrolling
 - **Constant support** — `{app}`, `{autopf}`, `{group}`, and all other built-in constants are recognised and validated,
   including inside quoted strings
 

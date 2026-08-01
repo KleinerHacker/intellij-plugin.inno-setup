@@ -47,3 +47,14 @@ The file-type icon on the root node matches the `.iss` file icon used throughout
 The status bar at the bottom of the editor shows the **structural path** to the current caret position
 (e.g. `demo.iss › [Setup] › DefaultGroupName`), giving a constant orientation hint without opening the
 Structure tool window.
+
+---
+
+## Sticky Lines
+
+The same structural information drives the editor's **sticky lines**: as soon as the header of the current
+section (`[Setup]`, `[Files]`, …) scrolls out of view, it stays pinned to the top of the editor, so it is
+always clear which section the visible entries belong to. Clicking the pinned line jumps back to it.
+
+Individual entries are never pinned — they are single-line and would add no orientation. Preprocessor blocks
+(`#if …`, `#sub …`) are not pinned either: they have no spanning element in the script grammar.

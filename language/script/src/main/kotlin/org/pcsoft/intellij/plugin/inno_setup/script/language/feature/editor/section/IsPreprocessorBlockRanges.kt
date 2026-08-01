@@ -35,7 +35,7 @@ data class IsPreprocessorBlockRange(
 
 /**
  * The matched `#if … #endif` and `#sub … #endsub` blocks of a host file, reduced to plain host ranges and
- * cached per file. Shared by the folding builder (fold regions) and the breadcrumbs collector (sticky lines).
+ * cached per file. Used by the folding builder to build its fold regions.
  *
  * Only blocks that lie within a single section (or entirely outside any section) are reported: two offsets
  * share a section iff [sectionAtOffset] returns the same block (or `null` for both), which also rules out a
@@ -48,33 +48,6 @@ object IsPreprocessorBlockRanges {
         CachedValuesManager.getCachedValue(file) {
             CachedValueProvider.Result.create(compute(file), file)
         }
-
-    /**
-     * The sticky ranges for [offset] — one per enclosing block, but for a conditional block reduced to the
-     * *active branch*: inside an `#elif` branch the `#elif` line replaces the `#if` line, and inside the
-     * `#else` branch the preceding header (`#if` or the last `#elif`) sticks together with the `#else` line
-     * below it. A `#sub` block always sticks with its `#sub` line.
-     */
-    fun stickyRangesAt(file: IsScriptFile, offset: Int): List<TextRange> =
-        blocksOf(file)
-            .filter { it.range.containsOffset(offset) }
-            .flatMap { block -> branchRanges(block, offset) }
-
-    private fun branchRanges(block: IsPreprocessorBlockRange, offset: Int): List<TextRange> {
-        val end = block.range.endOffset
-        if (block.branches.isEmpty()) return listOf(block.range)
-
-        val index = block.branches.indexOfLast { it.line.textRange.startOffset <= offset }
-        if (index < 0) return listOf(block.range)
-
-        val branch = block.branches[index]
-        val active = TextRange(branch.line.textRange.startOffset, end)
-        if (!branch.isElse || index == 0) return listOf(active)
-
-        // The #else is shown below the header it belongs to (the #if, or the last #elif before it).
-        val header = block.branches[index - 1].line.textRange.startOffset
-        return listOf(TextRange(header, end), active)
-    }
 
     private fun compute(file: IsScriptFile): List<IsPreprocessorBlockRange> {
         val conditionals = IsPreprocessorConditionalStructure.structureOf(file).blocks

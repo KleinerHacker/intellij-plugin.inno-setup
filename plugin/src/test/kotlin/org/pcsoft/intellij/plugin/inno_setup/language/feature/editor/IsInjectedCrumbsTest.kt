@@ -15,7 +15,6 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 import com.intellij.codeInsight.breadcrumbs.FileBreadcrumbsCollector
 import com.intellij.injected.editor.VirtualFileWindow
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.ui.components.breadcrumbs.StickyLineInfo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 
@@ -59,21 +58,9 @@ class IsInjectedCrumbsTest : IsTimedBasePlatformTestCase() {
         assertTrue("No injected-fragment crumb: $texts", texts.none { it.contains("Injected") })
     }
 
-    fun testStickyLinesWorkFromInsideTheInjection() {
-        configureInsideInjection()
-        val offsets = stickyOffsets()
-
-        assertTrue("The [Files] section must stick", offsets.contains(0))
-        assertTrue("The #if line must stick", offsets.contains(script.indexOf("#if")))
-    }
-
     private fun crumbTexts(): List<String> = collector().computeCrumbs(
         myFixture.file.virtualFile, injectedDocument(), myFixture.caretOffset, true
     ).map { it.text }
-
-    private fun stickyOffsets(): List<Int> = collector().computeStickyLineInfos(
-        myFixture.file.virtualFile, injectedDocument(), myFixture.caretOffset
-    ).map(StickyLineInfo::textOffset)
 
     private fun collector() = IsFileBreadcrumbsCollector(project)
 

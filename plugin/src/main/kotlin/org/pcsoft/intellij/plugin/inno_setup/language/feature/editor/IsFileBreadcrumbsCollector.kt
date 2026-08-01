@@ -23,32 +23,41 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiManager
 import com.intellij.ui.components.breadcrumbs.Crumb
-import com.intellij.ui.components.breadcrumbs.StickyLineInfo
 import com.intellij.xml.breadcrumbs.PsiFileBreadcrumbsCollector
-import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.section.IsPreprocessorBlockRanges
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType
 
 /**
- * Breadcrumbs and sticky lines of Inno Setup files, on top of the platform's PSI-based collector.
+ * Breadcrumbs for **injected ISPP lines** — nothing else.
  *
- * Two things need to be added to the delegate:
- * - **Preprocessor blocks**: `#if … #endif` and `#sub … #endsub` have no spanning PSI element (they are
- *   matched line-wise, see [IsPreprocessorBlockRanges]), so they can only be contributed as plain text
- *   ranges — branch-aware, so an `#elif`/`#else` sticks instead of / below the block's opener.
- * - **Injected ISPP lines**: with the caret on a `#…` line the platform asks the collector with the
- *   *injected* file (a [VirtualFileWindow], whose file type is still the host's). The PSI of that file is
- *   ISPP, so the delegate finds nothing and the breadcrumbs bar falls back to the injected file's name
- *   (`<Injected ISPP file>`). Everything is therefore resolved on the host file and host offset, which makes
- *   a preprocessor line behave exactly like any other line of the script.
+ * With the caret on a `#…` line the platform asks the collector with the *injected* file (a
+ * [VirtualFileWindow], whose file type is still the host's). The PSI of that file is ISPP, so the platform's
+ * own collector finds nothing and the breadcrumbs bar falls back to the injected file's name
+ * (`<Injected ISPP file>`). This collector therefore claims exactly that case and resolves file, document and
+ * offset on the host, which makes a preprocessor line behave like any other line of the script. Every other
+ * file is left to the platform — see [handlesFile].
+ *
+ * Sticky lines are never contributed here: the only API for non-PSI (plain range) sticky lines is
+ * `computeStickyLineInfos`/`StickyLineInfo`, which is `@ApiStatus.Internal` and therefore off limits for a
+ * published plugin. They come exclusively from the PSI-based [IsBreadcrumbsProvider.acceptStickyElement],
+ * evaluated by the platform's collector; `#if`/`#sub` blocks have no spanning PSI element and are
+ * consequently not sticky.
  */
 class IsFileBreadcrumbsCollector(private val project: Project) : FileBreadcrumbsCollector() {
 
     private val delegate = PsiFileBreadcrumbsCollector(project)
 
+    /**
+     * Only the injected case is claimed. For a normal `.iss`/`.isl` file the platform's own
+     * `PsiFileBreadcrumbsCollector` (registered with `order="last"`, so this collector wins whenever it
+     * claims a file) must stay in charge — it is the only collector that turns
+     * [IsBreadcrumbsProvider.acceptStickyElement] into the editor's sticky lines. Claiming the host file too
+     * would silence them, because the sticky-line part of the base class returns an empty list and the only
+     * way to fill it (`computeStickyLineInfos`) is `@ApiStatus.Internal`.
+     */
     override fun handlesFile(virtualFile: VirtualFile): Boolean {
-        val fileType = virtualFile.fileType
+        if (virtualFile !is VirtualFileWindow) return false
+        val fileType = virtualFile.delegate.fileType
         return fileType is IsScriptFileType || fileType is IsLanguageFileType
     }
 
@@ -59,18 +68,6 @@ class IsFileBreadcrumbsCollector(private val project: Project) : FileBreadcrumbs
         virtualFile: VirtualFile, document: Document, offset: Int, forcedShown: Boolean?
     ): Iterable<Crumb> = onHost(virtualFile, document, offset) { hostFile, hostDocument, hostOffset ->
         delegate.computeCrumbs(hostFile, hostDocument, hostOffset, forcedShown)
-    }
-
-    override fun computeStickyLineInfos(virtualFile: VirtualFile, document: Document, offset: Int): List<StickyLineInfo> =
-        onHost(virtualFile, document, offset) { hostFile, hostDocument, hostOffset ->
-            delegate.computeStickyLineInfos(hostFile, hostDocument, hostOffset) +
-                    preprocessorInfos(hostFile, hostOffset)
-        }
-
-    /** The active branch of every preprocessor block enclosing [offset], as sticky line infos. */
-    private fun preprocessorInfos(virtualFile: VirtualFile, offset: Int): List<StickyLineInfo> {
-        val file = PsiManager.getInstance(project).findFile(virtualFile) as? IsScriptFile ?: return emptyList()
-        return IsPreprocessorBlockRanges.stickyRangesAt(file, offset).map { StickyLineInfo(it) }
     }
 
     /**
