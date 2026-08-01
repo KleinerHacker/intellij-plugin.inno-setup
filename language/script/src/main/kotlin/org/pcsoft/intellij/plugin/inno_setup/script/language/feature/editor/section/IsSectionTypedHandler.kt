@@ -14,9 +14,11 @@ package org.pcsoft.intellij.plugin.inno_setup.script.language.feature.editor.sec
 
 import com.intellij.codeInsight.AutoPopupController
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 
 /**
@@ -36,7 +38,7 @@ class IsSectionTypedHandler : TypedHandlerDelegate() {
      * whitespace or before another closing brace), mirroring the platform's own behaviour.
      */
     override fun charTyped(c: Char, project: Project, editor: Editor, file: PsiFile): Result {
-        if (file !is IsScriptFile) return Result.CONTINUE
+        if (!appliesToScript(project, file)) return Result.CONTINUE
         val close = when (c) {
             '(' -> ')'
             '[' -> ']'
@@ -57,6 +59,18 @@ class IsSectionTypedHandler : TypedHandlerDelegate() {
         editor.caretModel.moveToOffset(offset) // keep the caret between the braces
         return Result.STOP
     }
+
+    /**
+     * Whether the auto-close logic applies to [file]: either the script host itself, or — since 2026.2 — the
+     * **injected ISPP fragment** of a `#…` directive line. In 2026.2 the caret inside a directive line sits
+     * in the injected [IsPreprocessorFile] (with an injected editor window), so this delegate is invoked with
+     * that injected file rather than the host [IsScriptFile]. Edits to the injected document still propagate
+     * to the host, so the same insertion must run there; otherwise the closing brace is never inserted.
+     */
+    private fun appliesToScript(project: Project, file: PsiFile): Boolean =
+        file is IsScriptFile ||
+                (file is IsPreprocessorFile &&
+                        InjectedLanguageManager.getInstance(project).getTopLevelFile(file) is IsScriptFile)
 
     /** Whether [offset] lies on a line whose first non-whitespace character is `#` (a preprocessor directive). */
     private fun isInPreprocessorLine(chars: CharSequence, offset: Int): Boolean {

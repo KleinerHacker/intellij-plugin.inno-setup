@@ -20,6 +20,17 @@ import java.time.Duration
 val ideaVersion = extensions.getByType<VersionCatalogsExtension>()
     .named("libs").findVersion("idea").get().requiredVersion
 
+// The IntelliJ Platform ships its own kotlin-stdlib as an IDE jar (not a resolved Gradle module), so it
+// does NOT participate in dependency conflict resolution. Transitive dependencies (jackson-module-kotlin
+// pulls kotlin-reflect → kotlin-stdlib) therefore decide the version on the test/runtime classpath. If
+// that resolves to a stdlib older than the compiler (2.2.20+ emits @DebugMetadata version 2), the
+// platform's coroutine debug probes crash with "Debug metadata version mismatch. Expected: 1, got 2",
+// which kills the plugin-descriptor-loading workers and hangs every platform test until the Gradle
+// timeout. Pin the Kotlin artifacts to the catalog version (matching both the compiler and the bundled
+// 2.4.0 stdlib) so the running stdlib understands the metadata the compiler emits.
+val kotlinVersion = extensions.getByType<VersionCatalogsExtension>()
+    .named("libs").findVersion("kotlin").get().requiredVersion
+
 // Convention for the language sub-modules (:language:script, :language:preprocessor): an IntelliJ
 // Platform *module* (not a publishable plugin) sharing the Kotlin/Jackson/IDE/test setup. The actual
 // publishable plugin (:plugin) configures org.jetbrains.intellij.platform itself.
@@ -32,7 +43,7 @@ plugins {
 kotlin {
     // Compile with JDK 25: since IntelliJ 2026.2 the platform jars are Java 25 (class file 69), so an
     // older javac/kotlinc cannot even read them. The emitted bytecode is pinned to Java 21 below so the
-    // plugin still loads on the whole supported IDE range (sinceBuild 261).
+    // plugin still loads on the whole supported IDE range (sinceBuild 262).
     jvmToolchain(25)
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)
@@ -73,6 +84,11 @@ intellijPlatform {
 }
 
 dependencies {
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    }
+
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.0")
     testImplementation("junit:junit:4.13.2")
@@ -89,14 +105,33 @@ dependencies {
             intellijIdea(ideaVersion)
         }
         testFramework(TestFrameworkType.Platform)
+
+        // Since the platform bump to 2026.2 the core `intellij.spellchecker` module (which our plugin
+        // transitively pulls via com.intellij.modules.lang) depends on `intellij.libraries.lucene.common`,
+        // which was moved out of core `lib/` into the bundled `intellij.libraries.misc.plugin`. Without it
+        // on the test classpath the lucene module is unresolved, spellchecker(.xml) is excluded, and the
+        // whole test plugin gets excluded ("dependency on 'IDEA CORE' which cannot be loaded") — which made
+        // every platform feature test fail with no language support. Pull the bundled plugin in for tests.
+        bundledPlugin("intellij.libraries.misc.plugin")
     }
 }
 
 tasks.withType<Test>().configureEach {
-    jvmArgs(
-        "-Didea.log.config.file=idea/log4j.xml",
-        "-Didea.log.level=OFF",
-    )
+    // Platform tests log through java.util.logging (JUL) via TestLoggerFactory — NOT log4j. The old
+    // idea/log4j.xml + idea.log.level were silently ignored. Two independent knobs actually matter:
+    //   1. intellij.console.log.level — the IntelliJ Platform Gradle plugin sets this to "warning" by
+    //      default; it is the threshold of the JUL console handler that echoes WARN+ records to stdout.
+    //      Override it to "off" to silence the console entirely (records still go to the per-test idea.log).
+    //   2. idea.log.config.file — read as a JUL .properties file and loaded into the LogManager.
+    // Note: on a FAILED test the framework additionally dumps the full buffered debug log (down to FINE/
+    // TRACE) to stderr for diagnostics — that is independent of the above and only appears for failures.
+    systemProperty("intellij.console.log.level", "off")
+    systemProperty("idea.log.config.file", "${rootDir}/gradle/test-logging.properties")
+    // On a FAILED test the framework dumps the full buffered debug log (down to FINE/TRACE) somewhere.
+    // Default target is stderr (floods the console); with this flag it goes to a per-test file under the
+    // sandbox log dir and only a short "Log saved to: …" line is printed. Keeps the console quiet even
+    // while tests are failing.
+    systemProperty("idea.split.test.logs", "true")
     // Hard backstop so a hung test cannot stall the build indefinitely (mirrors the former root config).
     timeout.set(Duration.ofMinutes(15))
 }
