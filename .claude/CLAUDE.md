@@ -114,3 +114,22 @@
   * Erstellen: nach Erstellung mit `git add` hinzufügen
 * Es DÜRFEN NIE Commits, Pushes, Pulls oder sonst welche Aktionen, die mit dem Git Server kommunizieren, aufgerufen werden.
   * Sollte es erforderlich sein, MUSS der Nutzer gefragt werden
+
+### Zielumgebung
+
+* Es MUSS GitHub verwendet werden
+* Alle Dateien rund um GitHub befinden sich in `.github`
+* Bei tieferen Änderungen in Strukturen MUSS die Pipeline geprüft und ggf. angepasst werden
+
+#### Pipeline
+
+* Es MUSS eine Pipeline für den regelmäßigen Bau geben in `ci.yml`
+  * Diese enthält: [Bauen] Bauen -> Testen -> Plugin Verifizieren, [Verifizieren] Lizenzen / Signatur / MKDocs Bauen und Verifizieren
+  * `Bauen` und `Verifizieren` MUSS parallel abgearbeitet werden, alles in `Verifizieren` MUSS auch parallel erfolgen
+* Es MUSS eine Pipeline für ein Tag basiertes Release geben mit dem Namen `release.yml`
+  * Diese enthält: [Changelog] Verifizieren auf Version -> ([Bauen] Bauen -> Testen -> Plugin Verifizieren, [Verifizieren] Lizenzen verifizieren / Signatur erstellen, [MKDocs] Bauen -> Deployen, [Release] Artefakte pushen / Zu Market Place deployen -> Release schreiben)
+  * `Changelog` erfolgt zu erst
+  * `Bauen`, `Verifizieren`, `MKDocs` parallel danach
+    * `Verifizieren` in sich auch parallel
+  * `Release` zum Schluss
+    * Deployment Fehler MÜSSEN ignoriert werden, aber als Warnung angezeigt
