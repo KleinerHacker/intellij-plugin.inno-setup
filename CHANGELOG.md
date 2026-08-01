@@ -7,6 +7,7 @@
 ## [0.6.3]
 
 - **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.2
+- **Dependency Updates**
 
 ## [0.6.2]
 
