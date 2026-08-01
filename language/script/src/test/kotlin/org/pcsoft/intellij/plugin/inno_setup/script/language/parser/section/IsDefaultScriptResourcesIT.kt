@@ -19,7 +19,7 @@ import java.io.File
  * Validates every `*.iss` script under `src/test/resources/default`: each must highlight without any
  * ERROR-level problem. New example scripts dropped into that directory are picked up automatically.
  */
-class IsDefaultScriptResourcesTest : IsTimedBasePlatformTestCase() {
+class IsDefaultScriptResourcesIT : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = TEST_DATA_PATH
 

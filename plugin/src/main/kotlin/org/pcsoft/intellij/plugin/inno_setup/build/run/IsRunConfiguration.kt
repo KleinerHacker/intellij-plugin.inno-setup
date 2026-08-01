@@ -37,6 +37,14 @@ class IsRunConfiguration(
     var languageOverride: String = ""
     var debugOutput: Boolean = true
 
+    /**
+     * Preprocessor symbols handed to ISCC as `/D…` when compiling, e.g. `DEBUG` or `VERSION=2`.
+     *
+     * Also read back by the editor: the conditional-branch analysis seeds these symbols so a `#ifdef DEBUG`
+     * that only this run configuration defines can still be decided (see `IsRunConfigurationSymbolProvider`).
+     */
+    var compilerDefines: String = ""
+
     /** Environment variables passed to the launched installer (setup.exe). */
     var envData: EnvironmentVariablesData = EnvironmentVariablesData.DEFAULT
 
@@ -66,6 +74,7 @@ class IsRunConfiguration(
         scriptPath = element.getAttributeValue("scriptPath") ?: ""
         languageOverride = element.getAttributeValue("languageOverride") ?: ""
         debugOutput = element.getAttributeValue("debugOutput")?.toBoolean() ?: true
+        compilerDefines = element.getAttributeValue("compilerDefines") ?: ""
         persistentTempOutputDir = element.getAttributeValue("persistentTempOutputDir") ?: ""
         envData = EnvironmentVariablesData.readExternal(element)
     }
@@ -75,6 +84,7 @@ class IsRunConfiguration(
         element.setAttribute("scriptPath", scriptPath)
         element.setAttribute("languageOverride", languageOverride)
         element.setAttribute("debugOutput", debugOutput.toString())
+        element.setAttribute("compilerDefines", compilerDefines)
         element.setAttribute("persistentTempOutputDir", persistentTempOutputDir)
         envData.writeExternal(element)
     }

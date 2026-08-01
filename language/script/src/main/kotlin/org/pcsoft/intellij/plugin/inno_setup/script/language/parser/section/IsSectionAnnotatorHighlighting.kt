@@ -90,4 +90,12 @@ object IsSectionAnnotatorHighlighting {
      */
     val INCLUDE_SEGMENT_BACKGROUND: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_INCLUDE_SEGMENT_BACKGROUND")
+
+    /**
+     * The body of a `#if` branch that is provably not compiled — dimmed, like inactive `#ifdef` code in a
+     * C/C++ IDE. Shares its string id with the preprocessor module's key of the same name; the script
+     * annotator paints it because the dead body is ordinary script text, not an injected ISPP fragment.
+     */
+    val INACTIVE_BRANCH: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_INACTIVE_BRANCH")
 }

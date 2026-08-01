@@ -77,8 +77,17 @@ object IsPreprocessorConditionalStructure {
         val branches = mutableListOf(IsConditionalBranch(openerLine, isElse = false))
     }
 
-    fun structureOf(hostFile: PsiFile): IsConditionalStructure {
-        val directivesWithLine = preprocessorDirectivesWithHostLine(hostFile)
+    fun structureOf(hostFile: PsiFile): IsConditionalStructure =
+        structureOf(preprocessorDirectivesWithHostLine(hostFile))
+
+    /**
+     * Same analysis over an already-collected directive list.
+     *
+     * Collecting it means enumerating the ISPP injection of every preprocessor line, which is the dominant
+     * cost on a large script — doing it twice for one analysis made the branch evaluation scale far worse
+     * than the number of directives alone would suggest. Callers that already hold the list pass it in.
+     */
+    fun structureOf(directivesWithLine: List<Pair<IsPreprocessorDirective, PsiElement>>): IsConditionalStructure {
         val stack = ArrayDeque<Open>()
         val blocks = mutableListOf<IsConditionalBlock>()
         val problems = mutableMapOf<IsPreprocessorDirective, IsConditionalProblem>()
@@ -121,7 +130,7 @@ object IsPreprocessorConditionalStructure {
 }
 
 /** The ISPP directives of [hostFile] paired with the host preprocessor line they live on, in document order. */
-internal fun preprocessorDirectivesWithHostLine(hostFile: PsiFile): List<Pair<IsPreprocessorDirective, PsiElement>> {
+fun preprocessorDirectivesWithHostLine(hostFile: PsiFile): List<Pair<IsPreprocessorDirective, PsiElement>> {
     val mgr = InjectedLanguageManager.getInstance(hostFile.project)
     return hostFile.children
         .filter { it is IsPreprocessorHostLine }

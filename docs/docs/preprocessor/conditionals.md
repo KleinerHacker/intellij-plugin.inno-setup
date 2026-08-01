@@ -49,6 +49,29 @@ opening directive and its matching `#endif` is only emitted when the condition h
 
 ---
 
+## Conditional evaluation in the editor
+
+The plugin evaluates every `#if` block and shows which branch the compiler will actually take.
+
+- A branch that **provably is not compiled** is **dimmed** and stops reporting problems — errors in code the
+  build never sees would be noise. Its colour is configurable under
+  *Settings | Editor | Color Scheme | Inno Setup | Preprocessor | Inactive branch*.
+- The structural checks (`#endif` missing, stray `#elif`/`#else`, `#elif` after `#else`) still apply inside a
+  dimmed branch: broken nesting breaks the file regardless of which branch is compiled.
+
+Not every condition can be decided while editing. ISPP runs at compile time and can read the environment,
+files, the registry or an external program, and it receives symbols from the ISCC command line. Whenever the
+outcome is not certain, **both branches are kept lit** and the condition is marked with a hint naming the
+reason — for example *"'GetEnv' reads state that is only known while compiling"*. Nothing is ever dimmed on a
+guess.
+
+Symbols passed on the ISCC command line are taken from the **run configuration**: whatever is entered in its
+*Preprocessor symbols* field counts as defined, so a `#ifdef DEBUG` that only the build defines is still
+resolved. See [Run configuration](../run-configuration.md).
+
+[Show Effective Script](include.md) applies the same evaluation: a decided `#if` is replaced by the content
+of its live branch, an undecidable one is kept in full with a comment noting why.
+
 ## Editor support
 
 - **Highlighting & completion** — all conditional keywords are highlighted and completed (after `#`) and

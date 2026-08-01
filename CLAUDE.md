@@ -78,13 +78,40 @@ build config lives in `buildSrc` (`inno-setup.platform-module` convention).
 
 ```
 ./gradlew runIde          # Start the plugin
-./gradlew check           # Tests + verification
+./gradlew check           # Tests + verification (both test suites)
+./gradlew assemble        # Only build artifacts, no verification — what CI's build job runs
 ./gradlew generateSources # Root umbrella: regenerate all lexers + parsers across modules (after BNF/Flex changes)
 # Per-module GrammarKit tasks: :language:script:generateIsSectionParser / generateIsSectionLexer /
 #   generateIsTemplateParser / generateIsTemplateLexer ; :language:preprocessor:generateIsPreprocessorParser /
 #   generateIsPreprocessorLexer
 ./gradlew buildDocs   # Build the MkDocs site (incl. Dokka + licence report) into build/docs; --strict = generation test
 ```
+
+### Developer tests vs. integration tests
+
+A test class whose name ends in **`IT`** is an **integration test**: it exercises a shipped artifact or the
+interplay of several layers, and may measure time. Everything else is a **developer test** and must stay
+fast — it is the inner feedback loop.
+
+```
+./gradlew test                         # everything (what `check` runs)
+./gradlew test -PtestSuite=developer   # every class NOT named *IT
+./gradlew test -PtestSuite=integration # only classes named *IT
+```
+
+The split is a filter on the single `test` task rather than a second task or source set: the IntelliJ
+Platform Gradle plugin configures `test` extensively (sandbox, IDE system properties, platform classpath),
+and a separately registered `Test` task inherits none of that — it starts a bare JVM and silently finds no
+platform tests at all. One task also guarantees both CI suites run on an identical base.
+
+CI (`ci.yml`, `release.yml`) runs the two suites as **parallel jobs** that both feed an aggregating `tests`
+job; every downstream job (`verify-signing`, `validate-docs`, and in the release everything that publishes)
+depends on it, so a red suite stops the pipeline. Their shared setup lives in the composite action
+`.github/actions/setup-gradle`.
+
+Current integration tests: `IsDefaultScriptResourcesIT`, `IsDefaultTemplateResourcesIT`,
+`IsIncludeExampleResourcesIT`, `IsEffectiveScriptProblemsIT`, `IsShowEffectiveScriptActionIT`,
+`IsPreprocessorBranchAnalysisPerformanceIT`.
 
 > **MkDocs tasks** (group `MKDocs`): `buildDocs` builds the site with `mkdocs build --clean --strict` into
 > `build/docs` (path via `site_dir` in `docs/mkdocs.yml`) — no serve, no deploy; `--strict` makes the build

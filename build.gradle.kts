@@ -203,3 +203,46 @@ tasks {
     }
     //endregion
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Developer tests vs. integration tests
+//
+// Project-wide convention: a test class whose name ends in `IT` is an *integration test* — it exercises a
+// shipped artifact or the interplay of several layers, and may measure time. Everything else is a
+// *developer test* and must stay fast, because it is the inner feedback loop.
+//
+//     ./gradlew test                         → everything (what `check` runs)
+//     ./gradlew test -PtestSuite=developer   → every class NOT named *IT
+//     ./gradlew test -PtestSuite=integration → only classes named *IT
+//
+// Applied here from the root rather than in the `inno-setup.platform-module` convention, because :plugin
+// does not use that convention (it configures org.jetbrains.intellij.platform itself) and would silently
+// run its full suite under either filter.
+//
+// Deliberately a filter on the existing `test` task rather than a second Test task: the IntelliJ Platform
+// Gradle plugin configures `test` extensively (sandbox, IDE system properties, platform classpath) and a
+// separately registered task inherits none of it — it starts a bare JVM and finds no platform tests at
+// all. One task is also the strongest reading of "both CI suites run on the same base": same task, same
+// source set, same classpath, same fixtures.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+val testSuite: String? = providers.gradleProperty("testSuite").orNull
+
+subprojects {
+    tasks.withType<Test>().configureEach {
+        // Without this a second invocation on the same machine would be UP-TO-DATE and skip its suite.
+        inputs.property("testSuite", testSuite ?: "all")
+
+        filter {
+            when (testSuite) {
+                "developer" -> excludeTestsMatching("*IT")
+                "integration" -> includeTestsMatching("*IT")
+                null -> Unit
+                else -> throw GradleException(
+                    "Unknown -PtestSuite=$testSuite (expected 'developer' or 'integration')"
+                )
+            }
+            // A module may legitimately contain no test of the selected kind — most have no integration tests.
+            isFailOnNoMatchingTests = false
+        }
+    }
+}

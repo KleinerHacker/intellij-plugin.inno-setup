@@ -22,6 +22,7 @@ click **+**, and select **Inno Setup**.
 | **Script**       | Path to the top-level `.iss` script to compile. The drop-down lists all top-level scripts found in the project; any path may also be typed in. |
 | **Language**     | Selects the installer language at launch time. Only shown when the script's `[Languages]` section contains two or more entries.                |
 | **Debug output** | When enabled, passes `/DBGMSG` to the installer so diagnostic messages are printed to the console during installation.                         |
+| **Preprocessor symbols** | Symbols passed to the compiler as `/D`, e.g. `DEBUG` or `VERSION=2`; separate several with a comma, semicolon or space. The editor uses the same symbols to decide `#ifdef` branches, so what is dimmed in the script matches what this configuration builds. Changing them triggers a rebuild. |
 
 ---
 

@@ -18,7 +18,7 @@ import org.pcsoft.intellij.plugin.inno_setup.script.test.IsTimedBasePlatformTest
  * Validates the real-world `#include` example scripts under `src/test/resources/include`: each `base.iss`
  * must highlight without ERROR-level problems, because its effective (`#include`-resolved) script is complete.
  */
-class IsIncludeExampleResourcesTest : IsTimedBasePlatformTestCase() {
+class IsIncludeExampleResourcesIT : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = "src/test/resources/include"
 

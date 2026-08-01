@@ -19,7 +19,7 @@ import org.pcsoft.intellij.plugin.inno_setup.script.test.IsTimedBasePlatformTest
  * Tests for [IsEffectiveScriptProblems]: problems of the combined effective script are attributed to the
  * topmost host `#include` that introduced the offending line; problems of the host file itself are dropped.
  */
-class IsEffectiveScriptProblemsTest : IsTimedBasePlatformTestCase() {
+class IsEffectiveScriptProblemsIT : IsTimedBasePlatformTestCase() {
 
     private fun open(name: String, content: String): IsScriptFile {
         val file = myFixture.addFileToProject(name, content)

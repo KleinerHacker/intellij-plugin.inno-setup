@@ -41,6 +41,7 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         AttributesDescriptor("References//Unknown reference", IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE),
         AttributesDescriptor("Preprocessor//Directive", IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE),
         AttributesDescriptor("Preprocessor//Define name", IsSectionAnnotatorHighlighting.DEFINE_NAME),
+        AttributesDescriptor("Preprocessor//Inactive branch", IsSectionAnnotatorHighlighting.INACTIVE_BRANCH),
         AttributesDescriptor("Deprecated", IsSectionAnnotatorHighlighting.DEPRECATED),
         AttributesDescriptor("Unused", IsSectionAnnotatorHighlighting.UNUSED),
     )
@@ -81,6 +82,10 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         <pp>#define</pp> <dname>Max</dname>(a, b) a > b ? a : b
         <pp>#include</pp> "common.iss"
 
+        <pp>#if</pp> BuildNumber > 100
+        <inactive>; this branch is provably not compiled</inactive>
+        <pp>#endif</pp>
+
         [<sectionName>Setup</sectionName>]
         <paramKey>AppName</paramKey>=MyApplication
         <paramKey>AppVersion</paramKey>={<pp>#</pp><ppref>AppVersion</ppref>}
@@ -106,5 +111,6 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         "dname" to IsSectionAnnotatorHighlighting.DEFINE_NAME,
         "ppref" to IsSectionAnnotatorHighlighting.ISPP_REFERENCE_NAME,
         "unused" to IsSectionAnnotatorHighlighting.UNUSED,
+        "inactive" to IsSectionAnnotatorHighlighting.INACTIVE_BRANCH,
     )
 }

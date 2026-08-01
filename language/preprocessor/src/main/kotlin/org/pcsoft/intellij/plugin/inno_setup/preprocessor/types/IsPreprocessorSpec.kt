@@ -124,6 +124,7 @@ enum class IsPreprocessorFunctionReturnType(val typeName: String) {
  * @property name Function name without arguments.
  * @property signature Display signature including argument information.
  * @property returnType Structured result type used by the expression type inference.
+ * @property pure Whether the function is free of side effects and depends only on its arguments.
  * @property description HTML-capable description loaded from the specification file.
  * @property since First Inno Setup version that provides the function, or `null` when unknown.
  * @property until Last Inno Setup version that provides the function, or `null` when it is still valid.
@@ -142,6 +143,17 @@ data class IsPreprocessorFunctionSpec(
      */
     @field:JsonProperty("return_type")
     val returnType: IsPreprocessorFunctionReturnType = IsPreprocessorFunctionReturnType.ANY,
+    /**
+     * Whether calling this function is free of side effects and depends only on its arguments.
+     *
+     * Impure functions touch state the IDE cannot see or reproduce at edit time — the file system
+     * (`FileRead`, `DirExists`), the registry (`ReadReg`), the environment (`GetEnv`), the clock
+     * (`GetDateTimeString`), external processes (`Exec`) — or they mutate the compilation itself
+     * (`SaveToFile`, `EmitLanguagesSection`, `SetSetupSetting`). The conditional-branch analysis
+     * treats a call to an impure function as poisoning the whole preprocessor environment, while a
+     * pure call it cannot compute merely makes that one expression non-computable.
+     */
+    val pure: Boolean = true,
     /**
      * Returns or performs the public behavior represented by this member.
      */

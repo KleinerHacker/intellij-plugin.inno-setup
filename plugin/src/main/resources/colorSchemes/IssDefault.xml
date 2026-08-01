@@ -47,6 +47,12 @@
                 <option name="FOREGROUND" value="808080"/>
             </value>
         </option>
+        <!-- Body of a provably skipped #if branch — dimmed, but still readable on a light background -->
+        <option name="ISS_INACTIVE_BRANCH">
+            <value>
+                <option name="FOREGROUND" value="9a9a9a"/>
+            </value>
+        </option>
         <!-- Background tint for #include-pulled text in the effective-script view — light translucent blue -->
         <option name="ISS_INCLUDE_SEGMENT_BACKGROUND">
             <value>

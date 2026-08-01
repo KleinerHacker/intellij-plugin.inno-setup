@@ -24,7 +24,7 @@ import java.io.File
  * Validates every `*.ist` template under `src/test/resources/default`: each must parse without any
  * [PsiErrorElement]. New example templates dropped into that directory are picked up automatically.
  */
-class IsDefaultTemplateResourcesTest : IsTimedBasePlatformTestCase() {
+class IsDefaultTemplateResourcesIT : IsTimedBasePlatformTestCase() {
 
     override fun getTestDataPath(): String = TEST_DATA_PATH
 

@@ -27,6 +27,8 @@ import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.IsAnnotationSink
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.PlatformAnnotationSink
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsBranchAnalysis
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorBranchAnalysis
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
@@ -61,6 +63,17 @@ class IsSectionAnnotator : Annotator {
 
     fun annotate(element: PsiElement, holder: IsAnnotationSink) {
         val spec = service<IsSpecService>().spec
+
+        // Conditional compilation: dim the bodies of provably skipped #if branches and stop reporting
+        // anything inside them. Diagnostics about code the build never sees are noise at best — a red
+        // squiggle in greyed-out dead code is worse than no analysis at all.
+        val branches = IsPreprocessorBranchAnalysis.analyze(element.containingFile)
+        if (element is IsScriptFile) {
+            annotateInactiveBranches(branches, holder)
+        } else if (branches.isInactive(element.textRange)) {
+            return
+        }
+
         when (element) {
             is IsScriptFile -> annotateFile(element, holder, spec)
             is IsSectionTitle -> annotateSectionName(element, holder, spec)
@@ -80,6 +93,22 @@ class IsSectionAnnotator : Annotator {
         if (element is IsSectionParamValue) {
             annotateLanguageId(element, holder)
             annotateMessagesFile(element, holder)
+        }
+    }
+
+    /**
+     * Dims the body of every `#if` branch the analysis proved is not compiled.
+     *
+     * Emitted once per file (from the [IsScriptFile] visit) rather than per element, because the dead body is
+     * plain script text spanning arbitrarily many PSI elements — and because a branch whose condition is
+     * merely undecidable must keep its normal colours.
+     */
+    private fun annotateInactiveBranches(branches: IsBranchAnalysis, holder: IsAnnotationSink) {
+        branches.inactiveRanges.forEach { range ->
+            holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                .range(range)
+                .textAttributes(IsSectionAnnotatorHighlighting.INACTIVE_BRANCH)
+                .create()
         }
     }
 

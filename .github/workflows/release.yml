@@ -36,6 +36,60 @@ jobs:
           name: sbom
           path: plugin/build/reports/cyclonedx/bom.xml
 
+  # Developer tests: every test class NOT named *IT.
+  test-developer:
+    runs-on: ubuntu-latest
+
+    steps:
+      # The local composite action can only be resolved once the repo is on disk.
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-gradle
+
+      - name: Run developer tests
+        run: ./gradlew test --stacktrace --info
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report-developer
+          path: '**/build/reports/tests/test/**'
+
+  # Integration tests: test classes named *IT. Runs at the same time as the developer tests,
+  # from the identical setup.
+  test-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+      # The local composite action can only be resolved once the repo is on disk.
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-gradle
+
+      - name: Run integration tests
+        run: ./gradlew integrationTest --stacktrace --info
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-report-integration
+          path: '**/build/reports/tests/integrationTest/**'
+
+  # Single gate name for everything that publishes: a release only happens when BOTH suites are green.
+  # Until this was introduced a tagged release was published without running any test at all.
+  tests:
+    runs-on: ubuntu-latest
+    needs:
+      - test-developer
+      - test-integration
+    steps:
+      - name: Both test suites passed
+        run: echo "Developer and integration tests are green."
+
   build:
     runs-on: ubuntu-latest
 
@@ -144,6 +198,7 @@ jobs:
       - build
       - licences
       - deploy-docs
+      - tests
 
     steps:
       - uses: actions/checkout@v7
@@ -192,6 +247,7 @@ jobs:
       - build
       - licences
       - deploy-docs
+      - tests
 
     permissions:
       contents: read
@@ -222,6 +278,7 @@ jobs:
       - build
       - licences
       - deploy-docs
+      - tests
       - publish-marketplace
       - publish-packages   # GitHub release only after the language artifacts are published
 

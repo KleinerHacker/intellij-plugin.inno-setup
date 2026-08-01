@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser
 
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.util.Key
+import com.intellij.openapi.vfs.VirtualFile
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 
 /**
@@ -56,3 +57,14 @@ data class IsPreprocessorIncludeProblem(val severity: HighlightSeverity, val mes
  * effective file. Defined here (the lowest module) so both the annotator and the script-side builder share it.
  */
 val EFFECTIVE_SCRIPT_MARKER: Key<Boolean> = Key.create("inno.effectiveScript")
+
+/**
+ * The real script an in-memory effective script was built from.
+ *
+ * An effective script is created with `PsiFileFactory.createFileFromText` and therefore has no
+ * [com.intellij.openapi.vfs.VirtualFile] of its own. Anything that must be resolved *per script* — most
+ * importantly the ISCC `/D` symbols contributed by a run configuration — would silently fall back to "nothing
+ * known" without this back-pointer, so the effective script would drop `#if` branches the editor keeps (or
+ * vice versa).
+ */
+val EFFECTIVE_SCRIPT_ORIGIN: Key<VirtualFile> = Key.create("inno.effectiveScript.origin")

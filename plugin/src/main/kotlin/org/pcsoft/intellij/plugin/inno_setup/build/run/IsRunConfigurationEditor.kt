@@ -20,6 +20,7 @@ import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
+import com.intellij.ui.components.JBTextField
 import com.intellij.util.ui.JBUI
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
@@ -54,6 +55,18 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
 
     private val envVarsComponent = EnvironmentVariablesComponent()
         .apply { alignmentX = Component.LEFT_ALIGNMENT }
+
+    // Preprocessor symbols passed to ISCC as /D…. Also read back by the editor's conditional-branch
+    // analysis, so what is typed here decides which #ifdef branches are greyed out in the script.
+    private val definesField = JBTextField().apply {
+        toolTipText = PluginBundle.message("run.config.editor.defines.tooltip")
+    }
+    private val definesRow = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0)).apply {
+        alignmentX = Component.LEFT_ALIGNMENT
+        add(JLabel(PluginBundle.message("run.config.editor.defines") + ":"))
+        add(Box.createHorizontalStrut(4))
+        add(definesField.apply { preferredSize = Dimension(280, preferredSize.height) })
+    }
 
     private val panel: JPanel = buildPanel()
 
@@ -92,6 +105,8 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
             layout = BoxLayout(this, BoxLayout.PAGE_AXIS)
             border = BorderFactory.createEmptyBorder(0, 12, 0, 0)
             add(languageRow)
+            add(Box.createVerticalStrut(4))
+            add(definesRow)
             add(Box.createVerticalStrut(4))
             add(debugOutputCheck)
             add(Box.createVerticalStrut(4))
@@ -148,6 +163,7 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     override fun resetEditorFrom(config: IsRunConfiguration) {
         loadScripts(config.scriptPath)
         debugOutputCheck.isSelected = config.debugOutput
+        definesField.text = config.compilerDefines
         envVarsComponent.envData = config.envData
         loadLanguages(config.scriptPath)
         val idx =
@@ -159,6 +175,7 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     override fun applyEditorTo(config: IsRunConfiguration) {
         config.scriptPath = selectedScriptPath()
         config.debugOutput = debugOutputCheck.isSelected
+        config.compilerDefines = definesField.text.trim()
         config.envData = envVarsComponent.envData
         val selLang = languageCombo.selectedItem as? String ?: ""
         config.languageOverride =

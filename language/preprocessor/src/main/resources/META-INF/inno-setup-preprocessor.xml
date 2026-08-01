@@ -13,6 +13,15 @@
 <!-- ISPP preprocessor language fragment (:language:preprocessor). Pulled into the main plugin.xml via
      <xi:include>. Contains only the language-level ISPP registrations. -->
 <idea-plugin>
+    <extensionPoints>
+        <!-- Preprocessor symbols defined outside the script (ISCC /D… of a run configuration), consumed by
+             the conditional-branch analysis. Implemented in the :plugin module, which knows run configs. -->
+        <!-- qualifiedName (not name) so the id stays independent of the plugin id and matches EP_NAME. -->
+        <extensionPoint qualifiedName="org.pcsoft.intellij.plugin.inno_setup.preprocessorSymbolProvider"
+                        interface="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolProvider"
+                        dynamic="true"/>
+    </extensionPoints>
+
     <extensions defaultExtensionNs="com.intellij">
         <!-- ISPP parser (injected language for #define, #include, etc.) -->
         <lang.parserDefinition language="ISPP"

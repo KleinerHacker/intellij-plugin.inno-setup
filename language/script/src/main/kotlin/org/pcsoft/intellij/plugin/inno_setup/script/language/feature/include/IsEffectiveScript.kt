@@ -25,6 +25,7 @@ import com.intellij.psi.util.CachedValuesManager
 import com.intellij.psi.util.PsiModificationTracker
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.IsIncludePaths
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.EFFECTIVE_SCRIPT_MARKER
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.EFFECTIVE_SCRIPT_ORIGIN
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
@@ -73,6 +74,7 @@ private fun buildOrReuseEffective(host: IsScriptFile): IsScriptFile {
     // Mark it so a (re-entrant) declaration lookup on the effective file short-circuits to itself
     // instead of building yet another effective script (see [declarationScope]).
     effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
+    host.virtualFile?.let { effective.putUserData(EFFECTIVE_SCRIPT_ORIGIN, it) }
     host.putUserData(EFFECTIVE_SCRIPT_INSTANCE, stamp to effective)
     return effective
 }
@@ -94,7 +96,18 @@ fun IsScriptFile.declarationScope(): IsScriptFile =
  * for text of the host (main) file, or the **topmost** `#include` directive of the host file through which the
  * slice was pulled in (no matter how deeply nested the actual include is).
  */
-data class IsEffectiveSegment(val range: TextRange, val origin: SmartPsiElementPointer<IsPreprocessorDirective>?)
+data class IsEffectiveSegment(
+    /** Range of the slice in the produced effective text. */
+    val range: TextRange,
+    /** The topmost host `#include` that pulled the slice in, or `null` for host text. */
+    val origin: SmartPsiElementPointer<IsPreprocessorDirective>?,
+    /**
+     * Start offset of the slice in the text it was taken from — the host file for `origin == null`, the
+     * included file otherwise. Lets an offset in the effective text be mapped back exactly, which the
+     * conditional pruning needs after it has shifted everything that follows a removed branch.
+     */
+    val sourceStart: Int = 0,
+)
 
 /**
  * The effective, fully `#include`-resolved text of a script **without** same-named section merging (so output
@@ -149,17 +162,17 @@ private fun buildAttributedEffectiveScript(host: IsScriptFile): IsAttributedEffe
     val segments = mutableListOf<IsEffectiveSegment>()
     val sb = StringBuilder()
 
-    fun append(text: String, origin: SmartPsiElementPointer<IsPreprocessorDirective>?) {
+    fun append(text: String, origin: SmartPsiElementPointer<IsPreprocessorDirective>?, sourceStart: Int) {
         if (text.isEmpty()) return
         val start = sb.length
         sb.append(text)
-        segments += IsEffectiveSegment(TextRange(start, sb.length), origin)
+        segments += IsEffectiveSegment(TextRange(start, sb.length), origin, sourceStart)
     }
 
     var lastEnd = 0
     LITERAL_INCLUDE.findAll(hostText).forEach { match ->
         if (match.range.first > lastEnd) {
-            append(hostText.substring(lastEnd, match.range.first), null)
+            append(hostText.substring(lastEnd, match.range.first), null, lastEnd)
         }
         val directive = includeAnchors.firstOrNull { it.second in match.range }?.first
         val origin = directive?.let { pointerManager.createSmartPsiElementPointer(it) }
@@ -178,33 +191,45 @@ private fun buildAttributedEffectiveScript(host: IsScriptFile): IsAttributedEffe
                 }
             }
         }
-        append(expanded, origin)
+        append(expanded, origin, match.range.first)
         lastEnd = match.range.last + 1
     }
-    if (lastEnd < hostText.length) append(hostText.substring(lastEnd), null)
+    if (lastEnd < hostText.length) append(hostText.substring(lastEnd), null, lastEnd)
 
     val effective = PsiFileFactory.getInstance(host.project)
         .createFileFromText("attributed_${host.name}", IsScriptLanguage, sb.toString()) as IsScriptFile
     effective.putUserData(EFFECTIVE_SCRIPT_MARKER, true)
+    host.virtualFile?.let { effective.putUserData(EFFECTIVE_SCRIPT_ORIGIN, it) }
     return IsAttributedEffectiveScript(effective, segments)
 }
 
 /**
- * The read-only *effective script view* of a host file: the fully `#include`-resolved [text] together with the
- * [includeRanges] (offsets into [text]) that originate from an `#include`. Used by the effective-script viewer
- * to render the merged script with the include-pulled parts tinted. When the host has no literal `#include`,
- * [text] is the original and [includeRanges] is empty.
+ * The read-only *effective script view* of a host file: [text] with every literal `#include` inlined **and**
+ * every decidable `#if` resolved, together with the [includeRanges] (offsets into [text]) that originate from
+ * an `#include`. Used by the effective-script viewer to render the result with the include-pulled parts
+ * tinted. When the host has no literal `#include`, [includeRanges] is empty.
  */
 data class IsEffectiveScriptView(val text: String, val includeRanges: List<TextRange>)
 
 /**
- * Builds the [IsEffectiveScriptView] of this host file from its [toAttributedEffectiveScript] (offsets map 1:1,
- * since the attributed variant applies no same-named section merge).
+ * Builds the [IsEffectiveScriptView] of this host file: [toAttributedEffectiveScript] inlines the includes
+ * (offsets map 1:1, since the attributed variant applies no same-named section merge), then
+ * [IsEffectiveScriptBranches] drops the branches that provably are not compiled.
+ *
+ * Note this is the *view* only. [toEffectiveScript] — the declaration scope used for reference resolution —
+ * deliberately keeps every branch: it exists to *find* declarations, and hiding a `#define` that some build
+ * configuration does define would turn a legitimate reference into a false "unresolved" error.
  */
 fun IsScriptFile.effectiveScriptView(): IsEffectiveScriptView {
-    val attributed = toAttributedEffectiveScript() ?: return IsEffectiveScriptView(text, emptyList())
-    val ranges = attributed.segments.filter { it.origin != null }.map { it.range }
-    return IsEffectiveScriptView(attributed.file.text, ranges)
+    val attributed = toAttributedEffectiveScript()
+    // Without a literal #include there is nothing to inline, but the conditionals still have to be applied,
+    // so the host file itself becomes the single (unattributed) segment of the pruning input.
+    val text = attributed?.file?.text ?: text
+    val segments = attributed?.segments ?: listOf(IsEffectiveSegment(TextRange(0, text.length), null, 0))
+    val analysed = attributed?.file ?: this
+
+    val (pruned, prunedSegments) = IsEffectiveScriptBranches.prune(text, segments, analysed)
+    return IsEffectiveScriptView(pruned, prunedSegments.filter { it.origin != null }.map { it.range })
 }
 
 /**

@@ -103,14 +103,16 @@ class IsCompilerService(private val project: Project) {
         scriptFile: VirtualFile,
         outputArg: String?,
         hasArtifact: Boolean,
-        force: Boolean = false
+        force: Boolean = false,
+        defines: List<String> = emptyList()
     ): ProjectTaskRunner.Result =
         runCompilation(
             listOf(scriptFile),
             PluginBundle.message("build.title.script", scriptFile.name),
             force,
             outputArgFor = { outputArg },
-            artifactPresent = { hasArtifact }
+            artifactPresent = { hasArtifact },
+            defines = defines
         )
 
     /**
@@ -118,13 +120,16 @@ class IsCompilerService(private val project: Project) {
      *                         pipeline); `null` falls back to the configured [outputMode].
      * @param artifactPresent  extra up-to-date guard: a script is only skipped when its build artifact
      *                         still exists. Defaults to always-present for the regular build.
+     * @param defines          ISCC `/D…` preprocessor symbols (used by the run pipeline); the regular
+     *                         project build defines none.
      */
     private fun runCompilation(
         scripts: List<VirtualFile>,
         title: String,
         force: Boolean,
         outputArgFor: ((VirtualFile) -> String?)? = null,
-        artifactPresent: (VirtualFile) -> Boolean = { true }
+        artifactPresent: (VirtualFile) -> Boolean = { true },
+        defines: List<String> = emptyList()
     ): ProjectTaskRunner.Result {
         // Flush unsaved editor changes so ISCC compiles the current content from disk.
         ApplicationManager.getApplication().invokeAndWait {
@@ -159,7 +164,7 @@ class IsCompilerService(private val project: Project) {
             val outputArg = outputArgFor?.invoke(script) ?: resolver.resolveOutputArg(script, mode)
             // Skip scripts whose participating files are unchanged since the last successful build to
             // the same output, unless a rebuild was forced or the previously produced artifact is gone.
-            val scriptKey = hashKey(script.path, outputArg)
+            val scriptKey = hashKey(script.path, outputArg, defines)
             val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
             if (!force && buildHashes[scriptKey] == currentHash && artifactPresent(script)) {
                 consoleService.print(
@@ -171,7 +176,7 @@ class IsCompilerService(private val project: Project) {
             }
 
             consoleService.print(console, PluginBundle.message("build.compiling", script.name) + "\n", error = false)
-            val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg)
+            val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg, defines)
 
             try {
                 val handler = OSProcessHandler(commandLine)
@@ -259,8 +264,13 @@ class IsCompilerService(private val project: Project) {
      * (a regular build vs. a run that forces a real installer) are tracked independently and never
      * wrongly skip one another.
      */
-    private fun hashKey(path: String, outputArg: String?): String =
-        canonicalPath(path) + '|' + (outputArg ?: "")
+    /**
+     * Identity of one build: same script, same output *and* same `/D` symbols. The defines belong in the key
+     * because they change what the preprocessor compiles — without them, flipping `/DDEBUG` would leave the
+     * previous installer wrongly considered up to date.
+     */
+    private fun hashKey(path: String, outputArg: String?, defines: List<String> = emptyList()): String =
+        canonicalPath(path) + '|' + (outputArg ?: "") + '|' + defines.joinToString(" ")
 
     private fun resolvePath(path: String): VirtualFile? =
         LocalFileSystem.getInstance().findFileByPath(path.replace('\\', '/'))
@@ -283,10 +293,13 @@ class IsCompilerService(private val project: Project) {
             iscc: File,
             scriptPath: String,
             workDir: String?,
-            outputArg: String?
+            outputArg: String?,
+            defines: List<String> = emptyList()
         ): GeneralCommandLine {
             val cmd = GeneralCommandLine(iscc.absolutePath)
             outputArg?.let { cmd.addParameter(it) }
+            // /D must precede the script name, like every other ISCC option.
+            defines.forEach { cmd.addParameter(it) }
             cmd.addParameter(scriptPath)
             if (workDir != null) cmd.withWorkDirectory(workDir)
             return cmd

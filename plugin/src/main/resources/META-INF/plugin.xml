@@ -254,6 +254,13 @@
                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.build.gutter.IsSetupSectionGutterIconProvider"/>
     </extensions>
 
+    <!-- Feeds the run configuration's ISCC /D symbols into the conditional-branch analysis, so the editor
+         greys out the same #ifdef branches the build skips. -->
+    <extensions defaultExtensionNs="org.pcsoft.intellij.plugin.inno_setup">
+        <preprocessorSymbolProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationSymbolProvider"/>
+    </extensions>
+
     <!-- Action texts/descriptions are set in code via PluginBundle (see the action classes). -->
     <actions>
         <action id="Iss.NewFile"

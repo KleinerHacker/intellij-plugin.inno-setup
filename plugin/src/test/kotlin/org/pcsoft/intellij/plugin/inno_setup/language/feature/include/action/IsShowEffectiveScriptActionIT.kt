@@ -20,7 +20,7 @@ import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
  * Tests for [IsShowEffectiveScriptAction]: opening the effective script produces a read-only, in-memory tab
  * whose content is the fully `#include`-resolved script.
  */
-class IsShowEffectiveScriptActionTest : IsTimedBasePlatformTestCase() {
+class IsShowEffectiveScriptActionIT : IsTimedBasePlatformTestCase() {
 
     fun testEffectiveScriptOpensReadOnlyWithMergedContent() {
         myFixture.addFileToProject("part.iss", "[Files]\nSource: \"a\"; DestDir: \"{app}\"\n")

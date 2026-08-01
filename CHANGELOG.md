@@ -4,6 +4,24 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Conditional compilation**: `#if`, `#elif`, `#else`, `#ifdef`, `#ifndef`, `#ifexist` and `#ifnexist` are
+  now evaluated in the editor. A branch that provably is not compiled is dimmed and no longer reports
+  errors or warnings.
+- If a condition cannot be evaluated with certainty — because it depends on the environment, a file being
+  read, an external program, or a symbol only defined on the compiler command line — **both branches stay
+  visible** and the condition is marked with a hint explaining why it could not be resolved. Nothing is ever
+  dimmed on a guess.
+- `#ifexist` and `#ifnexist` now actually check whether the file exists.
+- **Show Effective Script** resolves conditionals as well: a decided `#if` is replaced by the content of its
+  live branch, while an undecidable one is kept in full with a comment noting that it could not be resolved.
+- **Preprocessor symbols in the run configuration**: a new field passes symbols to the compiler as `/D`
+  (e.g. `DEBUG` or `VERSION=2`). The editor uses the same symbols, so `#ifdef DEBUG` is resolved exactly as
+  the build will resolve it. Changing them now also triggers a rebuild.
+- New colour scheme entry **Preprocessor | Inactive branch** for the dimming (Settings | Editor | Color
+  Scheme).
+
 ## [0.6.4]
 
 ### Added

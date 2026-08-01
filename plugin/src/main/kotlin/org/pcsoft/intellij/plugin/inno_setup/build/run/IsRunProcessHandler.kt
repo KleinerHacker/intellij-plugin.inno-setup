@@ -101,7 +101,10 @@ class IsRunProcessHandler(
         }
         val hasArtifact = IsScriptRunnerLogic.findSetupExe(outputDir) != null
         printOut("Building ${scriptFile.name} (see the Build tool window for details)…\n")
-        if (compilerService.compileScriptForRun(scriptVFile, outputArg, hasArtifact) != TaskRunnerResults.SUCCESS) {
+        val defines = IsCompilerDefines.toIsccArguments(config.compilerDefines)
+        if (compilerService.compileScriptForRun(scriptVFile, outputArg, hasArtifact, defines = defines)
+            != TaskRunnerResults.SUCCESS
+        ) {
             printErr("Build failed — aborting run.\n")
             notifyProcessTerminated(1)
             return

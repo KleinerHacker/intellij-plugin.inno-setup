@@ -42,4 +42,12 @@ object IsPreprocessorAnnotatorHighlighting {
     /** Unused elements (an unused `#define`) — gray, like Java's unused. */
     val UNUSED: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_UNUSED", CodeInsightColors.NOT_USED_ELEMENT_ATTRIBUTES)
+
+    /**
+     * The body of a `#if` branch that is provably not compiled — dimmed, like inactive `#ifdef` code in a
+     * C/C++ IDE. Only ever applied to a branch the analysis could *prove* dead; an undecidable condition
+     * leaves both branches painted normally.
+     */
+    val INACTIVE_BRANCH: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_INACTIVE_BRANCH")
 }

@@ -92,7 +92,20 @@ class IsPreprocessorAnnotator : Annotator {
                 highlight(element.textRange, IsPreprocessorSyntaxHighlighting.NUMBER, holder)
         }
 
-        if (element is IsPreprocessorDirective) annotateDirective(element, holder)
+        if (element is IsPreprocessorDirective) {
+            // A directive inside a provably skipped branch is never executed, so reporting problems in it
+            // would put red squiggles into greyed-out dead code. The conditional *structure* is the sole
+            // exception: unbalanced #if/#endif nesting breaks the file no matter which branch is compiled,
+            // so it is still validated below.
+            val hostRange = InjectedLanguageManager.getInstance(element.project)
+                .injectedToHost(element, element.textRange)
+            if (IsPreprocessorBranchAnalysis.analyze(element.containingFile).isInactive(hostRange)) {
+                annotateConditionalStructure(element, holder)
+                return
+            }
+
+            annotateDirective(element, holder)
+        }
     }
 
     private fun annotateDirective(directive: IsPreprocessorDirective, holder: IsAnnotationSink) {
@@ -211,6 +224,44 @@ class IsPreprocessorAnnotator : Annotator {
     }
 
     /** Highlights the optional scope/visibility keyword of a `#define`/`#undef` like a keyword. */
+    /**
+     * Marks a condition the branch analysis could not decide statically.
+     *
+     * Deliberately a [HighlightSeverity.WEAK_WARNING] and not an error: an undecidable condition is normal
+     * for a preprocessor that runs `Exec`, reads files or receives `/D` symbols on the ISCC command line. The
+     * marker only explains why *both* branches stay lit instead of one being greyed out. Its severity also
+     * keeps it out of the recorded-problem replay ([RecordingAnnotationBuilder] drops everything below
+     * WARNING), so an `#include`d file does not report it a second time on its includer.
+     */
+    private fun annotateUndecidableCondition(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: IsAnnotationSink,
+    ) {
+        val injectedRange = conditionRangeInDirective(directive, ex) ?: return
+        val manager = InjectedLanguageManager.getInstance(directive.project)
+        val hostRange = manager.injectedToHost(directive, injectedRange)
+
+        val reason = IsPreprocessorBranchAnalysis.analyze(directive.containingFile)
+            .unknown.firstOrNull { it.range == hostRange } ?: return
+
+        holder.newAnnotation(
+            HighlightSeverity.WEAK_WARNING,
+            "Condition cannot be evaluated statically — ${reason.message}; both branches are kept",
+        ).range(injectedRange).create()
+    }
+
+    /** The condition range of [directive] in its own (injected) coordinates, or `null` when it has none. */
+    private fun conditionRangeInDirective(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+    ): TextRange? {
+        if (ex.isIfdefFamily()) return directive.value?.textRange?.takeUnless { it.isEmpty }
+        val text = ex.getConditionExpressionText()?.takeUnless { it.isEmpty() } ?: return null
+        val start = directive.textRange.startOffset + ex.getConditionExpressionOffsetInDirective()
+        return TextRange(start, start + text.length)
+    }
+
     private fun highlightVisibility(ex: IsPreprocessorDirectiveEx, holder: IsAnnotationSink) {
         val visibility = ex.getVisibilityIdentifier() ?: return
         highlight(visibility.textRange, IsPreprocessorAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
@@ -284,7 +335,20 @@ class IsPreprocessorAnnotator : Annotator {
         ex: IsPreprocessorDirectiveEx,
         holder: IsAnnotationSink,
     ) {
-        // ── structure ──
+        annotateConditionalStructure(directive, holder)
+        annotateUndecidableCondition(directive, ex, holder)
+        annotateConditionalArgument(directive, ex, holder)
+    }
+
+    /**
+     * Reports an unbalanced conditional: an opener without `#endif`, a branch without an opener, or an `#elif`
+     * after `#else`.
+     *
+     * Runs even for directives inside a provably skipped branch — a malformed `#if`/`#endif` nesting breaks
+     * the whole file regardless of which branch the compiler would take, so this is the one check that must
+     * never be suppressed as "dead code".
+     */
+    private fun annotateConditionalStructure(directive: IsPreprocessorDirective, holder: IsAnnotationSink) {
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
         if (hostFile != null) {
@@ -304,6 +368,16 @@ class IsPreprocessorAnnotator : Annotator {
                 holder.newAnnotation(HighlightSeverity.ERROR, message).range(range).create()
             }
         }
+    }
+
+    /** Validates the argument of a conditional directive: an identifier, a file name or an expression. */
+    private fun annotateConditionalArgument(
+        directive: IsPreprocessorDirective,
+        ex: IsPreprocessorDirectiveEx,
+        holder: IsAnnotationSink,
+    ) {
+        val hostFile = InjectedLanguageManager.getInstance(directive.project)
+            .getTopLevelFile(directive.containingFile).asIsppHostFile()
 
         // ── #ifdef / #ifndef: a single identifier naming a (possibly non-existent) #define ──
         if (ex.isIfdefFamily()) {

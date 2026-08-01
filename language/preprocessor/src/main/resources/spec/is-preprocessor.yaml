@@ -212,6 +212,7 @@ builtin_functions:
     description: "Returns a substring of S. Index is 1-based."
 
   - name: CopyFile
+    pure: false
     signature: "CopyFile(ExistingFile: str, NewFile: str): int"
     return_type: int
     description: "Copies an existing file at compile time; returns non-zero on success."
@@ -232,11 +233,13 @@ builtin_functions:
     description: "Deletes Count characters from S starting at Index (modifies S by reference)."
 
   - name: DeleteFile
+    pure: false
     signature: "DeleteFile(Filename: str): int"
     return_type: int
     description: "Deletes a file at compile time; returns non-zero on success."
 
   - name: DeleteFileNow
+    pure: false
     signature: "DeleteFileNow(Filename: str): int"
     return_type: int
     description: "Deletes a file immediately during preprocessing; returns non-zero on success."
@@ -247,11 +250,13 @@ builtin_functions:
     description: "Returns the number of elements of an array variable."
 
   - name: DirExists
+    pure: false
     signature: "DirExists(Path: str): int"
     return_type: int
     description: "Returns 1 if the directory exists, 0 otherwise."
 
   - name: EmitLanguagesSection
+    pure: false
     signature: "EmitLanguagesSection()"
     return_type: void
     description: "Emits a [Languages] section from the bundled language files."
@@ -262,21 +267,25 @@ builtin_functions:
     description: "Encodes version components into a single packed version number."
 
   - name: EntryCount
+    pure: false
     signature: "EntryCount(Section: str): int"
     return_type: int
     description: "Returns the number of entries in the given script section."
 
   - name: Error
+    pure: false
     signature: "Error(Message: str)"
     return_type: void
     description: "Raises a compile-time error with the given message."
 
   - name: Exec
+    pure: false
     signature: "Exec(CmdLine: str, Params: str = \"\", WorkingDir: str = \"\", ShowCmd: int = 0, Wait: int = 0): int"
     return_type: int
     description: "Executes a program at compile time; returns the process exit code."
 
   - name: ExecAndGetFirstLine
+    pure: false
     signature: "ExecAndGetFirstLine(CmdLine: str, Params: str = \"\", WorkingDir: str = \"\"): str"
     return_type: str
     description: "Executes a program and returns the first line of its standard output."
@@ -302,131 +311,157 @@ builtin_functions:
     description: "Returns the drive and directory part of Filename (with a trailing backslash)."
 
   - name: FileClose
+    pure: false
     signature: "FileClose(Handle: int)"
     return_type: void
     description: "Closes a file previously opened with FileOpen."
 
   - name: FileEof
+    pure: false
     signature: "FileEof(Handle: int): int"
     return_type: int
     description: "Returns non-zero when the end of an open file has been reached."
 
   - name: FileExists
+    pure: false
     signature: "FileExists(Filename: str): int"
     return_type: int
     description: "Returns 1 if the file exists, 0 otherwise."
 
   - name: FileOpen
+    pure: false
     signature: "FileOpen(Filename: str): int"
     return_type: int
     description: "Opens a text file for reading and returns a file handle."
 
   - name: FileRead
+    pure: false
     signature: "FileRead(Handle: int): str"
     return_type: str
     description: "Reads the next line from an open file."
 
   - name: FileReset
+    pure: false
     signature: "FileReset(Handle: int)"
     return_type: void
     description: "Resets the read position of an open file to the beginning."
 
   - name: FileSize
+    pure: false
     signature: "FileSize(Filename: str): int"
     return_type: int
     description: "Returns the size of a file in bytes."
 
   - name: Find
+    pure: false
     signature: "Find(S: str, Substr: str, Index: int = 1): int"
     return_type: int
     description: "Returns the position of Substr in S starting at Index, or 0."
 
   - name: FindClose
+    pure: false
     signature: "FindClose(Handle: int)"
     return_type: void
     description: "Closes a search handle opened with FindFirst."
 
   - name: FindCode
+    pure: false
     signature: "FindCode(): int"
     return_type: int
     description: "Returns the line index where the [Code] section begins."
 
   - name: FindFirst
+    pure: false
     signature: "FindFirst(Pattern: str, Attributes: int = 0): int"
     return_type: int
     description: "Starts a file search and returns a handle, or a negative value if none found."
 
   - name: FindGetFileName
+    pure: false
     signature: "FindGetFileName(Handle: int): str"
     return_type: str
     description: "Returns the file name found by the current FindFirst/FindNext."
 
   - name: FindNext
+    pure: false
     signature: "FindNext(Handle: int): int"
     return_type: int
     description: "Advances a file search to the next match; returns non-zero on success."
 
   - name: FindSection
+    pure: false
     signature: "FindSection(Section: str): int"
     return_type: int
     description: "Returns the line index of the given section header."
 
   - name: FindSectionEnd
+    pure: false
     signature: "FindSectionEnd(Section: str): int"
     return_type: int
     description: "Returns the line index following the last entry of the given section."
 
   - name: ForceDirectories
+    pure: false
     signature: "ForceDirectories(Dir: str): int"
     return_type: int
     description: "Creates a directory tree at compile time; returns non-zero on success."
 
   - name: GetDateTimeString
+    pure: false
     signature: "GetDateTimeString(Format: str, DateSep: str, TimeSep: str): str"
     return_type: str
     description: "Returns the current date/time formatted according to Format."
 
   - name: GetEnv
+    pure: false
     signature: "GetEnv(Name: str): str"
     return_type: str
     description: "Returns the value of an environment variable."
 
   - name: GetFileCompanyString
+    pure: false
     signature: "GetFileCompanyString(Filename: str): str"
     return_type: str
     description: "Returns the CompanyName string from a file's version information."
 
   - name: GetFileCopyrightString
+    pure: false
     signature: "GetFileCopyrightString(Filename: str): str"
     return_type: str
     description: "Returns the LegalCopyright string from a file's version information."
 
   - name: GetFileDateTimeString
+    pure: false
     signature: "GetFileDateTimeString(Filename: str, Format: str, DateSep: str, TimeSep: str): str"
     return_type: str
     description: "Returns a file's last-modified timestamp formatted according to Format."
 
   - name: GetFileDescriptionString
+    pure: false
     signature: "GetFileDescriptionString(Filename: str): str"
     return_type: str
     description: "Returns the FileDescription string from a file's version information."
 
   - name: GetFileOriginalFilenameString
+    pure: false
     signature: "GetFileOriginalFilenameString(Filename: str): str"
     return_type: str
     description: "Returns the OriginalFilename string from a file's version information."
 
   - name: GetFileProductVersionString
+    pure: false
     signature: "GetFileProductVersionString(Filename: str): str"
     return_type: str
     description: "Returns the ProductVersion string from a file's version information."
 
   - name: GetFileVersionString
+    pure: false
     signature: "GetFileVersionString(Filename: str): str"
     return_type: str
     description: "Returns the file version of an executable or DLL as a dotted string, e.g. <code>1.2.3.4</code>."
 
   - name: GetMD5OfFile
+    pure: false
     signature: "GetMD5OfFile(Filename: str): str"
     return_type: str
     description: "Returns the MD5 hash of a file as a hex string."
@@ -442,11 +477,13 @@ builtin_functions:
     description: "Returns the MD5 hash of a Unicode string as a hex string."
 
   - name: GetPackedVersion
+    pure: false
     signature: "GetPackedVersion(Filename: str): int"
     return_type: int
     description: "Returns the packed (encoded) version number of a file."
 
   - name: GetSHA1OfFile
+    pure: false
     signature: "GetSHA1OfFile(Filename: str): str"
     return_type: str
     description: "Returns the SHA-1 hash of a file as a hex string."
@@ -462,6 +499,7 @@ builtin_functions:
     description: "Returns the SHA-1 hash of a Unicode string as a hex string."
 
   - name: GetSHA256OfFile
+    pure: false
     signature: "GetSHA256OfFile(Filename: str): str"
     return_type: str
     description: "Returns the SHA-256 hash of a file as a hex string."
@@ -477,21 +515,25 @@ builtin_functions:
     description: "Returns the SHA-256 hash of a Unicode string as a hex string."
 
   - name: GetStringFileInfo
+    pure: false
     signature: "GetStringFileInfo(Filename: str, Key: str): str"
     return_type: str
     description: "Returns a string from the version info of a file. Common keys: <code>FileVersion</code>, <code>ProductVersion</code>, <code>CompanyName</code>."
 
   - name: GetVersionComponents
+    pure: false
     signature: "GetVersionComponents(Filename: str, Major: int*, Minor: int*, Revision: int*, Build: int*): int"
     return_type: int
     description: "Reads a file's version components into the referenced variables; returns non-zero on success."
 
   - name: GetVersionNumbers
+    pure: false
     signature: "GetVersionNumbers(Filename: str, VersionMS: int*, VersionLS: int*): int"
     return_type: int
     description: "Reads a file's version into the referenced high/low words; returns non-zero on success."
 
   - name: GetVersionNumbersString
+    pure: false
     signature: "GetVersionNumbersString(Filename: str): str"
     return_type: str
     description: "Returns a file's version as a dotted string, e.g. <code>1.2.3.4</code>."
@@ -507,11 +549,13 @@ builtin_functions:
     description: "Converts a value to integer, using Default when conversion fails."
 
   - name: Is64BitPEImage
+    pure: false
     signature: "Is64BitPEImage(Filename: str): int"
     return_type: int
     description: "Returns non-zero if the given PE image is 64-bit."
 
   - name: IsWin64
+    pure: false
     signature: "IsWin64(): int"
     return_type: int
     description: "Returns non-zero when the compiler is running on 64-bit Windows."
@@ -532,6 +576,7 @@ builtin_functions:
     description: "Returns the greater of two integers."
 
   - name: Message
+    pure: false
     signature: "Message(S: str)"
     return_type: void
     description: "Outputs an informational message in the compiler log."
@@ -562,11 +607,13 @@ builtin_functions:
     description: "Returns Base raised to the power of Exponent."
 
   - name: ReadIni
+    pure: false
     signature: "ReadIni(Filename: str, Section: str, Key: str, Default: str = \"\"): str"
     return_type: str
     description: "Reads a value from an INI file at compile time."
 
   - name: ReadReg
+    pure: false
     signature: "ReadReg(RootKey: int, SubKeyName: str, ValueName: str = \"\", Default: str = \"\"): str"
     return_type: str
     description: "Reads a registry value at compile time."
@@ -602,21 +649,25 @@ builtin_functions:
     description: "Returns non-zero if two strings are equal (case-insensitive)."
 
   - name: SaveStringToFile
+    pure: false
     signature: "SaveStringToFile(Filename: str, S: str, Append: int = 0)"
     return_type: void
     description: "Writes a string to a file, optionally appending."
 
   - name: SaveToFile
+    pure: false
     signature: "SaveToFile(Filename: str)"
     return_type: void
     description: "Writes the preprocessed output collected so far to a file (debugging aid)."
 
   - name: SetSetupSetting
+    pure: false
     signature: "SetSetupSetting(Name: str, Value: str)"
     return_type: void
     description: "Sets a [Setup] section directive at compile time."
 
   - name: SetupSetting
+    pure: false
     signature: "SetupSetting(Name: str): str"
     return_type: str
     description: "Returns the value of a [Setup] section directive by name."
@@ -667,11 +718,13 @@ builtin_functions:
     description: "Converts a packed version number into a dotted version string."
 
   - name: Warning
+    pure: false
     signature: "Warning(Message: str)"
     return_type: void
     description: "Emits a compile-time warning with the given message."
 
   - name: WriteIni
+    pure: false
     signature: "WriteIni(Filename: str, Section: str, Key: str, Value: str)"
     return_type: void
     description: "Writes a value to an INI file at compile time."
