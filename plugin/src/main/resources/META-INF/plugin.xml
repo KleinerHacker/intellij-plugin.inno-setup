@@ -188,6 +188,12 @@
                                       implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureViewFactory"/>
         <navbar implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsStructureAwareNavbar"/>
 
+        <!-- Breadcrumbs + sticky lines (the platform derives sticky lines from the breadcrumbs infrastructure) -->
+        <breadcrumbsInfoProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsBreadcrumbsProvider"/>
+        <fileBreadcrumbsCollector id="IsFileBreadcrumbsCollector" order="first"
+                                  implementation="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsFileBreadcrumbsCollector"/>
+
         <!-- Documentation -->
         <lang.documentationProvider language="ISS"
                                     implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionDocumentationProvider"/>

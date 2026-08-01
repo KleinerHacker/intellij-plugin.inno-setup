@@ -20,16 +20,12 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorConditionalStructure
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSubroutineStructure
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.hostRange
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.*
-import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.sectionAtOffset
 import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
 
 /**
@@ -54,38 +50,17 @@ class IsSectionCodeFoldingBuilder : FoldingBuilderEx() {
         }
 
         if (root is IsScriptFile) {
-            conditionalFolds(root).forEach { descriptors += it }
-            subroutineFolds(root).forEach { descriptors += it }
+            preprocessorFolds(root).forEach { descriptors += it }
         }
         return descriptors.toTypedArray()
     }
 
     /**
-     * Folds for `#if … #endif` blocks — only when the whole block lies within a single section or entirely
-     * outside any section (it must not cross a section header). Two offsets share a section iff
-     * [sectionAtOffset] returns the same block (or `null` for both), which also rules out a crossing header.
+     * Folds for `#if … #endif` and `#sub … #endsub` blocks — see [IsPreprocessorBlockRanges] for the
+     * single-section rule that decides which blocks are foldable at all.
      */
-    private fun conditionalFolds(file: IsScriptFile): List<FoldingDescriptor> {
-        return IsPreprocessorConditionalStructure.structureOf(file).blocks.mapNotNull { block ->
-            val range = block.hostRange
-            if (file.sectionAtOffset(range.startOffset) !== file.sectionAtOffset(range.endOffset)) return@mapNotNull null
-            if (range.startOffset >= range.endOffset) return@mapNotNull null
-            FoldingDescriptor(block.openerLine.node, range)
-        }
-    }
-
-    /**
-     * Folds for `#sub … #endsub` blocks — same single-section rule as [conditionalFolds]: the whole block must
-     * lie within one section or entirely outside any section (it must not cross a section header).
-     */
-    private fun subroutineFolds(file: IsScriptFile): List<FoldingDescriptor> {
-        return IsPreprocessorSubroutineStructure.structureOf(file).blocks.mapNotNull { block ->
-            val range = block.hostRange
-            if (file.sectionAtOffset(range.startOffset) !== file.sectionAtOffset(range.endOffset)) return@mapNotNull null
-            if (range.startOffset >= range.endOffset) return@mapNotNull null
-            FoldingDescriptor(block.openerLine.node, range)
-        }
-    }
+    private fun preprocessorFolds(file: IsScriptFile): List<FoldingDescriptor> =
+        IsPreprocessorBlockRanges.blocksOf(file).map { FoldingDescriptor(it.openerLine.node, it.range) }
 
     private fun sectionFold(section: IsSectionBlock): FoldingDescriptor? {
         val foldStart = section.header.textRange.endOffset

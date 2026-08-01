@@ -35,12 +35,22 @@ enum class IsConditionalProblem {
     ElifAfterElse,
 }
 
-/** A matched `#if … #endif` block at host-file level (used for folding). */
+/** One branch of a conditional block: its opener (`#if`/`#ifdef`/…), an `#elif` or the `#else`. */
+data class IsConditionalBranch(
+    /** The host preprocessor line element carrying the branch directive. */
+    val line: PsiElement,
+    /** Whether this branch is the block's `#else` (as opposed to the opener or an `#elif`). */
+    val isElse: Boolean,
+)
+
+/** A matched `#if … #endif` block at host-file level (used for folding and sticky lines). */
 data class IsConditionalBlock(
     /** The host preprocessor line element carrying the opener (`#if`/`#ifdef`/…). */
     val openerLine: PsiElement,
     /** The host preprocessor line element carrying the closing `#endif`. */
     val endifLine: PsiElement,
+    /** The block's branches in host order: the opener first, then each `#elif`, then the `#else`. */
+    val branches: List<IsConditionalBranch>,
 )
 
 /** Result of analysing the conditional structure of a host file. */
@@ -53,8 +63,9 @@ data class IsConditionalStructure(
 
 /**
  * Analyses the `#if`/`#elif`/`#else`/`#endif` (and `#ifdef`/`#ifndef`/`#ifexist`/`#ifnexist`) structure of
- * an ISPP host file: matches openers to their `#endif`, and flags unterminated openers, stray branches and
- * `#elif`-after-`#else`. Shared by the annotator (per-directive validity) and the folding builder (ranges).
+ * an ISPP host file: matches openers to their `#endif`, records the branches of each block, and flags
+ * unterminated openers, stray branches and `#elif`-after-`#else`. Shared by the annotator (per-directive
+ * validity), the folding builder (ranges) and the sticky lines (per-branch ranges).
  */
 object IsPreprocessorConditionalStructure {
 
@@ -62,7 +73,9 @@ object IsPreprocessorConditionalStructure {
         val opener: IsPreprocessorDirective,
         val openerLine: PsiElement,
         var sawElse: Boolean = false,
-    )
+    ) {
+        val branches = mutableListOf(IsConditionalBranch(openerLine, isElse = false))
+    }
 
     fun structureOf(hostFile: PsiFile): IsConditionalStructure {
         val directivesWithLine = preprocessorDirectivesWithHostLine(hostFile)
@@ -79,19 +92,23 @@ object IsPreprocessorConditionalStructure {
                     val open = stack.lastOrNull()
                     if (open == null) problems[directive] = IsConditionalProblem.StrayBranch
                     else if (open.sawElse) problems[directive] = IsConditionalProblem.ElifAfterElse
+                    else open.branches += IsConditionalBranch(line, isElse = false)
                 }
 
                 ex.isElse() -> {
                     val open = stack.lastOrNull()
                     if (open == null) problems[directive] = IsConditionalProblem.StrayBranch
                     else if (open.sawElse) problems[directive] = IsConditionalProblem.StrayBranch
-                    else open.sawElse = true
+                    else {
+                        open.sawElse = true
+                        open.branches += IsConditionalBranch(line, isElse = true)
+                    }
                 }
 
                 ex.isEndif() -> {
                     val open = stack.removeLastOrNull()
                     if (open == null) problems[directive] = IsConditionalProblem.StrayBranch
-                    else blocks += IsConditionalBlock(open.openerLine, line)
+                    else blocks += IsConditionalBlock(open.openerLine, line, open.branches.toList())
                 }
             }
         }
