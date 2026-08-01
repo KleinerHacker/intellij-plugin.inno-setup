@@ -226,7 +226,7 @@
   sections.
 - **Structure/navigation improvements**: Added a structure-aware navigation bar model and expanded section/navigation
   tests.
-- **Documentation coverage tracking**: Added `DOC_STATUS.md` to track official Inno Setup documentation coverage.
+- **Documentation coverage tracking**: Added `STATUS.md` to track official Inno Setup documentation coverage.
 - **Docs site updates**: Added MkDocs pages for script files, language files, `[INI]`, `[ISSigKeys]`, `[LangOptions]`,
   `[Messages]`, and `[CustomMessages]`, and updated navigation and landing-page content.
 
