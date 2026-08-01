@@ -11,11 +11,16 @@
   errors or warnings.
 - If a condition cannot be evaluated with certainty — because it depends on the environment, a file being
   read, an external program, or a symbol only defined on the compiler command line — **both branches stay
-  visible** and the condition is marked with a hint explaining why it could not be resolved. Nothing is ever
-  dimmed on a guess.
-- `#ifexist` and `#ifnexist` now actually check whether the file exists.
+  visible** and the condition is marked with a blue wavy underline and a hint explaining why it could not be
+  resolved. Nothing is ever dimmed on a guess.
+- Conditions comparing strings (e.g. `#if MyDefine == "test"`) are now evaluated as well — case-insensitively,
+  like the Inno Setup preprocessor itself — instead of being reported as unresolvable.
+- `#ifexist` and `#ifnexist` now actually check whether the file exists and decide their branch — both for a
+  literal path and for a file name computed from `#define`s.
 - **Show Effective Script** resolves conditionals as well: a decided `#if` is replaced by the content of its
   live branch, while an undecidable one is kept in full with a comment noting that it could not be resolved.
+  Blank lines left behind by the removed branches are cleaned up — at most one blank line remains where a
+  block was pruned, and none at the beginning or end of the script.
 - **Preprocessor symbols in the run configuration**: a new field passes symbols to the compiler as `/D`
   (e.g. `DEBUG` or `VERSION=2`). The editor uses the same symbols, so `#ifdef DEBUG` is resolved exactly as
   the build will resolve it. Changing them now also triggers a rebuild.

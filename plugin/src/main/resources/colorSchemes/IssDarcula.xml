@@ -53,6 +53,13 @@
                 <option name="FOREGROUND" value="6a6a6a"/>
             </value>
         </option>
+        <!-- Statically undecidable #if/#elif condition — blue wavy underline instead of a yellow warning -->
+        <option name="ISS_UNDECIDABLE_CONDITION">
+            <value>
+                <option name="EFFECT_COLOR" value="6897bb"/>
+                <option name="EFFECT_TYPE" value="2"/>
+            </value>
+        </option>
         <!-- Background tint for #include-pulled text in the effective-script view — dark translucent blue -->
         <option name="ISS_INCLUDE_SEGMENT_BACKGROUND">
             <value>

@@ -52,6 +52,21 @@ class IsPreprocessorExprEvaluatorTest {
     }
 
     @Test
+    fun `string comparison is case-insensitive`() {
+        assertEquals(IntValue(1), eval("\"test\" == \"TEST\""))
+        assertEquals(IntValue(0), eval("\"test\" != \"Test\""))
+        assertEquals(IntValue(1), eval("\"a\" < \"b\""))
+        assertEquals(IntValue(1), eval("\"b\" >= \"B\""))
+    }
+
+    @Test
+    fun `string comparison through a reference`() =
+        assertEquals(IntValue(1), eval("demo == \"test\"", mapOf("demo" to StrValue("test"))))
+
+    @Test
+    fun `comparing a string with an int is not computable`() = assertNull(eval("\"a\" == 1"))
+
+    @Test
     fun `unary minus`() = assertEquals(IntValue(-5), eval("-5"))
 
     @Test

@@ -407,16 +407,26 @@ object IsPreprocessorBranchAnalysis {
             return if (ex.isIfndef()) !defined else defined
         }
 
-        val text = ex.getConditionExpressionText()?.trim()
-        if (text.isNullOrEmpty()) return undecidable("the condition is empty")
-
-        // #ifexist / #ifnexist are decidable whenever the path expression is: the include infrastructure
-        // resolves it exactly like a real #include.
+        // #ifexist / #ifnexist take a file name, not a condition expression — like #ifdef their argument is
+        // the directive's plain value. They are decidable whenever that file name is: the include
+        // infrastructure resolves it exactly like a real #include.
         if (ex.isIfExistFamily()) {
-            val exists = ex.resolveExistFile() != null
-            if (ex.getExistPath() == null) return undecidable("the file name is not a literal string")
+            val raw = directive.value?.text?.trim()
+            if (raw.isNullOrEmpty()) return undecidable("no file name is given")
+            // A literal path resolves directly; anything else is a string expression that must first be
+            // computed against the current symbol table (e.g. `#ifexist MyFile` or `#ifexist Dir + "\a.iss"`).
+            val path = ex.getExistPath() ?: run {
+                val value = evaluateExpression(raw, env, subNames)
+                    ?: return undecidable(reasonFor(raw, env, subNames))
+                (value as? IsPreprocessorExprValue.StrValue)?.value
+                    ?: return undecidable("the file name does not evaluate to a string")
+            }
+            val exists = ex.resolveRelativeFile(path) != null
             return if (ex.isIfNexist()) !exists else exists
         }
+
+        val text = ex.getConditionExpressionText()?.trim()
+        if (text.isNullOrEmpty()) return undecidable("the condition is empty")
 
         val value = evaluateExpression(text, env, subNames)
             ?: return undecidable(reasonFor(text, env, subNames))
@@ -599,7 +609,7 @@ object IsPreprocessorBranchAnalysis {
      * [InjectedLanguageManager.injectedToHost] maps them onto the script the marker is painted in.
      */
     private fun conditionRange(directive: IsPreprocessorDirective, ex: IsPreprocessorDirectiveEx): TextRange? {
-        val injected = if (ex.isIfdefFamily()) {
+        val injected = if (ex.isIfdefFamily() || ex.isIfExistFamily()) {
             directive.value?.textRange?.takeUnless { it.isEmpty }
         } else {
             val text = ex.getConditionExpressionText()?.takeUnless { it.isEmpty() }

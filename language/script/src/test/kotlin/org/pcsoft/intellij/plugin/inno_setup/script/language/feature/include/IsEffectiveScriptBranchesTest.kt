@@ -100,6 +100,28 @@ class IsEffectiveScriptBranchesTest : IsTimedBasePlatformTestCase() {
         )
     }
 
+    // ── blank lines left behind by pruning ─────────────────────────────────────
+
+    fun testGapLeavesAtMostOneBlankLine() {
+        val text = viewOf("A=1\n\n#if 0\n\nB=dead\n\n#endif\n\nC=2\n")
+        assertFalse("A pruned block must not leave stacked blank lines: $text", text.contains("\n\n\n"))
+        assertTrue("The neighbours must stay separated by one blank line: $text", text.contains("A=1\n\nC=2"))
+    }
+
+    fun testBlankLinesAroundAnInnerBranchAreCollapsed() {
+        val text = viewOf("#define demo \"test\"\n#ifexist demo\n\nAppComments=dead\n\n#else\n\nAppComments=live\n\n#endif\n")
+        assertFalse("Pruning must not stack blank lines: $text", text.contains("\n\n\n"))
+        assertTrue(
+            "The surviving branch keeps one separating blank line: $text",
+            text.contains("#define demo \"test\"\n\nAppComments=live"),
+        )
+    }
+
+    fun testLeadingBlankLinesOfAPrunedStartAreDropped() {
+        val text = viewOf("#if 0\nA=dead\n#endif\n\nB=2\n")
+        assertTrue("Nothing may precede the first surviving line: $text", text.startsWith("B=2"))
+    }
+
     // ── interaction with includes ──────────────────────────────────────────────
 
     /** The point of pruning after inlining: a `#define` from an include decides the includer's `#if`. */

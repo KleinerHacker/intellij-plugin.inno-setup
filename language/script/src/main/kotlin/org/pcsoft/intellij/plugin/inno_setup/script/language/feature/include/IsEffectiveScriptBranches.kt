@@ -43,7 +43,8 @@ internal object IsEffectiveScriptBranches {
     fun prune(text: String, segments: List<IsEffectiveSegment>, analysed: PsiFile): Pair<String, List<IsEffectiveSegment>> {
         val analysis = IsPreprocessorBranchAnalysis.analyze(analysed)
         val removals = merge(
-            (analysis.inactiveRanges + analysis.decidedDirectiveLines).map { it.withTrailingNewline(text) }
+            merge((analysis.inactiveRanges + analysis.decidedDirectiveLines).map { it.withTrailingNewline(text) })
+                .map { it.withSurroundingBlankLines(text) }
         )
         val insertions = analysis.undecidedBlockOffsets.toSortedSet()
         if (removals.isEmpty() && insertions.isEmpty()) return text to segments
@@ -93,6 +94,41 @@ internal object IsEffectiveScriptBranches {
         if (end < text.length && text[end] == '\r') end++
         if (end < text.length && text[end] == '\n') end++
         return TextRange(startOffset, end)
+    }
+
+    /**
+     * Widens a removal over the blank lines that touch it, so pruning a block does not leave the blank lines
+     * that separated it from its neighbours stacked on top of each other. At most **one** blank line survives
+     * such a gap; at the very start or the very end of the script none does, because there is nothing left to
+     * separate. A removal with no blank line next to it is returned unchanged.
+     */
+    private fun TextRange.withSurroundingBlankLines(text: String): TextRange {
+        var start = startOffset
+        while (start > 0) {
+            val previous = text.lastIndexOf('\n', start - 2).let { if (it < 0) 0 else it + 1 }
+            if (!text.substring(previous, start).isBlank()) break
+            start = previous
+        }
+        var end = endOffset
+        while (end < text.length) {
+            val next = text.indexOf('\n', end).let { if (it < 0) text.length else it + 1 }
+            if (!text.substring(end, next).isBlank()) break
+            end = next
+        }
+
+        // Nothing follows or precedes the gap: every blank line around it is pure trailing/leading noise.
+        if (start == 0 || end == text.length) return TextRange(start, end)
+
+        // Keep exactly one blank line as the separator — preferably one that already followed the removal.
+        if (end > endOffset) {
+            val lastBlankStart = text.lastIndexOf('\n', end - 2).let { if (it < 0) 0 else it + 1 }
+            return TextRange(start, lastBlankStart)
+        }
+        if (start < startOffset) {
+            val firstBlankEnd = text.indexOf('\n', start).let { if (it < 0) text.length else it + 1 }
+            return TextRange(firstBlankEnd, end)
+        }
+        return this
     }
 
     /** Sorts and merges overlapping/adjacent ranges so the forward walk never sees them nested. */

@@ -50,4 +50,12 @@ object IsPreprocessorAnnotatorHighlighting {
      */
     val INACTIVE_BRANCH: TextAttributesKey =
         TextAttributesKey.createTextAttributesKey("ISS_INACTIVE_BRANCH")
+
+    /**
+     * A `#if`/`#elif` condition the branch analysis could not decide statically — a blue wavy underline
+     * instead of the yellow squiggle a `WEAK_WARNING` would paint by default. An undecidable condition is
+     * informational, not a defect, so it must not read like a warning.
+     */
+    val UNDECIDABLE_CONDITION: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_UNDECIDABLE_CONDITION")
 }

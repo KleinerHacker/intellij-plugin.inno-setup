@@ -279,4 +279,11 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      * diagnostic — no annotation consumes it yet.
      */
     fun resolveExistFile(): com.intellij.openapi.vfs.VirtualFile?
+
+    /**
+     * Resolves an arbitrary [path] relative to the host script's directory, exactly like `#include` does, or
+     * `null` when it does not exist. Used for `#ifexist`/`#ifnexist` whose filename is not a literal but an
+     * expression the branch analysis could compute (e.g. `#ifexist MyDir + "\file.iss"`).
+     */
+    fun resolveRelativeFile(path: String): com.intellij.openapi.vfs.VirtualFile?
 }

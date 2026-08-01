@@ -785,8 +785,15 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
      * Resolves the literal `#ifexist`/`#ifnexist` filename to the file it points at (host-relative), or
      * `null`. Foundation for a future existence diagnostic; reuses the shared `#include` path semantics.
      */
-    override fun resolveExistFile(): com.intellij.openapi.vfs.VirtualFile? {
-        val path = getExistPath() ?: return null
+    override fun resolveExistFile(): com.intellij.openapi.vfs.VirtualFile? =
+        getExistPath()?.let { resolveRelativeFile(it) }
+
+    /**
+     * Resolves [path] against the host script's directory with the shared `#include` path semantics — the
+     * non-literal counterpart of [resolveExistFile], used once the branch analysis has computed a filename
+     * expression to a string.
+     */
+    override fun resolveRelativeFile(path: String): com.intellij.openapi.vfs.VirtualFile? {
         val injMgr = InjectedLanguageManager.getInstance(project)
         val hostFile = injMgr.getTopLevelFile(containingFile)
         val baseDir = hostFile?.virtualFile?.parent ?: return null

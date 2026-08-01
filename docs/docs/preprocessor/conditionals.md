@@ -61,8 +61,8 @@ The plugin evaluates every `#if` block and shows which branch the compiler will 
 
 Not every condition can be decided while editing. ISPP runs at compile time and can read the environment,
 files, the registry or an external program, and it receives symbols from the ISCC command line. Whenever the
-outcome is not certain, **both branches are kept lit** and the condition is marked with a hint naming the
-reason — for example *"'GetEnv' reads state that is only known while compiling"*. Nothing is ever dimmed on a
+outcome is not certain, **both branches are kept lit** and the condition is marked with a blue wavy underline
+and a hint naming the reason — for example *"'GetEnv' reads state that is only known while compiling"*. Nothing is ever dimmed on a
 guess.
 
 Symbols passed on the ISCC command line are taken from the **run configuration**: whatever is entered in its
@@ -70,7 +70,9 @@ Symbols passed on the ISCC command line are taken from the **run configuration**
 resolved. See [Run configuration](../run-configuration.md).
 
 [Show Effective Script](include.md) applies the same evaluation: a decided `#if` is replaced by the content
-of its live branch, an undecidable one is kept in full with a comment noting why.
+of its live branch, an undecidable one is kept in full with a comment noting why. The blank lines the removed
+branches leave behind are cleaned up: at most one remains where a block was pruned, and none at the start or
+end of the script.
 
 ## Editor support
 
@@ -88,7 +90,9 @@ of its live branch, an undecidable one is kept in full with a comment noting why
   rename) and `#define` names are offered in completion. Unlike a `#if` condition, an unknown name is
   **not** an error — testing an undefined macro is the whole point of `#ifdef` / `#ifndef`.
 - **`#ifexist` / `#ifnexist`** — the filename is a full ISPP **string** expression: operators and type
-  errors are validated (the value must be a string) and identifiers resolve to their `#define`. (No
+  errors are validated (the value must be a string) and identifiers resolve to their `#define`. The
+  expression is also **evaluated** — a literal path as well as one built from `#define`s — and the branch is
+  decided by whether that file exists. (No
   file-name completion is offered — these directives may test *any* file on disk, not just script files.)
 - **Boolean literals** — ISPP has no booleans, so a literal `true` / `false` / `yes` / `no` used directly
   in a condition is painted **yellow** and carries a warning (the word is silently treated as an

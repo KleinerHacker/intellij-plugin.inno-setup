@@ -231,7 +231,9 @@ class IsPreprocessorAnnotator : Annotator {
      * for a preprocessor that runs `Exec`, reads files or receives `/D` symbols on the ISCC command line. The
      * marker only explains why *both* branches stay lit instead of one being greyed out. Its severity also
      * keeps it out of the recorded-problem replay ([RecordingAnnotationBuilder] drops everything below
-     * WARNING), so an `#include`d file does not report it a second time on its includer.
+     * WARNING), so an `#include`d file does not report it a second time on its includer. The markup itself is
+     * overridden to [IsPreprocessorAnnotatorHighlighting.UNDECIDABLE_CONDITION] — a blue wavy underline
+     * instead of the yellow squiggle of a weak warning.
      */
     private fun annotateUndecidableCondition(
         directive: IsPreprocessorDirective,
@@ -248,7 +250,9 @@ class IsPreprocessorAnnotator : Annotator {
         holder.newAnnotation(
             HighlightSeverity.WEAK_WARNING,
             "Condition cannot be evaluated statically — ${reason.message}; both branches are kept",
-        ).range(injectedRange).create()
+        ).range(injectedRange)
+            .textAttributes(IsPreprocessorAnnotatorHighlighting.UNDECIDABLE_CONDITION)
+            .create()
     }
 
     /** The condition range of [directive] in its own (injected) coordinates, or `null` when it has none. */
@@ -256,7 +260,9 @@ class IsPreprocessorAnnotator : Annotator {
         directive: IsPreprocessorDirective,
         ex: IsPreprocessorDirectiveEx,
     ): TextRange? {
-        if (ex.isIfdefFamily()) return directive.value?.textRange?.takeUnless { it.isEmpty }
+        if (ex.isIfdefFamily() || ex.isIfExistFamily()) {
+            return directive.value?.textRange?.takeUnless { it.isEmpty }
+        }
         val text = ex.getConditionExpressionText()?.takeUnless { it.isEmpty() } ?: return null
         val start = directive.textRange.startOffset + ex.getConditionExpressionOffsetInDirective()
         return TextRange(start, start + text.length)

@@ -74,6 +74,44 @@ class IsPreprocessorInactiveBranchTest : IsTimedBasePlatformTestCase() {
         )
     }
 
+    fun testStringComparisonAgainstADefineIsDecided() {
+        val text = "#define demo \"test\"\n#if demo == \"test\"\n; live\n#else\n; dead\n#endif\n"
+        assertTrue("A string comparison against a known #define is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The #else of the taken branch must be dimmed", 1, dimmed(text).size)
+    }
+
+    fun testIfExistWithLiteralPathIsDecided() {
+        myFixture.addFileToProject("target.iss", "; content\n")
+        val text = "#ifexist \"target.iss\"\n; live\n#else\n; dead\n#endif\n"
+        assertTrue("An existing literal path is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The #else of the taken branch must be dimmed", 1, dimmed(text).size)
+    }
+
+    fun testIfExistWithMissingLiteralPathIsDecided() {
+        val text = "#ifexist \"nope.iss\"\n; dead\n#endif\n"
+        assertTrue("A missing literal path is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The body of the failing #ifexist must be dimmed", 1, dimmed(text).size)
+    }
+
+    fun testIfNexistWithMissingLiteralPathIsDecided() {
+        val text = "#ifnexist \"nope.iss\"\n; live\n#else\n; dead\n#endif\n"
+        assertTrue("A missing literal path is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The #else of the taken branch must be dimmed", 1, dimmed(text).size)
+    }
+
+    fun testIfExistWithDefinedFileNameIsDecided() {
+        myFixture.addFileToProject("target.iss", "; content\n")
+        val text = "#define file \"target.iss\"\n#ifexist file\n; live\n#else\n; dead\n#endif\n"
+        assertTrue("A file name from a #define is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The #else of the taken branch must be dimmed", 1, dimmed(text).size)
+    }
+
+    fun testIfExistWithDefinedNonExistingFileNameIsDecided() {
+        val text = "#define demo \"test\"\n#ifexist demo\n; dead\n#else\n; live\n#endif\n"
+        assertTrue("A file name from a #define is decidable", undecidableMarkers(text).isEmpty())
+        assertEquals("The failing branch must be dimmed", 1, dimmed(text).size)
+    }
+
     fun testDecidableConditionIsNotMarked() {
         assertTrue("A decided condition needs no marker", undecidableMarkers("#if 1\n#endif\n").isEmpty())
     }

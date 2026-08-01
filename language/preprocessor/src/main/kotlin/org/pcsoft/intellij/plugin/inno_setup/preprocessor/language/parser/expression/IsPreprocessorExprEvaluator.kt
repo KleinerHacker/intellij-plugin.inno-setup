@@ -89,6 +89,21 @@ class IsPreprocessorExprEvaluator(
             return if (left is StrValue && right is StrValue) StrValue(left.value + right.value) else null
         }
 
+        // Comparisons between two strings: ISPP compares them case-insensitively (see ISPP help, "Expressions").
+        if (left is StrValue && right is StrValue) {
+            val c = left.value.compareTo(right.value, ignoreCase = true)
+            return when (op) {
+                IsPreprocessorExprBinaryOperator.EQ -> bool(c == 0)
+                IsPreprocessorExprBinaryOperator.NEQ -> bool(c != 0)
+                IsPreprocessorExprBinaryOperator.LT -> bool(c < 0)
+                IsPreprocessorExprBinaryOperator.GT -> bool(c > 0)
+                IsPreprocessorExprBinaryOperator.LE -> bool(c <= 0)
+                IsPreprocessorExprBinaryOperator.GE -> bool(c >= 0)
+                IsPreprocessorExprBinaryOperator.COMMA -> right
+                else -> null
+            }
+        }
+
         val a = (left as? IntValue)?.value ?: return null
         val b = (right as? IntValue)?.value ?: return null
         return when (op) {
