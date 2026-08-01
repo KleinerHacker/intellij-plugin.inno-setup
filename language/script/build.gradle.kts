@@ -21,7 +21,7 @@ plugins {
     id("inno-setup.platform-module")
     id("org.jetbrains.grammarkit") version "2023.3.0.3"
     id("org.jetbrains.dokka") version "2.2.0"
-    id("org.jetbrains.kotlinx.kover") version "0.9.8"
+    id("org.jetbrains.kotlinx.kover") version "0.9.9"
 }
 
 dependencies {

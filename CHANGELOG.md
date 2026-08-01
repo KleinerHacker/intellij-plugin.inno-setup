@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [0.6.3]
+
+- **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.2
+
+## [0.6.2]
+
+- **Fixes for new IntelliJ IDEA**: fixes to support newer versions of IntelliJ IDEA since 2026.2
+
 ## [0.6.1]
 
 ### Added

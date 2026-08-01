@@ -26,9 +26,9 @@ plugins {
     id("org.jetbrains.intellij.platform")
     id("org.jetbrains.changelog") version "2.5.0"
     id("org.jetbrains.dokka") version "2.2.0"
-    id("org.jetbrains.kotlinx.kover") version "0.9.8"
+    id("org.jetbrains.kotlinx.kover") version "0.9.9"
     id("com.github.jk1.dependency-license-report") version "3.1.4"
-    id("org.cyclonedx.bom") version "3.2.4"
+    id("org.cyclonedx.bom") version "3.3.0"
     id("app.cash.licensee") version "1.14.1"
 }
 
@@ -50,8 +50,8 @@ intellijPlatform {
 
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "261"
-            untilBuild = provider { null }   // unbounded: covers 2026.1 (261) and future IDEs
+            sinceBuild = "262"
+            untilBuild = provider { null }   // unbounded: covers 2026.2 (262) and future IDEs
         }
         // Release-time changelog injection is wired separately; keep patchPluginXml off the changelog
         // provider so it stays configuration-cache friendly.
@@ -83,6 +83,14 @@ intellijPlatform {
 }
 
 dependencies {
+    // See inno-setup.platform-module: pin transitive Kotlin artifacts to the catalog version so an older
+    // stdlib (pulled via jackson-module-kotlin → kotlin-reflect) cannot crash the platform's coroutine
+    // debug probes with a "Debug metadata version mismatch" and hang the tests.
+    constraints {
+        implementation(libs.kotlin.stdlib)
+        implementation(libs.kotlin.reflect)
+    }
+
     testImplementation("junit:junit:4.13.2")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.0")
@@ -100,6 +108,11 @@ dependencies {
         // (used by IsStructureAwareNavbar) now ships in the separate intellij.platform.structureView
         // module, which must be requested explicitly instead of coming in via the monolithic classpath.
         bundledModule("intellij.platform.structureView")
+        // Also since 2026.2: core intellij.spellchecker(.xml) — pulled in transitively via
+        // com.intellij.modules.lang — now needs intellij.libraries.lucene.common, which was moved into the
+        // bundled intellij.libraries.misc.plugin. Without it the test plugin is excluded and every feature
+        // test fails with no language support. (See the same note in the :language convention.)
+        bundledPlugin("intellij.libraries.misc.plugin")
     }
 
     // Bundle the language modules as regular libraries into the plugin (one shared classloader). Each
@@ -160,10 +173,11 @@ tasks {
     }
 
     test {
-        jvmArgs(
-            "-Didea.log.config.file=idea/log4j.xml",
-            "-Didea.log.level=OFF",
-        )
+        // Platform tests log through java.util.logging (JUL) via TestLoggerFactory — NOT log4j. See the
+        // detailed explanation in the :language convention (inno-setup.platform-module.gradle.kts).
+        systemProperty("intellij.console.log.level", "off")
+        systemProperty("idea.log.config.file", "${rootDir}/gradle/test-logging.properties")
+        systemProperty("idea.split.test.logs", "true")
         timeout.set(Duration.ofMinutes(15))
     }
 }
