@@ -43,7 +43,7 @@ plugins {
 kotlin {
     // Compile with JDK 25: since IntelliJ 2026.2 the platform jars are Java 25 (class file 69), so an
     // older javac/kotlinc cannot even read them. The emitted bytecode is pinned to Java 21 below so the
-    // plugin still loads on the whole supported IDE range (sinceBuild 261).
+    // plugin still loads on the whole supported IDE range (sinceBuild 262).
     jvmToolchain(25)
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)

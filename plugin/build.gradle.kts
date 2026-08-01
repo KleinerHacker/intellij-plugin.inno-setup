@@ -50,8 +50,8 @@ intellijPlatform {
 
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "261"
-            untilBuild = provider { null }   // unbounded: covers 2026.1 (261) and future IDEs
+            sinceBuild = "262"
+            untilBuild = provider { null }   // unbounded: covers 2026.2 (262) and future IDEs
         }
         // Release-time changelog injection is wired separately; keep patchPluginXml off the changelog
         // provider so it stays configuration-cache friendly.
