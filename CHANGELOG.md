@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.6.4]
+
 ### Added
 
 - **Sticky lines**: while scrolling, the enclosing section header (`[Setup]`, `[Files]`, …) stays pinned at
