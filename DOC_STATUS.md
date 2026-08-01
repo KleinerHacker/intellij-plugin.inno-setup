@@ -2,7 +2,9 @@
 
 > **Reference version:** Inno Setup 7.0.1-beta  
 > **Docs URL:** https://jrsoftware.org/ishelp/  
-> **Last checked:** 2026-06-15 (parameter/flag completeness re-audited against the official section pages)
+> **Last checked:** 2026-08-01 (ISPP preprocessor support re-audited against the official ISPP docs — see
+> [Known gaps](#known-gaps-ispp-audit-2026-08-01); 2026-06-15: parameter/flag completeness re-audited against
+> the official section pages)
 >
 > This file tracks which parts of the official Inno Setup documentation are implemented in the plugin's
 > spec files (`src/main/resources/spec/`) and language support. Update the "Last checked" date and the
@@ -183,11 +185,12 @@ deprecated). Notable items already marked deprecated/removed in `isi-const.yaml`
 
 ## ISPP Preprocessor (`iss-ispp.yaml`)
 
-Coverage appears **complete**: 24 directives, 13+ predefined variables and the **full** ISPP built-in
+**Spec coverage** is **complete**: 24 directives, 13+ predefined variables and the **full** ISPP built-in
 function set (~104 functions from the official `topic_funcs` index, each with `signature`, `return_type`
 and `description` in `is-preprocessor.yaml`). All standard directives (`#define`, `#undef`,
 `#if`/`#elif`/`#else`/`#endif`, `#ifdef`, `#ifndef`, `#include`, `#for`, `#sub`, `#endsub`, `#emit`,
-`#expr`, `#pragma`, `#error`, etc.) are present.
+`#expr`, `#pragma`, `#error`, etc.) are present. **Tooling coverage** has a handful of known gaps, listed
+under [Known gaps](#known-gaps-ispp-audit-2026-08-01) below.
 
 **`#define` expression analysis & operator highlighting:** The value of a `#define` (and a function-like
 macro body) is parsed as a C/C++-like ISPP expression (`…/preprocessor/expression/`: tokenizer, fault-
@@ -266,6 +269,27 @@ directive** — `define.md`, `undef.md`, `arrays.md` (`#dim`/`#redim`), `include
 `sub.md` (`#sub`/`#endsub`), `pragma.md` and `error.md`. Keep these pages and the per-directive overview
 table above in sync whenever a directive's semantics change.
 
+### Known gaps (ISPP audit 2026-08-01)
+
+Everything the official ISPP docs *declare* is present in `is-preprocessor.yaml`; what is still missing is
+tooling on top of that data. Ordered roughly by value/effort ratio:
+
+| # | Gap                                                                                                                                                                                                                                                                             | Status | Where                                                                    |
+|---|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|--------------------------------------------------------------------------|
+| 1 | **Built-in functions are display data only.** `builtin_functions` carries just a `signature` **string** plus `return_type` — no structured parameter list. Hence no argument validation (count/type/optional args), no parameter-info popup, no Quick Doc for functions (see 2–3). | ❌      | `spec/is-preprocessor.yaml`, `types/IsPreprocessorSpec.kt` (`signature`) |
+| 2 | **No parameter info (`Ctrl+P`)** for built-in function calls — the project registers no `ParameterInfoHandler` at all.                                                                                                                                                            | ❌      | —                                                                        |
+| 3 | **Quick Doc covers only directive keywords and predefined variables**, not built-in functions.                                                                                                                                                                                    | ❌      | `IsPreprocessorDocumentationProvider`                                    |
+| 4 | **Valueless `void` symbols in conditions.** `__WIN32__`, `ISPP_INVOKED`, `ISCC_INVOKED`, `WINDOWS`, `UNICODE` are correctly excluded from `{#…}`, but `#ifdef` / `#if defined(...)` does not treat them specially yet.                                                             | ❌      | `IsPreprocessorAnnotator`                                                |
+| 5 | **`#ifexist` / `#ifnexist` never checks the file.** Only the string expression is validated; the include-path infrastructure needed for the real check already exists.                                                                                                            | ⚠️     | `IsPreprocessorAnnotator.kt` (`// … existence not yet checked`)          |
+| 6 | **No line continuation with a trailing `\`.** The Flex lexer terminates a directive strictly at `\r?\n`, so a multi-line directive breaks parsing.                                                                                                                                | ❌      | `parsing/IsPreprocessorLexer.flex`                                       |
+| 7 | **No conditional compilation in the editor.** `IsPreprocessorExprEvaluator` exists but is not wired to `#if`: inactive branches are not greyed out, and `#define` values are not surfaced as inlay/Quick Doc.                                                                      | ❌      | `expression/IsPreprocessorExprEvaluator`                                 |
+| 8 | **Function-like macro parameters are not modelled.** `#define M(A, B)` parameters (incl. default values and named arguments) are deliberately treated as `any` to avoid false positives — which also means no validation or completion inside the macro body.                      | ⚠️     | `expression/IsPreprocessorExprTypeInference`                             |
+| 9 | **ISCC command-line symbols (`/D…`) are not considered.** Names defined only on the compiler command line stay unresolved references.                                                                                                                                             | ❌      | `IsPreprocessorService` / resolution                                     |
+
+Items 1–3 hang together: giving `builtin_functions` a real `parameters` list (the information is already in
+the `signature` string, just not machine-readable) unlocks all three at once. Item 4 is a small fix in the
+existing annotator.
+
 ---
 
 ## IDE Features
@@ -291,7 +315,10 @@ table above in sync whenever a directive's semantics change.
 | Code folding                                    | ✅      | Sections, multi-pair entries, and `#if … #endif` / `#sub … #endsub` blocks (when wholly inside one section or wholly outside)                                                                                           |
 | Structure view                                  | ✅      |                                                                                                                                                                                                                         |
 | Documentation popup (Section)                   | ✅      | Sections/attributes/flags/constants from spec YAML (`IsSectionDocumentationProvider`): description, type, `required`/`deprecated` markers, `since`/`until` version section                                              |
-| Documentation popup (ISPP)                      | ✅      | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until` |
+| Documentation popup (ISPP)                      | ⚠️     | `IsPreprocessorDocumentationProvider` (lang `ISPP`): directive keyword (`#define`/`#include`/…) → description + syntax + `deprecated` + `since`/`until`; predefined variable use → type + description + `since`/`until`. **Built-in functions not covered** |
+| Parameter info (ISPP functions)                 | ❌      | No `ParameterInfoHandler`; built-in function arguments are neither hinted nor validated (see [Known gaps](#known-gaps-ispp-audit-2026-08-01) 1–2)                                                                       |
+| Conditional compilation (`#if` branches)        | ❌      | Inactive `#if`/`#else` branches are not greyed out; `IsPreprocessorExprEvaluator` is not wired to the annotator                                                                                                         |
+| ISPP line continuation (trailing `\`)           | ❌      | Lexer terminates a directive at `\r?\n`; multi-line directives break parsing                                                                                                                                           |
 | Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages)                                                                                                                                                                   |
 | Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                                                    |
 | Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                                         |
