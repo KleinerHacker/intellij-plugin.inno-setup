@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.language.parser.lang
+package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFileType
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase

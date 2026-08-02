@@ -96,8 +96,8 @@ cd inno-setup
 # Generate parsers/lexers and compile every module
 ./gradlew assemble
 
-# Run all tests (they live in the :plugin module)
-./gradlew :plugin:test
+# Run all tests (every module carries the tests for its own code)
+./gradlew test
 
 # Build the distributable plugin ZIP
 ./gradlew :plugin:buildPlugin
@@ -139,7 +139,7 @@ The root project is a pure aggregator (no code, no `plugin.xml`).
 │       │                    spec/settings services
 │       └── src/main/{kotlin, resources/{META-INF, parsing, spec, icons}}
 ├── plugin/                  Publishable plugin: IDE features, build/run, settings UI, main plugin.xml,
-│   │                        color schemes, icons — and ALL tests
+│   │                        color schemes, icons
 │   └── src/{main, test}/
 ├── buildSrc/                Shared Gradle convention (inno-setup.platform-module)
 ├── <module>/build/generated/  Generated parser/lexer/PSI per module (auto-generated)

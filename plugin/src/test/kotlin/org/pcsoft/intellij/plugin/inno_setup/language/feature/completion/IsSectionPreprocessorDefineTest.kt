@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.language.parser.section
+package org.pcsoft.intellij.plugin.inno_setup.language.feature.completion
 
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.lang.injection.InjectedLanguageManager
