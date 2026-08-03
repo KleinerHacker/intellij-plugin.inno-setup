@@ -63,6 +63,7 @@ using.
 | **Code formatting**        | Reformat Code normalises spacing around `=` / `:` / `;` and `[ ]`, keeps one blank line between sections, and spaces preprocessor arithmetic operators; configurable under Code Style  |
 | **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                                                                                            |
 | **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build                                                                         |
+| **Build configurations**   | Named sets of compile options (preprocessor symbols, output directory, extra ISCC options) stored one file each in the project's `.build` directory; selectable per run, from the gutter icon and from the context menu, and part of the rebuild decision |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 

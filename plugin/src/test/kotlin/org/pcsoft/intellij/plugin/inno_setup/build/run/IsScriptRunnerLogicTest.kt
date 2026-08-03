@@ -158,4 +158,52 @@ class IsScriptRunnerLogicTest {
         // The caller must check for this; outputDirFromArg is a dumb extractor.
         assertEquals(File("-"), IsScriptRunnerLogic.outputDirFromArg("/O-"))
     }
+
+    // ── build configuration output override ──────────────────────────────────────
+
+    /** A build configuration that sets no override leaves the resolved argument untouched. */
+    @Test
+    fun `applyOutputOverride keeps base argument when override is blank`() {
+        val buildRoot = File("C:\\proj\\build")
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", "", buildRoot))
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", null, buildRoot))
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", "   ", buildRoot))
+    }
+
+    /** A relative override is resolved below the project build directory, not the working directory. */
+    @Test
+    fun `applyOutputOverride resolves relative path against build root`() {
+        val buildRoot = File("C:\\proj\\build")
+        assertEquals(
+            IsScriptRunnerLogic.outputArg(File(buildRoot, "dist\\debug").path),
+            IsScriptRunnerLogic.applyOutputOverride("/O-", "dist\\debug", buildRoot)
+        )
+    }
+
+    /** An absolute override is taken as given. */
+    @Test
+    fun `applyOutputOverride keeps absolute path`() {
+        val result = IsScriptRunnerLogic.applyOutputOverride("/O-", "C:\\out", File("C:\\proj\\build"))
+        assertEquals(IsScriptRunnerLogic.outputArg("C:\\out"), result)
+    }
+
+    /** An already quoted override is not quoted twice. */
+    @Test
+    fun `applyOutputOverride strips existing quotes`() {
+        val result = IsScriptRunnerLogic.applyOutputOverride("/O-", "\"C:\\my out\"", File("C:\\proj\\build"))
+        assertEquals(IsScriptRunnerLogic.outputArg("C:\\my out"), result)
+    }
+
+    /** A null base argument stays null when there is nothing to override it with. */
+    @Test
+    fun `applyOutputOverride keeps null base without override`() {
+        assertNull(IsScriptRunnerLogic.applyOutputOverride(null, "", File("C:\\proj\\build")))
+    }
+
+    /** An override also supplies an argument where the project rule produced none. */
+    @Test
+    fun `applyOutputOverride replaces missing base argument`() {
+        val result = IsScriptRunnerLogic.applyOutputOverride(null, "C:\\out", File("C:\\proj\\build"))
+        assertEquals(IsScriptRunnerLogic.outputArg("C:\\out"), result)
+    }
 }

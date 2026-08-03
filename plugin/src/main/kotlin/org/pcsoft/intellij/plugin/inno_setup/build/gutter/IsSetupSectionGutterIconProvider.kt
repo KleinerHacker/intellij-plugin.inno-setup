@@ -15,19 +15,25 @@ package org.pcsoft.intellij.plugin.inno_setup.build.gutter
 import com.intellij.codeInsight.daemon.LineMarkerInfo
 import com.intellij.codeInsight.daemon.LineMarkerProvider
 import com.intellij.icons.AllIcons
-import com.intellij.openapi.actionSystem.ActionUiKind
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.actionSystem.DataContext
 import com.intellij.openapi.editor.markup.GutterIconRenderer
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.popup.JBPopupFactory
+import com.intellij.openapi.ui.popup.PopupStep
+import com.intellij.openapi.ui.popup.util.BaseListPopupStep
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import com.intellij.ui.awt.RelativePoint
+import org.pcsoft.intellij.plugin.inno_setup.build.action.IsBuildConfigurationActions
 import org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction
+import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfiguration
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTitle
+import java.awt.event.MouseEvent
+import javax.swing.Icon
 
 /**
- * Renders a play icon in the gutter next to the `\[Setup]` section header. Clicking it triggers a
- * dry-run installation of the current script.
+ * Renders a play icon in the gutter next to the `\[Setup]` section header. Clicking it offers the project's
+ * build configurations and runs the current script with the chosen one.
  */
 class IsSetupSectionGutterIconProvider : LineMarkerProvider {
 
@@ -51,22 +57,37 @@ class IsSetupSectionGutterIconProvider : LineMarkerProvider {
                 anchor.textRange,
                 AllIcons.RunConfigurations.TestState.Run,
                 { PluginBundle.message("gutter.run_setup.tooltip") },
-                { _, elt ->
-                    val dataContext = DataContext { dataId ->
-                        when (dataId) {
-                            CommonDataKeys.PROJECT.name -> elt.project
-                            CommonDataKeys.VIRTUAL_FILE.name -> scriptFile
-                            CommonDataKeys.VIRTUAL_FILE_ARRAY.name -> arrayOf(scriptFile)
-                            else -> null
-                        }
-                    }
-                    val event = AnActionEvent.createEvent(
-                        dataContext, null, "gutter", ActionUiKind.NONE, null
-                    )
-                    IsScriptRunAction.runScript(event, scriptFile.path, scriptFile.nameWithoutExtension)
-                },
+                { mouseEvent, elt -> showBuildConfigurationPopup(elt.project, scriptFile, mouseEvent) },
                 GutterIconRenderer.Alignment.RIGHT
             )
         }
+    }
+
+    /**
+     * Opens the list of build configurations at the click position and runs [scriptFile] with the one
+     * picked. Always a list, even for a single configuration, so the gutter never silently compiles with
+     * options the user did not see.
+     */
+    private fun showBuildConfigurationPopup(project: Project, scriptFile: VirtualFile, mouseEvent: MouseEvent) {
+        val configs = IsBuildConfigurationActions.availableConfigurations(project)
+        if (configs.isEmpty()) {
+            IsScriptRunAction.runScript(project, scriptFile.path, scriptFile.nameWithoutExtension)
+            return
+        }
+
+        val step = object : BaseListPopupStep<IsBuildConfiguration>(
+            PluginBundle.message("gutter.run_setup.popup_title"), configs
+        ) {
+            override fun getTextFor(value: IsBuildConfiguration): String = value.name
+            override fun getIconFor(value: IsBuildConfiguration): Icon = IsBuildConfigurationActions.ICON
+
+            override fun onChosen(selectedValue: IsBuildConfiguration, finalChoice: Boolean): PopupStep<*>? =
+                doFinalStep {
+                    IsScriptRunAction.runScript(
+                        project, scriptFile.path, scriptFile.nameWithoutExtension, selectedValue.name
+                    )
+                }
+        }
+        JBPopupFactory.getInstance().createListPopup(step).show(RelativePoint(mouseEvent))
     }
 }

@@ -13,21 +13,26 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configuration.EnvironmentVariablesComponent
+import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.SettingsEditor
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.util.Computable
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiManager
-import com.intellij.ui.components.JBTextField
+import com.intellij.ui.components.ActionLink
+import com.intellij.ui.dsl.listCellRenderer.listCellRenderer
 import com.intellij.util.ui.JBUI
+import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.findSections
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameDeclarations
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.valueUnquoted
+import org.pcsoft.intellij.plugin.inno_setup.settings.IsBuildSettingsConfigurable
 import java.awt.*
 import javax.swing.*
 
@@ -53,19 +58,30 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     private val debugOutputCheck = JCheckBox(PluginBundle.message("run.config.editor.debug_output"))
         .apply { alignmentX = Component.LEFT_ALIGNMENT }
 
-    private val envVarsComponent = EnvironmentVariablesComponent()
+    private val envVarsComponent = EnvironmentVariablesComponent(project)
         .apply { alignmentX = Component.LEFT_ALIGNMENT }
 
-    // Preprocessor symbols passed to ISCC as /D…. Also read back by the editor's conditional-branch
-    // analysis, so what is typed here decides which #ifdef branches are greyed out in the script.
-    private val definesField = JBTextField().apply {
-        toolTipText = PluginBundle.message("run.config.editor.defines.tooltip")
+    // Which build configuration the run compiles with. Only the *name* is part of the run configuration;
+    // the symbols and options behind it are edited on the project's build settings page — hence the link.
+    private val buildConfigCombo = ComboBox<String>().apply {
+        toolTipText = PluginBundle.message("run.config.editor.build_config.tooltip")
+        @Suppress("UNCHECKED_CAST")
+        renderer = listCellRenderer<String>("") {
+            icon(AllIcons.General.GearPlain)
+            text(value)
+        } as ListCellRenderer<String>
     }
-    private val definesRow = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0)).apply {
+    private val configureLink = ActionLink(PluginBundle.message("run.config.editor.build_config.configure")) {
+        ShowSettingsUtil.getInstance().showSettingsDialog(project, IsBuildSettingsConfigurable::class.java)
+        loadBuildConfigurations(selectedBuildConfiguration())
+    }
+    private val buildConfigRow = JPanel(FlowLayout(FlowLayout.LEFT, 0, 0)).apply {
         alignmentX = Component.LEFT_ALIGNMENT
-        add(JLabel(PluginBundle.message("run.config.editor.defines") + ":"))
+        add(JLabel(PluginBundle.message("run.config.editor.build_config") + ":"))
         add(Box.createHorizontalStrut(4))
-        add(definesField.apply { preferredSize = Dimension(280, preferredSize.height) })
+        add(buildConfigCombo.apply { preferredSize = Dimension(280, preferredSize.height) })
+        add(Box.createHorizontalStrut(8))
+        add(configureLink)
     }
 
     private val panel: JPanel = buildPanel()
@@ -104,9 +120,9 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
         val options = JPanel().apply {
             layout = BoxLayout(this, BoxLayout.PAGE_AXIS)
             border = BorderFactory.createEmptyBorder(0, 12, 0, 0)
-            add(languageRow)
+            add(buildConfigRow)
             add(Box.createVerticalStrut(4))
-            add(definesRow)
+            add(languageRow)
             add(Box.createVerticalStrut(4))
             add(debugOutputCheck)
             add(Box.createVerticalStrut(4))
@@ -128,6 +144,8 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
     private fun selectedScriptPath(): String =
         (scriptCombo.editor.item as? String ?: scriptCombo.selectedItem as? String ?: "").trim()
 
+    private fun selectedBuildConfiguration(): String = buildConfigCombo.selectedItem as? String ?: ""
+
     private fun loadScripts(current: String) {
         scriptCombo.removeAllItems()
         val paths = ApplicationManager.getApplication().runReadAction(Computable {
@@ -138,6 +156,19 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
         scriptCombo.selectedItem = current
         // Keep the combo from stretching too wide in the dialog.
         scriptCombo.preferredSize = Dimension(360, scriptCombo.preferredSize.height)
+    }
+
+    /**
+     * Fills the combo with the project's build configurations. A [current] name that no longer exists is
+     * still offered, so a stale reference stays visible (and reported by `checkConfiguration`) instead of
+     * silently turning into a different configuration.
+     */
+    private fun loadBuildConfigurations(current: String) {
+        buildConfigCombo.removeAllItems()
+        val names = IsBuildConfigurationService.getInstance(project).all().map { it.name }
+        names.forEach { buildConfigCombo.addItem(it) }
+        if (current.isNotBlank() && current !in names) buildConfigCombo.addItem(current)
+        buildConfigCombo.selectedItem = current.ifBlank { names.firstOrNull() ?: "" }
     }
 
     private fun loadLanguages(scriptPath: String) {
@@ -162,8 +193,8 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
 
     override fun resetEditorFrom(config: IsRunConfiguration) {
         loadScripts(config.scriptPath)
+        loadBuildConfigurations(config.buildConfigurationName)
         debugOutputCheck.isSelected = config.debugOutput
-        definesField.text = config.compilerDefines
         envVarsComponent.envData = config.envData
         loadLanguages(config.scriptPath)
         val idx =
@@ -174,8 +205,8 @@ class IsRunConfigurationEditor(private val project: Project) : SettingsEditor<Is
 
     override fun applyEditorTo(config: IsRunConfiguration) {
         config.scriptPath = selectedScriptPath()
+        config.buildConfigurationName = selectedBuildConfiguration()
         config.debugOutput = debugOutputCheck.isSelected
-        config.compilerDefines = definesField.text.trim()
         config.envData = envVarsComponent.envData
         val selLang = languageCombo.selectedItem as? String ?: ""
         config.languageOverride =

@@ -16,37 +16,29 @@ import com.intellij.execution.RunManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolProvider
-import java.io.File
 
 /**
- * Contributes the ISCC `/D…` symbols of the run configuration that compiles a given script, so the editor
- * decides `#ifdef` branches the same way the build will.
+ * Contributes the ISCC `/D…` symbols of the **selected** run configuration, so the editor decides `#ifdef`
+ * branches the same way the next run will.
  *
- * Selection is deliberately narrow: only a configuration whose `scriptPath` *is* the analysed file
- * contributes. A configuration for a different script says nothing about this one, and guessing (for example
- * falling back to the selected configuration) would grey out branches based on an unrelated build.
+ * The selected configuration is the honest source: it names exactly one build configuration, and that is
+ * what the user is about to compile with. Consulting every configuration instead — as this did while the
+ * symbols still lived on the run configuration itself — could only ever contribute what a "Debug"/"Release"
+ * pair agreed on, which is the empty set precisely for the symbols that matter.
  *
- * When several configurations target the same script — a common "Debug"/"Release" pair — only symbols they
- * **all** agree on are contributed. Anything they disagree about stays undefined here and therefore keeps its
- * condition undecidable, which is the honest answer: the outcome depends on which configuration is run.
+ * When no Inno Setup configuration is selected nothing is contributed, and
+ * [org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationNotificationProvider] tells the
+ * user why the conditions in front of them stay undecided.
  */
 class IsRunConfigurationSymbolProvider : IsPreprocessorSymbolProvider {
 
-    override fun symbols(project: Project, script: VirtualFile?): Map<String, String?> {
-        val file = script ?: return emptyMap()
+    override fun symbols(project: Project, script: VirtualFile?): Map<String, String?> =
+        selectedConfiguration(project)?.buildConfiguration()?.symbols ?: emptyMap()
 
-        val candidates = RunManager.getInstance(project).allConfigurationsList
-            .filterIsInstance<IsRunConfiguration>()
-            .filter { it.scriptPath.isNotBlank() && sameFile(it.scriptPath, file) }
-            .map { IsCompilerDefines.parse(it.compilerDefines) }
+    companion object {
 
-        val first = candidates.firstOrNull() ?: return emptyMap()
-        if (candidates.size == 1) return first
-
-        return first.filter { (name, value) -> candidates.all { it.containsKey(name) && it[name] == value } }
+        /** The selected run configuration when it is an Inno Setup one, else `null`. */
+        fun selectedConfiguration(project: Project): IsRunConfiguration? =
+            RunManager.getInstance(project).selectedConfiguration?.configuration as? IsRunConfiguration
     }
-
-    /** Whether [path] denotes [file], compared canonically so `..` and separator style do not matter. */
-    private fun sameFile(path: String, file: VirtualFile): Boolean =
-        runCatching { File(path).canonicalFile == File(file.path).canonicalFile }.getOrDefault(false)
 }

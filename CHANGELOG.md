@@ -21,9 +21,27 @@
   live branch, while an undecidable one is kept in full with a comment noting that it could not be resolved.
   Blank lines left behind by the removed branches are cleaned up — at most one blank line remains where a
   block was pruned, and none at the beginning or end of the script.
-- **Preprocessor symbols in the run configuration**: a new field passes symbols to the compiler as `/D`
-  (e.g. `DEBUG` or `VERSION=2`). The editor uses the same symbols, so `#ifdef DEBUG` is resolved exactly as
-  the build will resolve it. Changing them now also triggers a rebuild.
+- **Build configurations**: named sets of compile options — preprocessor symbols passed to the compiler as
+  `/D` (e.g. `DEBUG` or `VERSION=2`), an output directory override and additional `ISCC` options — managed
+  under **Settings | Inno Setup | Build**. A run configuration only refers to one by name, so editing the
+  options takes effect in every run that uses them. Each configuration is stored as a single file in the
+  project's `.build` directory and can be shared with the team through version control.
+- A project starts with two configurations: **Release** (no symbols) and **Debug** (`DEBUG`); every new run
+  configuration starts on **Debug**.
+- The **gutter icon** next to `[Setup]` now opens a list of the available build configurations, and the
+  context menu entries **Run Script** / **Build Script** became submenus listing them.
+- The editor resolves `#ifdef` branches with the symbols of the **selected** run configuration's build
+  configuration, so what is dimmed matches what the next run builds. Without a selected Inno Setup run
+  configuration a banner above the script says so and offers a drop-down to pick one.
+- A build is now only reused when the **content of the build configuration** is unchanged as well —
+  switching from `Debug` to `Release`, or editing `Debug`'s symbols, forces a rebuild; renaming a
+  configuration does not.
+
+### Changed
+
+- The run configuration's **Preprocessor symbols** field has been replaced by a **Build configuration**
+  drop-down. Existing run configurations are migrated automatically: their symbols move into a build
+  configuration, reusing a matching one where possible.
 - New colour scheme entry **Preprocessor | Inactive branch** for the dimming (Settings | Editor | Color
   Scheme).
 

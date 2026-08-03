@@ -85,9 +85,15 @@ class IsRunProcessHandler(
             config.persistentTempOutputDir =
                 File(System.getProperty("java.io.tmpdir"), "inno-run-${UUID.randomUUID()}").path
         }
-        val outputArg = IsScriptRunnerLogic.buildOutputArg(
+        // The selected build configuration may redirect the output; resolve it before locating setup.exe so
+        // the launch stage looks where the compile stage actually wrote.
+        val buildConfig = config.buildConfiguration()
+        val baseOutputArg = IsScriptRunnerLogic.buildOutputArg(
             projectMode, buildRoot, scriptOutputDir, config.persistentTempOutputDir
         )
+        // Non-null: applyOutputOverride only returns its (non-null) base argument or a replacement.
+        val outputArg =
+            IsScriptRunnerLogic.applyOutputOverride(baseOutputArg, buildConfig?.outputDirOverride, buildRoot)!!
         val outputDir = IsScriptRunnerLogic.outputDirFromArg(outputArg) ?: File(buildRoot, "Output")
 
         // ── Stage 1: delegate to the build, which decides whether a recompile is necessary ─────
@@ -101,8 +107,7 @@ class IsRunProcessHandler(
         }
         val hasArtifact = IsScriptRunnerLogic.findSetupExe(outputDir) != null
         printOut("Building ${scriptFile.name} (see the Build tool window for details)…\n")
-        val defines = IsCompilerDefines.toIsccArguments(config.compilerDefines)
-        if (compilerService.compileScriptForRun(scriptVFile, outputArg, hasArtifact, defines = defines)
+        if (compilerService.compileScriptForRun(scriptVFile, outputArg, hasArtifact, buildConfig = buildConfig)
             != TaskRunnerResults.SUCCESS
         ) {
             printErr("Build failed — aborting run.\n")

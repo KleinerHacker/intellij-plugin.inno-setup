@@ -15,11 +15,25 @@ package org.pcsoft.intellij.plugin.inno_setup.build.run
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationType
 import com.intellij.openapi.project.Project
+import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfiguration
+import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationService
 
+/**
+ * Creates [IsRunConfiguration]s. A new configuration starts on the `Debug` build configuration, so running
+ * a script straight away compiles with `DEBUG` defined — the expectation set by the C/C++ toolchains this
+ * follows. The starter configurations are created on the spot if the project has none yet.
+ */
 class IsRunConfigurationFactory(type: ConfigurationType) : ConfigurationFactory(type) {
 
     override fun getId() = IsRunConfigurationType.ID
 
-    override fun createTemplateConfiguration(project: Project): IsRunConfiguration =
-        IsRunConfiguration(project, this, "")
+    override fun createTemplateConfiguration(project: Project): IsRunConfiguration {
+        val config = IsRunConfiguration(project, this, "")
+        val service = IsBuildConfigurationService.getInstance(project)
+        service.ensureDefaults()
+        config.buildConfigurationName = service.byName(IsBuildConfiguration.DEFAULT_DEBUG_NAME)?.name
+            ?: service.defaultConfiguration()?.name
+                    ?: ""
+        return config
+    }
 }

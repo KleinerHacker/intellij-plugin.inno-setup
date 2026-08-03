@@ -141,3 +141,18 @@
     * `Verify` internally in parallel as well
   * `Release` at the end
     * Deployment errors MUST be ignored, but shown as a warning
+
+## Limiting search
+
+* NEVER decompile or reflect depending third party class
+  * If this is required, ask the user first
+
+# Claude Code
+
+## Console / CLI Output
+
+* On Console or in CLI: MUST ALWAYS in GERMANY
+
+## File Output
+
+* Into files: MUST ALWAYS in ENGLISH

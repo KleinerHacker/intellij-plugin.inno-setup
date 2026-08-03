@@ -252,7 +252,18 @@
         <codeInsight.lineMarkerProvider
                 language="ISS"
                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.build.gutter.IsSetupSectionGutterIconProvider"/>
+
+        <!-- ═══════════════════════════ Build configurations ═══════════════════════════ -->
+        <postStartupActivity
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationStartupActivity"/>
+        <editorNotificationProvider
+                implementation="org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationNotificationProvider"/>
     </extensions>
+
+    <projectListeners>
+        <listener class="org.pcsoft.intellij.plugin.inno_setup.build.config.IsRunConfigurationSelectionListener"
+                  topic="com.intellij.execution.RunManagerListener"/>
+    </projectListeners>
 
     <!-- Feeds the run configuration's ISCC /D symbols into the conditional-branch analysis, so the editor
          greys out the same #ifdef branches the build skips. -->
@@ -279,20 +290,23 @@
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Isl.NewFile"/>
         </action>
 
-        <action id="Iss.RunScript"
-                class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunAction"
-                icon="AllIcons.RunConfigurations.TestState.Run">
+        <!-- Submenus: one entry per build configuration, filled dynamically from the .build directory. -->
+        <group id="Iss.RunScript"
+               class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptRunGroup"
+               icon="AllIcons.RunConfigurations.TestState.Run"
+               popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="before"
                           relative-to-action="ProjectViewPopupMenuRunGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="before" relative-to-action="EditorPopupMenu.Run"/>
-        </action>
+        </group>
 
-        <action id="Iss.BuildScript"
-                class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptBuildAction"
-                icon="AllIcons.Actions.Compile">
+        <group id="Iss.BuildScript"
+               class="org.pcsoft.intellij.plugin.inno_setup.build.action.IsScriptBuildGroup"
+               icon="AllIcons.Actions.Compile"
+               popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
             <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Iss.RunScript"/>
-        </action>
+        </group>
 
         <action id="Iss.ShowEffectiveScript"
                 class="org.pcsoft.intellij.plugin.inno_setup.language.feature.include.action.IsShowEffectiveScriptAction">

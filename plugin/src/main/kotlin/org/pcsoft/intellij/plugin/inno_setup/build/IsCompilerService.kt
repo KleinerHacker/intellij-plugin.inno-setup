@@ -32,6 +32,8 @@ import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.task.ProjectTaskRunner
 import com.intellij.task.TaskRunnerResults
+import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfiguration
+import org.pcsoft.intellij.plugin.inno_setup.build.run.IsScriptRunnerLogic
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.script.build.IsScriptCollector
 import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
@@ -63,15 +65,17 @@ class IsCompilerService(private val project: Project) {
     }
 
     /**
-     * Compiles a single [scriptFile] on a pooled thread (used by the context-menu action). An
-     * explicit single-file action always forces a (re)build.
+     * Compiles a single [scriptFile] on a pooled thread (used by the context-menu action), optionally with
+     * the options of [buildConfig]. An explicit single-file action always forces a (re)build.
      */
-    fun compileScript(scriptFile: VirtualFile) {
+    @JvmOverloads
+    fun compileScript(scriptFile: VirtualFile, buildConfig: IsBuildConfiguration? = null) {
         ApplicationManager.getApplication().executeOnPooledThread {
             runCompilation(
                 listOf(scriptFile),
                 PluginBundle.message("build.title.script", scriptFile.name),
-                force = true
+                force = true,
+                buildConfig = buildConfig
             )
         }
     }
@@ -94,17 +98,17 @@ class IsCompilerService(private val project: Project) {
      * ([org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunProcessHandler]) using an explicit
      * [outputArg] — a run always needs a real installer, even when the project is configured
      * [IsBuildOutputMode.DRY] (which on its own suppresses output). The rebuild decision stays with
-     * the build: the compile is skipped only when the participating files are unchanged since the
-     * last successful build to the same output *and* [hasArtifact] reports the produced installer is
-     * still present. Blocking — intended to be called off the EDT. Streams to the build console and
-     * returns the aggregate task-runner result.
+     * the build: the compile is skipped only when the participating files and the options of
+     * [buildConfig] are unchanged since the last successful build to the same output *and*
+     * [hasArtifact] reports the produced installer is still present. Blocking — intended to be called
+     * off the EDT. Streams to the build console and returns the aggregate task-runner result.
      */
     fun compileScriptForRun(
         scriptFile: VirtualFile,
         outputArg: String?,
         hasArtifact: Boolean,
         force: Boolean = false,
-        defines: List<String> = emptyList()
+        buildConfig: IsBuildConfiguration? = null
     ): ProjectTaskRunner.Result =
         runCompilation(
             listOf(scriptFile),
@@ -112,7 +116,7 @@ class IsCompilerService(private val project: Project) {
             force,
             outputArgFor = { outputArg },
             artifactPresent = { hasArtifact },
-            defines = defines
+            buildConfig = buildConfig
         )
 
     /**
@@ -120,8 +124,9 @@ class IsCompilerService(private val project: Project) {
      *                         pipeline); `null` falls back to the configured [outputMode].
      * @param artifactPresent  extra up-to-date guard: a script is only skipped when its build artifact
      *                         still exists. Defaults to always-present for the regular build.
-     * @param defines          ISCC `/D…` preprocessor symbols (used by the run pipeline); the regular
-     *                         project build defines none.
+     * @param buildConfig      the selected build configuration, contributing `/D…` symbols, an output
+     *                         directory override and extra ISCC options; the regular project build uses
+     *                         none.
      */
     private fun runCompilation(
         scripts: List<VirtualFile>,
@@ -129,7 +134,7 @@ class IsCompilerService(private val project: Project) {
         force: Boolean,
         outputArgFor: ((VirtualFile) -> String?)? = null,
         artifactPresent: (VirtualFile) -> Boolean = { true },
-        defines: List<String> = emptyList()
+        buildConfig: IsBuildConfiguration? = null
     ): ProjectTaskRunner.Result {
         // Flush unsaved editor changes so ISCC compiles the current content from disk.
         ApplicationManager.getApplication().invokeAndWait {
@@ -159,12 +164,25 @@ class IsCompilerService(private val project: Project) {
         val mode = outputMode()
         val installPath = IsSettingsService.getInstance().state.installationPath
         val buildHashes = IsBuildSettingsService.getInstance(project).state.buildHashes
+        val defines = buildConfig?.isccDefines ?: emptyList()
+        val extraOptions = buildConfig?.isccOptions ?: emptyList()
+
+        if (buildConfig != null) {
+            consoleService.print(
+                console,
+                PluginBundle.message("build.using_configuration", buildConfig.name) + "\n",
+                error = false
+            )
+        }
 
         for (script in scripts) {
-            val outputArg = outputArgFor?.invoke(script) ?: resolver.resolveOutputArg(script, mode)
+            val baseOutputArg = outputArgFor?.invoke(script) ?: resolver.resolveOutputArg(script, mode)
+            val outputArg = IsScriptRunnerLogic.applyOutputOverride(
+                baseOutputArg, buildConfig?.outputDirOverride, resolver.buildRoot()
+            )
             // Skip scripts whose participating files are unchanged since the last successful build to
             // the same output, unless a rebuild was forced or the previously produced artifact is gone.
-            val scriptKey = hashKey(script.path, outputArg, defines)
+            val scriptKey = hashKey(script.path, outputArg, buildConfig)
             val currentHash = IsScriptHasher.hashScript(File(script.path), installPath)
             if (!force && buildHashes[scriptKey] == currentHash && artifactPresent(script)) {
                 consoleService.print(
@@ -176,7 +194,8 @@ class IsCompilerService(private val project: Project) {
             }
 
             consoleService.print(console, PluginBundle.message("build.compiling", script.name) + "\n", error = false)
-            val commandLine = buildCommandLine(iscc, script.path, script.parent?.path, outputArg, defines)
+            val commandLine =
+                buildCommandLine(iscc, script.path, script.parent?.path, outputArg, defines, extraOptions)
 
             try {
                 val handler = OSProcessHandler(commandLine)
@@ -256,21 +275,47 @@ class IsCompilerService(private val project: Project) {
         }
     }
 
-    private fun canonicalPath(path: String): String =
-        runCatching { File(path).canonicalPath }.getOrDefault(File(path).absolutePath)
+    companion object {
 
-    /**
-     * Up-to-date cache key. Includes the resolved [outputArg] so builds to different output locations
-     * (a regular build vs. a run that forces a real installer) are tracked independently and never
-     * wrongly skip one another.
-     */
-    /**
-     * Identity of one build: same script, same output *and* same `/D` symbols. The defines belong in the key
-     * because they change what the preprocessor compiles — without them, flipping `/DDEBUG` would leave the
-     * previous installer wrongly considered up to date.
-     */
-    private fun hashKey(path: String, outputArg: String?, defines: List<String> = emptyList()): String =
-        canonicalPath(path) + '|' + (outputArg ?: "") + '|' + defines.joinToString(" ")
+        private fun canonicalPath(path: String): String =
+            runCatching { File(path).canonicalPath }.getOrDefault(File(path).absolutePath)
+
+        /**
+         * Identity of one build: same script, same output *and* the same build configuration content.
+         *
+         * The build configuration enters by its [IsBuildConfiguration.contentHash] rather than its name,
+         * because what decides whether the previous installer is still valid is what was compiled, not what
+         * it was called. Editing `Debug`'s symbols therefore invalidates it, while renaming `Debug` does not
+         * — and a run switched from `Debug` to `Release` never reuses the other one's artifact.
+         */
+        fun hashKey(path: String, outputArg: String?, buildConfig: IsBuildConfiguration?): String =
+            canonicalPath(path) + '|' + (outputArg ?: "") + '|' + (buildConfig?.contentHash() ?: "")
+
+        /**
+         * Builds the ISCC command line. Pure with respect to IntelliJ project state so it can be
+         * unit-tested: the script path, optional working directory, optional `/O…` argument, the `/D…`
+         * symbols and any extra options are assembled into a [GeneralCommandLine].
+         */
+        @JvmOverloads
+        fun buildCommandLine(
+            iscc: File,
+            scriptPath: String,
+            workDir: String?,
+            outputArg: String?,
+            defines: List<String> = emptyList(),
+            extraOptions: List<String> = emptyList()
+        ): GeneralCommandLine {
+            val cmd = GeneralCommandLine(iscc.absolutePath)
+            outputArg?.let { cmd.addParameter(it) }
+            // /D must precede the script name, like every other ISCC option.
+            defines.forEach { cmd.addParameter(it) }
+            // Extra options come last among the options so an explicit one can still override the rest.
+            extraOptions.forEach { cmd.addParameter(it) }
+            cmd.addParameter(scriptPath)
+            if (workDir != null) cmd.withWorkDirectory(workDir)
+            return cmd
+        }
+    }
 
     private fun resolvePath(path: String): VirtualFile? =
         LocalFileSystem.getInstance().findFileByPath(path.replace('\\', '/'))
@@ -280,29 +325,6 @@ class IsCompilerService(private val project: Project) {
             if (project.isDisposed || !location.file.isValid) return@invokeLater
             OpenFileDescriptor(project, location.file, location.line.coerceAtLeast(0), location.column.coerceAtLeast(0))
                 .navigate(true)
-        }
-    }
-
-    companion object {
-        /**
-         * Builds the ISCC command line. Pure with respect to IntelliJ project state so it can be
-         * unit-tested: the script path, optional working directory and optional `/O…` argument are
-         * assembled into a [GeneralCommandLine].
-         */
-        fun buildCommandLine(
-            iscc: File,
-            scriptPath: String,
-            workDir: String?,
-            outputArg: String?,
-            defines: List<String> = emptyList()
-        ): GeneralCommandLine {
-            val cmd = GeneralCommandLine(iscc.absolutePath)
-            outputArg?.let { cmd.addParameter(it) }
-            // /D must precede the script name, like every other ISCC option.
-            defines.forEach { cmd.addParameter(it) }
-            cmd.addParameter(scriptPath)
-            if (workDir != null) cmd.withWorkDirectory(workDir)
-            return cmd
         }
     }
 }
