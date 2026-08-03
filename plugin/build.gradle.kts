@@ -11,6 +11,7 @@
  */
 
 import com.github.jk1.license.render.ReportRenderer
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.tasks.SignPluginTask
 import java.time.Duration
@@ -56,6 +57,23 @@ intellijPlatform {
         // Release-time changelog injection is wired separately; keep patchPluginXml off the changelog
         // provider so it stays configuration-cache friendly.
         changeNotes = provider { "" }
+    }
+
+    // The plugin declares sinceBuild=262 with an unbounded untilBuild, so it is offered to *every* 262+
+    // IDE — not just IntelliJ IDEA. Verifying only the development IDE would let a break in a sibling
+    // product surface in the marketplace instead of in the build. These four cover the IDEs the plugin is
+    // meant to support; the version is taken from the catalog so it can never drift from the platform the
+    // plugin is compiled against. See .claude/rules/plugin-verification.md — the list MUST be kept current.
+    pluginVerification {
+        ides {
+            val verificationVersion = libs.versions.idea.get()
+            listOf(
+                IntelliJPlatformType.IntellijIdea,
+                IntelliJPlatformType.Rider,
+                IntelliJPlatformType.CLion,
+                IntelliJPlatformType.GoLand,
+            ).forEach { create(it, verificationVersion) }
+        }
     }
 
     signing {

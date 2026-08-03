@@ -69,8 +69,10 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
+      # The suites are a filter on the single `test` task (see the root build.gradle.kts) — there is no
+      # separate `integrationTest` task. Without -PtestSuite this job would run BOTH suites.
       - name: Run developer tests
-        run: ./gradlew test --stacktrace --info
+        run: ./gradlew test -PtestSuite=developer --stacktrace --info
 
       - name: Upload test report
         if: always()
@@ -94,14 +96,15 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Run integration tests
-        run: ./gradlew integrationTest --stacktrace --info
+        run: ./gradlew test -PtestSuite=integration --stacktrace --info
 
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-integration
-          path: '**/build/reports/tests/integrationTest/**'
+          # Same `test` task, hence the same report directory as the developer suite.
+          path: '**/build/reports/tests/test/**'
 
   # Single gate name for everything downstream: the pipeline continues only when BOTH suites are green.
   tests:
@@ -112,6 +115,40 @@ jobs:
     steps:
       - name: Both test suites passed
         run: echo "Developer and integration tests are green."
+
+  # Run the JetBrains Plugin Verifier against the full IDE matrix declared in
+  # plugin/build.gradle.kts (IntelliJ IDEA, Rider, CLion, GoLand). The matrix is version-catalog driven,
+  # so this job automatically follows a platform bump. See .claude/rules/plugin-verification.md.
+  verify-plugin:
+    runs-on: ubuntu-latest
+    # Gated on the tests: a red suite must stop the pipeline, not merely be reported next to it.
+    needs: tests
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Verify plugin
+        run: ./gradlew verifyPlugin --stacktrace
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugin-verification-report
+          path: '**/build/reports/pluginVerifier/**'
 
   # Verify that the freshly built plugin can actually be signed with the signing material
   # currently stored in the repository secrets — so a broken/expired certificate or a wrong
