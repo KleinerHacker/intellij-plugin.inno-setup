@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.settings
 
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.ConfigurationException
@@ -182,6 +183,9 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
 
     /**
      * Stores the current UI values in the project settings state and writes the build configuration files.
+     *
+     * Edited symbols only reach the open editors once the highlighting runs again, so the daemon is restarted
+     * afterwards; the cached analysis itself is already invalidated by [IsBuildConfigurationService].
      */
     override fun apply() {
         flushDetails()
@@ -189,6 +193,7 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         state.compileOnBuild = compileOnBuildCheck?.isSelected ?: true
         state.outputMode = selectedOutputMode().name
         configService.replaceAll(working.toList())
+        DaemonCodeAnalyzer.getInstance(project).restart(RESTART_REASON)
     }
 
     /**
@@ -340,5 +345,10 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
             throw ConfigurationException(
                 PluginBundle.message("settings.build.config.error.duplicate", duplicate.key)
             )
+    }
+
+    private companion object {
+        /** Diagnostic reason shown in the daemon's restart log. */
+        const val RESTART_REASON = "Inno Setup build configurations changed"
     }
 }

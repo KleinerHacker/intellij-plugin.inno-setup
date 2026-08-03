@@ -45,6 +45,12 @@
 - New colour scheme entry **Preprocessor | Inactive branch** for the dimming (Settings | Editor | Color
   Scheme).
 
+### Fixed
+
+- Changing the build configuration — switching the selected run configuration, picking another build
+  configuration in it, or editing the configurations under **Settings | Inno Setup | Build** — now updates
+  the dimmed `#if` branches immediately instead of only after the script is edited.
+
 ## [0.6.4]
 
 ### Added

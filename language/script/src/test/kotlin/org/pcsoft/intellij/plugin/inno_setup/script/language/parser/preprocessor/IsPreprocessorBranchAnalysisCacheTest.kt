@@ -16,6 +16,7 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorBranchAnalysis
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolTracker
 import org.pcsoft.intellij.plugin.inno_setup.script.test.IsTimedBasePlatformTestCase
 
 /**
@@ -81,6 +82,40 @@ class IsPreprocessorBranchAnalysisCacheTest : IsTimedBasePlatformTestCase() {
 
         assertNotSame(
             "An edit must invalidate the cached analysis",
+            before,
+            IsPreprocessorBranchAnalysis.analyze(file),
+        )
+    }
+
+    /**
+     * Symbols contributed from outside the script — the `/D…` of the selected build configuration — change
+     * without any edit, so bumping [IsPreprocessorSymbolTracker] must invalidate the cached analysis.
+     * Otherwise switching the build configuration would leave the greyed-out branches on the old outcome
+     * until the file is typed in.
+     */
+    fun testAnalysisIsRecomputedAfterExternalSymbolsChanged() {
+        val file = script(blocks(3))
+        val before = IsPreprocessorBranchAnalysis.analyze(file)
+
+        IsPreprocessorSymbolTracker.getInstance(project).symbolsChanged()
+
+        assertNotSame(
+            "Changed external symbols must invalidate the cached analysis",
+            before,
+            IsPreprocessorBranchAnalysis.analyze(file),
+        )
+    }
+
+    /**
+     * The counterpart: as long as no external symbol source reports a change, the added dependency must not
+     * cost anything — the cache still has to hand out the identical result.
+     */
+    fun testUnchangedExternalSymbolsKeepTheCachedAnalysis() {
+        val file = script(blocks(3))
+        val before = IsPreprocessorBranchAnalysis.analyze(file)
+
+        assertSame(
+            "An unchanged symbol tracker must not invalidate the cache",
             before,
             IsPreprocessorBranchAnalysis.analyze(file),
         )

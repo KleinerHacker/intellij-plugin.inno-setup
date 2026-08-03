@@ -18,6 +18,7 @@ import com.intellij.execution.RunnerAndConfigurationSettings
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.ui.EditorNotifications
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolTracker
 
 /**
  * Re-runs the conditional-branch analysis whenever the selected run configuration changes.
@@ -26,6 +27,9 @@ import com.intellij.ui.EditorNotifications
  * ([org.pcsoft.intellij.plugin.inno_setup.build.run.IsRunConfigurationSymbolProvider]), switching from
  * `Debug` to `Release` in the toolbar must repaint the greyed-out branches — otherwise the editor would keep
  * showing the previous configuration's outcome until the file is touched.
+ *
+ * A daemon restart alone is not enough: the analysis is cached per document revision, so the restarted pass
+ * would re-read the previous result. [IsPreprocessorSymbolTracker] is therefore bumped first.
  */
 class IsRunConfigurationSelectionListener(private val project: Project) : RunManagerListener {
 
@@ -37,6 +41,7 @@ class IsRunConfigurationSelectionListener(private val project: Project) : RunMan
 
     private fun refresh() {
         if (project.isDisposed) return
+        IsPreprocessorSymbolTracker.getInstance(project).symbolsChanged()
         ApplicationManager.getApplication().invokeLater {
             if (project.isDisposed) return@invokeLater
             DaemonCodeAnalyzer.getInstance(project).restart(RESTART_REASON)

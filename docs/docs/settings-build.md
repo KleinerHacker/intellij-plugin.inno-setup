@@ -27,8 +27,8 @@ These settings are **project-scoped** (stored per project, not globally).
 
 ## Build Configurations
 
-A **build configuration** is the Inno Setup counterpart of a C/C++ build configuration: a named set of
-compile options that a [run configuration](run-configuration.md) refers to by name. The options live in
+A **build configuration** is a named set of Inno Setup compile options that a
+[run configuration](run-configuration.md) refers to by name. The options live in
 one place, so several runs can share them and editing them takes effect everywhere at once.
 
 | Option                     | Description                                                                                                                                                    |

@@ -12,6 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build.config
 
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolTracker
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import java.io.File
 
@@ -179,5 +180,40 @@ class IsBuildConfigurationServiceTest : IsTimedBasePlatformTestCase() {
         File(directory, "notes.txt").writeText("hello")
 
         assertEquals(listOf("Good"), service.all().map { it.name })
+    }
+
+    /**
+     * Writing a configuration changes the `/D…` symbols the branch analysis was cached with, so the symbol
+     * tracker must move — the settings page never touches a document while applying its changes.
+     */
+    fun testSaveBumpsTheSymbolTracker() {
+        val tracker = IsPreprocessorSymbolTracker.getInstance(project)
+        val before = tracker.modificationCount
+
+        service.save(IsBuildConfiguration("Custom", "DEBUG"))
+
+        assertTrue("Saving a configuration must invalidate the analysis", tracker.modificationCount > before)
+    }
+
+    /** Deleting a configuration removes symbols from the editor's view and must invalidate the analysis too. */
+    fun testDeleteBumpsTheSymbolTracker() {
+        service.save(IsBuildConfiguration("Custom", "DEBUG"))
+        val tracker = IsPreprocessorSymbolTracker.getInstance(project)
+        val before = tracker.modificationCount
+
+        service.delete("Custom")
+
+        assertTrue("Deleting a configuration must invalidate the analysis", tracker.modificationCount > before)
+    }
+
+    /** The settings page's commit path: replacing everything at once must invalidate the analysis as well. */
+    fun testReplaceAllBumpsTheSymbolTracker() {
+        service.ensureDefaults()
+        val tracker = IsPreprocessorSymbolTracker.getInstance(project)
+        val before = tracker.modificationCount
+
+        service.replaceAll(listOf(IsBuildConfiguration("Only", "DEBUG")))
+
+        assertTrue("Replacing the configurations must invalidate the analysis", tracker.modificationCount > before)
     }
 }

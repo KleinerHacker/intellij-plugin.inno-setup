@@ -140,8 +140,12 @@ object IsPreprocessorBranchAnalysis {
             // materialises while it runs, which invalidated the entry mid-pass and had a single pass over a
             // two-directive file recompute the analysis four times. The document changes only when the text
             // does — exactly what the result depends on.
+            //
+            // The symbols seeded by seedExternalSymbols() are the part that does *not* depend on the text, so
+            // IsPreprocessorSymbolTracker is listed as a second dependency: switching the build configuration
+            // must flip the greyed-out branches without the file being touched.
             val dependency: Any = host.viewProvider.document ?: PsiModificationTracker.MODIFICATION_COUNT
-            CachedValueProvider.Result.create(compute(host), dependency)
+            CachedValueProvider.Result.create(compute(host), dependency, IsPreprocessorSymbolTracker.getInstance(host.project))
         }
     }
 

@@ -17,6 +17,7 @@ import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import org.jetbrains.annotations.TestOnly
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSymbolTracker
 import java.io.File
 
 /**
@@ -139,9 +140,17 @@ class IsBuildConfigurationService(private val project: Project) {
         IsBuildConfiguration.defaults().forEach { save(it) }
     }
 
+    /**
+     * Drops the cached configurations. Also bumps [IsPreprocessorSymbolTracker], because a configuration that
+     * has been written, deleted or replaced changes the `/D…` symbols the branch analysis was cached with —
+     * the settings page applies its changes through here, without ever touching an open document.
+     */
     private fun invalidate() {
         cached = null
         cachedStamp = null
+        if (!project.isDisposed) {
+            IsPreprocessorSymbolTracker.getInstance(project).symbolsChanged()
+        }
     }
 
     private fun files(): List<File> =
