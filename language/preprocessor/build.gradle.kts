@@ -23,6 +23,17 @@ plugins {
     id("org.jetbrains.kotlinx.kover") version "0.9.9"
 }
 
+// Coverage is measured from `test`, which runs everything. Without this Kover's report tasks — and through
+// `koverVerify` the whole `check`/`build` lifecycle — would additionally pull in developerTest and
+// integrationTest, running every test three times concurrently. See inno-setup.platform-module.gradle.kts.
+kover {
+    currentProject {
+        instrumentation {
+            disabledForTestTasks.addAll("developerTest", "integrationTest")
+        }
+    }
+}
+
 val parsingRoot = "src/main/resources/parsing"
 val preprocessorPackage = "org/pcsoft/intellij/plugin/inno_setup/preprocessor/language/parser"
 

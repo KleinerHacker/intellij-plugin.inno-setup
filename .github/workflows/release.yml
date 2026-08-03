@@ -47,17 +47,16 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
-      # The suites are a filter on the single `test` task (see the root build.gradle.kts) — there is no
-      # separate `integrationTest` task. Without -PtestSuite this job would run BOTH suites.
+      # Dedicated task (see the root build.gradle.kts); `test` would run BOTH suites.
       - name: Run developer tests
-        run: ./gradlew test -PtestSuite=developer --stacktrace --info
+        run: ./gradlew developerTest --stacktrace --info
 
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-developer
-          path: '**/build/reports/tests/test/**'
+          path: '**/build/reports/tests/developerTest/**'
 
   # Integration tests: test classes named *IT. Runs at the same time as the developer tests,
   # from the identical setup.
@@ -72,15 +71,15 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Run integration tests
-        run: ./gradlew test -PtestSuite=integration --stacktrace --info
+        run: ./gradlew integrationTest --stacktrace --info
 
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-integration
-          # Same `test` task, hence the same report directory as the developer suite.
-          path: '**/build/reports/tests/test/**'
+          # Own task, hence its own report directory — separate from the developer suite.
+          path: '**/build/reports/tests/integrationTest/**'
 
   # Single gate name for everything that publishes: a release only happens when BOTH suites are green.
   # Until this was introduced a tagged release was published without running any test at all.

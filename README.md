@@ -100,6 +100,11 @@ cd inno-setup
 # Run all tests (every module carries the tests for its own code)
 ./gradlew test
 
+# …or run a single suite. A test class whose name ends in `IT` is an integration test,
+# everything else is a developer test — the fast inner-loop suite.
+./gradlew developerTest
+./gradlew integrationTest
+
 # Build the distributable plugin ZIP
 ./gradlew :plugin:buildPlugin
 # → plugin/build/distributions/inno-setup-<version>.zip
