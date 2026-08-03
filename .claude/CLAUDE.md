@@ -152,6 +152,7 @@
 ## Console / CLI Output
 
 * On Console or in CLI: MUST ALWAYS in GERMANY
+* Plans printed on Console MUST ALWAYS in GERMANY
 
 ## File Output
 

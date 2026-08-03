@@ -37,7 +37,9 @@ one place, so several runs can share them and editing them takes effect everywhe
 | **Output directory**       | Overrides where the installer is written. A relative path is resolved below the project's build folder. Leave it empty to keep the **Output** rule from above. |
 | **Additional ISCC options**| Further raw `ISCC` command-line options, separated by spaces. Wrap values containing spaces in double quotes.                                                   |
 
-Use **Add**, **Copy**, **Rename** and **Remove** to manage the list. At least one configuration must remain.
+The gear button next to the **Configuration** drop-down opens the management actions **Add…**,
+**Duplicate…**, **Rename…** and **Delete** — the same layout the IDE uses for code style schemes.
+At least one configuration must remain, so **Delete** is disabled on the last one.
 
 ### Defaults
 

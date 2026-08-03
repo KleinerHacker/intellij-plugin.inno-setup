@@ -44,6 +44,9 @@
   configuration, reusing a matching one where possible.
 - New colour scheme entry **Preprocessor | Inactive branch** for the dimming (Settings | Editor | Color
   Scheme).
+- The build configurations under **Settings | Inno Setup | Build** are now managed like code style schemes:
+  the four buttons were replaced by a gear button next to the drop-down offering **Add…**, **Duplicate…**,
+  **Rename…** and **Delete**.
 
 ### Fixed
 

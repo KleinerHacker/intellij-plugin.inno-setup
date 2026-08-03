@@ -14,17 +14,28 @@ package org.pcsoft.intellij.plugin.inno_setup.settings
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
 import com.intellij.icons.AllIcons
+import com.intellij.ide.DataManager
+import com.intellij.openapi.actionSystem.ActionPlaces
+import com.intellij.openapi.actionSystem.ActionToolbar
+import com.intellij.openapi.actionSystem.ActionUpdateThread
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.DefaultActionGroup
+import com.intellij.openapi.actionSystem.Presentation
+import com.intellij.openapi.actionSystem.impl.ActionButton
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.options.ConfigurationException
 import com.intellij.openapi.options.SearchableConfigurable
+import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.InputValidator
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.openapi.ui.popup.JBPopupFactory
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.dsl.builder.Align
+import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.dsl.listCellRenderer.listCellRenderer
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
@@ -32,7 +43,6 @@ import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfiguration
 import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfigurationService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import javax.swing.DefaultComboBoxModel
-import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.ListCellRenderer
 
@@ -41,6 +51,9 @@ import javax.swing.ListCellRenderer
  * project build, and for the project's named build configurations. Stored per project in
  * [IsBuildSettingsService] and [IsBuildConfigurationService]; registered as a project configurable
  * so the project scope marker stays on this node only, not on the IDE-wide installation page.
+ *
+ * The configuration selector follows the layout of the platform's Code Style / Color Scheme pages:
+ * a single header row with the selector combo and a gear button holding the management actions.
  */
 class IsBuildSettingsConfigurable(private val project: Project) : SearchableConfigurable {
 
@@ -63,7 +76,6 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
     private var symbolsField: JBTextField? = null
     private var outputDirField: TextFieldWithBrowseButton? = null
     private var optionsField: JBTextField? = null
-    private var removeButton: JButton? = null
 
     /**
      * Returns the stable settings page id used by IntelliJ search.
@@ -94,10 +106,7 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
 
         val combo = ComboBox<String>().apply {
             @Suppress("UNCHECKED_CAST")
-            renderer = listCellRenderer<String>("") {
-                icon(AllIcons.General.GearPlain)
-                text(value)
-            } as ListCellRenderer<String>
+            renderer = listCellRenderer<String>("") { text(value) } as ListCellRenderer<String>
             addActionListener { if (!loading) onConfigurationSelected(selectedIndex()) }
         }
         configCombo = combo
@@ -119,19 +128,7 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         }
         optionsField = options
 
-        val addButton = JButton(PluginBundle.message("settings.build.config.add")).apply {
-            addActionListener { addConfiguration() }
-        }
-        val copyButton = JButton(PluginBundle.message("settings.build.config.copy")).apply {
-            addActionListener { copyConfiguration() }
-        }
-        val renameButton = JButton(PluginBundle.message("settings.build.config.rename")).apply {
-            addActionListener { renameConfiguration() }
-        }
-        val deleteButton = JButton(PluginBundle.message("settings.build.config.remove")).apply {
-            addActionListener { removeConfiguration() }
-        }
-        removeButton = deleteButton
+        val gearButton = createGearButton()
 
         return panel {
             group("Build") {
@@ -149,13 +146,8 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
             }
             group(PluginBundle.message("settings.build.config.group")) {
                 row(PluginBundle.message("settings.build.config.configuration") + ":") {
-                    cell(combo).align(Align.FILL)
-                }
-                row {
-                    cell(addButton)
-                    cell(copyButton)
-                    cell(renameButton)
-                    cell(deleteButton)
+                    cell(combo).align(AlignX.FILL).resizableColumn()
+                    cell(gearButton)
                 }
                 row(PluginBundle.message("settings.build.config.symbols") + ":") {
                     cell(symbols).align(Align.FILL)
@@ -224,13 +216,69 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         symbolsField = null
         outputDirField = null
         optionsField = null
-        removeButton = null
     }
 
     private fun selectedOutputMode(): IsBuildOutputMode =
         outputModeCombo?.selectedItem as? IsBuildOutputMode ?: IsBuildOutputMode.DEFAULT
 
     // ── Build configuration editing ───────────────────────────────────────────────────────────────
+
+    /**
+     * Creates the gear button next to the selector combo. It opens the management actions as a popup,
+     * mirroring the scheme actions of the Code Style page.
+     */
+    private fun createGearButton(): ActionButton {
+        val group = DefaultActionGroup(
+            action(PluginBundle.message("settings.build.config.add")) { addConfiguration() },
+            action(PluginBundle.message("settings.build.config.copy")) { copyConfiguration() },
+            action(PluginBundle.message("settings.build.config.rename")) { renameConfiguration() },
+            // The last configuration must stay: a project without one cannot run anything.
+            action(PluginBundle.message("settings.build.config.remove"), { working.size > 1 }) { removeConfiguration() }
+        )
+
+        lateinit var button: ActionButton
+        val showAction = object : DumbAwareAction(
+            PluginBundle.message("settings.build.config.actions"),
+            null,
+            AllIcons.General.GearPlain
+        ) {
+            override fun getActionUpdateThread() = ActionUpdateThread.EDT
+
+            override fun actionPerformed(e: AnActionEvent) {
+                JBPopupFactory.getInstance()
+                    .createActionGroupPopup(
+                        null,
+                        group,
+                        DataManager.getInstance().getDataContext(button),
+                        JBPopupFactory.ActionSelectionAid.SPEEDSEARCH,
+                        true
+                    )
+                    .showUnderneathOf(button)
+            }
+        }
+        val presentation = Presentation(PluginBundle.message("settings.build.config.actions")).apply {
+            icon = AllIcons.General.GearPlain
+        }
+        button = ActionButton(
+            showAction,
+            presentation,
+            ActionPlaces.UNKNOWN,
+            ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
+        )
+        return button
+    }
+
+    /** Builds a popup entry with an optional enablement predicate. */
+    private fun action(text: String, enabled: () -> Boolean = { true }, perform: () -> Unit) =
+        object : DumbAwareAction(text) {
+            override fun getActionUpdateThread() = ActionUpdateThread.EDT
+
+            override fun update(e: AnActionEvent) {
+                e.presentation.isEnabled = enabled()
+            }
+
+            override fun actionPerformed(e: AnActionEvent) = perform()
+        }
 
     private fun selectedIndex(): Int = configCombo?.selectedIndex ?: -1
 
@@ -254,8 +302,6 @@ class IsBuildSettingsConfigurable(private val project: Project) : SearchableConf
         symbolsField?.isEnabled = editable
         outputDirField?.isEnabled = editable
         optionsField?.isEnabled = editable
-        // The last configuration must stay: a project without one cannot run anything.
-        removeButton?.isEnabled = working.size > 1
     }
 
     private fun onConfigurationSelected(newIndex: Int) {
