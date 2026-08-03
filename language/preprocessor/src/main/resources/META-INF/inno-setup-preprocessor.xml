@@ -38,5 +38,9 @@
         <!-- ISPP brace matching: () for preprocessor directives -->
         <lang.braceMatcher language="ISPP"
                            implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor.IsPreprocessorBraceMatcher"/>
+
+        <!-- ISPP parameter info (Ctrl+P) for built-in function and function-like macro calls -->
+        <codeInsight.parameterInfo language="ISPP"
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor.IsPreprocessorParameterInfoHandler"/>
     </extensions>
 </idea-plugin>

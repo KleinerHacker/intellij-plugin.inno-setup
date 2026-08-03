@@ -23,6 +23,8 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.IsDocLookupStub
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.computeValue
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorBuiltinParameter
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorBuiltinParameterKind
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.inferParameterTypes
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.inferType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.precedingDefine
@@ -35,6 +37,32 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTar
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
+
+/**
+ * A single built-in parameter rendered for the quick-doc popup: `<code>Index: int</code> — optional,
+ * defaults to <code>1</code>`.
+ */
+private val IsPreprocessorBuiltinParameter.docHtml: String
+    get() {
+        val notes = mutableListOf<String>()
+        if (byRef) notes += "passed by reference (the macro is written back)"
+        defaultValue?.let { notes += "optional, defaults to <code>$it</code>" }
+        val declaration = when (kind) {
+            IsPreprocessorBuiltinParameterKind.INT -> "$name: int"
+            IsPreprocessorBuiltinParameterKind.STR -> "$name: str"
+            IsPreprocessorBuiltinParameterKind.ANY -> "$name: any"
+            IsPreprocessorBuiltinParameterKind.IDENT -> {
+                notes += "a symbol name, not evaluated (may be undefined)"
+                name
+            }
+
+            IsPreprocessorBuiltinParameterKind.ARRAY -> {
+                notes += "an array name, passed without an index"
+                name
+            }
+        }
+        return "<code>$declaration</code>" + if (notes.isEmpty()) "" else " — ${notes.joinToString("; ")}"
+    }
 
 private fun StringBuilder.appendVersionSection(since: String?, until: String?) {
     if (since == null && until == null) return
@@ -190,9 +218,16 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
+    /**
+     * Quick-doc for a built-in ISPP function, entirely fed from `is-preprocessor.yaml`: name, result type,
+     * description and signature, plus the parameters broken down from the parsed signature (declared type,
+     * by-reference marker, default value, un-evaluated symbol parameters) and a note when the function has
+     * compile-time side effects (`pure: false`).
+     */
     private fun generateFunctionDoc(name: String, spec: IsPreprocessorSpec): String? {
         val function = spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
             ?: return null
+        val signature = service<IsPreprocessorService>().builtinSignature(function.name)
 
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
@@ -201,6 +236,17 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
             append(DocumentationMarkup.CONTENT_START)
             append("<p>${function.description}</p>")
             append("<p><b>Signature:</b> <code>${function.signature}</code></p>")
+            if (signature != null && signature.parameters.isNotEmpty()) {
+                append("<p><b>Parameters:</b></p><ul>")
+                signature.parameters.forEach { append("<li>${it.docHtml}</li>") }
+                append("</ul>")
+            }
+            if (!function.pure) {
+                append(
+                    "<p><i>Evaluated at compile time with side effects " +
+                            "(file system, registry, environment, external process or the compilation itself).</i></p>"
+                )
+            }
             appendVersionSection(function.since, function.until)
             append(DocumentationMarkup.CONTENT_END)
         }

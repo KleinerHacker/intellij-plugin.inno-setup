@@ -67,6 +67,7 @@ using.
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 | **ISPP function checking** | Calls to built-in preprocessor functions are checked against their signature: argument count (optional parameters included), argument types, by-reference parameters, and results that carry no value |
+| **ISPP parameter info**    | `Ctrl+P` inside a call shows the parameter list and highlights the current argument — for built-ins from their signature, for function-like macros from the types inferred from the macro body |
 
 ### IDE Compatibility
 

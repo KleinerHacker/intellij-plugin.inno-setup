@@ -152,4 +152,66 @@ class IsPreprocessorDocumentationProviderTest : IsTimedBasePlatformTestCase() {
         assertTrue("Doc must show the parameter type", doc.contains("x: str"))
         assertTrue("Doc must show the return type str", doc.contains("· str") || doc.contains("str"))
     }
+
+    // ── Built-in function details from the specification ─────────────────────
+
+    /**
+     * Quick Doc must also work at a real call site (the function name directly followed by `(`), not only
+     * on a bare identifier — that is where the user actually asks for it.
+     */
+    fun testBuiltinFunctionDocAtCallSite() {
+        val doc = docFor("#define A Co<caret>py(\"abc\", 1, 2)\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull("Expected doc for the Copy built-in function at its call site", doc)
+        assertTrue("Doc must name the function", doc!!.contains("Copy"))
+        assertTrue("Doc must show the signature", doc.contains("Signature"))
+    }
+
+    /**
+     * The parameters of a built-in are listed individually with their declared type, taken from the parsed
+     * signature of `is-preprocessor.yaml`.
+     */
+    fun testBuiltinFunctionDocListsParameters() {
+        val doc = docFor("#define A Co<caret>py(\"abc\", 1, 2)\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull(doc)
+        assertTrue("Doc must have a parameter section", doc!!.contains("Parameters"))
+        assertTrue("Doc must list the string parameter", doc.contains("S: str"))
+        assertTrue("Doc must list the integer parameters", doc.contains("Index: int"))
+    }
+
+    /** A parameter with a default value is marked as optional and shows that default. */
+    fun testBuiltinFunctionDocShowsOptionalParameterDefault() {
+        val doc = docFor("#define A Fi<caret>nd(\"abc\", \"b\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull(doc)
+        assertTrue("Doc must mark the optional parameter", doc!!.contains("optional"))
+    }
+
+    /** A by-reference parameter (`str*`) is called out as such. */
+    fun testBuiltinFunctionDocShowsByReferenceParameter() {
+        val doc = docFor(
+            "#define A StringCh<caret>ange(MyVar, \"a\", \"b\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n"
+        )
+        assertNotNull(doc)
+        assertTrue("Doc must mark the by-reference parameter", doc!!.contains("by reference"))
+    }
+
+    /** An `Ident` parameter is explained as an un-evaluated symbol name that may be undefined. */
+    fun testBuiltinFunctionDocExplainsSymbolParameter() {
+        val doc = docFor("#define A Defi<caret>ned(DEBUG)\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull(doc)
+        assertTrue("Doc must explain the symbol parameter", doc!!.contains("symbol name"))
+    }
+
+    /** A function marked `pure: false` in the specification carries a side-effect note. */
+    fun testImpureBuiltinFunctionDocShowsSideEffectNote() {
+        val doc = docFor("#define A FileExi<caret>sts(\"a.txt\")\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull(doc)
+        assertTrue("Doc of an impure function must note the side effects", doc!!.contains("side effects"))
+    }
+
+    /** A pure function must not carry the side-effect note. */
+    fun testPureBuiltinFunctionDocHasNoSideEffectNote() {
+        val doc = docFor("#define A Co<caret>py(\"abc\", 1, 2)\n[Setup]\nAppName=Test\nAppVersion=1.0\n")
+        assertNotNull(doc)
+        assertFalse("Doc of a pure function must not note side effects", doc!!.contains("side effects"))
+    }
 }

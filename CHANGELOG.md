@@ -44,6 +44,15 @@
   inside an expression is now reported.
 - Calling a name that is neither a built-in nor a macro of the script is now reported as
   **Unknown preprocessor function** instead of a generic unresolved reference.
+- **Quick documentation for built-in preprocessor functions** now lists the parameters individually — the
+  declared type, whether a parameter is passed by reference, its default value, and whether it takes a
+  symbol name instead of a value — and marks functions that have compile-time side effects (file system,
+  registry, environment, external programs).
+- **Parameter info (`Ctrl+P`) for preprocessor calls**: while the caret is inside an argument list, the
+  parameter list of the called function is shown and the argument being typed is highlighted. Built-in
+  functions show their declared parameter types, by-reference markers and default values; function-like
+  macros of the script show the parameter and result types inferred from their body wherever those can be
+  determined.
 
 ### Changed
 

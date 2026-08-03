@@ -45,12 +45,15 @@ enum class IsPreprocessorBuiltinParameterKind {
  * @property byRef Whether the parameter is passed by reference (`int*` / `str*`) and is therefore written
  *   back into the caller's macro — such an argument must be a bare macro name.
  * @property optional Whether the parameter has a default value and may be omitted.
+ * @property defaultValue The default value as written in the signature (e.g. `0` or `""`), or `null` when
+ *   the parameter is mandatory.
  */
 data class IsPreprocessorBuiltinParameter(
     val name: String,
     val kind: IsPreprocessorBuiltinParameterKind,
     val byRef: Boolean = false,
     val optional: Boolean = false,
+    val defaultValue: String? = null,
 )
 
 /**
@@ -140,6 +143,7 @@ private fun splitSignatureParameters(text: String): List<String> {
 /** Parses a single parameter declaration such as `Params: str = ""` or `Ident`. */
 private fun parseSignatureParameter(text: String): IsPreprocessorBuiltinParameter {
     val optional = text.contains('=')
+    val defaultValue = if (optional) text.substringAfter('=').trim().ifEmpty { null } else null
     val declaration = text.substringBefore('=').trim()
     val colon = declaration.indexOf(':')
     if (colon < 0) {
@@ -149,7 +153,7 @@ private fun parseSignatureParameter(text: String): IsPreprocessorBuiltinParamete
         } else {
             IsPreprocessorBuiltinParameterKind.IDENT
         }
-        return IsPreprocessorBuiltinParameter(declaration, kind, byRef = false, optional = optional)
+        return IsPreprocessorBuiltinParameter(declaration, kind, false, optional, defaultValue)
     }
 
     val name = declaration.substring(0, colon).trim()
@@ -160,7 +164,7 @@ private fun parseSignatureParameter(text: String): IsPreprocessorBuiltinParamete
         "str" -> IsPreprocessorBuiltinParameterKind.STR
         else -> IsPreprocessorBuiltinParameterKind.ANY
     }
-    return IsPreprocessorBuiltinParameter(name, kind, byRef, optional)
+    return IsPreprocessorBuiltinParameter(name, kind, byRef, optional, defaultValue)
 }
 
 /** Maps a signature result type name to the expression type system. */

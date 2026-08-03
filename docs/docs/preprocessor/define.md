@@ -130,6 +130,17 @@ may legitimately be undefined; for `DimOf` the array must exist but is passed wi
 #define Count     DimOf(Langs)     ; the array itself, not Langs[0]
 ```
 
+### Parameter info while typing a call
+
+Pressing **Ctrl+P** (Parameter Info) with the caret inside an argument list shows the parameter list of the
+called function and highlights the argument you are currently typing:
+
+* for a **built-in**, straight from its signature — `S: str, Index: int, Count: int → str`, including
+  `*` for a by-reference parameter and the default value of an optional one;
+* for a **function-like macro** of your script, ISPP declares no types, so the types inferred from the macro
+  body are shown where they can be determined (`#define Pad(n) "0" + Str(n)` → `n: int → str`) and the plain
+  parameter name otherwise.
+
 ### Recursive reference resolution
 
 A reference to another macro takes **that macro's** type, resolved recursively through the name — so type
