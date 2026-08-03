@@ -51,12 +51,24 @@ jobs:
       - name: Run developer tests
         run: ./gradlew developerTest --stacktrace --info
 
+      # Uploaded on failure too — that is the case the report is actually needed for. Three sources, because
+      # the HTML report alone is not enough to diagnose a failure that only happens on CI:
+      #   reports/      the browsable HTML report
+      #   test-results/ the JUnit XML, which carries the full stack trace and stdout/stderr per test
+      #   sandbox logs  the per-test idea.log under .intellijPlatform/sandbox/<module>/<ide>/log-test/;
+      #                 platform tests write their diagnostics there rather than to the console
+      #                 (idea.split.test.logs=true, see the module build scripts)
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-developer
-          path: '**/build/reports/tests/developerTest/**'
+          path: |
+            **/build/reports/tests/developerTest/**
+            **/build/test-results/developerTest/**
+            .intellijPlatform/sandbox/*/*/log-test/**
+          # An empty artifact would silently hide a broken path; fail loudly instead.
+          if-no-files-found: error
 
   # Integration tests: test classes named *IT. Runs at the same time as the developer tests,
   # from the identical setup.
@@ -73,13 +85,18 @@ jobs:
       - name: Run integration tests
         run: ./gradlew integrationTest --stacktrace --info
 
+      # Own task, hence its own report and result directories — separate from the developer suite.
+      # See the developer job above for what each of the three paths contributes.
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-integration
-          # Own task, hence its own report directory — separate from the developer suite.
-          path: '**/build/reports/tests/integrationTest/**'
+          path: |
+            **/build/reports/tests/integrationTest/**
+            **/build/test-results/integrationTest/**
+            .intellijPlatform/sandbox/*/*/log-test/**
+          if-no-files-found: error
 
   # Single gate name for everything that publishes: a release only happens when BOTH suites are green.
   # Until this was introduced a tagged release was published without running any test at all.

@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 
 import org.pcsoft.intellij.plugin.inno_setup.build.config.IsBuildConfiguration
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedTestCase
+import java.io.File
 
 /**
  * Developer tests for the build's up-to-date identity ([IsCompilerService.hashKey]).
@@ -24,8 +25,13 @@ import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedTestCase
  */
 class IsCompilerServiceHashKeyTest : IsTimedTestCase() {
 
-    private val script = "C:\\proj\\setup.iss"
-    private val output = "/O\"C:\\proj\\out\""
+    // Derived from a real directory rather than hard-coded as "C:\proj\…": the canonicalisation case below
+    // depends on the OS actually treating the separators as separators, and on Linux a backslash is an
+    // ordinary filename character — which made that test fail on the CI runner while passing locally. The
+    // directory need not exist; File.canonicalPath resolves "…/sub/.." purely textually for a missing path.
+    private val projectDir = File(System.getProperty("java.io.tmpdir"), "inno-setup-hash-key-test")
+    private val script = File(projectDir, "setup.iss").path
+    private val output = "/O\"" + File(projectDir, "out").path + "\""
 
     private fun key(config: IsBuildConfiguration?, path: String = script, outputArg: String? = output) =
         IsCompilerService.hashKey(path, outputArg, config)
@@ -104,7 +110,7 @@ class IsCompilerServiceHashKeyTest : IsTimedTestCase() {
     /** Different scripts keep separate keys even with the same configuration. */
     fun testDifferentScriptsDiffer() {
         val debug = IsBuildConfiguration("Debug", "DEBUG")
-        assertFalse(key(debug) == key(debug, path = "C:\\proj\\other.iss"))
+        assertFalse(key(debug) == key(debug, path = File(projectDir, "other.iss").path))
     }
 
     /** Different output arguments keep separate keys, so a build and a run never skip each other. */
@@ -116,6 +122,7 @@ class IsCompilerServiceHashKeyTest : IsTimedTestCase() {
     /** The same script spelled differently is one script, so its key must not change. */
     fun testPathIsCanonicalised() {
         val debug = IsBuildConfiguration("Debug", "DEBUG")
-        assertEquals(key(debug), key(debug, path = "C:\\proj\\sub\\..\\setup.iss"))
+        val detour = File(projectDir, "sub${File.separator}..${File.separator}setup.iss").path
+        assertEquals(key(debug), key(debug, path = detour))
     }
 }

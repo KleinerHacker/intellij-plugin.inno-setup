@@ -40,7 +40,6 @@ class IsSetupSectionGutterIconProvider : LineMarkerProvider {
     // getLineMarkerInfo is the legacy single-element entry point; collectSlowLineMarkers is preferred.
     override fun getLineMarkerInfo(element: PsiElement): LineMarkerInfo<*>? = null
 
-    @Suppress("DEPRECATION")
     override fun collectSlowLineMarkers(
         elements: MutableList<out PsiElement>,
         result: MutableCollection<in LineMarkerInfo<*>>
@@ -58,7 +57,9 @@ class IsSetupSectionGutterIconProvider : LineMarkerProvider {
                 AllIcons.RunConfigurations.TestState.Run,
                 { PluginBundle.message("gutter.run_setup.tooltip") },
                 { mouseEvent, elt -> showBuildConfigurationPopup(elt.project, scriptFile, mouseEvent) },
-                GutterIconRenderer.Alignment.RIGHT
+                GutterIconRenderer.Alignment.RIGHT,
+                // Accessible name for screen readers; the tooltip already states what the icon does.
+                { PluginBundle.message("gutter.run_setup.tooltip") }
             )
         }
     }
