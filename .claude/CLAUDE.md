@@ -122,6 +122,9 @@
   * Create: add with `git add` after creation
 * Commits, pushes, pulls or any other actions communicating with the Git server MUST NEVER be invoked.
   * Should it be required, the user MUST be asked
+* Exceptions:
+  * NEVER add plans or plan status
+  
 
 ### Target Environment
 
@@ -141,3 +144,19 @@
     * `Verify` internally in parallel as well
   * `Release` at the end
     * Deployment errors MUST be ignored, but shown as a warning
+
+## Limiting search
+
+* NEVER decompile or reflect depending third party class
+  * If this is required, ask the user first
+
+# Claude Code
+
+## Console / CLI Output
+
+* On Console or in CLI: MUST ALWAYS in GERMANY
+* Plans printed on Console MUST ALWAYS in GERMANY
+
+## File Output
+
+* Into files: MUST ALWAYS in ENGLISH

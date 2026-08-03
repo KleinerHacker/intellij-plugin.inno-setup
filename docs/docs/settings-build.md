@@ -22,3 +22,43 @@ These settings are **project-scoped** (stored per project, not globally).
 | **As defined in script**                     | Leaves the script's `[Setup] OutputDir` untouched — no `/O` switch is passed to `ISCC`.         |
 | **Into project build directory** *(default)* | Redirects a relative `OutputDir` below the project's build folder (`out`/`target`/`build`).     |
 | **Dry build — validate only, no output**     | Passes the native `ISCC` `/O-` switch so the script is validated but no setup file is produced. |
+
+---
+
+## Build Configurations
+
+A **build configuration** is a named set of Inno Setup compile options that a
+[run configuration](run-configuration.md) refers to by name. The options live in
+one place, so several runs can share them and editing them takes effect everywhere at once.
+
+| Option                     | Description                                                                                                                                                    |
+|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Preprocessor symbols**   | Symbols passed to the compiler as `/D`, e.g. `DEBUG` or `VERSION=2`; separate several with a comma, semicolon or space.                                        |
+| **Output directory**       | Overrides where the installer is written. A relative path is resolved below the project's build folder. Leave it empty to keep the **Output** rule from above. |
+| **Additional ISCC options**| Further raw `ISCC` command-line options, separated by spaces. Wrap values containing spaces in double quotes.                                                   |
+
+The gear button next to the **Configuration** drop-down opens the management actions **Add…**,
+**Duplicate…**, **Rename…** and **Delete** — the same layout the IDE uses for code style schemes.
+At least one configuration must remain, so **Delete** is disabled on the last one.
+
+### Defaults
+
+A project that has none yet starts with two configurations:
+
+| Name        | Symbols | Purpose                                    |
+|-------------|---------|--------------------------------------------|
+| **Release** | *(none)*| A plain build with nothing defined.        |
+| **Debug**   | `DEBUG` | The default of every new run configuration.|
+
+### Storage
+
+Each configuration is stored as a **single file in the project's `.build` directory**, next to `.idea` —
+the same layout the platform uses for shareable run configurations in `.run`. One file per configuration
+keeps them reviewable and mergeable, so they can be shared with the team through version control.
+
+### Effect on the build
+
+The content of the selected build configuration is part of the build's up-to-date check. Switching a run
+from `Debug` to `Release`, or merely editing `Debug`'s symbols, therefore invalidates the previously
+produced installer and forces a rebuild. Renaming a configuration does not — the name is not part of what
+was compiled.

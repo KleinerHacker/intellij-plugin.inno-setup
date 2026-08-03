@@ -39,6 +39,22 @@ class IsCompilerServiceTest : IsTimedBasePlatformTestCase() {
         assertEquals(listOf("/O-", "setup.iss"), cmd.parametersList.parameters)
     }
 
+    /** All options of a build configuration precede the script name, as ISCC requires. */
+    fun testCommandLineWithDefinesAndExtraOptions() {
+        val cmd = IsCompilerService.buildCommandLine(
+            File("ISCC.exe"), "setup.iss", null, "/O-",
+            defines = listOf("/DDEBUG"),
+            extraOptions = listOf("/Q")
+        )
+        assertEquals(listOf("/O-", "/DDEBUG", "/Q", "setup.iss"), cmd.parametersList.parameters)
+    }
+
+    /** Without a build configuration the command line is exactly what it was before. */
+    fun testCommandLineWithoutBuildConfigurationOptions() {
+        val cmd = IsCompilerService.buildCommandLine(File("ISCC.exe"), "setup.iss", null, null)
+        assertEquals(listOf("setup.iss"), cmd.parametersList.parameters)
+    }
+
     // ── document saving & graceful failure ───────────────────────────────────────
 
     fun testNoInstallationFailsGracefully() {

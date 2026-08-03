@@ -11,6 +11,9 @@
  */
 
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.api.tasks.testing.TestFilter
+import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.time.Duration
@@ -83,6 +86,13 @@ intellijPlatform {
     instrumentCode = false
 }
 
+// Single source of truth for the target IDE across all modules: a local IDE when configured (Gradle property
+// `localIdePath` or env `LOCAL_IDE_PATH`), otherwise the downloaded SDK. Pointing this at an IDE whose build
+// differs from the target version makes the platform tests hang during app boot. Resolved once here because
+// both the `intellijPlatform` dependencies and the custom test suites below need it.
+val localIdePath: String? = (providers.gradleProperty("localIdePath").orNull
+    ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
+
 dependencies {
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
@@ -94,11 +104,6 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
     intellijPlatform {
-        // Single source of truth for the target IDE across all modules: a local IDE when configured
-        // (Gradle property `localIdePath` or env `LOCAL_IDE_PATH`), otherwise the downloaded SDK. Pointing
-        // this at an IDE whose build differs from the target version makes the platform tests hang during app boot.
-        val localIdePath = (providers.gradleProperty("localIdePath").orNull
-            ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
         if (localIdePath != null) {
             local(localIdePath)
         } else {
@@ -135,3 +140,76 @@ tasks.withType<Test>().configureEach {
     // Hard backstop so a hung test cannot stall the build indefinitely (mirrors the former root config).
     timeout.set(Duration.ofMinutes(15))
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The two test suites — see the root build.gradle.kts for the convention. `test` keeps running everything
+// (that is what `check` depends on); these two are the filtered entry points.
+//
+// Registered through `intellijPlatformTesting.testIde` rather than as plain Test tasks: the platform plugin
+// does not configure `test` in place but supplies it through a dedicated `prepareTest` task, so a hand-rolled
+// Test task gets no sandbox and no platform system properties. `testIde` produces a TestIdeTask — a Test
+// subclass that goes through the same preparation — and is the only supported way to add a second test task.
+// The block above therefore applies to these tasks as well, since they are Test tasks.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Both resolved against the project — inside the `task { }` block below the receiver is the task itself.
+val testSourceSet = sourceSets[SourceSet.TEST_SOURCE_SET_NAME]
+
+fun registerTestSuite(name: String, taskDescription: String, applyFilter: TestFilter.() -> Unit) {
+    intellijPlatformTesting.testIde.register(name) {
+        if (localIdePath != null) {
+            localPath.set(file(localIdePath))
+        } else {
+            type.set(IntelliJPlatformType.IntellijIdea)
+            version.set(ideaVersion)
+        }
+
+        // Mirrors the test dependencies above: without it the lucene module stays unresolved, the
+        // spellchecker is excluded and the whole test plugin gets dropped.
+        plugins {
+            bundledPlugin("intellij.libraries.misc.plugin")
+        }
+
+        task {
+            group = LifecycleBasePlugin.VERIFICATION_GROUP
+            description = taskDescription
+
+            // `testIde` supplies the IntelliJ Platform side (sandbox, JVM arguments) but wires up neither the
+            // module's own test sources nor the platform test framework: without the lines below the task
+            // first reports NO-SOURCE, and once the sources are in place it cannot load BasePlatformTestCase.
+            //
+            // The framework comes from `intellijPlatformTestClasspath` — the same configuration the `test`
+            // task resolves. Deliberately NOT the per-task variant the registration above creates
+            // (intellijPlatformTestClasspath_<name>): `testFramework(TestFrameworkType.Platform)` is declared
+            // only for the default configuration, so the per-task one carries the IDE but no test-framework
+            // jars, BasePlatformTestCase stays unresolvable and every platform test is silently skipped.
+            // Reading the configuration rather than the `test` task also keeps `test` out of these runs.
+            testClassesDirs = testSourceSet.output.classesDirs
+            classpath = testSourceSet.runtimeClasspath +
+                    project.configurations["intellijPlatformTestClasspath"] +
+                    classpath
+
+            filter {
+                applyFilter()
+                // A module may legitimately contain no test of the selected kind — most have no
+                // integration tests at all.
+                isFailOnNoMatchingTests = false
+            }
+        }
+    }
+}
+
+registerTestSuite(
+    "developerTest",
+    "Runs the developer test suite: every test class NOT named *IT (the fast inner-loop suite)."
+) { excludeTestsMatching("*IT") }
+
+registerTestSuite(
+    "integrationTest",
+    "Runs the integration test suite: test classes named *IT."
+) { includeTestsMatching("*IT") }
+
+// `check` must keep running `test` and only `test` — otherwise the same tests run three times, concurrently,
+// which besides tripling the build time reliably breaks the wall-clock-based
+// IsPreprocessorBranchAnalysisPerformanceIT. Nothing wires the suites into `check` directly: it is Kover,
+// whose report tasks aggregate EVERY Test task and which hangs `koverVerify` off `check`. The suites are
+// therefore excluded from Kover instrumentation in each module's own build script, where Kover is applied.

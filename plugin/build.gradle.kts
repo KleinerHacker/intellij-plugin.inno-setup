@@ -11,6 +11,9 @@
  */
 
 import com.github.jk1.license.render.ReportRenderer
+import org.gradle.api.tasks.testing.TestFilter
+import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.tasks.SignPluginTask
 import java.time.Duration
@@ -58,6 +61,23 @@ intellijPlatform {
         changeNotes = provider { "" }
     }
 
+    // The plugin declares sinceBuild=262 with an unbounded untilBuild, so it is offered to *every* 262+
+    // IDE — not just IntelliJ IDEA. Verifying only the development IDE would let a break in a sibling
+    // product surface in the marketplace instead of in the build. These four cover the IDEs the plugin is
+    // meant to support; the version is taken from the catalog so it can never drift from the platform the
+    // plugin is compiled against. See .claude/rules/plugin-verification.md — the list MUST be kept current.
+    pluginVerification {
+        ides {
+            val verificationVersion = libs.versions.idea.get()
+            listOf(
+                IntelliJPlatformType.IntellijIdea,
+                IntelliJPlatformType.Rider,
+                IntelliJPlatformType.CLion,
+                IntelliJPlatformType.GoLand,
+            ).forEach { create(it, verificationVersion) }
+        }
+    }
+
     signing {
         System.getenv("KEYSTORE_FILE")?.takeIf { it.isNotBlank() }?.let { keyStore = file(it) }
         keyStoreType = "PKCS12"
@@ -82,6 +102,11 @@ intellijPlatform {
     }
 }
 
+// Resolved once here because both the `intellijPlatform` dependencies and the custom test suites at the
+// bottom of this file need it. See the convention plugin (inno-setup.platform-module) for the rationale.
+val localIdePath: String? = (providers.gradleProperty("localIdePath").orNull
+    ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
+
 dependencies {
     // See inno-setup.platform-module: pin transitive Kotlin artifacts to the catalog version so an older
     // stdlib (pulled via jackson-module-kotlin → kotlin-reflect) cannot crash the platform's coroutine
@@ -96,8 +121,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1")
 
     intellijPlatform {
-        val localIdePath = (providers.gradleProperty("localIdePath").orNull
-            ?: providers.environmentVariable("LOCAL_IDE_PATH").orNull)?.takeIf { it.isNotBlank() }
         if (localIdePath != null) {
             local(localIdePath)
         } else {
@@ -123,6 +146,15 @@ dependencies {
 }
 
 kover {
+    // Coverage is measured from `test`, which runs everything. Without this Kover's report tasks — and
+    // through `koverVerify` the whole `check`/`build` lifecycle — would additionally pull in developerTest
+    // and integrationTest, running every test three times concurrently.
+    currentProject {
+        instrumentation {
+            disabledForTestTasks.addAll("developerTest", "integrationTest")
+        }
+    }
+
     reports {
         filters {
             excludes {
@@ -172,7 +204,9 @@ tasks {
         )
     }
 
-    test {
+    // Applies to `test` as well as to the developerTest/integrationTest suites registered below — those are
+    // TestIdeTask instances, which extend Test.
+    withType<Test>().configureEach {
         // Platform tests log through java.util.logging (JUL) via TestLoggerFactory — NOT log4j. See the
         // detailed explanation in the :language convention (inno-setup.platform-module.gradle.kts).
         systemProperty("intellij.console.log.level", "off")
@@ -181,3 +215,62 @@ tasks {
         timeout.set(Duration.ofMinutes(15))
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The two test suites — see the root build.gradle.kts for the convention, and the identical registration in
+// inno-setup.platform-module.gradle.kts for the language modules. `test` keeps running everything (that is
+// what `check` depends on); these two are the filtered entry points.
+//
+// Registered through `intellijPlatformTesting.testIde` rather than as plain Test tasks: the platform plugin
+// does not configure `test` in place but supplies it through a dedicated `prepareTest` task, so a hand-rolled
+// Test task gets no sandbox and no platform system properties.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// Both resolved against the project — inside the `task { }` block below the receiver is the task itself.
+val testSourceSet = sourceSets[SourceSet.TEST_SOURCE_SET_NAME]
+
+fun registerTestSuite(name: String, taskDescription: String, applyFilter: TestFilter.() -> Unit) {
+    intellijPlatformTesting.testIde.register(name) {
+        if (localIdePath != null) {
+            localPath.set(file(localIdePath))
+        } else {
+            type.set(IntelliJPlatformType.IntellijIdea)
+            version.set(libs.versions.idea.get())
+        }
+
+        // Mirrors the test dependencies above — same reasoning, same two entries.
+        plugins {
+            bundledModule("intellij.platform.structureView")
+            bundledPlugin("intellij.libraries.misc.plugin")
+        }
+
+        task {
+            group = LifecycleBasePlugin.VERIFICATION_GROUP
+            description = taskDescription
+
+            // `testIde` supplies the IntelliJ Platform side (sandbox, JVM arguments) but wires up neither the
+            // module's own test sources nor the platform test framework — see the identical block in
+            // inno-setup.platform-module.gradle.kts for the full reasoning.
+            testClassesDirs = testSourceSet.output.classesDirs
+            classpath = testSourceSet.runtimeClasspath +
+                    project.configurations["intellijPlatformTestClasspath"] +
+                    classpath
+
+            filter {
+                applyFilter()
+                // A module may legitimately contain no test of the selected kind.
+                isFailOnNoMatchingTests = false
+            }
+        }
+    }
+}
+
+registerTestSuite(
+    "developerTest",
+    "Runs the developer test suite: every test class NOT named *IT (the fast inner-loop suite)."
+) { excludeTestsMatching("*IT") }
+
+registerTestSuite(
+    "integrationTest",
+    "Runs the integration test suite: test classes named *IT."
+) { includeTestsMatching("*IT") }
+

@@ -158,4 +158,63 @@ class IsScriptRunnerLogicTest {
         // The caller must check for this; outputDirFromArg is a dumb extractor.
         assertEquals(File("-"), IsScriptRunnerLogic.outputDirFromArg("/O-"))
     }
+
+    // ── build configuration output override ──────────────────────────────────────
+    //
+    // These cases turn on the difference between a relative and an absolute path, which only the running OS
+    // can decide: on Linux "C:\out" is neither absolute nor even a nested path — the backslash is an ordinary
+    // filename character — so a hard-coded Windows path made every one of these tests fail on the CI runner
+    // while passing locally. Paths are therefore derived from the TemporaryFolder rule, which yields a real
+    // absolute path with native separators on whatever OS the suite runs on.
+
+    /** A build configuration that sets no override leaves the resolved argument untouched. */
+    @Test
+    fun `applyOutputOverride keeps base argument when override is blank`() {
+        val buildRoot = tmp.newFolder("build")
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", "", buildRoot))
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", null, buildRoot))
+        assertEquals("/O-", IsScriptRunnerLogic.applyOutputOverride("/O-", "   ", buildRoot))
+    }
+
+    /** A relative override is resolved below the project build directory, not the working directory. */
+    @Test
+    fun `applyOutputOverride resolves relative path against build root`() {
+        val buildRoot = tmp.newFolder("build")
+        val relative = "dist${File.separator}debug"
+        assertEquals(
+            IsScriptRunnerLogic.outputArg(File(buildRoot, relative).path),
+            IsScriptRunnerLogic.applyOutputOverride("/O-", relative, buildRoot)
+        )
+    }
+
+    /** An absolute override is taken as given. */
+    @Test
+    fun `applyOutputOverride keeps absolute path`() {
+        val absolute = tmp.newFolder("out").path
+        val result = IsScriptRunnerLogic.applyOutputOverride("/O-", absolute, tmp.newFolder("build"))
+        assertEquals(IsScriptRunnerLogic.outputArg(absolute), result)
+    }
+
+    /** An already quoted override is not quoted twice. */
+    @Test
+    fun `applyOutputOverride strips existing quotes`() {
+        // A space in the name is the reason the caller quotes at all, so keep one here.
+        val absolute = tmp.newFolder("my out").path
+        val result = IsScriptRunnerLogic.applyOutputOverride("/O-", "\"$absolute\"", tmp.newFolder("build"))
+        assertEquals(IsScriptRunnerLogic.outputArg(absolute), result)
+    }
+
+    /** A null base argument stays null when there is nothing to override it with. */
+    @Test
+    fun `applyOutputOverride keeps null base without override`() {
+        assertNull(IsScriptRunnerLogic.applyOutputOverride(null, "", tmp.newFolder("build")))
+    }
+
+    /** An override also supplies an argument where the project rule produced none. */
+    @Test
+    fun `applyOutputOverride replaces missing base argument`() {
+        val absolute = tmp.newFolder("out").path
+        val result = IsScriptRunnerLogic.applyOutputOverride(null, absolute, tmp.newFolder("build"))
+        assertEquals(IsScriptRunnerLogic.outputArg(absolute), result)
+    }
 }

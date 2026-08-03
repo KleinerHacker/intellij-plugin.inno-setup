@@ -47,15 +47,28 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
+      # Dedicated task (see the root build.gradle.kts); `test` would run BOTH suites.
       - name: Run developer tests
-        run: ./gradlew test --stacktrace --info
+        run: ./gradlew developerTest --stacktrace --info
 
+      # Uploaded on failure too — that is the case the report is actually needed for. Three sources, because
+      # the HTML report alone is not enough to diagnose a failure that only happens on CI:
+      #   reports/      the browsable HTML report
+      #   test-results/ the JUnit XML, which carries the full stack trace and stdout/stderr per test
+      #   sandbox logs  the per-test idea.log under .intellijPlatform/sandbox/<module>/<ide>/log-test/;
+      #                 platform tests write their diagnostics there rather than to the console
+      #                 (idea.split.test.logs=true, see the module build scripts)
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-developer
-          path: '**/build/reports/tests/test/**'
+          path: |
+            **/build/reports/tests/developerTest/**
+            **/build/test-results/developerTest/**
+            .intellijPlatform/sandbox/*/*/log-test/**
+          # An empty artifact would silently hide a broken path; fail loudly instead.
+          if-no-files-found: error
 
   # Integration tests: test classes named *IT. Runs at the same time as the developer tests,
   # from the identical setup.
@@ -72,12 +85,18 @@ jobs:
       - name: Run integration tests
         run: ./gradlew integrationTest --stacktrace --info
 
+      # Own task, hence its own report and result directories — separate from the developer suite.
+      # See the developer job above for what each of the three paths contributes.
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-report-integration
-          path: '**/build/reports/tests/integrationTest/**'
+          path: |
+            **/build/reports/tests/integrationTest/**
+            **/build/test-results/integrationTest/**
+            .intellijPlatform/sandbox/*/*/log-test/**
+          if-no-files-found: error
 
   # Single gate name for everything that publishes: a release only happens when BOTH suites are green.
   # Until this was introduced a tagged release was published without running any test at all.
@@ -89,6 +108,35 @@ jobs:
     steps:
       - name: Both test suites passed
         run: echo "Developer and integration tests are green."
+
+  # Run the JetBrains Plugin Verifier against the full IDE matrix declared in plugin/build.gradle.kts
+  # (IntelliJ IDEA, Rider, CLion, GoLand). A release must never publish a plugin that fails verification
+  # on one of the supported products. See .claude/rules/plugin-verification.md.
+  verify-plugin:
+    runs-on: ubuntu-latest
+    needs: tests
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Verify plugin
+        run: ./gradlew verifyPlugin -Pversion=${{ github.ref_name }} --stacktrace
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugin-verification-report
+          path: '**/build/reports/pluginVerifier/**'
 
   build:
     runs-on: ubuntu-latest
@@ -199,6 +247,7 @@ jobs:
       - licences
       - deploy-docs
       - tests
+      - verify-plugin
 
     steps:
       - uses: actions/checkout@v7
@@ -248,6 +297,7 @@ jobs:
       - licences
       - deploy-docs
       - tests
+      - verify-plugin
 
     permissions:
       contents: read

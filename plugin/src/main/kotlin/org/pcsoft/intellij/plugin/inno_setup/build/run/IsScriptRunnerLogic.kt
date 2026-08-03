@@ -13,7 +13,6 @@
 package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputMode
-import org.pcsoft.intellij.plugin.inno_setup.build.run.IsScriptRunnerLogic.buildOutputArg
 import java.io.File
 import java.util.*
 
@@ -60,6 +59,21 @@ object IsScriptRunnerLogic {
 
     /** Formats an ISCC `/O` argument; the path is wrapped in double quotes as ISCC expects. */
     fun outputArg(path: String): String = "/O\"$path\""
+
+    /**
+     * Applies a build configuration's output directory override to an already resolved [baseArg].
+     *
+     * A blank [outputDirOverride] keeps [baseArg] untouched — the override is opt-in, so a configuration
+     * that only defines symbols still follows the project's output rule. A relative override is resolved
+     * against [buildRoot] so `dist/debug` lands inside the project's build folder rather than the working
+     * directory ISCC happens to run in.
+     */
+    fun applyOutputOverride(baseArg: String?, outputDirOverride: String?, buildRoot: File): String? {
+        val override = outputDirOverride?.trim()?.removeSurrounding("\"")?.takeIf { it.isNotEmpty() }
+            ?: return baseArg
+        val resolved = if (File(override).isAbsolute) override else File(buildRoot, override).path
+        return outputArg(resolved)
+    }
 
     /**
      * Builds the command-line arguments list for launching the compiled installer.

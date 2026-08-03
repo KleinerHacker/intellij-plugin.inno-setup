@@ -63,6 +63,7 @@ using.
 | **Code formatting**        | Reformat Code normalises spacing around `=` / `:` / `;` and `[ ]`, keeps one blank line between sections, and spaces preprocessor arithmetic operators; configurable under Code Style  |
 | **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                                                                                            |
 | **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build                                                                         |
+| **Build configurations**   | Named sets of compile options (preprocessor symbols, output directory, extra ISCC options) stored one file each in the project's `.build` directory; selectable per run, from the gutter icon and from the context menu, and part of the rebuild decision |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 
@@ -98,6 +99,11 @@ cd inno-setup
 
 # Run all tests (every module carries the tests for its own code)
 ./gradlew test
+
+# …or run a single suite. A test class whose name ends in `IT` is an integration test,
+# everything else is a developer test — the fast inner-loop suite.
+./gradlew developerTest
+./gradlew integrationTest
 
 # Build the distributable plugin ZIP
 ./gradlew :plugin:buildPlugin

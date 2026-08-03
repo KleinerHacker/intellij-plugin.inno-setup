@@ -24,7 +24,7 @@ import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
  */
 class IsScriptBuildActionTest : IsTimedBasePlatformTestCase() {
 
-    private val action = IsScriptBuildAction()
+    private val action = IsScriptBuildAction("Debug")
 
     private fun update(vararg files: VirtualFile): AnActionEvent {
         val builder = SimpleDataContext.builder().add(CommonDataKeys.PROJECT, project)
