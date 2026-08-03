@@ -99,6 +99,29 @@ ISPP 支持完整的类 C/C++ 运算符集。插件会高亮每个运算符标�
 #define Doubled  Power(2, 10) * 2                        ; int * int → int
 ```
 
+### 内置函数调用会按签名检查
+
+每个内置函数调用都会按照随插件打包的签名（见下方参考）进行校验：
+
+| 示例                                 | 原因                                          |
+|--------------------------------------|-----------------------------------------------|
+| `#define X Copy("abc")`              | `Copy` 需要 3 个参数                           |
+| `#define X Copy("abc", "x", 2)`      | `Index` 声明为 `int`，却传入了字符串             |
+| `#define X StringChange("lit", …)`   | 按引用传递的参数（`S: str*`）需要宏名而非字面量   |
+| `#define X Warning("x") + 1`         | `Warning` 不返回值，不能用作表达式的值           |
+| `#define X NoSuchFunc(1)`            | 未知的预处理器函数                              |
+
+带默认值的参数（例如 `Find(S, Substr, Index = 1)`）可以省略，只要所有必需参数都已传入，参数较少的调用也会被接受。
+
+标注为 `Ident` 或 `Array` 的参数（`Defined(Ident)`、`TypeOf(Ident)`、`DimOf(Array)`）接收的是符号的**名称**而非值：
+参数必须是纯标识符。对 `Defined`/`TypeOf` 而言可以尚未定义；对 `DimOf` 而言数组必须存在，但不带索引传入。
+
+```ini
+#dim Langs[2]
+#define HasDebug  Defined(DEBUG)   ; DEBUG 可以不存在
+#define Count     DimOf(Langs)     ; 是数组本身，而不是 Langs[0]
+```
+
 ### 递归引用解析
 
 对另一个宏的引用会取**该宏的**类型，并通过名称递归解析——因此即使操作数本身是 `#define`，也能捕获类型错误：

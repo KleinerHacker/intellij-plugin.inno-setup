@@ -93,8 +93,14 @@
 
 * A plan MUST be created for EVERY change
   * A switch to plan mode MUST happen
+* The PLAN MUST ALWAYS be written in GERMAN - both the plan file and the console output
+  * This applies to headings, bullet points and every other text of the plan
 * The PLAN MUST NOT contain a summary or explanation of the changes
+  * FORBIDDEN sections: "Context", "Background", "Summary", "Overview", "Rationale", "Trade-offs"
+  * FORBIDDEN: prose paragraphs of any kind - the plan consists of bullet points ONLY
 * The implementation tasks MUST be explained in short bullet points with no more than 20 words per bullet and a maximum of 10 bullets per task
+  * A bullet describes WHAT is done, NOT WHY
+* Before leaving plan mode the plan MUST be checked against ALL rules above
 * The plan MUST be written into the local `.claude/plans` directory, together with a status file
   * Naming scheme:
     * Plan: `<Name>.md`

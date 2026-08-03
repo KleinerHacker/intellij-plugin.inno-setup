@@ -17,6 +17,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Assert.*
 import org.junit.Test
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.parseBuiltinSignature
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorFunctionReturnType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorSpec
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorVariableType
@@ -129,6 +130,47 @@ class IsPreprocessorServiceTest {
         spec.forbiddenVariableNames.forEach { f ->
             assertFalse("Forbidden name must not be blank", f.name.isBlank())
             assertFalse("Forbidden name '${f.name}' description must not be blank", f.description.isBlank())
+        }
+    }
+
+    /**
+     * Every built-in signature of the specification must be parsable into the structured parameter model —
+     * otherwise the argument count / argument type validation would silently skip that function.
+     */
+    @Test
+    fun `every builtin signature can be parsed`() {
+        spec.builtinFunctions.forEach { function ->
+            val signature = parseBuiltinSignature(function.signature)
+            assertNotNull("Signature of '${function.name}' must be parsable: ${function.signature}", signature)
+            assertEquals(
+                "Parsed name of '${function.signature}'",
+                function.name,
+                signature!!.name,
+            )
+            signature.parameters.forEach { parameter ->
+                assertFalse(
+                    "Parameter name in '${function.signature}' must not be blank",
+                    parameter.name.isBlank(),
+                )
+            }
+        }
+    }
+
+    /**
+     * Optional parameters must always come last, otherwise the required-argument count derived from the
+     * signature would not describe a contiguous prefix of the parameter list.
+     */
+    @Test
+    fun `optional builtin parameters are trailing`() {
+        spec.builtinFunctions.forEach { function ->
+            val parameters = parseBuiltinSignature(function.signature)!!.parameters
+            val firstOptional = parameters.indexOfFirst { it.optional }
+            if (firstOptional >= 0) {
+                assertTrue(
+                    "Optional parameters of '${function.name}' must be trailing",
+                    parameters.drop(firstOptional).all { it.optional },
+                )
+            }
         }
     }
 

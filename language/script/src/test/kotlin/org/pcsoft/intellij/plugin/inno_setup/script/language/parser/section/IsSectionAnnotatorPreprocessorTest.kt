@@ -265,4 +265,94 @@ class IsSectionAnnotatorPreprocessorTest : IsTimedBasePlatformTestCase() {
             baseWarnings.isEmpty()
         )
     }
+
+    // ── Built-in function validation ──────────────────────────────────────────
+
+    /** All ERROR level highlights of [text] whose description contains [fragment]. */
+    private fun errorsContaining(text: String, fragment: String) =
+        myFixture.let {
+            it.configureByText(IsScriptFileType.INSTANCE, text)
+            it.doHighlighting()
+        }.filter {
+            it.severity == HighlightSeverity.ERROR &&
+                    it.description?.contains(fragment, ignoreCase = true) == true
+        }
+
+    /**
+     * A built-in call with too few arguments must be reported: `Copy` requires three arguments, so
+     * `Copy("abc")` is invalid and the message must name the expected count.
+     */
+    fun testBuiltinCallWithTooFewArgumentsIsReported() {
+        val errors = errorsContaining(
+            "#define Part Copy(\"abc\")\n[Setup]\nAppName={#Part}\n",
+            "expects 3 arguments"
+        )
+        assertTrue("Copy with one argument must be reported as an arity error", errors.isNotEmpty())
+    }
+
+    /** A built-in call matching its signature must not produce any diagnostic. */
+    fun testBuiltinCallWithMatchingArgumentsProducesNoError() {
+        val errors = errorsContaining(
+            "#define Part Copy(\"abc\", 1, 2)\n[Setup]\nAppName={#Part}\n",
+            "Copy"
+        )
+        assertTrue("A correct Copy call must not be flagged", errors.isEmpty())
+    }
+
+    /**
+     * A built-in argument of the wrong type must be reported: `Copy` declares `Index` as an integer,
+     * so passing a string literal is invalid.
+     */
+    fun testBuiltinArgumentOfWrongTypeIsReported() {
+        val errors = errorsContaining(
+            "#define Part Copy(\"abc\", \"x\", 2)\n[Setup]\nAppName={#Part}\n",
+            "must be int"
+        )
+        assertTrue("A string argument for an int parameter must be reported", errors.isNotEmpty())
+    }
+
+    /**
+     * A void built-in (`Warning`) used as an operand of an expression must be reported, because it
+     * yields no value that could be combined.
+     */
+    fun testVoidBuiltinUsedAsValueIsReported() {
+        val errors = errorsContaining(
+            "#define Part Warning(\"x\") + 1\n[Setup]\nAppName={#Part}\n",
+            "returns no value"
+        )
+        assertTrue("A void built-in used as a value must be reported", errors.isNotEmpty())
+    }
+
+    /**
+     * `Defined(X)` takes an un-evaluated symbol name, so an undefined `X` must NOT be reported as an
+     * unresolved reference (regression guard for the false positive of the plain reference check).
+     */
+    fun testDefinedArgumentIsNotReportedAsUnresolved() {
+        val errors = errorsContaining(
+            "#define Flag Defined(NotDefinedAnywhere)\n[Setup]\nAppName={#Flag}\n",
+            "Unresolved preprocessor reference"
+        )
+        assertTrue("The argument of Defined(...) must not be an unresolved reference", errors.isEmpty())
+    }
+
+    /**
+     * `DimOf(A)` takes the array itself, so the array name must NOT be reported as needing an index
+     * (regression guard for the false positive of the array reference check).
+     */
+    fun testDimOfArgumentIsNotReportedAsMissingIndex() {
+        val errors = errorsContaining(
+            "#dim Arr[3]\n#define Count DimOf(Arr)\n[Setup]\nAppName={#Count}\n",
+            "must be indexed"
+        )
+        assertTrue("The argument of DimOf(...) must not require an index", errors.isEmpty())
+    }
+
+    /** Calling a name that is neither a built-in nor a macro must be reported as an unknown function. */
+    fun testUnknownFunctionCallIsReported() {
+        val errors = errorsContaining(
+            "#define Part NoSuchFunction(1)\n[Setup]\nAppName={#Part}\n",
+            "Unknown preprocessor function"
+        )
+        assertTrue("A call to an unknown name must be reported as an unknown function", errors.isNotEmpty())
+    }
 }

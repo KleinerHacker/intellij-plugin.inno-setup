@@ -36,6 +36,14 @@
 - A build is now only reused when the **content of the build configuration** is unchanged as well —
   switching from `Debug` to `Release`, or editing `Debug`'s symbols, forces a rebuild; renaming a
   configuration does not.
+- **Built-in preprocessor functions are now checked against their signature**: a wrong number of arguments
+  (respecting optional parameters such as `Find(…, Index = 1)`), an argument of the wrong type
+  (e.g. a string where `Copy` expects an integer index), and a by-reference parameter (`str*` / `int*`) that
+  does not receive a macro name are reported as errors at the offending argument.
+- Calling a built-in that returns nothing (`Error`, `Warning`, `Message`, `FileClose`, …) as a **value**
+  inside an expression is now reported.
+- Calling a name that is neither a built-in nor a macro of the script is now reported as
+  **Unknown preprocessor function** instead of a generic unresolved reference.
 
 ### Changed
 
@@ -50,6 +58,9 @@
 
 ### Fixed
 
+- The argument of `Defined(...)` and `TypeOf(...)` is no longer reported as an unresolved reference — these
+  built-ins take the *name* of a symbol, which may legitimately be undefined.
+- `DimOf(MyArray)` no longer demands an index: the array is passed as a whole.
 - Changing the build configuration — switching the selected run configuration, picking another build
   configuration in it, or editing the configurations under **Settings | Inno Setup | Build** — now updates
   the dimmed `#if` branches immediately instead of only after the script is edited.

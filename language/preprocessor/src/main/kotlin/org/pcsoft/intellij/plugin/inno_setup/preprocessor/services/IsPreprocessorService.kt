@@ -16,6 +16,10 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.intellij.openapi.components.Service
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorBuiltinSignature
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprType
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.parseBuiltinSignature
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorFunctionReturnType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorSpec
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorVariableSpec
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorVariableType
@@ -46,4 +50,28 @@ class IsPreprocessorService {
     val emittableVariables: List<IsPreprocessorVariableSpec> by lazy {
         spec.predefinedVariables.filter { it.type != IsPreprocessorVariableType.VOID }
     }
+
+    /**
+     * Structured signatures of all built-in functions, keyed by the lower-case function name.
+     *
+     * Parsed once from the `signature` strings of the specification and used by the expression validation to
+     * check argument counts and argument types of built-in calls.
+     */
+    val builtinSignatures: Map<String, IsPreprocessorBuiltinSignature> by lazy {
+        spec.builtinFunctions.mapNotNull { function ->
+            parseBuiltinSignature(function.signature, function.returnType.toExprType())
+                ?.let { function.name.lowercase() to it }
+        }.toMap()
+    }
+
+    /** The structured signature of the built-in function [name] (case-insensitive), or `null`. */
+    fun builtinSignature(name: String): IsPreprocessorBuiltinSignature? = builtinSignatures[name.lowercase()]
+}
+
+/** Maps a specification return type to the expression type system. */
+private fun IsPreprocessorFunctionReturnType.toExprType(): IsPreprocessorExprType = when (this) {
+    IsPreprocessorFunctionReturnType.INT -> IsPreprocessorExprType.INT
+    IsPreprocessorFunctionReturnType.STR -> IsPreprocessorExprType.STR
+    IsPreprocessorFunctionReturnType.VOID -> IsPreprocessorExprType.VOID
+    IsPreprocessorFunctionReturnType.ANY -> IsPreprocessorExprType.ANY
 }

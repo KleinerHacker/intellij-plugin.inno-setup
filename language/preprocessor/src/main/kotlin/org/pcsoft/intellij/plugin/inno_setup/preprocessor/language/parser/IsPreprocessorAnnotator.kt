@@ -1053,11 +1053,26 @@ class IsPreprocessorAnnotator : Annotator {
                 return@forEach
             }
 
-            holder.newAnnotation(HighlightSeverity.ERROR, "Unresolved preprocessor reference: '$name'")
+            // An identifier immediately followed by '(' is a call, so report it as an unknown function
+            // rather than as an unknown value — the name is neither a built-in nor a macro of this file.
+            val message = if (isCallSite(directive, ref.rangeInElement.endOffset)) {
+                "Unknown preprocessor function: '$name'"
+            } else {
+                "Unresolved preprocessor reference: '$name'"
+            }
+            holder.newAnnotation(HighlightSeverity.ERROR, message)
                 .range(range)
                 .textAttributes(IsPreprocessorAnnotatorHighlighting.UNKNOWN_REFERENCE)
                 .create()
         }
+    }
+
+    /** Whether the identifier ending at [endOffsetInDirective] is directly followed by an argument list. */
+    private fun isCallSite(directive: IsPreprocessorDirective, endOffsetInDirective: Int): Boolean {
+        val text = directive.text
+        var i = endOffsetInDirective
+        while (i < text.length && text[i].isWhitespace()) i++
+        return i < text.length && text[i] == '('
     }
 
     /**

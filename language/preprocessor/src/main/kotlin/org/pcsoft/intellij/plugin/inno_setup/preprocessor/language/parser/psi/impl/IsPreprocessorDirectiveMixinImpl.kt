@@ -27,6 +27,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.refer
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorForVariableReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IS_PREPROCESSOR_BOOLEAN_WORDS
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorBuiltinParameterKind
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprTokenizer
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
@@ -408,10 +409,12 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         val name = nameNode() ?: return emptyList()  // the #define name resp. the #pragma sub-command
         val visibility = visibilityNode()
         val params = if (isExprDefine) macroParameterNames() else emptySet()
+        val symbolArgs = symbolArgumentNodes()
         return valueIdentifiers()
             .filter { it !== name }          // not the define's own name / pragma sub-command
             .filter { it !== visibility }    // not a scope/visibility keyword
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
+            .filter { it !in symbolArgs }    // not the un-evaluated symbol argument of `Defined(X)` & co.
     }
 
     /**
@@ -436,32 +439,37 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     private fun ifElifReferenceIdentifiers(): List<ASTNode> {
         val forbidden = service<IsPreprocessorService>().spec.forbiddenVariableNames
             .map { it.name.lowercase() }.toSet()
-        val definedArgs = definedCallArgumentNodes()
+        val symbolArgs = symbolArgumentNodes()
         return valueIdentifiers()
             .filter { it.text.lowercase() !in IS_PREPROCESSOR_BOOLEAN_WORDS }
             .filter { it.text.lowercase() !in forbidden }
-            .filter { it !in definedArgs }
+            .filter { it !in symbolArgs }
     }
 
     /**
-     * The identifier nodes that are the single argument of a `defined(...)` call in the value, e.g. `X`
-     * in `defined(X)`. Such names may legitimately be undefined, so they are not treated as references.
+     * The identifier nodes that are the un-evaluated *identifier* argument of a built-in call in the value,
+     * e.g. `X` in `defined(X)` or `TypeOf(X)`.
+     *
+     * These built-ins declare their first parameter as `Ident` in the bundled specification: ISPP passes the
+     * *name*, not a value, and the name may legitimately be undefined — so it must not become a reference,
+     * which would report it as unresolved.
+     *
+     * An `Array` parameter (`DimOf(A)`) is deliberately **not** included: the array must exist, so its name
+     * stays a resolvable reference for navigation, find-usages and rename.
      */
-    private fun definedCallArgumentNodes(): Set<ASTNode> {
+    private fun symbolArgumentNodes(): Set<ASTNode> {
         val value = (this as IsPreprocessorDirective).value?.node ?: return emptySet()
+        val preprocessorService = service<IsPreprocessorService>()
         val tokens = value.getChildren(null).filter { it.elementType != TokenType.WHITE_SPACE }
         val result = mutableSetOf<ASTNode>()
-        var i = 0
-        while (i < tokens.size) {
-            if (tokens[i].elementType == IsPreprocessorTypes.IDENTIFIER &&
-                tokens[i].text.equals("defined", ignoreCase = true) &&
-                tokens.getOrNull(i + 1)?.elementType == IsPreprocessorTypes.LPAREN
-            ) {
-                tokens.getOrNull(i + 2)
-                    ?.takeIf { it.elementType == IsPreprocessorTypes.IDENTIFIER }
-                    ?.let { result += it }
-            }
-            i++
+        tokens.forEachIndexed { i, token ->
+            if (token.elementType != IsPreprocessorTypes.IDENTIFIER) return@forEachIndexed
+            if (tokens.getOrNull(i + 1)?.elementType != IsPreprocessorTypes.LPAREN) return@forEachIndexed
+            val kind = preprocessorService.builtinSignature(token.text)?.parameters?.firstOrNull()?.kind
+            if (kind != IsPreprocessorBuiltinParameterKind.IDENT) return@forEachIndexed
+            tokens.getOrNull(i + 2)
+                ?.takeIf { it.elementType == IsPreprocessorTypes.IDENTIFIER }
+                ?.let { result += it }
         }
         return result
     }

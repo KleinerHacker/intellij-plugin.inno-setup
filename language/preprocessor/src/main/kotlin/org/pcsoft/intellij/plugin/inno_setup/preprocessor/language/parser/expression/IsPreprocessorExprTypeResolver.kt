@@ -64,6 +64,8 @@ data class IsPreprocessorExprArrayElementInfo(
  * @param functionMacros all function-like macros of the file.
  * @param variableType resolves a predefined variable name to its type, or `null` if it is not one.
  * @param builtinReturnType resolves a built-in function name to its return type.
+ * @param builtinSignature resolves a built-in function name to its structured signature, or `null` when the
+ *   name is not a built-in. Enables the argument count / argument type checks on built-in calls.
  */
 class IsPreprocessorExprTypeResolver(
     defines: List<IsPreprocessorExprDefineInfo>,
@@ -71,6 +73,7 @@ class IsPreprocessorExprTypeResolver(
     private val variableType: (String) -> IsPreprocessorExprType? = { null },
     private val builtinReturnType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
     arrays: List<IsPreprocessorExprArrayInfo> = emptyList(),
+    private val builtinSignature: (String) -> IsPreprocessorBuiltinSignature? = { null },
 ) {
 
     private val defines: List<IsPreprocessorExprDefineInfo> = defines.sortedBy { it.order }
@@ -181,6 +184,7 @@ class IsPreprocessorExprTypeResolver(
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
             functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
             isArray = { it !in bound && isArray(it, macro.order) },
+            builtinSignature = { builtinSignature(it) },
         )
         inference.infer(ast)
         return inference.errors.isNotEmpty()
@@ -193,6 +197,7 @@ class IsPreprocessorExprTypeResolver(
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, order) },
             functionMacroParameterTypes = { macroParameterTypesOrNull(it) },
             isArray = { isArray(it, order) },
+            builtinSignature = { builtinSignature(it) },
         )
 
     /**
@@ -233,6 +238,7 @@ class IsPreprocessorExprTypeResolver(
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
             functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
             isArray = { it !in bound && isArray(it, macro.order) },
+            builtinSignature = { builtinSignature(it) },
         ).infer(ast)
     }
 

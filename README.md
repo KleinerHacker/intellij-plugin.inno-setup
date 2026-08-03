@@ -66,6 +66,7 @@ using.
 | **Build configurations**   | Named sets of compile options (preprocessor symbols, output directory, extra ISCC options) stored one file each in the project's `.build` directory; selectable per run, from the gutter icon and from the context menu, and part of the rebuild decision |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
+| **ISPP function checking** | Calls to built-in preprocessor functions are checked against their signature: argument count (optional parameters included), argument types, by-reference parameters, and results that carry no value |
 
 ### IDE Compatibility
 

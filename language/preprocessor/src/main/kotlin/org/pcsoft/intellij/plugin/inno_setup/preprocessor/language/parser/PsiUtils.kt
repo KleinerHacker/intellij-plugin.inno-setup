@@ -21,7 +21,6 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expres
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorFunctionReturnType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorVariableType
 
 // ── ISPP host bridge (.iss/.isl script + .ist template) ──────────────────────────────
@@ -98,13 +97,6 @@ val PsiFile.definedConstants: List<Pair<String, String?>>
         }
 
 // ── ISPP type / value analysis ──────────────────────────────────────────────
-
-private fun IsPreprocessorFunctionReturnType.toExprType(): IsPreprocessorExprType = when (this) {
-    IsPreprocessorFunctionReturnType.INT -> IsPreprocessorExprType.INT
-    IsPreprocessorFunctionReturnType.STR -> IsPreprocessorExprType.STR
-    IsPreprocessorFunctionReturnType.VOID -> IsPreprocessorExprType.VOID
-    IsPreprocessorFunctionReturnType.ANY -> IsPreprocessorExprType.ANY
-}
 
 private fun IsPreprocessorVariableType.toExprType(): IsPreprocessorExprType = when (this) {
     IsPreprocessorVariableType.INT -> IsPreprocessorExprType.INT
@@ -222,10 +214,13 @@ private fun splitTopLevelCommas(text: String): List<String> {
 fun PsiFile.preprocessorTypeResolver(
     extraVariables: Map<String, IsPreprocessorExprType> = emptyMap(),
 ): IsPreprocessorExprTypeResolver {
-    val spec = service<IsPreprocessorService>().spec
+    val preprocessorService = service<IsPreprocessorService>()
+    val spec = preprocessorService.spec
+    val builtinSignature: (String) -> IsPreprocessorBuiltinSignature? = { name ->
+        preprocessorService.builtinSignature(name)
+    }
     val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
-        spec.builtinFunctions.firstOrNull { it.name.equals(name, ignoreCase = true) }
-            ?.returnType?.toExprType() ?: IsPreprocessorExprType.ANY
+        builtinSignature(name)?.returnType ?: IsPreprocessorExprType.ANY
     }
     val variableType: (String) -> IsPreprocessorExprType? = { name ->
         extraVariables.entries.firstOrNull { it.key.equals(name, ignoreCase = true) }?.value
@@ -233,6 +228,7 @@ fun PsiFile.preprocessorTypeResolver(
     }
     return IsPreprocessorExprTypeResolver(
         simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType, arrayInfos(),
+        builtinSignature = builtinSignature,
     )
 }
 

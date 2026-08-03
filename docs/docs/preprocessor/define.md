@@ -105,6 +105,31 @@ while `Str(Major) * 2` is rejected.
 #define Doubled  Power(2, 10) * 2                        ; int * int → int
 ```
 
+### Built-in calls are checked against their signature
+
+Every call to a built-in is validated against the bundled signature (see the reference below):
+
+| Example                              | Reason                                                                  |
+|--------------------------------------|-------------------------------------------------------------------------|
+| `#define X Copy("abc")`              | `Copy` expects 3 arguments                                              |
+| `#define X Copy("abc", "x", 2)`      | `Index` is declared `int`, a string is passed                           |
+| `#define X StringChange("lit", …)`   | a by-reference parameter (`S: str*`) needs a macro name, not a literal   |
+| `#define X Warning("x") + 1`         | `Warning` returns nothing and cannot be used as a value                  |
+| `#define X NoSuchFunc(1)`            | unknown preprocessor function                                            |
+
+Parameters with a default value (e.g. `Find(S, Substr, Index = 1)`) may be omitted, so a call with fewer
+arguments is accepted as long as every required parameter is supplied.
+
+Parameters shown as `Ident` or `Array` (`Defined(Ident)`, `TypeOf(Ident)`, `DimOf(Array)`) receive the
+**name** of a symbol rather than a value: the argument must be a bare identifier. For `Defined`/`TypeOf` it
+may legitimately be undefined; for `DimOf` the array must exist but is passed without an index.
+
+```ini
+#dim Langs[2]
+#define HasDebug  Defined(DEBUG)   ; DEBUG need not exist
+#define Count     DimOf(Langs)     ; the array itself, not Langs[0]
+```
+
 ### Recursive reference resolution
 
 A reference to another macro takes **that macro's** type, resolved recursively through the name — so type

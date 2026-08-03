@@ -13,6 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -225,5 +226,142 @@ class IsPreprocessorExprTypeInferenceTest {
     fun `int returning builtin in arithmetic is fine`() {
         val inference = analyse("Power(2, 3) + 1", funcs = mapOf("Power" to IsPreprocessorExprType.INT))
         assertEquals(0, inference.errors.size)
+    }
+
+    // ── built-in signature validation ────────────────────────────────────────
+
+    /** Infers [text] with the given built-in [signatures] and the given declared [arrays] in scope. */
+    private fun withBuiltins(
+        text: String,
+        vararg signatures: String,
+        arrays: Set<String> = emptySet(),
+    ): IsPreprocessorExprTypeInference {
+        val parsed = signatures.mapNotNull { parseBuiltinSignature(it) }.associateBy { it.name.lowercase() }
+        val ast = IsPreprocessorExprParser.parse(text).ast
+        val inference = IsPreprocessorExprTypeInference(
+            functionCallType = { name, _ ->
+                parsed[name.lowercase()]?.returnType ?: IsPreprocessorExprType.ANY
+            },
+            isArray = { name -> arrays.any { it.equals(name, ignoreCase = true) } },
+            builtinSignature = { parsed[it.lowercase()] },
+        )
+        inference.infer(ast)
+        return inference
+    }
+
+    private val copySignature = "Copy(S: str, Index: int, Count: int): str"
+    private val findSignature = "Find(S: str, Substr: str, Index: int = 1): int"
+    private val errorSignature = "Error(Message: str): void"
+
+    /** A built-in call with exactly the declared arguments produces no diagnostic. */
+    @Test
+    fun `builtin call with matching arguments is fine`() {
+        assertEquals(0, withBuiltins("Copy(\"abc\", 1, 2)", copySignature).errors.size)
+    }
+
+    /** Fewer arguments than the built-in requires is an error. */
+    @Test
+    fun `builtin call with too few arguments is an error`() {
+        val errors = withBuiltins("Copy(\"abc\")", copySignature).errors
+        assertEquals(1, errors.size)
+        assertTrue(errors[0].message.contains("3 arguments"))
+    }
+
+    /** More arguments than the built-in accepts is an error. */
+    @Test
+    fun `builtin call with too many arguments is an error`() {
+        assertEquals(1, withBuiltins("Copy(\"abc\", 1, 2, 3)", copySignature).errors.size)
+    }
+
+    /** A parameter with a default value may be omitted, but the required ones may not. */
+    @Test
+    fun `optional builtin parameters may be omitted`() {
+        assertEquals(0, withBuiltins("Find(\"abc\", \"b\")", findSignature).errors.size)
+        assertEquals(0, withBuiltins("Find(\"abc\", \"b\", 2)", findSignature).errors.size)
+        assertEquals(1, withBuiltins("Find(\"abc\")", findSignature).errors.size)
+    }
+
+    /** Passing a string where the built-in declares an integer parameter is an error. */
+    @Test
+    fun `builtin argument of the wrong type is an error`() {
+        val errors = withBuiltins("Copy(\"abc\", \"x\", 2)", copySignature).errors
+        assertEquals(1, errors.size)
+        assertTrue(errors[0].message.contains("Index"))
+    }
+
+    /** An `any` parameter accepts every argument type. */
+    @Test
+    fun `any parameter of a builtin accepts every type`() {
+        val signature = "Str(Value: any): str"
+        assertEquals(0, withBuiltins("Str(1)", signature).errors.size)
+        assertEquals(0, withBuiltins("Str(\"a\")", signature).errors.size)
+    }
+
+    /** A by-reference parameter must receive a bare macro name it can write back into. */
+    @Test
+    fun `by reference argument must be a macro name`() {
+        val signature = "StringChange(S: str*, FromStr: str, ToStr: str): int"
+        assertEquals(0, withBuiltins("StringChange(MyVar, \"a\", \"b\")", signature).errors.size)
+        assertEquals(1, withBuiltins("StringChange(\"lit\", \"a\", \"b\")", signature).errors.size)
+    }
+
+    /** An `Ident` parameter takes an un-evaluated symbol name, so an undefined name is not an error. */
+    @Test
+    fun `ident parameter accepts an undefined symbol name`() {
+        assertEquals(0, withBuiltins("Defined(Unknown)", "Defined(Ident): int").errors.size)
+    }
+
+    /** An `Ident` parameter rejects anything that is not a bare identifier. */
+    @Test
+    fun `ident parameter rejects a literal`() {
+        assertEquals(1, withBuiltins("Defined(\"x\")", "Defined(Ident): int").errors.size)
+    }
+
+    /** An `Array` parameter takes the array name without indexing it. */
+    @Test
+    fun `array parameter accepts a declared array name`() {
+        assertEquals(
+            0,
+            withBuiltins("DimOf(Arr)", "DimOf(Array): int", arrays = setOf("Arr")).errors.size,
+        )
+    }
+
+    /** An `Array` parameter rejects a name that is not a declared array. */
+    @Test
+    fun `array parameter rejects a non array name`() {
+        assertEquals(1, withBuiltins("DimOf(NotAnArray)", "DimOf(Array): int").errors.size)
+    }
+
+    /** A void built-in used as a value inside an expression is an error. */
+    @Test
+    fun `void builtin used as a value is an error`() {
+        val errors = withBuiltins("Error(\"boom\") + 1", errorSignature).errors
+        assertTrue(errors.any { it.message.contains("returns no value") })
+    }
+
+    /** A void built-in called as the whole expression is legitimate and produces no diagnostic. */
+    @Test
+    fun `void builtin as the whole expression is fine`() {
+        assertEquals(0, withBuiltins("Error(\"boom\")", errorSignature).errors.size)
+    }
+
+    /** A void built-in passed as an argument of another call is an error. */
+    @Test
+    fun `void builtin as an argument is an error`() {
+        val errors = withBuiltins("Copy(Error(\"x\"), 1, 2)", copySignature, errorSignature).errors
+        assertTrue(errors.any { it.message.contains("returns no value") })
+    }
+
+    /** Nested built-in calls are validated on every level. */
+    @Test
+    fun `nested builtin calls are validated`() {
+        val errors = withBuiltins("Copy(Copy(\"abc\"), 1, 2)", copySignature).errors
+        assertEquals(1, errors.size)
+    }
+
+    /** A call to a name without a known signature stays permissive (unknown names are the annotator's job). */
+    @Test
+    fun `call without a known signature is not checked`() {
+        assertEquals(0, withBuiltins("Whatever(1, 2, 3)").errors.size)
     }
 }
