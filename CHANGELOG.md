@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.7.0]
+
 ### Added
 
 - **Computed `#define` values are shown as an inlay hint** at the end of the directive line, so a macro
