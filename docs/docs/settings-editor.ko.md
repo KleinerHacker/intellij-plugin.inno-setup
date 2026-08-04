@@ -14,6 +14,10 @@
 
 이 설정은 **IDE 전역**입니다(전역 IDE 구성에 저장되며 프로젝트별이 아님).
 
+**계산된 `#define` 값** 힌트는 여기에 없습니다. 플랫폼의 선언적 인레이 API를 사용하므로 다른 모든 인레이 힌트와
+함께 **Settings | Editor | Inlay Hints**에서 켜고 끕니다. 무엇을 표시하는지는
+[`#define`](preprocessor/define.ko.md)을 참조하세요.
+
 ---
 
 ## 일반 설정

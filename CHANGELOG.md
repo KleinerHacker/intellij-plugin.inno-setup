@@ -6,6 +6,12 @@
 
 ### Added
 
+- **Computed `#define` values are shown as an inlay hint** at the end of the directive line, so a macro
+  assembled from other macros and operators (e.g. `#define MyExe MyName + ".exe"`) shows its result without
+  compiling the script. Calls to your own function-like macros are evaluated as well. Plain literals stay
+  unannotated — their value already stands in the source — as do function-like macros themselves, array
+  element defines and expressions that cannot be evaluated at analysis time, including calls to ISPP built-in
+  functions. The hint can be switched off under **Settings | Editor | Inlay Hints**.
 - **Conditional compilation**: `#if`, `#elif`, `#else`, `#ifdef`, `#ifndef`, `#ifexist` and `#ifnexist` are
   now evaluated in the editor. A branch that provably is not compiled is dimmed and no longer reports
   errors or warnings.

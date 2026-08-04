@@ -223,6 +223,41 @@ in Quick Documentation (**Ctrl+Q**) of the macro.
 
 ---
 
+## Computed value as inlay hint
+
+When a `#define` is assembled from other macros and operators, the plugin evaluates it and shows the result as
+a grey **inlay hint** at the end of the line — so the assembled value is readable without compiling the
+script:
+
+```ini
+#define MyName    "MyApp"
+#define MyVer     "1.5"
+#define MyExe     MyName + ".exe"          ; hint: "MyApp.exe"
+#define MyTitle   MyName + " " + MyVer     ; hint: "MyApp 1.5"
+#define Build     Major * 100 + Minor      ; hint: 203
+```
+
+Calls to your own function-like macros are evaluated as well, with the arguments bound:
+
+```ini
+#define ExeOf(str Name)  Name + ".exe"
+#define MyExe            ExeOf("MyApp")    ; hint: "MyApp.exe"
+```
+
+Only *computed* values are annotated. No hint is shown for:
+
+- a plain literal (`#define MyVer "1.5"`) — the value already stands in the source,
+- a function-like macro itself, whose result depends on the arguments of each call,
+- an array element define (`#define Names[0] …`) and a value-less `#define`,
+- an expression that cannot be evaluated at analysis time — an unresolved reference, a `{…}` constant, or a
+  call to an ISPP **built-in function**. The plugin checks a built-in call against its signature but never
+  executes it, so `#define S Str(Major)` stays unannotated even though `Str` is pure.
+
+The same value is available in Quick Documentation (**Ctrl+Q**) of the macro. The hint can be switched off
+under **Settings | Editor | Inlay Hints**.
+
+---
+
 ## Built-in function reference
 
 ISPP ships a large set of **built-in functions** that you may call inside a `#define` expression. The plugin

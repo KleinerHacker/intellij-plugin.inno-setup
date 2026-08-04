@@ -15,6 +15,10 @@ in the editor.
 
 These settings are **IDE-wide** (stored in the global IDE configuration, not per project).
 
+The **computed `#define` value** hint is not listed here: it uses the platform's declarative inlay API and is
+therefore switched on and off with every other inlay hint under **Settings | Editor | Inlay Hints**. See
+[`#define`](preprocessor/define.md) for what it shows.
+
 ---
 
 ## General Settings

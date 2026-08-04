@@ -205,6 +205,39 @@ ISPP 将参数声明为 `[<类型>] [*]<名称> [= <默认值>]`，其中 `<类�
 
 ---
 
+## 以内嵌提示显示计算结果
+
+当 `#define` 由其他宏和运算符组合而成时，插件会对其求值，并在行尾以灰色 **内嵌提示** 显示结果，
+无需编译脚本即可看到组合后的值：
+
+```ini
+#define MyName    "MyApp"
+#define MyVer     "1.5"
+#define MyExe     MyName + ".exe"          ; 提示： "MyApp.exe"
+#define MyTitle   MyName + " " + MyVer     ; 提示： "MyApp 1.5"
+#define Build     Major * 100 + Minor      ; 提示： 203
+```
+
+对你自己定义的函数式宏的调用也会在绑定实参后求值：
+
+```ini
+#define ExeOf(str Name)  Name + ".exe"
+#define MyExe            ExeOf("MyApp")    ; 提示： "MyApp.exe"
+```
+
+只有 *计算得出的* 值才会显示提示。以下情况不显示：
+
+- 纯字面量（`#define MyVer "1.5"`）——值已经写在源代码中，
+- 函数式宏本身——其结果取决于每次调用的实参，
+- 数组元素定义（`#define Names[0] …`）以及没有值的 `#define`，
+- 在分析时无法求值的表达式——未解析的引用、`{…}` 常量，以及对 ISPP **内置函数** 的调用。插件会根据签名检查
+  内置函数调用，但不会执行它，因此即使 `Str` 是纯函数，`#define S Str(Major)` 也不会显示提示。
+
+同样的值也可在宏的快速文档（**Ctrl+Q**）中查看。可在
+**Settings | Editor | Inlay Hints** 中关闭该提示。
+
+---
+
 ## 内置函数参考
 
 ISPP 提供大量可在 `#define` 表达式中调用的**内置函数**。插件捆绑了完整的官方集合；每个函数的返回类型会供给表达式类型检查器（见上文），并在补全中提供。下表是详尽的，并（与官方

@@ -14,6 +14,10 @@
 
 这些设置是 **IDE 全局**的（保存在全局 IDE 配置中，而非按项目保存）。
 
+**计算出的 `#define` 值** 提示不在此列：它使用平台的声明式内嵌提示 API，因此与其他所有内嵌提示一起在
+**Settings | Editor | Inlay Hints** 中开关。其显示内容参见
+[`#define`](preprocessor/define.zh.md)。
+
 ---
 
 ## 常规设置
