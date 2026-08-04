@@ -22,6 +22,10 @@ NUMBER     = [0-9]+(\.[0-9]+)*
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
+// A directive continues on the next line when the current line ends with a backslash; spaces/tabs
+// behind that backslash are tolerated (the formatter strips them). The continuation carries no
+// meaning for the grammar and is reported as whitespace.
+CONTINUATION = \\[ \t]*{NEWLINE}
 
 %state IN_STRING
 %state IN_STRING_CONSTANT
@@ -29,6 +33,7 @@ VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
 %%
 
 <YYINITIAL> {
+    {CONTINUATION} { return TokenType.WHITE_SPACE; }
     "#"           { return IsPreprocessorTypes.HASH; }
     {IDENTIFIER}  { return IsPreprocessorTypes.IDENTIFIER; }
     {NUMBER}      { return IsPreprocessorTypes.NUMBER; }
@@ -57,6 +62,7 @@ VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
 }
 
 <IN_STRING_CONSTANT> {
+    {CONTINUATION} { return TokenType.WHITE_SPACE; }
     "}"           { yybegin(IN_STRING); return IsPreprocessorTypes.RBRACE; }
     {IDENTIFIER}  { return IsPreprocessorTypes.IDENTIFIER; }
     {NUMBER}      { return IsPreprocessorTypes.NUMBER; }

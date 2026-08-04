@@ -60,13 +60,14 @@ using.
 | **Constant validation**    | Built-in constants are recognised and validated, including those embedded inside quoted strings                                                                                       |
 | **Brace / quote matching** | Auto-closes `{`, `[`, and `"`                                                                                                                                                         |
 | **Code folding**           | Sections, long parameter entries, and `#if … #endif` blocks fold independently                                                                                                        |
-| **Code formatting**        | Reformat Code normalises spacing around `=` / `:` / `;` and `[ ]`, keeps one blank line between sections, and spaces preprocessor arithmetic operators; configurable under Code Style  |
+| **Code formatting**        | Reformat Code normalises spacing around `=` / `:` / `;` and `[ ]`, keeps one blank line between sections, and spaces preprocessor arithmetic operators; keeps preprocessor line continuations intact and indents their continued lines; configurable under Code Style  |
 | **Inlay hints**            | Language flag icons are shown inline next to `Languages:` parameter values                                                                                                            |
 | **Build integration**      | Compile `.iss` scripts directly via a context-menu action; optionally run ISCC automatically on project build                                                                         |
 | **Build configurations**   | Named sets of compile options (preprocessor symbols, output directory, extra ISCC options) stored one file each in the project's `.build` directory; selectable per run, from the gutter icon and from the context menu, and part of the rebuild decision |
 | **Language file support**  | `.isl` language files are recognised, highlighted, and validated alongside `.iss` scripts                                                                                             |
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 | **ISPP function checking** | Calls to built-in preprocessor functions are checked against their signature: argument count (optional parameters included), argument types, by-reference parameters, and results that carry no value |
+| **ISPP line continuation** | A `#…` line ending with a backslash continues on the next line and is treated as one directive throughout the editor |
 | **ISPP parameter info**    | `Ctrl+P` inside a call shows the parameter list and highlights the current argument — for built-ins from their signature, for function-like macros from the types inferred from the macro body |
 
 ### IDE Compatibility

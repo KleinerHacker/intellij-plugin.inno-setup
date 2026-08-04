@@ -83,6 +83,10 @@ object IsPreprocessorExprTokenizer {
                     tokens += token(IsPreprocessorExprTokenType.COLON, text, i, i + 1); i++
                 }
 
+                // A trailing backslash only continues the directive on the next physical line; it carries no
+                // meaning for the expression itself and is therefore skipped like whitespace.
+                c == '\\' -> i++
+
                 else -> {
                     val op = matchOperator(text, i)
                     if (op != null) {

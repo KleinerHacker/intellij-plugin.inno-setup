@@ -28,6 +28,10 @@ WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 COMMENT    = (";" | "//")[^\r\n]*
 VALUE_CHAR = [^\r\n{};:=\"()#\t ]
+// A preprocessor line may be continued on the following line by ending it with a backslash, so the
+// opaque HASH_LINE token spans every continued line as well. Trailing spaces/tabs behind the
+// backslash are tolerated (the formatter strips them).
+HASH_LINE  = "#" ([^\r\n]* \\ [ \t]* {NEWLINE})* [^\r\n]*
 
 %state VALUE
 %state IN_STRING
@@ -41,7 +45,7 @@ VALUE_CHAR = [^\r\n{};:=\"()#\t ]
     "]"                 { return IsSectionTypes.RBRACKET; }
     "("                 { return IsSectionTypes.LPAREN; }
     ")"                 { return IsSectionTypes.RPAREN; }
-    "#" [^\r\n]*        { return IsSectionTypes.HASH_LINE; }
+    {HASH_LINE}         { return IsSectionTypes.HASH_LINE; }
     {IDENTIFIER}        { return IsSectionTypes.IDENTIFIER; }
     "="                 { yybegin(VALUE); return IsSectionTypes.EQ; }
     ":"                 { yybegin(VALUE); return IsSectionTypes.COLON; }

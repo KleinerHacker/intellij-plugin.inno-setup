@@ -23,11 +23,15 @@ WHITESPACE = [ \t]+
 // Any other run of characters is opaque free text (a .ist file is free text apart from preprocessor
 // lines, brackets/parens and identifiers).
 TEXT       = [^\r\n \t#\[\]()A-Za-z_]+
+// A preprocessor line may be continued on the following line by ending it with a backslash, so the
+// opaque HASH_LINE token spans every continued line as well. Trailing spaces/tabs behind the
+// backslash are tolerated (the formatter strips them).
+HASH_LINE  = "#" ([^\r\n]* \\ [ \t]* {NEWLINE})* [^\r\n]*
 
 %%
 
 <YYINITIAL> {
-    "#" [^\r\n]*        { return IsTemplateTypes.HASH_LINE; }
+    {HASH_LINE}         { return IsTemplateTypes.HASH_LINE; }
     "["                 { return IsTemplateTypes.LBRACKET; }
     "]"                 { return IsTemplateTypes.RBRACKET; }
     "("                 { return IsTemplateTypes.LPAREN; }

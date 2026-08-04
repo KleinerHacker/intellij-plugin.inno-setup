@@ -53,6 +53,14 @@
   functions show their declared parameter types, by-reference markers and default values; function-like
   macros of the script show the parameter and result types inferred from their body wherever those can be
   determined.
+- **Line continuation in preprocessor directives**: a `#…` line ending with a backslash is continued on the
+  following line, exactly as the Inno Setup preprocessor does it. Such a directive is now parsed, highlighted,
+  validated and completed as a single directive instead of breaking parsing at the line break. Trailing spaces
+  and tabs behind the backslash are tolerated and removed by the formatter.
+- **Reformat Code handles line continuations**: a continuation is treated like a line end, so no spacing rule
+  reaches across it and a multi-line directive keeps its layout. Two new options under **Code Style | Inno
+  Setup | Spacing** normalise the space before the trailing `\` and indent the continued lines with the
+  language's continuation indent.
 
 ### Changed
 

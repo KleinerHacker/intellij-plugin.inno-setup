@@ -28,7 +28,7 @@
     RBRACKET   = "]"
     LPAREN     = "("
     RPAREN     = ")"
-    HASH_LINE  = "regexp:#[^\r\n]*"
+    HASH_LINE  = "regexp:#([^\r\n]*\\[ \t]*\r?\n)*[^\r\n]*"
     IDENTIFIER = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"
     CRLF       = "regexp:\r?\n"
     TEXT       = "regexp:[^\r\n \t#\[\]()A-Za-z_]+"

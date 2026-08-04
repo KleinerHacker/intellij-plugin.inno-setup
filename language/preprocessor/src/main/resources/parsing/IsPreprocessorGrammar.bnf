@@ -43,7 +43,9 @@
   ]
 }
 
-// Root: each injected fragment is one preprocessor line (#keyword rest...)
+// Root: each injected fragment is one preprocessor directive (#keyword rest...). The fragment may
+// span several physical lines when a line ends with a backslash; the lexer reports such a line
+// continuation as whitespace, so the grammar stays line oriented.
 isppFile ::= directive? CRLF?
 
 directive ::= HASH IDENTIFIER value? {

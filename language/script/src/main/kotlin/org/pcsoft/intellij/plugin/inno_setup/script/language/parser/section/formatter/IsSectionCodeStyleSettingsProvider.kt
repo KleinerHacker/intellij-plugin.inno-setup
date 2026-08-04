@@ -74,6 +74,14 @@ class IsSectionCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
                     IsSectionCodeStyleSettings::class.java, "PP_SPACE_AFTER_SEMICOLON",
                     PluginBundle.message("code_style.pp_space_after_semicolon"), ppGroup,
                 )
+                consumer.showCustomOption(
+                    IsSectionCodeStyleSettings::class.java, "PP_SPACE_BEFORE_CONTINUATION",
+                    PluginBundle.message("code_style.pp_space_before_continuation"), ppGroup,
+                )
+                consumer.showCustomOption(
+                    IsSectionCodeStyleSettings::class.java, "PP_INDENT_CONTINUATION",
+                    PluginBundle.message("code_style.pp_indent_continuation"), ppGroup,
+                )
             }
 
             SettingsType.BLANK_LINES_SETTINGS -> {
@@ -98,6 +106,8 @@ class IsSectionCodeStyleSettingsProvider : LanguageCodeStyleSettingsProvider() {
             |
             |#define FeatureCount 2+3
             |#define GetName( s ) "App "+s
+            |#define Title GetName("X")+ \
+            |" Setup"
             |#for {i=0; i<FeatureCount; i++} FileEntry( i )
             |
             |[ Files ]

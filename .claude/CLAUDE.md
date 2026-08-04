@@ -91,7 +91,7 @@
 
 ## Planning
 
-* A plan MUST be created for EVERY change
+* A plan MUST be created for EVERY change, ALWAYS ask the user to create a plan or not
   * A switch to plan mode MUST happen
 * The PLAN MUST ALWAYS be written in GERMAN - both the plan file and the console output
   * This applies to headings, bullet points and every other text of the plan

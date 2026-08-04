@@ -46,4 +46,14 @@ class IsTemplateInjectionTest : IsTimedBasePlatformTestCase() {
         val injected = isppFilesIn("#include \"other.ist\"\n")
         assertEquals("ISPP must be injected into the #include line", 1, injected.size)
     }
+
+    /**
+     * A preprocessor line continued with a trailing backslash must stay a single line in a template file as
+     * well, with ISPP injected over all of its physical lines.
+     */
+    fun testContinuedLineGetsIsppInjectedAsOneFragment() {
+        val injected = isppFilesIn("#define MyVar \\\n    1\n")
+        assertEquals("ISPP must be injected into the continued line once", 1, injected.size)
+        assertEquals("#define MyVar \\\n    1", injected.first().text)
+    }
 }

@@ -17,6 +17,23 @@ unknown-section/flag/constant checks.
 
 ---
 
+## Line continuation
+
+A directive that ends with a backslash is continued on the following line — exactly as the Inno Setup
+preprocessor handles it. The plugin treats all physical lines of such a directive as **one** directive:
+highlighting, completion, validation, Quick Doc, parameter info and rename work across the line break.
+
+```iss
+#define InstallerName "MyApp " + \
+                      MyAppVersion + \
+                      " Setup"
+```
+
+Nothing but whitespace may follow the backslash: trailing spaces and tabs are tolerated and removed by the
+formatter, while a backslash followed by anything else is not a continuation.
+
+---
+
 ## Supported directives
 
 | Group          | Directives                                                                      |

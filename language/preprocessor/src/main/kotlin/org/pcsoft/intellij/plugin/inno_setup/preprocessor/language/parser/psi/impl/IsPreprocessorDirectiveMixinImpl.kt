@@ -381,7 +381,10 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         if (!isFunctionMacro()) return emptyList()
         val after = rawAfterName() ?: return emptyList()
         val close = matchingParen(after) ?: return emptyList()
+        // The parameter list may be spread over several physical lines with a trailing backslash; the
+        // continuation is whitespace and must not end up in a parameter name.
         return after.substring(1, close)        // text between '(' and ')'
+            .replace(IS_PREPROCESSOR_CONTINUATION, " ")
             .split(',')
             .map { it.trim() }
             .filter { it.isNotEmpty() }
@@ -936,5 +939,8 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     private companion object {
         /** A plain ISPP identifier (loop-variable name); letters/underscore start, then letters/digits/underscore. */
         val IS_PREPROCESSOR_IDENTIFIER = Regex("[A-Za-z_][A-Za-z0-9_]*")
+
+        /** A line continuation: a backslash ending the line, plus any spaces/tabs behind it. */
+        val IS_PREPROCESSOR_CONTINUATION = Regex("""\\[ \t]*\r?\n""")
     }
 }

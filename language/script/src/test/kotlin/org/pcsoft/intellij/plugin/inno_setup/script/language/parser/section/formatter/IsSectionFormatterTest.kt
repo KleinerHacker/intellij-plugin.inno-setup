@@ -109,6 +109,76 @@ class IsSectionFormatterTest : IsTimedBasePlatformTestCase() {
     fun testPreprocessorConditionOperators() =
         assertReformat("[Setup]\n#if A>1+2\n#endif\n", "[Setup]\n#if A>1 + 2\n#endif\n")
 
+    // ── Rules 9–10: line continuations ────────────────────────────────────────
+
+    /**
+     * A directive continued with a trailing `\` keeps its line structure: the continuation survives the
+     * reformat and the operator rule is applied on both physical lines.
+     */
+    fun testContinuedDirectiveKeepsItsContinuation() =
+        assertReformat(
+            "[Setup]\n#define X 2+3 \\\n        +4\n",
+            "[Setup]\n#define X 2 + 3 \\\n        + 4\n",
+        )
+
+    /**
+     * The whitespace before the trailing `\` is normalized to exactly one space (Rule 9).
+     */
+    fun testSpaceBeforeContinuationIsNormalized() =
+        assertReformat(
+            "[Setup]\n#define X 1   \\\n        2\n",
+            "[Setup]\n#define X 1 \\\n        2\n",
+        )
+
+    /**
+     * A `\` followed by nothing but whitespace still continues the directive, and that pointless trailing
+     * whitespace is stripped by Rule 9 together with the usual spacing and indent normalization.
+     */
+    fun testWhitespaceBehindContinuationIsStripped() =
+        assertReformat(
+            "[Setup]\n#define X 1 \\  \n2\n",
+            "[Setup]\n#define X 1 \\\n        2\n",
+        )
+
+    /**
+     * A continued line is indented by the continuation indent, whatever indentation it had before (Rule 10).
+     */
+    fun testContinuedLineGetsContinuationIndent() =
+        assertReformat(
+            "[Setup]\n#define X 1 + \\\n2\n",
+            "[Setup]\n#define X 1 + \\\n        2\n",
+        )
+
+    /**
+     * The bracket rule must not tighten across a line break: a `(` at the end of a continued line keeps the
+     * continuation instead of pulling the next line's first argument up.
+     */
+    fun testBracketRuleDoesNotActAcrossContinuation() =
+        assertReformat(
+            "[Setup]\n#define Sum(a, \\\n        b) a+b\n",
+            "[Setup]\n#define Sum(a, \\\n        b) a + b\n",
+        )
+
+    /** With the indent option off, the indentation of a continued line is left exactly as written. */
+    fun testDisablingContinuationIndentKeepsIndentUntouched() {
+        val settings = CodeStyle.createTestSettings(CodeStyle.getSettings(project))
+        settings.getCustomSettings(IsSectionCodeStyleSettings::class.java).PP_INDENT_CONTINUATION = false
+        CodeStyle.doWithTemporarySettings(project, settings, Runnable {
+            assertReformat("[Setup]\n#define X 1 + \\\n2\n", "[Setup]\n#define X 1 + \\\n2\n")
+        })
+    }
+
+    /** With the continuation-space option off, the whitespace around the `\` is left exactly as written. */
+    fun testDisablingContinuationSpacingKeepsBackslashUntouched() {
+        val settings = CodeStyle.createTestSettings(CodeStyle.getSettings(project))
+        val custom = settings.getCustomSettings(IsSectionCodeStyleSettings::class.java)
+        custom.PP_SPACE_BEFORE_CONTINUATION = false
+        custom.PP_INDENT_CONTINUATION = false
+        CodeStyle.doWithTemporarySettings(project, settings, Runnable {
+            assertReformat("[Setup]\n#define X 1   \\\n2\n", "[Setup]\n#define X 1   \\\n2\n")
+        })
+    }
+
     // ── Idempotency & protected [Code] ────────────────────────────────────────
 
     fun testAlreadyFormattedIsUnchanged() {

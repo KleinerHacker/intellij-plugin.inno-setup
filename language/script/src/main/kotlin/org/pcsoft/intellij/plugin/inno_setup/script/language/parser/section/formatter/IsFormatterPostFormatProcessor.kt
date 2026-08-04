@@ -59,6 +59,12 @@ import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.
  * - **Rule 6** — no spaces inside preprocessor `()` / `[]` and the `#for {…}` header braces (mirrors Rule 2).
  * - **Rule 7** — one space around the assignment `=` of a `#for` header (mirrors Rule 3.1).
  * - **Rule 8** — no space before / one after the `;` separators of a `#for` header (mirrors Rule 4.1).
+ * - **Rule 9** — exactly one space before the trailing `\` of a continued preprocessor line, and no
+ *   whitespace between that `\` and the line break.
+ * - **Rule 10** — the continued lines of a preprocessor directive are indented by the continuation indent.
+ *
+ * A line continuation is treated as a line end throughout: no rule ever inserts, removes or moves whitespace
+ * across it, so a continued directive keeps its line structure.
  *
  * Rules 5–8 parse each `#…` directive as a standalone ISPP tree (not via injected PSI, which does not resolve
  * in the non-physical Code Style live preview). The `[Code]` section (Pascal Script) and everything after it
@@ -99,6 +105,9 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
             custom.PP_SPACE_AROUND_ASSIGN || custom.PP_SPACE_AFTER_SEMICOLON
         ) {
             collectPreprocessorEdits(file, text, custom, edits)
+        }
+        if (custom.PP_SPACE_BEFORE_CONTINUATION || custom.PP_INDENT_CONTINUATION) {
+            collectContinuationEdits(file, text, settings, custom, edits)
         }
         if (custom.BLANK_LINE_BETWEEN_SECTIONS) collectBlankLineEdits(file, document, edits)
 
@@ -370,6 +379,49 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         }
     }
 
+    // ── Rules 9–10: line continuations of preprocessor directives ─────────────────────────────────────
+
+    /**
+     * Formats the `\` line continuations of every preprocessor line: exactly one space before the `\` and
+     * none behind it (Rule 9), and the continuation indent at the start of each continued line (Rule 10).
+     *
+     * The whole continued directive is one `HASH_LINE` token, so its continuations are found by scanning that
+     * token's text; the host offsets follow directly from the token start.
+     */
+    private fun collectContinuationEdits(
+        file: PsiFile, text: CharSequence, settings: CodeStyleSettings,
+        custom: IsSectionCodeStyleSettings, edits: MutableList<Edit>,
+    ) {
+        val indent = " ".repeat(continuationIndentSize(settings))
+        for (line in PsiTreeUtil.findChildrenOfType(file, IsSectionPreprocessorLine::class.java)) {
+            val hashNode = line.node.findChildByType(IsSectionTypes.HASH_LINE) ?: continue
+            val hashStart = hashNode.startOffset
+            for (match in CONTINUATION.findAll(hashNode.text)) {
+                val backslash = hashStart + match.range.first
+                if (custom.PP_SPACE_BEFORE_CONTINUATION) {
+                    // One space before the `\` — unless it starts the line, where there is nothing to separate.
+                    var start = backslash
+                    while (start > 0 && (text[start - 1] == ' ' || text[start - 1] == '\t')) start--
+                    if (start > 0 && text[start - 1] != '\n' && text[start - 1] != '\r') {
+                        setSpaces(text, start, backslash, 1, edits)
+                    }
+                    // Spaces/tabs behind the `\` are legal but pointless — strip them.
+                    setSpaces(text, backslash + 1, backslash + 1 + match.groupValues[1].length, 0, edits)
+                }
+                if (custom.PP_INDENT_CONTINUATION) {
+                    // The whitespace run that opens the continued line becomes the continuation indent.
+                    val indentStart = hashStart + match.range.last + 1 - match.groupValues[3].length
+                    edits += Edit(indentStart, hashStart + match.range.last + 1, indent)
+                }
+            }
+        }
+    }
+
+    /** The continuation indent configured for the script language, falling back to the platform default. */
+    private fun continuationIndentSize(settings: CodeStyleSettings): Int =
+        settings.getCommonSettings(IsScriptLanguage).indentOptions?.CONTINUATION_INDENT_SIZE
+            ?: DEFAULT_CONTINUATION_INDENT
+
     // ── Rules 3.2 / 4.2: no leading indentation before a key/parameter/header line ────────────────────
 
     private fun collectLeadingTrimEdits(file: PsiFile, text: CharSequence, edits: MutableList<Edit>) {
@@ -445,10 +497,29 @@ class IsFormatterPostFormatProcessor : PostFormatProcessor {
         var end = boundary
         while (end < text.length && (text[end] == ' ' || text[end] == '\t')) end++
         if (end >= text.length || text[end] == '\n' || text[end] == '\r') return // token ends the line
+        // A `\` that continues the directive on the next line ends the line just as a line break does; the
+        // spacing across it belongs to Rules 9–10 alone.
+        if (isContinuationAt(text, end)) return
         setSpaces(text, boundary, end, target, edits)
+    }
+
+    /** True when the `\` at [index] is a line continuation, i.e. only whitespace follows it up to the break. */
+    private fun isContinuationAt(text: CharSequence, index: Int): Boolean {
+        if (index >= text.length || text[index] != '\\') return false
+        var i = index + 1
+        while (i < text.length && (text[i] == ' ' || text[i] == '\t')) i++
+        return i < text.length && (text[i] == '\n' || text[i] == '\r')
     }
 
     private data class Edit(val start: Int, val end: Int, val replacement: String) {
         fun original(text: CharSequence): String = text.subSequence(start, end).toString()
+    }
+
+    private companion object {
+        /** A line continuation: `\`, trailing whitespace, the line break, and the indent of the next line. */
+        val CONTINUATION = Regex("""\\([ \t]*)(\r?\n)([ \t]*)""")
+
+        /** Continuation indent used when the language has no indent options of its own. */
+        const val DEFAULT_CONTINUATION_INDENT = 8
     }
 }

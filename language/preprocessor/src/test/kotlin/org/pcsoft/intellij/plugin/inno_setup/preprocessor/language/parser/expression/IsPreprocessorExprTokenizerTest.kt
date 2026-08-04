@@ -134,6 +134,22 @@ class IsPreprocessorExprTokenizerTest {
         )
     }
 
+    /**
+     * A directive may be continued on the next line with a trailing backslash; the backslash and the line
+     * break carry no meaning for the expression and must be skipped like whitespace.
+     */
+    @Test
+    fun `line continuation is skipped like whitespace`() {
+        assertEquals(
+            listOf(
+                IsPreprocessorExprTokenType.IDENT,
+                IsPreprocessorExprTokenType.OPERATOR,
+                IsPreprocessorExprTokenType.IDENT,
+            ),
+            types("a + \\\n    b"),
+        )
+    }
+
     @Test
     fun `token offsets address the exact source range`() {
         // 0123456

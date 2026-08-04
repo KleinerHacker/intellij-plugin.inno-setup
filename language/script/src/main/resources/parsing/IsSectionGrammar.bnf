@@ -35,7 +35,7 @@
     COLON            = ":"
     SEMICOLON        = ";"
     HASH             = "#"
-    HASH_LINE        = "regexp:#[^\r\n]*"
+    HASH_LINE        = "regexp:#([^\r\n]*\\[ \t]*\r?\n)*[^\r\n]*"
     CRLF             = "regexp:\r?\n"
     NUMBER           = "regexp:[0-9]+(\.[0-9]+)*"
     IDENTIFIER       = "regexp:[A-Za-z_][A-Za-z0-9_.\\-]*"

@@ -16,9 +16,12 @@ The rules live under **Settings ▸ Editor ▸ Code Style ▸ Inno Setup** and a
 | **Space after `;` between parameters**   | No space before, one space after the `;` separating parameter pairs.                       | `"a" ;DestDir` → `"a"; DestDir`                |
 | **No leading whitespace before keys**    | A key / parameter / header line starts at column 0.                                        | `····AppName = A` → `AppName = A`              |
 | **Space around arithmetic operators**    | One space around `+ - * / %` in preprocessor expressions (binary operators only).          | `#define X 2+3*4` → `#define X 2 + 3 * 4`      |
+| **Space before line continuation `\`**   | Exactly one space before the trailing `\` of a continued preprocessor line, and none behind it. | `#define X 1···\··` → `#define X 1 \`      |
+| **Indent continued lines**               | The continued lines of a preprocessor directive are set to the continuation indent of the language. | `#define X 1 + \`⏎`2` → `#define X 1 + \`⏎`········2` |
 
-Each rule can be turned off individually on the settings page; the *space around `=`*, `:`, `;`, brackets and
-leading-space options appear under **Spacing**, the blank-line option under **Blank Lines**.
+Each rule can be turned off individually on the settings page; the *space around `=`*, `:`, `;`, brackets,
+leading-space and the two continuation options appear under **Spacing**, the blank-line option under
+**Blank Lines**.
 
 ---
 
@@ -28,6 +31,9 @@ leading-space options appear under **Spacing**, the blank-line option under **Bl
 - Values themselves — only the whitespace **around** the separators is normalized, never the value text.
 - **Unary** signs (`-3`), a `-` inside identifiers or version strings, and the contents of quoted strings are
   not treated as arithmetic operators.
+- A **line continuation** is treated like a line end: no rule moves whitespace across it, so a directive that
+  is spread over several lines keeps its layout — only the space before the `\` and the indent of the
+  continued lines are normalized.
 
 ---
 

@@ -68,6 +68,14 @@ class IsSectionCodeStyleSettings(container: CodeStyleSettings) :
     @JvmField
     var PP_SPACE_AFTER_SEMICOLON: Boolean = true
 
+    /** Rule 9 — exactly one space before the trailing `\` that continues a preprocessor line. */
+    @JvmField
+    var PP_SPACE_BEFORE_CONTINUATION: Boolean = true
+
+    /** Rule 10 — indent the continued lines of a preprocessor directive by the continuation indent. */
+    @JvmField
+    var PP_INDENT_CONTINUATION: Boolean = true
+
     companion object {
         /** Serialization tag under which these options are stored inside the shared code-style settings. */
         const val TAG = "IsSectionCodeStyleSettings"
