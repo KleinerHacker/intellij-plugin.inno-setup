@@ -1,0 +1,419 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>IsPreprocessorParameterInfoHandler</title>
+<link href="../../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="../../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../../styles/style.css" rel="Stylesheet">
+<link href="../../../../styles/main.css" rel="Stylesheet">
+<link href="../../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../../index.html" tabindex="1">
+                    inno-setup
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.7.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":language:preprocessor/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":language:preprocessor/main" data-filter=":language:preprocessor/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    inno-setup
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="preprocessor::org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor/IsPreprocessorParameterInfoHandler///PointingToDeclaration//1138120223">
+  <div class="breadcrumbs"><a href="../../index.html">preprocessor</a><span class="delimiter">/</span><a href="../index.html">org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.editor</a><span class="delimiter">/</span><span class="current">IsPreprocessorParameterInfoHandler</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Parameter</span><wbr><span>Info</span><wbr><span><span>Handler</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">IsPreprocessorParameterInfoHandler</a> : <span data-unresolved-link="com.intellij.lang.parameterInfo/ParameterInfoHandler///PointingToDeclaration/">ParameterInfoHandler</span><span class="token operator">&lt;</span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span><a href="../-is-preprocessor-parameter-info-item/index.html">IsPreprocessorParameterInfoItem</a><span class="token operator">&gt; </span></div><p class="paragraph">Shows the parameter list of an ISPP call (<strong>Parameter Info</strong>, <code class="lang-kotlin">Ctrl+P</code>) while the caret is inside its argument list, highlighting the argument being typed.</p><p class="paragraph">Both callee kinds are supported:</p><ul><li><p class="paragraph">a <strong>built-in function</strong> — rendered from the structured signature of the bundled specification     (<code class="lang-kotlin">IsPreprocessorService.builtinSignatures</code>), so declared parameter types, <code class="lang-kotlin">Ident</code>/<code class="lang-kotlin">Array</code> symbol     parameters, by-reference markers and default values are visible;</p></li><li><p class="paragraph">a <strong>function-like macro</strong> of the host file — ISPP declares no types there, so the <i>probable</i> parameter     and result types inferred from the macro body are shown whenever they can be determined, and the bare     parameter name is shown otherwise.</p></li></ul><p class="paragraph">ISPP expressions are not part of the PSI tree, so the enclosing call is located in the directive text via <a href="../../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression/find-enclosing-call.html">findEnclosingCall</a>; the owning <a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a> acts as the parameter owner.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="1516366338%2FConstructors%2F1138120223" anchor-label="IsPreprocessorParameterInfoHandler" id="1516366338%2FConstructors%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-is-preprocessor-parameter-info-handler.html"><span>Is</span><wbr><span>Preprocessor</span><wbr><span>Parameter</span><wbr><span>Info</span><wbr><span><span>Handler</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1516366338%2FConstructors%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1709095241%2FProperties%2F1138120223" anchor-label="isDumbAware" id="1709095241%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.quickfix/-replace-include-with-line-quick-fix/index.html#1709095241%2FProperties%2F1138120223"><span>is</span><wbr><span>Dumb</span><wbr><span><span>Aware</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1709095241%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Contract///PointingToDeclaration/"><span class="token annotation builtin">Contract</span></span><span class="token punctuation">(</span><span>pure<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="../../org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.quickfix/-replace-include-with-line-quick-fix/index.html#1709095241%2FProperties%2F1138120223">isDumbAware</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1925232892%2FProperties%2F1138120223" anchor-label="isWhitespaceSensitive" id="1925232892%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1925232892%2FProperties%2F1138120223"><span>is</span><wbr><span>Whitespace</span><wbr><span><span>Sensitive</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1925232892%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#1925232892%2FProperties%2F1138120223">isWhitespaceSensitive</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1004800227%2FProperties%2F1138120223" anchor-label="parameterCloseChars" id="-1004800227%2FProperties%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1004800227%2FProperties%2F1138120223"><span>parameter</span><wbr><span>Close</span><wbr><span><span>Chars</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1004800227%2FProperties%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="index.html#-1004800227%2FProperties%2F1138120223">parameterCloseChars</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="27058766%2FFunctions%2F1138120223" anchor-label="couldShowInLookup" id="27058766%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#27058766%2FFunctions%2F1138120223"><span>could</span><wbr><span>Show</span><wbr><span>In</span><wbr><span><span>Lookup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="27058766%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#27058766%2FFunctions%2F1138120223"><span class="token function"><strike>couldShowInLookup</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2054128501%2FFunctions%2F1138120223" anchor-label="createBottomComponent" id="2054128501%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#2054128501%2FFunctions%2F1138120223"><span>create</span><wbr><span>Bottom</span><wbr><span><span>Component</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2054128501%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span></div></div><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#2054128501%2FFunctions%2F1138120223"><span class="token function">createBottomComponent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.desktop/javax/swing/JComponent.html">JComponent</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="454494940%2FFunctions%2F1138120223" anchor-label="dispose" id="454494940%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#454494940%2FFunctions%2F1138120223"><span><span>dispose</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="454494940%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#454494940%2FFunctions%2F1138120223"><span class="token function">dispose</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span>context<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.lang.parameterInfo/DeleteParameterInfoContext///PointingToDeclaration/">DeleteParameterInfoContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="507643770%2FFunctions%2F1138120223" anchor-label="findElementForParameterInfo" id="507643770%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-element-for-parameter-info.html"><span>find</span><wbr><span>Element</span><wbr><span>For</span><wbr><span>Parameter</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="507643770%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="find-element-for-parameter-info.html"><span class="token function">findElementForParameterInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/CreateParameterInfoContext///PointingToDeclaration/">CreateParameterInfoContext</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-590131213%2FFunctions%2F1138120223" anchor-label="findElementForUpdatingParameterInfo" id="-590131213%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="find-element-for-updating-parameter-info.html"><span>find</span><wbr><span>Element</span><wbr><span>For</span><wbr><span>Updating</span><wbr><span>Parameter</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-590131213%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="find-element-for-updating-parameter-info.html"><span class="token function">findElementForUpdatingParameterInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/UpdateParameterInfoContext///PointingToDeclaration/">UpdateParameterInfoContext</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1696016051%2FFunctions%2F1138120223" anchor-label="getParametersForDocumentation" id="1696016051%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1696016051%2FFunctions%2F1138120223"><span>get</span><wbr><span>Parameters</span><wbr><span>For</span><wbr><span><span>Documentation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1696016051%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1696016051%2FFunctions%2F1138120223"><span class="token function"><strike>getParametersForDocumentation</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p<span class="token operator">: </span><a href="../-is-preprocessor-parameter-info-item/index.html">IsPreprocessorParameterInfoItem</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/ParameterInfoContext///PointingToDeclaration/">ParameterInfoContext</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1618359359%2FFunctions%2F1138120223" anchor-label="getParametersForLookup" id="1618359359%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1618359359%2FFunctions%2F1138120223"><span>get</span><wbr><span>Parameters</span><wbr><span>For</span><wbr><span><span>Lookup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1618359359%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1618359359%2FFunctions%2F1138120223"><span class="token function"><strike>getParametersForLookup</strike></span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">item<span class="token operator">: </span><span data-unresolved-link="com.intellij.codeInsight.lookup/LookupElement///PointingToDeclaration/">LookupElement</span><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/ParameterInfoContext///PointingToDeclaration/">ParameterInfoContext</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator">&gt;</span><span class="token operator">?</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1523952669%2FFunctions%2F1138120223" anchor-label="processFoundElementForUpdatingParameterInfo" id="1523952669%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1523952669%2FFunctions%2F1138120223"><span>process</span><wbr><span>Found</span><wbr><span>Element</span><wbr><span>For</span><wbr><span>Updating</span><wbr><span>Parameter</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1523952669%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#1523952669%2FFunctions%2F1138120223"><span class="token function">processFoundElementForUpdatingParameterInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span>parameterOwner<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Nullable///PointingToDeclaration/"><span class="token annotation builtin">Nullable</span></span>&nbsp;</span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span>context<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.lang.parameterInfo/UpdateParameterInfoContext///PointingToDeclaration/">UpdateParameterInfoContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1444546305%2FFunctions%2F1138120223" anchor-label="showParameterInfo" id="1444546305%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="show-parameter-info.html"><span>show</span><wbr><span>Parameter</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1444546305%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="show-parameter-info.html"><span class="token function">showParameterInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">element<span class="token operator">: </span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/CreateParameterInfoContext///PointingToDeclaration/">CreateParameterInfoContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="478752955%2FFunctions%2F1138120223" anchor-label="supportsOverloadSwitching" id="478752955%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#478752955%2FFunctions%2F1138120223"><span>supports</span><wbr><span>Overload</span><wbr><span><span>Switching</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="478752955%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#478752955%2FFunctions%2F1138120223"><span class="token function">supportsOverloadSwitching</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1135355796%2FFunctions%2F1138120223" anchor-label="syncUpdateOnCaretMove" id="-1135355796%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1135355796%2FFunctions%2F1138120223"><span>sync</span><wbr><span>Update</span><wbr><span>On</span><wbr><span>Caret</span><wbr><span><span>Move</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1135355796%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-1135355796%2FFunctions%2F1138120223"><span class="token function">syncUpdateOnCaretMove</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span>context<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.lang.parameterInfo/UpdateParameterInfoContext///PointingToDeclaration/">UpdateParameterInfoContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-428139426%2FFunctions%2F1138120223" anchor-label="tracksParameterIndex" id="-428139426%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-428139426%2FFunctions%2F1138120223"><span>tracks</span><wbr><span>Parameter</span><wbr><span><span>Index</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-428139426%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-428139426%2FFunctions%2F1138120223"><span class="token function"><strike>tracksParameterIndex</strike></span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2047171577%2FFunctions%2F1138120223" anchor-label="updateBottomComponent" id="-2047171577%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2047171577%2FFunctions%2F1138120223"><span>update</span><wbr><span>Bottom</span><wbr><span><span>Component</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2047171577%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="index.html#-2047171577%2FFunctions%2F1138120223"><span class="token function">updateBottomComponent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span>component<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.desktop/javax/swing/JComponent.html">JComponent</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="738062728%2FFunctions%2F1138120223" anchor-label="updateParameterInfo" id="738062728%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-parameter-info.html"><span>update</span><wbr><span>Parameter</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="738062728%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="update-parameter-info.html"><span class="token function">updateParameterInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">parameterOwner<span class="token operator">: </span><a href="../../../../language/preprocessor/org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi/-is-preprocessor-directive/index.html">IsPreprocessorDirective</a><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/UpdateParameterInfoContext///PointingToDeclaration/">UpdateParameterInfoContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-509580834%2FFunctions%2F1138120223" anchor-label="updateUI" id="-509580834%2FFunctions%2F1138120223" data-filterable-set=":language:preprocessor/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":language:preprocessor/main" data-filterable-set=":language:preprocessor/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-u-i.html"><span>update</span><wbr><span><span>UI</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-509580834%2FFunctions%2F1138120223"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":language:preprocessor/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="update-u-i.html"><span class="token function">updateUI</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">p<span class="token operator">: </span><a href="../-is-preprocessor-parameter-info-item/index.html">IsPreprocessorParameterInfoItem</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">context<span class="token operator">: </span><span data-unresolved-link="com.intellij.lang.parameterInfo/ParameterInfoUIContext///PointingToDeclaration/">ParameterInfoUIContext</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
