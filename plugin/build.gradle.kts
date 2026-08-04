@@ -41,6 +41,13 @@ kotlin {
     jvmToolchain(25)
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+        // Do not emit delegating overrides for the default methods of implemented Java interfaces. Without
+        // this, a class such as IsBuildToolWindowFactory silently "overrides" every default method of
+        // ToolWindowFactory — including deprecated ones — and verifyPlugin reports those as deprecated API
+        // usages even though the source overrides nothing.
+        // Applied to this module only: the :language:* modules are published as Maven artifacts, where
+        // dropping the DefaultImpls classes would be a binary-compatibility change for consumers.
+        freeCompilerArgs.add("-jvm-default=no-compatibility")
     }
 }
 
