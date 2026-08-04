@@ -15,6 +15,7 @@ package org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorMacroParameterReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFile
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
@@ -186,16 +187,32 @@ class IsSectionPreprocessorReferenceTest : IsTimedBasePlatformTestCase() {
     fun testMacroParametersAreNotExpressionReferences() {
         val file = setup("#define Max(a, b) a > b ? a : b\n")
         val max = findDefine(file, "Max")!!
-        val texts = max.references.map { it.canonicalText }
-        assertEquals("Macro parameters must not create references", emptyList<String>(), texts)
+        val texts = max.references
+            .filterNot { it is IsPreprocessorMacroParameterReference }
+            .map { it.canonicalText }
+        assertEquals("Macro parameters must not create #define references", emptyList<String>(), texts)
     }
 
     fun testMacroBodyReferencesOtherDefineButNotParams() {
         val file = setup("#define K 5\n#define F(x) x + K\n")
         val f = findDefine(file, "F")!!
-        val texts = f.references.map { it.canonicalText }.toSet()
-        assertEquals("Only the real define 'K' is a reference, not the parameter 'x'", setOf("K"), texts)
-        assertEquals("K", (f.references.first().resolve() as? IsPreprocessorDirectiveEx)?.getDefineName())
+        val texts = f.references
+            .filterNot { it is IsPreprocessorMacroParameterReference }
+            .map { it.canonicalText }
+            .toSet()
+        assertEquals("Only the real define 'K' is a #define reference, not the parameter 'x'", setOf("K"), texts)
+        val defineRef = f.references.first { it !is IsPreprocessorMacroParameterReference }
+        assertEquals("K", (defineRef.resolve() as? IsPreprocessorDirectiveEx)?.getDefineName())
+    }
+
+    fun testMacroParametersAreParameterReferences() {
+        val file = setup("#define Max(a, b) a > b ? a : b\n")
+        val max = findDefine(file, "Max")!!
+        val texts = max.references
+            .filterIsInstance<IsPreprocessorMacroParameterReference>()
+            .map { it.canonicalText }
+            .toSet()
+        assertEquals("Both parameters must be referenceable in the body", setOf("a", "b"), texts)
     }
 
     fun testReferencesSearchFindsExpressionUsage() {

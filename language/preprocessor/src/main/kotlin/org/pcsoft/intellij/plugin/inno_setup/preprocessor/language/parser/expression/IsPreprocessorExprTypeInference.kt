@@ -26,11 +26,11 @@ package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expre
  *   types. For a user function-like macro this is the type of its body with the parameters bound to the
  *   argument types (so `#define func(x) "abc" + x` called as `func("x")` yields `str`); for a built-in it is
  *   the spec return type.
- * @param functionMacroParameterTypes the (probable) parameter types of a function-like macro
- *   (`#define f(x) …`), or `null` if the name is not one. Such a macro must be referenced as a call `f(…)`
- *   with exactly that many arguments, and each argument must be type-compatible with the corresponding
- *   parameter — a bare identifier, a wrong argument count, or an ill-typed argument is an error. The list
- *   size is the declared arity; a parameter of type `ANY`/`VOID` accepts any argument.
+ * @param functionMacroSignature the signature of a function-like macro (`#define f(int x, y = 1) …`), or
+ *   `null` if the name is not one. Such a macro must be referenced as a call `f(…)`; the call is checked
+ *   like a built-in call — argument count between the mandatory and the declared parameter count, argument
+ *   types against the declared (or probed) parameter types, and a by-reference parameter (`*x`) requiring a
+ *   bare macro name. A parameter of type `ANY`/`VOID` accepts any argument.
  * @param builtinSignature the structured signature of a built-in ISPP function, or `null` if the name is not
  *   one. A call to a built-in is checked against it: argument count (required vs. optional parameters),
  *   argument types, by-reference parameters (which need a bare macro name) and un-evaluated `Ident`/`Array`
@@ -43,7 +43,7 @@ class IsPreprocessorExprTypeInference(
     private val referenceType: (String) -> IsPreprocessorExprType = { IsPreprocessorExprType.ANY },
     private val functionCallType: (String, List<IsPreprocessorExprType>) -> IsPreprocessorExprType =
         { _, _ -> IsPreprocessorExprType.ANY },
-    private val functionMacroParameterTypes: (String) -> List<IsPreprocessorExprType>? = { null },
+    private val functionMacroSignature: (String) -> IsPreprocessorBuiltinSignature? = { null },
     private val isArray: (String) -> Boolean = { false },
     private val builtinSignature: (String) -> IsPreprocessorBuiltinSignature? = { null },
 ) {
@@ -83,7 +83,7 @@ class IsPreprocessorExprTypeInference(
      * call `f(…)`; using its name without an argument list is an error.
      */
     private fun referenceTypeChecked(node: IsPreprocessorExprReference): IsPreprocessorExprType {
-        if (functionMacroParameterTypes(node.name) != null) {
+        if (functionMacroSignature(node.name) != null) {
             errorList += IsPreprocessorExprError(
                 node.span,
                 "Function-like macro '${node.name}' must be called with an argument list",
@@ -123,8 +123,8 @@ class IsPreprocessorExprTypeInference(
      * of a built-in are validated as symbol names instead of being inferred as values.
      */
     private fun callType(node: IsPreprocessorExprCall): IsPreprocessorExprType {
-        val macroParamTypes = functionMacroParameterTypes(node.name)
-        val signature = if (macroParamTypes == null) builtinSignature(node.name) else null
+        val macroSignature = functionMacroSignature(node.name)
+        val signature = macroSignature ?: builtinSignature(node.name)
 
         val argTypes = node.arguments.mapIndexed { index, argument ->
             val parameter = signature?.parameters?.getOrNull(index)
@@ -138,8 +138,8 @@ class IsPreprocessorExprTypeInference(
             }
         }
 
-        if (macroParamTypes != null) checkMacroCall(node, macroParamTypes, argTypes)
-        if (signature != null) checkBuiltinCall(node, signature, argTypes)
+        if (macroSignature != null) checkMacroCall(node, macroSignature, argTypes)
+        else if (signature != null) checkBuiltinCall(node, signature, argTypes)
 
         return functionCallType(node.name, argTypes)
     }
@@ -149,29 +149,47 @@ class IsPreprocessorExprTypeInference(
         get() = this == IsPreprocessorBuiltinParameterKind.IDENT ||
                 this == IsPreprocessorBuiltinParameterKind.ARRAY
 
-    /** Checks the argument count and the argument types of a call to a function-like macro. */
+    /**
+     * Checks a call to a function-like macro against its declared parameter list: the argument count must lie
+     * between the mandatory count (parameters without a default value) and the declared parameter count, every
+     * argument must be type-compatible with its parameter, and a by-reference parameter (`*x`) needs a bare
+     * macro name it can write back into.
+     */
     private fun checkMacroCall(
         node: IsPreprocessorExprCall,
-        paramTypes: List<IsPreprocessorExprType>,
+        signature: IsPreprocessorBuiltinSignature,
         argTypes: List<IsPreprocessorExprType>,
     ) {
-        val arity = paramTypes.size
-        if (node.arguments.size != arity) {
+        if (node.arguments.size < signature.requiredCount || node.arguments.size > signature.maxCount) {
             errorList += IsPreprocessorExprError(
                 node.nameSpan,
-                "Function-like macro '${node.name}' expects $arity " +
-                        "argument${if (arity == 1) "" else "s"}, but got ${node.arguments.size}",
+                "Function-like macro '${node.name}' expects ${signature.arityDescription}, " +
+                        "but got ${node.arguments.size}",
             )
             return
         }
         node.arguments.forEachIndexed { i, arg ->
-            val expected = paramTypes[i]
-            val actual = argTypes[i]
-            if (!argumentCompatible(expected, actual)) {
+            val parameter = signature.parameters[i]
+
+            if (parameter.byRef && bareReferenceName(arg) == null) {
                 errorList += IsPreprocessorExprError(
                     arg.span,
-                    "Argument ${i + 1} of macro '${node.name}' must be ${expected.name.lowercase()}, " +
-                            "but got ${actual.name.lowercase()}",
+                    "Argument ${i + 1} ('${parameter.name}') of macro '${node.name}' is passed by reference " +
+                            "and must be a macro name",
+                )
+                return@forEachIndexed
+            }
+
+            val expected = when (parameter.kind) {
+                IsPreprocessorBuiltinParameterKind.INT -> IsPreprocessorExprType.INT
+                IsPreprocessorBuiltinParameterKind.STR -> IsPreprocessorExprType.STR
+                else -> IsPreprocessorExprType.ANY
+            }
+            if (!argumentCompatible(expected, argTypes[i])) {
+                errorList += IsPreprocessorExprError(
+                    arg.span,
+                    "Argument ${i + 1} ('${parameter.name}') of macro '${node.name}' must be " +
+                            "${expected.name.lowercase()}, but got ${argTypes[i].name.lowercase()}",
                 )
             }
         }

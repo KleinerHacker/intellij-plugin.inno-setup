@@ -20,6 +20,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.externalPreprocessorSymbols
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
@@ -66,6 +67,20 @@ object IsSectionPreprocessorVariableAfterHashProvider : CompletionProvider<Compl
                         .withIcon(IsIcons.Variable)
                         .withInsertHandler { ctx, _ -> insertClosingBrace(ctx) },
                     5.0
+                )
+            )
+        }
+
+        // ISCC `/D<name>` symbols of the selected build configuration — emittable like a #define, but
+        // declared outside the script.
+        file.externalPreprocessorSymbols().forEach { (name, value) ->
+            adjusted.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create(name)
+                        .withTypeText(value?.let { "= $it · build config" } ?: "build config")
+                        .withIcon(IsIcons.Variable)
+                        .withInsertHandler { ctx, _ -> insertClosingBrace(ctx) },
+                    4.0
                 )
             )
         }

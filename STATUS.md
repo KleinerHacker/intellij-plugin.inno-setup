@@ -2,7 +2,8 @@
 
 > **Reference version:** Inno Setup 7.0.1-beta  
 > **Docs URL:** https://jrsoftware.org/ishelp/  
-> **Last checked:** 2026-08-03 (built-in function calls validated against the parsed `signature`, closing
+> **Last checked:** 2026-08-04 (macro parameters fully modelled and `/D` symbols resolved everywhere, closing
+> gaps 8 and 9; 2026-08-03: built-in function calls validated against the parsed `signature`, closing
 > gap 1; 2026-08-01: ISPP preprocessor support re-audited against the official ISPP docs; conditional compilation implemented, closing gaps 4, 5 and most of 7 — see
 > [Known gaps](#known-gaps-ispp-audit-2026-08-01); 2026-06-15: parameter/flag completeness re-audited against
 > the official section pages)
@@ -218,6 +219,26 @@ resolvable reference (so rename / find-usages keep working) and merely needs no 
 that is neither a built-in nor a macro of the file is reported as `Unknown preprocessor function` by the
 annotator — deliberately not by the inference, which would duplicate the reference diagnostic.
 
+**Macro parameter model:** the parameter list of a function-like `#define` is parsed by
+`parseMacroParameters` (`expression/IsPreprocessorMacroSignature.kt`) into `IsPreprocessorMacroParameter`
+(name, declared type `any`/`int`/`str`/`func`, by-reference `*`, default expression, offset). `macroSignatureOf`
+maps it onto the same `IsPreprocessorBuiltinSignature` model the built-ins use, so a macro call runs through
+the identical checks — argument count between the mandatory and the declared count, argument types against the
+declared type (probing the body only where none is declared, `probableMacroParameterTypes`), and a `*`
+parameter requiring a bare macro name. An omitted optional argument falls back to its default when the macro's
+value is computed (`IsPreprocessorExprValueResolver.callValue`). Inside the body the parameters are in scope:
+`IsPreprocessorAnnotator.annotateExpression` binds them to their type, `IsPreprocessorDefineExpressionProvider`
+offers them, and each use is an `IsPreprocessorMacroParameterReference` resolving to an
+`IsPreprocessorMacroParameterElement` — a declaration element scoped to that one directive, so rename and Find
+Usages never reach the macro name.
+
+**Externally contributed symbols:** the ISCC `/D<name>[=<value>]` arguments of the selected run
+configuration's build configuration are collected through `IsPreprocessorSymbolProvider.collect` and cached per
+script by `IsPreprocessorExternalSymbols` against `IsPreprocessorSymbolTracker`. They are treated as defined by
+the branch analysis, by the `{#…}` validation (`IsSectionAnnotator`), by the unresolved-reference check
+(`IsPreprocessorAnnotator`), by the type resolver (numeric value → `int`, otherwise `any`) and by the
+completion providers. Since nothing in the script declares them, they resolve to no PSI element.
+
 Directive keywords are validated against this spec by `IsPreprocessorAnnotator`: a `#…` directive
 whose keyword is not declared in `is-preprocessor.yaml` is flagged as an error (`Unknown preprocessor
 directive`, case-insensitive), mirroring the unknown-section/flag/constant checks.
@@ -299,13 +320,16 @@ tooling on top of that data. Ordered roughly by value/effort ratio:
 | 5 | ~~`#ifexist` / `#ifnexist` never checks the file.~~ **Done:** the file name is resolved through `IsIncludePaths` and decides the branch — a literal path directly, a filename *expression* (e.g. `#ifexist MyFile`) after evaluating it against the current symbol table; only a name that is not statically computable stays undecidable.                                                                                                     | ✅      | `IsPreprocessorBranchAnalysis` (`evaluateBranchCondition`)               |
 | 6 | ~~No line continuation with a trailing `\`.~~ **Done:** the host lexers keep a `#…` line continued with a trailing backslash in one `HASH_LINE` token, so ISPP is injected over all of its physical lines; the ISPP lexer and the expression tokenizer report the continuation as whitespace. | ✅      | `parsing/IsSectionLexer.flex`, `parsing/IsTemplateLexer.flex`, `parsing/IsPreprocessorLexer.flex`, `expression/IsPreprocessorExprTokenizer.kt` |
 | 7 | ~~No conditional compilation in the editor.~~ **Done:** `#if` branches are evaluated three-valued (active/inactive/undecidable); provably dead branches are dimmed and stop reporting problems, undecidable conditions get a blue-underline marker, and the effective script prunes accordingly. Surfacing `#define` values as inlay/Quick Doc is still open. | ⚠️     | `IsPreprocessorBranchAnalysis`, `IsEffectiveScriptBranches`              |
-| 8 | **Function-like macro parameters are only partially modelled.** A *call* is validated (arity plus the *probable* parameter types derived by probing the body, `probableMacroParameterTypes`), and the callee name is offered in completion with its parameter list as tail text. Inside the body the parameters still count as `any` — so no validation and no completion for the parameter names there — and ISPP default values / named arguments of a macro are not modelled at all. | ⚠️     | `expression/IsPreprocessorExprTypeResolver`, `expression/IsPreprocessorExprTypeInference`, `completion/provider/IsPreprocessorDefineExpressionProvider` |
+| 8 | ~~Function-like macro parameters are only partially modelled.~~ **Done:** the ISPP declaration `[<type>] [*]<name> [= <default>]` is parsed (`parseMacroParameters`) into `IsPreprocessorMacroParameter` and mapped onto the shared signature model, so a call is validated like a built-in call (min/max arity via defaults, declared argument types, by-reference arguments). Inside the body the parameters are in scope: typed for the validation, offered in completion, and resolvable/renameable via `IsPreprocessorMacroParameterReference` → `IsPreprocessorMacroParameterElement`. Declared types, `*` and defaults are shown in parameter info and Quick Doc. | ✅      | `expression/IsPreprocessorMacroSignature.kt`, `expression/IsPreprocessorExprTypeResolver`, `expression/IsPreprocessorExprTypeInference`, `feature/reference/IsPreprocessorMacroParameterReference`, `completion/provider/IsPreprocessorDefineExpressionProvider` |
 | 10 | **Collecting the ISPP directives of a file is quadratic in file size.** `preprocessorDirectivesWithHostLine` / `isppDirectivesWithHostOffset` call `InjectedLanguageManager.enumerate` once per preprocessor line, and that call is not constant in file size — measured 12–13x for a 4x larger script; ~1500 conditional blocks take ~25 s. Predates the branch analysis (the annotator, folding and sticky lines collect the same way), but the branch analysis is the first consumer running it over the whole file per document revision. Irrelevant at realistic script sizes. Guarded by the disabled assertions in `IsPreprocessorBranchAnalysisPerformanceIT`. | ❌      | `IsPreprocessorConditionalStructure`, `language/parser/PsiUtils.kt`       |
-| 9 | **ISCC command-line symbols (`/D…`) are only considered for branch analysis.** The `/D` symbols of the selected run configuration's build configuration feed the conditional evaluation via `IsPreprocessorSymbolProvider`, but plain `{#Name}` references to them are still reported as unresolved.                     | ⚠️     | `IsPreprocessorSymbolProvider`, `IsRunConfigurationSymbolProvider`, `IsBuildConfiguration` |
+| 9 | ~~ISCC command-line symbols (`/D…`) are only considered for branch analysis.~~ **Done:** the `/D` symbols are collected once per script (`IsPreprocessorExternalSymbols`, cached against `IsPreprocessorSymbolTracker`) and count as defined everywhere — `{#Name}` emission, identifiers in `#define`/`#if` expressions (numeric value → `int`) and both completion lists. They have no declaration in the script, so they stay without a navigation target. | ✅      | `IsPreprocessorExternalSymbols`, `IsPreprocessorSymbolProvider`, `IsRunConfigurationSymbolProvider`, `IsBuildConfiguration` |
 
-Items 1–3 are done: the `signature` string is machine-readable (`parseBuiltinSignature`) and drives the call
-validation, the parameter info popup and the per-parameter section of the built-in Quick Doc. Item 6 (line
-continuation) is done as well, so a directive spread over several physical lines is parsed as one directive.
+Items 1–6, 8 and 9 are done: the `signature` string is machine-readable (`parseBuiltinSignature`) and drives
+the call validation, the parameter info popup and the per-parameter section of the built-in Quick Doc; a
+directive spread over several physical lines is parsed as one directive; a function-like macro's parameter
+list is parsed the same way its calls are validated; and the `/D` symbols of the selected build configuration
+count as defined everywhere, not only in a condition. Item 7 only lacks `#define` values as inlay/Quick Doc,
+item 10 is a performance note that is irrelevant at realistic script sizes.
 
 ---
 
@@ -320,7 +344,7 @@ continuation) is done as well, so a directive spread over several physical lines
 | Code completion — flags                         | ✅      |                                                                                                                                                                                                                         |
 | Code completion — constants                     | ✅      |                                                                                                                                                                                                                         |
 | Code completion — ISPP directives               | ✅      |                                                                                                                                                                                                                         |
-| Code completion — `{#…}` ISPP variables         | ✅      | After `{` and `{#`: user `#define`s + value-bearing predefined variables; valueless `void` symbols excluded                                                                                                             |
+| Code completion — `{#…}` ISPP variables         | ✅      | After `{` and `{#`: user `#define`s + value-bearing predefined variables + ISCC `/D` symbols of the build configuration; valueless `void` symbols excluded                                                                                                             |
 | Code completion — `[Languages]`                 | ✅      | Built-in names + MessagesFile, with flag icons                                                                                                                                                                          |
 | Code completion — `LanguageID`                  | ✅      | Windows LCIDs: name + flag + greyed `$hex` id                                                                                                                                                                           |
 | Code completion — message i18n prefix           | ✅      | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only; flag + name from LanguageID) + message ids                                                                                           |
@@ -336,14 +360,14 @@ continuation) is done as well, so a directive spread over several physical lines
 | Parameter info (ISPP functions)                 | ✅      | `IsPreprocessorParameterInfoHandler` (`codeInsight.parameterInfo`, lang `ISPP`): parameter list of the enclosing built-in / function-like macro call with the current argument highlighted, plus the result type where determinable. Arguments are additionally **validated** against the parsed signature (count, types, by-reference, `Ident`/`Array`, `void` result) |
 | Conditional compilation (`#if` branches)        | ✅      | Three-valued: provably dead branches are dimmed (`ISS_INACTIVE_BRANCH`) and produce no diagnostics; an undecidable condition keeps both branches and gets a blue-underline marker (`ISS_UNDECIDABLE_CONDITION`). Integer *and* string comparisons (case-insensitive, as in ISPP) are evaluated; `#ifexist`/`#ifnexist` (literal or computed file name) and run-configuration `/D` symbols are taken into account; the effective script prunes the same way (collapsing the blank lines the removed branches leave behind) |
 | ISPP line continuation (trailing `\`)           | ✅      | A `#…` line ending with `\` continues on the next line: the host lexers keep it in one `HASH_LINE` token, the ISPP lexer and the expression tokenizer treat the continuation as whitespace; the formatter treats it as a line end and normalises the space before `\` plus the indent of the continued lines |
-| Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages)                                                                                                                                                                   |
-| Rename refactoring                              | ✅      | For ISPP identifiers                                                                                                                                                                                                    |
+| Find usages                                     | ✅      | For ISPP `#define` references (incl. `#undef` usages) and for macro parameters inside their own macro                                                                                                                                                                   |
+| Rename refactoring                              | ✅      | For ISPP identifiers, incl. function-like macro parameters (scoped to their `#define`)                                                                                                                                                                                                    |
 | Commenter (`Ctrl+/`)                            | ✅      |                                                                                                                                                                                                                         |
 | Quote handler                                   | ✅      |                                                                                                                                                                                                                         |
 | ISPP language injection                         | ✅      | Preprocessor lines injected into ISI                                                                                                                                                                                    |
 | Semantic annotations / errors                   | ✅      |                                                                                                                                                                                                                         |
 | ISPP directive validation                       | ✅      | Unknown `#…` directive keywords (not in `is-preprocessor.yaml`) flagged as errors, case-insensitive (`IsPreprocessorAnnotator`)                                                                                               |
-| `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s + value-bearing predefined variables; valueless `void` symbols stay flagged as invalid emissions                                                                                 |
+| `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s, value-bearing predefined variables and ISCC `/D` symbols; valueless `void` symbols stay flagged as invalid emissions                                                                                 |
 | `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                                      |
 | Completion — deprecated members struck through  | ✅      | Deprecated sections/attributes/flags/constants/message-keys are rendered with strikethrough in the lookup (`withStrikeoutness`, target-aware); no extra "deprecated" tail text — it follows from the strikethrough      |
 | [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                                           |

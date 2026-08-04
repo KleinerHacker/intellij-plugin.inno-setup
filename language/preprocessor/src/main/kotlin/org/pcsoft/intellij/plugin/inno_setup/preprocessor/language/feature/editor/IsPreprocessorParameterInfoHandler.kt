@@ -168,9 +168,16 @@ class IsPreprocessorParameterInfoHandler :
 
         val resolver = hostFile.preprocessorTypeResolver()
         val parameterTypes = resolver.probableMacroParameterTypes(name)
-        val parameters = macro.getMacroParameters().mapIndexed { index, parameter ->
-            val type = parameterTypes.getOrNull(index)?.presentableName
-            if (type == null) parameter else "$parameter: $type"
+        // The declaration wins where it states a type; only an undeclared parameter falls back to the type
+        // probed from the body. `*` marks a by-reference parameter, `= …` an optional one.
+        val parameters = macro.getMacroParameterDeclarations().mapIndexed { index, parameter ->
+            val type = (parameter.declaredType ?: parameterTypes.getOrNull(index))?.presentableName
+            buildString {
+                append(parameter.name)
+                type?.let { append(": ").append(it) }
+                if (parameter.byRef) append("*")
+                parameter.defaultValue?.let { append(" = ").append(it) }
+            }
         }
         return IsPreprocessorParameterInfoItem(
             parameters = parameters,

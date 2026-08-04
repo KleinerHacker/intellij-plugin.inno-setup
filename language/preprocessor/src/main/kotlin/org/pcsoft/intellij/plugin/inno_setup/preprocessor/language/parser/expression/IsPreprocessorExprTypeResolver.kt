@@ -19,13 +19,37 @@ data class IsPreprocessorExprDefineInfo(val name: String, val expression: String
 
 /**
  * A function-like macro `#define Name(params…) body` as seen by the resolver, ordered by [order].
+ *
+ * [parameters] carries the full ISPP declaration of each parameter — type, by-reference marker and default
+ * value — so a call can be validated against it the same way a built-in call is.
  */
 data class IsPreprocessorExprFunctionMacroInfo(
     val name: String,
-    val parameters: List<String>,
+    val parameters: List<IsPreprocessorMacroParameter>,
     val body: String,
     val order: Int,
-)
+) {
+
+    /** The declared parameter names, in order. */
+    val parameterNames: List<String> get() = parameters.map { it.name }
+
+    companion object {
+
+        /** A macro whose parameters are only known by name — untyped, mandatory and by value. */
+        fun ofNames(
+            name: String,
+            parameterNames: List<String>,
+            body: String,
+            order: Int,
+        ): IsPreprocessorExprFunctionMacroInfo =
+            IsPreprocessorExprFunctionMacroInfo(
+                name,
+                parameterNames.map { IsPreprocessorMacroParameter(it) },
+                body,
+                order,
+            )
+    }
+}
 
 /**
  * An array declaration `#dim Name\[Size]` (or `#redim`) as seen by the resolver, ordered by [order].
@@ -125,23 +149,41 @@ class IsPreprocessorExprTypeResolver(
     private fun latestMacro(name: String): IsPreprocessorExprFunctionMacroInfo? =
         functionMacros.filter { it.name.equals(name, ignoreCase = true) }.maxByOrNull { it.order }
 
-    /** Probable parameter types of [name] when it is a function-like macro, else `null`. */
-    private fun macroParameterTypesOrNull(name: String): List<IsPreprocessorExprType>? =
-        if (latestMacro(name) != null) probableMacroParameterTypes(name) else null
-
-    /** Arity-shaped list of `ANY` for [name] — keeps the arity/bare-reference checks but disables type checks. */
-    private fun anyParameterTypesOrNull(name: String): List<IsPreprocessorExprType>? =
-        arityOf(name)?.let { count -> List(count) { IsPreprocessorExprType.ANY } }
+    /** The declared parameters of the latest function-like macro named [name], or an empty list. */
+    fun macroParametersOf(name: String): List<IsPreprocessorMacroParameter> =
+        latestMacro(name)?.parameters ?: emptyList()
 
     /**
-     * Probable parameter types of the function-like macro [name], in order. A parameter's type is determined
-     * by probing: if binding it to `str` makes the body ill-typed while `int` does not, it must be `int`
-     * (and vice versa); otherwise it is [IsPreprocessorExprType.ANY] (unconstrained). Empty when [name] is not
-     * a function-like macro.
+     * The signature of [name] when it is a function-like macro, else `null`. Parameter types come from the
+     * declaration where one is written and from probing the body otherwise.
+     */
+    fun macroSignatureOrNull(name: String): IsPreprocessorBuiltinSignature? {
+        val macro = latestMacro(name) ?: return null
+        return macroSignatureOf(macro.name, macro.parameters, probedTypes = probableMacroParameterTypes(name))
+    }
+
+    /**
+     * Signature of [name] with every parameter type widened to `ANY` — keeps the arity, by-reference and
+     * bare-reference checks while disabling the type checks (used while probing, where the parameter types are
+     * exactly what is being determined).
+     */
+    private fun anyMacroSignatureOrNull(name: String): IsPreprocessorBuiltinSignature? {
+        val macro = latestMacro(name) ?: return null
+        return macroSignatureOf(macro.name, macro.parameters.map { it.copy(declaredType = null) })
+    }
+
+    /**
+     * Probable parameter types of the function-like macro [name], in order. A declared type
+     * (`#define M(int A) …`) is used as-is; otherwise the type is determined by probing: if binding the
+     * parameter to `str` makes the body ill-typed while `int` does not, it must be `int` (and vice versa);
+     * otherwise it is [IsPreprocessorExprType.ANY] (unconstrained). Empty when [name] is not a function-like
+     * macro.
      */
     fun probableMacroParameterTypes(name: String): List<IsPreprocessorExprType> {
         val macro = latestMacro(name) ?: return emptyList()
-        return macro.parameters.indices.map { probeParameterType(macro, it) }
+        return macro.parameters.mapIndexed { index, parameter ->
+            parameter.declaredType ?: probeParameterType(macro, index)
+        }
     }
 
     /**
@@ -151,7 +193,8 @@ class IsPreprocessorExprTypeResolver(
     fun probableMacroReturnType(name: String): IsPreprocessorExprType {
         val macro = latestMacro(name) ?: return IsPreprocessorExprType.ANY
         val paramTypes = probableMacroParameterTypes(name)
-        val bound = macro.parameters.mapIndexed { i, p -> p to (paramTypes.getOrNull(i) ?: IsPreprocessorExprType.ANY) }
+        val bound = macro.parameters
+            .mapIndexed { i, p -> p.name to (paramTypes.getOrNull(i) ?: IsPreprocessorExprType.ANY) }
             .toMap()
         return inferMacroBodyType(macro, bound)
     }
@@ -169,20 +212,24 @@ class IsPreprocessorExprTypeResolver(
         }
     }
 
-    /** Whether the macro body is ill-typed when parameter [index] is bound to [probe] (others to ANY). */
+    /**
+     * Whether the macro body is ill-typed when parameter [index] is bound to [probe]. The other parameters
+     * keep their declared type where one is written and are otherwise unconstrained (`ANY`), so a declaration
+     * like `#define M(int A, B) A + B` narrows the probe of `B` instead of hiding it behind `ANY`.
+     */
     private fun bodyHasErrorWith(
         macro: IsPreprocessorExprFunctionMacroInfo,
         index: Int,
         probe: IsPreprocessorExprType,
     ): Boolean {
         val bound = macro.parameters.mapIndexed { i, p ->
-            p to if (i == index) probe else IsPreprocessorExprType.ANY
+            p.name to if (i == index) probe else (p.declaredType ?: IsPreprocessorExprType.ANY)
         }.toMap()
         val ast = IsPreprocessorExprParser.parse(macro.body).ast
         val inference = IsPreprocessorExprTypeInference(
             referenceType = { bound[it] ?: typeOfReference(it, macro.order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
-            functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
+            functionMacroSignature = { anyMacroSignatureOrNull(it) },
             isArray = { it !in bound && isArray(it, macro.order) },
             builtinSignature = { builtinSignature(it) },
         )
@@ -195,7 +242,7 @@ class IsPreprocessorExprTypeResolver(
         IsPreprocessorExprTypeInference(
             referenceType = { typeOfReference(it, order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, order) },
-            functionMacroParameterTypes = { macroParameterTypesOrNull(it) },
+            functionMacroSignature = { macroSignatureOrNull(it) },
             isArray = { isArray(it, order) },
             builtinSignature = { builtinSignature(it) },
         )
@@ -220,7 +267,14 @@ class IsPreprocessorExprTypeResolver(
 
         visitingMacros += key
         return try {
-            val bound = macro.parameters.mapIndexedNotNull { i, p -> argTypes.getOrNull(i)?.let { p to it } }.toMap()
+            // An omitted argument falls back to the parameter's declared type resp. its default expression,
+            // so `#define M(A, str B = "") …` called as `M(1)` still infers `B` as a string.
+            val bound = macro.parameters.mapIndexedNotNull { i, parameter ->
+                val type = argTypes.getOrNull(i)
+                    ?: parameter.declaredType
+                    ?: parameter.defaultValue?.let { defaultType(it, macro.order) }
+                type?.let { parameter.name to it }
+            }.toMap()
             inferMacroBodyType(macro, bound)
         } finally {
             visitingMacros -= key
@@ -236,11 +290,20 @@ class IsPreprocessorExprTypeResolver(
         return IsPreprocessorExprTypeInference(
             referenceType = { bound[it] ?: typeOfReference(it, macro.order) },
             functionCallType = { name, argTypes -> functionCallType(name, argTypes, macro.order) },
-            functionMacroParameterTypes = { anyParameterTypesOrNull(it) },
+            functionMacroSignature = { anyMacroSignatureOrNull(it) },
             isArray = { it !in bound && isArray(it, macro.order) },
             builtinSignature = { builtinSignature(it) },
         ).infer(ast)
     }
+
+    /** Type of a parameter's default expression as seen from the macro's own declaration line. */
+    private fun defaultType(expression: String, order: Int): IsPreprocessorExprType =
+        IsPreprocessorExprTypeInference(
+            referenceType = { typeOfReference(it, order) },
+            functionCallType = { name, argTypes -> functionCallType(name, argTypes, order) },
+            isArray = { isArray(it, order) },
+            builtinSignature = { builtinSignature(it) },
+        ).infer(IsPreprocessorExprParser.parse(expression).ast)
 
     private fun inferDefineType(define: IsPreprocessorExprDefineInfo): IsPreprocessorExprType {
         val ast = IsPreprocessorExprParser.parse(define.expression).ast

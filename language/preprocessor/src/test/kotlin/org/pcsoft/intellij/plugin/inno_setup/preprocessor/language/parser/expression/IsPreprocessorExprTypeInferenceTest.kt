@@ -155,8 +155,12 @@ class IsPreprocessorExprTypeInferenceTest {
         paramTypes: List<IsPreprocessorExprType>
     ): IsPreprocessorExprTypeInference {
         val ast = IsPreprocessorExprParser.parse(text).ast
+        val signature = macroSignatureOf(
+            "func",
+            paramTypes.mapIndexed { index, type -> IsPreprocessorMacroParameter("p$index", type) },
+        )
         val inference = IsPreprocessorExprTypeInference(
-            functionMacroParameterTypes = { if (it.equals("func", ignoreCase = true)) paramTypes else null },
+            functionMacroSignature = { if (it.equals("func", ignoreCase = true)) signature else null },
         )
         inference.infer(ast)
         return inference

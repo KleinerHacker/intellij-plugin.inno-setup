@@ -44,5 +44,20 @@ interface IsPreprocessorSymbolProvider {
         /** The extension point contributing externally defined preprocessor symbols. */
         val EP_NAME: ExtensionPointName<IsPreprocessorSymbolProvider> =
             ExtensionPointName.create("org.pcsoft.intellij.plugin.inno_setup.preprocessorSymbolProvider")
+
+        /**
+         * The merged symbols of every registered provider for [script], mapped name → value.
+         *
+         * A provider that throws is skipped rather than breaking the analysis of the whole file; later
+         * providers win over earlier ones for the same name. Callers that run per file element should go
+         * through [IsPreprocessorExternalSymbols] instead, which caches this result.
+         */
+        fun collect(project: Project, script: VirtualFile?): Map<String, String?> {
+            val symbols = mutableMapOf<String, String?>()
+            EP_NAME.extensionList.forEach { provider ->
+                runCatching { provider.symbols(project, script) }.getOrNull()?.let { symbols.putAll(it) }
+            }
+            return symbols
+        }
     }
 }

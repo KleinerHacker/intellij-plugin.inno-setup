@@ -119,7 +119,7 @@ private fun PsiFile.functionMacroInfos(): List<IsPreprocessorExprFunctionMacroIn
         if (!dex.isDefine() || !dex.isFunctionMacro()) return@mapNotNull null
         val name = dex.getDefineName() ?: return@mapNotNull null
         val body = dex.getMacroBody() ?: return@mapNotNull null
-        IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameters(), body, offset)
+        IsPreprocessorExprFunctionMacroInfo(name, dex.getMacroParameterDeclarations(), body, offset)
     }
 
 /** Evaluates [expr] (as seen at host offset [order]) to a constant integer over this file's scalar #defines. */
@@ -222,9 +222,18 @@ fun PsiFile.preprocessorTypeResolver(
     val builtinReturnType: (String) -> IsPreprocessorExprType = { name ->
         builtinSignature(name)?.returnType ?: IsPreprocessorExprType.ANY
     }
+    // Symbols handed to ISCC from outside (`/D<name>[=<value>]`) are in scope like a #define. A numeric value
+    // makes the symbol an int; anything else (including a valueless /DDEBUG) stays `any`, so it never causes
+    // a type error the build would not have.
+    val externalSymbols = externalPreprocessorSymbols()
     val variableType: (String) -> IsPreprocessorExprType? = { name ->
         extraVariables.entries.firstOrNull { it.key.equals(name, ignoreCase = true) }?.value
             ?: spec.predefinedVariables.firstOrNull { it.name.equals(name, ignoreCase = true) }?.type?.toExprType()
+            ?: externalSymbols.entries.firstOrNull { it.key.equals(name, ignoreCase = true) }
+                ?.let { entry ->
+                    if (entry.value?.trim()?.toLongOrNull() != null) IsPreprocessorExprType.INT
+                    else IsPreprocessorExprType.ANY
+                }
     }
     return IsPreprocessorExprTypeResolver(
         simpleDefineInfos(), functionMacroInfos(), variableType, builtinReturnType, arrayInfos(),

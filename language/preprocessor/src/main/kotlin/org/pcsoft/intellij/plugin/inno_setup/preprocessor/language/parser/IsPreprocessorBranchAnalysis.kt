@@ -557,20 +557,13 @@ object IsPreprocessorBranchAnalysis {
 
     /** Seeds symbols contributed from outside the script, e.g. ISCC `/D…` arguments of a run configuration. */
     private fun seedExternalSymbols(env: Env, hostFile: PsiFile) {
-        // An in-memory effective script has no VirtualFile of its own; EFFECTIVE_SCRIPT_ORIGIN points at the
-        // script it was built from, so it gets the same /D symbols the editor uses on the original.
-        val file = hostFile.getUserData(EFFECTIVE_SCRIPT_ORIGIN)
-            ?: hostFile.virtualFile
-            ?: hostFile.originalFile.virtualFile
-        IsPreprocessorSymbolProvider.EP_NAME.extensionList.forEach { provider ->
-            runCatching { provider.symbols(hostFile.project, file) }.getOrNull()?.forEach { (name, value) ->
-                val parsed = value?.trim()?.toLongOrNull()
-                env.define(
-                    name,
-                    if (parsed != null) Sym.Known(IsPreprocessorExprValue.IntValue(parsed))
-                    else Sym.DefinedUnknownValue,
-                )
-            }
+        hostFile.externalPreprocessorSymbols().forEach { (name, value) ->
+            val parsed = value?.trim()?.toLongOrNull()
+            env.define(
+                name,
+                if (parsed != null) Sym.Known(IsPreprocessorExprValue.IntValue(parsed))
+                else Sym.DefinedUnknownValue,
+            )
         }
     }
 

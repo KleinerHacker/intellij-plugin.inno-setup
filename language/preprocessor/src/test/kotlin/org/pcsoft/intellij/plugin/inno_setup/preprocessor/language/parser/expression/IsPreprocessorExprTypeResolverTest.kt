@@ -25,7 +25,14 @@ class IsPreprocessorExprTypeResolverTest {
         IsPreprocessorExprDefineInfo(name, expr, order)
 
     private fun macro(order: Int, name: String, parameters: List<String>, body: String) =
-        IsPreprocessorExprFunctionMacroInfo(name, parameters, body, order)
+        IsPreprocessorExprFunctionMacroInfo.ofNames(name, parameters, body, order)
+
+    private fun typedMacro(
+        order: Int,
+        name: String,
+        parameters: List<IsPreprocessorMacroParameter>,
+        body: String,
+    ) = IsPreprocessorExprFunctionMacroInfo(name, parameters, body, order)
 
     private fun resolver(
         vararg defines: IsPreprocessorExprDefineInfo,
@@ -214,6 +221,87 @@ class IsPreprocessorExprTypeResolverTest {
         val inference = r.inferenceAt(1)
         inference.infer(IsPreprocessorExprParser.parse("twice(5)").ast)
         assertEquals(0, inference.errors.size)
+    }
+
+    /** A declared parameter type wins over the type probed from the body, so `any x` stays unconstrained. */
+    @Test
+    fun `declared parameter type overrides the probed one`() {
+        val r = resolver(
+            functionMacros = listOf(
+                typedMacro(
+                    0, "twice",
+                    listOf(IsPreprocessorMacroParameter("x", IsPreprocessorExprType.ANY)),
+                    "x * 2",
+                )
+            )
+        )
+        assertEquals(listOf(IsPreprocessorExprType.ANY), r.probableMacroParameterTypes("twice"))
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("twice(\"a\")").ast)
+        assertEquals("An explicitly declared 'any' must accept a string", 0, inference.errors.size)
+    }
+
+    /** A declared type constrains an argument the body alone would not, e.g. `#define pass(int n) n`. */
+    @Test
+    fun `declared parameter type constrains the argument`() {
+        val r = resolver(
+            functionMacros = listOf(
+                typedMacro(
+                    0, "pass",
+                    listOf(IsPreprocessorMacroParameter("n", IsPreprocessorExprType.INT)),
+                    "n",
+                )
+            )
+        )
+        val inference = r.inferenceAt(1)
+        inference.infer(IsPreprocessorExprParser.parse("pass(\"a\")").ast)
+        assertEquals("A declared int parameter must reject a string", 1, inference.errors.size)
+    }
+
+    /** A parameter with a default value may be omitted, but the mandatory ones may not. */
+    @Test
+    fun `default value makes a parameter optional`() {
+        val r = resolver(
+            functionMacros = listOf(
+                typedMacro(
+                    0, "mul",
+                    listOf(
+                        IsPreprocessorMacroParameter("a", IsPreprocessorExprType.INT),
+                        IsPreprocessorMacroParameter("b", IsPreprocessorExprType.INT, defaultValue = "10"),
+                    ),
+                    "a * b",
+                )
+            )
+        )
+        val withDefault = r.inferenceAt(1)
+        withDefault.infer(IsPreprocessorExprParser.parse("mul(2)").ast)
+        assertEquals("The optional argument may be omitted", 0, withDefault.errors.size)
+
+        val withoutMandatory = r.inferenceAt(1)
+        withoutMandatory.infer(IsPreprocessorExprParser.parse("mul()").ast)
+        assertEquals("The mandatory argument is still required", 1, withoutMandatory.errors.size)
+    }
+
+    /** A by-reference parameter needs a bare macro name it can write back into. */
+    @Test
+    fun `by reference parameter requires a macro name`() {
+        val r = resolver(
+            define(0, "target", "0"),
+            functionMacros = listOf(
+                typedMacro(
+                    1, "fill",
+                    listOf(IsPreprocessorMacroParameter("out", IsPreprocessorExprType.INT, byRef = true)),
+                    "out",
+                )
+            )
+        )
+        val literal = r.inferenceAt(2)
+        literal.infer(IsPreprocessorExprParser.parse("fill(1)").ast)
+        assertEquals("A literal must be rejected in a by-reference position", 1, literal.errors.size)
+
+        val name = r.inferenceAt(2)
+        name.infer(IsPreprocessorExprParser.parse("fill(target)").ast)
+        assertEquals("A macro name is a valid by-reference argument", 0, name.errors.size)
     }
 
     @Test

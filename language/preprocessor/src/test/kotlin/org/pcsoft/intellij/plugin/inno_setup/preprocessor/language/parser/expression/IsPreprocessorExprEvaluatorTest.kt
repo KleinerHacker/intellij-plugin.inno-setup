@@ -114,7 +114,7 @@ class IsPreprocessorExprEvaluatorTest {
         // #define f(x) "a" + x  /  f("b") = "ab"
         val r = IsPreprocessorExprValueResolver(
             emptyList(),
-            listOf(IsPreprocessorExprFunctionMacroInfo("f", listOf("x"), "\"a\" + x", 0)),
+            listOf(IsPreprocessorExprFunctionMacroInfo.ofNames("f", listOf("x"), "\"a\" + x", 0)),
         )
         assertEquals(StrValue("ab"), r.evaluate("f(\"b\")", 1))
     }
@@ -129,7 +129,7 @@ class IsPreprocessorExprEvaluatorTest {
                 IsPreprocessorExprDefineInfo("lang", "\"demo.isl\"", 1),
                 IsPreprocessorExprDefineInfo("hello", "demo + anyany(\"y\")", 3),
             ),
-            listOf(IsPreprocessorExprFunctionMacroInfo("anyany", listOf("x"), "lang + x", 2)),
+            listOf(IsPreprocessorExprFunctionMacroInfo.ofNames("anyany", listOf("x"), "lang + x", 2)),
         )
         assertEquals(StrValue("testdemo.isly"), r.valueOfReference("hello", beforeOrder = 4))
     }
@@ -138,7 +138,7 @@ class IsPreprocessorExprEvaluatorTest {
     fun `macro call with a non-computable argument has no value`() {
         val r = IsPreprocessorExprValueResolver(
             emptyList(),
-            listOf(IsPreprocessorExprFunctionMacroInfo("f", listOf("x"), "\"a\" + x", 0)),
+            listOf(IsPreprocessorExprFunctionMacroInfo.ofNames("f", listOf("x"), "\"a\" + x", 0)),
         )
         assertNull(r.evaluate("f(Unknown)", 1))
     }

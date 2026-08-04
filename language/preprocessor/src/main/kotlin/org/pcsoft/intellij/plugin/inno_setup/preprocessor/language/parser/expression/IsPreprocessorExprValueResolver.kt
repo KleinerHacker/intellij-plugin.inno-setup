@@ -96,7 +96,13 @@ class IsPreprocessorExprValueResolver(
             .maxByOrNull { it.order }
             ?: return null
 
-        val bound = macro.parameters.mapIndexedNotNull { i, p -> argValues.getOrNull(i)?.let { p to it } }.toMap()
+        // An omitted argument falls back to the parameter's default expression, evaluated where the macro was
+        // declared — exactly what ISPP does for `#define M(A, B = 10) …` called as `M(1)`.
+        val bound = macro.parameters.mapIndexedNotNull { i, parameter ->
+            val value = argValues.getOrNull(i)
+                ?: parameter.defaultValue?.let { evaluate(it, macro.order) }
+            value?.let { parameter.name to it }
+        }.toMap()
         if (bound.size != macro.parameters.size) return null // an argument was not computable / wrong arity
 
         val key = name.lowercase()

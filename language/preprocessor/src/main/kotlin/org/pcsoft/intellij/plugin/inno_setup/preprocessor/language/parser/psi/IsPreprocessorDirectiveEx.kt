@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNameIdentifierOwner
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorMacroParameter
 
 /**
  * Declares additional behavior mixed into generated PSI interfaces.
@@ -114,6 +115,19 @@ interface IsPreprocessorDirectiveEx : PsiNameIdentifierOwner {
      * an empty list for a parameterless macro `name()` or when this directive is not a function-like macro.
      */
     fun getMacroParameters(): List<String>
+
+    /**
+     * For function-like macros: the declared parameters with their ISPP type, by-reference marker and default
+     * value (e.g. `int A`, `str *Result`, `B = 10`), in order; an empty list otherwise.
+     */
+    fun getMacroParameterDeclarations(): List<IsPreprocessorMacroParameter>
+
+    /**
+     * Offset of the first character *inside* the `(…)` parameter list of a function-like macro, relative to
+     * this directive's text; `-1` when this directive is not a function-like macro. Together with
+     * [IsPreprocessorMacroParameter.offset] it locates a parameter name in the document.
+     */
+    fun getMacroParameterListOffsetInDirective(): Int
 
     /**
      * The raw expression of this `#define` (no quote stripping): for a simple macro the value after the

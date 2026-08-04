@@ -28,6 +28,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.inclu
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.PlatformAnnotationSink
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorForVariableReference
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorMacroParameterReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.*
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
@@ -1040,6 +1041,10 @@ class IsPreprocessorAnnotator : Annotator {
                     spec.predefinedVariables.any { it.name.equals(name, ignoreCase = true) }
             if (knownBuiltin) return@forEach
 
+            // A symbol handed to ISCC from outside (`/D<name>`) is defined for the build although nothing in
+            // the script declares it — reporting it as unresolved would flag a valid script.
+            if (hostFile?.isExternalPreprocessorSymbol(name) == true) return@forEach
+
             // A #sub name: valid only when it is the #for body; anywhere else it is a misuse, not a value.
             if (subNames.any { it.equals(name, ignoreCase = true) }) {
                 if (forBodyRange != null && ref.rangeInElement.startOffset in forBodyRange) return@forEach
@@ -1090,8 +1095,27 @@ class IsPreprocessorAnnotator : Annotator {
         if (exprOffset < 0) return
         val hostFile = InjectedLanguageManager.getInstance(directive.project)
             .getTopLevelFile(directive.containingFile).asIsppHostFile()
+        // Inside a function-like macro body its own parameters are in scope, with the type the declaration
+        // states (`#define M(int A) …`) resp. the one probed from the body — so passing a `str` parameter
+        // into an `int` parameter of another macro is caught right here.
+        val parameters = if (ex.isFunctionMacro()) macroParameterTypes(ex, hostFile) else emptyMap()
         // Shared expression validation: operators, syntax/type errors, array-read bounds.
-        validateExpr(directive, exprText, exprOffset, hostFile, holder)
+        validateExpr(directive, exprText, exprOffset, hostFile, holder, parameters)
+    }
+
+    /** The in-scope types of a function-like macro's own parameters, declared type first. */
+    private fun macroParameterTypes(
+        ex: IsPreprocessorDirectiveEx,
+        hostFile: PsiFile?,
+    ): Map<String, IsPreprocessorExprType> {
+        val declarations = ex.getMacroParameterDeclarations()
+        if (declarations.isEmpty()) return emptyMap()
+        val name = ex.getDefineName()
+        val probed = if (name.isNullOrEmpty()) emptyList()
+        else hostFile?.preprocessorTypeResolver()?.probableMacroParameterTypes(name) ?: emptyList()
+        return declarations.mapIndexed { index, parameter ->
+            parameter.name to (parameter.declaredType ?: probed.getOrNull(index) ?: IsPreprocessorExprType.ANY)
+        }.toMap()
     }
 
     /**
@@ -1386,7 +1410,13 @@ class IsPreprocessorAnnotator : Annotator {
         return hostFile.isppDirectives
             .filter { it !== directive }
             .filter { (it as? IsPreprocessorDirectiveEx)?.isUndef() != true }
-            .any { other -> other.references.any { ref -> ref.canonicalText.equals(name, ignoreCase = true) } }
+            .any { other ->
+                other.references.any { ref ->
+                    // A macro parameter that happens to share the name is a local symbol, not a use.
+                    ref !is IsPreprocessorMacroParameterReference &&
+                            ref.canonicalText.equals(name, ignoreCase = true)
+                }
+            }
     }
 
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: IsAnnotationSink) =

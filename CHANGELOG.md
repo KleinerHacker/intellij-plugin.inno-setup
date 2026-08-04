@@ -57,6 +57,22 @@
   following line, exactly as the Inno Setup preprocessor does it. Such a directive is now parsed, highlighted,
   validated and completed as a single directive instead of breaking parsing at the line break. Trailing spaces
   and tabs behind the backslash are tolerated and removed by the formatter.
+- **Macro parameters are now fully modelled**: the ISPP declaration `[<type>] [*]<name> [= <default>]`
+  (`#define Multiply(int A, int B = 10) A * B`) is parsed, so a call is validated like a built-in call —
+  argument count between the mandatory and the declared parameter count, argument types against the declared
+  ones, and a by-reference parameter (`*`) that does not receive a macro name. An omitted optional argument
+  falls back to its default when the macro's value is computed.
+- Inside a macro body its **parameters are in scope**: they are offered in completion, resolve to their
+  declaration in the parameter list (go-to-definition, Find Usages) and can be renamed with **Shift+F6**
+  throughout the macro — without ever touching the macro name. A parameter with a declared type is
+  type-checked in the body instead of being treated as `any`.
+- Declared parameter types, `*` and default values are shown in **parameter info** (`Ctrl+P`) and in
+  **Quick Documentation** of a macro.
+- **Preprocessor symbols from the command line (`/D`)** now count as defined everywhere, not only for
+  conditional compilation: `{#Name}` emits such a symbol without an "unknown constant" error, an identifier
+  in a `#define`/`#if` expression resolves to it, and both completion lists offer it. A numeric value
+  (`/DVERSION=2`) makes the symbol an integer for the type check. Switching the selected run configuration or
+  editing its build configuration switches the symbols immediately.
 - **Reformat Code handles line continuations**: a continuation is treated like a line end, so no spacing rule
   reaches across it and a multi-line directive keeps its layout. Two new options under **Code Style | Inno
   Setup | Spacing** normalise the space before the trailing `\` and indent the continued lines with the

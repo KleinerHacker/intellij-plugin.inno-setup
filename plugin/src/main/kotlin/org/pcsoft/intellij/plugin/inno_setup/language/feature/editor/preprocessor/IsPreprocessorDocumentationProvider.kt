@@ -170,8 +170,19 @@ class IsPreprocessorDocumentationProvider : AbstractDocumentationProvider() {
         return buildString {
             append(DocumentationMarkup.DEFINITION_START)
             if (define.isFunctionMacro()) {
-                val params =
-                    define.inferParameterTypes().joinToString(", ") { "${it.first}: ${it.second.name.lowercase()}" }
+                // The declaration wins where it states a type, a `*` or a default; an undeclared parameter
+                // falls back to the type probed from the body.
+                val inferred = define.inferParameterTypes()
+                val params = define.getMacroParameterDeclarations().mapIndexed { index, parameter ->
+                    val type = parameter.declaredType?.name?.lowercase()
+                        ?: inferred.getOrNull(index)?.second?.name?.lowercase()
+                    buildString {
+                        append(parameter.name)
+                        type?.let { append(": ").append(it) }
+                        if (parameter.byRef) append("*")
+                        parameter.defaultValue?.let { append(" = ").append(it) }
+                    }
+                }.joinToString(", ")
                 append("<b>$name</b>($params) · macro · ${define.inferType().name.lowercase()}")
             } else {
                 append("<b>$name</b> · define · ${define.inferType().name.lowercase()}")

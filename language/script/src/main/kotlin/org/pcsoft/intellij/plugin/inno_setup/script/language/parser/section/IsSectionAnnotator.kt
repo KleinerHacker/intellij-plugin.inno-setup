@@ -30,6 +30,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.inclu
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsBranchAnalysis
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorBranchAnalysis
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isExternalPreprocessorSymbol
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
@@ -946,8 +947,13 @@ class IsSectionAnnotator : Annotator {
             return
         }
 
+        // ISCC `/D<name>` symbols of the selected build configuration have no declaration in the script, but
+        // they are defined for the build — emitting one via {#Name} is legitimate, not an unknown constant.
+        val isExternal = isIspp && constant.containingFile?.isExternalPreprocessorSymbol(name) == true
+
         val known = when {
-            isIspp -> name in isppNames || predefinedNames.any { it.equals(name, ignoreCase = true) }
+            isIspp -> name in isppNames || predefinedNames.any { it.equals(name, ignoreCase = true) } ||
+                    isExternal
             else -> builtins.any { it.name.equals(name, ignoreCase = true) }
         }
 

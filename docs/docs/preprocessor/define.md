@@ -137,9 +137,10 @@ called function and highlights the argument you are currently typing:
 
 * for a **built-in**, straight from its signature — `S: str, Index: int, Count: int → str`, including
   `*` for a by-reference parameter and the default value of an optional one;
-* for a **function-like macro** of your script, ISPP declares no types, so the types inferred from the macro
-  body are shown where they can be determined (`#define Pad(n) "0" + Str(n)` → `n: int → str`) and the plain
-  parameter name otherwise.
+* for a **function-like macro** of your script, straight from its parameter declaration where one states a
+  type, a `*` or a default (`#define Multiply(int A, int B = 10)` → `A: int, B: int = 10 → int`); for an
+  undeclared parameter the type inferred from the macro body is shown where it can be determined
+  (`#define Pad(n) "0" + Str(n)` → `n: int → str`) and the plain parameter name otherwise.
 
 ### Recursive reference resolution
 
@@ -175,13 +176,50 @@ function, or a `{…}` constant) is intentionally **not** flagged, to avoid fals
 
 ### Function-like macro bodies
 
-The expression rules apply to function-like macro bodies too; the parameters are treated as `any`, so they
-never trigger type errors:
+The expression rules apply to function-like macro bodies too. A parameter without a declared type is `any`
+unless the body constrains it — `x * 2` can only work with an integer, so `x` is treated as `int`:
 
 ```ini
 #define Max(a, b) a > b ? a : b
 #define Clamp(x)  x < 0 ? 0 : x
 ```
+
+Inside the body the parameters are in scope: they are offered in completion, **Ctrl+B** jumps from a use to
+its declaration in the parameter list, Find Usages lists the uses, and **Shift+F6** renames the parameter
+throughout the macro — and only there, never the macro name.
+
+### Macro parameters: types, by-reference and defaults
+
+ISPP declares a parameter as `[<type>] [*]<name> [= <default>]`, with `<type>` being `any`, `int`, `str` or
+`func`. The plugin parses that declaration and validates every call against it:
+
+```ini
+#define Multiply(int A, int B = 10)  A * B
+#define Pad(str S, int Width = 2)    S + Copy("00", 1, Width)
+#define Split(str S, str *Rest)      Copy(S, 1, Pos(",", S) - 1)
+```
+
+| Declaration        | Meaning                                                                            |
+|--------------------|------------------------------------------------------------------------------------|
+| `int A`            | the argument must be integer-compatible, otherwise it is flagged                    |
+| `str S`            | the argument must be string-compatible                                              |
+| `any V` / no type  | every argument is accepted; without a type the body may still narrow it             |
+| `func F`           | a macro-valued parameter — accepted like `any`                                       |
+| `B = 10`           | optional: the argument may be omitted, and the default is used for the value        |
+| `*Rest`            | by reference: the argument must be a bare macro name ISPP can write back into       |
+
+A call is therefore checked exactly like a built-in call: the argument count must lie between the number of
+mandatory parameters and the declared parameter count, and every argument must fit its parameter's type.
+
+```ini
+#define X  Multiply(2)          ; fine — B defaults to 10
+#define Y  Multiply()           ; error: expects 1 to 2 arguments, but got 0
+#define Z  Multiply("a", 2)     ; error: argument 1 ('A') must be int, but got str
+#define W  Split("a,b", "lit")  ; error: argument 2 ('Rest') is passed by reference
+```
+
+The declared types, the `*` and the default values also show up in the parameter info popup (**Ctrl+P**) and
+in Quick Documentation (**Ctrl+Q**) of the macro.
 
 ---
 

@@ -20,6 +20,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.externalPreprocessorSymbols
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
@@ -90,6 +91,24 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
                             ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
                         },
                     3.0
+                )
+            )
+        }
+
+        // ISCC `/D<name>` symbols of the selected build configuration — emittable like a #define, but
+        // declared outside the script.
+        file.externalPreprocessorSymbols().forEach { (name, value) ->
+            result.addElement(
+                PrioritizedLookupElement.withPriority(
+                    LookupElementBuilder.create("#$name")
+                        .withTypeText("build config")
+                        .withTailText(value?.let { " = $it" } ?: "", true)
+                        .withIcon(IsIcons.Variable)
+                        .withInsertHandler { ctx, _ ->
+                            ctx.document.insertString(ctx.tailOffset, "}")
+                            ctx.editor.caretModel.moveToOffset(ctx.tailOffset)
+                        },
+                    4.0
                 )
             )
         }

@@ -26,10 +26,13 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.inclu
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsIncludeFileReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorExpressionReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorForVariableReference
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorMacroParameterReference
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IS_PREPROCESSOR_BOOLEAN_WORDS
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorBuiltinParameterKind
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprTokenType
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprTokenizer
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorMacroParameter
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.parseMacroParameters
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorQuotedString
@@ -377,17 +380,36 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    override fun getMacroParameters(): List<String> {
-        if (!isFunctionMacro()) return emptyList()
-        val after = rawAfterName() ?: return emptyList()
-        val close = matchingParen(after) ?: return emptyList()
+    override fun getMacroParameters(): List<String> = getMacroParameterDeclarations().map { it.name }
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getMacroParameterDeclarations(): List<IsPreprocessorMacroParameter> =
+        parseMacroParameters(rawMacroParameterList() ?: return emptyList())
+
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    override fun getMacroParameterListOffsetInDirective(): Int {
+        if (!isFunctionMacro()) return -1
+        val directive = this as IsPreprocessorDirective
+        val value = directive.value ?: return -1
+        val after = rawAfterName() ?: return -1
+        val valueOffsetInDirective = value.textRange.startOffset - directive.textRange.startOffset
+        // +1 skips the '(' itself, so the offset points at the first character of the parameter list.
+        return valueOffsetInDirective + (value.text.length - after.length) + 1
+    }
+
+    /** The raw text between `(` and `)` of a function-like macro, continuations replaced by a space. */
+    private fun rawMacroParameterList(): String? {
+        if (!isFunctionMacro()) return null
+        val after = rawAfterName() ?: return null
+        val close = matchingParen(after) ?: return null
         // The parameter list may be spread over several physical lines with a trailing backslash; the
-        // continuation is whitespace and must not end up in a parameter name.
-        return after.substring(1, close)        // text between '(' and ')'
-            .replace(IS_PREPROCESSOR_CONTINUATION, " ")
-            .split(',')
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
+        // continuation is whitespace and must not end up in a parameter name. The replacement keeps the
+        // text length, so offsets into it stay valid document offsets.
+        return after.substring(1, close).replace(IS_PREPROCESSOR_CONTINUATION) { " ".repeat(it.value.length) }
     }
 
     /** The names declared as macro parameters (e.g. `a`, `b` in `name(a,b)`) — these are local, not references. */
@@ -413,11 +435,25 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
         val visibility = visibilityNode()
         val params = if (isExprDefine) macroParameterNames() else emptySet()
         val symbolArgs = symbolArgumentNodes()
+        val declarationRange = if (isExprDefine) macroParameterListRangeInDirective() else null
+        val base = (this as IsPreprocessorDirective).textRange.startOffset
         return valueIdentifiers()
             .filter { it !== name }          // not the define's own name / pragma sub-command
             .filter { it !== visibility }    // not a scope/visibility keyword
             .filter { it.text !in params }   // not a macro parameter (declaration or use)
+            // Nothing inside the `(…)` parameter list is a reference: neither a parameter name nor a type
+            // keyword (`int A`) — they declare, they do not refer.
+            .filter { declarationRange == null || (it.startOffset - base) !in declarationRange }
             .filter { it !in symbolArgs }    // not the un-evaluated symbol argument of `Defined(X)` & co.
+    }
+
+    /** The directive-relative offsets covered by a function-like macro's `(…)` parameter list, or `null`. */
+    private fun macroParameterListRangeInDirective(): IntRange? {
+        val listOffset = getMacroParameterListOffsetInDirective()
+        if (listOffset < 0) return null
+        val bodyOffset = getDefineExpressionOffsetInDirective()
+        if (bodyOffset < listOffset) return null
+        return listOffset until bodyOffset
     }
 
     /**
@@ -566,12 +602,32 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
             return refs.toTypedArray()
         }
         val ids = expressionReferenceIdentifiers()
-        if (ids.isEmpty()) return PsiReference.EMPTY_ARRAY
+        val parameterIds = macroParameterUseIdentifiers()
+        if (ids.isEmpty() && parameterIds.isEmpty()) return PsiReference.EMPTY_ARRAY
         val directive = this as IsPreprocessorDirective
         val base = directive.textRange.startOffset
-        return ids.map { id ->
+        val refs = ids.map<ASTNode, PsiReference> { id ->
             IsPreprocessorExpressionReference(directive, id.startOffset - base, id.text)
-        }.toTypedArray()
+        } + parameterIds.map { id ->
+            IsPreprocessorMacroParameterReference(directive, id.startOffset - base, id.text)
+        }
+        return refs.toTypedArray()
+    }
+
+    /**
+     * The identifiers in a function-like macro's **body** that use one of its own parameters.
+     *
+     * The declaration inside the `(…)` list is excluded — it is the declaration, not a use — by keeping only
+     * identifiers at or after the body offset.
+     */
+    private fun macroParameterUseIdentifiers(): List<ASTNode> {
+        if (!isDefine() || !isFunctionMacro()) return emptyList()
+        val params = macroParameterNames()
+        if (params.isEmpty()) return emptyList()
+        val bodyOffset = getDefineExpressionOffsetInDirective()
+        if (bodyOffset < 0) return emptyList()
+        val base = (this as IsPreprocessorDirective).textRange.startOffset
+        return valueIdentifiers().filter { it.text in params && (it.startOffset - base) >= bodyOffset }
     }
 
     /** The non-empty `#for` slots (init/cond/incr/body) paired with their offset inside the directive's text. */

@@ -18,6 +18,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.TokenSet
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.reference.IsPreprocessorMacroParameterElement
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorLexerAdapter
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorTypes
@@ -41,7 +42,8 @@ class IsPreprocessorFindUsagesProvider : FindUsagesProvider {
      * Returns or performs the public behavior represented by this member.
      */
     override fun canFindUsagesFor(element: PsiElement): Boolean =
-        element is IsPreprocessorDirectiveEx && element.isDefine()
+        (element is IsPreprocessorDirectiveEx && element.isDefine()) ||
+                element is IsPreprocessorMacroParameterElement
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -51,7 +53,8 @@ class IsPreprocessorFindUsagesProvider : FindUsagesProvider {
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    override fun getType(element: PsiElement): String = "ISPP define"
+    override fun getType(element: PsiElement): String =
+        if (element is IsPreprocessorMacroParameterElement) "ISPP macro parameter" else "ISPP define"
 
     /**
      * Returns or performs the public behavior represented by this member.

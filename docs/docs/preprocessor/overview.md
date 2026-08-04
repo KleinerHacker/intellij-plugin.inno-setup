@@ -69,6 +69,37 @@ variable. See [`#define`](define.md) for details and the predefined variables us
 
 ---
 
+## Symbols from the command line (`/D`)
+
+ISCC accepts `/D<name>[=<value>]` to define a symbol from outside the script, which is the usual way to
+switch a build between Debug and Release. The plugin takes these symbols from the **build configuration** of
+the currently selected run configuration (see [Run configuration](../run-configuration.md)), so they behave
+like a `#define` written at the very top of the script:
+
+```ini
+; Build configuration options:  /DDEBUG /DVERSION=2
+
+#ifdef DEBUG
+[Setup]
+AppName=My App (Debug)
+#endif
+
+[Setup]
+AppVerName=My App {#VERSION}
+```
+
+- `#ifdef`/`#if` conditions are decided with them, so a branch is dimmed instead of staying undecidable
+- `{#Name}` emits such a symbol without an "unknown constant" error, and it is offered in completion
+- an identifier in a `#define`/`#if` expression resolves to it instead of being reported as unresolved; a
+  numeric value (`/DVERSION=2`) makes it an `int`, a valueless `/DDEBUG` stays `any`
+- selecting another run configuration — or editing its build configuration — immediately switches the
+  symbols; a name no longer defined becomes unknown again
+
+Since the symbol has no declaration inside the script, there is nothing to navigate to: go-to-definition and
+Find Usages do not apply to it.
+
+---
+
 ## Working with `#include`
 
 An `#include "file"` path resolves to the referenced `.iss` file (relative to the including script's

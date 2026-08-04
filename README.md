@@ -68,7 +68,9 @@ using.
 | **ISPP support**           | Preprocessor directives (`#define`/`#undef` with scope keywords, `#include`, `#if`/`#elif`/`#else`/`#endif`, …) are parsed, highlighted, completed, validated, and reference-resolved |
 | **ISPP function checking** | Calls to built-in preprocessor functions are checked against their signature: argument count (optional parameters included), argument types, by-reference parameters, and results that carry no value |
 | **ISPP line continuation** | A `#…` line ending with a backslash continues on the next line and is treated as one directive throughout the editor |
-| **ISPP parameter info**    | `Ctrl+P` inside a call shows the parameter list and highlights the current argument — for built-ins from their signature, for function-like macros from the types inferred from the macro body |
+| **ISPP macro parameters**  | A function-like macro declares its parameters like ISPP does (`#define M(int A, str *S, B = 10)`); calls are checked against that declaration, and the parameters are completed, resolvable and renameable inside the macro body |
+| **ISPP build symbols**     | The `/D` symbols of the selected build configuration count as defined everywhere: conditions, `{#Name}` emission, expressions and completion |
+| **ISPP parameter info**    | `Ctrl+P` inside a call shows the parameter list and highlights the current argument — for built-ins from their signature, for function-like macros from their parameter declaration resp. the types inferred from the macro body |
 
 ### IDE Compatibility
 

@@ -20,6 +20,7 @@ import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.ProcessingContext
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.externalPreprocessorSymbols
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDirectivesWithHostOffset
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
@@ -66,7 +67,10 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
             // plus its parameter list, so it is visually distinct from a plain value define.
             val element = if (dex.isFunctionMacro()) {
                 LookupElementBuilder.create(name)
-                    .withTailText("(${dex.getMacroParameters().joinToString(", ")})", true)
+                    .withTailText(
+                        "(${dex.getMacroParameterDeclarations().joinToString(", ") { it.presentation }})",
+                        true
+                    )
                     .withTypeText("macro")
                     .withIcon(IsIcons.Function)
             } else {
@@ -109,6 +113,19 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
                 }
         }
 
+        // The parameters of the enclosing function-like macro are in scope within its own body.
+        (PsiTreeUtil.getParentOfType(position, IsPreprocessorDirective::class.java) as? IsPreprocessorDirectiveEx)
+            ?.takeIf { it.isDefine() && it.isFunctionMacro() }
+            ?.getMacroParameterDeclarations()
+            ?.forEach { parameter ->
+                adjusted.addElement(
+                    LookupElementBuilder.create(parameter.name)
+                        .withTypeText(parameter.declaredType?.name?.lowercase() ?: "parameter")
+                        .withTailText(parameter.defaultValue?.let { " = $it" } ?: "", true)
+                        .withIcon(IsIcons.Variable)
+                )
+            }
+
         // The loop variable of the enclosing #for is in scope within that loop's own slots.
         (PsiTreeUtil.getParentOfType(position, IsPreprocessorDirective::class.java) as? IsPreprocessorDirectiveEx)
             ?.takeIf { it.isFor() }
@@ -121,6 +138,15 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
                         .withIcon(IsIcons.Variable)
                 )
             }
+
+        // ISCC `/D<name>` symbols of the selected build configuration are in scope like a #define.
+        hostFile.externalPreprocessorSymbols().forEach { (name, value) ->
+            adjusted.addElement(
+                LookupElementBuilder.create(name)
+                    .withTypeText(value?.let { "= $it · build config" } ?: "build config")
+                    .withIcon(IsIcons.Variable)
+            )
+        }
 
         // Predefined ISPP variables are always available in an expression.
         service<IsPreprocessorService>().spec.predefinedVariables.forEach { variable ->
