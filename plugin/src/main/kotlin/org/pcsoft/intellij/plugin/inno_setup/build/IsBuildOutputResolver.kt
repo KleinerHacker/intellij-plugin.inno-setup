@@ -15,8 +15,6 @@ package org.pcsoft.intellij.plugin.inno_setup.build
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
-import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver.Companion.computeOutputArg
-import org.pcsoft.intellij.plugin.inno_setup.build.IsBuildOutputResolver.Companion.detectBuildSubdir
 import java.io.File
 
 /**
@@ -93,9 +91,10 @@ class IsBuildOutputResolver(private val project: Project) {
                 IsBuildOutputMode.SCRIPT -> null
                 IsBuildOutputMode.BUILD_DIR -> {
                     val relative = scriptOutputDir ?: "Output"
-                    // ISCC expects the path after /O wrapped in double quotes.
+                    // Unquoted on purpose: the argument goes to GeneralCommandLine as a single parameter,
+                    // which quotes it for Windows itself. See IsScriptRunnerLogic.outputArg.
                     if (File(relative).isAbsolute) null
-                    else "/O\"" + File(buildRoot, relative).path + "\""
+                    else "/O" + File(buildRoot, relative).path
                 }
             }
     }

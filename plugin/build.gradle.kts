@@ -285,3 +285,49 @@ registerTestSuite(
     "Runs the integration test suite: test classes named *IT."
 ) { includeTestsMatching("*IT") }
 
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+// The official Inno Setup example corpus (IsExampleScriptBuildIT)
+//
+// The same third-party corpus the :language:script integration tests analyse — downloaded from a pinned
+// upstream tag before the tests run, handed over through a system property and deleted again afterwards, so a
+// checkout never carries foreign sources. Here it feeds the *build* tests: every example is compiled with the
+// real ISCC through the plugin's own compiler service.
+//
+// Placed after the suites above because they are registered lazily by `intellijPlatformTesting.testIde` and
+// only exist as tasks from that point on.
+// ─────────────────────────────────────────────────────────────────────────────────────────────
+val innoSetupExamplesDir = layout.buildDirectory.dir("inno-setup-examples")
+val innoSetupExamplesArchive = layout.buildDirectory.file("tmp/inno-setup-examples.tar.gz")
+
+val downloadInnoSetupExamples =
+    tasks.register<org.pcsoft.intellij.plugin.inno_setup.gradle.InnoSetupExamplesTask>("downloadInnoSetupExamples") {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Downloads the official Inno Setup example scripts the build integration tests compile."
+        tag.set(libs.versions.innoSetupExamples)
+        examplesDir.set(innoSetupExamplesDir)
+        archive.set(innoSetupExamplesArchive)
+    }
+
+val cleanInnoSetupExamples = tasks.register<Delete>("cleanInnoSetupExamples") {
+    group = LifecycleBasePlugin.VERIFICATION_GROUP
+    description = "Removes the downloaded Inno Setup example corpus again."
+    delete(innoSetupExamplesDir, innoSetupExamplesArchive)
+}
+
+// The Inno Setup installation the build tests compile with. Overridable with -PinnoSetupHome=… or the
+// INNO_SETUP_HOME environment variable; the default is the standard 64-bit Windows installation location.
+val innoSetupHome: String = providers.gradleProperty("innoSetupHome")
+    .orElse(providers.environmentVariable("INNO_SETUP_HOME"))
+    .getOrElse("""C:\Program Files (x86)\Inno Setup 6""")
+
+// `developerTest` is deliberately left out: it excludes *IT and must stay offline and independent of an
+// installed Inno Setup.
+listOf("test", "integrationTest").forEach { taskName ->
+    tasks.named<Test>(taskName) {
+        dependsOn(downloadInnoSetupExamples)
+        finalizedBy(cleanInnoSetupExamples)
+        systemProperty("innoSetup.examples.dir", innoSetupExamplesDir.get().asFile.absolutePath)
+        systemProperty("innoSetup.installation.dir", innoSetupHome)
+    }
+}
+

@@ -31,9 +31,8 @@ class IsScriptRunnerLogicTest {
         val buildRoot = tmp.newFolder("build")
         val tempBase = tmp.newFolder("temp")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, null, tempBase)
-        assertTrue(arg.startsWith("/O\""))
-        assertTrue("must be under tempBase", arg.startsWith("/O\"${tempBase.path}"))
-        assertTrue("path is quoted", arg.endsWith("\""))
+        assertTrue("must be under tempBase", arg.startsWith("/O${tempBase.path}"))
+        assertFalse("the path must not be quoted — GeneralCommandLine quotes it", arg.contains('"'))
     }
 
     @Test
@@ -52,7 +51,7 @@ class IsScriptRunnerLogicTest {
         val persistent = tmp.newFolder("persistent").path
         val arg1 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, persistent, tempBase)
         val arg2 = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.DRY, buildRoot, null, persistent, tempBase)
-        assertEquals("/O\"$persistent\"", arg1)
+        assertEquals("/O$persistent", arg1)
         assertEquals(arg1, arg2)
     }
 
@@ -60,22 +59,21 @@ class IsScriptRunnerLogicTest {
     fun `BUILD_DIR mode uses buildRoot with relative scriptOutputDir`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.BUILD_DIR, buildRoot, "Release")
-        assertTrue(arg.startsWith("/O\""))
-        assertTrue(arg.endsWith("Release\""))
+        assertEquals("/O" + File(buildRoot, "Release").path, arg)
     }
 
     @Test
     fun `BUILD_DIR mode falls back to Output when scriptOutputDir is null`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.BUILD_DIR, buildRoot, null)
-        assertTrue(arg.endsWith("Output\""))
+        assertEquals("/O" + File(buildRoot, "Output").path, arg)
     }
 
     @Test
     fun `SCRIPT mode uses buildRoot with scriptOutputDir`() {
         val buildRoot = tmp.newFolder("build")
         val arg = IsScriptRunnerLogic.buildOutputArg(IsBuildOutputMode.SCRIPT, buildRoot, "Dist")
-        assertTrue(arg.endsWith("Dist\""))
+        assertEquals("/O" + File(buildRoot, "Dist").path, arg)
     }
 
     // ── buildInstallerArgs ────────────────────────────────────────────────────

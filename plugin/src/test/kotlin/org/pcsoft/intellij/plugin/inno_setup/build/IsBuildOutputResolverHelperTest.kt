@@ -44,15 +44,15 @@ class IsBuildOutputResolverHelperTest {
         val buildRoot = File(tempDir.root, "out")
         val arg = IsBuildOutputResolver.computeOutputArg(IsBuildOutputMode.BUILD_DIR, "Output", buildRoot)
         assertNotNull(arg)
-        assertTrue(arg!!.startsWith("/O\""))
-        assertEquals(File(buildRoot, "Output").path, arg.removePrefix("/O").removeSurrounding("\""))
+        // Unquoted: GeneralCommandLine performs the Windows quoting of the parameter itself.
+        assertEquals("/O" + File(buildRoot, "Output").path, arg)
     }
 
     @Test
     fun `build dir defaults to Output when script has none`() {
         val buildRoot = File(tempDir.root, "build")
         val arg = IsBuildOutputResolver.computeOutputArg(IsBuildOutputMode.BUILD_DIR, null, buildRoot)
-        assertEquals(File(buildRoot, "Output").path, arg!!.removePrefix("/O").removeSurrounding("\""))
+        assertEquals("/O" + File(buildRoot, "Output").path, arg)
     }
 
     @Test

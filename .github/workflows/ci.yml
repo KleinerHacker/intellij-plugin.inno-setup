@@ -96,12 +96,15 @@ jobs:
   # guards and the validation against the official Inno Setup example corpus. Runs at the same time as the
   # developer tests, from the identical setup.
   #
-  # NETWORK: `integrationTest` depends on :language:script:downloadInnoSetupExamples, which fetches the
-  # Examples/ directory of the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party
-  # scripts are deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes
-  # them again. Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  # NETWORK: `integrationTest` depends on downloadInnoSetupExamples, which fetches the Examples/ directory of
+  # the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party scripts are
+  # deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes them again.
+  # Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  #
+  # WINDOWS: IsExampleScriptBuildIT compiles every example with the real ISCC.exe, which exists on Windows
+  # only. The whole integration suite therefore runs on a Windows runner with Inno Setup installed.
   test-integration:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -112,7 +115,14 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
+      # The build tests compile through the plugin's own pipeline, which needs a real compiler.
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+        shell: pwsh
+
       - name: Run integration tests
+        env:
+          INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
         run: ./gradlew integrationTest --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.

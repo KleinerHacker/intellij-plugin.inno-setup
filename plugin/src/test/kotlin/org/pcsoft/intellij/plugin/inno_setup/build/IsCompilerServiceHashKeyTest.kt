@@ -31,7 +31,7 @@ class IsCompilerServiceHashKeyTest : IsTimedTestCase() {
     // directory need not exist; File.canonicalPath resolves "…/sub/.." purely textually for a missing path.
     private val projectDir = File(System.getProperty("java.io.tmpdir"), "inno-setup-hash-key-test")
     private val script = File(projectDir, "setup.iss").path
-    private val output = "/O\"" + File(projectDir, "out").path + "\""
+    private val output = "/O" + File(projectDir, "out").path
 
     private fun key(config: IsBuildConfiguration?, path: String = script, outputArg: String? = output) =
         IsCompilerService.hashKey(path, outputArg, config)

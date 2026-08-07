@@ -72,8 +72,11 @@ jobs:
 
   # Integration tests: test classes named *IT. Runs at the same time as the developer tests,
   # from the identical setup.
+  #
+  # WINDOWS: IsExampleScriptBuildIT compiles every official example with the real ISCC.exe, which exists on
+  # Windows only — hence the Windows runner and the Inno Setup installation.
   test-integration:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       # The local composite action can only be resolved once the repo is on disk.
@@ -82,7 +85,13 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+        shell: pwsh
+
       - name: Run integration tests
+        env:
+          INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
         run: ./gradlew integrationTest --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.
