@@ -65,7 +65,8 @@ jobs:
   # Runs in parallel with the integration tests, both fed by the build job's cache.
   test-developer:
     runs-on: ubuntu-latest
-    needs: build
+    needs:
+      - build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -253,8 +254,6 @@ jobs:
   # (see release.yml). No deployment happens from this workflow.
   validate-docs:
     runs-on: ubuntu-latest
-    # Gated on the tests, like every other downstream job.
-    needs: tests
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
