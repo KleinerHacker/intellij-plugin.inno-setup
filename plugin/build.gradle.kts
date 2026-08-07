@@ -81,7 +81,11 @@ intellijPlatform {
                 IntelliJPlatformType.Rider,
                 IntelliJPlatformType.CLion,
                 IntelliJPlatformType.GoLand,
-            ).forEach { create(it, verificationVersion) }
+                // The IDEs are resolved from their archives instead of their installers: the IntelliJ Platform
+                // Gradle Plugin does not support Rider as a target platform with `useInstaller = true` and
+                // warns about it on every verification run. The setting is applied to the whole matrix so all
+                // four IDEs are obtained the same way.
+            ).forEach { create(it, verificationVersion, useInstaller = false) }
         }
     }
 
