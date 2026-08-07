@@ -222,4 +222,4 @@ first to discuss larger changes.
 
 ## Licenses
 
-See [LICENSES](https://kleinerhacker.github.io/intellij-plugin.inno-setup/licences/) for details.
+See [LICENSES](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/licences/) for details.

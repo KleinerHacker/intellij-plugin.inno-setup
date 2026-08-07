@@ -16,6 +16,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess
 import com.intellij.task.TaskRunnerResults
 import com.intellij.util.ThrowableRunnable
 import junit.framework.TestCase
@@ -60,6 +61,19 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
 
     override fun setUp() {
         super.setUp()
+
+        // The corpus is compiled where it was downloaded to (plugin/build/inno-setup-examples) rather than
+        // copied into the fixture project: ISCC resolves an example's includes and payload relative to that
+        // directory, so a lone copied *.iss would not compile. A platform test may only touch a fixed set of
+        // roots, though, and the corpus is not among them — every access ends in VfsRootAccessNotAllowedError.
+        //
+        // On a developer machine this passed by accident: the allowed roots contain the user home, and a
+        // project checked out below it is covered incidentally. On CI the workspace sits on D: while the home
+        // is on C:, so the corpus falls outside every root and all example builds failed at once.
+        IsBuildExampleCorpus.directory?.let {
+            VfsRootAccess.allowRootAccess(testRootDisposable, it.absolutePath)
+        }
+
         val settings = IsSettingsService.getInstance().state
         previousInstallationPath = settings.installationPath
         settings.installationPath = IsBuildExampleCorpus.installationDir?.absolutePath
@@ -229,10 +243,13 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
             return suite
         }
 
-        /** A stand-alone test case that always fails with [message] — used to report a broken environment. */
+        /**
+         * A stand-alone test case that always fails with [message] — used to report a broken environment.
+         *
+         * [IsEnvironmentFailureIT] is a named class rather than an anonymous one because the suite filter
+         * matches on the class name; see the class documentation there.
+         */
         private fun failing(testName: String, message: String): TestCase =
-            object : TestCase(testName) {
-                override fun runTest() = fail(message)
-            }
+            IsEnvironmentFailureIT(testName, message)
     }
 }
