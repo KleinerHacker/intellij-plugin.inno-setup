@@ -133,6 +133,9 @@ class IsExampleScriptBuildIT private constructor(
      * The compile is guarded by [CompilerWatchdog] so a script that waits for input can never stall the run.
      */
     private fun buildExample() {
+        // Only reachable for a case created through the public constructor, which always carries a script;
+        // the environment report never gets here (see runTestRunnable).
+        val script = script!!
         val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(script)
         assertNotNull("The example ${script.name} is not visible in the virtual file system", virtualFile)
 
