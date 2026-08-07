@@ -38,11 +38,26 @@ import java.io.File
  * `INNO_SETUP_HOME` (see [IsBuildExampleCorpus]). Examples whose payload is not part of the corpus are
  * excluded through `src/test/resources/examples/build-skip.yaml`.
  *
- * @constructor Creates the test case that builds [script].
+ * A broken environment — no corpus, no `ISCC.exe` — is reported through this same class rather than through a
+ * `TestCase` of its own, because the suites are separated by class name (`excludeTestsMatching("*IT")` /
+ * `includeTestsMatching("*IT")` in `plugin/build.gradle.kts`) and that filter sees the class of the test
+ * *object*, not the name of the enclosing suite. Any other carrier gets both directions wrong: an anonymous
+ * `object : TestCase` is called `…$Companion$failing$1`, so it escapes the exclusion and fails the developer
+ * suite (which deliberately never downloads the corpus) while being silently dropped from the integration
+ * suite it is meant to guard; a named nested class is additionally picked up by Gradle's own test detection —
+ * that scans class files and ignores Kotlin visibility — and, having no `(String)` constructor, is replaced
+ * by JUnit's synthetic `warning` case, which runs as `junit.framework.TestSuite$1` and fails everywhere.
+ *
+ * @constructor Creates the test case that builds [script], or — when [failureMessage] is set — the case that
+ *   reports the broken environment described by it.
  */
-class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTestCase() {
+class IsExampleScriptBuildIT private constructor(
+    private val script: File?,
+    private val failureMessage: String?,
+) : IsTimedBasePlatformTestCase() {
 
-    init {
+    /** Creates the case that builds [script]. */
+    constructor(script: File) : this(script, null) {
         // JUnit 3 identifies a dynamically created test case by its name; it also feeds the temp directories
         // of the fixture, so it is reduced to path-safe characters.
         name = "testBuild_" + script.name.replace(Regex("[^A-Za-z0-9]"), "_")
@@ -62,6 +77,9 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
     override fun setUp() {
         super.setUp()
 
+        // Nothing to prepare for the environment report — there is no script to build.
+        if (failureMessage != null) return
+
         // The corpus is compiled where it was downloaded to (plugin/build/inno-setup-examples) rather than
         // copied into the fixture project: ISCC resolves an example's includes and payload relative to that
         // directory, so a lone copied *.iss would not compile. A platform test may only touch a fixed set of
@@ -77,13 +95,15 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
         val settings = IsSettingsService.getInstance().state
         previousInstallationPath = settings.installationPath
         settings.installationPath = IsBuildExampleCorpus.installationDir?.absolutePath
-        outputDir = FileUtil.createTempDirectory("inno-build-${script.nameWithoutExtension}", null, true)
+        outputDir = FileUtil.createTempDirectory("inno-build-${script!!.nameWithoutExtension}", null, true)
     }
 
     override fun tearDown() {
         try {
-            IsSettingsService.getInstance().state.installationPath = previousInstallationPath
-            outputDir.deleteRecursively()
+            if (failureMessage == null) {
+                IsSettingsService.getInstance().state.installationPath = previousInstallationPath
+                outputDir.deleteRecursively()
+            }
         } finally {
             super.tearDown()
         }
@@ -98,7 +118,7 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
      */
     @Throws(Throwable::class)
     override fun runTestRunnable(testRunnable: ThrowableRunnable<Throwable>) {
-        super.runTestRunnable { buildExample() }
+        super.runTestRunnable { failureMessage?.let { fail(it) } ?: buildExample() }
     }
 
     /**
@@ -194,31 +214,6 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
         }
     }
 
-    /**
-     * The case [failing] hands out: it reports a broken environment (missing corpus, missing `ISCC.exe`) as an
-     * ordinary failing test instead of silently compiling nothing.
-     *
-     * Both properties of this declaration carry weight for the suite separation, which is done purely by class
-     * name (`excludeTestsMatching("*IT")` / `includeTestsMatching("*IT")` in `plugin/build.gradle.kts`) and
-     * which sees the class of the test *object*, not the name of the enclosing suite:
-     *
-     * - **The name ends in `IT`** — as `IsExampleScriptBuildIT$FailureIT`. An anonymous `object : TestCase`
-     *   is called `…$Companion$failing$1`, slips past the exclusion and fails the developer suite, which
-     *   deliberately never downloads the corpus.
-     * - **It is private and nested** — a public top-level `TestCase` subclass would additionally be picked up
-     *   by Gradle's own test detection. Lacking a `(String)` or no-arg constructor, JUnit would then replace
-     *   it with its synthetic `warning` case, which runs as `junit.framework.TestSuite$1` and thereby escapes
-     *   the very filter this class is named for.
-     *
-     * @constructor Creates the case named [name] that fails with [message].
-     */
-    private class FailureIT(name: String, private val message: String) : TestCase(name) {
-
-        override fun runTest() {
-            fail(message)
-        }
-    }
-
     companion object {
 
         /**
@@ -268,7 +263,11 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
             return suite
         }
 
-        /** A stand-alone test case that always fails with [message] — used to report a broken environment. */
-        private fun failing(testName: String, message: String): TestCase = FailureIT(testName, message)
+        /**
+         * A test case that always fails with [message] — used to report a broken environment. It is an
+         * instance of the suite's own class on purpose; see the class documentation.
+         */
+        private fun failing(testName: String, message: String): TestCase =
+            IsExampleScriptBuildIT(null, message).apply { name = testName }
     }
 }
