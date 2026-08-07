@@ -92,8 +92,14 @@ jobs:
           # An empty artifact would silently hide a broken path; fail loudly instead.
           if-no-files-found: error
 
-  # Integration tests: test classes named *IT — shipped-artifact smoke tests and the timing-based
-  # performance guards. Runs at the same time as the developer tests, from the identical setup.
+  # Integration tests: test classes named *IT — shipped-artifact smoke tests, the timing-based performance
+  # guards and the validation against the official Inno Setup example corpus. Runs at the same time as the
+  # developer tests, from the identical setup.
+  #
+  # NETWORK: `integrationTest` depends on :language:script:downloadInnoSetupExamples, which fetches the
+  # Examples/ directory of the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party
+  # scripts are deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes
+  # them again. Only the derived fingerprints in language/script/src/test/resources/examples are committed.
   test-integration:
     runs-on: ubuntu-latest
     env:

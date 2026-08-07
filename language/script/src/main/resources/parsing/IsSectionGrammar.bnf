@@ -42,6 +42,8 @@
     QUOTE            = "\""
     STRING_PART      = "regexp:[^\"{\r\n]+"
     VALUE_CHAR       = "regexp:[^\r\n]"
+    // One line of free-form Pascal inside [Code]; produced by the lexer's IN_CODE state only.
+    CODE_LINE        = "regexp:[^\r\n]+"
   ]
 }
 
@@ -57,6 +59,7 @@ private item ::= block
                | parameterEntry
                | preprocessorLine
                | comment
+               | codeText
                | CRLF
 
 // Stops recovery at the next line boundary, section header, or preprocessor directive.
@@ -79,7 +82,18 @@ title  ::= IDENTIFIER
 private entry ::= directiveEntry
                 | parameterEntry
                 | comment
+                | codeText
                 | CRLF
+
+// A line of the [Code] section: free-form Pascal Script the lexer hands over as one opaque token, so the
+// section body stays part of its block instead of breaking the entry list and spilling error elements to
+// the top level. There is no Pascal support (see STATUS.md) — the line is deliberately not analysed.
+//
+// Also reachable at file level (see `item`): a `preprocessorLine` is a direct child of the FILE by design —
+// `preprocessorHostLines` collects only direct children, which is what carries ISPP declaration order,
+// include attribution and branch analysis. An ISPP line inside [Code] therefore ends the block, and the
+// code lines that follow it must remain parsable as top-level items.
+codeText ::= CODE_LINE
 
 // [Setup]-style: Key=Value
 // pin=2 commits after "Key ="; no recoverWhile to avoid consuming the next entry.
@@ -115,7 +129,10 @@ paramPair      ::= paramKey COLON paramValue {
 }
 paramKey       ::= IDENTIFIER
 
-paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR)* {
+// COLON is accepted inside the value: an unquoted value may carry a compile-time prefix
+// ("Source: compiler:WizClassicSmallImage.bmp"). The pair separator is the SEMICOLON, so a following
+// "Key: Value" pair is still recognised — only the FIRST colon after the key belongs to the paramPair.
+paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON)* {
   mixin="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.impl.IsSectionParamValueMixinImpl"
 }
 
@@ -124,7 +141,11 @@ quotedString   ::= QUOTE (STRING_PART | constant)* QUOTE
 
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE
-constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
+// A constant argument may itself be a constant ("{cm:UninstallProgram,{cm:MyAppName}}"), and an inline ISPP
+// emission may carry a whole expression with calls and string literals
+// ("{#file AddBackslash(SourcePath) + "License.txt"}") — hence the nested `constant`, the parentheses and
+// the quoted string.
+constantBody ::= (constant | quotedString | LPAREN | RPAREN | IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
   mixin="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.impl.IsSectionConstantBodyMixinImpl"
 }
 

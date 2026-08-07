@@ -52,10 +52,39 @@ class IsSectionPathAnnotatorTest : IsTimedBasePlatformTestCase() {
         assertFalse("An existing file must not be flagged", has(text, HighlightSeverity.ERROR, "not found"))
     }
 
-    fun testMissingFileProducesError() {
+    /**
+     * A missing source file is a WARNING, not an ERROR: whether the file has to be present at compile time
+     * depends on the entry's flags and on how the build produces its artefacts, so the analysis cannot
+     * decide it with certainty.
+     */
+    fun testMissingFileProducesWarning() {
         val missing = fwd(File(tempDir, "does-not-exist.txt"))
         val text = "[Files]\nSource: \"$missing\"; DestDir: \"{app}\"\n"
-        assertTrue("A missing file must be flagged", has(text, HighlightSeverity.ERROR, "File not found"))
+        assertTrue("A missing file must be flagged", has(text, HighlightSeverity.WARNING, "File not found"))
+        assertFalse(
+            "A missing file must not be an error",
+            has(text, HighlightSeverity.ERROR, "File not found")
+        )
+    }
+
+    /** `external` supplies the file at run time, so its absence at compile time must not be reported. */
+    fun testMissingFileWithExternalFlagIsNotFlagged() {
+        val missing = fwd(File(tempDir, "does-not-exist.txt"))
+        val text = "[Files]\nSource: \"$missing\"; DestDir: \"{app}\"; Flags: external\n"
+        assertFalse(
+            "With the external flag a missing source file must not be flagged at all",
+            has(text, HighlightSeverity.WARNING, "File not found")
+        )
+    }
+
+    /** `skipifsourcedoesntexist` makes a missing source file explicitly legal. */
+    fun testMissingFileWithSkipIfSourceDoesntExistFlagIsNotFlagged() {
+        val missing = fwd(File(tempDir, "does-not-exist.txt"))
+        val text = "[Files]\nSource: \"$missing\"; DestDir: \"{app}\"; Flags: skipifsourcedoesntexist\n"
+        assertFalse(
+            "With skipifsourcedoesntexist a missing source file must not be flagged at all",
+            has(text, HighlightSeverity.WARNING, "File not found")
+        )
     }
 
     fun testDirectoryWhereFileExpectedProducesError() {
@@ -90,10 +119,18 @@ class IsSectionPathAnnotatorTest : IsTimedBasePlatformTestCase() {
         assertFalse("An existing directory must not be flagged", has(text, HighlightSeverity.ERROR, "not found"))
     }
 
-    fun testMissingDirectoryProducesError() {
+    /** Like [testMissingFileProducesWarning]: a missing directory is a warning, not an error. */
+    fun testMissingDirectoryProducesWarning() {
         val missing = fwd(File(tempDir, "nope"))
         val text = "[Setup]\nAppName=Test\nAppVersion=1.0\nSourceDir=\"$missing\"\n"
-        assertTrue("A missing directory must be flagged", has(text, HighlightSeverity.ERROR, "Directory not found"))
+        assertTrue(
+            "A missing directory must be flagged",
+            has(text, HighlightSeverity.WARNING, "Directory not found")
+        )
+        assertFalse(
+            "A missing directory must not be an error",
+            has(text, HighlightSeverity.ERROR, "Directory not found")
+        )
     }
 
     fun testFileWhereDirectoryExpectedProducesError() {
@@ -161,6 +198,39 @@ class IsSectionPathAnnotatorTest : IsTimedBasePlatformTestCase() {
         val text = "[Icons]\nName: \"{group}\\X\"; Filename: \"https://example.com\"\n"
         assertFalse(
             "A URL scheme colon must be allowed",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
+    /**
+     * `userdocs:` is a compile-time prefix ISCC understands on `\[Setup] OutputDir` (the official
+     * `64Bit.iss` example uses exactly this value), so its colon is not a misplaced one.
+     */
+    fun testOptionalPathUserDocsPrefixProducesNoError() {
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\nOutputDir=userdocs:Inno Setup Examples Output\n"
+        assertFalse(
+            "The userdocs: prefix must be allowed",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
+    /**
+     * The counterpart of [testOptionalPathUserDocsPrefixProducesNoError]: the prefix is only legal at the
+     * very start of the value, so a colon behind a path segment stays an error.
+     */
+    fun testOptionalPathUserDocsPrefixInsidePathProducesError() {
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\nOutputDir={app}\\out\\userdocs:x\n"
+        assertTrue(
+            "A known prefix must only be accepted at the start of the value",
+            has(text, HighlightSeverity.ERROR, "Invalid character")
+        )
+    }
+
+    /** `compiler:` is the second compile-time prefix and must be accepted the same way. */
+    fun testOptionalPathCompilerPrefixProducesNoError() {
+        val text = "[Files]\nSource: \"${fwd(tempFile)}\"; DestDir: \"compiler:Stuff\"\n"
+        assertFalse(
+            "The compiler: prefix must be allowed",
             has(text, HighlightSeverity.ERROR, "Invalid character")
         )
     }

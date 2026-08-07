@@ -4,6 +4,39 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **`[Code]` sections no longer produce syntax errors.** Their content is free-form Pascal Script and is now
+  handed to the parser as opaque lines instead of being read as `Key=Value` / `Key: Value` entries. Until now
+  the first Pascal construct ended the section, which scattered error markers over the rest of the script and
+  could make entries of the following sections be misjudged.
+- Paths starting with a compile-time prefix (`userdocs:`, `compiler:`) are no longer reported as containing
+  an invalid character. `OutputDir=userdocs:Inno Setup Examples Output` — the value used by the official
+  Inno Setup example scripts — is valid again.
+- `{code:FunctionName}` and `{code:FunctionName|Parameter}` are recognised as constants instead of being
+  reported as unknown.
+- ISPP assignments (`=`) inside an expression are understood, and the predefined `Local` array is known. A
+  macro such as `#define M(str S) Local[0] = f(S), g(Local[0])` no longer reports errors.
+- `AppVersion` is no longer reported as missing when `AppVerName` is present — Inno Setup accepts either one.
+- The `UsePreviousLanguage` rule no longer fires on an ISPP emission (`AppId={#MyAppId}`): the preprocessor
+  replaces it with literal text before the script is compiled, so no constant remains.
+- An entry may be continued on the next line with a trailing `\` (as the `[ISSigKeys]` entries do).
+- An unquoted parameter value may contain a colon (`Source: compiler:WizClassicSmallImage.bmp`).
+- Constants may be nested inside a quoted string (`"{cm:UninstallProgram,{cm:MyAppName}}"`), and an inline
+  emission may carry a whole expression (`{#file AddBackslash(SourcePath) + "License.txt"}`).
+- **A missing source file or directory is now a warning instead of an error**, and it is not reported at all
+  when a flag of the entry makes the file optional (`external`, `skipifsourcedoesntexist`). Likewise
+  `DestDir` is no longer demanded for an entry flagged `dontcopy`. Which flags waive a requirement is part of
+  the specification, not hard-coded.
+- Numbers may group their digits with underscores (`ExtraDiskSpaceRequired=7_000_000`).
+- An inline emission carrying a preprocessor directive (`{#file …}`, `{#emit …}`) is recognised as such and
+  validated as that directive, instead of being reported as an unknown constant. A directive that produces
+  no value is reported when used inside `{#…}`.
+- `{cm:…}` is no longer reported as unknown when the script declares a `MessagesFile` whose custom messages
+  cannot be read because no Inno Setup installation path is configured.
+- **Show Effective Script** no longer repeats parts of the script. A condition that could not be resolved
+  left the copy position behind, so everything before its marker was emitted again for every further marker.
+
 ## [0.7.0]
 
 ### Added

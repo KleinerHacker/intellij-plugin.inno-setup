@@ -10,8 +10,10 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.grammarkit.tasks.GenerateLexerTask
 import org.jetbrains.grammarkit.tasks.GenerateParserTask
+import org.pcsoft.intellij.plugin.inno_setup.gradle.InnoSetupExamplesTask
 
 // :language:script — the Inno Setup language (section/INI grammar shared by .iss/.isl/.ist, file types,
 // highlighter, folding, brace matching, basic annotator + quickfixes, references, include infrastructure,
@@ -45,6 +47,47 @@ val sectionPackage = "$languagePackage/parser/section"
 val templatePackage = "$languagePackage/parser/template"
 
 tasks {
+    // ─────────────────────────────────────────────────────────────────────────────────────────
+    // The official Inno Setup example corpus (IsExampleScriptsIT)
+    //
+    // The example scripts of jrsoftware/issrc are third-party sources and are deliberately NOT checked into
+    // this repository. They are downloaded from a pinned upstream tag before the tests run, handed to the
+    // tests via a system property, and deleted again afterwards — so a checkout never carries foreign
+    // sources, neither locally nor on CI. Only derived, source-free fingerprints of the expected effective
+    // script are committed (src/test/resources/examples).
+    // ─────────────────────────────────────────────────────────────────────────────────────────
+    val innoSetupExamplesDir = layout.buildDirectory.dir("inno-setup-examples")
+    val innoSetupExamplesArchive = layout.buildDirectory.file("tmp/inno-setup-examples.tar.gz")
+
+    val downloadInnoSetupExamples = register<InnoSetupExamplesTask>("downloadInnoSetupExamples") {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Downloads the official Inno Setup example scripts the integration tests validate against."
+        tag.set(libs.versions.innoSetupExamples)
+        examplesDir.set(innoSetupExamplesDir)
+        archive.set(innoSetupExamplesArchive)
+    }
+
+    val cleanInnoSetupExamples = register<Delete>("cleanInnoSetupExamples") {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Removes the downloaded Inno Setup example corpus again."
+        delete(innoSetupExamplesDir, innoSetupExamplesArchive)
+    }
+
+    // `developerTest` is deliberately left out: it excludes *IT and must stay offline and fast.
+    listOf("test", "integrationTest").forEach { taskName ->
+        named<Test>(taskName) {
+            dependsOn(downloadInnoSetupExamples)
+            finalizedBy(cleanInnoSetupExamples)
+            systemProperty("innoSetup.examples.dir", innoSetupExamplesDir.get().asFile.absolutePath)
+            // The fingerprint files are generated/refreshed with
+            //     ./gradlew :language:script:integrationTest -PupdateExampleFingerprints
+            systemProperty(
+                "innoSetup.examples.updateFingerprints",
+                providers.gradleProperty("updateExampleFingerprints").isPresent.toString(),
+            )
+        }
+    }
+
     register<GenerateParserTask>("generateIsSectionParser") {
         sourceFile.set(layout.projectDirectory.file("$parsingRoot/IsSectionGrammar.bnf"))
         targetRootOutputDir.set(layout.buildDirectory.dir("generated"))

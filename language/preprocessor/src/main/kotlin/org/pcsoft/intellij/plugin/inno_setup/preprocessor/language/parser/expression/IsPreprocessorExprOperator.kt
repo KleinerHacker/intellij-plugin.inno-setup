@@ -13,7 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression
 
 /** Category of an ISPP operator, used both for type rules and for highlighting. */
-enum class IsPreprocessorExprOperatorCategory { ARITHMETIC, COMPARISON, LOGICAL, BITWISE, TERNARY, COMMA }
+enum class IsPreprocessorExprOperatorCategory { ARITHMETIC, COMPARISON, LOGICAL, BITWISE, TERNARY, COMMA, ASSIGNMENT }
 
 /**
  * ISPP binary operators with their C/C++-like precedence (higher binds tighter) and category.
@@ -27,6 +27,11 @@ enum class IsPreprocessorExprBinaryOperator(
     val category: IsPreprocessorExprOperatorCategory,
 ) {
     COMMA(",", 1, IsPreprocessorExprOperatorCategory.COMMA),
+
+    // ISPP expressions may assign — `#define M(str S) Local[0] = f(S), g(Local[0])` is the documented way
+    // of holding an intermediate result inside a macro. As in C, assignment binds tighter than the comma
+    // operator and looser than everything else.
+    ASSIGN("=", 2, IsPreprocessorExprOperatorCategory.ASSIGNMENT),
     LOGICAL_OR("||", 3, IsPreprocessorExprOperatorCategory.LOGICAL),
     LOGICAL_AND("&&", 4, IsPreprocessorExprOperatorCategory.LOGICAL),
     BIT_OR("|", 5, IsPreprocessorExprOperatorCategory.BITWISE),
@@ -83,6 +88,8 @@ object IsPreprocessorExprOperators {
      */
     val SYMBOLS: List<String> = listOf(
         "<<", ">>", "<=", ">=", "==", "!=", "&&", "||",
-        "+", "-", "*", "/", "%", "&", "|", "^", "~", "!", "<", ">",
+        // "=" MUST stay behind "==" and "!=" / "<=" / ">=" above, or the assignment operator would swallow
+        // the first character of every comparison.
+        "+", "-", "*", "/", "%", "&", "|", "^", "~", "!", "<", ">", "=",
     )
 }

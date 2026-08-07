@@ -110,7 +110,21 @@ cd inno-setup
 # everything else is a developer test — the fast inner-loop suite.
 ./gradlew developerTest
 ./gradlew integrationTest
+```
 
+> [!NOTE]
+> `integrationTest` (and `test`, which includes it) validates the plugin against the **official Inno Setup
+> example scripts**. Those are third-party sources and are not part of this repository: they are downloaded
+> from a pinned `jrsoftware/issrc` tag into `language/script/build/inno-setup-examples` before the run and
+> removed again afterwards, so the first run of these suites needs network access. `developerTest` stays
+> fully offline.
+>
+> Only source-free fingerprints of the expected effective script are committed, under
+> `language/script/src/test/resources/examples`. After an intentional change to the effective-script
+> computation, refresh them with
+> `./gradlew :language:script:integrationTest -PupdateExampleFingerprints` and review the diff.
+
+```bash
 # Build the distributable plugin ZIP
 ./gradlew :plugin:buildPlugin
 # → plugin/build/distributions/inno-setup-<version>.zip

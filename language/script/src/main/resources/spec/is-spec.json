@@ -116,6 +116,22 @@
           "description": "File types in which this attribute must be specified within its section (e.g. [\"iss\"], [\"isl\"]). Empty = optional.",
           "$ref": "#/definitions/fileTargets"
         },
+        "requiredAlternatives": {
+          "description": "Names of other attributes of the same section that satisfy this attribute's \"required\" state in its place. Inno Setup accepts either/or pairs (e.g. \"AppVersion\" may be replaced by \"AppVerName\"), so the attribute is not reported as missing while one of these alternatives is present.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "requiredWaivedByFlags": {
+          "description": "Flags of the same entry that waive this attribute's \"required\" state. Whether a parameter is mandatory is not a property of the attribute alone (e.g. [Files] \"DestDir\" is required normally, but not with \"dontcopy\", where the file is never installed to a target directory).",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
         "deprecated": {
           "description": "File types in which this attribute is deprecated (e.g. [\"iss\", \"isl\"]). Empty = not deprecated.",
           "$ref": "#/definitions/fileTargets"
@@ -238,6 +254,14 @@
                 "optional"
               ],
               "default": "required"
+            },
+            "existenceWaivedByFlags": {
+              "description": "Flags of the same entry that waive the compile-time existence requirement. Whether a file has to be present when the script is compiled is not a property of the attribute alone (e.g. [Files] \"Source\" must exist normally, but not with \"external\" or \"skipifsourcedoesntexist\"). With one of these flags set the value is only checked for invalid path characters, exactly like an \"optional\" path.",
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
             }
           },
           "additionalProperties": false

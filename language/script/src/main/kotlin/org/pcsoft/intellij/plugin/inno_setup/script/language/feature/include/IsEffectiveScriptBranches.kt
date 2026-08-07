@@ -79,6 +79,11 @@ internal object IsEffectiveScriptBranches {
                     // A marker is plain generated text and belongs to no source file, so it gets no segment;
                     // an offset inside it simply has no origin, exactly like unattributed host text.
                     builder.append(UNDECIDED_COMMENT).append('\n')
+                    // The text up to the marker has just been copied, so the cursor must move with it.
+                    // Without this an insertion left the cursor behind and every following copy started over
+                    // at the old position — the text before the marker was emitted again for each further
+                    // marker or removal, which duplicated whole sections of the effective script.
+                    cursor = maxOf(cursor, offset)
                 } else {
                     cursor = maxOf(cursor, removal.endOffset)
                 }

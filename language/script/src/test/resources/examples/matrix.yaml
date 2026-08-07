@@ -1,0 +1,50 @@
+# Preprocessor combination matrix for IsExampleScriptsIT.
+#
+# The test derives the candidate symbols of every example script itself: every name referenced by an
+# `#ifdef` / `#ifndef` / `#if` that the script does not `#define` on its own is an externally supplied
+# symbol, and the test runs the full cross product of "undefined" / "defined" over those names.
+#
+# This file only carries the overrides that auto-detection cannot know. It contains NO example source.
+#
+#   ignoredSymbols   names never treated as externally supplied (ISPP built-ins and functions)
+#   maxCombinations  global guard; an example exceeding it must declare its own limit below
+#   examples         per-file overrides:
+#                      values           map of symbol -> list of values; "" means "not defined at all"
+#                      ignoredSymbols   additional names ignored for this example
+#                      maxCombinations  per-file limit
+
+ignoredSymbols:
+  # ISPP predefined variables
+  - Ver
+  - VER
+  - SourcePath
+  - CompilerPath
+  - LineNumber
+  - FileName
+  - FileHandle
+  - Line
+  - GetEnv
+  - True
+  - False
+  # ISPP built-in functions that may appear inside an `#if` expression
+  - defined
+  - Defined
+  - EncodeVer
+  - GetVersionNumbersString
+  - GetFileVersion
+  - Exec
+  - ReadIni
+  - FileExists
+  - DirExists
+  - Int
+  - Str
+  - Len
+  - Copy
+  - Pos
+  - SetupSetting
+  - LowerCase
+  - UpperCase
+
+maxCombinations: 16
+
+examples: {}

@@ -985,7 +985,7 @@ class IsSectionAnnotatorTest : IsTimedBasePlatformTestCase() {
         }
 
     fun testAppIdWithConstantAndNoUsePreviousLanguageProducesError() {
-        val text = "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\n"
+        val text = "[Setup]\nAppName=Test\nAppVersion=1.0\nAppId=MyApp-{param:Edition|std}\n"
         assertTrue(
             "AppId containing a constant without UsePreviousLanguage=no must produce a file-level ERROR",
             usePreviousLanguageError(highlights(text))
@@ -994,7 +994,7 @@ class IsSectionAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     fun testAppIdWithConstantAndUsePreviousLanguageNoProducesNoError() {
         val text =
-            "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\nUsePreviousLanguage=no\n"
+            "[Setup]\nAppName=Test\nAppVersion=1.0\nAppId=MyApp-{param:Edition|std}\nUsePreviousLanguage=no\n"
         assertFalse(
             "AppId containing a constant with UsePreviousLanguage=no must not produce the ERROR",
             usePreviousLanguageError(highlights(text))
@@ -1003,16 +1003,29 @@ class IsSectionAnnotatorTest : IsTimedBasePlatformTestCase() {
 
     fun testAppIdWithConstantAndUsePreviousLanguageYesProducesError() {
         val text =
-            "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\nUsePreviousLanguage=yes\n"
+            "[Setup]\nAppName=Test\nAppVersion=1.0\nAppId=MyApp-{param:Edition|std}\nUsePreviousLanguage=yes\n"
         assertTrue(
             "AppId with a constant and UsePreviousLanguage=yes must produce the ERROR",
             usePreviousLanguageError(highlights(text))
         )
     }
 
+    /**
+     * An ISPP emission is not a constant for this rule: the preprocessor replaces `{#MyAppId}` with literal
+     * text before ISCC ever sees the script, so the compiled AppId contains no constant at all. The official
+     * `ISPPExample1.iss` relies on exactly this (`AppName={#AppName}` without `UsePreviousLanguage`).
+     */
+    fun testAppIdWithIsppEmissionProducesNoError() {
+        val text = "#define MyAppId \"static-id\"\n[Setup]\nAppName=Test\nAppVersion=1.0\nAppId={#MyAppId}\n"
+        assertFalse(
+            "An ISPP emission in AppId must not produce the UsePreviousLanguage ERROR",
+            usePreviousLanguageError(highlights(text))
+        )
+    }
+
     fun testConstantAppNameWithoutAppIdProducesError() {
         // AppId defaults to AppName when omitted — a constant in AppName therefore triggers the rule.
-        val text = "#define MyApp \"My Program\"\n[Setup]\nAppName={#MyApp}\nAppVersion=1.0\n"
+        val text = "[Setup]\nAppName=My Program {param:Edition|std}\nAppVersion=1.0\n"
         assertTrue(
             "A constant in AppName (no explicit AppId) without UsePreviousLanguage=no must produce the ERROR",
             usePreviousLanguageError(highlights(text))

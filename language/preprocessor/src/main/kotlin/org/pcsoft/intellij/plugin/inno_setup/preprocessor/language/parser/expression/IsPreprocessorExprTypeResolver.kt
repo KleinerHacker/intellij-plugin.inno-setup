@@ -104,9 +104,14 @@ class IsPreprocessorExprTypeResolver(
     private val functionMacros: List<IsPreprocessorExprFunctionMacroInfo> = functionMacros.sortedBy { it.order }
     private val arrays: List<IsPreprocessorExprArrayInfo> = arrays.sortedBy { it.order }
 
-    /** Whether an array named [name] is declared before [beforeOrder] (declaration-order aware). */
+    /**
+     * Whether an array named [name] is declared before [beforeOrder] (declaration-order aware).
+     *
+     * [PREDEFINED_ARRAYS] are always arrays — they need no declaration.
+     */
     fun isArray(name: String, beforeOrder: Int): Boolean =
-        arrays.any { it.order < beforeOrder && it.name.equals(name, ignoreCase = true) }
+        PREDEFINED_ARRAYS.any { it.equals(name, ignoreCase = true) } ||
+                arrays.any { it.order < beforeOrder && it.name.equals(name, ignoreCase = true) }
 
     private val cache = HashMap<String, IsPreprocessorExprType>()
     private val visiting = HashSet<String>()
@@ -310,3 +315,10 @@ class IsPreprocessorExprTypeResolver(
         return inferenceAt(define.order).infer(ast)
     }
 }
+
+/**
+ * Array variables ISPP predefines. `Local` is the scratch array available inside a macro body — it is never
+ * declared with `#dim`, so it must be known as an array up front (see the `ExecPowerShell` macro of the
+ * official `PowerShell.iss` example).
+ */
+private val PREDEFINED_ARRAYS = listOf("Local")

@@ -126,6 +126,9 @@ class IsPreprocessorExprEvaluator(
             IsPreprocessorExprBinaryOperator.LOGICAL_AND -> bool(a != 0L && b != 0L)
             IsPreprocessorExprBinaryOperator.LOGICAL_OR -> bool(a != 0L || b != 0L)
             IsPreprocessorExprBinaryOperator.COMMA -> right
+            // An assignment yields the assigned value. The evaluator is side-effect free — it never writes
+            // the target back — so a later read of that target stays unevaluable rather than wrong.
+            IsPreprocessorExprBinaryOperator.ASSIGN -> right
         }
     }
 

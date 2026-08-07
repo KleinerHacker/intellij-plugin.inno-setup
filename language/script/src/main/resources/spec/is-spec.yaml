@@ -26,8 +26,10 @@ sections:
           kind: native
           dataType: string
         required: [ iss ]
+        # Inno Setup accepts AppVerName in its place, so only the absence of BOTH is an error.
+        requiredAlternatives: [ AppVerName ]
         deprecated: [ ]
-        description: "The version string of the application, e.g. <code>1.0</code>. Shown in Add/Remove Programs and used for upgrade detection."
+        description: "The version string of the application, e.g. <code>1.0</code>. Shown in Add/Remove Programs and used for upgrade detection. Either this directive or <code>AppVerName</code> must be present."
         array: false
 
       # --- Compiler directives ---
@@ -2007,6 +2009,10 @@ sections:
       - name: Source
         type:
           kind: file
+          # With these flags the file need not be present when the script is compiled: `external` means it
+          # is supplied at run time (e.g. downloaded into {tmp}), `skipifsourcedoesntexist` explicitly makes
+          # a missing file legal.
+          existenceWaivedByFlags: [ external, skipifsourcedoesntexist ]
         required: [ iss ]
         deprecated: [ ]
         description: "Source file path or wildcard pattern, e.g. <code>MyProg.exe</code> or <code>Plugins\\*</code>. Relative to <code>SourceDir</code>."
@@ -2017,8 +2023,11 @@ sections:
           kind: directory
           existence: optional
         required: [ iss ]
+        # With `dontcopy` the file is never installed — it is only extracted to {tmp} on demand — so there
+        # is no destination directory to name.
+        requiredWaivedByFlags: [ dontcopy ]
         deprecated: [ ]
-        description: "Destination directory on the target machine, e.g. <code>{app}</code> or <code>{sys}</code>. Supports all Inno Setup constants."
+        description: "Destination directory on the target machine, e.g. <code>{app}</code> or <code>{sys}</code>. Supports all Inno Setup constants. Not required with <code>dontcopy</code>."
         array: false
 
       - name: DestName

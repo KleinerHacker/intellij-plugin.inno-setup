@@ -373,4 +373,22 @@ realistic script sizes.
 | `{#…}` variable validation                      | ✅      | `{#name}` accepted for user `#define`s, value-bearing predefined variables and ISCC `/D` symbols; valueless `void` symbols stay flagged as invalid emissions                                                                                 |
 | `{#…}` in `MessagesFile` path resolution        | ✅      | `IsMessagesFileResolver` expands path-relevant predefined variables (`{#SourcePath}`/`{#__DIR__}`/`{#CompilerPath}`/`{#SysPath}`); dynamic ones stay unresolvable (no false error)                                      |
 | Completion — deprecated members struck through  | ✅      | Deprecated sections/attributes/flags/constants/message-keys are rendered with strikethrough in the lookup (`withStrikeoutness`, target-aware); no extra "deprecated" tail text — it follows from the strikethrough      |
-| [Code] section Pascal support                   | ❌      | No Pascal intellisense; treated as plain text                                                                                                                                                                           |
+| [Code] section Pascal support                   | ❌      | No Pascal intellisense. The body is lexed in a dedicated `IN_CODE` state and handed to the parser as opaque `CODE_LINE` tokens, so it neither produces syntax errors nor is analysed; `//` comments and line-leading ISPP directives keep their own tokens |
+
+## Validation against the official examples
+
+The integration test `IsExampleScriptsIT` validates the plugin against the complete `Examples/` directory
+of `jrsoftware/issrc` (pinned tag `innoSetupExamples` in `gradle/libs.versions.toml`). The corpus is
+downloaded on demand and removed again after the run — it is never checked into this repository.
+
+Every example script is asserted to
+
+1. parse without a single `PsiErrorElement`,
+2. resolve every hard PSI reference,
+3. highlight without any ERROR or WARNING annotation, and
+4. produce the recorded effective script for every relevant combination of externally supplied
+   preprocessor symbols (`#ifdef`/`#if` names the script does not define itself, cross-product of
+   defined/undefined, overridable in `language/script/src/test/resources/examples/matrix.yaml`).
+
+The expectation of (4) is stored as a source-free fingerprint (SHA-256 of the normalized effective text plus
+section/entry counts) next to the matrix.

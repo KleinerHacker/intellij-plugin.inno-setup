@@ -362,6 +362,10 @@ class IsPreprocessorExprTypeInference(
 
             IsPreprocessorExprOperatorCategory.COMMA -> rightType
             IsPreprocessorExprOperatorCategory.TERNARY -> IsPreprocessorExprType.ANY
+
+            // An assignment evaluates to the assigned value, so its type is the type of the right operand.
+            // ISPP variables are untyped, so any value may be assigned to any target — nothing to check.
+            IsPreprocessorExprOperatorCategory.ASSIGNMENT -> rightType
         }
     }
 

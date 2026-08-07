@@ -184,6 +184,14 @@ predefined_variables:
     type: str
     description: "The tab character."
 
+  - name: Local
+    type: str
+    description: >
+      Predefined array holding local values inside a macro body. Its elements
+      (<code>Local[0]</code>, <code>Local[1]</code>, …) need no <code>#dim</code> declaration and are
+      typically used to keep an intermediate result, e.g.
+      <code>#define M(str S) Local[0] = f(S), g(Local[0])</code>.
+
 builtin_functions:
   # Sorted alphabetically to match the official ISPP function index (topic_funcs).
   - name: AddBackslash

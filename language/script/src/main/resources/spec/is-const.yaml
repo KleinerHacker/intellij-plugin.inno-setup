@@ -481,6 +481,18 @@ constants:
     parameterized: true
     syntax: "cm:MessageName[,Arguments]"
 
+  - name: code
+    description: >
+      Embeds the result of a <code>[Code]</code> section function, evaluated by Setup at run time.
+      The function takes a single string parameter — the text behind the <code>|</code>, or an empty
+      string when none is given — and returns the value to embed.<br>
+      <b>Syntax:</b> <code>{code:FunctionName}</code> or <code>{code:FunctionName|Parameter}</code><br>
+      <b>Example:</b> <code>{code:GetDataDir|{app}}</code>
+    deprecated: [ ]
+    type: parameterized
+    parameterized: true
+    syntax: "code:FunctionName[|Parameter]"
+
   # ── Deprecated Constants ───────────────────────────────────────────────────
 
   - name: pf

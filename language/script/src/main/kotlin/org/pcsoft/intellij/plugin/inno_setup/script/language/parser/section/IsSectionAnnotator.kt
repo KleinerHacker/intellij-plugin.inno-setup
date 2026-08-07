@@ -30,6 +30,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.inclu
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsBranchAnalysis
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorBranchAnalysis
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.expression.IsPreprocessorExprParser
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isExternalPreprocessorSymbol
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTarget
@@ -284,17 +285,22 @@ class IsSectionAnnotator : Annotator {
         target: IsSectionSpecTarget,
     ) {
         spec.sections.filter { it.type == IsSectionType.DIRECTIVE }.forEach { specSection ->
-            val required = specSection.attributes
-                .filter { it.required.appliesTo(target) }
-                .map { it.name.lowercase() }
-                .toSet()
+            val required = specSection.attributes.filter { it.required.appliesTo(target) }
             if (required.isEmpty()) return@forEach
 
             val blocks = effective.findSections(specSection.name)
             if (blocks.isEmpty()) return@forEach   // section absent → covered by the required-section check
 
             val present = blocks.flatMap { it.directiveEntryList }.map { it.keyText().lowercase() }.toSet()
-            val missing = required - present
+            // An attribute with alternatives (AppVersion ↔ AppVerName) counts as supplied as soon as any of
+            // them is present — Inno Setup accepts either one.
+            val missing = required
+                .filterNot { attribute ->
+                    attribute.name.lowercase() in present ||
+                            attribute.requiredAlternatives.any { it.lowercase() in present }
+                }
+                .map { it.name.lowercase() }
+                .toSet()
             if (missing.isEmpty()) return@forEach
 
             val message = "Required directive(s) missing in [${specSection.name}]: " + missing.joinToString(", ")
@@ -314,10 +320,13 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * When the effective AppId contains a constant (e.g. an \{#define} or \{code:…} expression), Inno
-     * Setup cannot reuse the previously selected language and requires `UsePreviousLanguage` to be set
-     * explicitly to `no`; otherwise the compiler rejects the script. `AppId` defaults to `AppName` when
-     * omitted, so the `AppName` value is checked in that case. Reported at file level.
+     * When the effective AppId contains a constant (e.g. a \{code:…} expression), Inno Setup cannot reuse
+     * the previously selected language and requires `UsePreviousLanguage` to be set explicitly to `no`;
+     * otherwise the compiler rejects the script. `AppId` defaults to `AppName` when omitted, so the
+     * `AppName` value is checked in that case. Reported at file level.
+     *
+     * ISPP emissions (`\{#Name}`) are **not** constants for this rule: the preprocessor replaces them with
+     * literal text before ISCC ever sees the script, so the compiled AppId holds no constant at all.
      */
     private fun annotateUsePreviousLanguage(file: IsScriptFile, holder: IsAnnotationSink) {
         if (file.specTarget != IsSectionSpecTarget.ISS) return
@@ -327,7 +336,9 @@ class IsSectionAnnotator : Annotator {
         val appIdValue = (setup.directiveEntryList.firstOrNull { it.keyText().equals("AppId", ignoreCase = true) }
             ?: setup.directiveEntryList.firstOrNull { it.keyText().equals("AppName", ignoreCase = true) })
             ?.paramValue ?: return
-        if (PsiTreeUtil.findChildrenOfType(appIdValue, IsSectionConstant::class.java).isEmpty()) return
+        val constants = PsiTreeUtil.findChildrenOfType(appIdValue, IsSectionConstant::class.java)
+            .filterNot { it.constantBody.text.trimStart().startsWith("#") }
+        if (constants.isEmpty()) return
 
         val entry = setup.directiveEntryList
             .firstOrNull { it.keyText().equals("UsePreviousLanguage", ignoreCase = true) }
@@ -390,8 +401,18 @@ class IsSectionAnnotator : Annotator {
         if (specSection.type != IsSectionType.PARAMETER) return
 
         val target = section.specTarget
-        val required =
-            specSection.attributes.filter { it.required.appliesTo(target) }.map { it.name.lowercase() }.toSet()
+        val declaredFlags = entry.declaredFlags()
+        val required = specSection.attributes
+            .filter { it.required.appliesTo(target) }
+            // A flag of the same entry can waive the requirement (`DestDir` with `dontcopy`) — the same
+            // spec-driven mechanism the file-existence check uses.
+            .filterNot { attribute ->
+                attribute.requiredWaivedByFlags.any { waiving ->
+                    declaredFlags.any { it.equals(waiving, ignoreCase = true) }
+                }
+            }
+            .map { it.name.lowercase() }
+            .toSet()
         val present = entry.paramPairList.map { it.keyText().lowercase() }.toSet()
         val missing = required - present
         if (missing.isNotEmpty()) {
@@ -604,7 +625,15 @@ class IsSectionAnnotator : Annotator {
         when (val type = attr.type) {
             is IsSectionFlagTypeSpec -> annotateFlagValue(value, type, holder)
             is IsSectionNativeTypeSpec -> annotateNativeValue(value, type, holder)
-            is IsSectionFileTypeSpec -> annotatePathValue(value, requireDirectory = false, type.existence, holder)
+            is IsSectionFileTypeSpec -> annotatePathValue(
+                value,
+                requireDirectory = false,
+                // A flag of the same entry can waive the compile-time existence requirement (`external`,
+                // `skipifsourcedoesntexist`) — then only the path characters are checked.
+                if (value.hasAnyFlag(type.existenceWaivedByFlags)) IsSectionPathExistence.OPTIONAL
+                else type.existence,
+                holder,
+            )
             is IsSectionDirectoryTypeSpec -> annotatePathValue(value, requireDirectory = true, type.existence, holder)
             is IsSectionReferenceTypeSpec -> {
                 val pair = value.containingParamPair
@@ -683,20 +712,47 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Whether the `:` at [index] in [path] is a legal Windows colon: a drive letter (`X:` at the start,
-     * immediately followed by `/` or `\`) or a URL scheme separator (`://`).
+     * Whether the `:` at [index] in [path] is a legal colon: a drive letter (`X:` at the start, immediately
+     * followed by `/` or `\`), a URL scheme separator (`://`), or the terminator of one of the compile-time
+     * path prefixes ISCC understands ([COMPILE_TIME_PATH_PREFIXES], e.g.
+     * `OutputDir=userdocs:Inno Setup Examples Output`).
      */
     private fun isValidColon(path: String, index: Int): Boolean {
         // URL scheme: "://"
         if (index + 2 <= path.lastIndex && path[index + 1] == '/' && path[index + 2] == '/') return true
+        // Compile-time prefix: the colon terminates a known keyword at the very start of the value.
+        if (COMPILE_TIME_PATH_PREFIXES.any { it.length == index && path.startsWith(it, ignoreCase = true) })
+            return true
         // Drive letter: single letter, then ':' directly before the first '/' or '\'.
         return index == 1 && path[0].isLetter() &&
                 index + 1 <= path.lastIndex && (path[index + 1] == '/' || path[index + 1] == '\\')
     }
 
     /**
+     * Whether the entry this value belongs to carries any of [flags] in its `Flags` parameter
+     * (case-insensitive). Used to let a flag waive the compile-time existence requirement of a path.
+     */
+    private fun IsSectionParamValue.hasAnyFlag(flags: Set<String>): Boolean {
+        if (flags.isEmpty()) return false
+        val declared = containingParameterEntry?.declaredFlags() ?: return false
+        return declared.any { declaredFlag -> flags.any { it.equals(declaredFlag, ignoreCase = true) } }
+    }
+
+    /** The flag names declared in the `Flags` parameter of this entry (whitespace-separated, unmodified). */
+    private fun IsSectionParameterEntry.declaredFlags(): List<String> =
+        paramPairList
+            .filter { it.keyText().equals("Flags", ignoreCase = true) }
+            .flatMap { it.paramValue?.singleText.orEmpty().trim().split(Regex("\\s+")) }
+            .filter { it.isNotBlank() }
+
+    /**
      * For `required` file/directory values the path must exist on the build machine; resolves and checks
      * existence and kind (see [annotatePathValue] doc).
+     *
+     * A missing or unreadable path is reported as a WARNING, not an ERROR: whether a file has to be present
+     * at compile time depends on the entry's flags and on how the build is set up (generated artefacts,
+     * files produced by a prior build step), so the analysis cannot decide it with certainty. The cases it
+     * *can* decide — a directory where a file is expected and vice versa — stay errors.
      */
     private fun annotatePathExistence(
         value: IsSectionParamValue,
@@ -724,13 +780,13 @@ class IsSectionAnnotator : Annotator {
         val noun = if (requireDirectory) "Directory" else "File"
         when (val result = IsMessagesFileResolver.resolveMessagesFile(expanded, scriptDir, installPath)) {
             is IsResolveResult.Missing ->
-                holder.newAnnotation(HighlightSeverity.ERROR, "$noun not found: '${result.resolvedPath}'")
+                holder.newAnnotation(HighlightSeverity.WARNING, "$noun not found: '${result.resolvedPath}'")
                     .range(value.textRange)
                     .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
 
             is IsResolveResult.Unreadable ->
-                holder.newAnnotation(HighlightSeverity.ERROR, "$noun is not readable: '${result.resolvedPath}'")
+                holder.newAnnotation(HighlightSeverity.WARNING, "$noun is not readable: '${result.resolvedPath}'")
                     .range(value.textRange)
                     .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
                     .create()
@@ -899,8 +955,11 @@ class IsSectionAnnotator : Annotator {
                 }
             }
 
-            // Accept decimal (-?[0-9]+) or Pascal-style hexadecimal ($ followed by hex digits, e.g. $0409)
-            IsSectionNativeDataType.INTEGER -> if (!text.matches(Regex("-?[0-9]+")) && !text.matches(Regex("\\\$[0-9A-Fa-f]+"))) {
+            // Accept decimal or Pascal-style hexadecimal ($ followed by hex digits, e.g. $0409). A decimal
+            // number may group its digits with underscores for readability (`7_000_000`) — Inno Setup accepts
+            // that in every numeric directive/parameter, and the official DownloadFiles.iss example uses it.
+            // The underscore must sit *between* digits, so a leading, trailing or doubled one stays an error.
+            IsSectionNativeDataType.INTEGER -> if (!text.matches(INTEGER_VALUE) && !text.matches(HEX_VALUE)) {
                 holder.newAnnotation(
                     HighlightSeverity.ERROR,
                     "Expected type '${type.dataType.typeName}', got: '$text'"
@@ -951,6 +1010,11 @@ class IsSectionAnnotator : Annotator {
         // they are defined for the build — emitting one via {#Name} is legitimate, not an unknown constant.
         val isExternal = isIspp && constant.containingFile?.isExternalPreprocessorSymbol(name) == true
 
+        // An inline emission may carry a whole ISPP directive rather than a plain name — e.g.
+        // `LicenseFile={#file AddBackslash(SourcePath) + "License.txt"}` embeds the `#file` directive. Such a
+        // body is not a symbol name and must not be looked up as one; it is validated as the directive it is.
+        if (isIspp && annotateInlineDirective(constant, body, bodyText, holder)) return
+
         val known = when {
             isIspp -> name in isppNames || predefinedNames.any { it.equals(name, ignoreCase = true) } ||
                     isExternal
@@ -995,8 +1059,76 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
+     * Handles an inline emission whose body is an ISPP **directive** rather than a symbol name, e.g.
+     * `{#file AddBackslash(SourcePath) + "License.txt"}`.
+     *
+     * Returns `false` when the body is not a directive, so the caller falls back to the plain
+     * `{#Name}` symbol check. Otherwise the directive is validated according to what it is:
+     *
+     * - [EXPRESSION_DIRECTIVES] take a value expression — it is parsed and its syntax errors are reported.
+     * - [FREEFORM_DIRECTIVES] take free-form text (`#pragma`, `#error`) — nothing to check.
+     * - every other directive is a declaration or a control-flow directive and cannot produce a value, so
+     *   using it inside `{#…}` is reported as an error.
+     */
+    private fun annotateInlineDirective(
+        constant: IsSectionConstant,
+        body: IsSectionConstantBody,
+        bodyText: String,
+        holder: IsAnnotationSink,
+    ): Boolean {
+        val withoutHash = bodyText.removePrefix("#").trimStart()
+        val keyword = withoutHash.takeWhile { it.isLetter() }
+        if (keyword.isEmpty()) return false
+
+        val directive = service<IsPreprocessorService>().spec.directives
+            .firstOrNull { it.name.equals(keyword, ignoreCase = true) }
+            ?: return false
+        // `{#Name}` where Name happens to read like a directive is only a directive when an argument
+        // follows — `{#file}` alone is a reference to a #define called "file".
+        val argument = withoutHash.removePrefix(keyword).trim()
+        if (argument.isEmpty()) return false
+
+        body.node.findChildByType(IsSectionTypes.HASH)?.let {
+            highlight(it.textRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+        }
+        body.node.findChildByType(IsSectionTypes.IDENTIFIER)?.let {
+            highlight(it.textRange, IsSectionAnnotatorHighlighting.PREPROCESSOR_DIRECTIVE, holder)
+        }
+
+        val name = directive.name.lowercase()
+        when {
+            name in FREEFORM_DIRECTIVES -> Unit
+
+            name in EXPRESSION_DIRECTIVES -> {
+                val errors = IsPreprocessorExprParser.parse(argument).errors
+                errors.firstOrNull()?.let {
+                    holder.newAnnotation(HighlightSeverity.ERROR, "#${directive.name}: ${it.message}")
+                        .range(constant.textRange)
+                        .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                        .create()
+                }
+            }
+
+            else -> holder.newAnnotation(
+                HighlightSeverity.ERROR,
+                "'#${directive.name}' produces no value and cannot be used in an inline emission"
+            ).range(constant.textRange)
+                .textAttributes(IsSectionAnnotatorHighlighting.UNKNOWN_REFERENCE)
+                .create()
+        }
+        return true
+    }
+
+    /**
      * Flags a `{cm:Name}` whose message name is not defined in any \[CustomMessages] section. The
      * red highlight covers only the name token, mirroring the unknown-flag/unknown-constant style.
+     *
+     * The script's own entries are not the only source: the language files shipped with Inno Setup
+     * (`Default.isl` and the files under `Languages`) carry a `\[CustomMessages]` section of their own, which
+     * is why `{cm:UninstallProgram}` resolves in the official `Languages.iss` example without the script
+     * declaring it. Those files can only be read when the installation path is configured, so the check is
+     * skipped — and only then — when the script pulls in a `MessagesFile` whose messages are out of reach.
+     * A script that declares no `MessagesFile` has no such hidden source and is checked as before.
      */
     private fun annotateCustomMessage(
         constant: IsSectionConstant,
@@ -1004,6 +1136,7 @@ class IsSectionAnnotator : Annotator {
         holder: IsAnnotationSink
     ) {
         val (msgName, nameRange) = body.customMessageNameRange() ?: return
+        if (constant.issFile?.declaresUnreadableMessagesFile() == true) return
 
         // [CustomMessages] entries may be contributed by an #include — resolve over the effective script.
         val declared = constant.issFile?.declarationScope()?.findSections("CustomMessages")
@@ -1021,6 +1154,20 @@ class IsSectionAnnotator : Annotator {
         }
     }
 
+    /**
+     * Whether this script declares a `\[Languages]` `MessagesFile` whose `\[CustomMessages]` section cannot
+     * be consulted, because no Inno Setup installation path is configured. The language files shipped with
+     * Inno Setup define custom messages of their own, so as long as they are out of reach a `{cm:…}` name
+     * that is missing from the script may still be perfectly valid.
+     */
+    private fun IsScriptFile.declaresUnreadableMessagesFile(): Boolean {
+        if (!IsSettingsService.getInstance().state.installationPath.isNullOrBlank()) return false
+        return declarationScope().findSections("Languages")
+            .flatMap { it.parameterEntryList }
+            .flatMap { it.paramPairList }
+            .any { it.keyText().equals("MessagesFile", ignoreCase = true) }
+    }
+
     private fun highlight(range: TextRange, key: TextAttributesKey, holder: IsAnnotationSink) =
         holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
             .range(range).textAttributes(key).create()
@@ -1030,5 +1177,23 @@ class IsSectionAnnotator : Annotator {
         // and the drive ':' are intentionally excluded (they are valid in paths), as are the wildcards
         // '*'/'?' which legitimately appear in delete/source patterns.
         val INVALID_PATH_CHARS = setOf('<', '>', '"', '|')
+
+        // Keywords ISCC accepts in front of a path, separated by a colon: `compiler:` (relative to the
+        // Inno Setup installation directory) and `userdocs:` (relative to the compiling user's Documents
+        // folder, e.g. the `OutputDir` of the official example scripts). Their colon is not a drive
+        // specifier, so it must not be reported as an invalid path character.
+        val COMPILE_TIME_PATH_PREFIXES = listOf("compiler", "userdocs")
+
+        /** Decimal integer, optionally with `_` digit grouping between digits (`7_000_000`). */
+        val INTEGER_VALUE = Regex("-?[0-9]+(_[0-9]+)*")
+
+        /** Pascal-style hexadecimal literal (`$0409`). */
+        val HEX_VALUE = Regex("\\\$[0-9A-Fa-f]+")
+
+        /** ISPP directives that take a value expression and may therefore appear inside `{#…}`. */
+        val EXPRESSION_DIRECTIVES = setOf("emit", "expr", "file", "insert", "append", "include")
+
+        /** ISPP directives whose argument is free-form text, so there is nothing to validate. */
+        val FREEFORM_DIRECTIVES = setOf("pragma", "error")
     }
 }

@@ -40,6 +40,18 @@ data class IsSectionAttributeSpec(
      */
     val required: Set<IsSectionSpecTarget> = emptySet(),
     /**
+     * Other attributes that satisfy this attribute's [required] state in its place. Inno Setup accepts
+     * either/or pairs — `AppVersion` may be replaced by `AppVerName` — so a required attribute must not be
+     * reported as missing while one of its alternatives is present.
+     */
+    val requiredAlternatives: Set<String> = emptySet(),
+    /**
+     * Flags of the same entry that waive this attribute's [required] state. Whether a parameter is mandatory
+     * is not a property of the attribute alone — `\[Files]` `DestDir` is required normally, but not with
+     * `dontcopy`, where the file is only extracted at run time and never installed to a target directory.
+     */
+    val requiredWaivedByFlags: Set<String> = emptySet(),
+    /**
      * Returns or performs the public behavior represented by this member.
      */
     val deprecated: Set<IsSectionSpecTarget> = emptySet(),

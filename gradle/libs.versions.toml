@@ -7,6 +7,9 @@ foojay-resolver = "1.0.0"
 intellij-platform = "2.18.1"
 idea = "2026.2"
 grammarkit = "2023.3.0.3"
+# Upstream tag of jrsoftware/issrc whose Examples/ directory the integration tests validate against.
+# The examples are downloaded on demand and never checked in; see InnoSetupExamplesTask.
+innoSetupExamples = "is-6_7_3"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }

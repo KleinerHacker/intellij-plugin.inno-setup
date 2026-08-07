@@ -107,7 +107,15 @@ enum class IsSectionPathExistence(val wireName: String) {
  *                     [IsSectionPathExistence.REQUIRED].
  */
 data class IsSectionFileTypeSpec(
-    val existence: IsSectionPathExistence = IsSectionPathExistence.REQUIRED
+    val existence: IsSectionPathExistence = IsSectionPathExistence.REQUIRED,
+    /**
+     * Flags of the same entry that waive the compile-time existence requirement. Whether a file has to be
+     * present when the script is compiled is not a property of the attribute alone — `\[Files]` `Source`
+     * must exist normally, but not with `external` (the file is supplied at run time) or with
+     * `skipifsourcedoesntexist`. With one of these flags set the value is only checked for invalid path
+     * characters, exactly like an [IsSectionPathExistence.OPTIONAL] path.
+     */
+    val existenceWaivedByFlags: Set<String> = emptySet(),
 ) : IsSectionAttributeTypeSpec()
 
 /**
