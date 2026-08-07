@@ -297,7 +297,8 @@ class IsSectionAnnotator : Annotator {
             val missing = required
                 .filterNot { attribute ->
                     attribute.name.lowercase() in present ||
-                            attribute.requiredAlternatives.any { it.lowercase() in present }
+                            attribute.required?.except?.byAttribute.orEmpty()
+                                .any { it.lowercase() in present }
                 }
                 .map { it.name.lowercase() }
                 .toSet()
@@ -407,7 +408,7 @@ class IsSectionAnnotator : Annotator {
             // A flag of the same entry can waive the requirement (`DestDir` with `dontcopy`) — the same
             // spec-driven mechanism the file-existence check uses.
             .filterNot { attribute ->
-                attribute.requiredWaivedByFlags.any { waiving ->
+                attribute.required?.except?.byFlag.orEmpty().any { waiving ->
                     declaredFlags.any { it.equals(waiving, ignoreCase = true) }
                 }
             }
@@ -625,16 +626,11 @@ class IsSectionAnnotator : Annotator {
         when (val type = attr.type) {
             is IsSectionFlagTypeSpec -> annotateFlagValue(value, type, holder)
             is IsSectionNativeTypeSpec -> annotateNativeValue(value, type, holder)
-            is IsSectionFileTypeSpec -> annotatePathValue(
-                value,
-                requireDirectory = false,
-                // A flag of the same entry can waive the compile-time existence requirement (`external`,
-                // `skipifsourcedoesntexist`) — then only the path characters are checked.
-                if (value.hasAnyFlag(type.existenceWaivedByFlags)) IsSectionPathExistence.OPTIONAL
-                else type.existence,
-                holder,
-            )
-            is IsSectionDirectoryTypeSpec -> annotatePathValue(value, requireDirectory = true, type.existence, holder)
+            is IsSectionFileTypeSpec ->
+                annotatePathValue(value, requireDirectory = false, value.mustExist(type.mustExists), holder)
+
+            is IsSectionDirectoryTypeSpec ->
+                annotatePathValue(value, requireDirectory = true, value.mustExist(type.mustExists), holder)
             is IsSectionReferenceTypeSpec -> {
                 val pair = value.containingParamPair
                 if (pair?.isReferenceParam() == true) {
@@ -647,15 +643,24 @@ class IsSectionAnnotator : Annotator {
     }
 
     /**
-     * Default validation for `file`/`directory` typed attributes, dispatching on [existence]:
+     * Whether the compile-time existence check applies to this value, given the [mustExists] block of
+     * its spec type. The check is off when the spec declares no `mustExists`, and it is switched off for
+     * this particular entry when one of `mustExists.except.by-flag` is declared on it (`\[Files]`
+     * `Source` with `external` or `skipifsourcedoesntexist`) — then only the path characters are checked.
+     */
+    private fun IsSectionParamValue.mustExist(mustExists: IsSectionMustExists?): Boolean =
+        mustExists != null && !hasAnyFlag(mustExists.except?.byFlag.orEmpty())
+
+    /**
+     * Default validation for `file`/`directory` typed attributes, dispatching on [mustExist]:
      *
-     * - [IsSectionPathExistence.REQUIRED] ([annotatePathExistence]): the value is resolved (expanding
+     * - `true` ([annotatePathExistence]): the value is resolved (expanding
      *   ISPP defines, env vars, and built-in constants) relative to the script directory and checked to
      *   exist and be of the expected kind. The `compiler:` prefix and the build-machine installation path
      *   are honoured via [IsMessagesFileResolver]. Values that cannot be unambiguously checked are skipped
      *   without an annotation: empty values, wildcard patterns (`*`, `?`), comma-separated lists, and
      *   values with unresolvable `{…}` placeholders.
-     * - [IsSectionPathExistence.OPTIONAL] ([annotatePathCharacters]): the path need not exist (a
+     * - `false` ([annotatePathCharacters]): the path need not exist (a
      *   target/runtime path such as `\[Files]` `DestDir`); only invalid path characters are reported.
      *
      * The `\[Languages]` `MessagesFile` directive keeps its dedicated handling
@@ -665,7 +670,7 @@ class IsSectionAnnotator : Annotator {
     private fun annotatePathValue(
         value: IsSectionParamValue,
         requireDirectory: Boolean,
-        existence: IsSectionPathExistence,
+        mustExist: Boolean,
         holder: IsAnnotationSink
     ) {
         // [Languages] MessagesFile is handled exclusively by annotateMessagesFile (the documented exception).
@@ -677,10 +682,8 @@ class IsSectionAnnotator : Annotator {
         val raw = value.singleText.trim()
         if (raw.isEmpty()) return
 
-        when (existence) {
-            IsSectionPathExistence.OPTIONAL -> annotatePathCharacters(value, raw, holder)
-            IsSectionPathExistence.REQUIRED -> annotatePathExistence(value, raw, requireDirectory, holder)
-        }
+        if (mustExist) annotatePathExistence(value, raw, requireDirectory, holder)
+        else annotatePathCharacters(value, raw, holder)
     }
 
     /**

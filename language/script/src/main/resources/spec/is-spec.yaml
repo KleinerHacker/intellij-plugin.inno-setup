@@ -16,7 +16,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "The full name of the application, e.g. <code>My Program</code>. Displayed throughout the wizard and in Add/Remove Programs."
         array: false
@@ -25,9 +26,11 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
-        # Inno Setup accepts AppVerName in its place, so only the absence of BOTH is an error.
-        requiredAlternatives: [ AppVerName ]
+        required:
+          files: [ iss ]
+          # Inno Setup accepts AppVerName in its place, so only the absence of BOTH is an error.
+          except:
+            by-attribute: [ AppVerName ]
         deprecated: [ ]
         description: "The version string of the application, e.g. <code>1.0</code>. Shown in Add/Remove Programs and used for upgrade detection. Either this directive or <code>AppVerName</code> must be present."
         array: false
@@ -37,7 +40,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Compression algorithm for setup files. Valid values: <code>lzma2/ultra64</code> (default, best ratio), <code>bzip2</code>, <code>deflate</code>, <code>none</code>."
         array: false
@@ -45,8 +47,6 @@ sections:
       - name: OutputDir
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Directory where the compiled Setup EXE is written. Relative to the script file location. Default: <code>Output</code>."
         array: false
@@ -54,8 +54,6 @@ sections:
       - name: OutputBaseFilename
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Base filename (without <code>.exe</code>) of the compiled installer, e.g. <code>myapp-setup</code>. Default: <code>setup</code>."
         array: false
@@ -63,7 +61,7 @@ sections:
       - name: SourceDir
         type:
           kind: directory
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Base directory for relative paths used in <code>[Files]</code> and other sections. Defaults to the directory containing the script."
         array: false
@@ -71,7 +69,7 @@ sections:
       - name: SetupIconFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to an <code>.ico</code> file used as the icon for the compiled Setup EXE."
         array: false
@@ -80,7 +78,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Password used to encrypt the setup's files. The installer will prompt for this password at runtime."
         array: false
@@ -90,7 +87,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Publisher name shown in Add/Remove Programs."
         array: false
@@ -99,7 +95,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "URL of the publisher's website, shown in Add/Remove Programs."
         array: false
@@ -108,7 +103,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Support URL shown in Add/Remove Programs."
         array: false
@@ -117,7 +111,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Updates/download URL shown in Add/Remove Programs."
         array: false
@@ -126,8 +119,6 @@ sections:
       - name: DefaultDirName
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Default installation directory shown on the Select Destination page, e.g. <code>{autopf}\\MyApp</code>. Supports Inno Setup directory constants."
         array: false
@@ -136,7 +127,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Default Start Menu folder name shown on the Select Start Menu Folder page."
         array: false
@@ -146,7 +136,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Required privilege level. Valid values: <code>admin</code> (default), <code>lowest</code>, <code>none</code>."
         array: false
@@ -155,7 +144,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Allows the user to override the privilege requirement. Values: <code>commandline</code>, <code>dialog</code>."
         array: false
@@ -165,7 +153,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version required to run the installer, e.g. <code>6.1</code> for Windows 7. Use <code>0</code> to never install."
         array: false
@@ -174,7 +161,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of allowed CPU architectures: <code>x86</code>, <code>x64</code>, <code>arm64</code>, <code>ia64</code>. Default: all."
         array: true
@@ -183,7 +169,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Architectures for which the installer runs in 64-bit mode, e.g. <code>x64compatible arm64</code>."
         array: true
@@ -193,7 +178,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Mutex name checked before installation starts. If the mutex exists, the installer warns that the application is already running."
         array: false
@@ -202,7 +186,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the installer automatically closes applications that lock files being updated."
         array: false
@@ -210,7 +193,7 @@ sections:
       - name: LicenseFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> license file shown on the License Agreement page."
         array: false
@@ -218,7 +201,7 @@ sections:
       - name: InfoBeforeFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page before installation begins."
         array: false
@@ -226,7 +209,7 @@ sections:
       - name: InfoAfterFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a <code>.txt</code> or <code>.rtf</code> file shown on an information page after installation completes."
         array: false
@@ -236,7 +219,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, a <i>Don't create a Start Menu folder</i> checkbox is shown on the Select Start Menu Folder page."
         array: false
@@ -245,7 +227,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name shown for the application in Add/Remove Programs. Defaults to <code>AppName</code>."
         array: false
@@ -253,8 +234,6 @@ sections:
       - name: UninstallDisplayIcon
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Path to an EXE, DLL, or ICO used as the icon in Add/Remove Programs, e.g. <code>{app}\\MyApp.exe</code>."
         array: false
@@ -263,7 +242,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "Controls whether the uninstall registry key is created under <code>HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall</code>. Default: <code>yes</code>."
         array: false
@@ -272,7 +250,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Pascal expression or <code>yes</code>/<code>no</code> controlling whether an uninstaller entry is created. Default: <code>yes</code>."
         array: false
@@ -282,7 +259,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Controls the Select Destination Directory page visibility. Values: <code>yes</code>, <code>no</code>, <code>auto</code> (default)."
         array: false
@@ -291,7 +267,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Controls the Select Start Menu Folder page visibility. Values: <code>yes</code>, <code>no</code>, <code>auto</code> (default)."
         array: false
@@ -300,7 +275,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the Welcome page is not shown. Default: <code>no</code>."
         array: false
@@ -309,7 +283,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the Ready to Install page is not shown. Default: <code>no</code>."
         array: false
@@ -318,7 +291,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the previously installed directory is pre-filled on reinstall. Default: <code>yes</code>."
         array: false
@@ -327,7 +299,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the previously used Start Menu folder is pre-filled on reinstall. Default: <code>yes</code>."
         array: false
@@ -336,7 +307,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, a page is shown asking for the user name, company name, and optional serial number."
         array: false
@@ -346,7 +316,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Visual style of the wizard. Values: <code>classic</code>, <code>modern</code> (default)."
         array: false
@@ -355,7 +324,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the wizard window can be resized by the user."
         array: false
@@ -363,7 +331,7 @@ sections:
       - name: WizardImageFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a BMP file displayed on the left side of the wizard in classic style."
         array: false
@@ -371,7 +339,7 @@ sections:
       - name: WizardSmallImageFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a BMP file displayed in the top-right corner of the wizard."
         array: false
@@ -380,7 +348,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, a log file is automatically created in the user's temp directory during installation."
         array: false
@@ -389,7 +356,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Comma-separated list of executable names excluded from automatic application-close checks, e.g. <code>MyHelper.exe</code>."
         array: false
@@ -399,7 +365,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Specifies the PBKDF2 iteration count used to derive the encryption key from the password. Higher values increase security at the cost of performance."
         array: false
@@ -409,7 +374,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Controls archive extraction capability. Values: <code>basic</code>, <code>enhanced/nopassword</code>, <code>enhanced</code>, <code>full</code>."
         array: false
@@ -419,7 +383,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, a log file is automatically created during uninstallation."
         array: false
@@ -429,7 +392,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Opacity (0–100) of the wizard image in modern style. Default: <code>100</code> (fully opaque)."
         array: false
@@ -438,7 +400,7 @@ sections:
       - name: WizardStyleFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard in light or default mode."
         array: false
@@ -447,7 +409,7 @@ sections:
       - name: WizardStyleFileDynamicDark
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a VCL style file (<code>.vsf</code>) applied to the wizard when the system is in dark mode (requires <code>WizardStyle=dynamic</code>)."
         array: false
@@ -457,7 +419,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the wizard window maintains its aspect ratio when resized. Default: <code>yes</code>."
         array: false
@@ -467,7 +428,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Background colour of the wizard window in light or default mode, e.g. <code>$F0F0F0</code>."
         array: false
@@ -477,7 +437,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Background colour of the wizard window in dark mode (requires <code>WizardStyle=dynamic</code>)."
         array: false
@@ -486,7 +445,7 @@ sections:
       - name: WizardBackImageFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to an image file displayed as the wizard background in light or default mode."
         array: false
@@ -495,7 +454,7 @@ sections:
       - name: WizardBackImageFileDynamicDark
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to an image file displayed as the wizard background in dark mode (requires <code>WizardStyle=dynamic</code>)."
         array: false
@@ -505,7 +464,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Opacity (0–100) of the wizard background image. Default: <code>100</code>."
         array: false
@@ -515,7 +473,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, enables Windows' RedirectionGuard mitigation to prevent path-based privilege escalation."
         array: false
@@ -525,7 +482,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Architecture of the generated installer binary. Values: <code>x86</code> (default, 32-bit), <code>x64</code> (64-bit, removes MAX_PATH limit)."
         array: false
@@ -536,7 +492,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Unique identifier of the application, used as the uninstall registry key name and to match previous installations. Defaults to <code>AppName</code>. Use a GUID for guaranteed uniqueness, e.g. <code>{{F1C…}}</code>."
         array: false
@@ -545,7 +500,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Full application name including version, e.g. <code>My Program 1.5</code>, shown throughout the wizard. If omitted, it is derived from <code>AppName</code> and <code>AppVersion</code>."
         array: false
@@ -554,7 +508,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Copyright string displayed on the wizard window, e.g. <code>Copyright © 2025 My Company</code>."
         array: false
@@ -563,7 +516,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Comments text shown in the application's Add/Remove Programs support information."
         array: false
@@ -572,7 +524,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Contact information shown in the application's Add/Remove Programs support information."
         array: false
@@ -581,7 +532,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Command line used for the <i>Modify</i> button in Add/Remove Programs, e.g. <code>{app}\\MyApp.exe /modify=1</code>."
         array: false
@@ -589,8 +539,6 @@ sections:
       - name: AppReadmeFile
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Path to a ReadMe file shown via the <i>Readme</i> button in Add/Remove Programs, e.g. <code>{app}\\README.TXT</code>."
         array: false
@@ -599,7 +547,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Support phone number shown in the application's Add/Remove Programs support information."
         array: false
@@ -609,7 +556,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "File version number written into the compiled Setup EXE's version resource, e.g. <code>1.5.0.0</code>. Defaults to <code>AppVersion</code> if numeric."
         array: false
@@ -618,7 +564,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Product version number written into the version resource, e.g. <code>1.5.0.0</code>. Defaults to <code>VersionInfoVersion</code>."
         array: false
@@ -627,7 +572,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "File version text written into the version resource. Defaults to <code>VersionInfoVersion</code>."
         array: false
@@ -636,7 +580,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Product version text written into the version resource. Defaults to <code>VersionInfoProductVersion</code>."
         array: false
@@ -645,7 +588,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Company name written into the compiled Setup EXE's version resource."
         array: false
@@ -654,7 +596,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "File description written into the version resource. Defaults to <code>AppName Setup</code>."
         array: false
@@ -663,7 +604,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Legal copyright string written into the version resource."
         array: false
@@ -672,7 +612,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Product name written into the version resource. Defaults to <code>AppName</code>."
         array: false
@@ -681,7 +620,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Original filename written into the version resource of the compiled Setup EXE."
         array: false
@@ -691,7 +629,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, the compiler does not produce an output (Setup) file. Useful for syntax-only checks. Default: <code>yes</code>."
         array: false
@@ -699,8 +636,6 @@ sections:
       - name: OutputManifestFile
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "If set, the compiler writes a manifest text file listing all compiled files to this path (relative to <code>OutputDir</code>)."
         array: false
@@ -709,7 +644,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Compression level for internal structures (not the files themselves). Values: <code>none</code>, <code>fast</code>, <code>normal</code> (default), <code>max</code>, <code>ultra</code>, <code>ultra64</code>."
         array: false
@@ -718,7 +652,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Number of threads used by LZMA/LZMA2 compression, or <code>auto</code> (default) to use all logical processors."
         array: false
@@ -727,7 +660,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, all files are compressed as a single solid stream, improving the ratio at the cost of slower partial extraction. Default: <code>no</code>."
         array: false
@@ -736,7 +668,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), identical source files are stored only once in the installer to reduce size."
         array: false
@@ -745,7 +676,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of extra bytes reserved at the end of the compiled Setup EXE, e.g. for appending custom data. Default: <code>0</code>."
         array: false
@@ -754,7 +684,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), a setup loader (SETUP.EXE + SETUP.0/.bin) is used. If <code>no</code>, a single self-contained EXE is produced without a loader."
         array: false
@@ -763,7 +692,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the compiler skips signature verification of precompiled bundled files. Default: <code>no</code>."
         array: false
@@ -773,7 +701,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "LZMA/LZMA2 compression algorithm: <code>0</code> (fast) or <code>1</code> (normal, default for <code>max</code>/<code>ultra</code>)."
         array: false
@@ -782,7 +709,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "LZMA match finder. Values: <code>BT</code> (binary tree, default) or <code>HC</code> (hash chain, faster but lower ratio)."
         array: false
@@ -791,7 +717,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of fast bytes for the LZMA encoder (5–273). Higher values improve the ratio slightly at the cost of speed."
         array: false
@@ -800,7 +725,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "LZMA dictionary size in KB. Larger values improve the ratio but increase memory use during compression and decompression."
         array: false
@@ -809,7 +733,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "LZMA2 block size in KB used when multithreading is enabled."
         array: false
@@ -818,7 +741,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of LZMA2 block threads used for parallel compression. Default: <code>1</code>."
         array: false
@@ -827,7 +749,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Whether LZMA compression runs in a separate process to access more memory. Values: <code>yes</code>, <code>no</code> (default), <code>x86</code>."
         array: false
@@ -837,7 +758,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the installer is split into multiple disk-sized slices. Default: <code>no</code>."
         array: false
@@ -846,7 +766,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Maximum size in bytes of each disk slice when <code>DiskSpanning</code> is enabled, or <code>max</code> for the largest supported size."
         array: false
@@ -855,7 +774,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Cluster size in bytes of the target disk media, used to optimise slice padding. Default: <code>512</code>."
         array: false
@@ -864,7 +782,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of slices to place on each disk when disk spanning is enabled. Default: <code>1</code>."
         array: false
@@ -874,7 +791,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, files are encrypted in the installer. Pair with <code>Password</code> (or <code>EncryptionKey</code>). Default: <code>no</code>."
         array: false
@@ -883,7 +799,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Password the user must enter to install. When <code>Encryption</code> is <code>yes</code>, it also encrypts the files."
         array: false
@@ -892,7 +807,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a sign tool (defined via the compiler's <code>SignTool</code> setting) used to digitally sign the Setup EXE and uninstaller."
         array: false
@@ -901,7 +815,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Minimum number of milliseconds to wait between consecutive sign tool invocations, to respect timestamp server rate limits."
         array: false
@@ -910,7 +823,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of times to retry signing if the sign tool fails. Default: <code>2</code>."
         array: false
@@ -919,7 +831,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Delay in milliseconds before retrying a failed sign tool invocation. Default: <code>500</code>."
         array: false
@@ -928,7 +839,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the sign tool process is run minimized. Default: <code>no</code>."
         array: false
@@ -937,7 +847,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the generated uninstaller is digitally signed using the configured <code>SignTool</code>. Default: <code>no</code>."
         array: false
@@ -945,7 +854,7 @@ sections:
       - name: SignedUninstallerDir
         type:
           kind: directory
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Directory containing pre-signed uninstaller binaries to embed instead of signing during compilation."
         array: false
@@ -955,7 +864,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the compiler warns when a message is missing from a language file."
         array: false
@@ -964,7 +872,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the compiler warns about unrecognised message identifiers in a language file."
         array: false
@@ -973,7 +880,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the compiler warns about <code>[Run]</code>/<code>[UninstallRun]</code> entries that use the <code>runonce</code> flag without a <code>RunOnceId</code>."
         array: false
@@ -982,7 +888,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the compiler warns when the script writes to user areas while requiring administrative privileges."
         array: false
@@ -992,7 +897,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as ASLR-compatible (Address Space Layout Randomization)."
         array: false
@@ -1001,7 +905,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as DEP-compatible (Data Execution Prevention)."
         array: false
@@ -1010,7 +913,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the Setup and uninstaller EXEs are marked as Terminal Services aware."
         array: false
@@ -1020,7 +922,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, no application directory is created and the Select Destination page is hidden; <code>{app}</code> resolves to <code>{src}</code>. Default: <code>yes</code>."
         array: false
@@ -1029,7 +930,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, the Cancel button is disabled during the actual file-copy phase. Default: <code>yes</code>."
         array: false
@@ -1038,7 +938,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, the user cannot select an installation directory on a network drive. Default: <code>yes</code>."
         array: false
@@ -1047,7 +946,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, the user cannot enter a UNC path as the installation directory. Default: <code>yes</code>."
         array: false
@@ -1056,7 +954,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the user may select a drive's root directory as the installation directory. Default: <code>no</code>."
         array: false
@@ -1065,7 +962,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the installer notifies the shell that file associations changed, so Explorer refreshes icons. Default: <code>no</code>."
         array: false
@@ -1074,7 +970,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the installer broadcasts an environment-change message so running programs pick up modified environment variables. Default: <code>no</code>."
         array: false
@@ -1083,7 +978,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Additional bytes of free disk space (beyond the size of the installed files) required, shown on the Ready page."
         array: false
@@ -1092,7 +986,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) on which the installer may run, e.g. <code>10.0</code>. Counterpart to <code>MinVersion</code>."
         array: false
@@ -1101,7 +994,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Mutex name preventing multiple instances of this installer from running simultaneously. Differs from <code>AppMutex</code>, which checks for the application itself."
         array: false
@@ -1110,7 +1002,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the computer is always prompted to restart at the end of installation. Default: <code>no</code>."
         array: false
@@ -1119,7 +1010,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the installer uses Restart Manager to close and restart applications that lock files. Works with <code>CloseApplications</code>."
         array: false
@@ -1128,7 +1018,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, a program launched from <code>[Run]</code> may request a reboot (exit code 3010), prompting the user to restart. Default: <code>no</code>."
         array: false
@@ -1137,7 +1026,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Wildcard filter (default <code>*.exe,*.dll,*.chm</code>) selecting which files are checked when <code>CloseApplications</code> is enabled."
         array: false
@@ -1147,7 +1035,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Date applied to installed files that use the <code>touch</code> flag. Values: <code>current</code>, <code>none</code>, or a <code>yyyy-mm-dd</code> date."
         array: false
@@ -1156,7 +1043,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Time applied to installed files that use the <code>touch</code> flag. Values: <code>current</code>, <code>none</code>, or an <code>hh:mm</code>/<code>hh:mm:ss</code> time."
         array: false
@@ -1165,7 +1051,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Number of seconds to which touched file timestamps are rounded. Default: <code>2</code>. Use <code>0</code> to disable rounding."
         array: false
@@ -1174,7 +1059,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, <code>TouchDate</code>/<code>TouchTime</code> values are interpreted as UTC instead of local time. Default: <code>no</code>."
         array: false
@@ -1184,7 +1068,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the initial <i>This will install…</i> confirmation prompt is not shown. Default: <code>no</code>."
         array: false
@@ -1193,7 +1076,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the final <i>Setup Completed</i> page is not shown. Default: <code>no</code>."
         array: false
@@ -1202,7 +1084,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the Ready to Install page omits the summary memo of selected options. Default: <code>no</code>."
         array: false
@@ -1211,7 +1092,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Controls the warning shown when the chosen directory already exists. Values: <code>auto</code> (default), <code>yes</code>, <code>no</code>."
         array: false
@@ -1220,7 +1100,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), a warning is shown when the chosen installation directory does not yet exist."
         array: false
@@ -1229,7 +1108,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, <code>DefaultDirName</code> is used verbatim instead of having the default folder name appended. Default: <code>yes</code>."
         array: false
@@ -1238,7 +1116,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>no</code>, <code>DefaultGroupName</code> is used verbatim instead of having the default group name appended. Default: <code>yes</code>."
         array: false
@@ -1247,7 +1124,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the components list is always shown on the Select Components page even when only one type is defined."
         array: false
@@ -1256,7 +1132,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), child components are displayed in a flat list with indentation rather than an expandable tree."
         array: false
@@ -1265,7 +1140,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the size of each component is displayed in the components list."
         array: false
@@ -1274,7 +1148,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, tree lines connecting parent and child tasks are shown on the Select Additional Tasks page. Default: <code>no</code>."
         array: false
@@ -1283,7 +1156,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the destination directory is always shown on the Ready to Install page, even when the Select Destination page was hidden. Default: <code>no</code>."
         array: false
@@ -1292,7 +1164,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the Start Menu folder is always shown on the Ready to Install page, even when its page was hidden. Default: <code>no</code>."
         array: false
@@ -1301,7 +1172,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, Start Menu shortcuts are always created in the current user's personal group rather than the common (all users) group. Default: <code>no</code>."
         array: false
@@ -1311,7 +1181,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Controls the Select Language dialog. Values: <code>yes</code> (default), <code>no</code>, <code>auto</code> (only show if the system language has no match)."
         array: false
@@ -1320,7 +1189,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "How the default language is detected. Values: <code>uilanguage</code> (default), <code>locale</code>, <code>none</code>."
         array: false
@@ -1329,7 +1197,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Fallback dialog font used when a language file does not specify <code>DialogFontName</code>. Default: <code>Segoe UI</code>."
         array: false
@@ -1339,7 +1206,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Default value for the user name field on the User Information page. Defaults to the registered Windows owner name."
         array: false
@@ -1348,7 +1214,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Default value for the organisation field on the User Information page. Defaults to the registered Windows organisation."
         array: false
@@ -1357,7 +1222,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Default value for the serial number field on the User Information page."
         array: false
@@ -1367,7 +1231,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the language chosen during a previous installation is reused, skipping the Select Language dialog."
         array: false
@@ -1376,7 +1239,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the privilege level used during a previous installation is reused when <code>PrivilegesRequiredOverridesAllowed</code> permits it."
         array: false
@@ -1385,7 +1247,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the setup type and component selection from a previous installation are pre-selected."
         array: false
@@ -1394,7 +1255,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the tasks selected during a previous installation are pre-selected."
         array: false
@@ -1403,7 +1263,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the name, organisation, and serial entered during a previous installation are pre-filled on the User Information page."
         array: false
@@ -1413,7 +1272,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Estimated size in bytes shown for the application in Add/Remove Programs. If omitted, it is calculated automatically."
         array: false
@@ -1421,8 +1279,6 @@ sections:
       - name: UninstallFilesDir
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Directory where the uninstaller (<code>unins???.exe</code>) and its log are stored. Default: <code>{app}</code>."
         array: false
@@ -1431,7 +1287,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "How the uninstall log is written. Values: <code>append</code> (default), <code>new</code>, <code>overwrite</code>."
         array: false
@@ -1440,7 +1295,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code>, the user is always prompted to restart the computer after uninstallation. Default: <code>no</code>."
         array: false
@@ -1449,7 +1303,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), reinstalling updates the application name stored in an existing uninstall log."
         array: false
@@ -1459,7 +1312,6 @@ sections:
         type:
           kind: native
           dataType: boolean
-        required: [ ]
         deprecated: [ ]
         description: "If <code>yes</code> (default), the wizard images are stretched to fit their area; if <code>no</code>, they are centred."
         array: false
@@ -1468,7 +1320,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "How the alpha channel of the wizard images is interpreted. Values: <code>none</code> (default), <code>defined</code>, <code>premultiplied</code>."
         array: false
@@ -1477,7 +1328,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Background colour shown behind a non-stretched main wizard image, e.g. <code>$ffffff</code> or <code>clWhite</code>."
         array: false
@@ -1486,7 +1336,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Dark-mode override for <code>WizardImageBackColor</code>, used when the system uses a dark theme."
         array: false
@@ -1495,7 +1344,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Dark-mode override for <code>WizardImageFile</code>, displayed when the system uses a dark theme."
         array: false
@@ -1504,7 +1352,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Background colour shown behind a non-stretched small wizard image (top-right corner)."
         array: false
@@ -1513,7 +1360,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Dark-mode override for <code>WizardSmallImageBackColor</code>."
         array: false
@@ -1522,7 +1368,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Dark-mode override for <code>WizardSmallImageFile</code>, displayed when the system uses a dark theme."
         array: false
@@ -1531,7 +1376,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Wizard window size as a percentage of its base size, either a single value or <code>width,height</code>, e.g. <code>120</code> or <code>150,140</code>. Range 100–150."
         array: false
@@ -1549,7 +1393,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Internal identifier for this installation type. Referenced by the <code>Types</code> parameter in <code>[Components]</code>."
         array: false
@@ -1558,7 +1403,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Human-readable label displayed in the wizard for this installation type."
         array: false
@@ -1571,7 +1417,6 @@ sections:
               description: "Marks this installation type as the user-customisable type. Only one type with this flag is allowed per script. When selected, the user can manually choose which components to install."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling the installation type behaviour."
         array: true
@@ -1581,7 +1426,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -1590,7 +1434,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -1599,7 +1442,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -1608,7 +1450,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -1626,7 +1467,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Internal identifier for this component. Use backslash for hierarchy, e.g. <code>extra\\plugins</code>."
         array: false
@@ -1635,7 +1477,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Label shown for this component in the wizard's component list."
         array: false
@@ -1644,7 +1487,6 @@ sections:
         type:
           kind: reference
           section: Types
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of installation type names (from <code>[Types]</code>) that include this component by default."
         array: true
@@ -1653,7 +1495,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Additional disk space in bytes required by this component, beyond the files it installs. Shown on the Select Components page."
         array: false
@@ -1690,7 +1531,6 @@ sections:
               description: "Suppresses the warning shown when the user deselects a previously installed component."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling component selection and installation behaviour."
         array: true
@@ -1700,7 +1540,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -1709,7 +1548,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
         array: true
@@ -1718,7 +1556,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -1727,7 +1564,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -1745,7 +1581,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Internal identifier for this task. Use backslash for sub-tasks, e.g. <code>desktopicon\\user</code>."
         array: false
@@ -1754,7 +1591,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Label shown next to the checkbox or radio button in the wizard."
         array: false
@@ -1763,7 +1601,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Optional heading text displayed above a group of tasks."
         array: false
@@ -1772,7 +1609,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names (from <code>[Components]</code>). This task is only shown when at least one listed component is selected."
         array: true
@@ -1809,7 +1645,6 @@ sections:
               description: "The task is unchecked by default."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling task selection behaviour."
         array: true
@@ -1819,7 +1654,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -1828,7 +1662,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names (from <code>[Languages]</code>). Limits this entry to the specified languages."
         array: true
@@ -1837,7 +1670,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -1846,7 +1678,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -1863,8 +1694,8 @@ sections:
       - name: Name
         type:
           kind: directory
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Full path of the directory to create, e.g. <code>{app}\\data</code>. Supports all Inno Setup directory constants."
         array: false
@@ -1873,7 +1704,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "File system attributes to set on the directory: <code>readonly</code>, <code>hidden</code>, <code>system</code>, <code>notcontentindexed</code>."
         array: true
@@ -1882,7 +1712,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "ACL permissions to grant, e.g. <code>users-modify</code>, <code>everyone-readexec</code>. Avoid setting ACLs on top-level system directories."
         array: true
@@ -1919,7 +1748,6 @@ sections:
               conflicts:
                 - flag: setntfscompression
                   type: forbidden
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling directory creation and removal."
         array: true
@@ -1929,7 +1757,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -1938,7 +1765,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -1947,7 +1773,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -1956,7 +1781,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -1965,7 +1789,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -1974,7 +1797,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -1983,7 +1805,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -1992,7 +1813,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -2012,8 +1832,11 @@ sections:
           # With these flags the file need not be present when the script is compiled: `external` means it
           # is supplied at run time (e.g. downloaded into {tmp}), `skipifsourcedoesntexist` explicitly makes
           # a missing file legal.
-          existenceWaivedByFlags: [ external, skipifsourcedoesntexist ]
-        required: [ iss ]
+          mustExists:
+            except:
+              by-flag: [ external, skipifsourcedoesntexist ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Source file path or wildcard pattern, e.g. <code>MyProg.exe</code> or <code>Plugins\\*</code>. Relative to <code>SourceDir</code>."
         array: false
@@ -2021,11 +1844,12 @@ sections:
       - name: DestDir
         type:
           kind: directory
-          existence: optional
-        required: [ iss ]
-        # With `dontcopy` the file is never installed — it is only extracted to {tmp} on demand — so there
-        # is no destination directory to name.
-        requiredWaivedByFlags: [ dontcopy ]
+        required:
+          files: [ iss ]
+          # With `dontcopy` the file is never installed — it is only extracted to {tmp} on demand — so
+          # there is no destination directory to name.
+          except:
+            by-flag: [ dontcopy ]
         deprecated: [ ]
         description: "Destination directory on the target machine, e.g. <code>{app}</code> or <code>{sys}</code>. Supports all Inno Setup constants. Not required with <code>dontcopy</code>."
         array: false
@@ -2033,8 +1857,6 @@ sections:
       - name: DestName
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Rename the file when installing. If omitted, the original filename is kept."
         array: false
@@ -2043,7 +1865,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Comma-separated list of filename patterns to exclude when using wildcards, e.g. <code>*.pdb,*.log</code>."
         array: false
@@ -2052,7 +1873,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Size in bytes of an external file (used with <code>external</code> flag) for accurate disk-space calculation."
         array: false
@@ -2061,7 +1881,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "File attributes to set after installation: <code>readonly</code>, <code>hidden</code>, <code>system</code>, <code>notcontentindexed</code>."
         array: true
@@ -2070,7 +1889,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "ACL permissions, e.g. <code>users-modify</code>, <code>everyone-readexec</code>."
         array: true
@@ -2079,7 +1897,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Registry font name used when installing a font file, e.g. <code>My Font (TrueType)</code>. Triggers font registration."
         array: false
@@ -2088,7 +1905,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: ".NET strong assembly name for GAC registration."
         array: false
@@ -2097,7 +1913,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Expected SHA-256 hash of the source file for integrity verification at compile time."
         array: false
@@ -2107,7 +1922,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Comma-separated list of key identifiers from <code>[ISSigKeys]</code> used to verify the file's <code>.issig</code> signature."
         array: true
@@ -2117,7 +1931,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Password for an encrypted archive (used with <code>extractarchive</code> flag). Stored unencrypted in the installer."
         array: false
@@ -2127,7 +1940,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "URL of the <code>.issig</code> signature file for a downloaded file."
         array: false
@@ -2137,7 +1949,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "HTTP Basic Auth username for authenticated file downloads (used with <code>download</code> flag)."
         array: false
@@ -2147,7 +1958,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "HTTP Basic Auth password for authenticated file downloads (used with <code>download</code> flag)."
         array: false
@@ -2406,7 +2216,6 @@ sections:
               description: "If the file is locked during uninstallation, schedules it for deletion on the next system restart."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how each file is installed."
         array: true
@@ -2416,7 +2225,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -2425,7 +2233,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -2434,7 +2241,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -2443,7 +2249,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -2452,7 +2257,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -2461,7 +2265,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -2470,7 +2273,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -2479,7 +2281,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -2496,8 +2297,8 @@ sections:
       - name: Name
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Full path and name of the shortcut, e.g. <code>{group}\\My Program</code> or <code>{commondesktop}\\My Program</code>."
         array: false
@@ -2505,8 +2306,8 @@ sections:
       - name: Filename
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Target of the shortcut — an executable, document, folder, or URL."
         array: false
@@ -2515,7 +2316,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Command-line arguments passed to the target when the shortcut is activated."
         array: false
@@ -2523,8 +2323,6 @@ sections:
       - name: WorkingDir
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Working directory set when the shortcut is launched. Defaults to the target's directory."
         array: false
@@ -2533,7 +2331,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Global keyboard shortcut to launch the target, e.g. <code>ctrl+alt+k</code>."
         array: false
@@ -2542,7 +2339,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Tooltip text shown when the user hovers over the shortcut."
         array: false
@@ -2550,8 +2346,6 @@ sections:
       - name: IconFilename
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Path to an <code>.ico</code>, <code>.exe</code>, or <code>.dll</code> containing the icon for this shortcut."
         array: false
@@ -2560,7 +2354,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Zero-based index of the icon within <code>IconFilename</code>. Default: <code>0</code>."
         array: false
@@ -2569,7 +2362,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Windows 7+ Application User Model ID, used to group taskbar buttons and toast notifications."
         array: false
@@ -2578,7 +2370,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Windows 10+ COM CLSID for toast notification activation."
         array: false
@@ -2632,7 +2423,6 @@ sections:
               description: "Allows <code>Filename</code> to contain only a file name; Setup resolves the full path from the registry's App Paths key."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling shortcut creation and launch behaviour."
         array: true
@@ -2642,7 +2432,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -2651,7 +2440,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -2660,7 +2448,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -2669,7 +2456,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -2678,7 +2464,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -2687,7 +2472,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -2696,7 +2480,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -2705,7 +2488,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -2723,7 +2505,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Registry root hive: <code>HKCU</code>, <code>HKLM</code>, <code>HKCR</code>, <code>HKU</code>, <code>HKCC</code>, <code>HKA</code>. Append <code>32</code> or <code>64</code> to force a specific registry view."
         array: false
@@ -2732,7 +2515,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Registry key path relative to <code>Root</code>, e.g. <code>Software\\My Company\\My App</code>."
         array: false
@@ -2741,7 +2525,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Type of the registry value: <code>none</code> (key only), <code>string</code>, <code>expandsz</code>, <code>multisz</code>, <code>dword</code>, <code>qword</code>, <code>binary</code>."
         array: false
@@ -2750,7 +2533,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of the registry value. Leave empty to set the default value of the key."
         array: false
@@ -2759,7 +2541,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Data to write. Use <code>{olddata}</code> to append to an existing value, or <code>{break}</code> as a line separator for <code>multisz</code>."
         array: false
@@ -2768,7 +2549,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "ACL permissions for the key: <code>full</code>, <code>modify</code>, <code>read</code>."
         array: true
@@ -2827,7 +2607,6 @@ sections:
               conflicts:
                 - flag: uninsclearvalue
                   type: forbidden
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling registry key and value handling."
         array: true
@@ -2837,7 +2616,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -2846,7 +2624,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -2855,7 +2632,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -2864,7 +2640,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -2873,7 +2648,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -2882,7 +2656,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -2891,7 +2664,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -2900,7 +2672,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -2917,8 +2688,6 @@ sections:
       - name: Filename
         type:
           kind: file
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "The <code>.INI</code> file to modify (constants are supported). Defaults to <code>WIN.INI</code> in the Windows directory if no path is given."
         array: false
@@ -2927,7 +2696,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Name of the section in which the entry is created (constants are supported)."
         array: false
@@ -2936,7 +2706,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of the key to set (constants are supported). If omitted or blank, no key is created — only the section is created."
         array: false
@@ -2945,7 +2714,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Value to assign to the key (constants are supported). If omitted, no key is created."
         array: false
@@ -2970,7 +2738,6 @@ sections:
               description: "Deletes the section from the INI file on uninstall only if it contains no other entries."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling INI entry handling and uninstall cleanup."
         array: true
@@ -2980,7 +2747,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -2989,7 +2755,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -2998,7 +2763,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -3007,7 +2771,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -3016,7 +2779,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -3025,7 +2787,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -3034,7 +2795,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -3043,7 +2803,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -3060,8 +2819,8 @@ sections:
       - name: Filename
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Path to the executable, document, or folder to launch. Use <code>shellexec</code> flag to open non-executables."
         array: false
@@ -3070,7 +2829,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for an optional checkbox shown on the post-install page (requires <code>postinstall</code> flag)."
         array: false
@@ -3079,7 +2837,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Command-line arguments passed to <code>Filename</code>."
         array: false
@@ -3087,8 +2844,6 @@ sections:
       - name: WorkingDir
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
         array: false
@@ -3097,7 +2852,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status message shown in the progress window while this entry executes."
         array: false
@@ -3106,7 +2860,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Unique identifier preventing duplicate execution on repeated installs (used in <code>[UninstallRun]</code>)."
         array: false
@@ -3115,7 +2868,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shell verb used with the <code>shellexec</code> flag, e.g. <code>open</code>, <code>print</code>."
         array: false
@@ -3124,7 +2876,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
@@ -3255,7 +3006,6 @@ sections:
               description: "Silently skips the entry if the file specified in <code>Filename</code> does not exist."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how and when the program is executed."
         array: true
@@ -3265,7 +3015,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -3274,7 +3023,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -3283,7 +3031,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -3292,7 +3039,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -3301,7 +3047,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -3310,7 +3055,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -3319,7 +3063,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -3328,7 +3071,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -3345,8 +3087,8 @@ sections:
       - name: Filename
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Path to the executable, document, or folder to launch during uninstallation."
         array: false
@@ -3355,7 +3097,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for an optional checkbox shown on the post-uninstall page (requires <code>postinstall</code> flag)."
         array: false
@@ -3364,7 +3105,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Command-line arguments passed to <code>Filename</code>."
         array: false
@@ -3372,8 +3112,6 @@ sections:
       - name: WorkingDir
         type:
           kind: directory
-          existence: optional
-        required: [ ]
         deprecated: [ ]
         description: "Working directory for the process. Defaults to the directory of <code>Filename</code>."
         array: false
@@ -3382,7 +3120,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status message shown in the progress window while this entry executes."
         array: false
@@ -3391,7 +3128,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Unique identifier preventing this entry from executing more than once across multiple uninstall runs."
         array: false
@@ -3400,7 +3136,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shell verb used with the <code>shellexec</code> flag, e.g. <code>open</code>, <code>print</code>."
         array: false
@@ -3409,7 +3144,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
@@ -3540,7 +3274,6 @@ sections:
               description: "Silently skips the entry if the file specified in <code>Filename</code> does not exist."
               deprecated: [ ]
               conflicts: [ ]
-        required: [ ]
         deprecated: [ ]
         description: "Behavioural flags controlling how and when the program is executed during uninstallation."
         array: true
@@ -3550,7 +3283,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -3559,7 +3291,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -3568,7 +3299,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -3577,7 +3307,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -3586,7 +3315,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -3595,7 +3323,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -3604,7 +3331,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -3613,7 +3339,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -3631,7 +3356,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Internal language identifier, e.g. <code>english</code>, <code>german</code>. Referenced by the <code>Languages</code> common parameter."
         array: false
@@ -3639,7 +3365,9 @@ sections:
       - name: MessagesFile
         type:
           kind: file
-        required: [ iss ]
+          mustExists:
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Path to the ISL message file. Use <code>compiler:Default.isl</code> for the built-in English messages or <code>compiler:Languages\\German.isl</code> for bundled translations."
         array: false
@@ -3647,7 +3375,7 @@ sections:
       - name: LicenseFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a language-specific license file, overriding the <code>[Setup]</code> <code>LicenseFile</code> directive for this language."
         array: false
@@ -3655,7 +3383,7 @@ sections:
       - name: InfoBeforeFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a language-specific 'before installation' info file, overriding the <code>[Setup]</code> <code>InfoBeforeFile</code> directive for this language."
         array: false
@@ -3663,7 +3391,7 @@ sections:
       - name: InfoAfterFile
         type:
           kind: file
-        required: [ ]
+          mustExists:
         deprecated: [ ]
         description: "Path to a language-specific 'after installation' info file, overriding the <code>[Setup]</code> <code>InfoAfterFile</code> directive for this language."
         array: false
@@ -3683,7 +3411,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ isl ]
+        required:
+          files: [ isl ]
         deprecated: [ ]
         description: "The native name of the language, displayed in the language selection dialog of a multilingual installer, e.g. <code>Deutsch</code>."
         array: false
@@ -3692,7 +3421,8 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ isl ]
+        required:
+          files: [ isl ]
         deprecated: [ ]
         description: "Numeric Windows language identifier used for automatic language detection, given in Pascal hexadecimal form, e.g. <code>$0409</code> (English &ndash; United States) or <code>$0407</code> (German &ndash; Germany)."
         array: false
@@ -3701,7 +3431,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "The code page used to convert the non-Unicode text in the message file. Set to <code>0</code> if the message file contains only Unicode/ASCII characters."
         array: false
@@ -3710,7 +3439,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Font used for most text in the wizard. Defaults to 9&nbsp;pt Segoe UI when left empty."
         array: false
@@ -3719,7 +3447,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Point size of the dialog font. Default: <code>9</code>."
         array: false
@@ -3728,7 +3455,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Base width, in pixels, used to scale dialog controls relative to the dialog font. Default: <code>7</code>."
         array: false
@@ -3737,7 +3463,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Base height, in pixels, used to scale dialog controls relative to the dialog font. Default: <code>15</code>."
         array: false
@@ -3746,7 +3471,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Font used for the large heading on the Welcome and Setup Completed pages. Defaults to 14&nbsp;pt Segoe UI when left empty."
         array: false
@@ -3755,7 +3479,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Point size of the welcome font. Default: <code>14</code>."
         array: false
@@ -3764,7 +3487,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "Whether the language is written right-to-left. Set to <code>1</code> to enable, <code>0</code> (default) for left-to-right."
         array: false
@@ -3773,7 +3495,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "(Removed in Inno Setup 6.4) Font formerly used for the application name on the background window."
         array: false
@@ -3783,7 +3504,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "(Removed in Inno Setup 6.4) Point size of the former title font."
         array: false
@@ -3793,7 +3513,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "(Removed in Inno Setup 6.4) Font formerly used for the <code>AppCopyright</code> text on the background window."
         array: false
@@ -3803,7 +3522,6 @@ sections:
         type:
           kind: native
           dataType: integer
-        required: [ ]
         deprecated: [ ]
         description: "(Removed in Inno Setup 6.4) Point size of the former copyright font."
         array: false
@@ -3825,7 +3543,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Window class title of the installer, e.g. Setup."
         array: false
@@ -3834,7 +3551,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Title bar caption of the installer window; %1 is replaced by the application name."
         array: false
@@ -3843,7 +3559,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Short title of the uninstaller, e.g. Uninstall."
         array: false
@@ -3852,7 +3567,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Full title bar caption of the uninstaller; %1 is the application name."
         array: false
@@ -3862,7 +3576,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of generic information dialog boxes."
         array: false
@@ -3871,7 +3584,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of generic confirmation dialog boxes."
         array: false
@@ -3880,7 +3592,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of generic error dialog boxes."
         array: false
@@ -3890,7 +3601,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt shown before installation begins; %1 is the application name."
         array: false
@@ -3899,7 +3609,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the loader cannot create a temporary file."
         array: false
@@ -3908,7 +3617,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the loader cannot execute the extracted temporary file."
         array: false
@@ -3918,7 +3626,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Note appended to the /HELP command-line help dialog."
         array: false
@@ -3927,7 +3634,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Wraps a system error: %1 is the message text, %2 the error code."
         array: false
@@ -3936,7 +3642,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a required file is missing from the installation folder; %1 is the file name."
         array: false
@@ -3945,7 +3650,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the setup files are corrupted."
         array: false
@@ -3954,7 +3658,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when setup files are corrupted or incompatible with this version of Setup."
         array: false
@@ -3963,7 +3666,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an invalid command-line parameter was passed; %1 is the parameter."
         array: false
@@ -3972,7 +3674,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when another instance of Setup is already running."
         array: false
@@ -3981,7 +3682,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the Windows version is not supported by the application."
         array: false
@@ -3990,7 +3690,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a required Windows edition or service pack is missing; %1/%2 give the requirement."
         array: false
@@ -3999,7 +3698,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the program cannot run on this Windows version; %1 is the required platform."
         array: false
@@ -4008,7 +3706,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the program can only run on a specific Windows version; %1 is that platform."
         array: false
@@ -4017,7 +3714,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the program requires a specific processor architecture; %1 lists the architectures."
         array: false
@@ -4026,7 +3722,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the installed Windows version is older than required; %1/%2 give the requirement."
         array: false
@@ -4035,7 +3730,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the installed Windows version is newer than supported; %1/%2 give the requirement."
         array: false
@@ -4044,7 +3738,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when administrator privileges are required to install."
         array: false
@@ -4053,7 +3746,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when administrator or Power User privileges are required to install."
         array: false
@@ -4062,7 +3754,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the application is running and must be closed before installing; %1 is the application name."
         array: false
@@ -4071,7 +3762,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the application is running and must be closed before uninstalling; %1 is the application name."
         array: false
@@ -4081,7 +3771,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the install-mode selection dialog."
         array: false
@@ -4090,7 +3779,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Main instruction of the install-mode selection dialog."
         array: false
@@ -4099,7 +3787,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body text variant of the install-mode dialog; %1 is the application name."
         array: false
@@ -4108,7 +3795,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Alternate body text variant of the install-mode dialog; %1 is the application name."
         array: false
@@ -4117,7 +3803,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for the all-users install option."
         array: false
@@ -4126,7 +3811,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for the recommended all-users install option."
         array: false
@@ -4135,7 +3819,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for the current-user install option."
         array: false
@@ -4144,7 +3827,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label for the recommended current-user install option."
         array: false
@@ -4154,7 +3836,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a directory could not be created; %1 is the directory."
         array: false
@@ -4163,7 +3844,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a directory holds too many files to add another; %1 is the directory."
         array: false
@@ -4173,7 +3853,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the exit-setup confirmation dialog."
         array: false
@@ -4182,7 +3861,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the exit-setup confirmation dialog."
         array: false
@@ -4191,7 +3869,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the About Setup menu item."
         array: false
@@ -4200,7 +3877,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the About Setup dialog."
         array: false
@@ -4209,7 +3885,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body text of the About Setup dialog; %1..%4 give version and date placeholders."
         array: false
@@ -4218,7 +3893,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Additional note shown in the About Setup dialog."
         array: false
@@ -4227,7 +3901,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Translator credit shown in the About Setup dialog."
         array: false
@@ -4237,7 +3910,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Back button."
         array: false
@@ -4246,7 +3918,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Next button."
         array: false
@@ -4255,7 +3926,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Install button."
         array: false
@@ -4264,7 +3934,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the OK button."
         array: false
@@ -4273,7 +3942,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Cancel button."
         array: false
@@ -4282,7 +3950,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Yes button."
         array: false
@@ -4291,7 +3958,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Yes to All button."
         array: false
@@ -4300,7 +3966,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the No button."
         array: false
@@ -4309,7 +3974,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the No to All button."
         array: false
@@ -4318,7 +3982,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Finish button."
         array: false
@@ -4327,7 +3990,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Browse button."
         array: false
@@ -4336,7 +3998,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Browse button on wizard pages."
         array: false
@@ -4345,7 +4006,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Make New Folder button."
         array: false
@@ -4355,7 +4015,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the language selection dialog."
         array: false
@@ -4364,7 +4023,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt text of the language selection dialog."
         array: false
@@ -4374,7 +4032,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Standard hint telling the user to click Next or Cancel."
         array: false
@@ -4383,7 +4040,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Optional small text shown on the wizard window bevel."
         array: false
@@ -4392,7 +4048,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the folder browse dialog."
         array: false
@@ -4401,7 +4056,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt text of the folder browse dialog."
         array: false
@@ -4410,7 +4064,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Default name given to a folder created via Make New Folder."
         array: false
@@ -4420,7 +4073,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Large heading on the Welcome page; %1 is the application name."
         array: false
@@ -4429,7 +4081,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body text on the Welcome page; %1 is the application name."
         array: false
@@ -4439,7 +4090,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Password page."
         array: false
@@ -4448,7 +4098,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the Password page."
         array: false
@@ -4457,7 +4106,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt above the password entry field."
         array: false
@@ -4466,7 +4114,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Accessible label of the password entry field."
         array: false
@@ -4475,7 +4122,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the entered password is incorrect."
         array: false
@@ -4485,7 +4131,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the License Agreement page."
         array: false
@@ -4494,7 +4139,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the License Agreement page."
         array: false
@@ -4503,7 +4147,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction to read the license agreement."
         array: false
@@ -4512,7 +4155,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the I accept the agreement radio button."
         array: false
@@ -4521,7 +4163,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the I do not accept the agreement radio button."
         array: false
@@ -4531,7 +4172,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Information page shown before installation."
         array: false
@@ -4540,7 +4180,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the before-installation Information page."
         array: false
@@ -4549,7 +4188,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hint to continue from the before-installation Information page."
         array: false
@@ -4558,7 +4196,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Information page shown after installation."
         array: false
@@ -4567,7 +4204,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the after-installation Information page."
         array: false
@@ -4576,7 +4212,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hint to continue from the after-installation Information page."
         array: false
@@ -4586,7 +4221,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the User Information page."
         array: false
@@ -4595,7 +4229,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the User Information page."
         array: false
@@ -4604,7 +4237,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the user name field."
         array: false
@@ -4613,7 +4245,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the organization field."
         array: false
@@ -4622,7 +4253,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the serial number field."
         array: false
@@ -4631,7 +4261,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the user name field is left empty."
         array: false
@@ -4641,7 +4270,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Select Destination Location page."
         array: false
@@ -4650,7 +4278,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the destination location page; %1 is the application name."
         array: false
@@ -4659,7 +4286,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction text above the destination folder field; %1 is the application name."
         array: false
@@ -4668,7 +4294,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hint to continue or browse for a different destination folder."
         array: false
@@ -4677,7 +4302,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Free-space requirement label in gigabytes; %1 is the amount."
         array: false
@@ -4686,7 +4310,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Free-space requirement label in megabytes; %1 is the amount."
         array: false
@@ -4695,7 +4318,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when installation to a network drive is not allowed."
         array: false
@@ -4704,7 +4326,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when installation to a UNC path is not allowed."
         array: false
@@ -4713,7 +4334,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the entered path is invalid; must include a drive letter."
         array: false
@@ -4722,7 +4342,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the selected drive or UNC share does not exist."
         array: false
@@ -4731,7 +4350,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the not-enough-disk-space warning."
         array: false
@@ -4740,7 +4358,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the not-enough-disk-space warning; %1 required, %2 available."
         array: false
@@ -4749,7 +4366,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the folder name or path is too long."
         array: false
@@ -4758,7 +4374,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the folder name is invalid."
         array: false
@@ -4767,7 +4382,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the folder name contains characters not allowed on this platform; %1 lists them."
         array: false
@@ -4776,7 +4390,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the folder-already-exists confirmation."
         array: false
@@ -4785,7 +4398,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the folder-already-exists confirmation; %1 is the folder."
         array: false
@@ -4794,7 +4406,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the folder-does-not-exist confirmation."
         array: false
@@ -4803,7 +4414,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the folder-does-not-exist confirmation; %1 is the folder."
         array: false
@@ -4813,7 +4423,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Select Components page."
         array: false
@@ -4822,7 +4431,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the Select Components page."
         array: false
@@ -4831,7 +4439,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction text on the Select Components page."
         array: false
@@ -4840,7 +4447,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Full installation setup type."
         array: false
@@ -4849,7 +4455,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Compact installation setup type."
         array: false
@@ -4858,7 +4463,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Custom installation setup type."
         array: false
@@ -4867,7 +4471,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the components-already-installed warning."
         array: false
@@ -4876,7 +4479,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the components-already-installed warning; %1 lists the components."
         array: false
@@ -4885,7 +4487,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Component size label in kilobytes; %1 is the amount."
         array: false
@@ -4894,7 +4495,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Component size label in megabytes; %1 is the amount."
         array: false
@@ -4903,7 +4503,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Selected-components space requirement in gigabytes; %1 is the amount."
         array: false
@@ -4912,7 +4511,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Selected-components space requirement in megabytes; %1 is the amount."
         array: false
@@ -4922,7 +4520,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Select Additional Tasks page."
         array: false
@@ -4931,7 +4528,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the Select Additional Tasks page."
         array: false
@@ -4940,7 +4536,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction text on the Select Additional Tasks page; %1 is the application name."
         array: false
@@ -4950,7 +4545,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Select Start Menu Folder page."
         array: false
@@ -4959,7 +4553,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the Select Start Menu Folder page."
         array: false
@@ -4968,7 +4561,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction text above the Start Menu folder field; %1 is the application name."
         array: false
@@ -4977,7 +4569,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hint to continue or browse for a different Start Menu folder."
         array: false
@@ -4986,7 +4577,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when no Start Menu folder name was entered."
         array: false
@@ -4995,7 +4585,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the Start Menu folder name or path is too long."
         array: false
@@ -5004,7 +4593,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the Start Menu folder name is invalid."
         array: false
@@ -5013,7 +4601,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the Start Menu folder name contains disallowed characters; %1 lists them."
         array: false
@@ -5022,7 +4609,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Don't create a Start Menu folder checkbox."
         array: false
@@ -5032,7 +4618,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Ready to Install page."
         array: false
@@ -5041,7 +4626,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Heading on the Ready to Install page; %1 is the application name."
         array: false
@@ -5050,7 +4634,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction to continue or review settings; %1 is the application name."
         array: false
@@ -5059,7 +4642,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Instruction to continue installation; %1 is the application name."
         array: false
@@ -5068,7 +4650,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for user information."
         array: false
@@ -5077,7 +4658,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for the destination location."
         array: false
@@ -5086,7 +4666,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for the setup type."
         array: false
@@ -5095,7 +4674,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for selected components."
         array: false
@@ -5104,7 +4682,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for the Start Menu folder."
         array: false
@@ -5113,7 +4690,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Ready-page memo heading for additional tasks."
         array: false
@@ -5123,7 +4699,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status label shown while files are downloading."
         array: false
@@ -5132,7 +4707,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Stop download button."
         array: false
@@ -5141,7 +4715,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Confirmation prompt when stopping a download."
         array: false
@@ -5150,7 +4723,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a download was aborted."
         array: false
@@ -5159,7 +4731,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a download failed; %1/%2 give details."
         array: false
@@ -5168,7 +4739,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the downloaded size could not be determined; %1/%2 give details."
         array: false
@@ -5177,7 +4747,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a file hash is malformed; %1 is the hash."
         array: false
@@ -5186,7 +4755,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a file hash does not match; %1 expected, %2 actual."
         array: false
@@ -5195,7 +4763,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when reported progress is invalid; %1/%2 give details."
         array: false
@@ -5204,7 +4771,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a file size does not match; %1 expected, %2 actual."
         array: false
@@ -5214,7 +4780,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status label shown while archives are extracting."
         array: false
@@ -5223,7 +4788,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the Stop extraction button."
         array: false
@@ -5232,7 +4796,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Confirmation prompt when stopping extraction."
         array: false
@@ -5241,7 +4804,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when extraction was aborted."
         array: false
@@ -5250,7 +4812,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when extraction failed; %1/%2 give details."
         array: false
@@ -5260,7 +4821,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an archive is corrupt or unreadable; %1 is the file."
         array: false
@@ -5269,7 +4829,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an archive password is incorrect; %1 is the file."
         array: false
@@ -5279,7 +4838,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Preparing to Install page."
         array: false
@@ -5288,7 +4846,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Description text on the Preparing to Install page; %1 is the application name."
         array: false
@@ -5297,7 +4854,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a previous install/uninstall must finish via restart; %1/%2 give details."
         array: false
@@ -5306,7 +4862,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when Setup cannot continue and must close."
         array: false
@@ -5315,7 +4870,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Lists applications using files that must be updated."
         array: false
@@ -5324,7 +4878,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Alternate text listing applications using files that must be updated."
         array: false
@@ -5333,7 +4886,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Automatically close the applications option."
         array: false
@@ -5342,7 +4894,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Do not close the applications option."
         array: false
@@ -5351,7 +4902,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when Setup could not automatically close all applications."
         array: false
@@ -5360,7 +4910,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a restart is required before installation can continue."
         array: false
@@ -5370,7 +4919,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title of the Installing page."
         array: false
@@ -5379,7 +4927,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text on the Installing page; %1 is the application name."
         array: false
@@ -5389,7 +4936,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Heading on the Setup Completed page; %1 is the application name."
         array: false
@@ -5398,7 +4944,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Completion text when no icons were created; %1 is the application name."
         array: false
@@ -5407,7 +4952,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Completion text when icons were created; %1 is the application name."
         array: false
@@ -5416,7 +4960,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hint to click Finish to exit Setup."
         array: false
@@ -5425,7 +4968,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Completion text prompting a computer restart; %1 is the application name."
         array: false
@@ -5434,7 +4976,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Restart-now confirmation prompt; %1 is the application name."
         array: false
@@ -5443,7 +4984,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the View the README file checkbox."
         array: false
@@ -5452,7 +4992,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Yes, restart the computer now radio button."
         array: false
@@ -5461,7 +5000,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the No, I will restart the computer later radio button."
         array: false
@@ -5470,7 +5008,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Run-entry label for executing a program; %1 is the description."
         array: false
@@ -5479,7 +5016,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Run-entry label for opening a document; %1 is the description."
         array: false
@@ -5489,7 +5025,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the insert-next-disk dialog."
         array: false
@@ -5498,7 +5033,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt to insert the next disk; %1 is the disk number."
         array: false
@@ -5507,7 +5041,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the disk path entry field."
         array: false
@@ -5516,7 +5049,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a file could not be found in the selected location; %1 file, %2 location."
         array: false
@@ -5525,7 +5057,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt to specify the location of the next disk."
         array: false
@@ -5535,7 +5066,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when installation was aborted and not completed."
         array: false
@@ -5544,7 +5074,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt asking the user to choose an abort/retry/ignore action."
         array: false
@@ -5553,7 +5082,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Try again retry option."
         array: false
@@ -5562,7 +5090,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Ignore the error option."
         array: false
@@ -5571,7 +5098,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Cancel installation option."
         array: false
@@ -5580,7 +5106,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt asking the user to choose a retry/cancel action."
         array: false
@@ -5589,7 +5114,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Try again retry option."
         array: false
@@ -5598,7 +5122,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Cancel installation option."
         array: false
@@ -5608,7 +5131,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while closing applications."
         array: false
@@ -5617,7 +5139,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while creating directories."
         array: false
@@ -5626,7 +5147,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while extracting files."
         array: false
@@ -5635,7 +5155,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while downloading files."
         array: false
@@ -5644,7 +5163,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while extracting archives."
         array: false
@@ -5653,7 +5171,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while creating shortcuts."
         array: false
@@ -5662,7 +5179,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while creating INI entries."
         array: false
@@ -5671,7 +5187,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while creating registry entries."
         array: false
@@ -5680,7 +5195,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while registering files."
         array: false
@@ -5689,7 +5203,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while saving uninstall information."
         array: false
@@ -5698,7 +5211,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while finishing the installation."
         array: false
@@ -5707,7 +5219,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while restarting applications."
         array: false
@@ -5716,7 +5227,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while rolling back changes."
         array: false
@@ -5726,7 +5236,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown for an internal error; %1 is the error detail."
         array: false
@@ -5735,7 +5244,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a function failed; %1 is the function name."
         array: false
@@ -5744,7 +5252,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a function failed; %1 name, %2 code."
         array: false
@@ -5753,7 +5260,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a function failed; %1 name, %2 code, %3 message."
         array: false
@@ -5762,7 +5268,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a program could not be executed; %1 is the file name."
         array: false
@@ -5772,7 +5277,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a registry key could not be opened; %1 root, %2 key."
         array: false
@@ -5781,7 +5285,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a registry key could not be created; %1 root, %2 key."
         array: false
@@ -5790,7 +5293,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when a registry key could not be written; %1 root, %2 key."
         array: false
@@ -5800,7 +5302,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an INI entry could not be created; %1 is the file."
         array: false
@@ -5810,7 +5311,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Skip this file (not recommended) option."
         array: false
@@ -5819,7 +5319,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Ignore the error (not recommended) option."
         array: false
@@ -5828,7 +5327,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the source file is corrupted."
         array: false
@@ -5837,7 +5335,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the source file does not exist; %1 is the file."
         array: false
@@ -5846,7 +5343,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an existing file is read-only and cannot be replaced."
         array: false
@@ -5855,7 +5351,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Remove the read-only attribute and retry option."
         array: false
@@ -5864,7 +5359,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Keep the existing file option."
         array: false
@@ -5873,7 +5367,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an error occurred reading the existing destination file."
         array: false
@@ -5882,7 +5375,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt asking what to do about an existing file."
         array: false
@@ -5891,7 +5383,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the file already exists."
         array: false
@@ -5900,7 +5391,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Overwrite the existing file option."
         array: false
@@ -5909,7 +5399,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Keep the existing file option."
         array: false
@@ -5918,7 +5407,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Do this for the next conflicts checkbox."
         array: false
@@ -5927,7 +5415,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Prompt asking what to do about a newer existing file."
         array: false
@@ -5936,7 +5423,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the existing file is newer than the one being installed."
         array: false
@@ -5945,7 +5431,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Overwrite the newer file option."
         array: false
@@ -5954,7 +5439,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Keep the newer file option."
         array: false
@@ -5963,7 +5447,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label of the Do this for the next conflicts checkbox."
         array: false
@@ -5972,7 +5455,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when changing the attributes of an existing file failed."
         array: false
@@ -5981,7 +5463,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when creating a file in the destination directory failed."
         array: false
@@ -5990,7 +5471,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when reading the source file failed."
         array: false
@@ -5999,7 +5479,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when copying a file failed."
         array: false
@@ -6008,7 +5487,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when replacing the existing file failed."
         array: false
@@ -6017,7 +5495,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when RestartReplace failed to replace a file."
         array: false
@@ -6026,7 +5503,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when renaming a temporary file in the destination directory failed."
         array: false
@@ -6035,7 +5511,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when registering a DLL/OCX failed; %1 is the module."
         array: false
@@ -6044,7 +5519,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when RegSvr32 failed with a non-zero exit code; %1 is the code."
         array: false
@@ -6053,7 +5527,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when registering a type library failed; %1 is the file."
         array: false
@@ -6063,7 +5536,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Format wrapping the uninstall display name with one marking; %1 name, %2 mark."
         array: false
@@ -6072,7 +5544,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Format wrapping the uninstall display name with two markings; %1 name, %2/%3 marks."
         array: false
@@ -6081,7 +5552,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Marking text indicating a 32-bit installation."
         array: false
@@ -6090,7 +5560,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Marking text indicating a 64-bit installation."
         array: false
@@ -6099,7 +5568,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Marking text indicating an all-users installation."
         array: false
@@ -6108,7 +5576,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Marking text indicating a current-user installation."
         array: false
@@ -6118,7 +5585,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the README file could not be opened."
         array: false
@@ -6127,7 +5593,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when Setup could not restart the computer."
         array: false
@@ -6137,7 +5602,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the uninstall data file no longer exists; %1 is the file."
         array: false
@@ -6146,7 +5610,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the uninstall data file could not be opened; %1 is the file."
         array: false
@@ -6155,7 +5618,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the uninstall log is in an unrecognized format; %1 is the file."
         array: false
@@ -6164,7 +5626,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when an unknown entry was encountered in the uninstall log; %1 is the entry."
         array: false
@@ -6173,7 +5634,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Confirmation prompt before removing the application; %1 is the application name."
         array: false
@@ -6182,7 +5642,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when this installation can only be uninstalled on 64-bit Windows."
         array: false
@@ -6191,7 +5650,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when only an administrator can uninstall the application."
         array: false
@@ -6200,7 +5658,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while removing the application; %1 is the application name."
         array: false
@@ -6209,7 +5666,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the application was successfully removed; %1 is the application name."
         array: false
@@ -6218,7 +5674,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the application was removed but some items remained; %1 is the application name."
         array: false
@@ -6227,7 +5682,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown when the application was not fully removed; %1 is the application name."
         array: false
@@ -6236,7 +5690,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shown during uninstall when a file no longer exists; %1 is the file."
         array: false
@@ -6246,7 +5699,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Caption of the shared-file deletion confirmation."
         array: false
@@ -6255,7 +5707,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Body of the shared-file deletion confirmation; %1 is the file."
         array: false
@@ -6264,7 +5715,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label showing the shared file name."
         array: false
@@ -6273,7 +5723,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Label showing the shared file location."
         array: false
@@ -6282,7 +5731,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Page title shown while uninstalling."
         array: false
@@ -6291,7 +5739,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Status text shown while uninstalling; %1 is the application name."
         array: false
@@ -6301,7 +5748,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shutdown-block reason shown while installing; %1 is the application name."
         array: false
@@ -6310,7 +5756,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Shutdown-block reason shown while uninstalling; %1 is the application name."
         array: false
@@ -6339,7 +5784,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "What to delete: <code>files</code> (matching files), <code>filesandordirs</code> (files and subdirectories), <code>dirifempty</code> (directory only if empty)."
         array: false
@@ -6347,8 +5793,8 @@ sections:
       - name: Name
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."
         array: false
@@ -6358,7 +5804,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -6367,7 +5812,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -6376,7 +5820,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -6385,7 +5828,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -6394,7 +5836,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -6403,7 +5844,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -6412,7 +5852,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -6421,7 +5860,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -6439,7 +5877,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "What to delete: <code>files</code> (matching files), <code>filesandordirs</code> (files and subdirectories), <code>dirifempty</code> (directory only if empty)."
         array: false
@@ -6447,8 +5886,8 @@ sections:
       - name: Name
         type:
           kind: file
-          existence: optional
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Path or wildcard pattern of the file/directory to delete, e.g. <code>{app}\\*.log</code> or <code>{app}\\cache</code>."
         array: false
@@ -6458,7 +5897,6 @@ sections:
         type:
           kind: reference
           section: Components
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of component names. This entry is processed only when at least one listed component is selected."
         array: true
@@ -6467,7 +5905,6 @@ sections:
         type:
           kind: reference
           section: Tasks
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of task names. This entry is processed only when at least one listed task is checked."
         array: true
@@ -6476,7 +5913,6 @@ sections:
         type:
           kind: reference
           section: Languages
-        required: [ ]
         deprecated: [ ]
         description: "Space-separated list of language names. Limits this entry to the specified languages."
         array: true
@@ -6485,7 +5921,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal function (returning <code>Boolean</code>) in <code>[Code]</code>. The entry is processed only when the function returns <code>True</code>."
         array: false
@@ -6494,7 +5929,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately before this entry is processed."
         array: false
@@ -6503,7 +5937,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Name of a Pascal procedure in <code>[Code]</code> called immediately after this entry is processed."
         array: false
@@ -6512,7 +5945,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Minimum Windows version for which this entry applies. Use <code>0</code> to never apply."
         array: false
@@ -6521,7 +5953,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Maximum Windows version (exclusive) for which this entry applies. Use <code>0</code> for no upper limit."
         array: false
@@ -6540,7 +5971,8 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ iss ]
+        required:
+          files: [ iss ]
         deprecated: [ ]
         description: "Identifier for this key entry, referenced by <code>ISSigAllowedKeys</code> in <code>[Files]</code>."
         array: false
@@ -6549,7 +5981,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Logical group name allowing multiple keys to share an identifier in <code>ISSigAllowedKeys</code>."
         array: false
@@ -6558,7 +5989,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Path to a key file containing public key data."
         array: false
@@ -6567,7 +5997,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hex-encoded X coordinate of the public EC key."
         array: false
@@ -6576,7 +6005,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Hex-encoded Y coordinate of the public EC key."
         array: false
@@ -6585,7 +6013,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Optional compile-time key identifier embedded in the installer for key lookup."
         array: false
@@ -6594,7 +6021,6 @@ sections:
         type:
           kind: native
           dataType: string
-        required: [ ]
         deprecated: [ ]
         description: "Optional runtime key identifier used by the installer at install time for key lookup."
         array: false

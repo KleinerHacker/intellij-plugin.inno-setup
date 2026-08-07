@@ -20,13 +20,13 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingSection
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.script.services.IsSpecService
+import org.pcsoft.intellij.plugin.inno_setup.script.types.appliesTo
 
 /**
  * Provides Inno Setup plugin behavior for the IntelliJ Platform.

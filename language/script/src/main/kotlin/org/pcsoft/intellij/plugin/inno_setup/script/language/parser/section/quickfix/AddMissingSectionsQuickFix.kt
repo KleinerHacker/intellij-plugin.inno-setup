@@ -17,12 +17,12 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
-import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.findSection
 import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionSpec
 import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionType
+import org.pcsoft.intellij.plugin.inno_setup.script.types.appliesTo
 
 /**
  * Implements an IntelliJ quick fix or intention for Inno Setup PSI.

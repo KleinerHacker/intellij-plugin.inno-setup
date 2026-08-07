@@ -76,57 +76,32 @@ data class IsSectionReferenceTypeSpec(val section: String) : IsSectionAttributeT
 data class IsSectionFlagTypeSpec(val flags: List<IsSectionFlagSpec>) : IsSectionAttributeTypeSpec()
 
 /**
- * Whether a `file`/`directory` typed value is expected to exist on the build machine at compile time.
+ * Value type denoting a path to a file. With [mustExists] the resolved path is checked to exist and to
+ * be a regular file (wildcards, comma-separated lists, and unresolvable `{…}` placeholders are
+ * skipped); without it only invalid path characters are reported.
  *
- * @property wireName The lowercase name used in the spec YAML/JSON.
- */
-enum class IsSectionPathExistence(val wireName: String) {
-    /**
-     * The path must already exist at compile time (a build-machine source file/directory). Validators
-     * check existence and that it is of the expected kind.
-     */
-    @JsonProperty("required")
-    REQUIRED("required"),
-
-    /**
-     * The path need not exist at compile time (a target/runtime path such as `\[Files]` `DestDir`).
-     * Existence is not checked; instead the value is validated for characters that are invalid in a
-     * path or filename.
-     */
-    @JsonProperty("optional")
-    OPTIONAL("optional"),
-}
-
-/**
- * Value type denoting a path to a file. When [existence] is [IsSectionPathExistence.REQUIRED] the
- * resolved path is checked to exist and to be a regular file (wildcards, comma-separated lists, and
- * unresolvable `{…}` placeholders are skipped). When [IsSectionPathExistence.OPTIONAL] only invalid
- * path characters are reported.
- *
- * @property existence Whether the file must exist at compile time. Defaults to
- *                     [IsSectionPathExistence.REQUIRED].
+ * @property mustExists Set when the file must exist on the build machine at compile time, `null` for a
+ *                      target/runtime path. See [IsSectionMustExists] for how a bare `mustExists:` in
+ *                      the spec YAML is distinguished from an absent key.
  */
 data class IsSectionFileTypeSpec(
-    val existence: IsSectionPathExistence = IsSectionPathExistence.REQUIRED,
     /**
-     * Flags of the same entry that waive the compile-time existence requirement. Whether a file has to be
-     * present when the script is compiled is not a property of the attribute alone — `\[Files]` `Source`
-     * must exist normally, but not with `external` (the file is supplied at run time) or with
-     * `skipifsourcedoesntexist`. With one of these flags set the value is only checked for invalid path
-     * characters, exactly like an [IsSectionPathExistence.OPTIONAL] path.
+     * Returns or performs the public behavior represented by this member.
      */
-    val existenceWaivedByFlags: Set<String> = emptySet(),
+    val mustExists: IsSectionMustExists? = null,
 ) : IsSectionAttributeTypeSpec()
 
 /**
- * Value type denoting a path to a directory. When [existence] is [IsSectionPathExistence.REQUIRED] the
- * resolved path is checked to exist and to be a directory (wildcards, comma-separated lists, and
- * unresolvable `{…}` placeholders are skipped). When [IsSectionPathExistence.OPTIONAL] only invalid
- * path characters are reported.
+ * Value type denoting a path to a directory. With [mustExists] the resolved path is checked to exist
+ * and to be a directory (wildcards, comma-separated lists, and unresolvable `{…}` placeholders are
+ * skipped); without it only invalid path characters are reported.
  *
- * @property existence Whether the directory must exist at compile time. Defaults to
- *                     [IsSectionPathExistence.REQUIRED].
+ * @property mustExists Set when the directory must exist on the build machine at compile time, `null`
+ *                      for a target/runtime path.
  */
 data class IsSectionDirectoryTypeSpec(
-    val existence: IsSectionPathExistence = IsSectionPathExistence.REQUIRED
+    /**
+     * Returns or performs the public behavior represented by this member.
+     */
+    val mustExists: IsSectionMustExists? = null,
 ) : IsSectionAttributeTypeSpec()

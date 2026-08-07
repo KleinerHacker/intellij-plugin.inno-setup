@@ -32,6 +32,38 @@ class IsSpecServiceTest {
         mapper.readValue(stream)
     }
 
+    private val mapper by lazy { YAMLMapper.builder().addModule(kotlinModule()).build() }
+
+    /**
+     * The whole `mustExists` mechanism rests on telling an absent key from a key written without a
+     * value. A `file` type without `mustExists` must deserialize to `null` (no existence check), while
+     * the bare `mustExists:` must deserialize to an instance without exceptions (check enabled).
+     */
+    @Test
+    fun `absent mustExists differs from a valueless mustExists`() {
+        val absent = mapper.readValue<IsSectionAttributeTypeSpec>("kind: file\n") as IsSectionFileTypeSpec
+        assertNull("An absent mustExists must switch the existence check off", absent.mustExists)
+
+        val bare =
+            mapper.readValue<IsSectionAttributeTypeSpec>("kind: file\nmustExists:\n") as IsSectionFileTypeSpec
+        assertEquals(
+            "A valueless mustExists must switch the existence check on",
+            IsSectionMustExists(), bare.mustExists
+        )
+    }
+
+    /**
+     * A `mustExists` block with exceptions must keep the flags that lift the existence check, for
+     * `directory` types just as for `file` types.
+     */
+    @Test
+    fun `mustExists exceptions are read for directory types`() {
+        val type = mapper.readValue<IsSectionAttributeTypeSpec>(
+            "kind: directory\nmustExists:\n  except:\n    by-flag: [ external ]\n"
+        ) as IsSectionDirectoryTypeSpec
+        assertEquals(setOf("external"), type.mustExists?.except?.byFlag)
+    }
+
     @Test
     fun `all 19 sections are loaded`() {
         assertEquals(19, spec.sections.size)
@@ -209,46 +241,74 @@ class IsSpecServiceTest {
         }
     }
 
+    /**
+     * `\[Files]` `Source` names a build-machine source file, so the spec must carry a `mustExists` block —
+     * written in the YAML as the bare key with only an `except` beneath it.
+     */
     @Test
-    fun `Source in Files is a required file type`() {
+    fun `Source in Files is a file type that must exist`() {
         val files = spec.sections.find { it.name == "Files" }!!
         val source = files.attributes.find { it.name == "Source" }!!
         assertTrue("Source must be a file type", source.type is IsSectionFileTypeSpec)
-        assertEquals(
+        assertNotNull(
             "Source must require existence (build-machine source)",
-            IsSectionPathExistence.REQUIRED, (source.type as IsSectionFileTypeSpec).existence
+            (source.type as IsSectionFileTypeSpec).mustExists
         )
     }
 
+    /**
+     * The `mustExists` exceptions of `\[Files]` `Source` must list exactly the flags that make a missing
+     * source file legal at compile time.
+     */
     @Test
-    fun `SourceDir in Setup is a required directory type`() {
+    fun `Source in Files waives existence by flag`() {
+        val files = spec.sections.find { it.name == "Files" }!!
+        val source = files.attributes.find { it.name == "Source" }!!
+        val except = (source.type as IsSectionFileTypeSpec).mustExists?.except
+        assertNotNull("Source must declare existence exceptions", except)
+        assertEquals(setOf("external", "skipifsourcedoesntexist"), except!!.byFlag)
+    }
+
+    /**
+     * `\[Setup]` `SourceDir` is a build-machine directory and must therefore be existence-checked.
+     */
+    @Test
+    fun `SourceDir in Setup is a directory type that must exist`() {
         val setup = spec.sections.find { it.name == "Setup" }!!
         val sourceDir = setup.attributes.find { it.name == "SourceDir" }!!
         assertTrue("SourceDir must be a directory type", sourceDir.type is IsSectionDirectoryTypeSpec)
-        assertEquals(
+        assertNotNull(
             "SourceDir must require existence",
-            IsSectionPathExistence.REQUIRED, (sourceDir.type as IsSectionDirectoryTypeSpec).existence
+            (sourceDir.type as IsSectionDirectoryTypeSpec).mustExists
         )
     }
 
+    /**
+     * `\[Files]` `DestDir` is a target path that only exists on the user's machine, so the spec must not
+     * carry a `mustExists` block — an absent key is what switches the existence check off.
+     */
     @Test
-    fun `DestDir in Files is an optional directory type`() {
+    fun `DestDir in Files is a directory type without existence check`() {
         val files = spec.sections.find { it.name == "Files" }!!
         val destDir = files.attributes.find { it.name == "DestDir" }!!
         assertTrue("DestDir must be a directory type", destDir.type is IsSectionDirectoryTypeSpec)
-        assertEquals(
-            "DestDir is a target path and must be existence-optional",
-            IsSectionPathExistence.OPTIONAL, (destDir.type as IsSectionDirectoryTypeSpec).existence
+        assertNull(
+            "DestDir is a target path and must not be existence-checked",
+            (destDir.type as IsSectionDirectoryTypeSpec).mustExists
         )
     }
 
+    /**
+     * All attributes naming a path on the *target* machine must be free of a `mustExists` block, so that
+     * only invalid path characters are reported for them.
+     */
     @Test
-    fun `target path attributes are existence-optional`() {
-        fun existenceOf(section: String, attr: String): IsSectionPathExistence {
+    fun `target path attributes have no existence check`() {
+        fun mustExistsOf(section: String, attr: String): IsSectionMustExists? {
             val a = spec.sections.find { it.name == section }!!.attributes.find { it.name == attr }!!
             return when (val t = a.type) {
-                is IsSectionFileTypeSpec -> t.existence
-                is IsSectionDirectoryTypeSpec -> t.existence
+                is IsSectionFileTypeSpec -> t.mustExists
+                is IsSectionDirectoryTypeSpec -> t.mustExists
                 else -> error("$section.$attr is not a path type: $t")
             }
         }
@@ -257,11 +317,45 @@ class IsSpecServiceTest {
             "Files" to "DestName", "Icons" to "Filename", "Icons" to "WorkingDir", "Icons" to "IconFilename",
             "Run" to "Filename", "Run" to "WorkingDir", "UninstallRun" to "Filename"
         ).forEach { (section, attr) ->
-            assertEquals(
-                "$section.$attr must be existence-optional",
-                IsSectionPathExistence.OPTIONAL, existenceOf(section, attr)
-            )
+            assertNull("$section.$attr must not be existence-checked", mustExistsOf(section, attr))
         }
+    }
+
+    /**
+     * `\[Files]` `DestDir` is mandatory, but `dontcopy` never installs the file, so the spec must waive
+     * the requirement by that flag.
+     */
+    @Test
+    fun `DestDir in Files waives its required state by flag`() {
+        val files = spec.sections.find { it.name == "Files" }!!
+        val destDir = files.attributes.find { it.name == "DestDir" }!!
+        assertEquals(setOf("dontcopy"), destDir.required?.except?.byFlag)
+    }
+
+    /**
+     * `\[Setup]` `AppVersion` may be replaced by `AppVerName`, which the spec expresses as an
+     * `except` / `by-attribute` entry under `required`.
+     */
+    @Test
+    fun `AppVersion in Setup waives its required state by attribute`() {
+        val setup = spec.sections.find { it.name == "Setup" }!!
+        val appVersion = setup.attributes.find { it.name == "AppVersion" }!!
+        assertEquals(setOf("AppVerName"), appVersion.required?.except?.byAttribute)
+    }
+
+    /**
+     * An attribute that is not mandatory anywhere carries no `required` block at all — the absent key is
+     * the only way "optional" is expressed now.
+     */
+    @Test
+    fun `optional attributes have no required block`() {
+        val setup = spec.sections.find { it.name == "Setup" }!!
+        val appComments = setup.attributes.find { it.name == "AppComments" }!!
+        assertNull("AppComments must not carry a required block", appComments.required)
+        assertFalse(
+            "An absent required block must not apply to any target",
+            appComments.required.appliesTo(IsSectionSpecTarget.ISS)
+        )
     }
 
     @Test

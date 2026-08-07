@@ -19,7 +19,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsSectionSpecTar
  *
  * @property name Attribute name as it appears in `.iss` or `.isl` files.
  * @property type Value type used for validation, completion, and reference creation.
- * @property required Targets for which the attribute must be present.
+ * @property required Set when the attribute is mandatory, `null` when it is optional.
  * @property deprecated Targets for which the attribute is marked as deprecated.
  * @property description HTML-capable description loaded from the section specification.
  * @property array Whether the attribute may occur more than once in the same section entry.
@@ -38,19 +38,7 @@ data class IsSectionAttributeSpec(
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    val required: Set<IsSectionSpecTarget> = emptySet(),
-    /**
-     * Other attributes that satisfy this attribute's [required] state in its place. Inno Setup accepts
-     * either/or pairs — `AppVersion` may be replaced by `AppVerName` — so a required attribute must not be
-     * reported as missing while one of its alternatives is present.
-     */
-    val requiredAlternatives: Set<String> = emptySet(),
-    /**
-     * Flags of the same entry that waive this attribute's [required] state. Whether a parameter is mandatory
-     * is not a property of the attribute alone — `\[Files]` `DestDir` is required normally, but not with
-     * `dontcopy`, where the file is only extracted at run time and never installed to a target directory.
-     */
-    val requiredWaivedByFlags: Set<String> = emptySet(),
+    val required: IsSectionRequiredSpec? = null,
     /**
      * Returns or performs the public behavior represented by this member.
      */
