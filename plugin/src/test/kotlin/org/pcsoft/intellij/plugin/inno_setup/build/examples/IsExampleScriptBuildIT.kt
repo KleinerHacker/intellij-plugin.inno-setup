@@ -194,6 +194,31 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
         }
     }
 
+    /**
+     * The case [failing] hands out: it reports a broken environment (missing corpus, missing `ISCC.exe`) as an
+     * ordinary failing test instead of silently compiling nothing.
+     *
+     * Both properties of this declaration carry weight for the suite separation, which is done purely by class
+     * name (`excludeTestsMatching("*IT")` / `includeTestsMatching("*IT")` in `plugin/build.gradle.kts`) and
+     * which sees the class of the test *object*, not the name of the enclosing suite:
+     *
+     * - **The name ends in `IT`** — as `IsExampleScriptBuildIT$FailureIT`. An anonymous `object : TestCase`
+     *   is called `…$Companion$failing$1`, slips past the exclusion and fails the developer suite, which
+     *   deliberately never downloads the corpus.
+     * - **It is private and nested** — a public top-level `TestCase` subclass would additionally be picked up
+     *   by Gradle's own test detection. Lacking a `(String)` or no-arg constructor, JUnit would then replace
+     *   it with its synthetic `warning` case, which runs as `junit.framework.TestSuite$1` and thereby escapes
+     *   the very filter this class is named for.
+     *
+     * @constructor Creates the case named [name] that fails with [message].
+     */
+    private class FailureIT(name: String, private val message: String) : TestCase(name) {
+
+        override fun runTest() {
+            fail(message)
+        }
+    }
+
     companion object {
 
         /**
@@ -243,13 +268,7 @@ class IsExampleScriptBuildIT(private val script: File) : IsTimedBasePlatformTest
             return suite
         }
 
-        /**
-         * A stand-alone test case that always fails with [message] — used to report a broken environment.
-         *
-         * [IsEnvironmentFailureIT] is a named class rather than an anonymous one because the suite filter
-         * matches on the class name; see the class documentation there.
-         */
-        private fun failing(testName: String, message: String): TestCase =
-            IsEnvironmentFailureIT(testName, message)
+        /** A stand-alone test case that always fails with [message] — used to report a broken environment. */
+        private fun failing(testName: String, message: String): TestCase = FailureIT(testName, message)
     }
 }
