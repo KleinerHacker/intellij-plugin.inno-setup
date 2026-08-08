@@ -35,6 +35,19 @@
 | **错误** | 红色文本   | `Error on line 22 in C:\...\demo.iss: Source file "..." not found` |
 | **警告** | 黄色文本   | `Warning on line 5 in C:\...\demo.iss: ...`                        |
 
+### 结构化的节输出与折叠
+
+ISCC 输出以结构化形式呈现，而不是一条长长的扁平日志：
+
+- **节节点** —— 属于同一 Inno Setup 节的连续输出行（`Parsing [Setup] section …`、
+  `Parsing [Languages] section …` 等）会在构建树中合并为一个节点，并以节名称和被折叠的行数
+  标注，例如 **`[Setup] (8)`**。无论整体构建状态如何，节节点**始终**会显示，并根据其内容
+  带有 **INFO**、**WARN** 或 **ERROR** 严重级别。
+- **控制台折叠** —— 在控制台中，缩进的详细行（例如 `[Languages]` 下方的 `Reading file: …` /
+  `Messages in script file` 行）默认折叠，其占位符会报告隐藏的行数。展开折叠即可查看各个行。
+
+这样可以保持输出紧凑：您一眼即可看到每个节的一个条目，并且只在需要时深入查看详细信息。
+
 ### 可导航的错误链接
 
 包含文件位置的错误和警告行包含可点击的 **`line XX`** 超链接。点击它可打开引用的 `.iss`
