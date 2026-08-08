@@ -57,8 +57,14 @@ object IsScriptRunnerLogic {
                 scriptOutputDir?.takeIf { !File(it).isAbsolute } ?: "Output").path)
     }
 
-    /** Formats an ISCC `/O` argument; the path is wrapped in double quotes as ISCC expects. */
-    fun outputArg(path: String): String = "/O\"$path\""
+    /**
+     * Formats an ISCC `/O` argument.
+     *
+     * The path is **not** quoted: the argument is handed to `GeneralCommandLine` as one parameter, which
+     * performs the Windows quoting itself. Embedding quotes here would make it escape them into a literal
+     * `\"`, and ISCC would receive a `/O` value that is not a usable path.
+     */
+    fun outputArg(path: String): String = "/O$path"
 
     /**
      * Applies a build configuration's output directory override to an already resolved [baseArg].

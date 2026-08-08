@@ -6,6 +6,11 @@
 
 ### Fixed
 
+- **Building and running a script works again.** The output directory was passed to ISCC with an extra pair of
+  quotes, which the process launcher escaped into literal characters — the compiler received an unusable `/O`
+  argument and every build failed, regardless of the script. Building now succeeds for all official Inno Setup
+  example scripts, which are compiled end-to-end by the test suite from now on.
+
 - **`[Code]` sections no longer produce syntax errors.** Their content is free-form Pascal Script and is now
   handed to the parser as opaque lines instead of being read as `Key=Value` / `Key: Value` entries. Until now
   the first Pascal construct ended the section, which scattered error markers over the rest of the script and

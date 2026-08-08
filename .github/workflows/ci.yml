@@ -32,33 +32,41 @@ jobs:
       - name: Generate SBOM
         run: ./gradlew cyclonedxBom --stacktrace
 
-  # Build and test are separate concerns and run independently: `assemble` only produces artifacts and
-  # contains no verification, so it never re-runs what the test jobs already cover.
+  # Head of the pipeline: this job compiles everything once — production code (`assemble`) AND test code
+  # (`testClasses`) — and publishes the result through the shared Gradle build cache. Both test jobs depend
+  # on it and restore that cache, so they no longer recompile what has already been built here. A
+  # compilation failure is therefore also reported as such, in one place, instead of surfacing identically
+  # in both test jobs.
   build:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
+      # The local composite action can only be resolved once the repo is on disk.
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      - uses: ./.github/actions/setup-gradle
 
       - name: Assemble
-        run: ./gradlew assemble --stacktrace --info
+        run: ./gradlew assemble testClasses --build-cache --stacktrace --info
+
+      # Must run here rather than inside the composite action: the cache can only be saved once the build
+      # has filled it, and a composite action cannot register a post-job step.
+      - name: Save shared build cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}/.gradle-build-cache
+          key: gradle-build-cache-${{ github.run_id }}
 
   # Developer tests: every test class NOT named *IT. The fast inner-loop suite.
+  # Runs in parallel with the integration tests, both fed by the build job's cache.
   test-developer:
     runs-on: ubuntu-latest
+    needs:
+      - build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -71,7 +79,7 @@ jobs:
 
       # Dedicated task (see the root build.gradle.kts); `test` would run BOTH suites.
       - name: Run developer tests
-        run: ./gradlew developerTest --stacktrace --info
+        run: ./gradlew developerTest --build-cache --stacktrace --info
 
       # Uploaded on failure too — that is the case the report is actually needed for. Three sources, because
       # the HTML report alone is not enough to diagnose a failure that only happens on CI:
@@ -94,14 +102,18 @@ jobs:
 
   # Integration tests: test classes named *IT — shipped-artifact smoke tests, the timing-based performance
   # guards and the validation against the official Inno Setup example corpus. Runs at the same time as the
-  # developer tests, from the identical setup.
+  # developer tests, from the identical setup and off the same build-job cache.
   #
-  # NETWORK: `integrationTest` depends on :language:script:downloadInnoSetupExamples, which fetches the
-  # Examples/ directory of the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party
-  # scripts are deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes
-  # them again. Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  # NETWORK: `integrationTest` depends on downloadInnoSetupExamples, which fetches the Examples/ directory of
+  # the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party scripts are
+  # deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes them again.
+  # Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  #
+  # WINDOWS: IsExampleScriptBuildIT compiles every example with the real ISCC.exe, which exists on Windows
+  # only. The whole integration suite therefore runs on a Windows runner with Inno Setup installed.
   test-integration:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+    needs: build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -112,8 +124,15 @@ jobs:
 
       - uses: ./.github/actions/setup-gradle
 
+      # The build tests compile through the plugin's own pipeline, which needs a real compiler.
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+        shell: pwsh
+
       - name: Run integration tests
-        run: ./gradlew integrationTest --stacktrace --info
+        env:
+          INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
+        run: ./gradlew integrationTest --build-cache --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.
       # See the developer job above for what each of the three paths contributes.
@@ -235,8 +254,6 @@ jobs:
   # (see release.yml). No deployment happens from this workflow.
   validate-docs:
     runs-on: ubuntu-latest
-    # Gated on the tests, like every other downstream job.
-    needs: tests
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7

@@ -124,6 +124,14 @@ cd inno-setup
 > computation, refresh them with
 > `./gradlew :language:script:integrationTest -PupdateExampleFingerprints` and review the diff.
 
+> [!IMPORTANT]
+> `:plugin:integrationTest` additionally **compiles** every official example through the plugin's build
+> pipeline with the real `ISCC.exe`, so it requires a locally installed Inno Setup (Windows). The default
+> location is `C:\Program Files (x86)\Inno Setup 6`; point the build elsewhere with
+> `./gradlew integrationTest -PinnoSetupHome="D:\Tools\Inno Setup 6"` or the `INNO_SETUP_HOME` environment
+> variable. Examples whose payload is not part of the downloaded corpus are excluded — with a reason — in
+> `plugin/src/test/resources/examples/build-skip.yaml`.
+
 ```bash
 # Build the distributable plugin ZIP
 ./gradlew :plugin:buildPlugin
@@ -214,4 +222,4 @@ first to discuss larger changes.
 
 ## Licenses
 
-See [LICENSES](https://kleinerhacker.github.io/intellij-plugin.inno-setup/licences/) for details.
+See [LICENSES](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/licences/) for details.

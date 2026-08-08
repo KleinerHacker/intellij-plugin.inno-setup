@@ -1,0 +1,17 @@
+# Examples IsExampleScriptBuildIT must not compile, mapped script name -> reason.
+#
+# Two kinds of example legitimately belong here:
+#
+#   * Payload outside the corpus — InnoSetupExamplesTask extracts only the top-level files of the upstream
+#     `Examples/` directory, so an example whose files live in the MyDll/MyProg source trees below it has
+#     nothing to package.
+#   * Interactive at compile time — an example that makes ISCC wait for a human cannot run unattended.
+#
+# Every entry needs a reason. Nothing else may be listed here: a failing build of an otherwise complete,
+# non-interactive example is a bug, not an exception.
+examples:
+  PowerShell.iss: >-
+    Interactive at compile time. Its `#expr` runs PowerShell while ISCC compiles and pops up a
+    System.Windows.Forms message box showing the generated password, which blocks the compiler until
+    someone clicks OK. That is the very point of the example, so there is nothing to fix — it just cannot
+    be built unattended.
