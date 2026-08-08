@@ -84,3 +84,10 @@ IDEA，并自带 YAML 解析基础设施，因此对宿主 IDE 没有隐藏的�
 ## 节参考
 
 上方导航包含 Inno Setup 脚本的节参考，以及专用的 `.isl` 语言文件参考，包括类型信息和官方 Inno Setup 文档链接。
+
+---
+
+!!! warning "商标与免责声明"
+本插件为非官方的社区开发插件，与 Jordan Russell、Martijn Laan 或 jrsoftware.org **无**任何隶属关系，也未获得其认可或赞助。
+“Inno Setup”及 Inno Setup 徽标归各自所有者所有，此处仅用于标识本插件所支持的软件。详见
+[许可证概览](licensing.md)。

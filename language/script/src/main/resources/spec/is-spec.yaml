@@ -1,4 +1,9 @@
 # $schema: ./isi-spec.json
+#
+# The descriptions in this file are derived from the official Inno Setup documentation
+# (https://jrsoftware.org/ishelp/), Copyright (C) 1997-2026 Jordan Russell, portions
+# Copyright (C) 2000-2026 Martijn Laan. Inno Setup itself is not distributed with this plugin.
+
 sections:
 
   # ---------------------------------------------------------------------------

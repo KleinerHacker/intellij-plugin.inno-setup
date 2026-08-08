@@ -100,6 +100,16 @@
         </p>
 
         <p>
+            <b>Disclaimer:</b> this is an unofficial, community-developed plugin. It is not affiliated with, endorsed
+            by, or sponsored by Jordan Russell, Martijn Laan or jrsoftware.org. &ldquo;Inno Setup&rdquo; and the Inno
+            Setup logo are the property of their respective owners and are used here only to identify the software this
+            plugin supports. Inno Setup itself is not bundled with this plugin and has to be installed separately. The
+            bundled section, parameter, constant and preprocessor descriptions are derived from the official
+            <a href="https://jrsoftware.org/ishelp/">Inno Setup documentation</a>, Copyright &copy; 1997-2026 Jordan
+            Russell, portions Copyright &copy; 2000-2026 Martijn Laan.
+        </p>
+
+        <p>
             Copyright &copy; KleinerHacker alias Pfeiffer C Soft 2026. Licensed under the Apache License, Version 2.0.
         </p>
         ]]></description>

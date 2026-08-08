@@ -3,6 +3,12 @@
 # directive: completion, validation, flags and English locale names.
 # 'builtin: true' marks the languages bundled with Inno Setup; those also carry the
 # Inno language name (issName) and its messages file used in the [Languages] section.
+#
+# The Inno Setup specific entries (issName, messages file, builtin flag) are derived from the
+# official Inno Setup documentation (https://jrsoftware.org/ishelp/) and its bundled language
+# files, Copyright (C) 1997-2026 Jordan Russell, portions Copyright (C) 2000-2026 Martijn Laan.
+# Inno Setup itself is not distributed with this plugin.
+
 languages:
   - displayName: "Arabic (Saudi Arabia)"
     id: "$0401"

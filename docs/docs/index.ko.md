@@ -85,3 +85,10 @@ JetBrains Marketplace 출시가 계획되어 있습니다. 출시 후에는 IDE 
 ## 섹션 참조
 
 위쪽 탐색에는 Inno Setup 스크립트의 섹션 참조와 타입 정보 및 공식 Inno Setup 문서 링크를 포함한 전용 `.isl` 언어 파일 참조가 포함되어 있습니다.
+
+---
+
+!!! warning "상표 및 면책 조항"
+이 플러그인은 비공식 커뮤니티 개발 플러그인입니다. Jordan Russell, Martijn Laan 또는 jrsoftware.org와 제휴 관계가 **없으며**
+이들의 보증이나 후원을 받지 않습니다. "Inno Setup" 및 Inno Setup 로고는 각 소유자의 자산이며, 이 플러그인이 지원하는 소프트웨어를
+가리키기 위해서만 사용됩니다. 자세한 내용은 [라이선스 개요](licensing.md)를 참조하세요.

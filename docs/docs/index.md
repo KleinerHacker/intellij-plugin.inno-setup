@@ -95,3 +95,11 @@ plugin browser.
 
 The navigation above contains the section reference for Inno Setup scripts and the dedicated `.isl` language-file
 reference, including type information and links to the official Inno Setup documentation.
+
+---
+
+!!! warning "Trademarks & Disclaimer"
+This is an unofficial, community-developed plugin. It is **not** affiliated with, endorsed by, or sponsored by Jordan
+Russell, Martijn Laan or jrsoftware.org. "Inno Setup" and the Inno Setup logo are the property of their respective
+owners and are used here only to identify the software this plugin supports. See the
+[licensing overview](licensing.md) for details.

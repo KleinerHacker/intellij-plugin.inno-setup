@@ -220,6 +220,24 @@ first to discuss larger changes.
 
 ---
 
+## Trademarks & Disclaimer
+
+This is an unofficial, community-developed plugin. It is **not** affiliated with, endorsed by, or sponsored by Jordan
+Russell, Martijn Laan or jrsoftware.org. "Inno Setup" and the Inno Setup logo are the property of their respective
+owners and are used here only to identify the software this plugin supports.
+
+Inno Setup itself is not distributed with this plugin — it has to be installed separately. The section, parameter,
+constant and preprocessor descriptions shipped with the plugin are derived from the official
+[Inno Setup documentation](https://jrsoftware.org/ishelp/), Copyright © 1997-2026 Jordan Russell, portions
+Copyright © 2000-2026 Martijn Laan.
+
+---
+
 ## Licenses
 
-See [LICENSES](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/licences/) for details.
+This plugin is licensed under the [Apache License, Version 2.0](LICENSE).
+
+See the [licensing overview](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/licensing/) for
+third-party attribution and the
+[dependency report](https://kleinerhacker.github.io/intellij-plugin.inno-setup/latest/licences/) for the licenses of
+all bundled dependencies.

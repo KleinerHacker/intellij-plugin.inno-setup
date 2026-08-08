@@ -61,6 +61,7 @@ plugins:
             Build: 构建
             API Docs: API 文档
             Licences: 许可证
+            Dependencies: 依赖项
         - locale: ja
           name: 日本語
           build: true
@@ -105,6 +106,7 @@ plugins:
             Build: ビルド
             API Docs: API ドキュメント
             Licences: ライセンス
+            Dependencies: 依存関係
         - locale: ko
           name: 한국어
           build: true
@@ -149,6 +151,7 @@ plugins:
             Build: 빌드
             API Docs: API 문서
             Licences: 라이선스
+            Dependencies: 종속성
 
 extra:
   version:
@@ -246,4 +249,6 @@ nav:
       - Code Style: settings-code-style.md
       - Build: settings-build.md
   - API Docs: dokka/html/index.html
-  - Licences: licences/index.html
+  - Licences:
+      - Overview: licensing.md
+      - Dependencies: licences/index.html
