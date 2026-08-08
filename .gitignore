@@ -1,5 +1,7 @@
 .gradle
 .idea
+# IntelliJ module descriptors are IDE-generated and belong to the local workspace, like .idea
+*.iml
 .intellijPlatform
 .kotlin
 .claude/plans

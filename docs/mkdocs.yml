@@ -50,6 +50,7 @@ plugins:
             Template Files: 模板文件
             Inno Setup Preprocessor: Inno Setup 预处理器
             Overview: 概述
+            Directives: 指令
             Build Integration: 构建集成
             Run Configuration: 运行配置
             Structure View: 结构视图
@@ -93,6 +94,7 @@ plugins:
             Template Files: テンプレートファイル
             Inno Setup Preprocessor: Inno Setup プリプロセッサー
             Overview: 概要
+            Directives: ディレクティブ
             Build Integration: ビルド統合
             Run Configuration: 実行構成
             Structure View: 構造ビュー
@@ -136,6 +138,7 @@ plugins:
             Template Files: 템플릿 파일
             Inno Setup Preprocessor: Inno Setup 전처리기
             Overview: 개요
+            Directives: 지시문
             Build Integration: 빌드 통합
             Run Configuration: 실행 구성
             Structure View: 구조 뷰
@@ -223,16 +226,17 @@ nav:
       - Template Files: template-files.md
   - Inno Setup Preprocessor:
       - Overview: preprocessor/overview.md
-      - "#define": preprocessor/define.md
-      - "#undef": preprocessor/undef.md
-      - "#dim / #redim": preprocessor/arrays.md
-      - "#include / #file": preprocessor/include.md
-      - "#emit / #expr / #insert / #append": preprocessor/output.md
-      - "#if / #ifdef / …": preprocessor/conditionals.md
-      - "#for": preprocessor/for.md
-      - "#sub / #endsub": preprocessor/sub.md
-      - "#pragma": preprocessor/pragma.md
-      - "#error": preprocessor/error.md
+      - Directives:
+        - "#define": preprocessor/define.md
+        - "#undef": preprocessor/undef.md
+        - "#dim / #redim": preprocessor/arrays.md
+        - "#include / #file": preprocessor/include.md
+        - "#emit / #expr / #insert / #append": preprocessor/output.md
+        - "#if / #ifdef / …": preprocessor/conditionals.md
+        - "#for": preprocessor/for.md
+        - "#sub / #endsub": preprocessor/sub.md
+        - "#pragma": preprocessor/pragma.md
+        - "#error": preprocessor/error.md
   - Build Integration: build.md
   - Run Configuration: run-configuration.md
   - Structure View: structure-view.md
