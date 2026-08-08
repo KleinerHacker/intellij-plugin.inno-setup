@@ -112,7 +112,16 @@
 
 ## Implementation
 
-* All changes to a single file MUST be applied at once (in a single write operation)
+* All changes to a single file MUST be applied in ONE single tool call
+  * Before editing, ALL required changes to that file MUST be collected and planned completely
+  * Then the file is written EXACTLY ONCE - with the `Write` tool (full content) or with a
+    SINGLE `Edit` call
+  * FORBIDDEN: several `Edit` calls on the same file, one after another, for the same change
+  * FORBIDDEN: incremental "edit -> read -> edit again" cycles on the same file
+  * If a change to file A reveals a follow-up change in file A, the file MUST NOT be patched
+    again - the complete new content MUST be written in one operation instead
+  * This rule applies per file, NOT per task: several DIFFERENT files MAY be edited in
+    parallel, each with exactly one call
 
 ## Concurrency
 

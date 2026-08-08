@@ -12,3 +12,6 @@ docs/docs/dokka
 docs/docs/licences
 # Local plugin signing material (private key must never be committed)
 /.signing
+# Stray npm artifacts — this project is pure Kotlin/Gradle and has no Node part
+/package-lock.json
+/node_modules/
