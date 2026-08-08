@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.0.0]
+
 ### Fixed
 
 - **Building and running a script works again.** The output directory was passed to ISCC with an extra pair of
