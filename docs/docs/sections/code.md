@@ -15,3 +15,10 @@ write to the registry, and much more.
 The `[Code]` section has no structured parameters. Its entire content is Pascal source code. See
 the [Inno Setup Scripting Reference](https://jrsoftware.org/ishelp/index.php?topic=scriptintro) for the full API
 surface, including all available event functions, built-in procedures, and supported Pascal language features.
+
+!!! note "No misplaced editor assistance inside `[Code]`"
+Because the content is plain Pascal, the plugin deliberately switches off the ISS-specific editor features
+here: no quick documentation, no cross-section or custom-message references, no auto-closing of `"` (Pascal
+strings use `'`), and no *Flip parameters* intention. The preprocessor remains active — `#…` directive lines
+and inline `{#…}` emissions keep their documentation and references, because Inno Setup evaluates ISPP inside
+`[Code]` as well.

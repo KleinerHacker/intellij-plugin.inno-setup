@@ -18,6 +18,7 @@ import com.intellij.psi.PsiReference
 import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.reference.IsSectionCustomMessageReference
 import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.reference.IsSectionPreprocessorConstantReference
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.customMessageNameRange
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInCodeSection
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionConstantBody
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
 
@@ -25,6 +26,9 @@ abstract class IsSectionConstantBodyMixinImpl(node: ASTNode) : ASTWrapperPsiElem
 
     /**
      * Returns references contributed by this PSI element.
+     *
+     * Inside \[Code] only the ISPP define reference survives — the preprocessor runs there as well, while every
+     * other ISS construct is switched off in that section.
      */
     override fun getReferences(): Array<PsiReference> {
         val bodyText = text ?: return PsiReference.EMPTY_ARRAY
@@ -36,6 +40,8 @@ abstract class IsSectionConstantBodyMixinImpl(node: ASTNode) : ASTWrapperPsiElem
             if (name.isEmpty()) return PsiReference.EMPTY_ARRAY
             return arrayOf(IsSectionPreprocessorConstantReference(this as IsSectionConstantBody, name))
         }
+
+        if (isInCodeSection) return PsiReference.EMPTY_ARRAY
 
         // {cm:Name} or {cm:Name,Arg1,…} — custom-message reference covering the name segment.
         val cm = (this as IsSectionConstantBody).customMessageNameRange()

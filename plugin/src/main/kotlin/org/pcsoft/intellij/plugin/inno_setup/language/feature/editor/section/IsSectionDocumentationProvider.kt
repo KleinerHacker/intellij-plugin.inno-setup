@@ -29,6 +29,8 @@ import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptF
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingParamPair
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInCodeSection
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInPreprocessorLine
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.*
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.sectionAtOffset
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.specSection
@@ -54,6 +56,10 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
 
     /**
      * Returns or performs the public behavior represented by this member.
+     *
+     * Inside \[Code] no ISS documentation target is resolved: the section holds free-form Pascal, so an
+     * identifier there is never a section name, attribute key, flag or constant. Only preprocessor lines keep
+     * their documentation, because ISPP is evaluated inside \[Code] as well.
      */
     override fun getCustomDocumentationElement(
         editor: Editor, file: PsiFile,
@@ -61,6 +67,7 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
     ): PsiElement? {
         val el = contextElement ?: return null
         if (el.node?.elementType != IsSectionTypes.IDENTIFIER) return null
+        if (el.isInCodeSection && !el.isInPreprocessorLine) return null
 
         return when (val parent = el.parent) {
             is IsSectionTitle -> parent
@@ -81,6 +88,7 @@ class IsSectionDocumentationProvider : AbstractDocumentationProvider() {
      */
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         if (element is IsDocLookupStub) return element.docHtml
+        if (element.isInCodeSection && !element.isInPreprocessorLine) return null
 
         val spec = service<IsSpecService>().spec
 

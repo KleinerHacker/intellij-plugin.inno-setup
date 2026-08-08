@@ -6,7 +6,29 @@
 
 ## [1.0.0]
 
+### Added
+
+- **A section announces its entry syntax.** The section-name completion now carries the matching icon on
+  every offered section, and the same icon is rendered as an inlay hint directly behind the `[` of a section
+  header: `=` for a directive section such as `[Setup]`, `:` for a parameter section such as `[Files]`, and
+  the script icon for `[Code]`. The syntax of a section is therefore visible before its first entry exists.
+  The hint can be switched off separately under *Inlay Hints* as "Section type".
+
+### Changed
+
+- **Sections and their entries have their own icons.** The structure view, breadcrumbs and navigation bar no
+  longer borrow the generic Java class and field icons. A section carries the Inno Setup tile with a `[ ]`
+  bracket glyph; an entry carries its separator, so the two entry kinds are told apart at a glance: `=` for a
+  directive entry of a section such as `[Setup]`, `:` for a parameter entry of a section such as `[Files]`.
+
 ### Fixed
+
+- **No more misplaced editor assistance inside `[Code]`.** The section holds free-form Pascal Script, yet
+  quick documentation popped up on ordinary identifiers, `"` was auto-closed although Pascal strings use
+  `'`, the "Flip parameters" intention appeared at every statement-terminating `;`, and cross-section
+  references were resolved from Pascal code. All of this is switched off in `[Code]` now. The preprocessor
+  stays available — `#…` directive lines and inline `{#…}` emissions keep their documentation and
+  references, because Inno Setup evaluates ISPP inside `[Code]` as well.
 
 - **Building and running a script works again.** The output directory was passed to ISCC with an extra pair of
   quotes, which the process launcher escaped into literal characters — the compiler received an unusable `/O`

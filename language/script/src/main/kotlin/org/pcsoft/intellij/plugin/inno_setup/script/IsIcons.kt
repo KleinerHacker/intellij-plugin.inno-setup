@@ -10,11 +10,12 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.script.language.file_type
+package org.pcsoft.intellij.plugin.inno_setup.script
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
 import com.intellij.ui.LayeredIcon
+import org.pcsoft.intellij.plugin.inno_setup.script.types.IsSectionType
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -85,16 +86,24 @@ object IsIcons {
     }
 
     /**
-     * Provides Inno Setup plugin behavior for the IntelliJ Platform.
+     * Represents a `[…]` section block in the structure view, breadcrumbs and navigation bar.
      */
     @JvmField
-    val Section: Icon = AllIcons.Nodes.Class
+    val Section: Icon = IconLoader.getIcon("/icons/inno-setup-section-icon.svg", IsIcons::class.java)
 
     /**
-     * Returns or performs the public behavior represented by this member.
+     * Represents a `Key: Value` parameter entry of a parameter section such as \[Files], carrying the `:`
+     * separator as its glyph.
      */
     @JvmField
-    val ParameterEntry: Icon = AllIcons.Nodes.Field
+    val ParameterEntry: Icon = IconLoader.getIcon("/icons/inno-setup-parameter-icon.svg", IsIcons::class.java)
+
+    /**
+     * Represents a `Key=Value` directive entry of a directive section such as \[Setup], carrying the `=`
+     * separator as its glyph.
+     */
+    @JvmField
+    val DirectiveEntry: Icon = IconLoader.getIcon("/icons/inno-setup-directive-icon.svg", IsIcons::class.java)
 
     /**
      * Returns or performs the public behavior represented by this member.
@@ -113,4 +122,20 @@ object IsIcons {
      */
     @JvmField
     val Function: Icon = AllIcons.Nodes.Method
+
+    /**
+     * The icon characterising a section by the entry syntax it uses: `=` for a directive section such as
+     * \[Setup], `:` for a parameter section such as \[Files], and the script icon for the free-form Pascal
+     * \[Code] section.
+     *
+     * Used wherever a section is presented before its entries are visible — the section-name completion and
+     * the inlay hint inside the `[…]` header — so the syntax of the section is known before the first entry
+     * is typed. An unknown [type] (a section the specification does not describe) gets no icon.
+     */
+    fun forSectionType(type: IsSectionType?): Icon? = when (type) {
+        IsSectionType.DIRECTIVE -> DirectiveEntry
+        IsSectionType.PARAMETER -> ParameterEntry
+        IsSectionType.CODE -> ScriptFile
+        null -> null
+    }
 }

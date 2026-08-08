@@ -23,4 +23,6 @@ name: architecture
     * `types` - General types
     * `settings` - Settings features, settings pages, ...
     * `build` - Everything around building Inno Setup, e.g. run config, building, ...
+* The `*Icons` class collecting all icons of a module MUST ALWAYS reside on the package root level of that
+  module, NOT in a specialised package
 * For any deviation the user MUST be asked

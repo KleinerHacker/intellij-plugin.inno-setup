@@ -19,6 +19,7 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.TokenSet
 import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.reference.IsSectionReference
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.containingParamPair
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInCodeSection
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.referenceTargetSection
@@ -27,8 +28,11 @@ abstract class IsSectionParamValueMixinImpl(node: ASTNode) : ASTWrapperPsiElemen
 
     /**
      * Returns references contributed by this PSI element.
+     *
+     * \[Code] holds free-form Pascal, so no cross-section reference is contributed from there.
      */
     override fun getReferences(): Array<PsiReference> {
+        if (isInCodeSection) return PsiReference.EMPTY_ARRAY
         val pair = containingParamPair ?: return PsiReference.EMPTY_ARRAY
         val targetSection = pair.referenceTargetSection ?: return PsiReference.EMPTY_ARRAY
         val paramValue = this as IsSectionParamValue
