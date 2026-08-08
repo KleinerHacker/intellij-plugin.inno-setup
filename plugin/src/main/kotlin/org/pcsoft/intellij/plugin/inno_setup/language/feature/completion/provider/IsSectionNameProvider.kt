@@ -21,6 +21,7 @@ import com.intellij.openapi.components.service
 import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.allowedInLanguageFile
@@ -68,6 +69,9 @@ object IsSectionNameProvider : CompletionProvider<CompletionParameters>() {
             }
             val element = LookupElementBuilder
                 .create(specSection.name)
+                // The icon states the entry syntax of the section (`=`, `:` or Pascal code) before the
+                // first entry exists, so picking the right section does not depend on reading the type text.
+                .withIcon(IsIcons.forSectionType(specSection.type))
                 .withTypeText(specSection.type.typeName)
                 .withTailText(tailText, true)
                 .withStrikeoutness(specSection.deprecated.appliesTo(target))

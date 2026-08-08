@@ -18,6 +18,10 @@ import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 /**
  * Integration tests for [IsSectionLanguageInlayHintsProvider]: drives the provider over real PSI and
  * inspects the editor's inlay model after a highlighting pass.
+ *
+ * The negative tests assert that no inlay sits at the *value* in question rather than that the document
+ * carries no inlay at all: [IsSectionTypeInlayHintsProvider] contributes an inlay to every section header,
+ * so an empty inlay model would no longer be a statement about the language flags.
  */
 class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
 
@@ -33,6 +37,9 @@ class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
             .map { it.offset }
     }
 
+    /**
+     * A `LanguageID` holding a known LCID is preceded by the flag of that locale.
+     */
     fun testLanguageIdKnownLcidShowsInlay() {
         val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$0409\n"
         val offsets = inlineInlayOffsets(text)
@@ -40,6 +47,9 @@ class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
         assertTrue("A flag inlay must be placed before a known LanguageID value", expected in offsets)
     }
 
+    /**
+     * A recognised LCID with a curated entry (`$0436`, Afrikaans) is treated like any other known locale.
+     */
     fun testLanguageIdCuratedLcidShowsInlay() {
         // $0436 (Afrikaans) is a recognised LCID and now has a curated entry → inlay shown.
         val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$0436\n"
@@ -48,11 +58,20 @@ class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
         assertTrue("A flag inlay must be placed before a recognised LanguageID value", expected in offsets)
     }
 
+    /**
+     * An unassigned LCID maps to no locale, so no flag is shown at the value.
+     */
     fun testLanguageIdInvalidValueShowsNoInlay() {
         val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$9999\n"
-        assertTrue("No inlay for an unassigned LanguageID", inlineInlayOffsets(text).isEmpty())
+        val offsets = inlineInlayOffsets(text)
+        val value = myFixture.file.text.indexOf("\$9999")
+        assertFalse("No inlay for an unassigned LanguageID", value in offsets)
     }
 
+    /**
+     * The flag belongs to `MessagesFile` (whose `.isl` declares the LanguageID), not to the user-chosen
+     * `Name` of the \[Languages] entry.
+     */
     fun testLanguagesMessagesFileShowsFlagInlayButNameDoesNot() {
         val text = VALID_SETUP + "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n"
         val offsets = inlineInlayOffsets(text)
@@ -64,11 +83,20 @@ class IsSectionLanguageInlayHintsTest : IsTimedBasePlatformTestCase() {
         )
     }
 
+    /**
+     * A `MessagesFile` that cannot be resolved yields no LanguageID and therefore no flag.
+     */
     fun testLanguagesUnknownMessagesFileShowsNoInlay() {
         val text = VALID_SETUP + "\n[Languages]\nName: \"klingon\"; MessagesFile: \"custom.isl\"\n"
-        assertTrue("No inlay for a non-resolvable MessagesFile", inlineInlayOffsets(text).isEmpty())
+        val offsets = inlineInlayOffsets(text)
+        val fileText = myFixture.file.text
+        assertFalse("No inlay for a non-resolvable MessagesFile", fileText.indexOf("\"custom.isl\"") in offsets)
+        assertFalse("No inlay for the Name of an unresolved entry", fileText.indexOf("\"klingon\"") in offsets)
     }
 
+    /**
+     * A `lang.` prefixed message key carries the flag of the language the prefix refers to.
+     */
     fun testMessagesLanguagePrefixShowsFlagInlay() {
         val text = VALID_SETUP +
                 "\n[Languages]\nName: \"english\"; MessagesFile: \"compiler:Default.isl\"\n" +

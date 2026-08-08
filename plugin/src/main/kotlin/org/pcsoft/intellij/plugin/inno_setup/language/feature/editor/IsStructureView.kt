@@ -19,7 +19,7 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.displayName
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isParameterSection
@@ -91,7 +91,7 @@ class IsStructureViewElement(private val element: PsiElement) : StructureViewTre
         is IsScriptFile -> SimpleItemPresentation(element.name, IsIcons.ScriptFile)
         is IsSectionBlock -> SimpleItemPresentation(element.nameText, IsIcons.Section)
         is IsSectionParameterEntry -> SimpleItemPresentation(element.displayName, IsIcons.ParameterEntry)
-        is IsSectionDirectiveEntry -> SimpleItemPresentation(element.keyText(), IsIcons.ParameterEntry)
+        is IsSectionDirectiveEntry -> SimpleItemPresentation(element.keyText(), IsIcons.DirectiveEntry)
         else -> SimpleItemPresentation(element.text ?: "", null)
     }
 

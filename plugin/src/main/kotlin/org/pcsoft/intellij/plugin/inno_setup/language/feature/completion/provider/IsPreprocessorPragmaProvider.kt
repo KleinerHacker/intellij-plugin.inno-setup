@@ -21,7 +21,7 @@ import com.intellij.openapi.components.service
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.IsPreprocessorPragmaArgument
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFile
 
 /**

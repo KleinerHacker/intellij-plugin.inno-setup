@@ -12,7 +12,7 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.language.feature.editor
 
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.displayName
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.nameText
@@ -39,7 +39,7 @@ object IsElementPresentation {
     /** The icon of [obj], or `null` if it has none. */
     fun iconOf(obj: Any?): Icon? = when (obj) {
         is IsSectionBlock -> IsIcons.Section
-        is IsSectionDirectiveEntry -> IsIcons.ParameterEntry
+        is IsSectionDirectiveEntry -> IsIcons.DirectiveEntry
         is IsSectionParameterEntry -> IsIcons.ParameterEntry
         else -> null
     }

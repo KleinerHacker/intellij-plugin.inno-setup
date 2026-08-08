@@ -140,8 +140,10 @@
                     factoryClass="org.pcsoft.intellij.plugin.inno_setup.build.IsBuildToolWindowFactory"/>
         <notificationGroup id="Inno Setup" displayType="BALLOON"/>
 
-        <!-- Inlay hints: language flags for [Languages]/[LangOptions], #include content preview,
-             and the computed value of a #define -->
+        <!-- Inlay hints: entry syntax of a section inside its [ ] header, language flags for
+             [Languages]/[LangOptions], #include content preview, and the computed value of a #define -->
+        <codeInsight.inlayProvider language="ISS"
+                                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionTypeInlayHintsProvider"/>
         <codeInsight.inlayProvider language="ISS"
                                    implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionLanguageInlayHintsProvider"/>
         <codeInsight.inlayProvider language="ISS"

@@ -23,6 +23,7 @@ import com.intellij.psi.PsiFile
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.Generated
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.isInCodeSection
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
 
 /**
@@ -32,11 +33,15 @@ class IsQuoteHandler : TypedHandlerDelegate() {
 
     /**
      * Returns or performs the public behavior represented by this member.
+     *
+     * Skipped inside \[Code]: Pascal string literals are delimited by `'`, so a typed `"` there is ordinary
+     * text and must not be auto-closed or skipped over.
      */
     override fun beforeCharTyped(
         c: Char, project: Project, editor: Editor, file: PsiFile, fileType: FileType
     ): Result {
         if ((file !is IsScriptFile && file !is IsPreprocessorFile) || c != '"') return Result.CONTINUE
+        if (file.findElementAt(editor.caretModel.offset)?.isInCodeSection == true) return Result.CONTINUE
 
         val offset = editor.caretModel.offset
         val text = editor.document.charsSequence

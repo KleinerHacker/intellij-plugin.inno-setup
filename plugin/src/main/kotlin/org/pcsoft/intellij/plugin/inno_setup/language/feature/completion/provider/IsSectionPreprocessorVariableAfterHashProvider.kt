@@ -22,7 +22,7 @@ import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.externalPreprocessorSymbols
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 
 /**

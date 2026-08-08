@@ -25,7 +25,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.isppDi
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirective
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.psi.IsPreprocessorDirectiveEx
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 
 /**

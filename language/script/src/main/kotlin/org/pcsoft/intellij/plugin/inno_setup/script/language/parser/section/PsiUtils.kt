@@ -272,3 +272,15 @@ val PsiElement.containingDirectiveEntry: IsSectionDirectiveEntry?
  */
 val PsiElement.isInCodeSection: Boolean
     get() = containingSection?.nameText?.equals("Code", ignoreCase = true) == true
+
+/**
+ * Whether this element belongs to a preprocessor (`#…`) line.
+ *
+ * The section lexer keeps a whole `#…` line as one opaque [IsSectionTypes.HASH_LINE] token, so the check covers
+ * both the token itself and any element below an [IsSectionPreprocessorLine]. Preprocessor handling stays active
+ * inside \[Code] — Inno Setup evaluates ISPP there just like anywhere else — so features that are suppressed in
+ * \[Code] use this property to keep the preprocessor exempt.
+ */
+val PsiElement.isInPreprocessorLine: Boolean
+    get() = node?.elementType == IsSectionTypes.HASH_LINE ||
+            PsiTreeUtil.getParentOfType(this, IsSectionPreprocessorLine::class.java) != null

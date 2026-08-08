@@ -23,7 +23,7 @@ import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.define
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.externalPreprocessorSymbols
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.types.appliesTo
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.specTarget
 import org.pcsoft.intellij.plugin.inno_setup.script.services.IsConstantService

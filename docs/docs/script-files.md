@@ -74,6 +74,12 @@ Language flag icons are shown inline next to `MessagesFile:` values in `[Languag
 displays the locale name (e.g. *English (United States)*) so the referenced language is immediately visible
 without opening the `.isl` file.
 
+Every section header carries an icon directly behind its `[`, stating which entry syntax the section uses:
+`=` for a directive section such as `[Setup]`, `:` for a parameter section such as `[Files]`, and the script
+icon for the free-form Pascal `[Code]`. The same icon is shown in the section-name completion, so the syntax
+is known before the first entry is typed. The hint can be switched off separately in
+*Settings → Editor → Inlay Hints* as **Section type**.
+
 ### Validation and Quick-Fixes
 
 The annotator highlights problems directly in the editor:

@@ -14,7 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.build.run
 
 import com.intellij.execution.configurations.ConfigurationTypeBase
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
-import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsIcons
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 
 class IsRunConfigurationType : ConfigurationTypeBase(
     "IssRunConfiguration",

@@ -13,6 +13,7 @@
 package org.pcsoft.intellij.plugin.inno_setup.script.language.file_type
 
 import com.intellij.openapi.fileTypes.LanguageFileType
+import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import javax.swing.Icon
 
 /**

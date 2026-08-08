@@ -13,3 +13,8 @@
 `[Code]` 节没有结构化参数。其全部内容是 Pascal
 源代码。请参阅 [Inno Setup 脚本参考](https://jrsoftware.org/ishelp/index.php?topic=scriptintro)，获取完整的 API
 界面，包括所有可用的事件函数、内置过程和支持的 Pascal 语言功能。
+
+!!! note "`[Code]` 内不提供不适用的编辑器辅助功能"
+由于其内容是纯 Pascal，插件在 `[Code]` 内有意关闭 ISS 专有的编辑器功能：不提供快速文档、不解析跨节引用和自定义消息引用、不自动补全 `"`（Pascal
+字符串使用 `'`），也不提供 *Flip parameters* 意图操作。预处理器仍然有效——Inno Setup 同样会在 `[Code]` 内求值 ISPP，因此 `#…` 指令行和内联 `{#…}`
+输出保留其文档与引用。
