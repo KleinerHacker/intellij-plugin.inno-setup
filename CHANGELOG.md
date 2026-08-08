@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.0.0]
+
 ### Added
 
 - **A section announces its entry syntax.** The section-name completion now carries the matching icon on
