@@ -141,11 +141,17 @@ jobs:
         run: choco install innosetup --no-progress -y
         shell: pwsh
 
+      # -Pversion mirrors the build job so both see identical task inputs.
+      #
+      # The version MUST stay quoted here. This job runs on Windows, where the default shell is pwsh, and
+      # pwsh splits an unquoted `-Pversion=1.0.0` into the two arguments `-Pversion=1` and `.0.0`. Gradle
+      # then takes the second one for a task name and aborts with "Task '.0.0' not found" before a single
+      # test has run — which is exactly how the 1.0.0 release failed. The Linux jobs pass the same argument
+      # unquoted without trouble because bash does not re-tokenize it.
       - name: Run integration tests
         env:
           INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
-        # -Pversion mirrors the build job so both see identical task inputs.
-        run: ./gradlew integrationTest -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
+        run: ./gradlew integrationTest -Pversion="${{ github.ref_name }}" --build-cache --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.
       # See the developer job above for what each of the three paths contributes.
