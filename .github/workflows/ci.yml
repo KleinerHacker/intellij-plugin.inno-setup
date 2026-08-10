@@ -56,7 +56,7 @@ jobs:
       # has filled it, and a composite action cannot register a post-job step.
       - name: Save shared build cache
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: ${{ github.workspace }}/.gradle-build-cache
           key: gradle-build-cache-${{ github.run_id }}
