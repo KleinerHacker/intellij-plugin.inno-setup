@@ -9,8 +9,34 @@ permissions:
   contents: write
 
 jobs:
+  # Head of the whole release pipeline: nothing is built, tested or published before the CHANGELOG.md is
+  # known to describe the tag being released. The release job extracts the very same section later on to
+  # fill the GitHub release notes — without this gate that failure would only surface at the very end,
+  # after the plugin has already been pushed to the Marketplace and the docs to gh-pages.
+  changelog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Verify changelog entry for the release version
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [ ! -f CHANGELOG.md ]; then
+            echo "ERROR: CHANGELOG.md not found"
+            exit 1
+          fi
+          # Same extraction the release job uses: everything between `## [TAG]` and the next `## [` heading.
+          NOTES=$(awk "/^## \[$TAG\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md)
+          if [ -z "$(echo "$NOTES" | tr -d '[:space:]')" ]; then
+            echo "ERROR: No changelog entry found for tag $TAG — add a '## [$TAG]' section to CHANGELOG.md"
+            exit 1
+          fi
+          echo "Changelog entry for $TAG found."
+
   licences:
     runs-on: ubuntu-latest
+    needs: changelog
 
     steps:
       - uses: actions/checkout@v7
@@ -43,6 +69,7 @@ jobs:
   # identically in both test jobs.
   build:
     runs-on: ubuntu-latest
+    needs: changelog
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -210,6 +237,7 @@ jobs:
   # Build the docs as a generation test (mkdocs --strict) before they get deployed.
   validate-docs:
     runs-on: ubuntu-latest
+    needs: changelog
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -288,10 +316,8 @@ jobs:
   publish-marketplace:
     runs-on: ubuntu-latest
     needs:
-      - build
       - licences
       - deploy-docs
-      - tests
       - verify-plugin
 
     steps:
@@ -338,10 +364,8 @@ jobs:
   publish-packages:
     runs-on: ubuntu-latest
     needs:
-      - build
       - licences
       - deploy-docs
-      - tests
       - verify-plugin
 
     permissions:
