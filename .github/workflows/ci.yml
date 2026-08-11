@@ -69,11 +69,18 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Every Gradle invocation below goes through the local `gradle` action instead of calling ./gradlew
+      # directly: it repeats the run when it failed because a dependency repository was unreachable, and
+      # only then. See .github/actions/gradle for what counts as such a failure.
       - name: Check licences
-        run: ./gradlew licensee --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: licensee --stacktrace --info
 
       - name: Generate SBOM
-        run: ./gradlew cyclonedxBom --stacktrace
+        uses: ./.github/actions/gradle
+        with:
+          arguments: cyclonedxBom --stacktrace
 
   # Head of the pipeline: this job compiles everything once — production code (`assemble`) AND test code
   # (`testClasses`) — and publishes the result through the shared Gradle build cache. Both test jobs depend
@@ -95,7 +102,9 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Assemble
-        run: ./gradlew assemble testClasses --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: assemble testClasses --build-cache --stacktrace --info
 
       # Must run here rather than inside the composite action: the cache can only be saved once the build
       # has filled it, and a composite action cannot register a post-job step.
@@ -126,7 +135,9 @@ jobs:
 
       # Dedicated task (see the root build.gradle.kts); `test` would run BOTH suites.
       - name: Run developer tests
-        run: ./gradlew developerTest --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: developerTest --build-cache --stacktrace --info
 
       # Uploaded on failure too — that is the case the report is actually needed for. Three sources, because
       # the HTML report alone is not enough to diagnose a failure that only happens on CI:
@@ -154,7 +165,9 @@ jobs:
   # NETWORK: `integrationTest` depends on downloadInnoSetupExamples, which fetches the Examples/ directory of
   # the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party scripts are
   # deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes them again.
-  # Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  # Only the derived fingerprints in language/script/src/test/resources/examples are committed. That download
+  # adds a second remote host to the one every job already depends on, which is why this job of all of them
+  # profits most from the retrying gradle action.
   #
   # WINDOWS: IsExampleScriptBuildIT compiles every example with the real ISCC.exe, which exists on Windows
   # only. The whole integration suite therefore runs on a Windows runner with Inno Setup installed.
@@ -163,6 +176,10 @@ jobs:
     needs: build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      # Declared for the whole job, not on the Gradle step: a step that calls a composite action does not
+      # documentedly pass its own `env:` down into that action's steps, while the job's environment is
+      # shared with them.
+      INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
 
     steps:
       # The local composite action can only be resolved once the repo is on disk.
@@ -176,10 +193,16 @@ jobs:
         run: choco install innosetup --no-progress -y
         shell: pwsh
 
+      # The gradle action runs the wrapper from bash and hands it the argument line word-split, so
+      # `-Pversion=1.0.0` arrives as exactly one argument. That also retires the pwsh problem this step
+      # used to work around: pwsh split an unquoted `-Pversion=1.0.0` into `-Pversion=1` and `.0.0`, and
+      # Gradle then aborted with "Task '.0.0' not found" — which is how the 1.0.0 release failed. Do NOT
+      # add quotes around a value here: the argument line gets no quote processing, so they would reach
+      # Gradle as part of the value.
       - name: Run integration tests
-        env:
-          INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
-        run: ./gradlew integrationTest --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: integrationTest --build-cache --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.
       # See the developer job above for what each of the three paths contributes.
@@ -228,8 +251,12 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # The heaviest downloader of the whole pipeline — it pulls a complete IDE per matrix entry, so it is
+      # also the job most exposed to a hiccup on the JetBrains side.
       - name: Verify plugin
-        run: ./gradlew verifyPlugin --stacktrace
+        uses: ./.github/actions/gradle
+        with:
+          arguments: verifyPlugin --stacktrace
 
       - name: Upload verification report
         if: always()
@@ -278,23 +305,34 @@ jobs:
 
       # Secrets touch the environment only in this trusted printf-only step; the Gradle/signer
       # process below gets just file paths (umask 077 keeps the files private).
+      #
+      # What the signer needs is handed on through $GITHUB_ENV instead of through `env:` on the Gradle
+      # step: a step that calls a composite action does not documentedly pass its own `env:` down into
+      # that action's steps, whereas $GITHUB_ENV is the shared store composite actions do see. The only
+      # step that follows in this job is that Gradle call, so the reach of the values is unchanged.
       - name: Write signing material
         if: steps.secrets.outputs.available == 'true'
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
           umask 077
           printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/keystore.p12"
           printf '%s' "$KEYSTORE_PASSWORD"           > "$RUNNER_TEMP/keystore.pass"
+          {
+            echo "KEYSTORE_FILE=$RUNNER_TEMP/keystore.p12"
+            echo "KEYSTORE_PASSWORD_FILE=$RUNNER_TEMP/keystore.pass"
+            echo "KEY_ALIAS=$KEY_ALIAS"
+          } >> "$GITHUB_ENV"
 
+      # Signing itself is offline, but the task chain in front of it builds the plugin and therefore
+      # resolves the whole platform — the same exposure as every other build job.
       - name: Build and sign the plugin (signability check)
         if: steps.secrets.outputs.available == 'true'
-        env:
-          KEYSTORE_FILE: ${{ runner.temp }}/keystore.p12
-          KEYSTORE_PASSWORD_FILE: ${{ runner.temp }}/keystore.pass
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-        run: ./gradlew signPlugin --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: signPlugin --stacktrace --info
 
   # Build the docs as a generation test (mkdocs --strict) on every push and PR.
   # Verification only — the gh-pages site is updated solely by tag releases
@@ -327,5 +365,9 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Retried as well: the task installs the MkDocs toolchain from PyPI, which is exactly the same kind
+      # of exposure to a remote repository.
       - name: Build docs
-        run: ./gradlew buildDocs --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: buildDocs --stacktrace --info
