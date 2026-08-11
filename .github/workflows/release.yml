@@ -50,11 +50,19 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Every Gradle invocation below goes through the local `gradle` action instead of calling ./gradlew
+      # directly: it repeats the run when it failed because a dependency repository was unreachable, and
+      # only then. A release is triggered by a tag and cannot simply be re-run, which makes that
+      # resilience worth even more here than in ci.yml. See .github/actions/gradle.
       - name: Check licences
-        run: ./gradlew licensee --stacktrace
+        uses: ./.github/actions/gradle
+        with:
+          arguments: licensee --stacktrace
 
       - name: Generate SBOM
-        run: ./gradlew cyclonedxBom --stacktrace
+        uses: ./.github/actions/gradle
+        with:
+          arguments: cyclonedxBom --stacktrace
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v7
@@ -81,7 +89,9 @@ jobs:
       - uses: ./.github/actions/setup-gradle
 
       - name: Build plugin
-        run: ./gradlew buildPlugin testClasses -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: buildPlugin testClasses -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
 
       # Must run here rather than inside the composite action: the cache can only be saved once the build
       # has filled it, and a composite action cannot register a post-job step.
@@ -118,7 +128,9 @@ jobs:
       # -Pversion mirrors the build job so both see identical task inputs — otherwise the cache entries
       # written there would not match here.
       - name: Run developer tests
-        run: ./gradlew developerTest -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: developerTest -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
 
       # Uploaded on failure too — that is the case the report is actually needed for. Three sources, because
       # the HTML report alone is not enough to diagnose a failure that only happens on CI:
@@ -146,7 +158,9 @@ jobs:
   # NETWORK: `integrationTest` depends on downloadInnoSetupExamples, which fetches the Examples/ directory of
   # the pinned jrsoftware/issrc tag (see gradle/libs.versions.toml). Those third-party scripts are
   # deliberately not checked in; the run is finalized by cleanInnoSetupExamples, which deletes them again.
-  # Only the derived fingerprints in language/script/src/test/resources/examples are committed.
+  # Only the derived fingerprints in language/script/src/test/resources/examples are committed. That download
+  # adds a second remote host to the one every job already depends on, which is why this job of all of them
+  # profits most from the retrying gradle action.
   #
   # WINDOWS: IsExampleScriptBuildIT compiles every example with the real ISCC.exe, which exists on Windows
   # only. The whole integration suite therefore runs on a Windows runner with Inno Setup installed.
@@ -155,6 +169,10 @@ jobs:
     needs: build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+      # Declared for the whole job, not on the Gradle step: a step that calls a composite action does not
+      # documentedly pass its own `env:` down into that action's steps, while the job's environment is
+      # shared with them.
+      INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
 
     steps:
       # The local composite action can only be resolved once the repo is on disk.
@@ -170,15 +188,16 @@ jobs:
 
       # -Pversion mirrors the build job so both see identical task inputs.
       #
-      # The version MUST stay quoted here. This job runs on Windows, where the default shell is pwsh, and
-      # pwsh splits an unquoted `-Pversion=1.0.0` into the two arguments `-Pversion=1` and `.0.0`. Gradle
-      # then takes the second one for a task name and aborts with "Task '.0.0' not found" before a single
-      # test has run — which is exactly how the 1.0.0 release failed. The Linux jobs pass the same argument
-      # unquoted without trouble because bash does not re-tokenize it.
+      # The gradle action runs the wrapper from bash and hands it the argument line word-split, so
+      # `-Pversion=1.0.0` arrives as exactly one argument. That also retires the pwsh problem this step
+      # used to work around: pwsh split an unquoted `-Pversion=1.0.0` into `-Pversion=1` and `.0.0`, and
+      # Gradle then aborted with "Task '.0.0' not found" before a single test had run — which is exactly
+      # how the 1.0.0 release failed. Do NOT re-add the quotes: the argument line gets no quote
+      # processing, so they would reach Gradle as part of the version.
       - name: Run integration tests
-        env:
-          INNO_SETUP_HOME: C:\Program Files (x86)\Inno Setup 6
-        run: ./gradlew integrationTest -Pversion="${{ github.ref_name }}" --build-cache --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: integrationTest -Pversion=${{ github.ref_name }} --build-cache --stacktrace --info
 
       # Own task, hence its own report and result directories — separate from the developer suite.
       # See the developer job above for what each of the three paths contributes.
@@ -224,8 +243,12 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # The heaviest downloader of the whole pipeline — it pulls a complete IDE per matrix entry, so it is
+      # also the job most exposed to a hiccup on the JetBrains side.
       - name: Verify plugin
-        run: ./gradlew verifyPlugin -Pversion=${{ github.ref_name }} --stacktrace
+        uses: ./.github/actions/gradle
+        with:
+          arguments: verifyPlugin -Pversion=${{ github.ref_name }} --stacktrace
 
       - name: Upload verification report
         if: always()
@@ -260,8 +283,12 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Retried as well: the task installs the MkDocs toolchain from PyPI, which is exactly the same kind
+      # of exposure to a remote repository.
       - name: Build docs
-        run: ./gradlew buildDocs --stacktrace --info
+        uses: ./.github/actions/gradle
+        with:
+          arguments: buildDocs --stacktrace --info
 
   # Publish the docs via mike under the release tag as the version. This is the only
   # place the gh-pages site is updated — pushes to the default branch merely build
@@ -301,14 +328,24 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Deploy docs
+      # The tag decides whether this version also becomes 'latest'. Determined in its own step because the
+      # gradle action takes one flat argument line and cannot carry an if/else.
+      - name: Determine deployment arguments
+        id: args
         run: |
           TAG="${{ github.ref_name }}"
           if [[ "$TAG" =~ ^v?[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
-            ./gradlew deployDocs -Pversion="$TAG" --stacktrace --info
+            echo "gradle=deployDocs -Pversion=$TAG --stacktrace --info" >> "$GITHUB_OUTPUT"
           else
-            ./gradlew deployDocs -Pversion="$TAG" -PsetLatest=false --stacktrace --info
+            echo "gradle=deployDocs -Pversion=$TAG -PsetLatest=false --stacktrace --info" >> "$GITHUB_OUTPUT"
           fi
+
+      # Safe to repeat: mike overwrites the directory of the version being deployed, so a second run
+      # produces the same gh-pages state as the first.
+      - name: Deploy docs
+        uses: ./.github/actions/gradle
+        with:
+          arguments: ${{ steps.args.outputs.gradle }}
 
   # Sign the plugin and upload it to the JetBrains Marketplace. This is the last step
   # before the GitHub release is created (the release job depends on this job), so a
@@ -346,6 +383,10 @@ jobs:
           printf '%s' "$KEYSTORE_PASSWORD"           > "$RUNNER_TEMP/keystore.pass"
           printf '%s' "$PUBLISH_TOKEN"               > "$RUNNER_TEMP/publish.token"
 
+      # Deliberately NOT wrapped in the retrying gradle action: publishPlugin uploads to the Marketplace,
+      # and an upload that got through before the connection broke would be repeated by a retry.
+      # Publishing is not idempotent, so it stays a single attempt — `continue-on-error` already turns a
+      # failure here into a warning instead of a broken release.
       - name: Publish to JetBrains Marketplace
         env:
           KEYSTORE_FILE: ${{ runner.temp }}/keystore.p12
@@ -384,6 +425,9 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Not wrapped either, for the same reason as the Marketplace upload above: a repeated publication is
+      # an upload of artifacts that may already be in the registry, and GitHub Packages rejects a second
+      # push of the same version.
       - name: Publish language modules to GitHub Packages
         env:
           GITHUB_ACTOR: ${{ github.actor }}
