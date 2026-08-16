@@ -12,6 +12,10 @@ highlighting, context-aware completion, inline documentation, reference resoluti
 and preprocessor (ISPP) code. It also integrates the Inno Setup compiler, so scripts can be built and run straight
 from the IDE.
 
+> [!NOTE]
+> **AI transparency notice:** The code and documentation of this project were largely created with AI assistance
+> (transparency notice pursuant to the EU AI Act).
+
 ---
 
 ## Documentation

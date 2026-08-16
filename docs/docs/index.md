@@ -2,6 +2,11 @@
 
 **First-class editor support for Inno Setup scripts (`.iss`) and language files (`.isl`) in all JetBrains IDEs.**
 
+!!! note "AI transparency notice"
+
+    The code and documentation of this project were largely created with AI assistance
+    (transparency notice pursuant to the EU AI Act).
+
 ---
 
 ## What is Inno Setup?
