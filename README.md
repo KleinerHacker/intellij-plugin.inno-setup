@@ -87,6 +87,194 @@ Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **W
 
 ---
 
+## Implementation Status
+
+This section states exactly which parts of Inno Setup the plugin supports today, which parts are only partially
+covered, and which are still missing or planned.
+
+> **Reference version:** Inno Setup 7.0.1-beta · **Official docs:** <https://jrsoftware.org/ishelp/> ·
+> **Last checked:** 2026-08-04
+>
+> **Legend:** ✅ implemented · ⚠️ partial · ❌ not implemented / planned · 🗑️ obsolete in Inno Setup
+> (intentionally skipped)
+
+### File Types
+
+| Extension | Status | What you get                                                                                                                                                                                                                        |
+|-----------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `.iss`    | ✅      | Inno Setup script — full parsing, highlighting, completion, documentation, references and validation                                                                                                                                |
+| `.isl`    | ✅      | Inno Setup language file — same language and tooling as `.iss`, but only `[LangOptions]`, `[Messages]` and `[CustomMessages]` are allowed; `[Setup]` is not required, instead `[LangOptions]` with `LanguageName` + `LanguageID` is |
+
+Whether a rule (`required`, `deprecated`, `since`/`until`) applies is decided per file type, so a directive can be
+required in a script, in a language file, in both, or in neither.
+
+### Script Sections
+
+| Section             | Entry syntax | Status | Coverage                                                                                            |
+|---------------------|--------------|--------|-----------------------------------------------------------------------------------------------------|
+| `[Setup]`           | `Key=Value`  | ✅      | All ~158 current directives (166 spec entries incl. legacy `EncryptionKey*` aliases)                |
+| `[Types]`           | `Key: Value` | ✅      | Attributes, `iscustom` flag, common parameters                                                      |
+| `[Components]`      | `Key: Value` | ✅      | Attributes, flags, common parameters                                                                |
+| `[Tasks]`           | `Key: Value` | ✅      | Attributes, flags, common parameters                                                                |
+| `[Dirs]`            | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[Files]`           | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[Icons]`           | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[INI]`             | `Key: Value` | ✅      | `Filename` (defaults to `WIN.INI`), `Section`, `Key`, `String` plus all `uninsdelete*` flags        |
+| `[Registry]`        | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[Run]`             | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[UninstallRun]`    | `Key: Value` | ✅      | All attributes and flags                                                                            |
+| `[Languages]`       | `Key: Value` | ✅      | `Name`, `MessagesFile`, `LicenseFile`, `InfoBeforeFile`, `InfoAfterFile`                            |
+| `[Messages]`        | `Key=Value`  | ✅      | Full standard `Default.isl` message set (~273 ids) as known keys, plus `lang.` prefix completion    |
+| `[CustomMessages]`  | `Key=Value`  | ✅      | Free key names, `lang.` prefix completion, and `{cm:…}` reference / find usages / rename            |
+| `[LangOptions]`     | `Key=Value`  | ✅      | All directives incl. `LanguageID` completion; the fonts removed in 6.4 are marked as such           |
+| `[InstallDelete]`   | `Key: Value` | ✅      | All attributes                                                                                      |
+| `[UninstallDelete]` | `Key: Value` | ✅      | All attributes                                                                                      |
+| `[ISSigKeys]`       | `Key: Value` | ✅      | `Name`, `KeyFile`, `PublicX`, `PublicY`, `KeyID`, `Group`, `RuntimeID` (Inno Setup 6.5+)            |
+| `[Code]`            | Pascal       | ⚠️     | Recognised and left untouched — no Pascal intellisense, see [Not implemented](#not-implemented-yet) |
+
+#### Cross-section parameters
+
+Five parameters are not section-specific; the plugin models their applicability exactly as the official docs
+define it:
+
+| Parameter(s)                                  | Supported by                                                       |
+|-----------------------------------------------|--------------------------------------------------------------------|
+| `Languages`, `MinVersion`, `OnlyBelowVersion` | all parameter sections                                             |
+| `Check`                                       | all parameter sections                                             |
+| `Components`                                  | all **except** `[Types]`, `[Components]`                           |
+| `Tasks`                                       | all **except** `[Types]`, `[Components]`, `[Tasks]`                |
+| `BeforeInstall`, `AfterInstall`               | all **except** `[Languages]`, `[Types]`, `[Components]`, `[Tasks]` |
+
+(`[Languages]` itself takes none of them — only its own five attributes.)
+
+#### Obsolete `[Setup]` directives (intentionally skipped)
+
+🗑️ `AlwaysCreateUninstallIcon`, `BackColor`, `BackColor2`, `BackColorDirection`, `BackSolid`,
+`DisableAppendDir`, `DontMergeDuplicateFiles`, `MessagesFile`, `UninstallIconFile`, `UninstallIconName`,
+`UninstallStyle`, `WindowResizable`, `WindowShowCaption`, `WindowStartMaximized`, `WindowVisible`,
+`WizardResizable`
+
+### Constants
+
+✅ Complete for every constant documented at the time of the last check (58 entries). Constants removed or
+deprecated by Inno Setup are annotated as such and struck through in completion: `{hwnd}` (removed in 6.4) and
+the deprecated `{pf}`, `{pf32}`, `{pf64}`, `{cf}`, `{cf32}`, `{cf64}`, `{fonts}`, `{sendto}`.
+
+### Preprocessor (ISPP)
+
+✅ The specification is fully covered: 24 directives, 13+ predefined variables and the complete built-in
+function set (~104 functions with signature, result type and description).
+
+| Directive                                 | Parsing | Validation                                                                                 | Completion                                      | References                                                  |
+|-------------------------------------------|:-------:|--------------------------------------------------------------------------------------------|-------------------------------------------------|-------------------------------------------------------------|
+| `#define`                                 |    ✅    | ✅ expression + types + unused + scope keyword                                              | ✅ keyword + scope keyword + names + functions   | ✅                                                           |
+| `#undef`                                  |    ✅    | ✅ keyword + scope keyword + no-match warning                                               | ✅ keyword + scope keyword + `#define` names     | ✅ → `#define`                                               |
+| `#dim` / `#redim`                         |    ✅    | ✅ name + size/index type + bounds + scope keyword + inline init + `#redim` needs `#dim`    | ✅ keyword + scope keyword + array names         | ✅ `#dim` ↔ `arr[i]` / `#redim` / `#define arr[i]` / `DimOf` |
+| `#include` / `#file`                      |    ✅    | ✅ path + effective script                                                                  | ✅ keyword + file path                           | ✅ file                                                      |
+| `#emit` / `#expr` / `#insert` / `#append` |    ✅    | ✅ keyword                                                                                  | ✅ keyword                                       | —                                                            |
+| `#if` / `#elif`                           |    ✅    | ✅ expression + types + structure + boolean literal                                         | ✅ keyword                                       | ✅ → `#define`                                               |
+| `#else` / `#endif`                        |    ✅    | ✅ keyword + structure (opener ↔ `#endif`)                                                  | ✅ keyword                                       | —                                                            |
+| `#ifdef` / `#ifndef`                      |    ✅    | ✅ name + structure (undefined names are not an error)                                      | ✅ keyword + name                                | ✅ → `#define`                                               |
+| `#ifexist` / `#ifnexist`                  |    ✅    | ✅ string expression + type + structure + file existence                                    | ✅ keyword + expression                          | ✅ → `#define` + file                                        |
+| `#for`                                    |    ✅    | ✅ structure (`{init;cond;incr} body`) + loop variable + condition type + slot expression   | ✅ keyword + loop variable + names/subs          | ✅ loop variable (local) + `#define` / `#dim` / `#sub`       |
+| `#sub` / `#endsub`                        |    ✅    | ✅ name + structure (`#sub` ↔ `#endsub`)                                                    | ✅ keyword + sub names                           | ✅ name ↔ `#for` body / expression                           |
+| `#pragma`                                 |    ✅    | ✅ sub-command + option flags + expression/type                                             | ✅ keyword + sub-command + flags                 | ✅ inside expression arguments                               |
+| `#error`                                  |    ✅    | ✅ keyword                                                                                  | ✅ keyword                                       | —                                                            |
+
+An unknown `#…` directive keyword is reported as an error (case-insensitive), like an unknown section, flag or
+constant.
+
+What the preprocessor support means in practice:
+
+- **Expression analysis:** the value of a `#define` and of a macro body is parsed as a real expression. Missing
+  operators, unbalanced parentheses and type violations (`"a" * "b"`, `1 + "s"`, `"a" < 1`, …) are reported as
+  errors at the exact offending token; references to other `#define`s are resolved recursively (with a cycle
+  guard). An operand whose type cannot be determined statically is treated as "any" and never produces a false
+  error.
+- **Call checking:** built-in calls and calls to function-like macros are validated for argument count (optional
+  parameters included), argument types, by-reference parameters (`str*`/`int*`, which need a bare macro name),
+  symbol parameters (`Defined`, `TypeOf`, `DimOf`) and results that carry no value.
+- **Macro parameters:** declared like in ISPP (`#define M(int A, str *S, B = 10)`) — typed for validation,
+  offered in completion, and resolvable/renameable inside the macro body only.
+- **Conditional compilation:** `#if` branches are evaluated three-valued. Provably dead branches are dimmed and
+  report no problems, an undecidable condition keeps both branches and gets a blue underline, and the effective
+  script prunes accordingly. Integer *and* string comparisons (case-insensitive, as ISPP does it),
+  `#ifexist`/`#ifnexist` and the `/D` symbols of the selected build configuration are taken into account.
+- **Inline emission `{#…}`:** value-bearing predefined variables (`{#__LINE__}`, `{#SourcePath}`, `{#Ver}`, …),
+  your own `#define`s and the build configuration's `/D` symbols are valid there. The valueless symbols
+  (`__WIN32__`, `ISPP_INVOKED`, `ISCC_INVOKED`, `WINDOWS`, `UNICODE`) exist only for conditions and are
+  deliberately excluded from `{#…}`.
+- **Line continuation:** a `#…` line ending with `\` is treated as a single directive everywhere — parsing,
+  validation, completion and formatting.
+
+The MkDocs site carries a dedicated **Inno Setup Preprocessor** chapter with one page per directive
+(`define`, `undef`, arrays, `include`, output, conditionals, `for`, `sub`, `pragma`, `error`) in all four
+locales.
+
+### Editor Features
+
+| Feature                                         | Status | Notes                                                                                                                                                                                                         |
+|-------------------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Syntax highlighting (script)                    | ✅      |                                                                                                                                                                                                               |
+| Syntax highlighting (ISPP)                       | ✅      |                                                                                                                                                                                                               |
+| Code completion — sections                       | ✅      |                                                                                                                                                                                                               |
+| Code completion — attributes                     | ✅      |                                                                                                                                                                                                               |
+| Code completion — flags                          | ✅      |                                                                                                                                                                                                               |
+| Code completion — constants                      | ✅      |                                                                                                                                                                                                               |
+| Code completion — ISPP directives                | ✅      |                                                                                                                                                                                                               |
+| Code completion — `{#…}` ISPP variables          | ✅      | After `{` and `{#`: own `#define`s, value-bearing predefined variables and the build configuration's `/D` symbols; valueless symbols excluded                                                                 |
+| Code completion — `[Languages]`                  | ✅      | Built-in language names + `MessagesFile`, with flag icons                                                                                                                                                     |
+| Code completion — `LanguageID`                   | ✅      | Windows LCIDs: name + flag + greyed `$hex` id, built-in languages first                                                                                                                                       |
+| Code completion — message language prefix        | ✅      | `[Messages]`/`[CustomMessages]`: `lang.` prefix list (declared `[Languages]` only, with flag + name) followed by the message ids                                                                              |
+| Code completion — `{cm:…}`                       | ✅      | Declared custom message names                                                                                                                                                                                 |
+| `{cm:…}` reference / find usages / rename        | ✅      | Resolves to `[CustomMessages]`, red when unresolved; rename keeps all language variants in sync                                                                                                               |
+| `lang.` prefix reference / find usages / rename  | ✅      | Prefix resolves to a `[Languages] Name`, red when undeclared; renaming the name updates every prefix                                                                                                          |
+| Inlay hints — computed `#define` value           | ✅      | End-of-line hint with the statically computed value, calls to own function-like macros included. Excluded: plain literals, function-like macros themselves, array element defines, value-less defines and everything not computable (built-in calls among them). Toggle under *Editor \| Inlay Hints* |
+| Inlay hints — language flags                     | ✅      | Flag + English name before `[Languages] MessagesFile` and `[LangOptions] LanguageID`, and the flag of the referenced language before a `lang.` message key                                                    |
+| Inlay hints — section type                       | ✅      | Icon behind the `[` of a section header showing its entry syntax (`=`, `:` or Pascal)                                                                                                                         |
+| Brace matching `[]`, `{}`, `()`                  | ✅      |                                                                                                                                                                                                               |
+| Code folding                                     | ✅      | Sections, multi-pair entries, and `#if … #endif` / `#sub … #endsub` blocks                                                                                                                                    |
+| Structure view                                   | ✅      | Own icons per section and entry kind                                                                                                                                                                          |
+| Quick documentation (script)                     | ✅      | Sections, attributes, flags and constants: description, type, `required`/`deprecated` markers and `since`/`until` range                                                                                       |
+| Quick documentation (ISPP)                       | ✅      | Directive keyword → description + syntax + version range; predefined variable → type + description; built-in function → description, result type, signature, per-parameter details and a side-effect note; own `#define`/macro → inferred type and computed value |
+| Parameter info (ISPP calls)                      | ✅      | `Ctrl+P` shows the parameter list of the enclosing built-in or macro call and highlights the current argument                                                                                                 |
+| Conditional compilation (`#if` branches)         | ✅      | See [Preprocessor](#preprocessor-ispp)                                                                                                                                                                        |
+| ISPP line continuation (trailing `\`)            | ✅      | Parsing, injection and formatting treat it as one directive                                                                                                                                                   |
+| Find usages                                      | ✅      | ISPP `#define` references (`#undef` included) and macro parameters inside their macro                                                                                                                         |
+| Rename refactoring                               | ✅      | ISPP identifiers, incl. function-like macro parameters (scoped to their `#define`)                                                                                                                            |
+| Commenter (`Ctrl+/`)                             | ✅      |                                                                                                                                                                                                               |
+| Quote handler                                    | ✅      |                                                                                                                                                                                                               |
+| Code formatting                                  | ✅      | Spacing around `=` / `:` / `;` and `[ ]`, blank lines between sections, preprocessor operators and line continuations; configurable under Code Style                                                          |
+| ISPP language injection                          | ✅      | Preprocessor lines are injected into the script, `[Code]` included                                                                                                                                            |
+| Semantic annotations / errors                    | ✅      | Unknown sections, attributes, flags, constants and `#…` directives                                                                                                                                            |
+| `{#…}` in `MessagesFile` path resolution         | ✅      | Path-relevant predefined variables (`{#SourcePath}`, `{#__DIR__}`, `{#CompilerPath}`, `{#SysPath}`) are expanded; dynamic ones simply stay unresolved instead of producing a false error                      |
+| Deprecated members struck through in completion   | ✅      | Deprecated sections, attributes, flags, constants and message keys, evaluated per file type                                                                                                                   |
+| Build integration                                | ✅      | Compile `.iss` via context menu or gutter icon, optionally on project build; named build configurations in the project's `.build` directory                                                                    |
+| `[Code]` Pascal intellisense                     | ❌      | See below                                                                                                                                                                                                     |
+
+### Not implemented yet
+
+| Topic                                | Status | Details                                                                                                                                                                                                                                                                     |
+|--------------------------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `[Code]` Pascal Script intellisense  | ❌      | The body of `[Code]` is recognised and handed to the parser as opaque lines: no syntax errors, but also no completion, navigation or analysis for Pascal itself. `//` comments and preprocessor lines inside `[Code]` do keep their own tooling. Planned as a follow-up step. |
+| Very large scripts with many `#if`   | ⚠️     | Collecting the preprocessor directives of a file grows faster than linearly with file size — roughly 1500 conditional blocks take about 25 s. Irrelevant for realistic script sizes; a performance test guards the behaviour.                                                 |
+
+### Validated against the official examples
+
+Every release is checked against the complete `Examples/` directory of `jrsoftware/issrc` (a pinned tag). Each
+example script must
+
+1. parse without a single error element,
+2. resolve every hard reference,
+3. highlight without any error or warning annotation,
+4. produce the recorded effective script for every relevant combination of externally supplied preprocessor
+   symbols, and
+5. compile end-to-end with the real `ISCC.exe` through the plugin's build pipeline.
+
+The example sources are downloaded on demand and are never part of this repository.
+
+---
+
 ## Getting Started (Development)
 
 ### Prerequisites

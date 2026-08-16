@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- **The implementation status is part of the README now.** The separate `STATUS.md` is gone; its content lives
+  in the README under "Implementation Status", rewritten for readers of the plugin rather than its developers:
+  which file types, sections, constants, preprocessor directives and editor features are supported, and what is
+  still missing or planned.
+
 ## [1.0.0]
 
 ### Added

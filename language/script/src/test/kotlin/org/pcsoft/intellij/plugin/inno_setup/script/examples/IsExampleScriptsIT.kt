@@ -62,7 +62,7 @@ class IsExampleScriptsIT : IsTimedBasePlatformTestCase() {
      * rejects a construct the official examples use, which no user script may hit either.
      *
      * The error elements [IsSectionErrorFilter] suppresses are excluded — that is the plugin's contract, not
-     * a defect: `\[Code]` holds free-form Pascal (no `Key=Value` / `Key: Value` syntax and, per STATUS.md, no
+     * a defect: `\[Code]` holds free-form Pascal (no `Key=Value` / `Key: Value` syntax and, per README.md, no
      * Pascal support), and a preprocessor line is parsed by the injected ISPP language instead.
      */
     fun testExamplesParseWithoutErrors() {

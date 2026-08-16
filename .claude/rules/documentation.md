@@ -17,6 +17,11 @@ name: documentation
 * There MUST be a short outline of the "WHAT" of the project
 * There MUST be a reference to the MkDocs documentation (gh-pages), the API documentation and the licence report
 * The readme MUST be checked automatically after changes and adjusted if required
+* The current implementation status against the Inno Setup documentation MUST be recorded in the
+  readme (section "Implementation Status")
+    * It MUST show for the end user which features are implemented, which are partial and which are
+      missing or planned
+    * There MUST NOT be a separate status file - the readme is the single source
 
 # Plugin Description
 
@@ -40,10 +45,6 @@ name: documentation
     * The changes MUST be visible to the user, otherwise they MUST NOT go into the changelog
 * The prescribed format MUST be kept
     * New entries MUST go under `[UNRELEASED]`
-
-## STATUS.md
-
-* The current implementation status against the Inno Setup documentation MUST be recorded here
 
 ## External Documentation
 
