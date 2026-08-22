@@ -1,3 +1,8 @@
+---
+name: plugin-verification
+description: verifyPlugin IDE matrix in plugin/build.gradle.kts. Use for the pluginVerification block, adding/removing a verified IDE, libs.versions.idea, sinceBuild/untilBuild.
+---
+
 # Plugin Verification Rules
 
 The `pluginVerification { ides { … } }` block in `plugin/build.gradle.kts` is the authoritative IDE
@@ -32,5 +37,4 @@ matrix for `verifyPlugin`. It MUST be kept up to date.
 ## Result
 
 * `verifyPlugin` MUST pass without errors for EVERY IDE in the matrix.
-* Warnings are acceptable, except DEPRECATION and REMOVAL warnings — those MUST be fixed
-  (see `plugin.md`).
+* Warnings are acceptable, except DEPRECATION and REMOVAL warnings — those MUST be fixed.

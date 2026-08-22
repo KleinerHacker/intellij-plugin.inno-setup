@@ -11,17 +11,8 @@ name: documentation
 
 ## Readme
 
-* There MUST be instructions on how to check out, build and run the project
-* EVERY feature must be documented in a bullet point
-* There MUST be instructions on how to consume the artifacts
-* There MUST be a short outline of the "WHAT" of the project
-* There MUST be a reference to the MkDocs documentation (gh-pages), the API documentation and the licence report
-* The readme MUST be checked automatically after changes and adjusted if required
-* The current implementation status against the Inno Setup documentation MUST be recorded in the
-  readme (section "Implementation Status")
-    * It MUST show for the end user which features are implemented, which are partial and which are
-      missing or planned
-    * There MUST NOT be a separate status file - the readme is the single source
+* The readme MUST be checked after every change and adjusted if required
+    * For the required sections and the "Implementation Status" use the skill `readme`
 
 # Plugin Description
 
@@ -30,13 +21,8 @@ name: documentation
 
 ## MkDocs
 
-* MkDocs MUST be integrated under `docs`
-* Structure:
-    * `docs/mkdocs.yml` - Root file
-    * `docs/docs` - *.MD files
-    * `docs/docs/assets` - Further asset files (MUST reside inside `docs_dir` so that MkDocs ships them)
-    * `docs/docs/stylesheets` - Additional CSS files
-* The documentation MUST be checked after every change and adjusted if necessary
+* The MkDocs documentation under `docs` MUST be checked after every change and adjusted if necessary
+    * For structure and conventions use the skill `mkdocs`
 
 ## CHANGELOG.md
 

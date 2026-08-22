@@ -1,6 +1,6 @@
 ---
 name: java-tls-certificate
-description: Fix SSLHandshakeException / "PKIX path building failed" in a JVM build by importing the intercepting proxy's or antivirus's root CA into the JDK truststore.
+description: Fix SSLHandshakeException / PKIX path building failed in a JVM build by importing the proxy or antivirus root CA into the JDK truststore.
 ---
 
 # Java TLS Certificate Problems

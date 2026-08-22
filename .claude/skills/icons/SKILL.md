@@ -1,5 +1,5 @@
 ---
-name: Icons
+name: icons
 description: Create new icons for inno setup plugin
 ---
 

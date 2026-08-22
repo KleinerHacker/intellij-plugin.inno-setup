@@ -1,5 +1,5 @@
 ---
-name: inno setup lang
+name: is-lang
 description: Language information for Inno Setup (installer languages)
 ---
 

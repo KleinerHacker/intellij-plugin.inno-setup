@@ -1,5 +1,5 @@
 ---
-name: inno setup const
+name: is-const
 description: List of constants and related information for Inno Setup (usable in Inno Setup scripts)
 ---
 

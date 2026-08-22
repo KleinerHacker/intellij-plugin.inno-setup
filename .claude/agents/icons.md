@@ -6,7 +6,7 @@ model: opus
 effort: low
 
 skills:
-  - name: Icons
+  - icons
 ---
 
 # Role

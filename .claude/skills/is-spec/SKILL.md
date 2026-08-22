@@ -1,5 +1,5 @@
 ---
-name: inno setup spec
+name: is-spec
 description: Specification for Inno Setup sections and their parameters, including rules
 ---
 

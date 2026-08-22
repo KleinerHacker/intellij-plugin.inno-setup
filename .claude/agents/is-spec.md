@@ -6,7 +6,7 @@ model: opus
 effort: low
 
 skills:
-  - inno setup spec
+  - is-spec
 ---
 
 # Role

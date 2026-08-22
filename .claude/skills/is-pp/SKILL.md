@@ -1,5 +1,5 @@
 ---
-name: inno setup preprocessor
+name: is-pp
 description: Specification for the Inno Setup preprocessor, including rules
 ---
 
