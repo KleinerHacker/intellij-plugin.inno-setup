@@ -96,6 +96,7 @@ class IsSectionAnnotator : Annotator {
             annotateLanguageId(element, holder)
             annotateMessagesFile(element, holder)
             annotateOutputDir(element, holder)
+            IsSectionEscapeAnnotations.annotate(element, holder)
         }
     }
 

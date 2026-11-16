@@ -4,11 +4,27 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Escape sequences get their own colour.** `{{`, `""` inside a quoted value, `%n`/`%%`/`%1`–`%9` and
+  `%7d`/`%2c`/`%7c` are coloured as escape sequences — in script values and in `#` directives, whether the text
+  is written plain, in double quotes or (in directives) in single quotes. The colour is listed as "Escape
+  sequence" in the Inno Setup colour settings and follows the IDE's valid-string-escape colour by default.
+- **A warning for `{{…}}` with two closing braces.** Inno Setup turns `{{` into `{`, but never escapes a closing
+  `}`, so `{{GUID}}` ends up as `{GUID}}`. The warning explains the stray `}` and offers a quick fix that keeps a
+  single `}`.
+- **Unclosed constants are reported.** A `{` without a matching `}` (for example `DestDir: {app`) is flagged as
+  an error instead of breaking the rest of the entry.
+
 ### Changed
 
 - **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.3
 
 ### Fixed
+
+- **`AppId={{GUID}` and other escaped braces no longer break the section.** The escape `{{` (a literal `{`), a lone
+  `}` and `""` inside a quoted value are understood. Half-written values such as `{`, `{{` or `{{a` no longer
+  make the plugin report `AppName`/`AppVersion` as missing or drop the rest of the file.
 
 - **Macros and constants in `OutputDir` are expanded.** A `\[Setup]` `OutputDir` such as
   `{#OutputDirectoryPath}` (or `{src}`, `{%ENV}`) was taken literally, so the installer was written to a folder

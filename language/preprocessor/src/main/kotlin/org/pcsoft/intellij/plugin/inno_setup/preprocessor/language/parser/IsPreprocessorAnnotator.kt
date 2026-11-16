@@ -91,6 +91,11 @@ class IsPreprocessorAnnotator : Annotator {
 
             IsPreprocessorTypes.NUMBER ->
                 highlight(element.textRange, IsPreprocessorSyntaxHighlighting.NUMBER, holder)
+
+            // The escape tokens are painted here as well, for the same reason as strings and numbers.
+            IsPreprocessorTypes.ESCAPED_LBRACE, IsPreprocessorTypes.ESCAPED_QUOTE,
+            IsPreprocessorTypes.ESCAPED_PERCENT ->
+                highlight(element.textRange, IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE, holder)
         }
 
         if (element is IsPreprocessorDirective) {
@@ -106,6 +111,7 @@ class IsPreprocessorAnnotator : Annotator {
             }
 
             annotateDirective(element, holder)
+            IsPreprocessorEscapeAnnotations.annotate(element, holder)
         }
     }
 

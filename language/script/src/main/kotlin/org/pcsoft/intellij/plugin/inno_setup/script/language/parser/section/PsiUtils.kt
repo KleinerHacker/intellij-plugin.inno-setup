@@ -176,7 +176,7 @@ val IsSectionParamPair.valueText: String
  * Returns or performs the public behavior represented by this member.
  */
 val IsSectionParamPair.valueUnquoted: String
-    get() = valueText.removeSurrounding("\"")
+    get() = valueText.unescapeIssValue()
 
 /**
  * Returns or performs the public behavior represented by this member.
