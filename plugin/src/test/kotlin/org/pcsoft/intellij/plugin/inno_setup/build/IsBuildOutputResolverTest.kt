@@ -39,6 +39,43 @@ class IsBuildOutputResolverTest : IsTimedBasePlatformTestCase() {
         assertNull(IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.BUILD_DIR))
     }
 
+    /**
+     * Issue #60: a relative `OutputDir` given as `{#Define}` is expanded, so the `/O` argument ends with the
+     * define's value and never contains the unexpanded `{#…}` text.
+     */
+    fun testBuildDirExpandsDefineInOutputDir() {
+        val file = myFixture.addFileToProject(
+            "setup.iss",
+            "#define OutputDirectoryPath \"artifacts\\setup\"\n[Setup]\nOutputDir={#OutputDirectoryPath}\n"
+        )
+        val arg = IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.BUILD_DIR)
+        assertNotNull(arg)
+        assertFalse("must not contain the unexpanded macro, was: $arg", arg!!.contains("{#"))
+        assertTrue("must end with the define value, was: $arg", arg.endsWith("artifacts\\setup"))
+    }
+
+    /**
+     * Issue #60: an `OutputDir` that cannot be expanded statically must not produce an `/O` override, so the
+     * compiler expands the value itself.
+     */
+    fun testBuildDirDoesNotOverrideUnresolvableOutputDir() {
+        val file = myFixture.addFileToProject("setup.iss", "[Setup]\nOutputDir={#Missing}\n")
+        assertNull(IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.BUILD_DIR))
+    }
+
+    /**
+     * The scanned result distinguishes a missing `OutputDir` from one that is present but not expandable.
+     */
+    fun testResolveScriptOutputDirDistinguishesAbsentResolvedUnresolved() {
+        val resolver = IsBuildOutputResolver(project)
+        val absent = myFixture.addFileToProject("a.iss", "[Setup]\nAppName=x\n")
+        val resolved = myFixture.addFileToProject("b.iss", "#define D \"dist\"\n[Setup]\nOutputDir={#D}\n")
+        val unresolved = myFixture.addFileToProject("c.iss", "[Setup]\nOutputDir={#Nope}\n")
+        assertEquals(IsScriptOutputDir.Absent, resolver.resolveScriptOutputDir(absent.virtualFile))
+        assertEquals(IsScriptOutputDir.Resolved("dist"), resolver.resolveScriptOutputDir(resolved.virtualFile))
+        assertEquals(IsScriptOutputDir.Unresolved, resolver.resolveScriptOutputDir(unresolved.virtualFile))
+    }
+
     fun testScriptModeReturnsNull() {
         val file = myFixture.addFileToProject("setup.iss", "[Setup]\nOutputDir=Release\n")
         assertNull(IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.SCRIPT))

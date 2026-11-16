@@ -8,6 +8,8 @@ description: verifyPlugin IDE matrix in plugin/build.gradle.kts. Use for the plu
 The `pluginVerification { ides { … } }` block in `plugin/build.gradle.kts` is the authoritative IDE
 matrix for `verifyPlugin`. It MUST be kept up to date.
 
+* The Gradle target `verifyPlugin` MUST NEVER be executed (see rule `development`). Only the user may run it.
+
 ## IDE Matrix
 
 * IDEs are registered with `create(<IntelliJPlatformType>, <version>)` on the `ides` receiver.
@@ -27,7 +29,7 @@ matrix for `verifyPlugin`. It MUST be kept up to date.
 * Hardcoded IDE version strings inside the matrix are FORBIDDEN — the matrix must never be able to
   drift away from the platform the plugin is compiled against.
 * Bumping `idea` in the version catalog therefore bumps every verified IDE automatically; after such a
-  bump `verifyPlugin` MUST be re-run.
+  bump the user MUST be told that `verifyPlugin` has to be run by them.
 
 ## Compatibility Range
 
@@ -36,5 +38,5 @@ matrix for `verifyPlugin`. It MUST be kept up to date.
 
 ## Result
 
-* `verifyPlugin` MUST pass without errors for EVERY IDE in the matrix.
-* Warnings are acceptable, except DEPRECATION and REMOVAL warnings — those MUST be fixed.
+* `verifyPlugin` is expected to pass without errors for EVERY IDE in the matrix; the user verifies this.
+* Warnings are acceptable, except DEPRECATION and REMOVAL warnings — those MUST be fixed once reported.

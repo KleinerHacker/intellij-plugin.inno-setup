@@ -8,6 +8,14 @@
 
 - **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.3
 
+### Fixed
+
+- **Macros and constants in `OutputDir` are expanded.** A `\[Setup]` `OutputDir` such as
+  `{#OutputDirectoryPath}` (or `{src}`, `{%ENV}`) was taken literally, so the installer was written to a folder
+  named `out\{#OutputDirectoryPath}`. The value is now expanded before the output folder setting is applied.
+  If it cannot be expanded statically, the compiler decides where the installer is written and the value is
+  marked with a warning.
+
 ## [1.0.1]
 
 ### Changed
