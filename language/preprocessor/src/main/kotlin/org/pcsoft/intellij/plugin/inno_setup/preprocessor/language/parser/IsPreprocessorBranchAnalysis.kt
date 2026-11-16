@@ -623,5 +623,7 @@ object IsPreprocessorBranchAnalysis {
 /** Whether this directive's keyword is one of [keywords], matched case-insensitively. */
 private fun IsPreprocessorDirectiveEx.keywordIsOneOf(vararg keywords: String): Boolean {
     val keyword = (this as? IsPreprocessorDirective)?.identifier?.text ?: return false
-    return keywords.any { it.equals(keyword, ignoreCase = true) }
+    // Shorthands (`#?`, `#^`, `#.`) and aliases count as the directive they stand for.
+    val canonical = service<IsPreprocessorService>().canonicalDirective(keyword)
+    return keywords.any { it.equals(canonical, ignoreCase = true) }
 }

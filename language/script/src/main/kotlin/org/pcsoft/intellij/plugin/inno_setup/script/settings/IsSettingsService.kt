@@ -51,7 +51,6 @@ class IsSettingsService : SimplePersistentStateComponent<IsSettingsState>(IsSett
             if (path.isBlank()) return null
             val dir = File(path)
             if (!dir.resolve("ISCC.exe").exists()) return null
-            if (!dir.resolve("Compil32.exe").exists()) return null
             return try {
                 val process = ProcessBuilder(dir.resolve("ISCC.exe").absolutePath, "/?")
                     .redirectErrorStream(true)

@@ -40,9 +40,13 @@ class IsSettingsConfigurable : SearchableConfigurable {
         /** Stable id; used as the parent for the project-level build sub-page. */
         const val ID = "org.pcsoft.intellij.plugin.inno_setup.settings"
 
+        /**
+         * Selectable minimum versions per major version. Only versions that changed the script
+         * language or the compiler are listed (7.0.2 and 7.1.1 brought no such change).
+         */
         private val VERSIONS_BY_MAJOR = mapOf(
             6 to listOf("6.0", "6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7"),
-            7 to listOf("7.0")
+            7 to listOf("7.0", "7.0.1", "7.1")
         )
         private val ALL_VERSIONS = VERSIONS_BY_MAJOR.values.flatten()
         private const val DEFAULT_LATEST = "6.7"
@@ -105,7 +109,7 @@ class IsSettingsConfigurable : SearchableConfigurable {
             null,
             FileChooserDescriptorFactory.createSingleFolderDescriptor()
                 .withTitle("Select Inno Setup Installation Directory")
-                .withDescription("Choose the folder containing ISCC.exe and Compil32.exe")
+                .withDescription("Choose the folder containing ISCC.exe")
         )
 
         picker.textField.document.addDocumentListener(object : DocumentListener {
@@ -120,7 +124,7 @@ class IsSettingsConfigurable : SearchableConfigurable {
                 row("Installation directory:") { cell(picker).align(Align.FILL) }
                 row("Detected version:") { cell(versionLabel!!) }
                 row { cell(validationLabel!!) }
-                row { comment("The directory must contain <b>ISCC.exe</b> and <b>Compil32.exe</b>.") }
+                row { comment("The directory must contain <b>ISCC.exe</b>.") }
             }
             group("Version Validation") {
                 row("Minimum Inno Setup version:") { cell(combo) }
@@ -206,7 +210,6 @@ class IsSettingsConfigurable : SearchableConfigurable {
         val dir = java.io.File(path)
         val missing = buildList {
             if (path.isNotBlank() && !dir.resolve("ISCC.exe").exists()) add("ISCC.exe")
-            if (path.isNotBlank() && !dir.resolve("Compil32.exe").exists()) add("Compil32.exe")
         }
         validationLabel?.apply {
             if (missing.isEmpty()) {

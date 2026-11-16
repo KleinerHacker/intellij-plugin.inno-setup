@@ -193,6 +193,12 @@
                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsSectionCompletionContributor"/>
         <completion.contributor language="ISPP"
                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsPreprocessorCompletionContributor"/>
+        <!-- Version-aware ISPP directive check (needs the script-module minimum version setting, hence in :plugin) -->
+        <annotator language="ISPP"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.preprocessor.IsPreprocessorVersionAnnotator"/>
+        <annotator language="ISS"
+                   implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section.IsSectionPreprocessorVersionAnnotator"/>
+
         <completion.contributor language="IST"
                                 implementationClass="org.pcsoft.intellij.plugin.inno_setup.language.feature.completion.IsTemplateCompletionContributor"/>
 

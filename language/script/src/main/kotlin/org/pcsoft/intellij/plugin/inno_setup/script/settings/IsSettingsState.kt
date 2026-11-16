@@ -20,7 +20,7 @@ import com.intellij.openapi.components.BaseState
  */
 class IsSettingsState : BaseState() {
     /**
-     * Installation directory that should contain `ISCC.exe` and `Compil32.exe`.
+     * Installation directory that should contain `ISCC.exe`.
      */
     var installationPath: String? by string()
 

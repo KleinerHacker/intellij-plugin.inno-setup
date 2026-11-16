@@ -91,7 +91,11 @@ object IsSectionPreprocessorVariableAfterHashProvider : CompletionProvider<Compl
             adjusted.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create(v.name)
-                        .withTypeText("${v.type.typeName} · ISPP")
+                        .withTypeText(
+                            "${v.type.typeName} · ISPP" +
+                                    org.pcsoft.intellij.plugin.inno_setup.language.feature.version.IsPreprocessorVersionSupport
+                                        .hint(v.since, v.until)
+                        )
                         .withIcon(IsIcons.Variable)
                         .withInsertHandler { ctx, _ -> insertClosingBrace(ctx) },
                     3.0

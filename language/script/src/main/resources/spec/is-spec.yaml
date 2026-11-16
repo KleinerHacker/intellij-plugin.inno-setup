@@ -167,7 +167,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Space-separated list of allowed CPU architectures: <code>x86</code>, <code>x64</code>, <code>arm64</code>, <code>ia64</code>. Default: all."
+        description: "Space-separated list of allowed CPU architectures: <code>x86</code>, <code>x64</code>, <code>arm64</code>, <code>ia64</code>. Default: all; since 7.0 the default is <code>x64compatible</code> when <code>SetupArchitecture=x64</code>."
         array: true
 
       - name: ArchitecturesInstallIn64BitMode
@@ -175,7 +175,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Architectures for which the installer runs in 64-bit mode, e.g. <code>x64compatible arm64</code>."
+        description: "Architectures for which the installer runs in 64-bit mode, e.g. <code>x64compatible arm64</code>. Since 7.0 the default is <code>x64compatible</code> when <code>SetupArchitecture=x64</code>."
         array: true
 
       # --- Runtime behaviour ---
@@ -322,7 +322,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Visual style of the wizard. Values: <code>classic</code>, <code>modern</code> (default)."
+        description: "Visual style of the wizard as one or more space-separated values: <code>classic</code> (default), <code>modern</code>; <code>light</code>, <code>dark</code>, <code>dynamic</code>; <code>polar</code>, <code>slate</code>, <code>stellar</code> (built-in since 7.0), <code>windows11</code>, <code>zircon</code>; modifiers <code>excludelightbuttons</code>, <code>excludelightcontrols</code>, <code>hidebevels</code>, <code>includetitlebar</code>. Example: <code>modern stellar excludelightcontrols</code>."
         array: false
 
       - name: WizardResizable
@@ -380,7 +380,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Controls archive extraction capability. Values: <code>basic</code>, <code>enhanced/nopassword</code>, <code>enhanced</code>, <code>full</code>."
+        description: "Controls archive extraction capability. Values: <code>basic</code>, <code>enhanced/nopassword</code>, <code>enhanced</code>, <code>full</code> (supports many formats incl. .zip and, since 7.0, .zst), <code>auto</code> (since 7.0, new default; selects the method automatically based on the [Files] entries)."
         array: false
         since: "6.5"
 
@@ -506,7 +506,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Full application name including version, e.g. <code>My Program 1.5</code>, shown throughout the wizard. If omitted, it is derived from <code>AppName</code> and <code>AppVersion</code>."
+        description: "Full application name including version, e.g. <code>My Program 1.5</code>, shown throughout the wizard. If omitted, it is derived from <code>AppName</code> and <code>AppVersion</code>; since 7.0 the default is <code>AppName AppVersion</code> (separated by a single space)."
         array: false
 
       - name: AppCopyright
@@ -731,7 +731,7 @@ sections:
           kind: native
           dataType: integer
         deprecated: [ ]
-        description: "LZMA dictionary size in KB. Larger values improve the ratio but increase memory use during compression and decompression."
+        description: "LZMA dictionary size in KB. Larger values improve the ratio but increase memory use during compression and decompression. Maximum for the 32-bit compiler: 131072 (1048576 with <code>LZMAUseSeparateProcess=yes</code> on x64 Windows); since 7.0 the 64-bit compiler allows up to 3932160 (3.8 GB) for <code>lzma</code>/<code>lzma2</code>."
         array: false
 
       - name: LZMABlockSize
@@ -755,7 +755,7 @@ sections:
           kind: native
           dataType: string
         deprecated: [ ]
-        description: "Whether LZMA compression runs in a separate process to access more memory. Values: <code>yes</code>, <code>no</code> (default), <code>x86</code>."
+        description: "Whether LZMA compression runs in a separate process to access more memory. Values: <code>yes</code>, <code>no</code> (default), <code>x86</code>. Ignored by the 64-bit compiler (since 7.0)."
         array: false
 
       # --- Disk spanning ---
@@ -1065,7 +1065,7 @@ sections:
           kind: native
           dataType: boolean
         deprecated: [ ]
-        description: "If <code>yes</code>, <code>TouchDate</code>/<code>TouchTime</code> values are interpreted as UTC instead of local time. Default: <code>no</code>."
+        description: "If <code>yes</code>, <code>TouchDate</code>/<code>TouchTime</code> values are interpreted as UTC instead of local time. Default: <code>yes</code> since 7.0 (<code>no</code> before)."
         array: false
 
       # --- Wizard pages & UI ---
@@ -2884,7 +2884,7 @@ sections:
         deprecated: [ ]
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
-        since: "6.6"
+        since: "7.0"
 
       - name: Flags
         type:
@@ -3152,7 +3152,7 @@ sections:
         deprecated: [ ]
         description: "Name of a Pascal procedure called for each output line (requires <code>logoutput</code> flag)."
         array: false
-        since: "6.6"
+        since: "7.0"
 
       - name: Flags
         type:
