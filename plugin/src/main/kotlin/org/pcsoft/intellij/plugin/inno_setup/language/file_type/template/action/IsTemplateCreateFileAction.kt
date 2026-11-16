@@ -16,8 +16,8 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.DumbAwareAction
-import org.pcsoft.intellij.plugin.inno_setup.language.file_type.openFileInEditor
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import javax.swing.Icon
 
@@ -47,7 +47,7 @@ class IsTemplateCreateFileAction : DumbAwareAction(
 
         WriteCommandAction.runWriteCommandAction(project, PluginBundle.message("action.ist.new_file.command"), null, {
             dir.createFile("${dialog.fileName}.ist").let {
-                openFileInEditor(project, it.virtualFile)
+                OpenFileDescriptor(project, it.virtualFile).navigate(true)
             }
         })
     }
