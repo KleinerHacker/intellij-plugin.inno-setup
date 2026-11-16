@@ -18,7 +18,7 @@ import org.jetbrains.grammarkit.tasks.GenerateParserTask
 // is pulled in by :language:script. Carries its own plugin.xml fragment (META-INF/inno-setup-preprocessor.xml).
 plugins {
     id("inno-setup.platform-module")
-    id("org.jetbrains.grammarkit") version "2023.3.0.3"
+    id("org.jetbrains.grammarkit") version "2023.3.0.4"
     id("org.jetbrains.dokka") version "2.2.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.9"
 }

@@ -21,7 +21,7 @@ import org.pcsoft.intellij.plugin.inno_setup.gradle.InnoSetupExamplesTask
 // plugin.xml fragment (META-INF/inno-setup-script.xml).
 plugins {
     id("inno-setup.platform-module")
-    id("org.jetbrains.grammarkit") version "2023.3.0.3"
+    id("org.jetbrains.grammarkit") version "2023.3.0.4"
     id("org.jetbrains.dokka") version "2.2.0"
     id("org.jetbrains.kotlinx.kover") version "0.9.9"
 }
