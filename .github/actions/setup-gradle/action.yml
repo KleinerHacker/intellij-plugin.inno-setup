@@ -36,9 +36,14 @@ runs:
     # Deliberately NOT keyed on runner.os: the build job runs on Linux, the integration tests on Windows,
     # and the JVM compilation output in the cache is platform independent. A per-OS key would make the
     # Windows job miss every entry the build job produced.
+    #
+    # The key alone is not enough: without `enableCrossOsArchive` actions/cache versions every cache
+    # per operating system, so the Windows job would still never see what the Linux build job saved.
+    # The same flag MUST be set on the save step of the build job (see ci.yml / release.yml).
     - name: Restore shared build cache
       uses: actions/cache/restore@v4
       with:
+        enableCrossOsArchive: true
         path: ${{ github.workspace }}/.gradle-build-cache
         # Exact hit on the cache the build job of THIS run wrote; the fallback reuses an earlier run's
         # cache, which is still safe — Gradle validates every entry against its own input hashes and

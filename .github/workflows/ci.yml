@@ -59,15 +59,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up JDK
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      # JDK, executable wrapper and Gradle caches come from the shared composite action. A plain
+      # actions/setup-java with `cache: gradle` found no cache in the sibling jobs and spent minutes at the
+      # end of the job trying to save one the registry rejected.
+      - uses: ./.github/actions/setup-gradle
 
       # Every Gradle invocation below goes through the local `gradle` action instead of calling ./gradlew
       # directly: it repeats the run when it failed because a dependency repository was unreachable, and
@@ -108,10 +103,15 @@ jobs:
 
       # Must run here rather than inside the composite action: the cache can only be saved once the build
       # has filled it, and a composite action cannot register a post-job step.
+      #
+      # `enableCrossOsArchive` is required because the integration tests restore this cache on Windows;
+      # without it actions/cache keeps Linux and Windows caches apart. Must match the restore step in
+      # .github/actions/setup-gradle.
       - name: Save shared build cache
         if: always()
         uses: actions/cache/save@v6
         with:
+          enableCrossOsArchive: true
           path: ${{ github.workspace }}/.gradle-build-cache
           key: gradle-build-cache-${{ github.run_id }}
 
@@ -230,10 +230,13 @@ jobs:
   # Run the JetBrains Plugin Verifier against the full IDE matrix declared in
   # plugin/build.gradle.kts (IntelliJ IDEA, Rider, CLion, GoLand). The matrix is version-catalog driven,
   # so this job automatically follows a platform bump. See .claude/rules/plugin-verification.md.
+  #
+  # Depends on the build only, NOT on the tests: it is the longest job of the pipeline and needs nothing the
+  # tests produce, so it runs alongside both suites instead of behind them. A red suite still fails the
+  # workflow through the `tests` job — it just no longer holds this job back.
   verify-plugin:
     runs-on: ubuntu-latest
-    # Gated on the tests: a red suite must stop the pipeline, not merely be reported next to it.
-    needs: tests
+    needs: build
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
@@ -241,22 +244,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up JDK
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      - uses: ./.github/actions/setup-gradle
 
       # The heaviest downloader of the whole pipeline — it pulls a complete IDE per matrix entry, so it is
       # also the job most exposed to a hiccup on the JetBrains side.
       - name: Verify plugin
         uses: ./.github/actions/gradle
         with:
-          arguments: verifyPlugin --stacktrace
+          arguments: verifyPlugin --build-cache --stacktrace
 
       - name: Upload verification report
         if: always()
@@ -279,15 +274,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Set up JDK
-        uses: actions/setup-java@v6
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
+      - uses: ./.github/actions/setup-gradle
 
       - name: Check signing secrets presence
         id: secrets
@@ -332,7 +319,7 @@ jobs:
         if: steps.secrets.outputs.available == 'true'
         uses: ./.github/actions/gradle
         with:
-          arguments: signPlugin --stacktrace --info
+          arguments: signPlugin --build-cache --stacktrace --info
 
   # Build the docs as a generation test (mkdocs --strict) on every push and PR.
   # Verification only — the gh-pages site is updated solely by tag releases
