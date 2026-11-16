@@ -14,6 +14,7 @@ package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section
 
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSyntaxHighlighting
 
 /**
  * Holds editor highlighting attributes for Inno Setup inspections.
@@ -55,10 +56,10 @@ object IsSectionSyntaxHighlighting {
     val KEYWORD: TextAttributesKey = DefaultLanguageHighlighterColors.KEYWORD
 
     /**
-     * Recognised escape sequences: `{{` (literal `{`), `""` inside a quoted value (literal quote), `%7d`/`%2c`/`%7c`
-     * in constant arguments and `%n`/`%%`/`%1`–`%9` in message texts. Falls back to the IDE's
-     * "valid string escape" colour, so it follows the active color scheme until the user overrides it.
+     * Recognised escape sequences: `{{` (literal `{`), `""` inside a quoted value (literal quote) and the
+     * `%` escapes (`%n`, `%%`, `%1`–`%9`, `%7d`, `%2c`, `%7c`). Falls back to the IDE's "valid string escape"
+     * colour, so it follows the active color scheme until the user overrides it. The key is defined by the
+     * preprocessor language, so the script and the `#` directives share one colour setting.
      */
-    val ESCAPE_SEQUENCE: TextAttributesKey =
-        TextAttributesKey.createTextAttributesKey("ISS_ESCAPE_SEQUENCE", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
+    val ESCAPE_SEQUENCE: TextAttributesKey = IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE
 }

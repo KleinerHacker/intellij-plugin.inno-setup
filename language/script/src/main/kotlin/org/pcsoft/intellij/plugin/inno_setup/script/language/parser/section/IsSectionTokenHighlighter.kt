@@ -52,6 +52,7 @@ class IsSectionTokenHighlighter : SyntaxHighlighterBase() {
                 m[IsSectionTypes.HASH] = IsSectionSyntaxHighlighting.KEYWORD
                 m[IsSectionTypes.ESCAPED_LBRACE] = IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE
                 m[IsSectionTypes.ESCAPED_QUOTE] = IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE
+                m[IsSectionTypes.ESCAPED_PERCENT] = IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE
             }
     }
 }

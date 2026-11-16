@@ -40,7 +40,8 @@
                 strings.</li>
             <li><b>Escape sequences</b> &mdash; <code>{{</code> (a literal <code>{</code>), <code>""</code> in quoted
                 values and the <code>%</code> escapes (<code>%n</code>, <code>%%</code>, <code>%1</code>&hellip;,
-                <code>%7d</code>) are recognised and coloured in their own colour; <code>{{&hellip;}}</code> with two
+                <code>%7d</code>) are recognised and coloured in their own colour, in script values and in
+                <code>#</code> directives; <code>{{&hellip;}}</code> with two
                 closing braces is flagged with a quick fix, and an unclosed <code>{</code> is reported.</li>
             <li><b>Structure view &amp; navigation bar</b> &mdash; get a bird&rsquo;s-eye overview of every section and
                 its entries and jump straight to them.</li>

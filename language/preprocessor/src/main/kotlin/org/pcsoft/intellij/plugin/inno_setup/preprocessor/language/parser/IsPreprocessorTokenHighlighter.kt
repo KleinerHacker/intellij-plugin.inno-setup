@@ -41,6 +41,9 @@ class IsPreprocessorTokenHighlighter : SyntaxHighlighterBase() {
                 m[IsPreprocessorTypes.QUOTE] = IsPreprocessorSyntaxHighlighting.STRING
                 m[IsPreprocessorTypes.STRING_PART] = IsPreprocessorSyntaxHighlighting.STRING
                 m[IsPreprocessorTypes.NUMBER] = IsPreprocessorSyntaxHighlighting.NUMBER
+                m[IsPreprocessorTypes.ESCAPED_LBRACE] = IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE
+                m[IsPreprocessorTypes.ESCAPED_QUOTE] = IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE
+                m[IsPreprocessorTypes.ESCAPED_PERCENT] = IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE
             }
     }
 }

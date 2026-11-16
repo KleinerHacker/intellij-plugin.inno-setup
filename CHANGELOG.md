@@ -6,10 +6,10 @@
 
 ### Added
 
-- **Escape sequences get their own colour.** `{{`, `""` inside a quoted value, `%7d`/`%2c`/`%7c` inside a
-  constant argument and `%n`/`%%`/`%1`–`%9` in `[Messages]` and `[CustomMessages]` are coloured as escape
-  sequences. The colour is listed as "Escape sequence" in the Inno Setup colour settings and follows the IDE's
-  valid-string-escape colour by default.
+- **Escape sequences get their own colour.** `{{`, `""` inside a quoted value, `%n`/`%%`/`%1`–`%9` and
+  `%7d`/`%2c`/`%7c` are coloured as escape sequences — in script values and in `#` directives, whether the text
+  is written plain, in double quotes or (in directives) in single quotes. The colour is listed as "Escape
+  sequence" in the Inno Setup colour settings and follows the IDE's valid-string-escape colour by default.
 - **A warning for `{{…}}` with two closing braces.** Inno Setup turns `{{` into `{`, but never escapes a closing
   `}`, so `{{GUID}}` ends up as `{GUID}}`. The warning explains the stray `}` and offers a quick fix that keeps a
   single `}`.

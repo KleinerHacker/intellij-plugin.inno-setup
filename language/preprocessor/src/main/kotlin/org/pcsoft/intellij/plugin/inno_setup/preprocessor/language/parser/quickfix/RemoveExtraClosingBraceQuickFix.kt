@@ -10,15 +10,15 @@
  * See the License for the specific language governing permissions and limitations.
  */
 
-package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.quickfix
+package org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.quickfix
 
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.SmartPointerManager
-import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
 
 /**
  * Turns the doubled closing brace of a `{{…}}` into a single one.
@@ -27,13 +27,16 @@ import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.
  * `{GUID}}`, with a stray `}` at the end. The fix removes that extra `}` so `{{GUID}` remains, which the
  * compiler turns into `{GUID}`.
  *
- * @param value the value that holds the `{{…}}`
- * @param extraBraceOffset offset of the extra (second) closing brace relative to the start of [value]
+ * It works for a script value and for a preprocessor directive alike (the directive is an injected fragment;
+ * its document maps the edit back to the host file).
+ *
+ * @param element the element that holds the `{{…}}` (a script value or a preprocessor directive)
+ * @param extraBraceOffset offset of the extra (second) closing brace relative to the start of [element]
  */
-class RemoveExtraClosingBraceQuickFix(value: IsSectionParamValue, private val extraBraceOffset: Int) : IntentionAction {
+class RemoveExtraClosingBraceQuickFix(element: PsiElement, private val extraBraceOffset: Int) : IntentionAction {
 
-    private val valuePointer =
-        SmartPointerManager.getInstance(value.project).createSmartPsiElementPointer(value)
+    private val elementPointer =
+        SmartPointerManager.getInstance(element.project).createSmartPsiElementPointer(element)
 
     /**
      * Returns the user-visible action text used by IntelliJ.
@@ -55,8 +58,9 @@ class RemoveExtraClosingBraceQuickFix(value: IsSectionParamValue, private val ex
      * Executes this action against the current PSI file by deleting the extra closing brace.
      */
     override fun invoke(project: Project, editor: Editor?, file: PsiFile) {
+        val element = elementPointer.element ?: return
         val range = extraBraceRange() ?: return
-        val document = PsiDocumentManager.getInstance(project).getDocument(file) ?: return
+        val document = PsiDocumentManager.getInstance(project).getDocument(element.containingFile) ?: return
         document.deleteString(range.first, range.second)
         PsiDocumentManager.getInstance(project).commitDocument(document)
     }
@@ -66,13 +70,13 @@ class RemoveExtraClosingBraceQuickFix(value: IsSectionParamValue, private val ex
      */
     override fun startInWriteAction(): Boolean = true
 
-    /** The document range of the extra brace, or `null` when the text no longer has the `}}` shape. */
+    /** The range of the extra brace in the document of its file, or `null` when the text no longer has the `}}` shape. */
     private fun extraBraceRange(): Pair<Int, Int>? {
-        val value = valuePointer.element ?: return null
-        val text = value.text
+        val element = elementPointer.element ?: return null
+        val text = element.text
         if (extraBraceOffset < 1 || extraBraceOffset >= text.length) return null
         if (text[extraBraceOffset] != '}' || text[extraBraceOffset - 1] != '}') return null
-        val start = value.textRange.startOffset + extraBraceOffset
+        val start = element.textRange.startOffset + extraBraceOffset
         return start to start + 1
     }
 }

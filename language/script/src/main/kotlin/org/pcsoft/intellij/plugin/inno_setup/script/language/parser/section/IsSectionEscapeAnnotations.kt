@@ -15,68 +15,43 @@ package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.PsiTreeUtil
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.feature.include.IsAnnotationSink
-import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionConstant
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsEscapeSequences
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.quickfix.RemoveExtraClosingBraceQuickFix
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
-import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.quickfix.RemoveExtraClosingBraceQuickFix
 
 /**
- * Annotations around the escape sequences of a script value (see [IsSectionEscapes]):
+ * Annotations around the escape sequences of a script value:
  *
- * - colours the `%` escapes that are plain text for the lexer: `%7d`, `%2c`, `%7c` in constant arguments and
- *   `%n`, `%%`, `%1`–`%9` in the values of `[Messages]` and `[CustomMessages]`
  * - warns about `{{…}}`, whose doubled closing brace stays in the text (with a quick fix)
  * - reports a `{` that never closes
  *
- * Everything the compiler accepts stays without an error: a lone `}` and a `{{` are ordinary text.
+ * The escapes themselves are tokens of the section lexer and are coloured by its syntax highlighter. Everything
+ * the compiler accepts stays without an error: a lone `}` and a `{{` are ordinary text.
  */
 object IsSectionEscapeAnnotations {
+
+    /** Lower-case names of the sections whose values are message texts, where a `{` is free text. */
+    private val MESSAGE_SECTIONS: Set<String> = setOf("messages", "custommessages")
 
     /** Annotates [value]; values of the `[Code]` section are not script values and are skipped. */
     fun annotate(value: IsSectionParamValue, holder: IsAnnotationSink) {
         if (value.isInCodeSection) return
 
-        val isMessage = value.containingSection?.nameText?.lowercase() in IsSectionEscapes.MESSAGE_SECTIONS
-        val constants = PsiTreeUtil.findChildrenOfType(value, IsSectionConstant::class.java)
-
-        highlightConstantArgumentEscapes(constants, holder)
-        if (isMessage) highlightMessageEscapes(value, constants.map { it.textRange }, holder)
+        val isMessage = value.containingSection?.nameText?.lowercase() in MESSAGE_SECTIONS
         warnDoubleClosedBraces(value, holder)
         // A message text is free text; a "{" there is not necessarily the start of a constant.
         if (!isMessage) reportUnclosedConstants(value, holder)
     }
 
-    /** `%7d`, `%2c` and `%7c` inside the text of a constant. */
-    private fun highlightConstantArgumentEscapes(constants: Collection<IsSectionConstant>, holder: IsAnnotationSink) {
-        constants.forEach { constant ->
-            val start = constant.textRange.startOffset
-            IsSectionEscapes.CONSTANT_ARGUMENT_ESCAPE.findAll(constant.text).forEach { match ->
-                highlight(TextRange(start + match.range.first, start + match.range.last + 1), holder)
-            }
-        }
-    }
-
-    /** `%n`, `%%` and `%1`–`%9` outside of constants in the value of a message section. */
-    private fun highlightMessageEscapes(value: IsSectionParamValue, constants: List<TextRange>, holder: IsAnnotationSink) {
-        val base = value.textRange.startOffset
-        IsSectionEscapes.MESSAGE_ESCAPE.findAll(value.text).forEach { match ->
-            val range = TextRange(base + match.range.first, base + match.range.last + 1)
-            if (constants.none { it.contains(range) }) highlight(range, holder)
-        }
-    }
-
     /** `{{…}}`: Inno Setup yields `{…}}`, the second closing brace is kept. */
     private fun warnDoubleClosedBraces(value: IsSectionParamValue, holder: IsAnnotationSink) {
         val base = value.textRange.startOffset
-        IsSectionEscapes.DOUBLE_CLOSED_BRACE.findAll(value.text).forEach { match ->
+        IsEscapeSequences.DOUBLE_CLOSED_BRACE.findAll(value.text).forEach { match ->
             val extra = match.range.last
-            holder.newAnnotation(
-                HighlightSeverity.WARNING,
-                "'{{…}}' is not an escaped '{…}': '{{' becomes '{', but a closing '}' is never escaped, " +
-                        "so the result is '{…}}' with a stray '}'. Use a single '}'"
-            ).range(TextRange(base + extra, base + extra + 1))
+            holder.newAnnotation(HighlightSeverity.WARNING, IsEscapeSequences.DOUBLE_CLOSED_BRACE_MESSAGE)
+                .range(TextRange(base + extra, base + extra + 1))
                 .withFix(RemoveExtraClosingBraceQuickFix(value, extra))
                 .create()
         }
@@ -90,12 +65,5 @@ object IsSectionEscapeAnnotations {
                 "Unclosed constant: '{' has no matching '}' (write '{{' for a literal '{')"
             ).range(brace.textRange).create()
         }
-    }
-
-    private fun highlight(range: TextRange, holder: IsAnnotationSink) {
-        holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
-            .range(range)
-            .textAttributes(IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE)
-            .create()
     }
 }

@@ -14,11 +14,13 @@ package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section
 
 import com.intellij.codeInsight.intention.IntentionAction
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import com.intellij.psi.PsiErrorElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.IsPreprocessorSyntaxHighlighting
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFileType
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionTypes
@@ -27,7 +29,8 @@ import org.pcsoft.intellij.plugin.inno_setup.script.test.IsTimedBasePlatformTest
 /**
  * Tests for the escape sequences of Inno Setup values: `{{` (literal `{`), a lone `}`, `""` in quoted values
  * and the `%` escapes — their tokens, their robust parsing (half-written forms must never abort the rest of
- * the file), the warning and quick fix for `{{…}}`, the highlighting colour and the colour settings page entry.
+ * the file), the warning and quick fix for `{{…}}`, the highlighting colour, the colour settings page entry and
+ * the same escapes inside `#` directives.
  *
  * Background (ticket #63): `AppId={{GUID}` is the documented way to write a GUID. `{{` is the escape of a
  * literal `{`, a closing `}` is never escaped.
@@ -46,6 +49,13 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
 
     private fun highlights(content: String) =
         myFixture.run { configureByText(IsScriptFileType.INSTANCE, content); doHighlighting() }
+
+    /** The texts coloured with the escape sequence attribute, in order of their position. */
+    private fun escapeTexts(text: String): List<String> =
+        highlights(text)
+            .filter { it.forcedTextAttributesKey == IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE }
+            .sortedBy { it.startOffset }
+            .map { text.substring(it.startOffset, it.endOffset) }
 
     /** Token types of [text] without whitespace. */
     private fun tokens(text: String): List<IElementType> {
@@ -127,6 +137,45 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
         assertFalse(t.contains(IsSectionTypes.LBRACE))
     }
 
+    /**
+     * Use case: the percent escapes are tokens of their own whether the text is written plain, in double
+     * quotes or in single quotes — `%n`, `%%` and `%1` each become one escape token.
+     */
+    fun testLexerPercentEscapesForEveryWayOfWritingTheText() {
+        listOf("Hello%nWorld %1 100%%", "\"Hello%nWorld %1 100%%\"", "'Hello%nWorld %1 100%%'").forEach { value ->
+            assertEquals(
+                "Percent escapes in $value",
+                3, tokens("Greeting=$value\n").count { it == IsSectionTypes.ESCAPED_PERCENT }
+            )
+        }
+    }
+
+    /**
+     * Use case: a `%` that does not start an escape (`100%`, `%x`, `%APPDATA%`) stays plain text.
+     */
+    fun testLexerPercentWithoutEscapeIsPlainText() {
+        listOf("A=100%\n", "A=%x\n", "A=\"%APPDATA%\"\n").forEach { text ->
+            assertFalse("Escape found in $text", tokens(text).contains(IsSectionTypes.ESCAPED_PERCENT))
+        }
+    }
+
+    /**
+     * Use case: `%7d` inside the argument of a constant is an escape token, in a quoted string and in a plain value.
+     */
+    fun testLexerPercentEscapeInConstantArgument() {
+        assertTrue(tokens("A=\"{cm:X,a%7db}\"\n").contains(IsSectionTypes.ESCAPED_PERCENT))
+        assertTrue(tokens("A={cm:X,a%7db}\n").contains(IsSectionTypes.ESCAPED_PERCENT))
+    }
+
+    /**
+     * Use case: an environment constant such as `{%USERNAME}` does not contain an escape (`%U` is no escape),
+     * and `{%name}` is not mistaken for the lower-case `%n` of a message in an upper-case name.
+     */
+    fun testLexerEnvironmentConstantHasNoUpperCaseEscape() {
+        assertFalse(tokens("A={%USERNAME}\n").contains(IsSectionTypes.ESCAPED_PERCENT))
+        assertFalse(tokens("A={%NAME}\n").contains(IsSectionTypes.ESCAPED_PERCENT))
+    }
+
     // ── Parser ───────────────────────────────────────────────────────────────
 
     /**
@@ -145,7 +194,7 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
      * no parse error appears and `AppName`/`AppVersion` below stay directives of `[Setup]`.
      */
     fun testHalfWrittenValuesDoNotAbortTheRestOfTheFile() {
-        listOf("{", "{{", "{{a", "{{...}", "{{}}", "{{a}}b", "{{a}", "a}b", "{a").forEach { value ->
+        listOf("{", "{{", "{{a", "{{...}", "{{}}", "{{a}}b", "{{a}", "a}b", "{a", "%", "%n%", "\"a%\"").forEach { value ->
             val content = "[Setup]\nAppId=$value\n$setupTail"
             assertTrue("Parse errors for '$value'", parseErrors(content).isEmpty())
             val setup = (myFixture.file as IsScriptFile).findSection("Setup") ?: error("No [Setup] for '$value'")
@@ -167,6 +216,14 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
         val file = myFixture.file as IsScriptFile
         assertEquals(2, file.findSection("Files")!!.parameterEntryList.size)
         assertNotNull(file.findSection("Icons"))
+    }
+
+    /**
+     * Use case: percent escapes in a quoted parameter value and in a constant argument parse without errors.
+     */
+    fun testPercentEscapesParseWithoutErrors() {
+        val content = "[Run]\nFilename: \"{app}\\a.exe\"; Parameters: \"%1 100%% {cm:X,a%7db}\"\n"
+        assertTrue(parseErrors(content).isEmpty())
     }
 
     // ── Annotator, warning and quick fix ─────────────────────────────────────
@@ -245,12 +302,14 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
     // ── Highlighting ─────────────────────────────────────────────────────────
 
     /**
-     * Use case: the lexer-level tokens `{{` and `""` are coloured with the escape sequence attribute.
+     * Use case: the lexer-level tokens `{{`, `""` and the percent escapes are coloured with the escape sequence
+     * attribute by the syntax highlighter itself.
      */
     fun testEscapeTokensUseTheEscapeSequenceKey() {
         val highlighter = IsSectionTokenHighlighter()
-        assertTrue(highlighter.getTokenHighlights(IsSectionTypes.ESCAPED_LBRACE).contains(IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE))
-        assertTrue(highlighter.getTokenHighlights(IsSectionTypes.ESCAPED_QUOTE).contains(IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE))
+        listOf(IsSectionTypes.ESCAPED_LBRACE, IsSectionTypes.ESCAPED_QUOTE, IsSectionTypes.ESCAPED_PERCENT).forEach {
+            assertTrue("$it", highlighter.getTokenHighlights(it).contains(IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE))
+        }
     }
 
     /**
@@ -264,33 +323,69 @@ class IsSectionEscapeTest : IsTimedBasePlatformTestCase() {
     }
 
     /**
-     * Use case: `%n`, `%1` and `%%` in a `[CustomMessages]` value are coloured as escape sequences.
+     * Use case: the script and the `#` directives share one colour setting for escapes.
      */
-    fun testMessageEscapesAreHighlightedInMessageSections() {
-        val text = "[CustomMessages]\nGreeting=Hello%nWelcome %1 (100%%)\n"
-        val coloured = highlights(text)
-            .filter { it.forcedTextAttributesKey == IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE }
-            .map { text.substring(it.startOffset, it.endOffset) }
-        assertEquals(listOf("%n", "%1", "%%"), coloured)
+    fun testScriptAndDirectivesShareTheEscapeKey() {
+        assertSame(IsPreprocessorSyntaxHighlighting.ESCAPE_SEQUENCE, IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE)
+    }
+
+    // ── Escapes inside `#` directives ────────────────────────────────────────
+
+    /**
+     * Use case: in a double-quoted ISPP string the escapes `{{`, `""` and `%n` are coloured with the escape
+     * sequence attribute.
+     */
+    fun testDirectiveDoubleQuotedStringEscapesAreHighlighted() {
+        val text = "#define S \"a{{b\"\"c%nd\"\n[Setup]\n$setupTail"
+        assertEquals(listOf("{{", "\"\"", "%n"), escapeTexts(text))
     }
 
     /**
-     * Use case: `%n` in a path value (outside of the message sections) is plain text and stays uncoloured.
+     * Use case: in a single-quoted ISPP string the doubled quote `''` and the percent escapes are coloured, and
+     * the `{{` is coloured as well.
      */
-    fun testMessageEscapesAreNotHighlightedOutsideMessageSections() {
-        val text = "[Setup]\n$setupTail[Files]\nSource: \"a.exe\"; DestDir: \"{app}\\a%nb\"\n"
-        assertTrue(highlights(text).none { it.forcedTextAttributesKey == IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE })
+    fun testDirectiveSingleQuotedStringEscapesAreHighlighted() {
+        val text = "#define S 'a''b{{c%1'\n[Setup]\n$setupTail"
+        assertEquals(listOf("''", "{{", "%1"), escapeTexts(text))
     }
 
     /**
-     * Use case: `%7d` inside the argument of a constant is coloured as escape sequence.
+     * Use case: a `{{` in plain (unquoted) directive text is coloured as escape.
      */
-    fun testConstantArgumentEscapeIsHighlighted() {
-        val text = "[CustomMessages]\nGreeting=Hi\n[Setup]\nAppComments={cm:Greeting,a%7db}\n"
-        val coloured = highlights(text)
-            .filter { it.forcedTextAttributesKey == IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE }
-            .map { text.substring(it.startOffset, it.endOffset) }
-        assertEquals(listOf("%7d"), coloured)
+    fun testDirectivePlainTextEscapeIsHighlighted() {
+        val text = "#define S {{abc\n[Setup]\n$setupTail"
+        assertEquals(listOf("{{"), escapeTexts(text))
+    }
+
+    /**
+     * Use case: a lone apostrophe in free directive text (`#error Don't`) is no string; nothing is coloured.
+     */
+    fun testDirectiveApostropheIsNoString() {
+        val text = "#error Don't do 100%1 it ''\n[Setup]\n$setupTail"
+        assertEquals(emptyList<String>(), escapeTexts(text))
+    }
+
+    /**
+     * Use case: `{{…}}` with two closing braces in a directive is warned about, like in a script value.
+     */
+    fun testDirectiveDoubleClosedBraceIsWarnedAbout() {
+        val all = highlights("#define Id \"{{abc}}\"\n[Setup]\n$setupTail")
+        assertTrue(all.any { it.severity == HighlightSeverity.WARNING && it.description?.contains("stray '}'") == true })
+    }
+
+    /**
+     * Use case: the quick fix on the directive warning removes the extra closing brace in the host file.
+     */
+    fun testDirectiveQuickFixRemovesTheExtraClosingBrace() {
+        myFixture.configureByText(
+            IsScriptFileType.INSTANCE,
+            "#define Id \"{{abc}<caret>}\"\n[Setup]\n$setupTail"
+        )
+        myFixture.doHighlighting()
+        myFixture.launchAction(findIntention("Use a single '}'"))
+        // The fix runs in the injected ISPP fragment, so the fixture file is the fragment: read the host file.
+        val host = InjectedLanguageManager.getInstance(project).getTopLevelFile(myFixture.file)
+        assertEquals("#define Id \"{{abc}\"\n[Setup]\n$setupTail", host.text)
     }
 
     // ── Colour settings page ─────────────────────────────────────────────────

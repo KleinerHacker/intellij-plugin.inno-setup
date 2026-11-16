@@ -43,9 +43,10 @@
     STRING_PART      = "regexp:[^\"{\r\n]+"
     VALUE_CHAR       = "regexp:[^\r\n]"
     // Escapes of Inno Setup: "{{" is a literal "{" (never opens a constant), "" inside a quoted string is a
-    // literal quote. A closing "}" is never escaped.
+    // literal quote, and %n, %%, %1-%9, %7d, %7c, %2c are the percent escapes. A closing "}" is never escaped.
     ESCAPED_LBRACE   = "{{"
     ESCAPED_QUOTE    = "\"\""
+    ESCAPED_PERCENT  = "regexp:%([n%1-9]|7[dDcC]|2[cC])"
     // One line of free-form Pascal inside [Code]; produced by the lexer's IN_CODE state only.
     CODE_LINE        = "regexp:[^\r\n]+"
   ]
@@ -112,13 +113,13 @@ directiveKey   ::= IDENTIFIER
 // accepts the COLON/SEMICOLON/EQ/HASH tokens as plain text. This keeps free-form, unquoted
 // values (e.g. [CustomMessages]/[Messages] strings like "Additional icons:" or "Launch %1;
 // then quit") from terminating the entry early and dropping the rest of the file from the parse.
-// ESCAPED_LBRACE, LBRACE and RBRACE come last, after `constant` has had its chance: "{{" is the escape of a
-// literal "{", a "}" outside a constant is ordinary text, and an unclosed "{" (half-written constant) falls
-// back to plain text instead of breaking the entry — the annotator reports it, the rest of the file keeps
-// parsing.
+// ESCAPED_PERCENT, ESCAPED_LBRACE, LBRACE and RBRACE come last, after `constant` has had its chance: "{{" is
+// the escape of a literal "{", a "}" outside a constant is ordinary text, and an unclosed "{" (half-written
+// constant) falls back to plain text instead of breaking the entry — the annotator reports it, the rest of
+// the file keeps parsing.
 // elementType=paramValue collapses it onto the IsSectionParamValue PSI type, so every
 // IsSectionParamValue consumer (annotator, references, accessors) keeps working unchanged.
-directiveValue ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | SEMICOLON | EQ | HASH | ESCAPED_LBRACE | LBRACE | RBRACE)* {
+directiveValue ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | SEMICOLON | EQ | HASH | ESCAPED_PERCENT | ESCAPED_LBRACE | LBRACE | RBRACE)* {
   extends="paramValue"
   elementType="paramValue"
   mixin="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.impl.IsSectionParamValueMixinImpl"
@@ -140,21 +141,21 @@ paramKey       ::= IDENTIFIER
 // COLON is accepted inside the value: an unquoted value may carry a compile-time prefix
 // ("Source: compiler:WizClassicSmallImage.bmp"). The pair separator is the SEMICOLON, so a following
 // "Key: Value" pair is still recognised — only the FIRST colon after the key belongs to the paramPair.
-// ESCAPED_LBRACE / LBRACE / RBRACE are the last alternatives, see `directiveValue`.
-paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | ESCAPED_LBRACE | LBRACE | RBRACE)* {
+// ESCAPED_PERCENT / ESCAPED_LBRACE / LBRACE / RBRACE are the last alternatives, see `directiveValue`.
+paramValue     ::= (constant | quotedString | NUMBER | IDENTIFIER | LPAREN | RPAREN | VALUE_CHAR | COLON | ESCAPED_PERCENT | ESCAPED_LBRACE | LBRACE | RBRACE)* {
   mixin="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.impl.IsSectionParamValueMixinImpl"
 }
 
 // "..." with optional embedded {constants}; "{{" and "" are escapes of a literal "{" and a literal quote
-quotedString   ::= QUOTE (STRING_PART | ESCAPED_LBRACE | ESCAPED_QUOTE | constant)* QUOTE
+quotedString   ::= QUOTE (STRING_PART | ESCAPED_PERCENT | ESCAPED_LBRACE | ESCAPED_QUOTE | constant)* QUOTE
 
 // {app}, {win}, {reg:HKLM\...}, {#AppVersion}, {%ENV|default}
 constant     ::= LBRACE constantBody RBRACE
 // A constant argument may itself be a constant ("{cm:UninstallProgram,{cm:MyAppName}}"), and an inline ISPP
 // emission may carry a whole expression with calls and string literals
 // ("{#file AddBackslash(SourcePath) + "License.txt"}") — hence the nested `constant`, the parentheses and
-// the quoted string.
-constantBody ::= (constant | quotedString | LPAREN | RPAREN | IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ)* {
+// the quoted string. A percent escape (%7d, %2c, %7c) may appear in the arguments.
+constantBody ::= (constant | quotedString | LPAREN | RPAREN | IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ | ESCAPED_PERCENT)* {
   mixin="org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.impl.IsSectionConstantBodyMixinImpl"
 }
 

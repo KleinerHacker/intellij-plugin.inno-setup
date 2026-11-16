@@ -14,31 +14,9 @@ package org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section
 
 import org.pcsoft.intellij.plugin.inno_setup.script.language.parser.section.psi.IsSectionParamValue
 
-/**
- * Escape sequences of Inno Setup script values.
- *
- * - `{{` stands for a literal `{`; a `}` is never escaped
- * - `""` inside a quoted value stands for a literal double quote
- * - `%7d`, `%2c`, `%7c` inside the arguments of a constant stand for a literal `}`, `,` and `|`
- * - `%n`, `%%`, `%1`–`%9` are message escapes of the `[Messages]` and `[CustomMessages]` sections
- */
-object IsSectionEscapes {
-
-    /** Escapes of a constant argument: `%7d` (`}`), `%2c` (`,`) and `%7c` (`|`), case-insensitive. */
-    val CONSTANT_ARGUMENT_ESCAPE: Regex = Regex("%(?:7[dDcC]|2[cC])")
-
-    /** Escapes of a message text: `%n` (line break), `%%` (literal `%`) and the arguments `%1`–`%9`. */
-    val MESSAGE_ESCAPE: Regex = Regex("%(?:[nN%]|[1-9])")
-
-    /**
-     * A `{{…}}` with two closing braces: `{{` is an escaped `{`, but a closing `}` is never escaped, so
-     * Inno Setup produces `{…}}` — the second `}` stays in the text. The text between the braces holds no brace.
-     */
-    val DOUBLE_CLOSED_BRACE: Regex = Regex("""\{\{[^{}]*}}""")
-
-    /** Lower-case names of the sections whose values are message texts (the `%` escapes apply there only). */
-    val MESSAGE_SECTIONS: Set<String> = setOf("messages", "custommessages")
-}
+// The escape sequences of Inno Setup values — `{{` (literal `{`, a closing `}` is never escaped), `""` inside a
+// quoted value (literal quote) and the percent escapes — are tokens of the section lexer. Their patterns shared
+// with the preprocessor language live in `IsEscapeSequences`.
 
 /**
  * The text of this value as the compiler sees it: surrounding quotes are removed, `""` inside a quoted
