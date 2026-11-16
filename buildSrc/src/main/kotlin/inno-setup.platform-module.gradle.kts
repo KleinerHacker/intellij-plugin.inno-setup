@@ -46,7 +46,7 @@ plugins {
 kotlin {
     // Compile with JDK 25: since IntelliJ 2026.2 the platform jars are Java 25 (class file 69), so an
     // older javac/kotlinc cannot even read them. The emitted bytecode is pinned to Java 21 below so the
-    // plugin still loads on the whole supported IDE range (sinceBuild 262).
+    // plugin still loads on the whole supported IDE range (sinceBuild 263).
     jvmToolchain(25)
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_21)
@@ -111,13 +111,6 @@ dependencies {
         }
         testFramework(TestFrameworkType.Platform)
 
-        // Since the platform bump to 2026.2 the core `intellij.spellchecker` module (which our plugin
-        // transitively pulls via com.intellij.modules.lang) depends on `intellij.libraries.lucene.common`,
-        // which was moved out of core `lib/` into the bundled `intellij.libraries.misc.plugin`. Without it
-        // on the test classpath the lucene module is unresolved, spellchecker(.xml) is excluded, and the
-        // whole test plugin gets excluded ("dependency on 'IDEA CORE' which cannot be loaded") — which made
-        // every platform feature test fail with no language support. Pull the bundled plugin in for tests.
-        bundledPlugin("intellij.libraries.misc.plugin")
     }
 }
 
@@ -161,12 +154,6 @@ fun registerTestSuite(name: String, taskDescription: String, applyFilter: TestFi
         } else {
             type.set(IntelliJPlatformType.IntellijIdea)
             version.set(ideaVersion)
-        }
-
-        // Mirrors the test dependencies above: without it the lucene module stays unresolved, the
-        // spellchecker is excluded and the whole test plugin gets dropped.
-        plugins {
-            bundledPlugin("intellij.libraries.misc.plugin")
         }
 
         task {

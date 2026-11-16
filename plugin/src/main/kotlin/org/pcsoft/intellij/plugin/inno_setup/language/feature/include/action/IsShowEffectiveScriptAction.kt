@@ -19,6 +19,7 @@ import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.markup.HighlighterLayer
 import com.intellij.openapi.editor.markup.HighlighterTargetArea
 import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
@@ -74,8 +75,9 @@ class IsShowEffectiveScriptAction : DumbAwareAction({ PluginBundle.message("acti
             val vFile = LightVirtualFile("effective_${host.name}", IsScriptFileType.INSTANCE, view.text)
             vFile.isWritable = false
 
-            val editors = FileEditorManager.getInstance(project).openFile(vFile, true)
-            val editor = editors.filterIsInstance<TextEditor>().firstOrNull()?.editor ?: return vFile
+            OpenFileDescriptor(project, vFile).navigate(true)
+
+            val editor = FileEditorManager.getInstance(project).getEditors(vFile).filterIsInstance<TextEditor>().firstOrNull()?.editor ?: return vFile
 
             val attributes = EditorColorsManager.getInstance().globalScheme
                 .getAttributes(IsSectionAnnotatorHighlighting.INCLUDE_SEGMENT_BACKGROUND)

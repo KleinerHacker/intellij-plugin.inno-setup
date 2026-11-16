@@ -5,7 +5,7 @@ kotlin = "2.4.20"
 changelog = "2.5.0"
 foojay-resolver = "1.0.0"
 intellij-platform = "2.18.1"
-idea = "2026.2"
+idea = "2026.3"
 grammarkit = "2023.3.0.4"
 # Upstream tag of jrsoftware/issrc whose Examples/ directory the integration tests validate against.
 # The examples are downloaded on demand and never checked in; see InnoSetupExamplesTask.

@@ -16,10 +16,10 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
+import org.pcsoft.intellij.plugin.inno_setup.language.file_type.openFileInEditor
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.PluginBundle
 import org.pcsoft.intellij.plugin.inno_setup.script.types.IsLanguageDataSpec
 
@@ -62,7 +62,7 @@ class IsScriptCreateFileAction : DumbAwareAction(
                     it.virtualFile,
                     buildTemplate(dialog.appName, dialog.appVersion, dialog.selectedLanguages)
                 )
-                FileEditorManager.getInstance(project).openFile(it.virtualFile, true)
+                openFileInEditor(project, it.virtualFile)
             }
         })
     }

@@ -21,7 +21,7 @@ private const val BUNDLE = "messages.PluginBundle"
  * Accessor for the plugin's localized messages ([BUNDLE]). Use for any user-visible string that is
  * produced from code (plugin.xml `%key%` placeholders are resolved by the platform on their own).
  */
-object PluginBundle : DynamicBundle(BUNDLE) {
+object PluginBundle : DynamicBundle(PluginBundle::class.java, BUNDLE) {
     fun message(@PropertyKey(resourceBundle = BUNDLE) key: String, vararg params: Any): String =
         getMessage(key, *params)
 }
