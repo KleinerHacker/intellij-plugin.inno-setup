@@ -26,13 +26,20 @@ import org.pcsoft.intellij.plugin.inno_setup.build.run.IsScriptRunnerLogic
 import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import org.pcsoft.intellij.plugin.inno_setup.test.IsTimedBasePlatformTestCase
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 /**
  * Compiles **every official Inno Setup example script** (`Examples/` of `jrsoftware/issrc`) through the
  * plugin's own build pipeline — [IsCompilerService], the very code path the IDE action and the run
  * configuration use — with the real `ISCC.exe` of the locally installed Inno Setup.
  *
- * One test case is generated per example (see [suite]), so a broken example is reported by name instead of
+ * Besides the corpus, the suite builds the repository's own **escape-sequence scripts**
+ * (`src/test/resources/examples/escapes`, see [IsBuildExampleCorpus.escapeScripts]): the scripts in `ok/` must
+ * compile, the ones in `fail/` must be rejected by the compiler, and a script with an `.expected` file next to
+ * it is run silently afterwards and has to write exactly that text into its `/ResultFile=` argument. This ties
+ * the plugin's idea of `{{`, `}`, `""` and the `%` escapes to what the real compiler does with them.
+ *
+ * One test case is generated per script (see [suite]), so a broken example is reported by name instead of
  * hiding behind a single aggregate failure. Both the corpus and the Inno Setup installation are mandatory:
  * the corpus is provided by `:plugin:downloadInnoSetupExamples`, the installation by `-PinnoSetupHome` /
  * `INNO_SETUP_HOME` (see [IsBuildExampleCorpus]). Examples whose payload is not part of the corpus are
@@ -49,18 +56,30 @@ import java.io.File
  * by JUnit's synthetic `warning` case, which runs as `junit.framework.TestSuite$1` and fails everywhere.
  *
  * @constructor Creates the test case that builds [script], or — when [failureMessage] is set — the case that
- *   reports the broken environment described by it.
+ *   reports the broken environment described by it. [escapeScript] marks one of the repository's own escape
+ *   scripts, [expectFailure] one that the compiler has to reject.
  */
 class IsExampleScriptBuildIT private constructor(
     private val script: File?,
     private val failureMessage: String?,
+    private val escapeScript: Boolean,
+    private val expectFailure: Boolean,
 ) : IsTimedBasePlatformTestCase() {
 
-    /** Creates the case that builds [script]. */
-    constructor(script: File) : this(script, null) {
+    /** Creates the case that builds the official example [script]. */
+    constructor(script: File) : this(script, null, false, false) {
         // JUnit 3 identifies a dynamically created test case by its name; it also feeds the temp directories
         // of the fixture, so it is reduced to path-safe characters.
         name = "testBuild_" + script.name.replace(Regex("[^A-Za-z0-9]"), "_")
+    }
+
+    /**
+     * Creates the case that builds one of the repository's escape scripts: [expectFailure] `false` for a script
+     * of `ok/` (must compile), `true` for one of `fail/` (must be rejected).
+     */
+    constructor(script: File, expectFailure: Boolean) : this(script, null, true, expectFailure) {
+        name = (if (expectFailure) "testEscapeRejected_" else "testEscapeBuild_") +
+                script.name.replace(Regex("[^A-Za-z0-9]"), "_")
     }
 
     /** The `/O…` target of this build; created in [setUp] and removed in [tearDown]. */
@@ -91,6 +110,8 @@ class IsExampleScriptBuildIT private constructor(
         IsBuildExampleCorpus.directory?.let {
             VfsRootAccess.allowRootAccess(testRootDisposable, it.absolutePath)
         }
+        // The repository's own escape scripts live in the test resources, which can be outside the roots too.
+        VfsRootAccess.allowRootAccess(testRootDisposable, IsBuildExampleCorpus.escapeDirectory.absolutePath)
 
         val settings = IsSettingsService.getInstance().state
         previousInstallationPath = settings.installationPath
@@ -122,18 +143,21 @@ class IsExampleScriptBuildIT private constructor(
     }
 
     /**
-     * Use case: a user opens one of the official example scripts and builds it.
+     * Use case: a user opens one of the official example scripts and builds it — or one of the repository's
+     * escape scripts, which pins down how the real compiler treats `{{`, `}`, `""` and the `%` escapes.
      *
      * The script is compiled exactly as the IDE would compile it — through
      * [IsCompilerService.compileScriptForRun] with an explicit output directory and a forced rebuild — and
      * must succeed: the examples are correct by definition, so a compiler error means the plugin handed ISCC
      * something wrong. The produced installer is asserted as well, because ISCC also reports success when it
-     * was told to write nothing.
+     * was told to write nothing. An escape script of `fail/` is the opposite: the compiler must reject it and
+     * must not produce an installer. When an `.expected` file exists, the installer is run silently and its
+     * result file is compared with it.
      *
      * The compile is guarded by [CompilerWatchdog] so a script that waits for input can never stall the run.
      */
     private fun buildExample() {
-        // Only reachable for a case created through the public constructor, which always carries a script;
+        // Only reachable for a case created through a public constructor, which always carries a script;
         // the environment report never gets here (see runTestRunnable).
         val script = script!!
         val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(script)
@@ -158,14 +182,55 @@ class IsExampleScriptBuildIT private constructor(
                     "src/test/resources/examples/build-skip.yaml with a reason.",
             watchdog.firedOnTimeout,
         )
+
+        if (expectFailure) {
+            assertEquals(
+                "The compiler accepted ${script.name}, but this escape script must be rejected",
+                TaskRunnerResults.FAILURE,
+                result,
+            )
+            assertNull(
+                "The rejected script ${script.name} produced an installer in $outputDir",
+                IsScriptRunnerLogic.findSetupExe(outputDir),
+            )
+            return
+        }
+
         assertEquals(
-            "Building the official example ${script.name} failed — see the compiler output above",
+            "Building ${script.name} failed — see the compiler output above",
             TaskRunnerResults.SUCCESS,
             result,
         )
-        assertNotNull(
-            "Building ${script.name} reported success but produced no installer in $outputDir",
-            IsScriptRunnerLogic.findSetupExe(outputDir),
+        val setupExe = IsScriptRunnerLogic.findSetupExe(outputDir)
+        assertNotNull("Building ${script.name} reported success but produced no installer in $outputDir", setupExe)
+
+        if (escapeScript) verifyExpectedResult(script, setupExe!!)
+    }
+
+    /**
+     * Runs the built [setupExe] silently when the script has an `.expected` file and compares the text it wrote
+     * into its `/ResultFile=` argument with that file (surrounding whitespace ignored). The scripts of this kind
+     * save the expanded `AppId` from `InitializeSetup` and abort the installation right away, so nothing is
+     * installed.
+     */
+    private fun verifyExpectedResult(script: File, setupExe: File) {
+        val expectedFile = script.resolveSibling(script.nameWithoutExtension + ".expected")
+        if (!expectedFile.isFile) return
+
+        val resultFile = File(outputDir, "result.txt")
+        val process = ProcessBuilder(
+            setupExe.absolutePath, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/ResultFile=${resultFile.absolutePath}",
+        ).redirectErrorStream(true).start()
+        if (!process.waitFor(SETUP_TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+            process.destroyForcibly()
+            fail("The built setup of ${script.name} did not finish within ${SETUP_TIMEOUT_SECONDS}s")
+        }
+
+        assertTrue("The built setup of ${script.name} wrote no result file", resultFile.isFile)
+        assertEquals(
+            "The compiler expanded the script ${script.name} differently than expected",
+            expectedFile.readText().trim(),
+            resultFile.readText().trim(),
         )
     }
 
@@ -227,8 +292,12 @@ class IsExampleScriptBuildIT private constructor(
         private val BUILD_TIMEOUT_SECONDS: Long =
             System.getProperty("is.test.example.build.timeout.seconds")?.toLongOrNull() ?: 180L
 
+        /** Time budget for running a built escape-script setup (it ends right after `InitializeSetup`). */
+        private const val SETUP_TIMEOUT_SECONDS: Long = 60L
+
         /**
-         * Builds the suite: one [IsExampleScriptBuildIT] per example of the corpus.
+         * Builds the suite: one [IsExampleScriptBuildIT] per example of the corpus, followed by one per escape
+         * script of the repository (`ok/` must build, `fail/` must be rejected).
          *
          * A missing corpus or a missing `ISCC.exe` is not skipped but reported as a failing test — a build
          * suite that silently compiles nothing would be indistinguishable from a passing one.
@@ -263,6 +332,8 @@ class IsExampleScriptBuildIT private constructor(
             IsBuildExampleCorpus.scripts
                 .filterNot { it.name in IsBuildExampleCorpus.skipped }
                 .forEach { suite.addTest(IsExampleScriptBuildIT(it)) }
+            IsBuildExampleCorpus.escapeScripts.forEach { suite.addTest(IsExampleScriptBuildIT(it, false)) }
+            IsBuildExampleCorpus.escapeFailScripts.forEach { suite.addTest(IsExampleScriptBuildIT(it, true)) }
             return suite
         }
 
@@ -271,6 +342,6 @@ class IsExampleScriptBuildIT private constructor(
          * instance of the suite's own class on purpose; see the class documentation.
          */
         private fun failing(testName: String, message: String): TestCase =
-            IsExampleScriptBuildIT(null, message).apply { name = testName }
+            IsExampleScriptBuildIT(null, message, false, false).apply { name = testName }
     }
 }

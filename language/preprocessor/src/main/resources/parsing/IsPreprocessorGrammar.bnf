@@ -40,6 +40,11 @@
     EQ          = "="
     COLON       = ":"
     SEMICOLON   = ";"
+    // Escapes of Inno Setup: "{{" is a literal "{", "" inside a string is a literal quote, and %n, %%, %1-%9,
+    // %7d, %7c, %2c are the percent escapes (recognised inside strings).
+    ESCAPED_LBRACE  = "{{"
+    ESCAPED_QUOTE   = "\"\""
+    ESCAPED_PERCENT = "regexp:%([n%1-9]|7[dDcC]|2[cC])"
   ]
 }
 
@@ -56,6 +61,8 @@ directive ::= HASH IDENTIFIER value? {
 
 value ::= valueToken+
 
+// ESCAPED_LBRACE, LBRACE and RBRACE come last, after `constant` has had its chance: "{{" is the escape of a
+// literal "{", a "}" outside a constant is ordinary text, and an unclosed "{" falls back to plain text.
 private valueToken ::= constant
                      | quotedString
                      | NUMBER
@@ -65,13 +72,14 @@ private valueToken ::= constant
                      | LBRACKET | RBRACKET
                      | EQ | COLON | SEMICOLON
                      | HASH
+                     | ESCAPED_LBRACE | LBRACE | RBRACE
 
-// "..." with optional embedded {constants}
-quotedString ::= QUOTE (STRING_PART | constant)* QUOTE
+// "..." with optional embedded {constants}; "{{", "" and the percent escapes are escapes inside the string
+quotedString ::= QUOTE (STRING_PART | ESCAPED_LBRACE | ESCAPED_QUOTE | ESCAPED_PERCENT | constant)* QUOTE
 
 // {app}, {#Name}, {reg:...}, etc. within ISPP values — and the `#for {Init; Cond; Incr}` header group.
 // The body accepts arbitrary balanced expression tokens so a `#for {i = 0; i < 10; i++}` brace group does
 // not produce spurious parse errors; nested `{…}` and quoted strings are matched recursively.
 constant     ::= LBRACE constantBody RBRACE
 constantBody ::= (IDENTIFIER | NUMBER | VALUE_CHAR | COLON | HASH | EQ | SEMICOLON
-                 | LPAREN | RPAREN | LBRACKET | RBRACKET | quotedString | constant)*
+                 | LPAREN | RPAREN | LBRACKET | RBRACKET | quotedString | constant | ESCAPED_PERCENT)*

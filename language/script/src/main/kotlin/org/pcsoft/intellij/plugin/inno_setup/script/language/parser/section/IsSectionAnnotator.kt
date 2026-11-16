@@ -95,6 +95,7 @@ class IsSectionAnnotator : Annotator {
         if (element is IsSectionParamValue) {
             annotateLanguageId(element, holder)
             annotateMessagesFile(element, holder)
+            IsSectionEscapeAnnotations.annotate(element, holder)
         }
     }
 

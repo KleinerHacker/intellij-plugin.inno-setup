@@ -72,8 +72,31 @@ object IsBuildExampleCorpus {
             .examples
     }
 
+    /**
+     * The own escape-sequence scripts of this repository (not part of the downloaded corpus): `ok/` holds the
+     * scripts the compiler must build, `fail/` the ones it must reject. Next to a script in `ok/` a file with
+     * the same name and the extension `expected` states the text the built setup must write into the file of
+     * its `/ResultFile=` argument.
+     */
+    val escapeDirectory: File = File(ESCAPE_RESOURCE)
+
+    /** The escape scripts the compiler must build, sorted by name. */
+    val escapeScripts: List<File>
+        get() = scriptsIn(escapeDirectory.resolve("ok"))
+
+    /** The escape scripts the compiler must reject, sorted by name. */
+    val escapeFailScripts: List<File>
+        get() = scriptsIn(escapeDirectory.resolve("fail"))
+
+    private fun scriptsIn(directory: File): List<File> =
+        directory.listFiles().orEmpty()
+            .filter { it.isFile && it.extension.equals("iss", true) }
+            .sortedBy { it.name }
+
     /** Payload of `build-skip.yaml`. */
     private data class SkipList(val examples: Map<String, String> = emptyMap())
 
     private const val SKIP_RESOURCE = "src/test/resources/examples/build-skip.yaml"
+
+    private const val ESCAPE_RESOURCE = "src/test/resources/examples/escapes"
 }
