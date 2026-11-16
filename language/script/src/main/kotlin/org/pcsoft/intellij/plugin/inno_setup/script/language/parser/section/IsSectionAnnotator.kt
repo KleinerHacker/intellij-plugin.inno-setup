@@ -113,6 +113,11 @@ class IsSectionAnnotator : Annotator {
         val raw = value.singleText.trim().removeSurrounding("\"")
         if (!raw.contains('{')) return
 
+        // A fragment pulled in via #include cannot see the defines of the including script on its own; the
+        // value is validated against the including script's effective view instead.
+        val fragmentFile = value.containingFile?.virtualFile
+        if (fragmentFile != null && IsScriptCollector(value.project).isIncludedByOther(fragmentFile)) return
+
         val scriptDir = value.containingFile?.virtualFile?.parent?.path?.let { File(it) }
         val defines = value.issFile?.declarationScope()?.definedConstants ?: emptyList()
         val installPath = IsSettingsService.getInstance().state.installationPath
