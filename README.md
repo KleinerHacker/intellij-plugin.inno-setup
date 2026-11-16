@@ -410,6 +410,8 @@ After the restart, any file with the `.iss` extension will be handled by the plu
 and [pull requests](https://github.com/KleinerHacker/intellij-plugin.inno-setup/pulls) are welcome. Please open an issue
 first to discuss larger changes.
 
+Project Board: https://github.com/users/KleinerHacker/projects/2
+
 ---
 
 ## Trademarks & Disclaimer
