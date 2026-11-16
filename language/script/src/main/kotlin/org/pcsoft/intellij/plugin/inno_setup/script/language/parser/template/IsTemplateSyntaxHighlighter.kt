@@ -29,7 +29,7 @@ import com.intellij.psi.tree.IElementType
 class IsTemplateSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer = IsTemplateLexerAdapter()
 
-    override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> = EMPTY
+    override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> = EMPTY
 
     private companion object {
         val EMPTY = emptyArray<TextAttributesKey>()

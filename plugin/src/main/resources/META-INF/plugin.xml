@@ -16,6 +16,7 @@
     <id>org.pcsoft.ij.plugin.inno-setup</id>
     <name>Inno Setup</name>
     <description><![CDATA[
+        <b>Created with AI</b>
         <p>
             Brings first-class language support for <a href="https://jrsoftware.org/isinfo.php">Inno Setup</a>
             installer scripts to the whole JetBrains IDE family. Inno Setup scripts (<code>.iss</code>) describe a

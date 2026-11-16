@@ -60,15 +60,15 @@ intellijPlatform {
 
     pluginConfiguration {
         ideaVersion {
-            sinceBuild = "262"
-            untilBuild = provider { null }   // unbounded: covers 2026.2 (262) and future IDEs
+            sinceBuild = "263"
+            untilBuild = provider { null }   // unbounded: covers 2026.3 (263) and future IDEs
         }
         // Release-time changelog injection is wired separately; keep patchPluginXml off the changelog
         // provider so it stays configuration-cache friendly.
         changeNotes = provider { "" }
     }
 
-    // The plugin declares sinceBuild=262 with an unbounded untilBuild, so it is offered to *every* 262+
+    // The plugin declares sinceBuild=263 with an unbounded untilBuild, so it is offered to *every* 263+
     // IDE — not just IntelliJ IDEA. Verifying only the development IDE would let a break in a sibling
     // product surface in the marketplace instead of in the build. These four cover the IDEs the plugin is
     // meant to support; the version is taken from the catalog so it can never drift from the platform the
@@ -142,11 +142,6 @@ dependencies {
         // (used by IsStructureAwareNavbar) now ships in the separate intellij.platform.structureView
         // module, which must be requested explicitly instead of coming in via the monolithic classpath.
         bundledModule("intellij.platform.structureView")
-        // Also since 2026.2: core intellij.spellchecker(.xml) — pulled in transitively via
-        // com.intellij.modules.lang — now needs intellij.libraries.lucene.common, which was moved into the
-        // bundled intellij.libraries.misc.plugin. Without it the test plugin is excluded and every feature
-        // test fails with no language support. (See the same note in the :language convention.)
-        bundledPlugin("intellij.libraries.misc.plugin")
     }
 
     // Bundle the language modules as regular libraries into the plugin (one shared classloader). Each
@@ -248,10 +243,9 @@ fun registerTestSuite(name: String, taskDescription: String, applyFilter: TestFi
             version.set(libs.versions.idea.get())
         }
 
-        // Mirrors the test dependencies above — same reasoning, same two entries.
+        // Mirrors the test dependencies above — same reasoning.
         plugins {
             bundledModule("intellij.platform.structureView")
-            bundledPlugin("intellij.libraries.misc.plugin")
         }
 
         task {

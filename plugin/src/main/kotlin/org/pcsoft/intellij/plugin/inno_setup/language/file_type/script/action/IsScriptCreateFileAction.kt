@@ -16,7 +16,7 @@ import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.command.WriteCommandAction
-import com.intellij.openapi.fileEditor.FileEditorManager
+import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.vfs.VfsUtil
 import org.jetbrains.annotations.VisibleForTesting
@@ -62,7 +62,7 @@ class IsScriptCreateFileAction : DumbAwareAction(
                     it.virtualFile,
                     buildTemplate(dialog.appName, dialog.appVersion, dialog.selectedLanguages)
                 )
-                FileEditorManager.getInstance(project).openFile(it.virtualFile, true)
+                OpenFileDescriptor(project, it.virtualFile).navigate(true)
             }
         })
     }
