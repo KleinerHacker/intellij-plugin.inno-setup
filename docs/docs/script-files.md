@@ -92,6 +92,15 @@ The annotator highlights problems directly in the editor:
 - Empty sections (with a quick-fix to delete them)
 - Missing required sections (with a quick-fix to add them)
 - Unresolved constants and references
+- Unclosed constants such as `{app` (write `{{` for a literal `{`)
+- `{{…}}` with two closing braces: `{{` becomes `{`, but a closing `}` is never escaped, so the text ends with a
+  stray `}` (warning, with a quick-fix that keeps a single `}`)
+
+Escape sequences are recognised and coloured in their own colour (*Settings → Editor → Color Scheme → Inno Setup →
+Escape sequence*, by default the colour of a valid string escape): `{{` (a literal `{`), `""` inside a quoted
+value, `%7d`, `%2c`, `%7c` inside a constant argument, and `%n`, `%%`, `%1`–`%9` in `[Messages]` and
+`[CustomMessages]` values. A single `}` is plain text and needs no escape. A GUID is therefore written as
+`AppId={{A1B2C3D4-0001-4000-8000-000000000001}`.
 
 ### Structure View
 

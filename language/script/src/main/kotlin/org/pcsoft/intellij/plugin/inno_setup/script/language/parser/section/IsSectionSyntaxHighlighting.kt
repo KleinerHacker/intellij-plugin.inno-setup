@@ -53,4 +53,12 @@ object IsSectionSyntaxHighlighting {
      * Returns or performs the public behavior represented by this member.
      */
     val KEYWORD: TextAttributesKey = DefaultLanguageHighlighterColors.KEYWORD
+
+    /**
+     * Recognised escape sequences: `{{` (literal `{`), `""` inside a quoted value (literal quote), `%7d`/`%2c`/`%7c`
+     * in constant arguments and `%n`/`%%`/`%1`–`%9` in message texts. Falls back to the IDE's
+     * "valid string escape" colour, so it follows the active color scheme until the user overrides it.
+     */
+    val ESCAPE_SEQUENCE: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_ESCAPE_SEQUENCE", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
 }

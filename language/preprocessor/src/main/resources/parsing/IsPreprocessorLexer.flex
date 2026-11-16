@@ -54,6 +54,8 @@ CONTINUATION = \\[ \t]*{NEWLINE}
 }
 
 <IN_STRING> {
+    // "{{" is the Inno Setup escape of a literal "{", not the start of a constant; it is plain string text.
+    "{{"          { return IsPreprocessorTypes.STRING_PART; }
     "{"           { yybegin(IN_STRING_CONSTANT); return IsPreprocessorTypes.LBRACE; }
     "\""          { yybegin(YYINITIAL); return IsPreprocessorTypes.QUOTE; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsPreprocessorTypes.CRLF; }

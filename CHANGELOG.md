@@ -4,6 +4,24 @@
 
 ## [Unreleased]
 
+### Added
+
+- **Escape sequences get their own colour.** `{{`, `""` inside a quoted value, `%7d`/`%2c`/`%7c` inside a
+  constant argument and `%n`/`%%`/`%1`–`%9` in `[Messages]` and `[CustomMessages]` are coloured as escape
+  sequences. The colour is listed as "Escape sequence" in the Inno Setup colour settings and follows the IDE's
+  valid-string-escape colour by default.
+- **A warning for `{{…}}` with two closing braces.** Inno Setup turns `{{` into `{`, but never escapes a closing
+  `}`, so `{{GUID}}` ends up as `{GUID}}`. The warning explains the stray `}` and offers a quick fix that keeps a
+  single `}`.
+- **Unclosed constants are reported.** A `{` without a matching `}` (for example `DestDir: {app`) is flagged as
+  an error instead of breaking the rest of the entry.
+
+### Fixed
+
+- **`AppId={{GUID}` and other escaped braces no longer break the section.** The escape `{{` (a literal `{`), a lone
+  `}` and `""` inside a quoted value are understood. Half-written values such as `{`, `{{` or `{{a` no longer
+  make the plugin report `AppName`/`AppVersion` as missing or drop the rest of the file.
+
 ### Changed
 
 - **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.3

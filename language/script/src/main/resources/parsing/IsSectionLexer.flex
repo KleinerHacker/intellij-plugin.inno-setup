@@ -72,6 +72,9 @@ COMMENT_PASCAL = "//" [^\r\n]*
 }
 
 <VALUE> {
+    // "{{" is the escape of a literal "{" (it never opens a constant). It is longer than "{", so JFlex prefers it.
+    // A closing "}" is never escaped; a lone "}" outside a constant is ordinary text for the parser.
+    "{{"          { return IsSectionTypes.ESCAPED_LBRACE; }
     "{"           { return IsSectionTypes.LBRACE; }
     "}"           { return IsSectionTypes.RBRACE; }
     "("           { return IsSectionTypes.LPAREN; }
@@ -131,6 +134,10 @@ COMMENT_PASCAL = "//" [^\r\n]*
 // identifiers inside {…} keep the standard letter-leading IDENTIFIER form.
 
 <IN_STRING> {
+    // "{{" is the escape of a literal "{" and "" the escape of a literal quote; both are longer than the
+    // rules they precede ("{" opens a constant, a single quote closes the string), so JFlex prefers them.
+    "{{"          { return IsSectionTypes.ESCAPED_LBRACE; }
+    "\"\""        { return IsSectionTypes.ESCAPED_QUOTE; }
     "{"           { yybegin(IN_STRING_CONSTANT); return IsSectionTypes.LBRACE; }
     "\""          { yybegin(VALUE); return IsSectionTypes.QUOTE; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
