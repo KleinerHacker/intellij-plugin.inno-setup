@@ -76,6 +76,103 @@ class IsBuildOutputResolverTest : IsTimedBasePlatformTestCase() {
         assertEquals(IsScriptOutputDir.Unresolved, resolver.resolveScriptOutputDir(unresolved.virtualFile))
     }
 
+    /**
+     * An `OutputDir` that lives in an `#include`d file is found: the main script has none of its own, the
+     * included `\[Setup]` section does.
+     */
+    fun testOutputDirInIncludeIsFound() {
+        myFixture.addFileToProject("inc.iss", "[Setup]\nOutputDir=Release\n")
+        val main = myFixture.addFileToProject("main.iss", "#include \"inc.iss\"\n[Setup]\nAppName=x\n")
+        val arg = IsBuildOutputResolver(project).resolveOutputArg(main.virtualFile, IsBuildOutputMode.BUILD_DIR)
+        assertNotNull(arg)
+        assertTrue("must end with the included OutputDir, was: $arg", arg!!.endsWith("Release"))
+    }
+
+    /**
+     * A define from the main script is visible to an `OutputDir` that is pulled in from an `#include`.
+     */
+    fun testIncludeOutputDirExpandsDefineOfMainScript() {
+        myFixture.addFileToProject("inc.iss", "[Setup]\nOutputDir={#D}\n")
+        val main = myFixture.addFileToProject("main.iss", "#define D \"dist\"\n#include \"inc.iss\"\n")
+        assertEquals(
+            IsScriptOutputDir.Resolved("dist"),
+            IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        )
+    }
+
+    /**
+     * A define from an `#include`d file is visible to an `OutputDir` in the main script.
+     */
+    fun testOutputDirExpandsDefineOfInclude() {
+        myFixture.addFileToProject("inc.iss", "#define D \"dist\"\n")
+        val main = myFixture.addFileToProject("main.iss", "#include \"inc.iss\"\n[Setup]\nOutputDir={#D}\n")
+        assertEquals(
+            IsScriptOutputDir.Resolved("dist"),
+            IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        )
+    }
+
+    /**
+     * `{src}` always means the directory of the main script, also when the `OutputDir` comes from an `#include`
+     * in a sub-folder, so it is expanded and never left as literal text.
+     */
+    fun testSrcConstantInIncludeIsExpanded() {
+        myFixture.addFileToProject("sub/inc.iss", "[Setup]\nOutputDir={src}\\dist\n")
+        val main = myFixture.addFileToProject("main.iss", "#include \"sub\\inc.iss\"\n[Setup]\nAppName=x\n")
+        val result = IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        assertTrue("must be resolved, was: $result", result is IsScriptOutputDir.Resolved)
+        val path = (result as IsScriptOutputDir.Resolved).path
+        assertTrue("must not keep the constant, was: $path", !path.contains("{") && path.endsWith("dist"))
+    }
+
+    /**
+     * `{#SourcePath}` is the directory of the file being processed. In the main script it is the script's
+     * directory and therefore expandable.
+     */
+    fun testSourcePathInMainScriptIsExpanded() {
+        val main = myFixture.addFileToProject("main.iss", "[Setup]\nOutputDir={#SourcePath}\\dist\n")
+        val result = IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        assertTrue("must be resolved, was: $result", result is IsScriptOutputDir.Resolved)
+        assertTrue((result as IsScriptOutputDir.Resolved).path.endsWith("dist"))
+    }
+
+    /**
+     * In an `#include`d file in a sub-folder `{#SourcePath}` is that sub-folder, not the main script's
+     * directory. The plugin cannot expand it correctly, so the value is reported as unresolved.
+     */
+    fun testSourcePathInIncludeIsUnresolved() {
+        myFixture.addFileToProject("sub/inc.iss", "[Setup]\nOutputDir={#SourcePath}\\dist\n")
+        val main = myFixture.addFileToProject("main.iss", "#include \"sub\\inc.iss\"\n[Setup]\nAppName=x\n")
+        assertEquals(
+            IsScriptOutputDir.Unresolved,
+            IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        )
+    }
+
+    /**
+     * An environment variable that is set is expanded, one that is not set (and has no default) makes the value
+     * unresolved.
+     */
+    fun testEnvironmentVariableInOutputDir() {
+        val resolver = IsBuildOutputResolver(project)
+        val set = myFixture.addFileToProject("a.iss", "[Setup]\nOutputDir={%PATH}\n")
+        val unset = myFixture.addFileToProject("b.iss", "[Setup]\nOutputDir={%INNO_UNSET_VARIABLE_FOR_TEST}\n")
+        assertTrue(resolver.resolveScriptOutputDir(set.virtualFile) is IsScriptOutputDir.Resolved)
+        assertEquals(IsScriptOutputDir.Unresolved, resolver.resolveScriptOutputDir(unset.virtualFile))
+    }
+
+    /**
+     * An `#include` that points to a missing file contributes nothing, so the script keeps having no
+     * `OutputDir`.
+     */
+    fun testMissingIncludeLeavesOutputDirAbsent() {
+        val main = myFixture.addFileToProject("main.iss", "#include \"nope.iss\"\n[Setup]\nAppName=x\n")
+        assertEquals(
+            IsScriptOutputDir.Absent,
+            IsBuildOutputResolver(project).resolveScriptOutputDir(main.virtualFile)
+        )
+    }
+
     fun testScriptModeReturnsNull() {
         val file = myFixture.addFileToProject("setup.iss", "[Setup]\nOutputDir=Release\n")
         assertNull(IsBuildOutputResolver(project).resolveOutputArg(file.virtualFile, IsBuildOutputMode.SCRIPT))

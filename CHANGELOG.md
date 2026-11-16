@@ -14,7 +14,7 @@
   `{#OutputDirectoryPath}` (or `{src}`, `{%ENV}`) was taken literally, so the installer was written to a folder
   named `out\{#OutputDirectoryPath}`. The value is now expanded before the output folder setting is applied.
   If it cannot be expanded statically, the compiler decides where the installer is written and the value is
-  marked with a warning.
+  marked with a warning. An `OutputDir` that is defined in an `#include`d file is taken into account as well.
 
 ## [1.0.1]
 

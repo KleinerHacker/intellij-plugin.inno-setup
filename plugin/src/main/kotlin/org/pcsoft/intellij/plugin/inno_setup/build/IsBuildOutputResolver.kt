@@ -21,6 +21,7 @@ import com.intellij.psi.PsiManager
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
 import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsMessagesFileResolver
 import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.include.declarationScope
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.include.effectiveScriptView
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
 import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import java.io.File
@@ -77,16 +78,21 @@ class IsBuildOutputResolver(private val project: Project) {
     /**
      * Reads the script's `\[Setup] OutputDir` and expands its `{#Define}`, `{%ENV}` and built-in constants
      * against the `#define`s of the effective (`#include`-resolved) script.
+     *
+     * The directive is looked up in the effective script, so an `OutputDir` that lives in an `#include`d file
+     * is found as well. `{src}` always refers to the main script's directory, which is what ISPP does too. The
+     * ISPP variables `SourcePath` and `__DIR__` however refer to the file being processed, which for an
+     * `OutputDir` pulled in from an `#include` is not the main script's directory — such a value is reported
+     * as [IsScriptOutputDir.Unresolved] instead of being expanded against the wrong directory.
      */
     fun resolveScriptOutputDir(scriptFile: VirtualFile): IsScriptOutputDir {
-        val raw = readScriptOutputDir(scriptFile) ?: return IsScriptOutputDir.Absent
+        val source = runReadActionBlocking { readOutputDirSource(scriptFile) }
+        val raw = source.raw ?: return IsScriptOutputDir.Absent
+        if (source.fromInclude && FILE_RELATIVE_VARIABLE.containsMatchIn(raw)) return IsScriptOutputDir.Unresolved
+
         val scriptDir = scriptFile.parent?.path?.let { File(it) }
-        val defines = runReadActionBlocking {
-            (PsiManager.getInstance(project).findFile(scriptFile) as? IsScriptFile)
-                ?.declarationScope()?.definedConstants
-        }.orEmpty()
         val installPath = IsSettingsService.getInstance().state.installationPath
-        return expandOutputDir(raw, defines, scriptDir, installPath)
+        return expandOutputDir(raw, source.defines, scriptDir, installPath)
             ?.let { IsScriptOutputDir.Resolved(it) }
             ?: IsScriptOutputDir.Unresolved
     }
@@ -109,9 +115,20 @@ class IsBuildOutputResolver(private val project: Project) {
         return File(base, detectBuildSubdir(base))
     }
 
-    private fun readScriptOutputDir(scriptFile: VirtualFile): String? {
-        val text = runCatching { VfsUtilCore.loadText(scriptFile) }.getOrNull() ?: return null
-        return parseOutputDir(text)
+    /** The raw `OutputDir`, where it was found and the `#define`s visible to it. Must run in a read action. */
+    private class OutputDirSource(val raw: String?, val fromInclude: Boolean, val defines: List<Pair<String, String?>>)
+
+    private fun readOutputDirSource(scriptFile: VirtualFile): OutputDirSource {
+        val psi = PsiManager.getInstance(project).findFile(scriptFile) as? IsScriptFile
+        if (psi == null) {
+            // No PSI (e.g. a file outside the project): fall back to the plain file text, without includes.
+            val text = runCatching { VfsUtilCore.loadText(scriptFile) }.getOrNull()
+            return OutputDirSource(text?.let { parseOutputDir(it) }, false, emptyList())
+        }
+        val hostRaw = parseOutputDir(psi.text)
+        // The effective view inlines literal #include files and drops #if branches that are provably inactive.
+        val raw = parseOutputDir(psi.effectiveScriptView().text)
+        return OutputDirSource(raw, raw != null && raw != hostRaw, psi.declarationScope().definedConstants)
     }
 
     companion object {
@@ -119,6 +136,9 @@ class IsBuildOutputResolver(private val project: Project) {
         // than PSI because the section lexer splits values on ':' and would truncate Windows paths.
         private val OUTPUT_DIR =
             Regex("""^\s*OutputDir\s*=\s*(.+?)\s*$""", setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE))
+
+        // ISPP variables that hold the directory of the file currently being processed.
+        private val FILE_RELATIVE_VARIABLE = Regex("""\{#\s*(SourcePath|__DIR__)\s*}""", RegexOption.IGNORE_CASE)
 
         /**
          * Extracts the `\[Setup] OutputDir` value from raw script [text], or `null` when absent.
