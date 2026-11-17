@@ -30,12 +30,9 @@ name: development
 ## Building
 
 * A build MUST always be performed with the Gradle target `build` after every change
-* A plugin verification MUST always be performed with the Gradle target `verifyPlugin` after every change
-    * The verification MUST pass without errors, but MAY contain warnings
-    * If a DEPRECATION or REMOVAL warning is reported, the code MUST be adjusted
-    * If an error is detected, the code MUST be adjusted
-    * If the cases above cannot be fixed, the user MUST be asked what to do, together with a list of prepared solution proposals
-    * For the IDE matrix and version rules use the skill `plugin-verification`
+* The Gradle target `verifyPlugin` MUST NEVER be executed
+    * Not after a change, not on request of a skill, not as part of any other task
+    * Only the user may run it himself
 
 ## Testing
 

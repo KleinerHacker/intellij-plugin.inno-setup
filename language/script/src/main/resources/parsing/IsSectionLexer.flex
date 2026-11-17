@@ -31,7 +31,12 @@ COMMENT    = (";" | "//")[^\r\n]*
 // [ISSigKeys] entries of the official examples). The continuation carries no meaning of its own, so it is
 // swallowed like whitespace and the entry keeps being one logical line for the parser.
 CONTINUATION = \\ [ \t]* {NEWLINE}
-VALUE_CHAR = [^\r\n{};:=\"()#\t ]
+// A value character that is not a "%": a "%" may start a percent escape, so it is tokenized on its own.
+VALUE_CHAR = [^\r\n{};:=\"()#\t %]
+// The percent escapes of Inno Setup: %n (line break), %% (percent sign), %1-%9 (message arguments) and
+// %7d, %7c, %2c (a literal "}", "|" and "," inside a constant argument). They are recognised wherever the
+// lexer reads value text, regardless of how the value is written (plain or in quotes).
+PERCENT_ESCAPE = "%" ( [n%1-9] | "7" [dDcC] | "2" [cC] )
 // A preprocessor line may be continued on the following line by ending it with a backslash, so the
 // opaque HASH_LINE token spans every continued line as well. Trailing spaces/tabs behind the
 // backslash are tolerated (the formatter strips them).
@@ -72,6 +77,9 @@ COMMENT_PASCAL = "//" [^\r\n]*
 }
 
 <VALUE> {
+    // "{{" is the escape of a literal "{" (it never opens a constant). It is longer than "{", so JFlex prefers it.
+    // A closing "}" is never escaped; a lone "}" outside a constant is ordinary text for the parser.
+    "{{"          { return IsSectionTypes.ESCAPED_LBRACE; }
     "{"           { return IsSectionTypes.LBRACE; }
     "}"           { return IsSectionTypes.RBRACE; }
     "("           { return IsSectionTypes.LPAREN; }
@@ -88,6 +96,8 @@ COMMENT_PASCAL = "//" [^\r\n]*
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {VALUE_IDENTIFIER} { return IsSectionTypes.IDENTIFIER; }
+    {PERCENT_ESCAPE} { return IsSectionTypes.ESCAPED_PERCENT; }
+    "%"           { return IsSectionTypes.VALUE_CHAR; }
     {VALUE_CHAR}+ { return IsSectionTypes.VALUE_CHAR; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }
@@ -131,10 +141,16 @@ COMMENT_PASCAL = "//" [^\r\n]*
 // identifiers inside {…} keep the standard letter-leading IDENTIFIER form.
 
 <IN_STRING> {
+    // "{{" is the escape of a literal "{" and "" the escape of a literal quote; both are longer than the
+    // rules they precede ("{" opens a constant, a single quote closes the string), so JFlex prefers them.
+    "{{"          { return IsSectionTypes.ESCAPED_LBRACE; }
+    "\"\""        { return IsSectionTypes.ESCAPED_QUOTE; }
+    {PERCENT_ESCAPE} { return IsSectionTypes.ESCAPED_PERCENT; }
+    "%"           { return IsSectionTypes.STRING_PART; }
     "{"           { yybegin(IN_STRING_CONSTANT); return IsSectionTypes.LBRACE; }
     "\""          { yybegin(VALUE); return IsSectionTypes.QUOTE; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
-    [^\"{\r\n]+   { return IsSectionTypes.STRING_PART; }
+    [^\"{%\r\n]+  { return IsSectionTypes.STRING_PART; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }
 
@@ -154,6 +170,8 @@ COMMENT_PASCAL = "//" [^\r\n]*
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {IDENTIFIER}  { return IsSectionTypes.IDENTIFIER; }
+    {PERCENT_ESCAPE} { return IsSectionTypes.ESCAPED_PERCENT; }
+    "%"           { return IsSectionTypes.VALUE_CHAR; }
     {VALUE_CHAR}+ { return IsSectionTypes.VALUE_CHAR; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }
@@ -167,6 +185,8 @@ COMMENT_PASCAL = "//" [^\r\n]*
     {NEWLINE}     { yybegin(YYINITIAL); return IsSectionTypes.CRLF; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {IDENTIFIER}  { return IsSectionTypes.IDENTIFIER; }
+    {PERCENT_ESCAPE} { return IsSectionTypes.ESCAPED_PERCENT; }
+    "%"           { return IsSectionTypes.VALUE_CHAR; }
     {VALUE_CHAR}+ { return IsSectionTypes.VALUE_CHAR; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }

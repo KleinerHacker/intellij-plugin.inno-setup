@@ -111,6 +111,31 @@ class IsSectionAnnotatorIncludeTest : IsTimedBasePlatformTestCase() {
         )
     }
 
+    private fun hasOutputDirWarning() = myFixture.doHighlighting().any {
+        it.severity.name == "WARNING" && it.description?.contains("cannot be resolved statically") == true
+    }
+
+    /**
+     * An `OutputDir={#D}` in an `#include`d fragment whose `#define D` lives only in the including script must
+     * not be warned about when the fragment is opened on its own: the fragment cannot see the define itself.
+     */
+    fun testOutputDirInFragmentWithDefineOfMainScriptIsNotWarned() {
+        myFixture.addFileToProject("main.iss", "#define D \"dist\"\n#include \"frag.iss\"\n[Setup]\nAppName=x\n")
+        val frag = myFixture.addFileToProject("frag.iss", "[Setup]\nOutputDir={#D}\n")
+        open(frag)
+        assertFalse("A fragment's OutputDir must not be warned about on its own", hasOutputDirWarning())
+    }
+
+    /**
+     * A standalone script with an `OutputDir` that references an unknown define is still warned about, so the
+     * fragment exemption does not hide real problems.
+     */
+    fun testOutputDirWithUnknownDefineInStandaloneScriptIsWarned() {
+        val solo = myFixture.addFileToProject("solo.iss", "[Setup]\nAppName=x\nOutputDir={#Missing}\n")
+        open(solo)
+        assertTrue("An unresolvable OutputDir in a standalone script must be warned about", hasOutputDirWarning())
+    }
+
     fun testLanguagePrefixDeclaredInIncludeIsNotFlagged() {
         myFixture.addFileToProject(
             "langs.iss",

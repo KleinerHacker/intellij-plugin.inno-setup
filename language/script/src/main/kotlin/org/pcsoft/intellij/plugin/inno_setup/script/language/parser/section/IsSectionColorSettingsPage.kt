@@ -28,6 +28,7 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
     private val DESCRIPTORS = arrayOf(
         AttributesDescriptor("Comment", IsSectionSyntaxHighlighting.COMMENT),
         AttributesDescriptor("String", IsSectionSyntaxHighlighting.STRING),
+        AttributesDescriptor("Escape sequence", IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE),
         AttributesDescriptor("Number", IsSectionSyntaxHighlighting.NUMBER),
         AttributesDescriptor("Brackets and braces//Brackets [ ]", IsSectionSyntaxHighlighting.BRACKET),
         AttributesDescriptor("Brackets and braces//Braces { }", IsSectionSyntaxHighlighting.BRACE),
@@ -87,6 +88,7 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         <pp>#endif</pp>
 
         [<sectionName>Setup</sectionName>]
+        <paramKey>AppId</paramKey>=<esc>{{</esc>8A3F-1B2C}
         <paramKey>AppName</paramKey>=MyApplication
         <paramKey>AppVersion</paramKey>={<pp>#</pp><ppref>AppVersion</ppref>}
         <paramKey>VersionInfoVersion</paramKey>={<pp>#</pp><ppref>BuildNumber</ppref>}
@@ -96,7 +98,10 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         <paramKey>Source</paramKey>: "MyProg.exe"; <paramKey>DestDir</paramKey>: "<ref>{app}</ref>"; <paramKey>Flags</paramKey>: <flag>ignoreversion</flag><unused>;</unused>
 
         [<sectionName>Icons</sectionName>]
-        <paramKey>Name</paramKey>: "<ref>{group}</ref>\My Program"; <paramKey>Filename</paramKey>: "<ref>{app}</ref>\MyProg.exe"
+        <paramKey>Name</paramKey>: "<ref>{group}</ref>\My <esc>""</esc>Program<esc>""</esc>"; <paramKey>Filename</paramKey>: "<ref>{app}</ref>\MyProg.exe"
+
+        [<sectionName>CustomMessages</sectionName>]
+        <paramKey>Greeting</paramKey>=Hello<esc>%n</esc>Welcome to <esc>%1</esc> (100<esc>%%</esc>)
     """.trimIndent()
 
     /**
@@ -112,5 +117,6 @@ class IsSectionColorSettingsPage : ColorSettingsPage {
         "ppref" to IsSectionAnnotatorHighlighting.ISPP_REFERENCE_NAME,
         "unused" to IsSectionAnnotatorHighlighting.UNUSED,
         "inactive" to IsSectionAnnotatorHighlighting.INACTIVE_BRANCH,
+        "esc" to IsSectionSyntaxHighlighting.ESCAPE_SEQUENCE,
     )
 }

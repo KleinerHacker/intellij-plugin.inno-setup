@@ -34,4 +34,12 @@ object IsPreprocessorSyntaxHighlighting {
      * and grouping parentheses inside `#define` expressions.
      */
     val OPERATOR: TextAttributesKey = DefaultLanguageHighlighterColors.OPERATION_SIGN
+
+    /**
+     * Recognised escape sequences of Inno Setup values (`{{`, `""`, `''` in single-quoted strings and the `%`
+     * escapes). Falls back to the IDE's "valid string escape" colour. The script language uses the very same
+     * key (same external name), so one colour setting covers both languages.
+     */
+    val ESCAPE_SEQUENCE: TextAttributesKey =
+        TextAttributesKey.createTextAttributesKey("ISS_ESCAPE_SEQUENCE", DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE)
 }

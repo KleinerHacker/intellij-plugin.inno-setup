@@ -24,6 +24,12 @@ NEWLINE    = \r?\n
 VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
 // The one-character directive shorthands: #? (#if), #^ (#else), #. (#endif) and #% (#env).
 SHORTHAND  = [\?\^\.\%]
+// Like VALUE_CHAR, but without "%": inside a string constant a "%" may start a percent escape, so it is
+// tokenized on its own. (Outside of strings "%" is the ISPP modulo operator and stays an ordinary value char.)
+CONSTANT_CHAR = [^\r\n\[\]{};:=\"()#\t %]
+// The percent escapes of Inno Setup: %n (line break), %% (percent sign), %1-%9 (message arguments) and
+// %7d, %7c, %2c (a literal "}", "|" and "," inside a constant argument).
+PERCENT_ESCAPE = "%" ( [n%1-9] | "7" [dDcC] | "2" [cC] )
 // A directive continues on the next line when the current line ends with a backslash; spaces/tabs
 // behind that backslash are tolerated (the formatter strips them). The continuation carries no
 // meaning for the grammar and is reported as whitespace.
@@ -45,6 +51,8 @@ CONTINUATION = \\[ \t]*{NEWLINE}
     {IDENTIFIER}  { return IsPreprocessorTypes.IDENTIFIER; }
     {NUMBER}      { return IsPreprocessorTypes.NUMBER; }
     "\""          { yybegin(IN_STRING); return IsPreprocessorTypes.QUOTE; }
+    // "{{" is the Inno Setup escape of a literal "{", not the start of a constant; it is longer than "{".
+    "{{"          { return IsPreprocessorTypes.ESCAPED_LBRACE; }
     "{"           { return IsPreprocessorTypes.LBRACE; }
     "}"           { return IsPreprocessorTypes.RBRACE; }
     "("           { return IsPreprocessorTypes.LPAREN; }
@@ -67,10 +75,16 @@ CONTINUATION = \\[ \t]*{NEWLINE}
 }
 
 <IN_STRING> {
+    // "{{" is the escape of a literal "{" and "" the escape of a literal quote; both are longer than the rules
+    // they precede ("{" opens a constant, a single quote closes the string), so JFlex prefers them.
+    "{{"          { return IsPreprocessorTypes.ESCAPED_LBRACE; }
+    "\"\""        { return IsPreprocessorTypes.ESCAPED_QUOTE; }
+    {PERCENT_ESCAPE} { return IsPreprocessorTypes.ESCAPED_PERCENT; }
+    "%"           { return IsPreprocessorTypes.STRING_PART; }
     "{"           { yybegin(IN_STRING_CONSTANT); return IsPreprocessorTypes.LBRACE; }
     "\""          { yybegin(YYINITIAL); return IsPreprocessorTypes.QUOTE; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsPreprocessorTypes.CRLF; }
-    [^\"{\r\n]+   { return IsPreprocessorTypes.STRING_PART; }
+    [^\"{%\r\n]+  { return IsPreprocessorTypes.STRING_PART; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }
 
@@ -85,7 +99,9 @@ CONTINUATION = \\[ \t]*{NEWLINE}
     "["           { return IsPreprocessorTypes.VALUE_CHAR; }
     "]"           { return IsPreprocessorTypes.VALUE_CHAR; }
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
-    {VALUE_CHAR}+ { return IsPreprocessorTypes.VALUE_CHAR; }
+    {PERCENT_ESCAPE} { return IsPreprocessorTypes.ESCAPED_PERCENT; }
+    "%"           { return IsPreprocessorTypes.VALUE_CHAR; }
+    {CONSTANT_CHAR}+ { return IsPreprocessorTypes.VALUE_CHAR; }
     {NEWLINE}     { yybegin(YYINITIAL); return IsPreprocessorTypes.CRLF; }
     [^]           { return TokenType.BAD_CHARACTER; }
 }

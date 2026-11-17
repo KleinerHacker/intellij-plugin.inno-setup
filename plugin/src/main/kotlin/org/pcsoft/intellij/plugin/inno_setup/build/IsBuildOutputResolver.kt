@@ -12,17 +12,44 @@
 
 package org.pcsoft.intellij.plugin.inno_setup.build
 
+import com.intellij.openapi.application.runReadActionBlocking
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.PsiManager
+import org.pcsoft.intellij.plugin.inno_setup.preprocessor.language.parser.definedConstants
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.IsMessagesFileResolver
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.include.declarationScope
+import org.pcsoft.intellij.plugin.inno_setup.script.language.feature.include.effectiveScriptView
+import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.IsScriptFile
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 import java.io.File
+
+/**
+ * Outcome of reading a script's `\[Setup] OutputDir` and expanding its preprocessor defines and constants.
+ */
+sealed interface IsScriptOutputDir {
+
+    /** The script does not define an `OutputDir`. */
+    object Absent : IsScriptOutputDir
+
+    /** The `OutputDir` was fully expanded to [path] (which may still be relative). */
+    data class Resolved(val path: String) : IsScriptOutputDir
+
+    /**
+     * The `OutputDir` contains a macro or constant that cannot be expanded statically (for example a
+     * `{#Define}` computed by an expression). Only the Inno Setup compiler can tell where the output goes.
+     */
+    object Unresolved : IsScriptOutputDir
+}
 
 /**
  * Determines the ISCC `/O` argument for a script according to the configured [IsBuildOutputMode].
  *
  * The path-mapping decisions live in pure, dependency-free helpers ([detectBuildSubdir],
- * [computeOutputArg]) so they can be unit-tested without a project; only [resolveOutputArg] reaches
- * into PSI to read the script's `\[Setup] OutputDir`.
+ * [computeOutputArg], [expandOutputDir]) so they can be unit-tested without a project; only
+ * [resolveOutputArg] reaches into PSI to read the script's `\[Setup] OutputDir`.
  */
 class IsBuildOutputResolver(private val project: Project) {
 
@@ -31,15 +58,53 @@ class IsBuildOutputResolver(private val project: Project) {
 
     /**
      * Resolves the `/O…` command-line argument for [scriptFile], or `null` when ISCC's own output
-     * handling should be left untouched (mode [IsBuildOutputMode.SCRIPT], or an absolute
-     * `OutputDir` in [IsBuildOutputMode.BUILD_DIR]).
+     * handling should be left untouched (mode [IsBuildOutputMode.SCRIPT], an absolute `OutputDir` in
+     * [IsBuildOutputMode.BUILD_DIR], or an `OutputDir` that cannot be expanded statically — the compiler
+     * then expands it itself).
      */
     fun resolveOutputArg(scriptFile: VirtualFile, mode: IsBuildOutputMode): String? {
         val scriptOutputDir = when (mode) {
-            IsBuildOutputMode.BUILD_DIR -> readScriptOutputDir(scriptFile) ?: defaultOutputDir
+            IsBuildOutputMode.BUILD_DIR -> when (val dir = resolveScriptOutputDir(scriptFile)) {
+                is IsScriptOutputDir.Resolved -> dir.path
+                IsScriptOutputDir.Absent -> defaultOutputDir
+                IsScriptOutputDir.Unresolved -> return null
+            }
+
             else -> null
         }
         return computeOutputArg(mode, scriptOutputDir, buildRoot())
+    }
+
+    /**
+     * Reads the script's `\[Setup] OutputDir` and expands its `{#Define}`, `{%ENV}` and built-in constants
+     * against the `#define`s of the effective (`#include`-resolved) script.
+     *
+     * The directive is looked up in the effective script, so an `OutputDir` that lives in an `#include`d file
+     * is found as well. `{src}` always refers to the main script's directory, which is what ISPP does too. The
+     * ISPP variables `SourcePath` and `__DIR__` however refer to the file being processed, which for an
+     * `OutputDir` pulled in from an `#include` is not the main script's directory — such a value is reported
+     * as [IsScriptOutputDir.Unresolved] instead of being expanded against the wrong directory.
+     */
+    fun resolveScriptOutputDir(scriptFile: VirtualFile): IsScriptOutputDir {
+        val source = runReadActionBlocking { readOutputDirSource(scriptFile) }
+        val raw = source.raw ?: return IsScriptOutputDir.Absent
+        if (source.fromInclude && FILE_RELATIVE_VARIABLE.containsMatchIn(raw)) return IsScriptOutputDir.Unresolved
+
+        val scriptDir = scriptFile.parent?.path?.let { File(it) }
+        val installPath = IsSettingsService.getInstance().state.installationPath
+        return expandOutputDir(raw, source.defines, scriptDir, installPath)
+            ?.let { IsScriptOutputDir.Resolved(it) }
+            ?: IsScriptOutputDir.Unresolved
+    }
+
+    /**
+     * The expanded `OutputDir` of [scriptFile] for the run pipeline, or `null` when the script defines none or
+     * it cannot be expanded statically. A run needs a known directory to find the produced installer, so the
+     * caller falls back to its own output directory in that case.
+     */
+    fun resolveRunScriptOutputDir(scriptFile: File): String? {
+        val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(scriptFile) ?: return null
+        return (resolveScriptOutputDir(virtualFile) as? IsScriptOutputDir.Resolved)?.path
     }
 
     /**
@@ -50,9 +115,20 @@ class IsBuildOutputResolver(private val project: Project) {
         return File(base, detectBuildSubdir(base))
     }
 
-    private fun readScriptOutputDir(scriptFile: VirtualFile): String? {
-        val text = runCatching { VfsUtilCore.loadText(scriptFile) }.getOrNull() ?: return null
-        return parseOutputDir(text)
+    /** The raw `OutputDir`, where it was found and the `#define`s visible to it. Must run in a read action. */
+    private class OutputDirSource(val raw: String?, val fromInclude: Boolean, val defines: List<Pair<String, String?>>)
+
+    private fun readOutputDirSource(scriptFile: VirtualFile): OutputDirSource {
+        val psi = PsiManager.getInstance(project).findFile(scriptFile) as? IsScriptFile
+        if (psi == null) {
+            // No PSI (e.g. a file outside the project): fall back to the plain file text, without includes.
+            val text = runCatching { VfsUtilCore.loadText(scriptFile) }.getOrNull()
+            return OutputDirSource(text?.let { parseOutputDir(it) }, false, emptyList())
+        }
+        val hostRaw = parseOutputDir(psi.text)
+        // The effective view inlines literal #include files and drops #if branches that are provably inactive.
+        val raw = parseOutputDir(psi.effectiveScriptView().text)
+        return OutputDirSource(raw, raw != null && raw != hostRaw, psi.declarationScope().definedConstants)
     }
 
     companion object {
@@ -61,11 +137,28 @@ class IsBuildOutputResolver(private val project: Project) {
         private val OUTPUT_DIR =
             Regex("""^\s*OutputDir\s*=\s*(.+?)\s*$""", setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE))
 
+        // ISPP variables that hold the directory of the file currently being processed.
+        private val FILE_RELATIVE_VARIABLE = Regex("""\{#\s*(SourcePath|__DIR__)\s*}""", RegexOption.IGNORE_CASE)
+
         /**
          * Extracts the `\[Setup] OutputDir` value from raw script [text], or `null` when absent.
          */
         fun parseOutputDir(text: String): String? =
             OUTPUT_DIR.find(text)?.groupValues?.get(1)?.trim()?.removeSurrounding("\"")?.takeIf { it.isNotBlank() }
+
+        /**
+         * Expands the placeholders of a raw `OutputDir` value ([raw]) using [defines] (`#define` name/value
+         * pairs), [scriptDir] and [installPath]. Returns `null` when any placeholder cannot be expanded
+         * statically, or when the result is blank.
+         */
+        fun expandOutputDir(
+            raw: String,
+            defines: List<Pair<String, String?>>,
+            scriptDir: File?,
+            installPath: String?
+        ): String? =
+            IsMessagesFileResolver.expandValue(raw, defines, scriptDir, emptyMap(), installPath)
+                ?.trim()?.takeIf { it.isNotEmpty() }
 
         /**
          * Picks the conventional build sub-directory for a project rooted at [baseDir]: `target`
