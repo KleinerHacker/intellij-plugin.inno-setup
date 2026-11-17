@@ -84,6 +84,10 @@
         "until": {
           "description": "Inno Setup / ISPP version up to which this directive is supported; absent if still current.",
           "type": "string"
+        },
+        "alias_of": {
+          "description": "Name of the directive this entry is an alias or shorthand of (e.g. \"if\" for the shorthand \"?\"); absent for primary directives.",
+          "type": "string"
         }
       },
       "additionalProperties": false

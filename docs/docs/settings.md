@@ -11,7 +11,7 @@ The plugin adds an **Inno Setup** node under **Build, Execution, Deployment** in
 
 | Option                     | Description                                                                             |
 |----------------------------|-----------------------------------------------------------------------------------------|
-| **Installation directory** | Path to the Inno Setup installation folder. Must contain `ISCC.exe` and `Compil32.exe`. |
+| **Installation directory** | Path to the Inno Setup installation folder. Must contain `ISCC.exe`. |
 | **Detected version**       | Read-only field showing the Inno Setup version found in the selected directory.         |
 
 ### Version Validation

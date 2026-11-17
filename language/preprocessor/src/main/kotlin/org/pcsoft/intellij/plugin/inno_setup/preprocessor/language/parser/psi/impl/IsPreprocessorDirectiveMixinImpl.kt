@@ -93,7 +93,9 @@ abstract class IsPreprocessorDirectiveMixinImpl(node: ASTNode) : ASTWrapperPsiEl
 
     private fun keywordEquals(vararg keywords: String): Boolean {
         val kw = (this as IsPreprocessorDirective).identifier?.text ?: return false
-        return keywords.any { kw.equals(it, ignoreCase = true) }
+        // Aliases and shorthands (`#?`, `#^`, `#.`, `#echo`, `#call`) count as the directive they stand for.
+        val canonical = service<IsPreprocessorService>().canonicalDirective(kw)
+        return keywords.any { canonical.equals(it, ignoreCase = true) }
     }
 
     /**

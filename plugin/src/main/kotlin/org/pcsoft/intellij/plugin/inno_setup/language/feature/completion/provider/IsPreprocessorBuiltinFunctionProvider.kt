@@ -41,7 +41,12 @@ object IsPreprocessorBuiltinFunctionProvider : CompletionProvider<CompletionPara
         service<IsPreprocessorService>().spec.builtinFunctions.forEach { function ->
             adjusted.addElement(
                 LookupElementBuilder.create(function.name)
-                    .withTailText(functionParams(function.signature), true)
+                    .withTailText(
+                        functionParams(function.signature) +
+                                org.pcsoft.intellij.plugin.inno_setup.language.feature.version.IsPreprocessorVersionSupport
+                                    .hint(function.since, function.until),
+                        true
+                    )
                     .withTypeText(function.returnType.typeName)
                     .withIcon(IsIcons.Function)
             )

@@ -22,6 +22,8 @@ NUMBER     = [0-9]+(\.[0-9]+)*
 WHITESPACE = [ \t]+
 NEWLINE    = \r?\n
 VALUE_CHAR = [^\r\n\[\]{};:=\"()#\t ]
+// The one-character directive shorthands: #? (#if), #^ (#else), #. (#endif) and #% (#env).
+SHORTHAND  = [\?\^\.\%]
 // Like VALUE_CHAR, but without "%": inside a string constant a "%" may start a percent escape, so it is
 // tokenized on its own. (Outside of strings "%" is the ISPP modulo operator and stays an ordinary value char.)
 CONSTANT_CHAR = [^\r\n\[\]{};:=\"()#\t %]
@@ -35,11 +37,16 @@ CONTINUATION = \\[ \t]*{NEWLINE}
 
 %state IN_STRING
 %state IN_STRING_CONSTANT
+// Directly behind the "#" that starts a fragment when a shorthand character follows.
+%state AFTER_HASH
 
 %%
 
 <YYINITIAL> {
     {CONTINUATION} { return TokenType.WHITE_SPACE; }
+    // A fragment is exactly one directive and starts with its "#". Only that leading "#" may be followed by a
+    // shorthand keyword; a "#" further right (e.g. the "#%" in a {#%Name} constant) keeps its old meaning.
+    "#" / {SHORTHAND} { if (zzStartRead == 0) yybegin(AFTER_HASH); return IsPreprocessorTypes.HASH; }
     "#"           { return IsPreprocessorTypes.HASH; }
     {IDENTIFIER}  { return IsPreprocessorTypes.IDENTIFIER; }
     {NUMBER}      { return IsPreprocessorTypes.NUMBER; }
@@ -59,6 +66,12 @@ CONTINUATION = \\[ \t]*{NEWLINE}
     {WHITESPACE}  { return TokenType.WHITE_SPACE; }
     {VALUE_CHAR}+ { return IsPreprocessorTypes.VALUE_CHAR; }
     [^]           { return TokenType.BAD_CHARACTER; }
+}
+
+// The shorthand keyword is reported as an IDENTIFIER, so it is the directive keyword like `if` or `endif`.
+<AFTER_HASH> {
+    {SHORTHAND}   { yybegin(YYINITIAL); return IsPreprocessorTypes.IDENTIFIER; }
+    [^]           { yybegin(YYINITIAL); return TokenType.BAD_CHARACTER; }
 }
 
 <IN_STRING> {

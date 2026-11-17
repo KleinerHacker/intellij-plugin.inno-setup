@@ -93,8 +93,8 @@ Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **W
 This section states exactly which parts of Inno Setup the plugin supports today, which parts are only partially
 covered, and which are still missing or planned.
 
-> **Reference version:** Inno Setup 7.0.1-beta · **Official docs:** <https://jrsoftware.org/ishelp/> ·
-> **Last checked:** 2026-08-04
+> **Reference version:** Inno Setup 7.1.1 · **Official docs:** <https://jrsoftware.org/ishelp/> ·
+> **Last checked:** 2026-11-16
 >
 > **Legend:** ✅ implemented · ⚠️ partial · ❌ not implemented / planned · 🗑️ obsolete in Inno Setup
 > (intentionally skipped)

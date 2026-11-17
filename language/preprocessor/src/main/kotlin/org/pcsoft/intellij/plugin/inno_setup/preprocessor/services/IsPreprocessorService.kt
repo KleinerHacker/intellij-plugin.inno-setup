@@ -64,6 +64,20 @@ class IsPreprocessorService {
         }.toMap()
     }
 
+    /** Lower-case directive name to the lower-case name of the directive it is an alias or shorthand of. */
+    private val directiveAliases: Map<String, String> by lazy {
+        spec.directives
+            .filter { it.aliasOf != null }
+            .associate { it.name.lowercase() to it.aliasOf!!.lowercase() }
+    }
+
+    /**
+     * The canonical directive name of [name] (case-insensitive, lower-case): aliases and shorthands such as `?`,
+     * `^`, `.`, `echo` or `call` resolve to the directive they stand for (`if`, `else`, `endif`, `emit`, `expr`),
+     * every other name resolves to itself.
+     */
+    fun canonicalDirective(name: String): String = name.lowercase().let { directiveAliases[it] ?: it }
+
     /** The structured signature of the built-in function [name] (case-insensitive), or `null`. */
     fun builtinSignature(name: String): IsPreprocessorBuiltinSignature? = builtinSignatures[name.lowercase()]
 }

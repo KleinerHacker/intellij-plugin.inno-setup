@@ -1113,7 +1113,9 @@ class IsSectionAnnotator : Annotator {
         holder: IsAnnotationSink,
     ): Boolean {
         val withoutHash = bodyText.removePrefix("#").trimStart()
-        val keyword = withoutHash.takeWhile { it.isLetter() }
+        // `{#%Name}` is the shorthand of `{#env Name}`.
+        val shorthandEnv = withoutHash.startsWith("%")
+        val keyword = if (shorthandEnv) "env" else withoutHash.takeWhile { it.isLetter() }
         if (keyword.isEmpty()) return false
 
         val directive = service<IsPreprocessorService>().spec.directives
@@ -1121,7 +1123,7 @@ class IsSectionAnnotator : Annotator {
             ?: return false
         // `{#Name}` where Name happens to read like a directive is only a directive when an argument
         // follows — `{#file}` alone is a reference to a #define called "file".
-        val argument = withoutHash.removePrefix(keyword).trim()
+        val argument = (if (shorthandEnv) withoutHash.removePrefix("%") else withoutHash.removePrefix(keyword)).trim()
         if (argument.isEmpty()) return false
 
         body.node.findChildByType(IsSectionTypes.HASH)?.let {
@@ -1227,9 +1229,9 @@ class IsSectionAnnotator : Annotator {
         val HEX_VALUE = Regex("\\\$[0-9A-Fa-f]+")
 
         /** ISPP directives that take a value expression and may therefore appear inside `{#…}`. */
-        val EXPRESSION_DIRECTIVES = setOf("emit", "expr", "file", "insert", "append", "include")
+        val EXPRESSION_DIRECTIVES = setOf("emit", "echo", "expr", "call", "file", "insert", "append", "include")
 
         /** ISPP directives whose argument is free-form text, so there is nothing to validate. */
-        val FREEFORM_DIRECTIVES = setOf("pragma", "error")
+        val FREEFORM_DIRECTIVES = setOf("pragma", "error", "env")
     }
 }

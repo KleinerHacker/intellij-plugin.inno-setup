@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * @property deprecated Targets for which the directive is marked as deprecated.
  * @property since First Inno Setup version that supports the directive, or `null` when unknown.
  * @property until Last Inno Setup version that supports the directive, or `null` when it is still valid.
+ * @property aliasOf Name of the directive this one is an alias or shorthand of (e.g. `?` for `if`), or `null`.
  */
 data class IsPreprocessorDirectiveSpec(
     /**
@@ -48,7 +49,11 @@ data class IsPreprocessorDirectiveSpec(
     /**
      * Returns or performs the public behavior represented by this member.
      */
-    val until: String? = null
+    val until: String? = null,
+    /**
+     * Name of the directive this entry is an alias or shorthand of, or `null` for a primary directive.
+     */
+    @field:JsonProperty("alias_of") val aliasOf: String? = null
 )
 
 /**

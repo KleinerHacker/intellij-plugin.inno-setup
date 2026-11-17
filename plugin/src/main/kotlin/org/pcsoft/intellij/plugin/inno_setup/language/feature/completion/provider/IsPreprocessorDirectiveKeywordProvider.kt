@@ -18,17 +18,20 @@ import com.intellij.codeInsight.completion.CompletionResultSet
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.injection.InjectedLanguageManager
 import com.intellij.openapi.components.service
+import com.intellij.ui.JBColor
 import com.intellij.util.ProcessingContext
 import org.pcsoft.intellij.plugin.inno_setup.preprocessor.services.IsPreprocessorService
 import org.pcsoft.intellij.plugin.inno_setup.script.IsIcons
 import org.pcsoft.intellij.plugin.inno_setup.script.language.file_type.lang.IsLanguageFile
+import org.pcsoft.intellij.plugin.inno_setup.script.settings.IsSettingsService
 
 /**
  * Provides context-aware IntelliJ Platform behavior for Inno Setup PSI elements.
  */
 object IsPreprocessorDirectiveKeywordProvider : CompletionProvider<CompletionParameters>() {
     /**
-     * Adds lookup elements for the current completion request.
+     * Adds lookup elements for the current completion request. Directives that are newer than the configured
+     * minimum Inno Setup version are marked with their first version and shown in orange, removed ones in gray.
      */
     override fun addCompletions(
         params: CompletionParameters,
@@ -39,14 +42,33 @@ object IsPreprocessorDirectiveKeywordProvider : CompletionProvider<CompletionPar
             .getTopLevelFile(params.position.containingFile)
         if (hostFile is IsLanguageFile) return
 
+        val minVersion = IsSettingsService.getInstance().state.minInnoVersion
         service<IsPreprocessorService>().spec.directives
             .distinctBy { it.name }
             .forEach { dir ->
+                val since = dir.since
+                val until = dir.until
+                val tooNew = minVersion != null && since != null &&
+                        IsSettingsService.compareIsVersions(since, minVersion) > 0
+                val removed = minVersion != null && until != null &&
+                        IsSettingsService.compareIsVersions(until, minVersion) <= 0
+                val versionHint = when {
+                    removed -> " [removed IS $until]"
+                    tooNew -> " [IS $since+]"
+                    else -> ""
+                }
                 result.addElement(
                     LookupElementBuilder.create(dir.name)
                         .withTypeText("ISPP")
-                        .withTailText("  ${dir.syntax}", true)
+                        .withTailText("  ${dir.syntax}$versionHint", true)
                         .withIcon(IsIcons.Constant)
+                        .withItemTextForeground(
+                            when {
+                                removed -> JBColor.GRAY
+                                tooNew -> JBColor.ORANGE
+                                else -> JBColor.foreground()
+                            }
+                        )
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, " ")
                             ctx.editor.caretModel.moveToOffset(ctx.tailOffset)

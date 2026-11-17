@@ -84,7 +84,11 @@ object IsSectionConstantCompletionProvider : CompletionProvider<CompletionParame
             result.addElement(
                 PrioritizedLookupElement.withPriority(
                     LookupElementBuilder.create("#${v.name}")
-                        .withTypeText("${v.type.typeName} · ISPP")
+                        .withTypeText(
+                            "${v.type.typeName} · ISPP" +
+                                    org.pcsoft.intellij.plugin.inno_setup.language.feature.version.IsPreprocessorVersionSupport
+                                        .hint(v.since, v.until)
+                        )
                         .withIcon(IsIcons.Variable)
                         .withInsertHandler { ctx, _ ->
                             ctx.document.insertString(ctx.tailOffset, "}")

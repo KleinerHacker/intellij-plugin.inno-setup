@@ -152,7 +152,11 @@ object IsPreprocessorDefineExpressionProvider : CompletionProvider<CompletionPar
         service<IsPreprocessorService>().spec.predefinedVariables.forEach { variable ->
             adjusted.addElement(
                 LookupElementBuilder.create(variable.name)
-                    .withTypeText("predefined ${variable.type.typeName}")
+                    .withTypeText(
+                        "predefined ${variable.type.typeName}" +
+                                org.pcsoft.intellij.plugin.inno_setup.language.feature.version.IsPreprocessorVersionSupport
+                                    .hint(variable.since, variable.until)
+                    )
                     .withIcon(IsIcons.Constant)
             )
         }

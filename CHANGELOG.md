@@ -19,6 +19,19 @@
 ### Changed
 
 - **Compatibility**: minimum version of IntelliJ IDEA is now: 2026.3
+- **Inno Setup 7 support**: an installation directory containing only `ISCC.exe` is accepted now. Inno Setup 7
+  renamed the compiler IDE `Compil32.exe` to `ISIDE.exe`, so the settings page no longer reports `Compil32.exe`
+  as missing. The minimum version list offers 7.0, 7.0.1 and 7.1 for Inno Setup 7.
+- **Inno Setup 7.0 / 7.1 specification**: the new `[Setup]` values and defaults (`SetupArchitecture`,
+  `ArchiveExtraction=auto`, `WizardStyle=stellar`, `TimeStampsInUTC`, `AppVerName`, architecture defaults,
+  LZMA limits), the `OnLog` parameter and the new preprocessor items (`SysPath` since 7.0.1, `Format` since 7.1,
+  the `GetFile…String` functions since 7.0) are documented and carry their first Inno Setup version.
+- **Preprocessor shorthands and aliases**: the shorthands `#?` (`#if`), `#^` (`#else`), `#.` (`#endif`) and
+  `#%` (`#env`) as well as the aliases `#echo` and `#call` are recognized, checked like the directives they stand
+  for and offered in the completion list. They exist in all supported Inno Setup versions.
+- **Version check for preprocessor functions and variables**: built-in functions and predefined variables used in
+  directives and in inline `{#…}` emissions (e.g. `Format`, `SysPath`) that are newer than the configured minimum
+  Inno Setup version are now reported with a warning and marked in the completion list.
 
 ### Fixed
 
