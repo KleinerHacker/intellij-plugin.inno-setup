@@ -38,12 +38,12 @@
 - **`AppId={{GUID}` and other escaped braces no longer break the section.** The escape `{{` (a literal `{`), a lone
   `}` and `""` inside a quoted value are understood. Half-written values such as `{`, `{{` or `{{a` no longer
   make the plugin report `AppName`/`AppVersion` as missing or drop the rest of the file.
-
-- **Macros and constants in `OutputDir` are expanded.** A `\[Setup]` `OutputDir` such as
+- **Macros and constants in `OutputDir` are expanded.** A `[Setup]` `OutputDir` such as
   `{#OutputDirectoryPath}` (or `{src}`, `{%ENV}`) was taken literally, so the installer was written to a folder
   named `out\{#OutputDirectoryPath}`. The value is now expanded before the output folder setting is applied.
   If it cannot be expanded statically, the compiler decides where the installer is written and the value is
-  marked with a warning. An `OutputDir` that is defined in an `#include`d file is taken into account as well.
+  marked with a warning. An `OutputDir` that is defined in an `#include`d file is taken into account as well; if it uses `{#SourcePath}`
+  or `{#__DIR__}` there, it counts as not expandable, because those variables refer to the included file.
 
 ## [1.0.1]
 

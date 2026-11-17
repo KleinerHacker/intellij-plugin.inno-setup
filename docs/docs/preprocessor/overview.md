@@ -61,6 +61,33 @@ directive has its own page:
 
 ---
 
+## Shorthands and aliases
+
+Some directives have a short form or an alias. They are recognised, checked like the directive they stand for and
+offered in the completion list:
+
+| Short form / alias | Stands for                                            |
+|--------------------|-------------------------------------------------------|
+| `#?`               | `#if`                                                 |
+| `#^`               | `#else`                                               |
+| `#.`               | `#endif`                                              |
+| `#%`               | `#env` (value of an environment variable, `{#%Name}`) |
+| `#echo`            | `#emit`                                               |
+| `#call`            | `#expr`                                               |
+
+They exist in all supported Inno Setup versions.
+
+## Version hints
+
+Built-in functions and predefined variables used in directives and in inline `{#…}` emissions that are newer than
+the configured *Minimum Inno Setup version* (see [Settings](../settings.md)) are reported with a warning and marked
+in the completion list, e.g. `Format` (since 7.1) or `SysPath` (since 7.0.1).
+
+## Escape sequences
+
+In `#` directives, `{{`, `""`, `''` (inside a single-quoted string) and the `%` escapes are coloured as escape
+sequences, just like in script values.
+
 ## Inline emission `{#…}`
 
 Inside a normal script line, `{#expr}` is the inline form of `{#emit expr}`: the preprocessor evaluates the

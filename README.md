@@ -76,12 +76,14 @@ using.
 | **ISPP line continuation** | A `#…` line ending with a backslash continues on the next line and is treated as one directive throughout the editor |
 | **ISPP macro parameters**  | A function-like macro declares its parameters like ISPP does (`#define M(int A, str *S, B = 10)`); calls are checked against that declaration, and the parameters are completed, resolvable and renameable inside the macro body |
 | **ISPP build symbols**     | The `/D` symbols of the selected build configuration count as defined everywhere: conditions, `{#Name}` emission, expressions and completion |
+| **ISPP version hints**     | Built-in functions and predefined variables (e.g. `Format`, `SysPath`) that are newer than the configured minimum Inno Setup version are reported with a warning and marked in the completion list |
 | **ISPP parameter info**    | `Ctrl+P` inside a call shows the parameter list and highlights the current argument — for built-ins from their signature, for function-like macros from their parameter declaration resp. the types inferred from the macro body |
 
 ### IDE Compatibility
 
 The plugin targets `com.intellij.modules.lang` — available in every full IntelliJ-platform IDE — and bundles its own
-runtime dependencies, so it has no hidden requirements on the host IDE.
+runtime dependencies, so it has no hidden requirements on the host IDE. The minimum supported IDE version is
+**2026.3** (build 263); newer versions are supported as well.
 
 Works in: **IntelliJ IDEA**, **PyCharm**, **CLion / CLion Nova**, **Rider**, **WebStorm**, **GoLand**, **RubyMine**, *
 *DataGrip**, and all other IntelliJ-platform IDEs.
@@ -94,7 +96,7 @@ This section states exactly which parts of Inno Setup the plugin supports today,
 covered, and which are still missing or planned.
 
 > **Reference version:** Inno Setup 7.1.1 · **Official docs:** <https://jrsoftware.org/ishelp/> ·
-> **Last checked:** 2026-11-16
+> **Last checked:** 2026-11-17
 >
 > **Legend:** ✅ implemented · ⚠️ partial · ❌ not implemented / planned · 🗑️ obsolete in Inno Setup
 > (intentionally skipped)
@@ -181,6 +183,8 @@ function set (~104 functions with signature, result type and description).
 | `#sub` / `#endsub`                        |    ✅    | ✅ name + structure (`#sub` ↔ `#endsub`)                                                    | ✅ keyword + sub names                           | ✅ name ↔ `#for` body / expression                           |
 | `#pragma`                                 |    ✅    | ✅ sub-command + option flags + expression/type                                             | ✅ keyword + sub-command + flags                 | ✅ inside expression arguments                               |
 | `#error`                                  |    ✅    | ✅ keyword                                                                                  | ✅ keyword                                       | —                                                            |
+| `#echo` / `#call` / `#env`                |    ✅    | ✅ like `#emit` / `#expr`; `#env` name                                                      | ✅ keyword                                       | —                                                            |
+| `#?` / `#^` / `#.` / `#%`                 |    ✅    | ✅ like `#if` / `#else` / `#endif` / `#env` (shorthands)                                    | ✅ keyword                                       | —                                                            |
 
 An unknown `#…` directive keyword is reported as an error (case-insensitive), like an unknown section, flag or
 constant.
@@ -283,7 +287,7 @@ The example sources are downloaded on demand and are never part of this reposito
 | Tool          | Version                                              |
 |---------------|------------------------------------------------------|
 | JDK           | 21 or later                                          |
-| IntelliJ IDEA | 2024.1 or later (for IDE-assisted development)       |
+| IntelliJ IDEA | 2026.3 or later (for IDE-assisted development)       |
 | Gradle        | Provided via Gradle Wrapper — no installation needed |
 
 ### Build

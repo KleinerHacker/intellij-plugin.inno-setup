@@ -16,7 +16,11 @@
     <id>org.pcsoft.ij.plugin.inno-setup</id>
     <name>Inno Setup</name>
     <description><![CDATA[
-        <b>Created with AI</b>
+        <p>
+            <b>AI transparency notice:</b> the code and documentation of this project were largely created with AI
+            assistance (transparency notice pursuant to the EU AI Act).
+        </p>
+
         <p>
             Brings first-class language support for <a href="https://jrsoftware.org/isinfo.php">Inno Setup</a>
             installer scripts to the whole JetBrains IDE family. Inno Setup scripts (<code>.iss</code>) describe a
@@ -103,11 +107,6 @@
             Full documentation &mdash; including a complete reference for every Inno Setup section and parameter &mdash;
             is available at
             <a href="https://kleinerhacker.github.io/intellij-plugin.inno-setup/">https://kleinerhacker.github.io/intellij-plugin.inno-setup/</a>.
-        </p>
-
-        <p>
-            <b>AI transparency notice:</b> the code and documentation of this project were largely created with AI
-            assistance (transparency notice pursuant to the EU AI Act).
         </p>
 
         <p>
