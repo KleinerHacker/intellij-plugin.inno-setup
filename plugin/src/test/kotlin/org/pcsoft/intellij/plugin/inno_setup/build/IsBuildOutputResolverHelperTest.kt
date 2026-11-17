@@ -83,6 +83,66 @@ class IsBuildOutputResolverHelperTest {
         assertNull(IsBuildOutputResolver.parseOutputDir("[Setup]\nAppName=x"))
     }
 
+    // ── expandOutputDir ──────────────────────────────────────────────────────────
+
+    /**
+     * Use case of issue #60: `OutputDir={#OutputDirectoryPath}` must be expanded with the value of the
+     * `#define` instead of being treated as a literal relative folder name.
+     */
+    @Test
+    fun `expands a preprocessor define`() {
+        val defines = listOf("OutputDirectoryPath" to "..\\artifacts\\setup")
+        assertEquals(
+            "..\\artifacts\\setup",
+            IsBuildOutputResolver.expandOutputDir("{#OutputDirectoryPath}", defines, null, null)
+        )
+    }
+
+    /**
+     * A define whose name differs only in case is still found, because ISPP symbol names are case-insensitive.
+     */
+    @Test
+    fun `expands a define case-insensitively and keeps surrounding text`() {
+        val defines = listOf("Dist" to "out")
+        assertEquals("out\\x64", IsBuildOutputResolver.expandOutputDir("{#dist}\\x64", defines, null, null))
+    }
+
+    /**
+     * A value without any placeholder is returned unchanged, so plain relative and absolute paths keep working.
+     */
+    @Test
+    fun `keeps a plain value unchanged`() {
+        assertEquals("Release", IsBuildOutputResolver.expandOutputDir("Release", emptyList(), null, null))
+    }
+
+    /**
+     * The `{src}` constant is expanded against the script directory.
+     */
+    @Test
+    fun `expands the src constant against the script directory`() {
+        val scriptDir = tempDir.root
+        val expanded = IsBuildOutputResolver.expandOutputDir("{src}\\dist", emptyList(), scriptDir, null)
+        assertNotNull(expanded)
+        assertTrue("was: $expanded", expanded!!.startsWith(scriptDir.path) && expanded.endsWith("\\dist"))
+    }
+
+    /**
+     * A define that does not exist cannot be expanded statically; the result is `null` so that no `/O` override
+     * is built from the unexpanded text.
+     */
+    @Test
+    fun `returns null for an unknown define`() {
+        assertNull(IsBuildOutputResolver.expandOutputDir("{#Missing}", emptyList(), null, null))
+    }
+
+    /**
+     * A define without a value (function macro) cannot be expanded statically either.
+     */
+    @Test
+    fun `returns null for a define without value`() {
+        assertNull(IsBuildOutputResolver.expandOutputDir("{#Macro}", listOf("Macro" to null), null, null))
+    }
+
     // ── detectBuildSubdir ────────────────────────────────────────────────────────
 
     @Test

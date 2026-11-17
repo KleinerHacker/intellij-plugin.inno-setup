@@ -12,7 +12,8 @@ description: Job structure of the GitHub Actions pipelines ci.yml and release.ym
 ## ci.yml
 
 * There MUST be a pipeline for the regular build in `ci.yml`
-    * It contains: [Build] Build -> Test -> Verify plugin, [Verify] Licences / Signature / Build and verify MkDocs
+    * It contains: [Build] Build -> Test (developer / integration in parallel), [Verify plugin] directly after Build, [Verify] Licences / Signature / Build and verify MkDocs
+    * `Verify plugin` depends on `Build` only and MUST run in parallel to `Test`, not after it
     * `Build` and `Verify` MUST be processed in parallel; everything within `Verify` MUST also run in parallel
 
 ## release.yml

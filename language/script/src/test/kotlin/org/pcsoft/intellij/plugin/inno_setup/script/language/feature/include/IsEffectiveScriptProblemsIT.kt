@@ -69,6 +69,36 @@ class IsEffectiveScriptProblemsIT : IsTimedBasePlatformTestCase() {
         )
     }
 
+    /**
+     * An `OutputDir` in an `#include`d fragment that no define of the including script can expand is not warned
+     * about in the fragment itself, but the effective-script replay must surface the warning on the include.
+     */
+    fun testUnresolvableOutputDirInFragmentIsAttributedToTheInclude() {
+        myFixture.addFileToProject("part.iss", "[Setup]\nOutputDir={#Missing}\n")
+        val main = open("main.iss", "#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+
+        val map = IsEffectiveScriptProblems.forHost(main)
+        assertTrue(
+            "The unresolvable OutputDir must be reported on the include",
+            map.values.flatten().any { it.message.contains("cannot be resolved statically", ignoreCase = true) }
+        )
+    }
+
+    /**
+     * An `OutputDir` in an `#include`d fragment that expands through a define of the including script is
+     * resolvable in the effective view, so the include carries no OutputDir warning.
+     */
+    fun testResolvableOutputDirInFragmentCarriesNoWarning() {
+        myFixture.addFileToProject("part.iss", "[Setup]\nOutputDir={#D}\n")
+        val main = open("main.iss", "#define D \"dist\"\n#include \"part.iss\"\n[Setup]\nAppName=x\nAppVersion=1\n")
+
+        val map = IsEffectiveScriptProblems.forHost(main)
+        assertTrue(
+            "A resolvable OutputDir must not be reported on the include",
+            map.values.flatten().none { it.message.contains("cannot be resolved statically", ignoreCase = true) }
+        )
+    }
+
     fun testNoIncludeYieldsNoProblems() {
         val main = open(
             "main.iss",

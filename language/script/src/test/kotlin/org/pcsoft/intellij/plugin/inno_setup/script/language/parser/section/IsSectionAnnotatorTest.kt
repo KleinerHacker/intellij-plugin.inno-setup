@@ -819,6 +819,38 @@ class IsSectionAnnotatorTest : IsTimedBasePlatformTestCase() {
         assertFalse("LanguageID=0 must be allowed without warning", hasUnknownLcidWarning(highlights(text)))
     }
 
+    private fun hasOutputDirWarning(all: List<com.intellij.codeInsight.daemon.impl.HighlightInfo>) =
+        all.any {
+            it.severity == HighlightSeverity.WARNING &&
+                    it.description?.contains("OutputDir", ignoreCase = true) == true &&
+                    it.description?.contains("cannot be resolved statically", ignoreCase = true) == true
+        }
+
+    /**
+     * Issue #60: an `OutputDir` that references an unknown define cannot be expanded statically and is flagged
+     * with a warning on the value.
+     */
+    fun testOutputDirWithUnknownDefineProducesWarning() {
+        val text = "[Setup]\nAppName=x\nOutputDir={#Missing}\n"
+        assertTrue("Unresolvable OutputDir must be warned about", hasOutputDirWarning(highlights(text)))
+    }
+
+    /**
+     * An `OutputDir` using a known `#define` is expandable, so no warning is produced.
+     */
+    fun testOutputDirWithKnownDefineProducesNoWarning() {
+        val text = "#define OutDir \"dist\"\n[Setup]\nAppName=x\nOutputDir={#OutDir}\n"
+        assertFalse("Resolvable OutputDir must not be warned about", hasOutputDirWarning(highlights(text)))
+    }
+
+    /**
+     * A plain `OutputDir` without any placeholder is never reported by the new check.
+     */
+    fun testPlainOutputDirProducesNoWarning() {
+        val text = "[Setup]\nAppName=x\nOutputDir=Release\n"
+        assertFalse(hasOutputDirWarning(highlights(text)))
+    }
+
     fun testLangOptionsUnknownLanguageIdProducesWarning() {
         // $9999 is a well-formed hex integer but not an assigned LCID.
         val text = VALID_SETUP + "\n[LangOptions]\nLanguageID=\$9999\n"

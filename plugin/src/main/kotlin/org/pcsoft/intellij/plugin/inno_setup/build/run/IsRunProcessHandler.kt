@@ -74,9 +74,9 @@ class IsRunProcessHandler(
             IsBuildSettingsService.getInstance(project).state.outputMode
         )
         val scriptFile = File(config.scriptPath)
-        val scriptOutputDir = IsBuildOutputResolver.parseOutputDir(
-            runCatching { scriptFile.readText() }.getOrDefault("")
-        )
+        // An OutputDir that cannot be expanded statically yields null: the run then uses <buildRoot>/Output,
+        // because the produced installer must be found at a known location.
+        val scriptOutputDir = resolver.resolveRunScriptOutputDir(scriptFile)
         val buildRoot = resolver.buildRoot()
 
         // In project DRY mode no real setup.exe would be produced, so a temp output directory is

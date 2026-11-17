@@ -23,6 +23,8 @@ These settings are **project-scoped** (stored per project, not globally).
 | **Into project build directory** *(default)* | Redirects a relative `OutputDir` below the project's build folder (`out`/`target`/`build`).     |
 | **Dry build — validate only, no output**     | Passes the native `ISCC` `/O-` switch so the script is validated but no setup file is produced. |
 
+If `OutputDir` contains a macro or constant that cannot be expanded statically (for example a `{#Define}` computed by an expression), no `/O` switch is passed in mode **Into project build directory**. The compiler expands the value itself and the value is marked with a warning. When a script is run, `<build folder>/Output` is used so that the installer can be found.
+
 ---
 
 ## Build Configurations

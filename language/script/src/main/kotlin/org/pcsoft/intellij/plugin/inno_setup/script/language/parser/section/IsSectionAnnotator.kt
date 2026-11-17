@@ -95,8 +95,40 @@ class IsSectionAnnotator : Annotator {
         if (element is IsSectionParamValue) {
             annotateLanguageId(element, holder)
             annotateMessagesFile(element, holder)
+            annotateOutputDir(element, holder)
             IsSectionEscapeAnnotations.annotate(element, holder)
         }
+    }
+
+    /**
+     * Warns when a \[Setup] `OutputDir` contains a macro or constant that cannot be expanded statically (see
+     * [IsMessagesFileResolver.expandValue]). The plugin then cannot apply its output folder setting and leaves
+     * the decision to the Inno Setup compiler.
+     */
+    private fun annotateOutputDir(value: IsSectionParamValue, holder: IsAnnotationSink) {
+        if (value.isInCodeSection) return
+        val directive = value.containingDirectiveEntry ?: return
+        if (!directive.keyText().equals("OutputDir", ignoreCase = true)) return
+        if (directive.containingSection?.nameText?.equals("Setup", ignoreCase = true) != true) return
+
+        val raw = value.singleText.trim().removeSurrounding("\"")
+        if (!raw.contains('{')) return
+
+        // A fragment pulled in via #include cannot see the defines of the including script on its own; the
+        // value is validated against the including script's effective view instead.
+        val fragmentFile = value.containingFile?.virtualFile
+        if (fragmentFile != null && IsScriptCollector(value.project).isIncludedByOther(fragmentFile)) return
+
+        val scriptDir = value.containingFile?.virtualFile?.parent?.path?.let { File(it) }
+        val defines = value.issFile?.declarationScope()?.definedConstants ?: emptyList()
+        val installPath = IsSettingsService.getInstance().state.installationPath
+        if (IsMessagesFileResolver.expandValue(raw, defines, scriptDir, emptyMap(), installPath) != null) return
+
+        holder.newAnnotation(
+            HighlightSeverity.WARNING,
+            "OutputDir '$raw' cannot be resolved statically — the plugin's output folder setting is not applied " +
+                    "and the compiler decides where the installer is written"
+        ).range(value.textRange).create()
     }
 
     /**
