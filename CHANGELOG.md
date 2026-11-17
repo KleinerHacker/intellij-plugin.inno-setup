@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [1.1.0]
+
 ### Added
 
 - **Escape sequences get their own colour.** `{{`, `""` inside a quoted value, `%n`/`%%`/`%1`–`%9` and

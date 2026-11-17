@@ -44,7 +44,10 @@ property names `version`, `pluginVersion` and `<version>`, in all file types (`*
 `*.properties`, `*.xml`, `*.yml`, `*.yaml`, `*.md`, `*.json`). Classify every hit with the rules of the section
 above. Known locations of release version numbers:
 
-* `gradle.properties` - `version=` (keep a trailing `-SNAPSHOT` if the current value has one)
+* `gradle.properties` - `version=`: if the current value ends with `-SNAPSHOT`, it MUST NOT be set to the
+  target version but to the NEXT BUGFIX version of the target followed by `-SNAPSHOT` (target `1.1.0` ->
+  `1.1.1-SNAPSHOT`), because the snapshot always denotes the upcoming development state after the release.
+  Without a `-SNAPSHOT` suffix the value is set to the target version itself
 * `plugin/src/main/resources/META-INF/plugin.xml` - `<version>`
 * `CHANGELOG.md` - the section `## [Unreleased]`
 * Any further hit that the classification marks as "version of this plugin" (documentation pages,
