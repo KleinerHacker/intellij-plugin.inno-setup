@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -2641,8 +2641,11 @@ Setup 和 Uninstall 执行哪些运行时操作。</p>
 <li><code>[Code]</code> 不是最后一个节（附带快速修复以移动）</li>
 <li>空节（附带快速修复以删除）</li>
 <li>缺少必需节（附带快速修复以添加）</li>
-<li>未解析的常量和引用</li>
+<li>未闭合的常量，例如 <code>{app</code>（字面量 <code>{</code> 请写作 <code>{{</code>）</li>
+<li>带有两个右花括号的 <code>{{…}}</code>：<code>{{</code> 变为 <code>{</code>，但右花括号不会被转义，因此文本末尾会多出一个 <code>}</code>（警告，附带快速修复以仅保留一个 <code>}</code>）</li>
 </ul>
+<p>转义序列会以独立的颜色识别并着色（<em>设置 → 编辑器 → 配色方案 → Inno Setup → Escape sequence</em>，默认与有效字符串转义同色）：<code>{{</code>（字面量 <code>{</code>）、带引号值中的 <code>""</code>、<code>%n</code>、<code>%%</code>、<code>%1</code>–<code>%9</code>，以及（常量参数中的）<code>%7d</code>、<code>%2c</code>、<code>%7c</code>。无论文本是直接书写、放在双引号中，还是（在 <code>#</code> 指令中）放在单引号中，都会着色（单引号中的 <code>''</code> 表示字面量单引号）。单个 <code>}</code> 是普通文本，无需转义。因此 GUID 写作 <code>AppId={{A1B2C3D4-0001-4000-8000-000000000001}</code>。
+- 未解析的常量和引用</p>
 <h3 id="_9">结构视图</h3>
 <p>结构工具窗口（<strong>Alt+7</strong>）显示所有节及其条目的树形概览。点击条目可跳转到对应行。</p>
 <h3 id="_10">代码折叠</h3>
@@ -2710,10 +2713,10 @@ Setup 和 Uninstall 执行哪些运行时操作。</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1481,6 +1481,39 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
+        短縮形とエイリアス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        バージョンのヒント
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エスケープシーケンス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         インライン出力 {#…}
       
     </span>
@@ -1512,7 +1545,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         検証
@@ -1523,7 +1556,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         有効なスクリプトを表示
@@ -1539,7 +1572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         エディターサポート
@@ -2359,6 +2392,39 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
+        短縮形とエイリアス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        バージョンのヒント
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エスケープシーケンス
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         インライン出力 {#…}
       
     </span>
@@ -2390,7 +2456,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         検証
@@ -2401,7 +2467,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         有効なスクリプトを表示
@@ -2417,7 +2483,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         エディターサポート
@@ -2511,7 +2577,48 @@ ISPP 仕様に対してキーワードを検証します。未知のディレク
 <li><a href="../error/"><code>#error</code></a> — メッセージを表示してコンパイルを中止する</li>
 </ul>
 <hr />
-<h2 id="_4">インライン出力 <code>{#…}</code></h2>
+<h2 id="_4">短縮形とエイリアス</h2>
+<p>一部のディレクティブには短縮形またはエイリアスがあります。これらは認識され、対応するディレクティブと同様に検査され、補完リストに表示されます。</p>
+<table>
+<thead>
+<tr>
+<th>短縮形 / エイリアス</th>
+<th>対応するディレクティブ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#?</code></td>
+<td><code>#if</code></td>
+</tr>
+<tr>
+<td><code>#^</code></td>
+<td><code>#else</code></td>
+</tr>
+<tr>
+<td><code>#.</code></td>
+<td><code>#endif</code></td>
+</tr>
+<tr>
+<td><code>#%</code></td>
+<td><code>#env</code>（環境変数の値、<code>{#%Name}</code>）</td>
+</tr>
+<tr>
+<td><code>#echo</code></td>
+<td><code>#emit</code></td>
+</tr>
+<tr>
+<td><code>#call</code></td>
+<td><code>#expr</code></td>
+</tr>
+</tbody>
+</table>
+<p>サポートされているすべての Inno Setup バージョンで使用できます。</p>
+<h2 id="_5">バージョンのヒント</h2>
+<p>ディレクティブ内およびインライン <code>{#…}</code> 出力内で使用された組み込み関数と事前定義変数のうち、設定された<em>最小 Inno Setup バージョン</em>（<a href="../../settings/">設定</a>を参照）より新しいものは、警告として報告され、補完リストでマークされます。例: <code>Format</code>（7.1 以降）、<code>SysPath</code>（7.0.1 以降）。</p>
+<h2 id="_6">エスケープシーケンス</h2>
+<p><code>#</code> ディレクティブでは、<code>{{</code>、<code>""</code>、<code>''</code>（単一引用符の文字列内）および <code>%</code> エスケープが、スクリプト値と同様にエスケープシーケンスとして色付けされます。</p>
+<h2 id="_7">インライン出力 <code>{#…}</code></h2>
 <p>通常のスクリプト行内では、<code>{#expr}</code> は <code>{#emit expr}</code>
 のインライン形式です。プリプロセッサーは式を評価し、プレースホルダーをその値で置き換えます。式は通常マクロまたは定義済み変数です。詳細とこの方法で使用できる定義済み変数については、<a href="../define/">
 <code>#define</code></a> を参照してください。</p>
@@ -2556,17 +2663,17 @@ AppVerName=My App {#VERSION}
 </ul>
 <p>参照先ファイルを IDE で<strong>リネームまたは移動</strong>すると、<code>#include</code> のパスは自動的に更新され、ファイルを
 指し続けます。</p>
-<h3 id="_5">検証</h3>
+<h3 id="_8">検証</h3>
 <p><code>#include</code> 行自体もチェックされます。存在しないファイルや見つからないファイル、リテラルでないパスや空の
 パスはエラーとしてフラグ付けされます。インクルードされたファイル<strong>内部</strong>で検出された問題（未知の
 ディレクティブ、フラグ、未定義の定数、警告）は、インクルードするスクリプトの <code>#include</code> 行に表示され、
 必須セクションのチェックもインクルードが提供する内容を正しく考慮します。</p>
-<h3 id="_6">有効なスクリプトを表示</h3>
+<h3 id="_9">有効なスクリプトを表示</h3>
 <p><strong>有効なスクリプトを表示（Show Effective Script）</strong>アクションは、<code>#include</code> を完全に解決した（すべての
 インクルードをインライン展開した）スクリプトを読み取り専用タブで開き、コンパイラーが実際に見る内容を
 確認できます。</p>
 <hr />
-<h2 id="_7">エディターサポート</h2>
+<h2 id="_10">エディターサポート</h2>
 <ul>
 <li>ディレクティブ、マクロ名、スコープキーワード、インライン <code>{#…}</code> 参照の<strong>構文ハイライト</strong></li>
 <li>ディレクティブキーワード、<code>#define</code>/<code>#undef</code> のスコープキーワード、<code>#define</code> と値を持つ定義済み変数、
@@ -2629,10 +2736,10 @@ AppVerName=My App {#VERSION}
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

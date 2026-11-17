@@ -52,6 +52,7 @@ org.pcsoft.intellij.plugin.inno_setup.language.feature.editor.section
 org.pcsoft.intellij.plugin.inno_setup.language.feature.find
 org.pcsoft.intellij.plugin.inno_setup.language.feature.include.action
 org.pcsoft.intellij.plugin.inno_setup.language.feature.reference
+org.pcsoft.intellij.plugin.inno_setup.language.feature.version
 org.pcsoft.intellij.plugin.inno_setup.language.file_type.lang.action
 org.pcsoft.intellij.plugin.inno_setup.language.file_type.script.action
 org.pcsoft.intellij.plugin.inno_setup.language.file_type.template.action

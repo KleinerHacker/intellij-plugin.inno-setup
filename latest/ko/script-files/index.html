@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -2641,8 +2641,11 @@ Setup 및 Uninstall이 어떤 런타임 작업을 실행하는지를 설명합�
 <li><code>[Code]</code>가 마지막 섹션이 아닌 경우(이동하는 빠른 수정 포함)</li>
 <li>빈 섹션(삭제하는 빠른 수정 포함)</li>
 <li>누락된 필수 섹션(추가하는 빠른 수정 포함)</li>
-<li>해결되지 않은 상수 및 참조</li>
+<li>닫히지 않은 상수, 예: <code>{app</code> (리터럴 <code>{</code>는 <code>{{</code>로 작성)</li>
+<li>닫는 중괄호가 두 개인 <code>{{…}}</code>: <code>{{</code>는 <code>{</code>가 되지만 닫는 중괄호는 이스케이프되지 않으므로 텍스트 끝에 불필요한 <code>}</code>가 남습니다(경고, <code>}</code> 하나만 남기는 빠른 수정 포함)</li>
 </ul>
+<p>이스케이프 시퀀스는 별도의 색으로 인식·강조됩니다(<em>설정 → 편집기 → 색 구성표 → Inno Setup → Escape sequence</em>, 기본값은 유효한 문자열 이스케이프의 색): <code>{{</code>(리터럴 <code>{</code>), 따옴표 값 안의 <code>""</code>, <code>%n</code>, <code>%%</code>, <code>%1</code>–<code>%9</code>, 그리고 (상수 인수 안의) <code>%7d</code>, <code>%2c</code>, <code>%7c</code>. 텍스트를 그대로, 큰따옴표로, 또는 (<code>#</code> 지시문에서는) 작은따옴표로 쓰더라도 색상이 표시됩니다(작은따옴표 안의 <code>''</code>는 리터럴 작은따옴표). 단독 <code>}</code>는 일반 텍스트이며 이스케이프가 필요하지 않습니다. 따라서 GUID는 <code>AppId={{A1B2C3D4-0001-4000-8000-000000000001}</code>로 작성합니다.
+- 해결되지 않은 상수 및 참조</p>
 <h3 id="_9">구조 뷰</h3>
 <p>구조 도구 창(<strong>Alt+7</strong>)은 모든 섹션과 항목의 트리 뷰를 표시합니다. 항목을 클릭하면 해당 줄로 이동합니다.</p>
 <h3 id="_10">코드 접기</h3>
@@ -2710,10 +2713,10 @@ Setup 및 Uninstall이 어떤 런타임 작업을 실행하는지를 설명합�
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

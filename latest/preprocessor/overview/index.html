@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1478,6 +1478,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shorthands-and-aliases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shorthands and aliases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version hints
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#escape-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Escape sequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inline-emission" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2356,6 +2389,39 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#shorthands-and-aliases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shorthands and aliases
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#version-hints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version hints
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#escape-sequences" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Escape sequences
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#inline-emission" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2518,6 +2584,51 @@ directive has its own page:</p>
 <li><a href="../error/"><code>#error</code></a> — abort compilation with a message</li>
 </ul>
 <hr />
+<h2 id="shorthands-and-aliases">Shorthands and aliases</h2>
+<p>Some directives have a short form or an alias. They are recognised, checked like the directive they stand for and
+offered in the completion list:</p>
+<table>
+<thead>
+<tr>
+<th>Short form / alias</th>
+<th>Stands for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#?</code></td>
+<td><code>#if</code></td>
+</tr>
+<tr>
+<td><code>#^</code></td>
+<td><code>#else</code></td>
+</tr>
+<tr>
+<td><code>#.</code></td>
+<td><code>#endif</code></td>
+</tr>
+<tr>
+<td><code>#%</code></td>
+<td><code>#env</code> (value of an environment variable, <code>{#%Name}</code>)</td>
+</tr>
+<tr>
+<td><code>#echo</code></td>
+<td><code>#emit</code></td>
+</tr>
+<tr>
+<td><code>#call</code></td>
+<td><code>#expr</code></td>
+</tr>
+</tbody>
+</table>
+<p>They exist in all supported Inno Setup versions.</p>
+<h2 id="version-hints">Version hints</h2>
+<p>Built-in functions and predefined variables used in directives and in inline <code>{#…}</code> emissions that are newer than
+the configured <em>Minimum Inno Setup version</em> (see <a href="../../settings/">Settings</a>) are reported with a warning and marked
+in the completion list, e.g. <code>Format</code> (since 7.1) or <code>SysPath</code> (since 7.0.1).</p>
+<h2 id="escape-sequences">Escape sequences</h2>
+<p>In <code>#</code> directives, <code>{{</code>, <code>""</code>, <code>''</code> (inside a single-quoted string) and the <code>%</code> escapes are coloured as escape
+sequences, just like in script values.</p>
 <h2 id="inline-emission">Inline emission <code>{#…}</code></h2>
 <p>Inside a normal script line, <code>{#expr}</code> is the inline form of <code>{#emit expr}</code>: the preprocessor evaluates the
 expression and replaces the placeholder with its value. The expression is typically a macro or a predefined
@@ -2637,10 +2748,10 @@ in a read-only tab, so you can inspect what the compiler actually sees.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

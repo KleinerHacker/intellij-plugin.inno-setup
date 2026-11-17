@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -2653,7 +2653,16 @@ is known before the first entry is typed. The hint can be switched off separatel
 <li>Empty sections (with a quick-fix to delete them)</li>
 <li>Missing required sections (with a quick-fix to add them)</li>
 <li>Unresolved constants and references</li>
+<li>Unclosed constants such as <code>{app</code> (write <code>{{</code> for a literal <code>{</code>)</li>
+<li><code>{{…}}</code> with two closing braces: <code>{{</code> becomes <code>{</code>, but a closing <code>}</code> is never escaped, so the text ends with a
+  stray <code>}</code> (warning, with a quick-fix that keeps a single <code>}</code>)</li>
 </ul>
+<p>Escape sequences are recognised and coloured in their own colour (<em>Settings → Editor → Color Scheme → Inno Setup →
+Escape sequence</em>, by default the colour of a valid string escape): <code>{{</code> (a literal <code>{</code>), <code>""</code> inside a quoted
+value, <code>%n</code>, <code>%%</code>, <code>%1</code>–<code>%9</code>, and <code>%7d</code>, <code>%2c</code>, <code>%7c</code> (inside a constant argument). They are coloured whether the
+text is written plain, in double quotes or, in <code>#</code> directives, in single quotes (<code>''</code> is a literal single quote
+there). A single <code>}</code> is plain text and needs no escape. A GUID is therefore written as
+<code>AppId={{A1B2C3D4-0001-4000-8000-000000000001}</code>.</p>
 <h3 id="structure-view">Structure View</h3>
 <p>The Structure tool window (<strong>Alt+7</strong>) shows a bird's-eye tree of all sections and their entries. Clicking an
 entry jumps to the corresponding line.</p>
@@ -2727,10 +2736,10 @@ predefined variables, and inline <code>{#…}</code> emission.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>

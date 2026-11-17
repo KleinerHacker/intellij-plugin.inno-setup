@@ -31,7 +31,7 @@
       
       
       <link rel="icon" href="../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -39,10 +39,10 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1481,6 +1481,39 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
+        简写与别名
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        转义序列
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         内联输出 {#…}
       
     </span>
@@ -1512,7 +1545,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证
@@ -1523,7 +1556,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         显示有效脚本
@@ -1539,7 +1572,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         编辑器支持
@@ -2359,6 +2392,39 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       
+        简写与别名
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        版本提示
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        转义序列
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         内联输出 {#…}
       
     </span>
@@ -2390,7 +2456,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
         验证
@@ -2401,7 +2467,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
         显示有效脚本
@@ -2417,7 +2483,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#_10" class="md-nav__link">
     <span class="md-ellipsis">
       
         编辑器支持
@@ -2509,7 +2575,48 @@
 <li><a href="../error/"><code>#error</code></a> — 中止编译并显示消息</li>
 </ul>
 <hr />
-<h2 id="_4">内联输出 <code>{#…}</code></h2>
+<h2 id="_4">简写与别名</h2>
+<p>部分指令有简写形式或别名。它们会被识别，与其所代表的指令一样接受检查，并出现在补全列表中：</p>
+<table>
+<thead>
+<tr>
+<th>简写 / 别名</th>
+<th>代表的指令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#?</code></td>
+<td><code>#if</code></td>
+</tr>
+<tr>
+<td><code>#^</code></td>
+<td><code>#else</code></td>
+</tr>
+<tr>
+<td><code>#.</code></td>
+<td><code>#endif</code></td>
+</tr>
+<tr>
+<td><code>#%</code></td>
+<td><code>#env</code>（环境变量的值，<code>{#%Name}</code>）</td>
+</tr>
+<tr>
+<td><code>#echo</code></td>
+<td><code>#emit</code></td>
+</tr>
+<tr>
+<td><code>#call</code></td>
+<td><code>#expr</code></td>
+</tr>
+</tbody>
+</table>
+<p>它们在所有受支持的 Inno Setup 版本中均可使用。</p>
+<h2 id="_5">版本提示</h2>
+<p>在指令和内联 <code>{#…}</code> 输出中使用的内置函数和预定义变量，如果比配置的<em>最低 Inno Setup 版本</em>（参见<a href="../../settings/">设置</a>）更新，会以警告形式报告并在补全列表中标记，例如 <code>Format</code>（自 7.1 起）或 <code>SysPath</code>（自 7.0.1 起）。</p>
+<h2 id="_6">转义序列</h2>
+<p>在 <code>#</code> 指令中，<code>{{</code>、<code>""</code>、<code>''</code>（单引号字符串内）和 <code>%</code> 转义会像脚本值一样以转义序列的颜色显示。</p>
+<h2 id="_7">内联输出 <code>{#…}</code></h2>
 <p>在普通脚本行内，<code>{#expr}</code> 是 <code>{#emit expr}</code>
 的内联形式：预处理器计算表达式并用其值替换占位符。表达式通常是宏或预定义变量。详情及可通过此方式使用的预定义变量，请参阅 <a href="../define/">
 <code>#define</code></a>。</p>
@@ -2548,15 +2655,15 @@ AppVerName=My App {#VERSION}
   文件中。会请求输入文件名（在覆盖已有文件前也会确认），并将选定的整行替换为对该新文件的 <code>#include</code>。</li>
 </ul>
 <p>当在 IDE 中<strong>重命名或移动</strong>所引用的文件时，<code>#include</code> 路径会自动更新以继续指向该文件。</p>
-<h3 id="_5">验证</h3>
+<h3 id="_8">验证</h3>
 <p><code>#include</code> 行本身也会被检查：缺失或不存在的文件，以及非字面量或空路径，都会被标记为错误。在被包含文件
 <strong>内部</strong>检测到的问题（未知指令、标志、未定义常量、警告）会显示在包含脚本的 <code>#include</code> 行上，必需节检查
 也会正确计入由 include 提供的内容。</p>
-<h3 id="_6">显示有效脚本</h3>
+<h3 id="_9">显示有效脚本</h3>
 <p><strong>显示有效脚本（Show Effective Script）</strong>操作会在只读标签页中打开完全解析 <code>#include</code>（所有 include 均内联）
 后的脚本，便于你查看编译器实际看到的内容。</p>
 <hr />
-<h2 id="_7">编辑器支持</h2>
+<h2 id="_10">编辑器支持</h2>
 <ul>
 <li>对指令、宏名称、作用域关键字和内联 <code>{#…}</code> 引用的<strong>语法高亮</strong></li>
 <li>指令关键字、<code>#define</code>/<code>#undef</code> 作用域关键字、<code>#define</code> 与带值预定义变量以及内置函数的<strong>补全</strong> ——
@@ -2618,10 +2725,10 @@ AppVerName=My App {#VERSION}
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"alias": true, "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": {"alias": true, "provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
