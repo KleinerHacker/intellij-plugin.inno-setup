@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- **Release notes on the JetBrains Marketplace.** The "What's New" tab of the Marketplace and the plugin manager
+  of the IDE now show the changes of the respective plugin version. Until now the plugin was published without
+  any change notes.
+
 ## [1.1.0]
 
 ### Added
