@@ -73,16 +73,19 @@ intellijPlatform {
         // read from <change-notes> in the packaged plugin.xml — the Marketplace never reads CHANGELOG.md itself.
         // Render the CHANGELOG.md section of the version being built (CI passes the release tag as -Pversion);
         // if there is none (e.g. a -SNAPSHOT build), fall back to [Unreleased]. Resolved lazily through a
-        // provider, so it stays configuration-cache friendly.
-        changeNotes = providers.gradleProperty("version").map { pluginVersion ->
-            with(changelog) {
-                renderItem(
-                    (getOrNull(pluginVersion) ?: getUnreleased())
-                        .withHeader(false)
-                        .withEmptySections(false),
-                    org.jetbrains.changelog.Changelog.OutputType.HTML,
-                )
-            }
+        // provider.
+        //
+        // Configuration cache: the lambda MUST NOT touch the `changelog` accessor (or anything else of the build
+        // script) — that would capture the Project, which cannot be serialized. Instead the parsed changelog
+        // (`changelog.instance`) and the version are zipped, so the lambda only works on its own parameters.
+        changeNotes = changelog.instance.zip(providers.gradleProperty("version")) { log, pluginVersion ->
+            val item = runCatching { log.get(pluginVersion) }.getOrNull()
+                ?: log.unreleasedItem
+                ?: error("CHANGELOG.md contains neither a section for $pluginVersion nor an [Unreleased] section")
+            log.renderItem(
+                item.withHeader(false).withEmptySections(false),
+                org.jetbrains.changelog.Changelog.OutputType.HTML,
+            )
         }
     }
 
